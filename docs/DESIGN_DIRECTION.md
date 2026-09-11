@@ -64,8 +64,8 @@ Antes de aceptar una pantalla, revisar:
 ## Contrato visual para futuras contribuciones
 
 - La referencia base es una wiki oscura, compacta, editorial y orientada a información.
-- La escala debe mantenerse contenida: header de 58px, sidebar de 248px, radios de 4px, bordes carbón sutiles y títulos sin pesos excesivos.
-- El fondo debe ser casi negro uniforme; los paneles apenas se elevan y el dorado se reserva para selección, foco y acciones importantes.
+- La escala debe mantenerse contenida: header de 66px, sidebar de 248px, radios suaves de 6px, bordes carbón visibles pero ligeros y títulos sin pesos excesivos.
+- El fondo debe ser oscuro neutro; las superficies soft se separan con paneles apenas más claros, bordes de baja intensidad y sin sombras dramáticas. El dorado se reserva para selección, foco y acciones importantes.
 - El cuerpo usa Geist en pesos regulares; el texto secundario es gris apagado y los metadatos usan Geist Mono en una escala menor.
 - Usa los tokens semánticos de `src/styles/global.css`; no introduzcas colores hexadecimales ni gradientes específicos de página.
 - Prefiere los patrones `wiki-*` compartidos para shell, navegación, paneles, índices, artículos, evidencia, tablas y herramientas.
