@@ -1,0 +1,25 @@
+---
+import type { Locale } from '../../i18n/config';
+
+interface Props {
+  locale: Locale;
+  eyebrow: string;
+  title: string;
+  description: string;
+  nextStep: string;
+}
+
+const { locale, eyebrow, title, description, nextStep } = Astro.props;
+---
+
+<section class="wiki-empty-state" data-testid="route-placeholder">
+  <p class="eyebrow">{eyebrow}</p>
+  <h1 class="display-title mt-3 max-w-3xl">{title}</h1>
+  <p class="muted-copy mt-3 leading-7">{description}</p>
+  <div class="mt-6 border-t border-border pt-4">
+    <p class="font-mono text-[0.68rem] uppercase tracking-[0.15em] text-primary">
+      {locale === 'es' ? 'Estado de esta sección' : 'Section status'}
+    </p>
+    <p class="mt-3 text-sm leading-6 text-muted-foreground">{nextStep}</p>
+  </div>
+</section>

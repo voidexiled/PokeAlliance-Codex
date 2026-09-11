@@ -1,0 +1,55 @@
+---
+import AppLayout from '../../../layouts/AppLayout.astro';
+import { PokemonExplorer } from '../../../components/tools/PokemonExplorer';
+import { getLocale, locales, type Locale } from '../../../i18n/config';
+
+export const prerender = true;
+
+export function getStaticPaths() {
+  return locales.map((locale) => ({ params: { locale } }));
+}
+
+const locale = getLocale(Astro.params.locale) as Locale;
+const copy =
+  locale === 'es'
+    ? {
+        title: 'Comparar Pokémon',
+        description: 'Compara variantes y explora los tiers publicados por la wiki.',
+        eyebrow: 'Herramientas / Pokémon',
+        intro:
+          'Una consulta rápida para leer el roster público en paralelo. Los campos muestran lo que la fuente publica; no hay recomendaciones inventadas ni fórmulas ocultas.',
+        home: 'Inicio',
+        tools: 'Herramientas',
+      }
+    : {
+        title: 'Compare Pokémon',
+        description: 'Compare variants and explore the tiers published by the wiki.',
+        eyebrow: 'Tools / Pokémon',
+        intro:
+          'A quick way to read the public roster side by side. Fields show what the source publishes; there are no invented recommendations or hidden formulas.',
+        home: 'Home',
+        tools: 'Tools',
+      };
+---
+
+<AppLayout locale={locale} title={copy.title} description={copy.description}>
+  <div>
+    <nav
+      class="wiki-breadcrumbs"
+      aria-label={locale === 'es' ? 'Ruta de navegación' : 'Breadcrumb'}
+    >
+      <a href={`/${locale}/`}>{copy.home}</a>
+      <span class="wiki-breadcrumb-separator">/</span>
+      <a href={`/${locale}/herramientas/`}>{copy.tools}</a>
+      <span class="wiki-breadcrumb-separator">/</span>
+      <span>{copy.title}</span>
+    </nav>
+    <header class="wiki-page-header">
+      <p class="eyebrow">{copy.eyebrow}</p>
+      <h1 class="display-title">{copy.title}</h1>
+      <p class="muted-copy">{copy.intro}</p>
+    </header>
+
+    <PokemonExplorer client:load locale={locale} />
+  </div>
+</AppLayout>

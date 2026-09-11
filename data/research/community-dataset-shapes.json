@@ -1,0 +1,22 @@
+{
+  "schemaVersion": "0.1.0",
+  "generatedAt": "2026-09-09T00:00:00-06:00",
+  "sourceId": "source:thiagobfo-repository",
+  "sourceRevision": "0135ccdef08109ff04dfc3343dbeb8fdfe9989b1",
+  "status": "shape_inventory_only",
+  "datasets": [
+    { "file": "boost.json", "records": 18, "sampleFields": ["stone", "items", "type", "fragment"] },
+    { "file": "drops.json", "records": 802, "sampleFields": ["pokemon", "drops"] },
+    { "file": "hoennHunts.json", "records": 137, "sampleFields": ["pokemon", "location", "types"] },
+    { "file": "locations.json", "records": 426, "sampleFields": ["wildscape", "pokemon", "normal"] },
+    { "file": "tasks.json", "records": 43, "sampleFields": ["pokemon", "npc", "location"] },
+    { "file": "tierList.json", "records": 847, "sampleFields": ["pokemon", "tier", "moveset"] },
+    { "file": "hazardTasks.json", "records": 17, "sampleFields": ["task", "npc", "location"] },
+    { "file": "gyms.json", "records": 8, "sampleFields": ["dungeon", "task1", "task2", "city"] }
+  ],
+  "limitations": [
+    "The sampled source records do not contain per-record provenance or verification timestamps.",
+    "Field presence describes source shape only and does not verify current gameplay values.",
+    "No bulk source data is copied into Alliance Codex by this inventory."
+  ]
+}

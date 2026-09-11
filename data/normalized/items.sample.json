@@ -1,0 +1,18 @@
+{
+  "schemaVersion": "0.1.0-draft",
+  "generatedAt": "2026-09-09T00:00:00-06:00",
+  "status": "research_sample_not_application_ready",
+  "records": [
+    {
+      "id": "item:normal-training-charger",
+      "entityId": "item:normal-training-charger",
+      "canonicalSlug": "normal-training-charger",
+      "canonicalName": "Normal charger",
+      "itemKind": "training_charger",
+      "facts": {
+        "description": { "value": "Adds 20,000 standard-progress charges to the Punching Bag", "status": "supported", "evidenceIds": ["evidence:pka-training-system:2026-09-09"] },
+        "usedBy": { "value": ["system:punching-bag-training"], "status": "supported", "evidenceIds": ["evidence:pka-training-system:2026-09-09"] }
+      }
+    }
+  ]
+}

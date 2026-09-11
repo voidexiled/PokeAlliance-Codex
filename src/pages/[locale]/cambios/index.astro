@@ -1,0 +1,64 @@
+---
+import AppLayout from '../../../layouts/AppLayout.astro';
+import { getLocale, locales, type Locale } from '../../../i18n/config';
+
+export const prerender = true;
+
+export function getStaticPaths() {
+  return locales.map((locale) => ({ params: { locale } }));
+}
+
+const locale = getLocale(Astro.params.locale) as Locale;
+const copy =
+  locale === 'es'
+    ? {
+        title: 'Cambios',
+        description: 'Registro de actualizaciones, revisiones y cambios documentados de la wiki.',
+        intro:
+          'Esta página será el historial legible de la wiki. Cada entrada deberá conservar fecha, fuente y una descripción concreta del cambio.',
+        pending: 'El registro todavía no tiene entradas publicadas.',
+        manual:
+          'Por ahora, las novedades del Discord oficial se incorporarán manualmente. No se usa un bot ni se presenta una actualización sin una fuente revisable.',
+        sources: 'Ver fuentes y procedencia',
+      }
+    : {
+        title: 'Changes',
+        description: 'Record of documented wiki updates, reviews and changes.',
+        intro:
+          'This page will be the readable history of the wiki. Every entry must keep a date, source and concrete description of the change.',
+        pending: 'The record has no published entries yet.',
+        manual:
+          'For now, official Discord updates will be added manually. No bot is used and no update is shown without a reviewable source.',
+        sources: 'View sources and provenance',
+      };
+---
+
+<AppLayout locale={locale} title={copy.title} description={copy.description}>
+  <div>
+    <nav
+      class="wiki-breadcrumbs"
+      aria-label={locale === 'es' ? 'Ruta de navegación' : 'Breadcrumb'}
+    >
+      <a href={`/${locale}/`}>{locale === 'es' ? 'Inicio' : 'Home'}</a>
+      <span class="wiki-breadcrumb-separator">/</span>
+      <span>{copy.title}</span>
+    </nav>
+    <header class="wiki-page-header">
+      <p class="eyebrow">{locale === 'es' ? 'Historial de la wiki' : 'Wiki history'}</p>
+      <h1 class="display-title">{copy.title}</h1>
+      <p class="muted-copy">{copy.intro}</p>
+    </header>
+
+    <section class="wiki-section wiki-empty-state" aria-labelledby="pending-title">
+      <p class="eyebrow">{locale === 'es' ? 'Sin entradas todavía' : 'No entries yet'}</p>
+      <h2 id="pending-title" class="mt-2 text-base font-semibold text-foreground">
+        {copy.pending}
+      </h2>
+      <p class="mt-3">{copy.manual}</p>
+      <a
+        class="mt-5 inline-block text-sm text-accent underline-offset-4 hover:underline"
+        href={`/${locale}/fuentes/`}>{copy.sources} →</a
+      >
+    </section>
+  </div>
+</AppLayout>

@@ -1,0 +1,79 @@
+---
+import AppLayout from '../../../layouts/AppLayout.astro';
+import { MapExplorer } from '../../../components/map/MapExplorer';
+import { getLocale, locales, type Locale } from '../../../i18n/config';
+import {
+  clientMapPreview,
+  clientMinimapFlags,
+  clientMinimapSource,
+} from '../../../lib/map/client-map';
+
+export const prerender = true;
+
+export function getStaticPaths() {
+  return locales.map((locale) => ({ params: { locale } }));
+}
+
+const locale = getLocale(Astro.params.locale) as Locale;
+const copy =
+  locale === 'es'
+    ? {
+        title: 'Mapa del cliente',
+        description:
+          'Preview interactivo de coordenadas y marcadores observados en el cliente de PokeAlliance.',
+        eyebrow: 'Herramientas / Mapa',
+        intro:
+          'Explora los marcadores disponibles por piso y consulta sus coordenadas. Esta primera vista representa la capa observada del cliente; todavía no es un mapa semántico completo del mundo.',
+        source:
+          '119 marcadores extraídos de Minimap.flags. Las etiquetas y coordenadas conservan la procedencia de la configuración local revisada.',
+        contribute: 'Aportar al mapa',
+        contributeDescription: 'Formato para enviar observaciones sin publicarlas automáticamente.',
+      }
+    : {
+        title: 'Client map',
+        description:
+          'Interactive preview of coordinates and markers observed in the PokeAlliance client.',
+        eyebrow: 'Tools / Map',
+        intro:
+          'Explore available markers by floor and inspect their coordinates. This first view represents the client-observed layer; it is not yet a complete semantic world map.',
+        source:
+          '119 markers extracted from Minimap.flags. Labels and coordinates retain the provenance of the reviewed local configuration.',
+        contribute: 'Contribute to the map',
+        contributeDescription:
+          'Format for sending observations without publishing them automatically.',
+      };
+---
+
+<AppLayout locale={locale} title="Mapa" description={copy.description}>
+  <div>
+    <nav
+      class="wiki-breadcrumbs"
+      aria-label={locale === 'es' ? 'Ruta de navegación' : 'Breadcrumb'}
+    >
+      <a href={`/${locale}/`}>{locale === 'es' ? 'Inicio' : 'Home'}</a>
+      <span class="wiki-breadcrumb-separator">/</span>
+      <a href={`/${locale}/herramientas/`}>{locale === 'es' ? 'Herramientas' : 'Tools'}</a>
+      <span class="wiki-breadcrumb-separator">/</span>
+      <span>{copy.title}</span>
+    </nav>
+    <header class="wiki-page-header">
+      <p class="eyebrow">{copy.eyebrow}</p>
+      <h1 class="display-title">{copy.title}</h1>
+      <p class="muted-copy">{copy.intro}</p>
+      <p class="mt-4 text-xs text-muted-foreground">{copy.source}</p>
+      <a
+        class="mt-5 inline-block text-sm text-accent underline-offset-4 hover:underline"
+        href={`/${locale}/mapa/aportar/`}>{copy.contribute} · {copy.contributeDescription} →</a
+      >
+    </header>
+    <section class="wiki-section" aria-label={copy.title}>
+      <MapExplorer
+        flags={clientMinimapFlags}
+        mapPreview={clientMapPreview}
+        locale={locale}
+        sourceSnapshot={clientMinimapSource.sourceSnapshot}
+        client:load
+      />
+    </section>
+  </div>
+</AppLayout>

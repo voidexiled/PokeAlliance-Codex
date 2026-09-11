@@ -1,0 +1,147 @@
+---
+import AppLayout from '../../../layouts/AppLayout.astro';
+import { getLocale, locales, type Locale } from '../../../i18n/config';
+
+export const prerender = true;
+
+export function getStaticPaths() {
+  return locales.map((locale) => ({ params: { locale } }));
+}
+
+const locale = getLocale(Astro.params.locale) as Locale;
+const copy =
+  locale === 'es'
+    ? {
+        title: 'Herramientas',
+        description:
+          'Utilidades integradas en la wiki para consultar y organizar información de PokeAlliance.',
+        intro:
+          'Las herramientas forman parte del Codex. Cada una se habilitará cuando sus datos y límites estén suficientemente revisados.',
+        available: 'Disponible',
+        planned: 'Siguiente en la hoja de ruta',
+        search: 'Búsqueda del Codex',
+        searchDescription:
+          'Encuentra Pokémon, movimientos, objetos, misiones y otros registros publicados.',
+        map: 'Mapa interactivo',
+        mapDescription:
+          'Mapa por pisos con marcadores del cliente y observaciones comunitarias revisadas.',
+        mapStatus: 'Preview disponible',
+        compare: 'Comparar Pokémon y tiers',
+        compareDescription:
+          'Compara variantes y filtra el roster público por tier, función y elementos.',
+        compareStatus: 'Disponible con snapshot público',
+        guild: 'Ranking de guild',
+        guildDescription:
+          'Carga el JSON del cliente, calcula el ritmo semanal y exporta texto e imagen con la contribución.',
+        guildStatus: 'Disponible en local',
+        rotation: 'Rotaciones y equipos',
+        rotationDescription:
+          'Siguiente bloque: lectura de rotaciones y armado de equipos guardados.',
+        hunts: 'Buscador de hunts',
+        huntsDescription: 'Pendiente de fuentes estructuradas y ubicaciones revisadas.',
+        calculators: 'Calculadoras',
+        calculatorsDescription:
+          'Pendiente de fórmulas y datos del juego con procedencia suficiente.',
+      }
+    : {
+        title: 'Tools',
+        description:
+          'Utilities integrated into the wiki for browsing and organizing PokeAlliance information.',
+        intro:
+          'Tools live inside the Codex. Each one will be enabled when its data and boundaries are sufficiently reviewed.',
+        available: 'Available',
+        planned: 'Next in the roadmap',
+        search: 'Codex search',
+        searchDescription: 'Find Pokémon, moves, items, quests and other published records.',
+        map: 'Interactive map',
+        mapDescription: 'Floor-aware map with client markers and reviewed community observations.',
+        mapStatus: 'Preview available',
+        compare: 'Compare Pokémon and tiers',
+        compareDescription:
+          'Compare variants and filter the public roster by tier, role and elements.',
+        compareStatus: 'Available with public snapshot',
+        guild: 'Guild ranking',
+        guildDescription:
+          'Load the client JSON, calculate the weekly pace and export text and image with contribution.',
+        guildStatus: 'Available locally',
+        rotation: 'Rotations and teams',
+        rotationDescription: 'Next block: rotation reading and saved team building.',
+        hunts: 'Hunt Finder',
+        huntsDescription: 'Waiting for structured sources and reviewed locations.',
+        calculators: 'Calculators',
+        calculatorsDescription: 'Waiting for formulas and sufficiently sourced game data.',
+      };
+---
+
+<AppLayout locale={locale} title={copy.title} description={copy.description}>
+  <div>
+    <nav
+      class="wiki-breadcrumbs"
+      aria-label={locale === 'es' ? 'Ruta de navegación' : 'Breadcrumb'}
+    >
+      <a href={`/${locale}/`}>{locale === 'es' ? 'Inicio' : 'Home'}</a>
+      <span class="wiki-breadcrumb-separator">/</span>
+      <span>{copy.title}</span>
+    </nav>
+    <header class="wiki-page-header">
+      <p class="eyebrow">{locale === 'es' ? 'Sección del Codex' : 'Codex section'}</p>
+      <h1 class="display-title">{copy.title}</h1>
+      <p class="muted-copy">{copy.intro}</p>
+    </header>
+
+    <section class="wiki-section" aria-labelledby="available-title">
+      <div class="wiki-section-heading">
+        <h2 id="available-title" class="section-title">{copy.available}</h2>
+      </div>
+      <div class="wiki-panel mt-4">
+        <a class="wiki-portal-link px-4" href={`/${locale}/buscar/`}>
+          <span
+            ><strong>{copy.search}</strong><span class="block text-xs text-muted-foreground"
+              >{copy.searchDescription}</span
+            ></span
+          >
+        </a>
+      </div>
+      <div class="wiki-data-list mt-4">
+        <a class="wiki-data-row no-underline" href={`/${locale}/mapa/`}>
+          <span class="wiki-data-row-name">{copy.map}</span>
+          <span class="wiki-data-row-summary">{copy.mapDescription}</span>
+          <span class="status-label">{copy.mapStatus}</span>
+        </a>
+        <a class="wiki-data-row no-underline" href={`/${locale}/herramientas/pokemon/`}>
+          <span class="wiki-data-row-name">{copy.compare}</span>
+          <span class="wiki-data-row-summary">{copy.compareDescription}</span>
+          <span class="status-label" data-status="supported">{copy.compareStatus}</span>
+        </a>
+        <a class="wiki-data-row no-underline" href={`/${locale}/herramientas/guild/`}>
+          <span class="wiki-data-row-name">{copy.guild}</span>
+          <span class="wiki-data-row-summary">{copy.guildDescription}</span>
+          <span class="status-label" data-status="supported">{copy.guildStatus}</span>
+        </a>
+      </div>
+    </section>
+
+    <section class="wiki-section" aria-labelledby="planned-title">
+      <div class="wiki-section-heading">
+        <h2 id="planned-title" class="section-title">{copy.planned}</h2>
+      </div>
+      <div class="wiki-data-list mt-4">
+        <div class="wiki-data-row">
+          <span class="wiki-data-row-name">{copy.rotation}</span>
+          <span class="wiki-data-row-summary">{copy.rotationDescription}</span>
+          <span class="status-label">{copy.planned}</span>
+        </div>
+        <div class="wiki-data-row">
+          <span class="wiki-data-row-name">{copy.hunts}</span>
+          <span class="wiki-data-row-summary">{copy.huntsDescription}</span>
+          <span class="status-label">{copy.planned}</span>
+        </div>
+        <div class="wiki-data-row">
+          <span class="wiki-data-row-name">{copy.calculators}</span>
+          <span class="wiki-data-row-summary">{copy.calculatorsDescription}</span>
+          <span class="status-label">{copy.planned}</span>
+        </div>
+      </div>
+    </section>
+  </div>
+</AppLayout>

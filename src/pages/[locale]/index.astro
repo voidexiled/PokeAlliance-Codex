@@ -1,0 +1,312 @@
+---
+import AppLayout from '../../layouts/AppLayout.astro';
+import { ServerSaveStatus } from '../../components/phase3/ServerSaveStatus';
+import { getLocale, locales, type Locale } from '../../i18n/config';
+import { SERVER_SAVE_ZONE } from '../../lib/time/server-save';
+import { getCatalogMetrics, getCollections, getRecords } from '../../lib/content/repository';
+import { Temporal } from '@js-temporal/polyfill';
+import { WikiSearch } from '../../components/wiki/WikiSearch';
+import { WikiPortalPanel } from '../../components/wiki/WikiPortalPanel';
+import {
+  BookOpenIcon,
+  BoxesIcon,
+  FileClockIcon,
+  MapIcon,
+  SearchIcon,
+  ShieldIcon,
+  SparklesIcon,
+  SwordsIcon,
+  UsersIcon,
+} from 'lucide-react';
+
+export const prerender = true;
+
+export function getStaticPaths() {
+  return locales.map((locale) => ({ params: { locale } }));
+}
+
+const locale = getLocale(Astro.params.locale) as Locale;
+const canonicalDate = Temporal.Now.zonedDateTimeISO(SERVER_SAVE_ZONE).toPlainDate().toString();
+const catalog = getCatalogMetrics();
+const collections = getCollections(locale);
+const featuredPokemon = getRecords('pokemon')[0];
+const copy =
+  locale === 'es'
+    ? {
+        title: 'Inicio',
+        description: 'Wiki comunitaria de PokeAlliance con fichas, guías y herramientas.',
+        eyebrow: 'Alliance Codex',
+        welcome: 'Bienvenido a la wiki de PokeAlliance',
+        intro:
+          'Consulta la información del juego, revisa de dónde sale cada dato y encuentra las herramientas que iremos construyendo con la comunidad.',
+        featured: 'Accesos rápidos',
+        pokedex: 'Pokédex',
+        pokedexDescription: 'Especies, variantes y hechos revisados.',
+        guides: 'Guías',
+        guidesDescription: 'Misiones, ubicaciones y rutas documentadas.',
+        tools: 'Herramientas',
+        toolsDescription: 'Mapa, búsqueda y utilidades del Codex.',
+        changes: 'Cambios',
+        changesDescription: 'Registro de actualizaciones y revisiones.',
+        catalog: 'Contenido disponible',
+        records: 'registros',
+        dataStatus: 'Estado de los datos',
+        dataStatusIntro:
+          'Esta muestra está conectada al repositorio normalizado. La cobertura completa se incorporará por etapas.',
+        type: 'Tipo',
+        count: 'Cantidad',
+        temporal: 'Hora del servidor',
+        temporalDescription:
+          'Server Save se guarda a las 00:00 en Brasil y se convierte a la zona local de cada visitante.',
+        featuredEntry: 'Ficha de ejemplo',
+        collections: 'Colecciones',
+        wikiTools: 'Herramientas de la wiki',
+        community: 'Comunidad y revisión',
+      }
+    : {
+        title: 'Home',
+        description: 'Community wiki for PokeAlliance with records, guides and tools.',
+        eyebrow: 'Alliance Codex',
+        welcome: 'Welcome to the PokeAlliance wiki',
+        intro:
+          'Browse game information, see where each fact comes from and find the tools we will build with the community.',
+        featured: 'Quick access',
+        pokedex: 'Pokédex',
+        pokedexDescription: 'Species, variants and reviewed facts.',
+        guides: 'Guides',
+        guidesDescription: 'Documented quests, locations and routes.',
+        tools: 'Tools',
+        toolsDescription: 'Map, search and Codex utilities.',
+        changes: 'Changes',
+        changesDescription: 'Updates and review history.',
+        catalog: 'Available content',
+        records: 'records',
+        dataStatus: 'Data status',
+        dataStatusIntro:
+          'This sample is connected to the normalized repository. Full coverage will be added in stages.',
+        type: 'Type',
+        count: 'Count',
+        temporal: 'Server time',
+        temporalDescription:
+          'Server Save is stored at 00:00 in Brazil and converted to each visitor’s local zone.',
+        featuredEntry: 'Example entry',
+        collections: 'Collections',
+        wikiTools: 'Wiki tools',
+        community: 'Community & review',
+      };
+const quickLinks = [
+  {
+    title: copy.pokedex,
+    description: copy.pokedexDescription,
+    href: `/${locale}/pokedex/`,
+    icon: BookOpenIcon,
+  },
+  {
+    title: copy.guides,
+    description: copy.guidesDescription,
+    href: `/${locale}/guias/`,
+    icon: SparklesIcon,
+  },
+  {
+    title: copy.tools,
+    description: copy.toolsDescription,
+    href: `/${locale}/herramientas/`,
+    icon: SwordsIcon,
+  },
+  {
+    title: copy.changes,
+    description: copy.changesDescription,
+    href: `/${locale}/cambios/`,
+    icon: FileClockIcon,
+  },
+];
+const collectionLinks = collections.map((collection) => ({
+  title: collection.label,
+  description: collection.description,
+  href: collection.href,
+  meta: collection.count,
+  icon: BoxesIcon,
+}));
+const toolLinks = [
+  {
+    title: locale === 'es' ? 'Comparar Pokémon' : 'Compare Pokémon',
+    href: `/${locale}/herramientas/pokemon/`,
+    icon: SwordsIcon,
+  },
+  {
+    title: locale === 'es' ? 'Ranking de guild' : 'Guild ranking',
+    href: `/${locale}/herramientas/guild/`,
+    icon: UsersIcon,
+  },
+  {
+    title: locale === 'es' ? 'Mapa del cliente' : 'Client map',
+    href: `/${locale}/mapa/`,
+    icon: MapIcon,
+  },
+  { title: locale === 'es' ? 'Buscar' : 'Search', href: `/${locale}/buscar/`, icon: SearchIcon },
+];
+const communityLinks = [
+  {
+    title: locale === 'es' ? 'Fuentes y procedencia' : 'Sources & provenance',
+    href: `/${locale}/fuentes/`,
+    icon: ShieldIcon,
+  },
+  { title: copy.changes, href: `/${locale}/cambios/`, icon: FileClockIcon },
+  {
+    title: locale === 'es' ? 'Aportar al mapa' : 'Contribute to the map',
+    href: `/${locale}/mapa/aportar/`,
+    icon: MapIcon,
+  },
+];
+---
+
+<AppLayout locale={locale} title={copy.title} description={copy.description}>
+  <div>
+    <header class="wiki-page-header wiki-home-page-header">
+      <div class="wiki-home-brandline">
+        <span class="wiki-home-brandmark" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path
+              d="M12 3.5 19 7.3v8.4L12 19.5l-7-3.8V7.3l7-3.8Z"
+              stroke="currentColor"
+              stroke-width="1.7"></path>
+            <path
+              d="m8.5 12 2.2 2.2 4.8-5"
+              stroke="currentColor"
+              stroke-width="1.7"
+              stroke-linecap="round"
+              stroke-linejoin="round"></path>
+          </svg>
+        </span>
+        <div>
+          <p class="eyebrow">{copy.eyebrow}</p>
+          <h1 class="display-title">{copy.welcome}</h1>
+          <p class="muted-copy">{copy.intro}</p>
+        </div>
+      </div>
+      <div class="wiki-home-search">
+        <WikiSearch
+          action={`/${locale}/buscar/`}
+          label={locale === 'es' ? 'Buscar en la wiki' : 'Search the wiki'}
+          placeholder={locale === 'es'
+            ? 'Buscar por páginas, Pokémon, objetos…'
+            : 'Search pages, Pokémon, items…'}
+          prominent
+        />
+      </div>
+    </header>
+
+    <section class="wiki-section wiki-home-featured-section" aria-labelledby="quick-access-title">
+      <div class="wiki-section-heading">
+        <h2 id="quick-access-title" class="section-title">{copy.featured}</h2>
+        <span class="wiki-section-count">{quickLinks.length}</span>
+      </div>
+      <div class="wiki-featured-list">
+        {
+          quickLinks.map((link) => (
+            <a class="wiki-featured-link" href={link.href}>
+              <span class="wiki-featured-mark" aria-hidden="true">
+                <link.icon />
+              </span>
+              <span>
+                <strong>{link.title}</strong>
+                <span class="block text-xs text-muted-foreground">{link.description}</span>
+              </span>
+            </a>
+          ))
+        }
+      </div>
+    </section>
+
+    <section class="wiki-section wiki-home-catalog-section" aria-labelledby="catalog-title">
+      <div class="wiki-section-heading">
+        <h2 id="catalog-title" class="section-title">{copy.catalog}</h2>
+        <span class="wiki-section-count">{catalog.records} {copy.records}</span>
+      </div>
+      <div class="wiki-home-index-grid mt-4">
+        <WikiPortalPanel
+          title={copy.collections}
+          icon={BookOpenIcon}
+          links={collectionLinks}
+          count={catalog.records}
+        />
+        <WikiPortalPanel
+          title={copy.wikiTools}
+          icon={SwordsIcon}
+          links={toolLinks}
+          count={toolLinks.length}
+        />
+        <WikiPortalPanel
+          title={copy.community}
+          icon={UsersIcon}
+          links={communityLinks}
+          count={communityLinks.length}
+        />
+      </div>
+    </section>
+
+    <section
+      class="wiki-section grid gap-5 lg:grid-cols-[minmax(0,1fr)_330px]"
+      aria-labelledby="status-title"
+    >
+      <div class="wiki-panel">
+        <div class="wiki-panel-header">
+          <div>
+            <h2 id="status-title">{copy.dataStatus}</h2>
+            <p class="mt-1 text-xs text-muted-foreground">{copy.dataStatusIntro}</p>
+          </div>
+        </div>
+        <table class="wiki-status-table">
+          <thead>
+            <tr><th>{copy.type}</th><th>{copy.count}</th></tr>
+          </thead>
+          <tbody>
+            <tr
+              ><td>{locale === 'es' ? 'Registros normalizados' : 'Normalized records'}</td><td
+                >{catalog.records}</td
+              ></tr
+            >
+            <tr
+              ><td>{locale === 'es' ? 'Fuentes registradas' : 'Registered sources'}</td><td
+                >{catalog.sources}</td
+              ></tr
+            >
+            <tr
+              ><td>{locale === 'es' ? 'Evidencias enlazadas' : 'Linked evidence'}</td><td
+                >{catalog.evidence}</td
+              ></tr
+            >
+          </tbody>
+        </table>
+      </div>
+      <div>
+        <div class="mb-3">
+          <p class="eyebrow">{copy.temporal}</p>
+          <p class="mt-2 text-sm text-muted-foreground">{copy.temporalDescription}</p>
+        </div>
+        <ServerSaveStatus locale={locale} canonicalDate={canonicalDate} client:load />
+      </div>
+    </section>
+
+    {
+      featuredPokemon && (
+        <section class="wiki-section" aria-labelledby="featured-entry-title">
+          <div class="wiki-section-heading">
+            <h2 id="featured-entry-title" class="section-title">
+              {copy.featuredEntry}
+            </h2>
+          </div>
+          <a
+            class="wiki-panel mt-4 block px-4 py-3 text-sm text-foreground no-underline hover:border-accent"
+            href={`/${locale}/pokedex/${featuredPokemon.canonicalSlug}/`}
+          >
+            {featuredPokemon.canonicalName}
+            <span class="ml-3 font-mono text-xs text-muted-foreground">
+              #{featuredPokemon.pokedexNumber ?? '—'}
+            </span>
+          </a>
+        </section>
+      )
+    }
+  </div>
+</AppLayout>

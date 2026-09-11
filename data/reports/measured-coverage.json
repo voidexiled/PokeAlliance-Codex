@@ -1,0 +1,72 @@
+{
+  "schemaVersion": "0.1.0",
+  "generatedAt": "2026-09-09T17:56:09.1791878Z",
+  "jsonFilesParsed": 29,
+  "sourceCount": 10,
+  "evidenceCount": 19,
+  "validationIssueCount": 0,
+  "issues": [],
+  "domains": [
+    {
+      "domain": "pokemon_variant",
+      "recordCount": 1,
+      "requiredFieldCount": 17,
+      "presentFieldInstances": 3,
+      "possibleFieldInstances": 17,
+      "measuredFieldCoveragePercent": 17.65
+    },
+    {
+      "domain": "move",
+      "recordCount": 1,
+      "requiredFieldCount": 12,
+      "presentFieldInstances": 8,
+      "possibleFieldInstances": 12,
+      "measuredFieldCoveragePercent": 66.67
+    },
+    {
+      "domain": "location_hunt",
+      "recordCount": 1,
+      "requiredFieldCount": 15,
+      "presentFieldInstances": 7,
+      "possibleFieldInstances": 15,
+      "measuredFieldCoveragePercent": 46.67
+    },
+    {
+      "domain": "item",
+      "recordCount": 1,
+      "requiredFieldCount": 13,
+      "presentFieldInstances": 6,
+      "possibleFieldInstances": 13,
+      "measuredFieldCoveragePercent": 46.15
+    },
+    {
+      "domain": "quest",
+      "recordCount": 1,
+      "requiredFieldCount": 16,
+      "presentFieldInstances": 14,
+      "possibleFieldInstances": 16,
+      "measuredFieldCoveragePercent": 87.5
+    },
+    {
+      "domain": "rotation_tier_assertion",
+      "recordCount": 1,
+      "requiredFieldCount": 13,
+      "presentFieldInstances": 10,
+      "possibleFieldInstances": 13,
+      "measuredFieldCoveragePercent": 76.92
+    },
+    {
+      "domain": "map_feature",
+      "recordCount": 1,
+      "requiredFieldCount": 14,
+      "presentFieldInstances": 11,
+      "possibleFieldInstances": 14,
+      "measuredFieldCoveragePercent": 78.57
+    }
+  ],
+  "notes": [
+    "Coverage is measured only against normalized research records currently present in the repository.",
+    "A zero can mean no normalized records exist yet; it does not mean the game domain has no data.",
+    "Field-name mismatches are intentionally counted as missing until Phase 2 resolves the canonical model."
+  ]
+}

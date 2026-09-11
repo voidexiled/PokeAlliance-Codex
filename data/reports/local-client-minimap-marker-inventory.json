@@ -1,0 +1,36 @@
+{
+  "schemaVersion": "0.1.0",
+  "generatedAt": "2026-09-09T00:00:00-06:00",
+  "sourceRoot": "research-inbox/client-files/local/PokeAlliance",
+  "module": {
+    "relativePath": "modules/game_minimap",
+    "files": [
+      { "path": "minimap.lua", "bytes": 11392, "sha256": "670CA2594982EDBE27260BEC382D67621872CDBEBA269CB4310D3AAA7AC01D83", "protectedOrNonstandard": true },
+      { "path": "minimap.otmod", "bytes": 208, "sha256": "256222A2B049F0584B637815B9078B3A798C08448D49BD3A207C7A4463172EBF", "protectedOrNonstandard": true },
+      { "path": "minimap.otui", "bytes": 800, "sha256": "01A8B827FDD556545A388320FB138FC4B832860BD278EAB3EB2A5C2FD7BC90B7", "protectedOrNonstandard": true },
+      { "path": "searchcoords.otui", "bytes": 1024, "sha256": "6AFF8FCC575C6D62FCFC4C4065A5E3D496F3BD78D4E9DF76B99E08A09D8AC787", "protectedOrNonstandard": true },
+      { "path": "waypoint.otui", "bytes": 400, "sha256": "244439377B20771B6D46682E38D1C39334741583500294112B5D75CC7083D7D7", "protectedOrNonstandard": true },
+      { "path": "images/waypoints.png", "bytes": 6672, "sha256": "447FC5C09E0974E1FD45DB01541458FDC122ECEA334DFA7267C2FE7FD8ED766E", "protectedOrNonstandard": true }
+    ]
+  },
+  "namedMarkerAssets": [
+    "catch", "duel", "event", "gyms", "item", "kill", "mark", "nurse", "requirement"
+  ],
+  "markerAssetCount": 9,
+  "mapFlagAssetCount": 20,
+  "configuredFlagRecordCount": 119,
+  "configuredFlagDescriptions": { "Pokemon Center": 57, "Poke Mart": 44, "Fisherman": 11, "PIDGEOT": 1, "TOGEPI": 1, "Toge": 1, "(empty description)": 4 },
+  "configuredFlagFloors": [1, 3, 4, 5, 6, 7, 8, 9],
+  "capabilitiesIndicatedByNames": [
+    "waypoint editing or display",
+    "coordinate search UI",
+    "map floor up/down controls",
+    "named NPC or activity marker categories",
+    "map flag legend"
+  ],
+  "limitations": [
+    "Protected module and image bytes were not decoded or bypassed.",
+    "Asset names indicate intended UI categories but do not prove coordinate datasets or marker placement.",
+    "No semantic coordinate labels have been extracted yet."
+  ]
+}

@@ -1,0 +1,5 @@
+{
+  "framework": "astro",
+  "installCommand": "pnpm install --frozen-lockfile",
+  "buildCommand": "pnpm build"
+}

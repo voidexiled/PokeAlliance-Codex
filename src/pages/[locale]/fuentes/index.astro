@@ -1,0 +1,73 @@
+---
+import AppLayout from '../../../layouts/AppLayout.astro';
+import { getEvidenceForSource, getSources } from '../../../lib/content/repository';
+import { getLocale, locales, type Locale } from '../../../i18n/config';
+import { WikiSourceCard } from '../../../components/wiki/WikiSourceCard';
+
+export const prerender = true;
+
+export function getStaticPaths() {
+  return locales.map((locale) => ({ params: { locale } }));
+}
+
+const locale = getLocale(Astro.params.locale) as Locale;
+const sources = getSources();
+const copy =
+  locale === 'es'
+    ? {
+        title: 'Fuentes y procedencia',
+        description:
+          'Registro de superficies consultadas, autoridad, frescura y evidencia disponible.',
+        eyebrow: 'Wiki Core / Provenance',
+        intro:
+          'La wiki no oculta de dónde sale cada afirmación. Las fuentes locales se conservan como observaciones, no como enlaces públicos.',
+        authority: 'Autoridad',
+        scope: 'Alcance',
+        checked: 'Última consulta',
+        evidence: 'evidencias',
+        open: 'Abrir fuente',
+        local: 'Observación local',
+      }
+    : {
+        title: 'Sources & provenance',
+        description: 'Registry of consulted surfaces, authority, freshness and available evidence.',
+        eyebrow: 'Wiki Core / Provenance',
+        intro:
+          'The wiki keeps the origin of each assertion visible. Local sources remain observations, not public links.',
+        authority: 'Authority',
+        scope: 'Scope',
+        checked: 'Last checked',
+        evidence: 'evidence items',
+        open: 'Open source',
+        local: 'Local observation',
+      };
+---
+
+<AppLayout locale={locale} title={copy.title} description={copy.description}>
+  <div>
+    <nav
+      class="wiki-breadcrumbs"
+      aria-label={locale === 'es' ? 'Ruta de navegación' : 'Breadcrumb'}
+    >
+      <a href={`/${locale}/`}>{locale === 'es' ? 'Inicio' : 'Home'}</a>
+      <span class="wiki-breadcrumb-separator">/</span>
+      <span>{copy.title}</span>
+    </nav>
+    <header class="wiki-page-header">
+      <p class="eyebrow">{copy.eyebrow}</p>
+      <h1 class="display-title">{copy.title}</h1>
+      <p class="muted-copy">{copy.intro}</p>
+    </header>
+
+    <div class="wiki-section wiki-document-grid">
+      {
+        sources.map((source) => {
+          const sourceEvidence = getEvidenceForSource(source.id);
+          return (
+            <WikiSourceCard source={source} evidenceCount={sourceEvidence.length} copy={copy} />
+          );
+        })
+      }
+    </div>
+  </div>
+</AppLayout>

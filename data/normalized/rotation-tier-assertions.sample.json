@@ -1,0 +1,24 @@
+{
+  "schemaVersion": "0.1.0-draft",
+  "generatedAt": "2026-09-09T00:00:00-06:00",
+  "status": "research_sample_not_application_ready",
+  "records": [
+    {
+      "id": "rotation-assertion:special-shiny-tiers-primal-only",
+      "assertionId": "rotation-assertion:special-shiny-tiers-primal-only",
+      "canonicalSlug": "special-shiny-tiers-primal-only",
+      "canonicalName": "Special Shiny tiers — Primal Area availability",
+      "facts": {
+        "subjectEntityId": { "value": "pokemon-variant:shiny-ultra-rare-legendary-mythic", "status": "supported", "evidenceIds": ["evidence:pka-shiny-tiers:2026-09-09"] },
+        "assertionKind": { "value": "availability_scope", "status": "supported", "evidenceIds": ["evidence:pka-shiny-tiers:2026-09-09"] },
+        "methodologyVersion": { "value": "official-wiki-page-2026-09-09", "status": "supported", "evidenceIds": ["evidence:pka-shiny-tiers:2026-09-09"] },
+        "value": { "value": "Ultra Rare, Legendary and Mythic Shiny variants appear naturally only in compatible Primal Areas.", "status": "supported", "evidenceIds": ["evidence:pka-shiny-tiers:2026-09-09"] },
+        "context": { "value": { "excludedScopes": ["common respawns", "Wildscape"], "compatibilityCondition": "The species must be configured for the specific Primal Area." }, "status": "supported", "evidenceIds": ["evidence:pka-shiny-tiers:2026-09-09"] },
+        "rationale": { "value": "The guide distinguishes the rarity tier from traditional legendary species status and states that the natural appearance is restricted to compatible Primal Areas.", "status": "supported", "evidenceIds": ["evidence:pka-shiny-tiers:2026-09-09"] },
+        "status": { "value": "current_guide_assertion", "status": "supported", "evidenceIds": ["evidence:pka-shiny-tiers:2026-09-09"] },
+        "hunts": { "value": ["common respawn", "Wildscape", "Primal Area"], "status": "supported", "evidenceIds": ["evidence:pka-shiny-tiers:2026-09-09"] },
+        "comparisonSet": { "value": ["common respawn", "Wildscape", "compatible Primal Area"], "status": "supported", "evidenceIds": ["evidence:pka-shiny-tiers:2026-09-09"] }
+      }
+    }
+  ]
+}

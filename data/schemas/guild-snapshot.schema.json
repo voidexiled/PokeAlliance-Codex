@@ -1,0 +1,72 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://alliancecodex.example/schemas/guild-snapshot.schema.json",
+  "title": "Alliance Codex future guild snapshot",
+  "type": "object",
+  "required": ["schemaVersion", "snapshotId", "capturedAt", "phase", "source", "guild", "members"],
+  "additionalProperties": false,
+  "properties": {
+    "schemaVersion": { "type": "string", "minLength": 1 },
+    "snapshotId": { "type": "string", "pattern": "^guild-snapshot:[a-z0-9-]+:[0-9T:-]+$" },
+    "capturedAt": { "type": "string", "format": "date-time" },
+    "phase": { "enum": ["before_server_save", "after_server_save"] },
+    "serverSave": {
+      "type": "object",
+      "required": ["canonicalZone", "localDate", "localTime"],
+      "additionalProperties": false,
+      "properties": {
+        "canonicalZone": { "const": "America/Sao_Paulo" },
+        "localDate": { "type": "string", "format": "date" },
+        "localTime": { "const": "00:00:00" },
+        "visitorZone": { "type": ["string", "null"] },
+        "visitorLocalInstant": { "type": ["string", "null"], "format": "date-time" }
+      }
+    },
+    "source": {
+      "type": "object",
+      "required": ["kind", "locator", "sha256", "completeness"],
+      "additionalProperties": false,
+      "properties": {
+        "kind": { "type": "string", "minLength": 1 },
+        "locator": { "type": "string", "minLength": 1 },
+        "sha256": { "type": "string", "pattern": "^[A-Fa-f0-9]{64}$" },
+        "clientVersion": { "type": ["string", "null"] },
+        "completeness": { "enum": ["complete", "partial", "unknown", "failed"] }
+      }
+    },
+    "guild": {
+      "type": "object",
+      "required": ["guildKey"],
+      "additionalProperties": false,
+      "properties": {
+        "guildKey": { "type": "string", "minLength": 1 },
+        "worldKey": { "type": ["string", "null"] }
+      }
+    },
+    "members": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["memberKey", "observedFields"],
+        "additionalProperties": false,
+          "properties": {
+          "memberKey": { "type": "string", "minLength": 1, "description": "Normalized unique in-game name within guild/world scope." },
+          "observedFields": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "level": { "type": ["integer", "null"], "minimum": 0 },
+              "dailiesCompleted": { "type": ["integer", "null"], "minimum": 0 },
+              "rank": { "type": ["string", "null"] },
+              "status": { "type": ["string", "null"] },
+              "contribution": { "type": ["integer", "null"], "minimum": 0 },
+              "displayName": { "type": ["string", "null"] },
+              "lastLogin": { "type": ["string", "null"] }
+            }
+          },
+          "fieldAvailability": { "type": "object" }
+        }
+      }
+    }
+  }
+}

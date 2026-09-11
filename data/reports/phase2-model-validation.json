@@ -1,0 +1,16 @@
+{
+  "schemaVersion": "0.1.0",
+  "generatedAt": "2026-09-11T10:31:18.6876702Z",
+  "phase": 2,
+  "migrationCount": 7,
+  "requiredArtifactCount": 10,
+  "workflowScenarioCount": 4,
+  "researchValidationExitCode": 0,
+  "validationIssueCount": 0,
+  "issues": [],
+  "scope": [
+    "Static artifact, migration-order and contract-token audit.",
+    "Existing Phase 1 research validator rerun.",
+    "Remote migration application is verified separately through the Supabase CLI."
+  ]
+}

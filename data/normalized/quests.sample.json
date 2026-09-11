@@ -1,0 +1,27 @@
+{
+  "schemaVersion": "0.1.0-draft",
+  "generatedAt": "2026-09-09T00:00:00-06:00",
+  "status": "research_sample_not_application_ready",
+  "records": [
+    {
+      "id": "quest:porygon-dr-vektor",
+      "entityId": "quest:porygon-dr-vektor",
+      "canonicalSlug": "porygon-quest-dr-vektor",
+      "canonicalName": "Porygon Quest: Dr. Vektor",
+      "facts": {
+        "canonicalTitle": { "value": "Porygon Quest: Dr. Vektor", "status": "supported", "evidenceIds": ["evidence:pka-porygon-quest:2026-09-09"] },
+        "requiredLevel": { "value": 200, "status": "supported", "evidenceIds": ["evidence:pka-porygon-quest:2026-09-09"] },
+        "prerequisites": { "value": ["Speak with Dr. Vektor", "Accept to help with the research"], "status": "supported", "evidenceIds": ["evidence:pka-porygon-quest:2026-09-09"] },
+        "steps": { "value": ["Accept the mission", "Use the computer beside Dr. Vektor", "Solve the computer-color sequence", "Activate the final room", "Defeat Giant Porygon", "Return to Dr. Vektor"], "status": "supported", "evidenceIds": ["evidence:pka-porygon-quest:2026-09-09"] },
+        "rewards": { "value": ["5,000,000 experience", "50 Empty Alliance Ball", "50 Empty Yume Ball", "4 Enhanced Normal Stone", "Permanent access to the Porygon-area computer"], "status": "supported", "evidenceIds": ["evidence:pka-porygon-quest:2026-09-09"] },
+        "npcs": { "value": ["Dr. Vektor"], "status": "supported", "evidenceIds": ["evidence:pka-porygon-quest:2026-09-09"] },
+        "locations": { "value": ["Digital World", "Porygon area", "Dr. Vektor laboratory"], "status": "supported", "evidenceIds": ["evidence:pka-porygon-quest:2026-09-09"] },
+        "pokemon": { "value": ["Giant Porygon", "Porygon"], "status": "supported", "evidenceIds": ["evidence:pka-porygon-quest:2026-09-09"] },
+        "systems": { "value": ["time-limited instance", "computer puzzle", "permanent area access"], "status": "supported", "evidenceIds": ["evidence:pka-porygon-quest:2026-09-09"] },
+        "summary": { "value": "Help Dr. Vektor remove a virus from the Digital World and unlock permanent access to the Porygon area.", "status": "supported", "evidenceIds": ["evidence:pka-porygon-quest:2026-09-09"] },
+        "instructions": { "value": "Complete the computer sequence and defeat Giant Porygon within 45 minutes, then return to Dr. Vektor.", "status": "supported", "evidenceIds": ["evidence:pka-porygon-quest:2026-09-09"] },
+        "notes": { "value": ["The instance accepts one player at a time.", "The computer positions change on a new attempt.", "Coordinates are not supplied by the source page."], "status": "supported", "evidenceIds": ["evidence:pka-porygon-quest:2026-09-09"] }
+      }
+    }
+  ]
+}

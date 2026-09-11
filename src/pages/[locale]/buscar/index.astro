@@ -1,0 +1,72 @@
+---
+import AppLayout from '../../../layouts/AppLayout.astro';
+import { ContentSearch, type SearchItem } from '../../../components/wiki/ContentSearch';
+import {
+  formatFactValue,
+  getCollectionLabel,
+  getRecordHref,
+  searchRecords,
+  type CollectionKey,
+} from '../../../lib/content/repository';
+import { getLocale, locales, type Locale } from '../../../i18n/config';
+
+export const prerender = true;
+
+export function getStaticPaths() {
+  return locales.map((locale) => ({ params: { locale } }));
+}
+
+const locale = getLocale(Astro.params.locale) as Locale;
+const results = searchRecords('', locale);
+const items: SearchItem[] = results.map(({ record, collection }) => {
+  const summaryFact = record.facts.summary ?? record.facts.description ?? record.facts.value;
+  return {
+    id: record.id,
+    name: record.canonicalName,
+    collection: getCollectionLabel(collection as CollectionKey, locale),
+    href: getRecordHref(collection as CollectionKey, record, locale),
+    meta: [record.variant, record.kind, record.itemKind].filter(Boolean).join(' · '),
+    summary: summaryFact ? formatFactValue(summaryFact.value) : '',
+    status: Object.values(record.facts)[0]?.status ?? 'unknown',
+  };
+});
+const copy =
+  locale === 'es'
+    ? {
+        title: 'Buscar en el Codex',
+        description:
+          'Busca en los registros normalizados de Pokémon, movimientos, objetos, misiones y sistemas.',
+        eyebrow: 'Wiki Core / Search',
+        intro:
+          'La búsqueda recorre el catálogo disponible y lleva cada resultado a su ficha o colección correspondiente.',
+      }
+    : {
+        title: 'Search the Codex',
+        description: 'Search normalized records for Pokémon, moves, items, quests and systems.',
+        eyebrow: 'Wiki Core / Search',
+        intro:
+          'Search traverses the available catalog and links every result to its record or collection.',
+      };
+const initialQuery = Astro.url.searchParams.get('q') ?? '';
+---
+
+<AppLayout locale={locale} title={copy.title} description={copy.description}>
+  <div>
+    <nav
+      class="wiki-breadcrumbs"
+      aria-label={locale === 'es' ? 'Ruta de navegación' : 'Breadcrumb'}
+    >
+      <a href={`/${locale}/`}>{locale === 'es' ? 'Inicio' : 'Home'}</a>
+      <span class="wiki-breadcrumb-separator">/</span>
+      <span>{copy.title}</span>
+    </nav>
+    <header class="wiki-page-header">
+      <p class="eyebrow">{copy.eyebrow}</p>
+      <h1 class="display-title">{copy.title}</h1>
+      <p class="muted-copy">{copy.intro}</p>
+    </header>
+    <section class="wiki-section">
+      <ContentSearch items={items} locale={locale} initialQuery={initialQuery} client:load />
+    </section>
+  </div>
+</AppLayout>

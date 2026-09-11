@@ -1,0 +1,16 @@
+{
+  "schemaVersion": "0.1.0",
+  "generatedAt": "2026-09-09T00:00:00-06:00",
+  "sourcePath": "research-inbox/client-files/PokeAlliance/cache/feed.json",
+  "sourceSha256": "0E1ABBC520F4638CBBDFAF1A3F6C52811B80967A5B72703D65C3BCE82237A7A6",
+  "feedUpdatedAt": "2026-09-04T06:46:00Z",
+  "bannerCount": 2,
+  "newsCount": 20,
+  "rawBodiesPersisted": false,
+  "profileScript": "scripts/research/profile-launcher-feed.ps1",
+  "notes": [
+    "The source feed is a local launcher cache and may be incomplete or stale.",
+    "Raw HTML bodies remain in the ignored inbox; the repository stores metadata, headings and hashes only.",
+    "A future importer may create reviewed changelog entries from selected records without rendering source HTML directly."
+  ]
+}

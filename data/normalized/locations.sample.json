@@ -1,0 +1,19 @@
+{
+  "schemaVersion": "0.1.0-draft",
+  "generatedAt": "2026-09-09T00:00:00-06:00",
+  "status": "research_sample_not_application_ready",
+  "records": [
+    {
+      "id": "location:saffron",
+      "entityId": "location:saffron",
+      "canonicalSlug": "saffron",
+      "canonicalName": "Saffron",
+      "kind": "city",
+      "facts": {
+        "region": { "value": "Kanto", "status": "supported", "evidenceIds": ["evidence:pka-teleport-guide:2026-09-09"] },
+        "accessRequirements": { "value": ["Visit the city", "Speak with the Pokémon Center Nurse or Nurse Joy"], "status": "supported", "evidenceIds": ["evidence:pka-teleport-guide:2026-09-09"] },
+        "travelConnections": { "value": [{ "mode": "Teleport", "command": "h \"saffron" }], "status": "supported", "evidenceIds": ["evidence:pka-teleport-guide:2026-09-09"] }
+      }
+    }
+  ]
+}

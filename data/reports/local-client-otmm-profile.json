@@ -1,0 +1,57 @@
+{
+  "schemaVersion": "0.1.0",
+  "generatedAt": "2026-09-09T00:00:00-06:00",
+  "source": {
+    "originalPath": "C:\\Users\\jalom\\AppData\\Roaming\\PokeAlliance\\PokeAllianceV3\\minimap854.otmm",
+    "snapshotPath": "C:\\Users\\jalom\\AppData\\Local\\Temp\\alliance-codex-minimap854-20260909.otmm",
+    "clientVersionInFilename": 854,
+    "sizeBytes": 9332148,
+    "sha256": "E3E0FE7BF1C18A89EA391EB9DF2B3C73CB2EF20DD26EED76AA2152186AD05933",
+    "stablePointInTimeSnapshot": true
+  },
+  "format": {
+    "signature": "OTMM",
+    "version": 1,
+    "description": "OTMM 1.0",
+    "blockWidth": 64,
+    "blockHeight": 64,
+    "tileRecordBytes": 3,
+    "tileRecordFields": ["flags", "color", "speed"],
+    "compression": "zlib",
+    "referenceImplementation": "https://github.com/edubart/otclient/blob/master/src/client/minimap.cpp"
+  },
+  "summary": {
+    "blockCount": 33501,
+    "seenTileCount": 30094994,
+    "coloredTileCount": 23970804,
+    "notPathableTileCount": 156506,
+    "notWalkableTileCount": 13072811,
+    "floorCount": 16,
+    "minimumFloor": 0,
+    "maximumFloor": 15
+  },
+  "floors": [
+    { "z": 15, "blocks": 78, "minX": 768, "maxX": 3519, "minY": 1792, "maxY": 4031, "seenTiles": 22823, "coloredTiles": 22823 },
+    { "z": 14, "blocks": 135, "minX": 768, "maxX": 4031, "minY": 1792, "maxY": 4351, "seenTiles": 82722, "coloredTiles": 82528 },
+    { "z": 13, "blocks": 228, "minX": 192, "maxX": 4031, "minY": 1792, "maxY": 4415, "seenTiles": 96448, "coloredTiles": 90939 },
+    { "z": 12, "blocks": 529, "minX": 64, "maxX": 4735, "minY": 128, "maxY": 5375, "seenTiles": 168949, "coloredTiles": 165128 },
+    { "z": 11, "blocks": 856, "minX": 64, "maxX": 4735, "minY": 128, "maxY": 5375, "seenTiles": 313952, "coloredTiles": 307590 },
+    { "z": 10, "blocks": 851, "minX": 64, "maxX": 4735, "minY": 128, "maxY": 5375, "seenTiles": 468029, "coloredTiles": 463765 },
+    { "z": 9, "blocks": 850, "minX": 64, "maxX": 4735, "minY": 128, "maxY": 5375, "seenTiles": 966880, "coloredTiles": 948053 },
+    { "z": 8, "blocks": 852, "minX": 64, "maxX": 4735, "minY": 128, "maxY": 5375, "seenTiles": 1321374, "coloredTiles": 1272792 },
+    { "z": 7, "blocks": 3675, "minX": 0, "maxX": 6655, "minY": 128, "maxY": 5503, "seenTiles": 11293459, "coloredTiles": 12115925 },
+    { "z": 6, "blocks": 3676, "minX": 0, "maxX": 6655, "minY": 128, "maxY": 5503, "seenTiles": 3453204, "coloredTiles": 3071394 },
+    { "z": 5, "blocks": 3662, "minX": 0, "maxX": 6655, "minY": 128, "maxY": 5503, "seenTiles": 2456439, "coloredTiles": 1934986 },
+    { "z": 4, "blocks": 3647, "minX": 0, "maxX": 6655, "minY": 320, "maxY": 5503, "seenTiles": 2004357, "coloredTiles": 1364887 },
+    { "z": 3, "blocks": 3616, "minX": 0, "maxX": 6655, "minY": 320, "maxY": 5503, "seenTiles": 1753451, "coloredTiles": 901993 },
+    { "z": 2, "blocks": 3615, "minX": 0, "maxX": 6655, "minY": 320, "maxY": 5503, "seenTiles": 1798757, "coloredTiles": 693781 },
+    { "z": 1, "blocks": 3619, "minX": 0, "maxX": 6655, "minY": 320, "maxY": 5503, "seenTiles": 3889505, "coloredTiles": 532027 },
+    { "z": 0, "blocks": 3612, "minX": 0, "maxX": 6655, "minY": 320, "maxY": 5503, "seenTiles": 4645, "coloredTiles": 2193 }
+  ],
+  "limitations": [
+    "The active original changed during an earlier read; all reported values use the stable point-in-time temporary snapshot.",
+    "The file represents explored or preloaded minimap cache state, not a named location dataset.",
+    "No city, hunt, NPC, quest or teleport labels have yet been mapped to coordinates.",
+    "Colored tiles can exist without the WasSeen flag; counts must not be interpreted as unique playable area."
+  ]
+}

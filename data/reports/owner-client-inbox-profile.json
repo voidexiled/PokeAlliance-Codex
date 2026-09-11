@@ -1,0 +1,40 @@
+{
+  "schemaVersion": "0.1.0",
+  "generatedAt": "2026-09-09T00:00:00-06:00",
+  "inboxPath": "C:\\Users\\jalom\\Documents\\ChatGPT\\PokeAlliance-Codex\\research-inbox\\client-files",
+  "inventory": {
+    "totalFilesObserved": 8882,
+    "totalBytesObserved": 925966608,
+    "clientCopy": {
+      "relativePath": "local/PokeAlliance",
+      "files": 8075,
+      "bytes": 809689085,
+      "dominantExtensions": { ".png": 7100, ".otui": 291, ".lua": 250, ".otmod": 136, ".ogg": 114, ".frag": 107 }
+    },
+    "launcherCache": {
+      "relativePath": "PokeAlliance/cache",
+      "files": [
+        { "name": "feed.json", "sha256": "0E1ABBC520F4638CBBDFAF1A3F6C52811B80967A5B72703D65C3BCE82237A7A6", "topLevelFields": ["notice", "banners", "news", "updated_at"] },
+        { "name": "lives.json", "sha256": "69D3A0E6D64B1EC41CF997937D28F81EA58E7F0576ECFEFF6124FFD42BD6CBD4", "topLevelFields": ["streams", "updated_at"] },
+        { "name": "ranking.json", "sha256": "ACD67E24294D46F0B40EC68E20D8A34506E29FE3F3A1B5EE2DE3961C320EFBF2", "topLevelFields": ["worlds", "limit", "global", "by_world", "refreshed_at", "updated_at"] },
+        { "name": "tos.json", "sha256": "3DD8D15FB327C80B61DD1DE7992A5E323D423107D8149D3D4182045696BF15C6", "topLevelFields": ["version", "title", "markdown", "updated_at"] }
+      ]
+    }
+  },
+  "inspectedByExplicitOwnerAuthorization": [
+    "PokeAlliance/PokeAllianceV3/exports/GuildMembers_Void_Exiled_2026-09-09_071522.json"
+  ],
+  "excludedSensitiveBranches": [
+    "roaming/PokeAlliance_Launcher.exe/EBWebView",
+    "PokeAlliance/cache/players.json",
+    "PokeAlliance/PokeAllianceV3/config.otml",
+    "PokeAlliance/PokeAllianceV3/characters.otml",
+    "PokeAlliance/PokeAllianceV3/settings",
+    "PokeAlliance/PokeAllianceV3/exports/* (except the specifically listed guild export)"
+  ],
+  "notes": [
+    "Excluded branches may contain login databases, browser history, sessions, account configuration, character identifiers or community-member data.",
+    "The inbox remains ignored by Git and its contents are not application assets.",
+    "No executable was run and no supplied file was modified."
+  ]
+}

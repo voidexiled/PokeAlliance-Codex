@@ -1,0 +1,39 @@
+{
+  "schemaVersion": "0.1.0",
+  "generatedAt": "2026-09-09T00:00:00-06:00",
+  "records": [
+    {
+      "id": "term:variant:shiny",
+      "canonical": "Shiny",
+      "entityType": "variant_marker",
+      "shouldTranslate": false,
+      "status": "supported",
+      "sourceIds": ["source:pka-admin-wiki"]
+    },
+    {
+      "id": "term:variant:mega",
+      "canonical": "Mega",
+      "entityType": "variant_marker",
+      "shouldTranslate": false,
+      "status": "supported",
+      "sourceIds": ["source:pka-admin-wiki", "source:lukkezin-community-wiki"]
+    },
+    {
+      "id": "term:system:boost",
+      "canonical": "Boost",
+      "entityType": "game_system",
+      "shouldTranslate": false,
+      "status": "supported",
+      "sourceIds": ["source:pka-main-site", "source:pka-admin-wiki"]
+    },
+    {
+      "id": "term:ui:required-level",
+      "canonical": "Required Level",
+      "entityType": "ui_label",
+      "shouldTranslate": true,
+      "translations": { "es": "Nivel requerido", "en": "Required level" },
+      "status": "confirmed",
+      "sourceIds": []
+    }
+  ]
+}

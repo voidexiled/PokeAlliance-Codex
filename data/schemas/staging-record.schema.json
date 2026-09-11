@@ -1,0 +1,39 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://alliancecodex.example/schemas/staging-record.schema.json",
+  "title": "Alliance Codex source-specific staging collection",
+  "type": "object",
+  "required": ["schemaVersion", "generatedAt", "sourceId", "extractor", "records"],
+  "additionalProperties": false,
+  "properties": {
+    "schemaVersion": { "type": "string", "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$" },
+    "generatedAt": { "type": "string", "format": "date-time" },
+    "sourceId": { "type": "string", "pattern": "^source:[a-z0-9-]+$" },
+    "extractor": {
+      "type": "object",
+      "required": ["id", "version", "inputLocator", "inputDigest"],
+      "additionalProperties": false,
+      "properties": {
+        "id": { "type": "string", "minLength": 1 },
+        "version": { "type": "string", "minLength": 1 },
+        "inputLocator": { "type": "string", "minLength": 1 },
+        "inputDigest": { "type": ["string", "null"] }
+      }
+    },
+    "records": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["stagingId", "domain", "sourceLocator", "raw", "issues"],
+        "additionalProperties": false,
+        "properties": {
+          "stagingId": { "type": "string", "pattern": "^staging:[a-z0-9:-]+$" },
+          "domain": { "type": "string", "minLength": 1 },
+          "sourceLocator": { "type": "string", "minLength": 1 },
+          "raw": { "type": "object" },
+          "issues": { "type": "array", "items": { "type": "string" } }
+        }
+      }
+    }
+  }
+}

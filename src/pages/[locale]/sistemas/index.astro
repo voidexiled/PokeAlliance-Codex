@@ -1,0 +1,159 @@
+---
+import AppLayout from '../../../layouts/AppLayout.astro';
+import DataStatus from '../../../components/wiki/DataStatus.astro';
+import EvidenceTrail from '../../../components/wiki/EvidenceTrail.astro';
+import {
+  formatFactValue,
+  getFact,
+  getRecordEvidence,
+  getRecords,
+} from '../../../lib/content/repository';
+import { getLocale, locales, type Locale } from '../../../i18n/config';
+
+export const prerender = true;
+
+export function getStaticPaths() {
+  return locales.map((locale) => ({ params: { locale } }));
+}
+
+const locale = getLocale(Astro.params.locale) as Locale;
+const items = getRecords('items');
+const moves = getRecords('moves');
+const copy =
+  locale === 'es'
+    ? {
+        title: 'Sistemas',
+        description: 'Objetos y movimientos que ayudan a entender los sistemas de PokeAlliance.',
+        eyebrow: 'Wiki Core / Sistemas',
+        intro: 'Cada ficha conserva el estado del dato y el enlace a la evidencia que lo respalda.',
+        items: 'Objetos de sistema',
+        moves: 'Movimientos',
+        descriptionLabel: 'Descripción',
+        element: 'Elemento',
+        slot: 'Slot',
+        cooldown: 'Cooldown',
+        evidence: 'evidencias',
+      }
+    : {
+        title: 'Systems',
+        description: 'Items and moves that explain the systems of PokeAlliance.',
+        eyebrow: 'Wiki Core / Systems',
+        intro: 'Every entry keeps its data status and the evidence link behind it.',
+        items: 'System items',
+        moves: 'Moves',
+        descriptionLabel: 'Description',
+        element: 'Element',
+        slot: 'Slot',
+        cooldown: 'Cooldown',
+        evidence: 'evidence items',
+      };
+const itemViews = items.map((item) => ({
+  item,
+  description: getFact<string>(item, 'description')?.value,
+  evidence: getRecordEvidence(item),
+}));
+const moveViews = moves.map((move) => ({
+  move,
+  combatMode: getFact<string>(move, 'combatMode')?.value,
+  element: getFact<string>(move, 'element')?.value,
+  slot: getFact<string>(move, 'slot')?.value,
+  cooldown: getFact<unknown>(move, 'cooldown')?.value,
+  evidence: getRecordEvidence(move),
+}));
+---
+
+<AppLayout locale={locale} title={copy.title} description={copy.description}>
+  <div>
+    <nav
+      class="wiki-breadcrumbs"
+      aria-label={locale === 'es' ? 'Ruta de navegación' : 'Breadcrumb'}
+    >
+      <a href={`/${locale}/`}>{locale === 'es' ? 'Inicio' : 'Home'}</a>
+      <span class="wiki-breadcrumb-separator">/</span>
+      <span>{copy.title}</span>
+    </nav>
+    <header class="wiki-page-header">
+      <p class="eyebrow">{copy.eyebrow}</p>
+      <h1 class="display-title">{copy.title}</h1>
+      <p class="muted-copy">{copy.intro}</p>
+    </header>
+
+    <section class="wiki-section" aria-labelledby="items-title">
+      <div class="flex items-end justify-between gap-4">
+        <h2 id="items-title" class="section-title">{copy.items}</h2>
+        <span class="font-mono text-xs text-muted-foreground">{items.length}</span>
+      </div>
+      <div class="mt-4 grid gap-4 md:grid-cols-2">
+        {
+          itemViews.map(({ item, description, evidence }) => (
+            <article id={item.canonicalSlug} class="wiki-panel wiki-article-panel p-5">
+              <div class="flex items-start justify-between gap-4">
+                <div>
+                  <p class="eyebrow">{item.itemKind ?? 'item'}</p>
+                  <h3 class="mt-2 text-xl font-semibold tracking-tight">{item.canonicalName}</h3>
+                </div>
+                <DataStatus
+                  status={Object.values(item.facts)[0]?.status ?? 'unknown'}
+                  locale={locale}
+                />
+              </div>
+              {description && <p class="muted-copy mt-4">{description}</p>}
+              <p class="mt-5 font-mono text-[0.65rem] uppercase tracking-[0.13em] text-muted-foreground">
+                {evidence.length} {copy.evidence}
+              </p>
+              <EvidenceTrail records={evidence} locale={locale} />
+            </article>
+          ))
+        }
+      </div>
+    </section>
+
+    <section class="wiki-section" aria-labelledby="moves-title">
+      <div class="flex items-end justify-between gap-4">
+        <h2 id="moves-title" class="section-title">{copy.moves}</h2>
+        <span class="font-mono text-xs text-muted-foreground">{moves.length}</span>
+      </div>
+      <div class="mt-4 grid gap-4 md:grid-cols-2">
+        {
+          moveViews.map(({ move, combatMode, element, slot, cooldown, evidence }) => (
+            <article id={move.canonicalSlug} class="wiki-panel wiki-article-panel p-5">
+              <div class="flex items-start justify-between gap-4">
+                <div>
+                  <p class="eyebrow">{combatMode ?? 'move'}</p>
+                  <h3 class="mt-2 text-xl font-semibold tracking-tight">{move.canonicalName}</h3>
+                </div>
+                <DataStatus
+                  status={Object.values(move.facts)[0]?.status ?? 'unknown'}
+                  locale={locale}
+                />
+              </div>
+              <dl class="mt-5 grid grid-cols-3 gap-3 text-sm">
+                <div>
+                  <>
+                    <dt class="eyebrow">{copy.element}</dt>
+                    <dd class="mt-2 font-semibold">{element ?? '—'}</dd>
+                  </>
+                </div>
+                <div>
+                  <>
+                    <dt class="eyebrow">{copy.slot}</dt>
+                    <dd class="mt-2 font-semibold">{slot ?? '—'}</dd>
+                  </>
+                </div>
+                <div>
+                  <>
+                    <dt class="eyebrow">{copy.cooldown}</dt>
+                    <dd class="mt-2 font-semibold">{formatFactValue(cooldown)}</dd>
+                  </>
+                </div>
+              </dl>
+              <p class="mt-5 font-mono text-[0.65rem] uppercase tracking-[0.13em] text-muted-foreground">
+                {evidence.length} {copy.evidence}
+              </p>
+            </article>
+          ))
+        }
+      </div>
+    </section>
+  </div>
+</AppLayout>

@@ -1,0 +1,147 @@
+---
+import AppLayout from '../../../layouts/AppLayout.astro';
+import DataStatus from '../../../components/wiki/DataStatus.astro';
+import EvidenceTrail from '../../../components/wiki/EvidenceTrail.astro';
+import {
+  formatFactValue,
+  getRecord,
+  getRecordEvidence,
+  getRecords,
+} from '../../../lib/content/repository';
+import { getLocale, locales, type Locale } from '../../../i18n/config';
+
+export const prerender = true;
+
+export function getStaticPaths() {
+  return locales.flatMap((locale) =>
+    getRecords('pokemon').map((record) => ({
+      params: { locale, slug: record.canonicalSlug },
+      props: { record },
+    })),
+  );
+}
+
+const locale = getLocale(Astro.params.locale) as Locale;
+const record = Astro.props.record ?? getRecord('pokemon', Astro.params.slug ?? '');
+if (!record) return Astro.redirect(`/${locale}/pokedex/`);
+
+const evidence = getRecordEvidence(record);
+const factLabels: Record<string, { es: string; en: string }> = {
+  hp: { es: 'Puntos de vida', en: 'Hit points' },
+  experience: { es: 'Experiencia', en: 'Experience' },
+  requiredLevel: { es: 'Nivel requerido', en: 'Required level' },
+  tier: { es: 'Tier', en: 'Tier' },
+  function: { es: 'Función', en: 'Role' },
+};
+const strings =
+  locale === 'es'
+    ? {
+        home: 'Inicio',
+        section: 'Pokédex',
+        back: 'Volver a la Pokédex',
+        sample: 'Registro normalizado',
+        facts: 'Datos de la ficha',
+        factStatus: 'Información publicada',
+        noFact: 'Sin datos publicados',
+        fields: 'campos',
+        evidenceLinks: 'enlaces de evidencia',
+        summary: 'Resumen',
+        recordId: 'Identificador del registro',
+      }
+    : {
+        home: 'Home',
+        section: 'Pokédex',
+        back: 'Back to Pokédex',
+        sample: 'Normalized record',
+        facts: 'Record data',
+        factStatus: 'Published information',
+        noFact: 'No published data',
+        fields: 'fields',
+        evidenceLinks: 'evidence links',
+        summary: 'Summary',
+        recordId: 'Record identifier',
+      };
+---
+
+<AppLayout
+  locale={locale}
+  title={record.canonicalName}
+  description={`${record.canonicalName} · Alliance Codex`}
+>
+  <div>
+    <nav
+      class="wiki-breadcrumbs"
+      aria-label={locale === 'es' ? 'Ruta de navegación' : 'Breadcrumb'}
+    >
+      <a href={`/${locale}/`}>{strings.home}</a>
+      <span class="wiki-breadcrumb-separator">/</span>
+      <a href={`/${locale}/pokedex/`}>{strings.section}</a>
+      <span class="wiki-breadcrumb-separator">/</span>
+      <span>{record.canonicalName}</span>
+    </nav>
+
+    <div class="wiki-article-layout">
+      <article class="wiki-article">
+        <header class="wiki-page-header">
+          <div class="wiki-page-header-row">
+            <div>
+              <p class="eyebrow">{strings.sample}</p>
+              <h1 class="display-title">{record.canonicalName}</h1>
+              <p class="mt-3 font-mono text-xs text-muted-foreground">
+                {record.pokedexNumber ? `#${record.pokedexNumber}` : '—'} · {
+                  record.variant ?? 'base'
+                }
+              </p>
+            </div>
+            <DataStatus
+              status={Object.values(record.facts)[0]?.status ?? 'unknown'}
+              locale={locale}
+            />
+          </div>
+        </header>
+
+        <section class="wiki-section" aria-labelledby="facts-title">
+          <div class="wiki-section-heading">
+            <h2 id="facts-title" class="section-title">{strings.facts}</h2>
+            <span class="wiki-section-count"
+              >{Object.keys(record.facts).length} {strings.fields}</span
+            >
+          </div>
+          <div class="wiki-data-list mt-4">
+            {
+              Object.entries(record.facts).map(([key, fact]) => (
+                <div class="wiki-data-row">
+                  <div class="wiki-data-row-name">{factLabels[key]?.[locale] ?? key}</div>
+                  <div class="wiki-data-row-summary text-foreground">
+                    {formatFactValue(fact.value) || strings.noFact}
+                  </div>
+                  <div class="text-right">
+                    <DataStatus status={fact.status} locale={locale} />
+                    <p class="mt-1 font-mono text-[0.6rem] text-muted-foreground">
+                      {fact.evidenceIds.length} {strings.evidenceLinks}
+                    </p>
+                  </div>
+                </div>
+              ))
+            }
+          </div>
+        </section>
+
+        <EvidenceTrail records={evidence} locale={locale} />
+      </article>
+
+      <aside class="wiki-toc" aria-label={strings.summary}>
+        <p class="wiki-toc-title">{strings.summary}</p>
+        <a href="#facts-title">{strings.facts}</a>
+        <a href="#evidence-title"
+          >{locale === 'es' ? 'Fuentes y evidencia' : 'Sources and evidence'}</a
+        >
+        <p class="mt-5 text-[0.68rem] leading-5 text-muted-foreground">{strings.recordId}</p>
+        <p class="mt-1 break-all font-mono text-[0.63rem] leading-5 text-muted-foreground">
+          {record.id}
+        </p>
+        <a class="mt-5" href={`/${locale}/pokedex/`}>← {strings.back}</a>
+      </aside>
+    </div>
+  </div>
+</AppLayout>

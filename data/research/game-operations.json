@@ -1,0 +1,21 @@
+{
+  "schemaVersion": "0.1.0",
+  "generatedAt": "2026-09-09T00:00:00-06:00",
+  "operations": [
+    {
+      "id": "game-operation:server-save",
+      "canonicalName": "Server Save",
+      "schedule": {
+        "kind": "daily_zoned_civil_time",
+        "localTime": "00:00:00",
+        "timeZone": "America/Sao_Paulo",
+        "calendar": "iso8601"
+      },
+      "status": "supported",
+      "evidenceIds": ["evidence:user-server-save:2026-09-09"],
+      "effectiveFrom": null,
+      "verifiedAt": null,
+      "notes": "Do not store the visitor-local 21:00 conversion as the canonical schedule. Direct official verification remains pending."
+    }
+  ]
+}

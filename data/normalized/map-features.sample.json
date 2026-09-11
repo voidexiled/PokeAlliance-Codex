@@ -1,0 +1,24 @@
+{
+  "schemaVersion": "0.1.0-draft",
+  "generatedAt": "2026-09-09T00:00:00-06:00",
+  "status": "research_sample_not_application_ready",
+  "records": [
+    {
+      "id": "map-feature:local-config:flag-2",
+      "featureId": "map-feature:local-config:flag-2",
+      "featureKind": "client_minimap_marker",
+      "canonicalName": "Pokemon Center",
+      "x": 3790,
+      "y": 2591,
+      "z": 6,
+      "geometry": { "type": "point" },
+      "visibility": "client_minimap_flag",
+      "sourceSnapshot": "sha256:541B6383153809CA89066D8F3BD5DAFD954650A72EB1A8A038A4E37D30E56828",
+      "facts": {
+        "location": { "value": null, "status": "unverified", "evidenceIds": ["evidence:local-minimap-flags:2026-09-09"] },
+        "npc": { "value": "Nurse or Pokémon Center marker category unknown", "status": "unverified", "evidenceIds": ["evidence:local-minimap-flags:2026-09-09"] },
+        "sourceSnapshot": { "value": "config.otml Minimap.flags", "status": "supported", "evidenceIds": ["evidence:local-minimap-flags:2026-09-09"] }
+      }
+    }
+  ]
+}
