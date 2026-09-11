@@ -3,7 +3,7 @@
 Last updated: 2026-09-11  
 Repository: `C:\Users\jalom\Documents\ChatGPT\PokeAlliance-Codex`  
 Branch: `master`  
-Git history: initial publication commit `91040a2`; latest published commit `f95a805`
+Git history: initial publication commit `91040a2`; subsequent publication and CI-fix commits are on `master`
 
 ## Active phase
 
@@ -133,7 +133,7 @@ Phase 0 planning, Phase 1 research, Phase 2 data-model consolidation, Phase 3 te
 - Browser checks: Playwright smoke suite passed 3/3, including localized routing, Pokédex search/detail, guides, sources, guild JSON file loading, contribution table coverage, console/page-error checks and absence of the Astro error overlay. `agent-browser` verified the live guild route, screenshot, interactive snapshot, no console errors, no framework overlay and successful local JSON rendering.
 - Visual shell correction validation: `agent-browser` inspected the Spanish home and Pokémon detail at 1440×900, the home at 375px, and the guild route after the shared CSS/layout update. The intended wiki hierarchy is visible in all three states; no new console or page errors were observed. Owner visual acceptance remains pending.
 - RubinoT-reference continuation validation: the Spanish home was inspected at 1440×900 and 390×844, and the shared Pokédex shell at 1440×900. `pnpm run ci` passed (format, lint, Astro check, both data validators, 6 Vitest files / 27 tests and production build); `pnpm exec playwright test --workers=1` passed 4/4. The pre-existing `document.execCommand` deprecation hint remains the only Astro diagnostic. Owner visual acceptance remains pending.
-- GitHub publication validation: the explicit non-ignored file allowlist staged 175 foundation files, followed by 8 repository tooling/policy files; no `.env`, client-inbox, dependency, build-output or CodeGraph files were included. The published `master` history contains 183 tracked files through commit `f95a805` at [voidexiled/PokeAlliance-Codex](https://github.com/voidexiled/PokeAlliance-Codex).
+- GitHub publication validation: the explicit non-ignored file allowlist staged 175 foundation files, followed by 8 repository tooling/policy files; no `.env`, client-inbox, dependency, build-output or CodeGraph files were included. The published `master` history contains 183 tracked project files at [voidexiled/PokeAlliance-Codex](https://github.com/voidexiled/PokeAlliance-Codex).
 - GitHub Actions validation: workflow run [34589946041](https://github.com/voidexiled/PokeAlliance-Codex/actions/runs/34589946041) passed both quality and browser jobs; the browser job reports 4 passing Playwright tests. GitHub still shows the upstream Node 20 action deprecation annotation for `actions/checkout@v4`, `actions/setup-node@v4` and `pnpm/action-setup@v4`.
 - PostgreSQL/Supabase verification: the linked remote project has all seven migrations applied; RLS/advisor checks and anonymous RPC denial passed. Authenticated account creation/import acceptance still requires a real owner-controlled account and fixture.
 - Production deployment, clean-machine install and owner visual/runtime acceptance: not performed.
