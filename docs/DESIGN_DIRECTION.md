@@ -64,6 +64,9 @@ Antes de aceptar una pantalla, revisar:
 ## Contrato visual para futuras contribuciones
 
 - La referencia base es una wiki oscura, compacta, editorial y orientada a información.
+- La escala debe mantenerse contenida: header de 58px, sidebar de 248px, radios de 4px, bordes carbón sutiles y títulos sin pesos excesivos.
+- El fondo debe ser casi negro uniforme; los paneles apenas se elevan y el dorado se reserva para selección, foco y acciones importantes.
+- El cuerpo usa Geist en pesos regulares; el texto secundario es gris apagado y los metadatos usan Geist Mono en una escala menor.
 - Usa los tokens semánticos de `src/styles/global.css`; no introduzcas colores hexadecimales ni gradientes específicos de página.
 - Prefiere los patrones `wiki-*` compartidos para shell, navegación, paneles, índices, artículos, evidencia, tablas y herramientas.
 - Para interacción, compón los primitives existentes de shadcn antes de crear markup propio. Usa clases Tailwind semánticas como `bg-background`, `text-muted-foreground`, `border-border` y `text-primary`.
