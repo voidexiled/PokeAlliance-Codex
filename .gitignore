@@ -1,0 +1,30 @@
+# Owner-provided local client research inputs may contain proprietary or sensitive data.
+research-inbox/client-files/*
+!research-inbox/client-files/README.md
+
+# Local indexing/runtime state.
+.codegraph/
+
+# Astro build output and generated types.
+dist/
+.astro/
+.vercel/
+
+# Dependencies and local tooling output.
+node_modules/
+.playwright/
+playwright-report/
+test-results/
+
+# Local environment files. Keep the committed template visible.
+.env
+.env.*
+!.env.example
+
+# Local editor and package-manager noise.
+.idea/
+.DS_Store
+npm-debug.log*
+pnpm-debug.log*
+yarn-debug.log*
+yarn-error.log*
