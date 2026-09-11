@@ -3,7 +3,7 @@
 Last updated: 2026-09-11  
 Repository: `C:\Users\jalom\Documents\ChatGPT\PokeAlliance-Codex`  
 Branch: `master`  
-Git history: no commits yet
+Git history: initial publication commit `91040a2`
 
 ## Active phase
 
@@ -95,6 +95,7 @@ Phase 0 planning, Phase 1 research, Phase 2 data-model consolidation, Phase 3 te
 - Added configurable guild difficulty allocation: the tool calculates Normal/Wildscape/Primal counts per snapshot interval, detects tier transitions, exposes current/previous/review estimation policy, and lets the operator correct a member's interval through a validated table editor. The correction updates ranking totals and WhatsApp/Discord breakdowns; it is session-local until durable correction storage is added to the account schema.
 - Added deterministic guild member lifecycle analysis over the saved snapshots: per-player level gains, observed joins, departures and returns, plus daily eligibility from the next Server Save and contribution eligibility from the second. Goal bands now use each member's eligible days, the UI exposes a weekly activity panel and per-row access state, Discord daily history includes the aggregate movements, and replacing a same-date snapshot rebuilds the derived lifecycle. Existing Supabase snapshot/member-total persistence already contains the required facts, so no parallel remote table or migration was added.
 - Applied the second visual correction of the shared wiki shell from the owner's RubiOT reference: the home route now uses an in-content identity/search block, compact featured links and restrained catalog panels; deep pages keep a centered topbar search, persistent grouped navigation and the same neutral dark panel system. The guild tool remains inside the wiki shell without changing its data or interaction contracts.
+- Published the complete current foundation to [GitHub](https://github.com/voidexiled/PokeAlliance-Codex) as the public repository `voidexiled/PokeAlliance-Codex`; the initial commit contains the application, reviewed data, documentation, migrations, public map assets and tests while local secrets, client files and generated directories remain ignored.
 
 ## Important findings so far
 
@@ -132,6 +133,7 @@ Phase 0 planning, Phase 1 research, Phase 2 data-model consolidation, Phase 3 te
 - Browser checks: Playwright smoke suite passed 3/3, including localized routing, Pokédex search/detail, guides, sources, guild JSON file loading, contribution table coverage, console/page-error checks and absence of the Astro error overlay. `agent-browser` verified the live guild route, screenshot, interactive snapshot, no console errors, no framework overlay and successful local JSON rendering.
 - Visual shell correction validation: `agent-browser` inspected the Spanish home and Pokémon detail at 1440×900, the home at 375px, and the guild route after the shared CSS/layout update. The intended wiki hierarchy is visible in all three states; no new console or page errors were observed. Owner visual acceptance remains pending.
 - RubinoT-reference continuation validation: the Spanish home was inspected at 1440×900 and 390×844, and the shared Pokédex shell at 1440×900. `pnpm run ci` passed (format, lint, Astro check, both data validators, 6 Vitest files / 27 tests and production build); `pnpm exec playwright test --workers=1` passed 4/4. The pre-existing `document.execCommand` deprecation hint remains the only Astro diagnostic. Owner visual acceptance remains pending.
+- GitHub publication validation: the explicit non-ignored file allowlist staged 175 project files; no `.env`, client-inbox, dependency, build-output or CodeGraph files were included. Commit `91040a2` was pushed successfully to `origin/master` at [voidexiled/PokeAlliance-Codex](https://github.com/voidexiled/PokeAlliance-Codex).
 - PostgreSQL/Supabase verification: the linked remote project has all seven migrations applied; RLS/advisor checks and anonymous RPC denial passed. Authenticated account creation/import acceptance still requires a real owner-controlled account and fixture.
 - Production deployment, clean-machine install and owner visual/runtime acceptance: not performed.
 
@@ -157,4 +159,4 @@ Obtain owner visual acceptance for the RubinoT-reference shell continuation, the
 
 ## Worktree note
 
-The worktree contains uncommitted project files and an untracked `.codegraph/` directory. Preserve all of them. Do not commit, push or publish without explicit authorization.
+The project foundation is published on `origin/master`. Local `.env`/`.env.local`, `.codegraph/`, dependency/build output and owner-provided client files remain ignored and stay on this machine. Future commits should continue using an explicit staged-file allowlist and preserve those local-only paths.
