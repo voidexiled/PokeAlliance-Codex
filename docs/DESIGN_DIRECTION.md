@@ -61,6 +61,20 @@ Antes de aceptar una pantalla, revisar:
 4. ¿La pantalla se siente como una página de wiki o como una landing/dashboard?
 5. ¿La traducción mantiene la terminología canónica y la intención editorial?
 
+## Contrato visual para futuras contribuciones
+
+- La referencia base es una wiki oscura, compacta, editorial y orientada a información.
+- La escala debe mantenerse contenida: header de 58px, sidebar de 248px, radios de 4px, bordes carbón sutiles y títulos sin pesos excesivos.
+- El fondo debe ser casi negro uniforme; los paneles apenas se elevan y el dorado se reserva para selección, foco y acciones importantes.
+- El cuerpo usa Geist en pesos regulares; el texto secundario es gris apagado y los metadatos usan Geist Mono en una escala menor.
+- Usa los tokens semánticos de `src/styles/global.css`; no introduzcas colores hexadecimales ni gradientes específicos de página.
+- Prefiere los patrones `wiki-*` compartidos para shell, navegación, paneles, índices, artículos, evidencia, tablas y herramientas.
+- Para interacción, compón los primitives existentes de shadcn antes de crear markup propio. Usa clases Tailwind semánticas como `bg-background`, `text-muted-foreground`, `border-border` y `text-primary`.
+- La navegación permanece agrupada por propósito: Explorar, Herramientas y Comunidad. El acento sólo comunica selección, foco o enlaces relevantes.
+- Evita copy de marketing, métricas decorativas, tarjetas genéricas repetidas, superficies sobredimensionadas, brillos y contenido inventado.
+- Una herramienta nueva debe parecer una página funcional de wiki, con tarea clara, controles compactos, estado de datos explícito y procedencia; no un dashboard SaaS separado.
+- Cada página nueva debe funcionar en `es` y `en`, conservar la terminología canónica y seguir siendo usable en pantallas estrechas.
+
 ## Modelo de experiencia a diseñar
 
 La propuesta base que deberá validarse antes de codificar el rediseño es una estructura de documentación/wiki:
