@@ -1,0 +1,50 @@
+/* ShinyMark (spec 7.4, DS:ShinyMark), ported from the `.ac-shiny-mark` block of the
+   design system's components/bundle.css. global.css imports this file with
+   layer(components).
+
+   A 13 × 14 box with two 9 × 10 squares in `tt-shiny`: the back one 4 px down at
+   `opacity-shiny-back`, the front one 4 px to the right. No token holds 13, 14, 9
+   or 10 — they are the measures of the mark itself, and the reference sheet writes
+   them as literals too. */
+
+.ac-shiny-mark {
+  position: relative;
+  display: block;
+  flex: none;
+  width: 13px; /* sin token: medida propia de la marca (DS:ShinyMark) */
+  height: 14px; /* sin token: medida propia de la marca (DS:ShinyMark) */
+}
+
+.ac-shiny-mark__back,
+.ac-shiny-mark__front {
+  position: absolute;
+  width: 9px; /* sin token: medida propia de la marca (DS:ShinyMark) */
+  height: 10px; /* sin token: medida propia de la marca (DS:ShinyMark) */
+  border-radius: var(--radius-2);
+  background: var(--tt-shiny);
+}
+
+.ac-shiny-mark__back {
+  left: 0;
+  top: var(--space-4);
+  opacity: var(--opacity-shiny-back);
+}
+
+.ac-shiny-mark__front {
+  left: var(--space-4);
+  top: 0;
+}
+
+/* Head of the game tooltip: top right corner of the head column. */
+.ac-shiny-mark--tooltip {
+  position: absolute;
+  top: 0;
+  right: 0;
+}
+
+/* Pokédex slot: 4 px inside its top right corner. */
+.ac-shiny-mark--slot {
+  position: absolute;
+  top: var(--space-4);
+  right: var(--space-4);
+}

@@ -1,0 +1,71 @@
+/* ElementChip (spec 7.2.4, 7.6.4; DS:ElementChip), ported from the `.ac-element-chip` block of
+   the design system's components/bundle.css.
+
+   The interactive chip and the link take their look from NestedEntity, so `ac-element-chip` is
+   only a hook on the trigger. This file has the icon box, the two static forms — the chip that
+   an element without a tooltip falls back to (R2) and the cell of the Lista view — and the
+   icon-only round chip of the compact Pokédex card. */
+
+/* Element icons are illustrations of 100 px drawn at the 16 of every chip sprite. */
+.ac-element-chip__icon {
+  display: block;
+  flex: none;
+  width: var(--size-sprite-nav);
+  height: var(--size-sprite-nav);
+}
+
+/* Static chip: the geometry of the reference, plus the `color` and the `flex` that the
+   interactive chip gets from the NestedEntity wrapper and its trigger, so the element that
+   falls back to this form looks the same as the one beside it that opens a tooltip. */
+.ac-element-chip--chip {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  gap: var(--space-4);
+  padding: var(--space-4) var(--space-10) var(--space-4) var(--space-8);
+  border-radius: var(--radius-full);
+  background: var(--bg-tertiary);
+  color: var(--text-primary);
+  white-space: nowrap;
+  @apply type-ui;
+}
+
+/* An element with no icon: the padding closes on the side the sprite left empty. */
+.ac-element-chip--text {
+  padding: var(--space-4) var(--space-8);
+}
+
+/* Lista cell, and the plain text an element without a tooltip falls back to (R2). */
+.ac-element-chip--label {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-8);
+}
+
+/* Compact anatomy of the Pokédex card (spec 7.6.4): under 495 px of container the chip becomes
+   a round 24 and its name stays only for the screen reader and the accessible name of the
+   trigger. The DOM does not change and no prop chooses this. An element without an icon keeps
+   its text, so the rules only reach a chip that has one. The rest of the compact anatomy —
+   head, title and drops — belongs to the card and lives with it. */
+@container (width < 495px) {
+  .ac-card-grid[data-family='pokedex'] .ac-element-chip:has(.ac-element-chip__icon) {
+    justify-content: center;
+    gap: 0;
+    width: var(--size-chip);
+    height: var(--size-chip);
+    padding: 0;
+  }
+
+  .ac-card-grid[data-family='pokedex']
+    .ac-element-chip:has(.ac-element-chip__icon)
+    .ac-element-chip__name {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    padding: 0;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+}

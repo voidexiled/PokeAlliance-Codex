@@ -1,0 +1,79 @@
+/* WorldsTable (spec 7.2.7, 8.1 step 4, X3, PZ-05; CARD_GRID_SYSTEM §6.5; DS:WorldsTable),
+   ported from the `.ac-worlds-table` block of the design system's components/bundle.css.
+
+   Per-page stylesheet. Only the home draws the worlds, so this file is not one of the @imports
+   of global.css: src/components/home/WorldsTable.tsx imports it and the build writes it next to
+   the page (plan M10, D-018, §13.6: the shared sheet keeps its S17 budget). It carries its own
+   `@layer components` block and repeats the layer order of global.css first, so the order holds
+   whichever of the sheets the browser reads first (§3.6), and `@reference` brings the text styles
+   of theme.css to `@apply` without writing them again.
+
+   A bordered block of radius 12 around a table: the header row of 45 on `bg-secondary`, then one
+   row per world with no border between rows and no row hover (DS:WorldsTable «No hacer»). In the
+   bento the table stretches to the row it shares with the index panels (`height: 100%` inside a
+   stretched grid cell, CARD_GRID_SYSTEM §6.5); on a phone it has no row partner and each row
+   measures 44, like the link rows of the panels (5.8: the rows of the home's index are touch
+   targets of 44 at 390).
+
+   Differences against the reference (X3, PZ-05):
+
+   - one column, «Mundo», until `/api/mundos` brings players online (§15): no «En línea» column,
+     no `colgroup` and no sort button, so no `.ac-worlds-table__sort` and no coarse-pointer rule
+     for it. The header holds its label as text, at the same place the button put it: 16 from the
+     left edge and centred in the 45. The name of each world is a data cell (see WorldsTable.tsx);
+   - the 44 rows follow the width of the window (`width < 48rem`, 5.4) and not a `rowHeight` prop:
+     the home is one prerendered page for every screen, so the phone rows cannot be a prop;
+   - the type pairs are `@apply type-body` and `@apply type-ui-strong` (spec 3.7). */
+
+@reference '../theme.css';
+
+@layer properties, theme, base, components, utilities;
+
+@layer components {
+  .ac-worlds-table {
+    display: flex;
+    min-width: 0;
+    flex-direction: column;
+    border: 1px solid var(--border-secondary);
+    border-radius: var(--radius-12);
+    overflow: hidden;
+  }
+
+  /* height: 100% stretches the rows to the bento row the table shares with the index panels;
+     outside a stretched cell it has nothing to resolve against and the rows keep their own. */
+  .ac-worlds-table__table {
+    width: 100%;
+    height: 100%;
+    border-collapse: collapse;
+    table-layout: fixed;
+    @apply type-body;
+  }
+
+  .ac-worlds-table__th {
+    height: 45px; /* sin token: la cabecera de 45 de DS:WorldsTable */
+    padding: 0;
+    background: var(--bg-secondary);
+    text-align: center;
+    @apply type-ui-strong;
+  }
+
+  .ac-worlds-table__th--name {
+    padding-left: var(--space-16);
+    text-align: left;
+  }
+
+  /* The name of a world, 24 from the left edge in the weight of the body text: a `td` while the
+     table has the name alone, the `th scope="row"` of the reference once a figure follows it. */
+  .ac-worlds-table__name {
+    padding: 0 0 0 var(--space-24);
+    text-align: left;
+    font-weight: 400;
+  }
+
+  /* A phone: one column of panels, no row partner to stretch to, rows of 44. */
+  @media (width < 48rem) {
+    .ac-worlds-table__name {
+      height: var(--size-touch);
+    }
+  }
+}

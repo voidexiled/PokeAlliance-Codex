@@ -1,0 +1,159 @@
+---
+// 404 (spec 8.12, R-02 of 12.3): the page of every request that no file and no route of the
+// site answers, in template E of 8.0.2 on PageLayout. In the order of the DOM:
+//
+//   PageTitle        «Página no encontrada» / «Page not found» (step 1)
+//   <p>              the line with the requested path (step 2)
+//   SearchTrigger    `home` (40, with its keycap) from `layout-bp-md` and `mobile` (44, no
+//                    keycap) below it, each in its own slot; both open the palette of
+//                    PageLayout (step 3)
+//   FeaturedSection  «Destacados», the entries of the Inicio and of the pinned menu group
+//                    (`buildFeatured`, step 4)
+//
+// PageLayout adds the frame, the menu and the footer (step 5). No crumbs (E4, 8.0.4),
+// `noindex` (13.5), and `unlisted`: the menu marks no entry, even when the requested path lies
+// under a section such as `/es/pokedex/…` (S1, WA3). No island of its own: FeaturedSection
+// renders here on the server with no client directive, and the only JavaScript is the frame's
+// (13.6: a content page).
+//
+// Rendered on demand (`prerender = false`, 3.13), because the language is the one the
+// requested path starts with — `/en` and `/en/…` read English, any other path Spanish,
+// `/xx/…` included (8.0.1) — which one prerendered HTML could not know. @astrojs/vercel sends
+// every request that matches no file and no route to the server function with status 404 (the
+// last route of `.vercel/output/config.json`) and Astro renders this page there, with the URL
+// that was asked for; the development server does the same for a path that no
+// `getStaticPaths` yields, such as an unknown Pokémon id (NF3).
+//
+// The requested path (step 2, NF2) is text, never HTML: it is decoded for reading with
+// `decodeURI`, which keeps `%2F` and the other reserved escapes as they came (a malformed
+// escape leaves the path as it came), it is shown whole up to 120 characters and cut to 119
+// and «…» past them, and Astro escapes it like every other expression of the template. It
+// appears in that line alone: the `<title>` and the description are the h1, so no attribute
+// of the head carries what the reader typed (the canonical URL keeps its percent escapes).
+//
+// The language menu and the hreflang links point at the Inicio of each locale: the requested
+// path is a page in no language, and every link of this page answers 200 (WG5).
+//
+// Text (DP1, 13.2): `messages.errors` for the h1 — also the `<title>` and the description of
+// this `noindex` page (13.5 asks it for none of its own) — and for the line; the h2 of
+// Destacados is `home.featured`, as on the Inicio and on Buscar. The triggers read `shell`
+// themselves (7.2.1).
+//
+// Styles: the slot of the triggers and the wrapping of a long path are this page's own rules,
+// the `<style>` block at the end, inside `@layer components` (13.6, S17).
+import { getAlternatePath, getPathLocale, locales, type Locale } from '@/i18n/config';
+import type { Messages } from '@/i18n/messages/en';
+import { en } from '@/i18n/messages/en';
+import { es } from '@/i18n/messages/es';
+import { fill } from '@/i18n/messages/types';
+import { buildFeatured } from '@/lib/nav/groups';
+
+import { FeaturedSection } from '@/components/home/FeaturedSection';
+import { PageTitle } from '@/components/layout/PageTitle';
+import SearchTrigger from '@/components/layout/SearchTrigger.astro';
+import PageLayout from '@/layouts/PageLayout.astro';
+
+export const prerender = false;
+
+/** The longest requested path the line shows whole, in characters (8.12 step 2). */
+const PATH_MAX = 120;
+
+/**
+ * The requested path as the reader wrote it: percent escapes decoded, except the reserved
+ * ones that `decodeURI` keeps (`%2F` is not a separator). A malformed escape leaves the path
+ * as it came.
+ */
+function readable(pathname: string): string {
+  try {
+    return decodeURI(pathname);
+  } catch {
+    return pathname;
+  }
+}
+
+/**
+ * At most `PATH_MAX` characters, counted by code point so a character outside the BMP is
+ * never split: a longer path keeps its first `PATH_MAX - 1` and ends in «…».
+ */
+function clip(path: string): string {
+  const characters = Array.from(path);
+  return characters.length <= PATH_MAX ? path : `${characters.slice(0, PATH_MAX - 1).join('')}…`;
+}
+
+const dictionaries: Record<Locale, Messages> = { es, en };
+
+const requested = readable(Astro.url.pathname);
+const locale = getPathLocale(requested);
+const messages = dictionaries[locale];
+
+const title = messages.errors.notFound;
+const line = fill(messages.errors.notFoundLine, { path: clip(requested) });
+
+// The Inicio of each locale (see the head of this file): the root under each locale prefix.
+const alternates = Object.fromEntries(
+  locales.map((option) => [option, getAlternatePath('/', option)]),
+) as Record<Locale, string>;
+
+// Step 4: the entries of content/destacados.json that the menu links, in the order of the file.
+const featured = buildFeatured(locale);
+
+Astro.response.status = 404;
+---
+
+<PageLayout
+  locale={locale}
+  title={title}
+  description={title}
+  alternates={alternates}
+  noindex
+  unlisted
+>
+  <PageTitle title={title} />
+  <p class="ac-not-found__line">{line}</p>
+
+  <div class="ac-not-found__search ac-not-found__search--wide">
+    <SearchTrigger variant="home" locale={locale} />
+  </div>
+  <div class="ac-not-found__search ac-not-found__search--narrow">
+    <SearchTrigger variant="mobile" locale={locale} />
+  </div>
+
+  <FeaturedSection id="no-encontrada-destacados" title={messages.home.featured} items={featured} />
+</PageLayout>
+
+<style is:global>
+  /* The pieces of the 404 that belong to no component of the design system (8.12). Per-page
+     CSS (13.6, S17): the layer order of global.css is repeated first, so `components` keeps
+     its place whichever sheet the browser reads first (3.6).
+
+     - `ac-not-found__line`: the line breaks a long path inside the column instead of widening
+       the page (WG1 at 390, reflow of 13.7); a path is one word with no space to break at.
+     - `ac-not-found__search`: the slot of each search trigger, as on the Inicio. The page
+       renders both and one shows per width: the hidden one is `display: none`, so it takes no
+       gap of the column, no Tab stop and no place in the accessibility tree, and Ctrl + K
+       answers the visible one (src/scripts/search-shortcut.ts). */
+  @layer properties, theme, base, components, utilities;
+
+  @layer components {
+    .ac-not-found__line {
+      overflow-wrap: anywhere;
+    }
+
+    .ac-not-found__search {
+      display: flex;
+      min-width: 0;
+    }
+
+    @media (width < 48rem) {
+      .ac-not-found__search--wide {
+        display: none;
+      }
+    }
+
+    @media (width >= 48rem) {
+      .ac-not-found__search--narrow {
+        display: none;
+      }
+    }
+  }
+</style>

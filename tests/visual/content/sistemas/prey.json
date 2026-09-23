@@ -1,0 +1,14 @@
+{
+  "$schema": "../../../../content/schemas/sistemas.schema.json",
+  "id": "prey",
+  "titulo": {
+    "es": "Prey",
+    "en": "Prey"
+  },
+  "sprite": null,
+  "orden": 9,
+  "tooltip": [],
+  "intro": [],
+  "secciones": [],
+  "borrador": true
+}

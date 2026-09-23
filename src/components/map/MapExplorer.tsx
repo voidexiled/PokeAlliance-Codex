@@ -1,18 +1,14 @@
 import { useMemo, useRef, useState, type CSSProperties, type PointerEvent } from 'react';
 
-import type { ClientMapPreviewFloor, ClientMinimapFlag } from '@/lib/map/client-map';
+import type { ClientMapPreview, ClientMinimapFlag } from '@/lib/map/client-map';
 import { getMapFloors, getMapMarkerLabel, getMapPreviewFloor } from '@/lib/map/client-map';
 
 type Locale = 'es' | 'en';
 
 type Props = {
   flags: ClientMinimapFlag[];
-  mapPreview: {
-    sourceSnapshot: string;
-    floors: ClientMapPreviewFloor[];
-  };
+  mapPreview: ClientMapPreview;
   locale: Locale;
-  sourceSnapshot: string;
 };
 
 type MarkerCategory =
@@ -35,19 +31,14 @@ const copy = {
     filter: 'Filtrar marcadores',
     filterPlaceholder: 'Pokémon Center, Poke Mart…',
     markers: 'marcadores',
-    source: 'Fuente',
-    clientObserved: 'Observado en el cliente',
+    clientObserved: 'Marcadores disponibles',
     noMarkers: 'No hay marcadores que coincidan con este filtro.',
     coordinates: 'Coordenadas',
     select: 'Selecciona un marcador para ver sus coordenadas.',
-    warningTitle: 'Límite de este preview',
-    warning:
-      'La base visible es una miniatura derivada del snapshot OTMM del cliente. Los puntos provienen de Minimap.flags y sus etiquetas todavía no confirman el nombre de una ciudad, NPC o zona del mundo; las capas semánticas quedan para una etapa posterior.',
     unlabeled: 'Sin etiqueta',
-    otherFlag: 'Otro marcador del cliente',
-    snapshot: 'snapshot',
+    otherFlag: 'Otro marcador',
     layers: 'Capas',
-    clientMarkers: 'Marcadores del cliente',
+    clientMarkers: 'Marcadores',
     visible: 'visibles',
     hidden: 'ocultos',
     zoomIn: 'Acercar mapa',
@@ -55,8 +46,8 @@ const copy = {
     center: 'Centrar mapa',
     cursor: 'Cursor',
     dragHint: 'Arrastra el mapa para explorar',
-    baseLabel: 'Base OTMM · snapshot',
-    baseSource: 'Base del cliente',
+    baseLabel: 'Mapa base',
+    baseSource: 'Mapa base no disponible',
   },
   en: {
     all: 'All',
@@ -64,19 +55,14 @@ const copy = {
     filter: 'Filter markers',
     filterPlaceholder: 'Pokémon Center, Poke Mart…',
     markers: 'markers',
-    source: 'Source',
-    clientObserved: 'Observed in client',
+    clientObserved: 'Available markers',
     noMarkers: 'No markers match this filter.',
     coordinates: 'Coordinates',
     select: 'Select a marker to see its coordinates.',
-    warningTitle: 'Preview boundary',
-    warning:
-      'The visible base is a thumbnail derived from the client OTMM snapshot. The points come from Minimap.flags, and their labels do not yet confirm a city, NPC or world-area name; semantic layers belong to a later stage.',
     unlabeled: 'Unlabeled',
-    otherFlag: 'Other client flag',
-    snapshot: 'snapshot',
+    otherFlag: 'Other marker',
     layers: 'Layers',
-    clientMarkers: 'Client markers',
+    clientMarkers: 'Markers',
     visible: 'visible',
     hidden: 'hidden',
     zoomIn: 'Zoom in',
@@ -84,8 +70,8 @@ const copy = {
     center: 'Center map',
     cursor: 'Cursor',
     dragHint: 'Drag the map to explore',
-    baseLabel: 'OTMM base · snapshot',
-    baseSource: 'Client base',
+    baseLabel: 'Base map',
+    baseSource: 'Base map unavailable',
   },
 } as const;
 
@@ -102,11 +88,7 @@ function getCategoryCount(flags: ClientMinimapFlag[], category: MarkerCategory):
   return flags.filter((flag) => getCategory(flag) === category).length;
 }
 
-function formatSnapshot(snapshot: string): string {
-  return `${snapshot.slice(0, 12)}…`;
-}
-
-export function MapExplorer({ flags, locale, mapPreview, sourceSnapshot }: Props) {
+export function MapExplorer({ flags, locale, mapPreview }: Props) {
   const strings = copy[locale];
   const floors = useMemo(() => getMapFloors(flags), [flags]);
   const [selectedFloor, setSelectedFloor] = useState(floors.includes(7) ? 7 : (floors[0] ?? 0));
@@ -144,10 +126,8 @@ export function MapExplorer({ flags, locale, mapPreview, sourceSnapshot }: Props
   }, [category, flags, hiddenCategories, query, selectedFloor]);
 
   const baseFloor = useMemo(
-    () =>
-      getMapPreviewFloor(selectedFloor) ??
-      mapPreview.floors.find((floor) => floor.z === selectedFloor),
-    [mapPreview.floors, selectedFloor],
+    () => getMapPreviewFloor(mapPreview, selectedFloor),
+    [mapPreview, selectedFloor],
   );
 
   const bounds = useMemo(() => {
@@ -287,6 +267,45 @@ export function MapExplorer({ flags, locale, mapPreview, sourceSnapshot }: Props
 
       <div className="map-coordinate-layout">
         <div className="map-viewport-shell">
+          <div className="map-legend" aria-label={strings.layers}>
+            <div className="map-legend-heading">
+              <strong>{strings.layers}</strong>
+              <span>
+                {strings.floor} {selectedFloor}
+              </span>
+            </div>
+            <div className="map-legend-client-row">
+              <span className="map-legend-swatch" data-category="client" />
+              <span>{strings.clientMarkers}</span>
+              <small>
+                {visibleFlags.length} {strings.visible}
+              </small>
+            </div>
+            {markerCategories.map((markerCategory) => {
+              const hidden = hiddenCategories.has(markerCategory);
+              return (
+                <button
+                  aria-pressed={!hidden}
+                  className="map-legend-row"
+                  data-hidden={hidden}
+                  data-testid={`map-layer-${markerCategory}`}
+                  key={markerCategory}
+                  onClick={() => toggleCategory(markerCategory)}
+                  type="button"
+                >
+                  <span className="map-legend-swatch" data-category={markerCategory} />
+                  <span>
+                    {markerCategory === 'Unlabeled'
+                      ? strings.unlabeled
+                      : markerCategory === 'Other client flag'
+                        ? strings.otherFlag
+                        : markerCategory}
+                  </span>
+                  <small>{getCategoryCount(flags, markerCategory)}</small>
+                </button>
+              );
+            })}
+          </div>
           <div
             className="map-viewport"
             data-dragging={isDragging}
@@ -298,45 +317,6 @@ export function MapExplorer({ flags, locale, mapPreview, sourceSnapshot }: Props
             role="region"
             aria-label={`${strings.floor} ${selectedFloor}, ${visibleFlags.length} ${strings.markers}`}
           >
-            <div className="map-legend" aria-label={strings.layers}>
-              <div className="map-legend-heading">
-                <strong>{strings.layers}</strong>
-                <span>
-                  {strings.floor} {selectedFloor}
-                </span>
-              </div>
-              <div className="map-legend-client-row">
-                <span className="map-legend-swatch" data-category="client" />
-                <span>{strings.clientMarkers}</span>
-                <small>
-                  {visibleFlags.length} {strings.visible}
-                </small>
-              </div>
-              {markerCategories.map((markerCategory) => {
-                const hidden = hiddenCategories.has(markerCategory);
-                return (
-                  <button
-                    aria-pressed={!hidden}
-                    className="map-legend-row"
-                    data-hidden={hidden}
-                    data-testid={`map-layer-${markerCategory}`}
-                    key={markerCategory}
-                    onClick={() => toggleCategory(markerCategory)}
-                    type="button"
-                  >
-                    <span className="map-legend-swatch" data-category={markerCategory} />
-                    <span>
-                      {markerCategory === 'Unlabeled'
-                        ? strings.unlabeled
-                        : markerCategory === 'Other client flag'
-                          ? strings.otherFlag
-                          : markerCategory}
-                    </span>
-                    <small>{getCategoryCount(flags, markerCategory)}</small>
-                  </button>
-                );
-              })}
-            </div>
             <span className="map-base-badge">
               {baseFloor ? strings.baseLabel : strings.baseSource}
             </span>
@@ -487,22 +467,7 @@ export function MapExplorer({ flags, locale, mapPreview, sourceSnapshot }: Props
           ) : (
             <p className="map-details-empty">{strings.select}</p>
           )}
-          <div className="map-source-note">
-            <span>{strings.source}</span>
-            <code>
-              {formatSnapshot(sourceSnapshot)} {strings.snapshot}
-            </code>
-          </div>
-          <div className="map-source-note">
-            <span>{strings.baseSource}</span>
-            <code>{formatSnapshot(mapPreview.sourceSnapshot)} OTMM</code>
-          </div>
         </aside>
-      </div>
-
-      <div className="map-boundary-note">
-        <strong>{strings.warningTitle}</strong>
-        <p>{strings.warning}</p>
       </div>
     </section>
   );

@@ -1,0 +1,80 @@
+/* TextField (spec 7.2.2; DS:TextField), ported from the `.ac-text-field` block of the design
+   system's components/bundle.css. global.css imports this file with layer(components).
+
+   A 40 px field of radius 11 on `bg-primary` with its 14/22 label 8 above and a 12/16 helper
+   4 below; the search variants add the 16 px magnifier. The focus ring is the one of base.css,
+   fields included (spec 5.2). `--ac-text-field-width` is the `width` prop (C-R2). */
+
+.ac-text-field {
+  position: relative;
+  width: var(--ac-text-field-width, auto);
+  min-width: 0;
+}
+
+.ac-text-field__label {
+  display: block;
+  margin-bottom: var(--space-8);
+  color: var(--text-primary);
+  @apply type-body;
+}
+
+.ac-text-field__control {
+  position: relative;
+  min-width: 0;
+}
+
+.ac-text-field__input {
+  display: block;
+  width: 100%;
+  min-width: 0;
+  height: var(--size-control);
+  margin: 0;
+  padding: var(--space-8) var(--space-12);
+  border: 1px solid var(--border-secondary);
+  border-radius: var(--radius-11);
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  font-family: var(--font-sans);
+  @apply type-field;
+}
+
+.ac-text-field__input:disabled {
+  color: var(--text-quaternary);
+  cursor: not-allowed;
+}
+
+.ac-text-field__helper {
+  margin: var(--space-4) 0 0;
+  color: var(--helper);
+  @apply type-ui;
+}
+
+/* Search variants: 16 px magnifier in `text-tertiary`, 12 from the left edge, centred on the
+   field (half of the 16 px glyph above the middle). */
+.ac-text-field__icon {
+  position: absolute;
+  left: var(--space-12);
+  top: calc(50% - var(--space-8));
+  display: block;
+  color: var(--text-tertiary);
+  pointer-events: none;
+}
+
+/* 36: the 12 inset of the glyph, the 16 glyph and 8 of air before the text. */
+.ac-text-field--search .ac-text-field__input,
+.ac-text-field--filter .ac-text-field__input {
+  padding-left: calc(var(--space-12) + var(--space-16) + var(--space-8));
+}
+
+/* The page search (Comercio) is a search box: radius 12. The toolbar filter (Guild members)
+   keeps the field radius 11. */
+.ac-text-field--search .ac-text-field__input {
+  border-radius: var(--radius-12);
+}
+
+/* Touch (spec 13.7, S14): the field grows to `size-touch`. */
+@media (pointer: coarse) {
+  .ac-text-field__input {
+    height: var(--size-touch);
+  }
+}

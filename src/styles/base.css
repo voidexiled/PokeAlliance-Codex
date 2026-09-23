@@ -1,0 +1,63 @@
+/* Base rules of the site (spec 3.6), ported from the base block of the design system's
+   components/bundle.css. global.css imports this file with layer(base).
+
+   There is no ::selection rule: the design system does not define one.
+
+   Box sizing, the margin reset and the form-control `font: inherit` come from the Tailwind
+   preflight that @import 'tailwindcss' already puts in the same layer. */
+
+html {
+  /* Single theme, "Oscuro" (spec 3.4): form controls and scrollbars render dark. */
+  color-scheme: dark;
+  background-color: var(--bg-primary);
+  /* An anchor lands below the fixed header (spec 5). */
+  scroll-padding-top: var(--layout-header);
+}
+
+body {
+  margin: 0;
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  font-family: var(--font-sans);
+  @apply type-base;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Visible focus everywhere, fields included: 2px solid ring, 1px offset. */
+:focus-visible {
+  outline: 2px solid var(--ring);
+  outline-offset: 1px;
+}
+
+::placeholder {
+  color: var(--text-quaternary);
+  opacity: 1;
+}
+
+/* Prose link: only inside a paragraph, always underlined (design system TextLink --prose).
+   A link that carries a class styles itself. */
+:where(p) a:not([class]) {
+  color: var(--link-prose);
+  text-decoration: underline;
+}
+
+/* Reduced motion (spec 6.4): smooth scrolling only when the reader allows motion. */
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    scroll-behavior: smooth;
+  }
+}
+
+/* Forced colors (spec 5.2 states table, spec 13.7). The ring token is not honoured in
+   forced-colors mode, so the focus outline keeps its 2px/1px geometry on the system
+   Highlight colour.
+
+   The other half of the spec 5.2 row — the selected state, whose second pixel is a
+   box-shadow the mode drops, and which becomes `border: 2px solid Highlight` — cannot be
+   written here: it needs the element that draws the selection. Each component sheet in
+   src/styles/components/ carries its own forced-colors rule for it (spec 7.2 onwards). */
+@media (forced-colors: active) {
+  :focus-visible {
+    outline-color: Highlight;
+  }
+}

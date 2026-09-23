@@ -1,0 +1,81 @@
+---
+// Header (spec 5.6, 7.10.1, DS:Header): the 64 px band at the top of every page,
+// sticky over the content.
+//
+// Left, the wordmark as text — there is no graphic logo. Centre, from 768 up and
+// only on inner pages, the 448 x 40 search trigger, centred on the header and not
+// on the space left over. Right, from 1280 up, the language selector; below that
+// a 1 x 16 rule and the 44 menu button, with the lens in front of the rule below
+// 768 (the language selector moves into the sheet, 5.8).
+//
+// There is no theme button and no second rule: one theme means the button would
+// do nothing (X2, PZ-01, R12). The `mobile` prop of the design system is a
+// preview flag and is not implemented (DP5).
+//
+// The menu button is the only handle of the sheet: `src/scripts/mobile-menu.ts`
+// delegates on `button[aria-controls="menu-movil"]` and keeps `aria-expanded`.
+import type { Locale } from '@/i18n/config';
+import type { Messages } from '@/i18n/messages/en';
+import { en } from '@/i18n/messages/en';
+import { es } from '@/i18n/messages/es';
+import { Glyph } from '@/components/icons/Glyph';
+
+import LanguageMenu from './LanguageMenu.astro';
+import SearchTrigger from './SearchTrigger.astro';
+
+interface Props {
+  /** Page locale: the dictionary this frame component reads and the brand href. */
+  locale: Locale;
+  /** The same route in each locale (13.1), for the language selector. */
+  alternates: Record<Locale, string>;
+  /** Inicio: no centred trigger and no lens — its search lives in the body (A3). */
+  home?: boolean;
+  /** Utilities added by the caller, after the component's own classes (3.8). */
+  class?: string;
+}
+
+const { locale, alternates, home = false, class: className } = Astro.props;
+
+const dictionaries: Record<Locale, Messages> = { es, en };
+const shell = dictionaries[locale].shell;
+
+// A proper noun, the same in both locales (13.4), so it is not a dictionary key.
+const BRAND = 'Alliance Codex';
+---
+
+<header class:list={['ac-header', className]}>
+  <a class="ac-header__brand" href={`/${locale}/`}>{BRAND}</a>
+
+  {
+    !home && (
+      <div class="ac-header__search">
+        <SearchTrigger variant="header" locale={locale} />
+      </div>
+    )
+  }
+
+  <div class="ac-header__end">
+    <LanguageMenu locale={locale} alternates={alternates} />
+  </div>
+
+  <div class="ac-header__compact">
+    {
+      !home && (
+        <span class="ac-header__search-icon">
+          <SearchTrigger variant="icon" locale={locale} />
+        </span>
+      )
+    }
+    <div role="none" class="ac-header__sep"></div>
+    <button
+      type="button"
+      class="ac-header__icon"
+      aria-label={shell.menuOpen}
+      aria-haspopup="dialog"
+      aria-expanded="false"
+      aria-controls="menu-movil"
+    >
+      <Glyph name="menu" size={18} />
+    </button>
+  </div>
+</header>

@@ -1,0 +1,203 @@
+---
+// Sidebar (spec 5.7, 7.10.2, DS:Sidebar): the main navigation of the site, 208
+// wide from 1280 and, with `touch`, the same navigation inside the phone sheet
+// with 44 px rows.
+//
+// Two changes against the reference (C-R2):
+// - a collapsible group is `<details>` with `<summary class="ac-sidebar__toggle">`,
+//   so it folds with no JavaScript and the browser exposes the expanded state;
+//   the reference uses a button with `aria-expanded` and a `ul[hidden]`. The
+//   summary carries both chevrons of the reference, up and down, as two `Glyph`s
+//   (C-R7), and CSS shows the one the `[open]` state asks for, with no
+//   animation (6.2);
+// - the pinned «Destacados» group is a heading with no button and no chevron,
+//   as in the reference, and it is the only group with sprites (8.0.3, 7.10.2).
+//   `src/lib/nav/groups.ts` fills it from `content/destacados.json` (M10) and
+//   gives each of its links the sprite of its record, already resolved by the
+//   adapter: frame 0 and no animation, the Diamond with `half` (R11, 6.3). Each
+//   link draws it in the 16 px box of `sidebar.css`, which bounces; a record
+//   with no sprite yet keeps the box, empty, so every label of the group starts
+//   at the same x. As in the reference (`spriteNode` of DS:Sidebar), a pixel
+//   sprite keeps its size and is centred in the box on whole pixels: an odd side
+//   gets a 1 px trailing margin, so it lands at floor((16 - side) / 2). The
+//   reference writes that margin inline; here the box names the odd side in
+//   `data-snap` and `sidebar.css` adds the margin, because 3.7 keeps literal
+//   lengths out of `style`.
+//
+// What the links are, and which ones exist, is `src/lib/nav/groups.ts` (8.0.3,
+// WG5). This component paints what it is given and never decides a route.
+//
+// Prefetch (6.1): `astro.config.mjs` sets `prefetchAll: false` with the `hover`
+// strategy, so a link is prefetched only when it asks for it. These are the
+// links 6.1 names — «los enlaces del menú lateral … llevan `data-astro-prefetch`»
+// — and without the attribute the configuration would never fire once.
+//
+// Scroll position between pages (5.7): the inline script below the nav restores
+// `scrollTop` before the first paint and saves it on `pagehide`. It only acts on
+// the column — inside the sheet it returns at once, because the sheet is built
+// again on every page and there it is the dialog that scrolls.
+import type { Locale } from '@/i18n/config';
+import type { SidebarLink, SidebarNav } from '@/lib/nav/groups';
+import type { Messages } from '@/i18n/messages/en';
+import { en } from '@/i18n/messages/en';
+import { es } from '@/i18n/messages/es';
+import { Sprite } from '@/components/game/Sprite';
+import { Glyph } from '@/components/icons/Glyph';
+
+interface Props {
+  /** Page locale: picks the dictionary. */
+  locale: Locale;
+  /** Links and groups of 8.0.3, already trimmed by WG5. */
+  nav: SidebarNav;
+  /** Inside the phone sheet: full width and 44 px rows (5.8). */
+  touch?: boolean;
+  /**
+   * Prefix of the element ids this instance writes. Astro has no `useId()`, and a
+   * page paints this component twice (the column and the sheet), so each instance
+   * needs its own prefix to keep ids unique (C-R4).
+   */
+  idPrefix?: string;
+  /** Utilities added by the caller, after the component's own classes (3.8). */
+  class?: string;
+}
+
+const dictionaries: Record<Locale, Messages> = { es, en };
+
+const { locale, nav, touch = false, idPrefix = 'nav', class: className } = Astro.props;
+const shell = dictionaries[locale].shell;
+
+/**
+ * The odd sides of the sprite of a pinned link, which `sidebar.css` follows with 1 px
+ * so the box of 16 centres it on whole pixels (DS:Sidebar `spriteNode`): `x` for an
+ * odd width, `y` for an odd height, nothing when both are even. The drawn size is the
+ * illustration's own, or the frame at 1x, or at 0.5x for `half`.
+ */
+function snap(item: SidebarLink): string | undefined {
+  const sprite = item.sprite;
+  if (!sprite) return undefined;
+  const factor = item.half ? 0.5 : Math.max(1, Math.trunc(sprite.scale ?? 1));
+  const width = sprite.smooth ? (sprite.width ?? 0) : Math.round(sprite.size[0] * factor);
+  const height = sprite.smooth ? (sprite.height ?? 0) : Math.round(sprite.size[1] * factor);
+  const sides = [width % 2 === 1 ? 'x' : null, height % 2 === 1 ? 'y' : null].filter(Boolean);
+  return sides.length > 0 ? sides.join(' ') : undefined;
+}
+---
+
+<nav
+  class:list={['ac-sidebar', touch && 'ac-sidebar--touch', className]}
+  aria-label={shell.navLabel}
+>
+  <div class="ac-sidebar__inner">
+    {
+      nav.top.length > 0 && (
+        <ul class="ac-sidebar__top">
+          {nav.top.map((item) => (
+            <li>
+              <a
+                class="ac-sidebar__link"
+                href={item.href}
+                aria-current={item.current}
+                data-astro-prefetch
+              >
+                {item.label}
+              </a>
+            </li>
+          ))}
+        </ul>
+      )
+    }
+    {
+      nav.groups.map((group) =>
+        group.pinned ? (
+          <div class="ac-sidebar__group">
+            <p id={`${idPrefix}-${group.id}-t`} class="ac-sidebar__heading">
+              {group.label}
+            </p>
+            <ul class="ac-sidebar__list" aria-labelledby={`${idPrefix}-${group.id}-t`}>
+              {group.items.map((item) => (
+                <li>
+                  <a
+                    class="ac-sidebar__link"
+                    href={item.href}
+                    aria-current={item.current}
+                    data-astro-prefetch
+                  >
+                    {item.sprite !== undefined && (
+                      <span
+                        class="ac-sidebar__sprite ac-bounce"
+                        aria-hidden="true"
+                        data-snap={snap(item)}
+                      >
+                        {item.sprite !== null && <Sprite {...item.sprite} half={item.half} />}
+                      </span>
+                    )}
+                    {item.label}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </div>
+        ) : (
+          <details class="ac-sidebar__group" open={group.open}>
+            <summary class="ac-sidebar__toggle">
+              {group.label}
+              <Glyph
+                name="chevron-up"
+                size={16}
+                className="ac-sidebar__chevron ac-sidebar__chevron-open"
+              />
+              <Glyph
+                name="chevron-down"
+                size={16}
+                className="ac-sidebar__chevron ac-sidebar__chevron-closed"
+              />
+            </summary>
+            <ul class="ac-sidebar__list">
+              {group.items.map((item) => (
+                <li>
+                  <a
+                    class="ac-sidebar__link"
+                    href={item.href}
+                    aria-current={item.current}
+                    data-astro-prefetch
+                  >
+                    {item.label}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </details>
+        ),
+      )
+    }
+  </div>
+</nav>
+<script is:inline>
+  // Sidebar scroll position between pages (spec 5.7). It runs where it stands, right
+  // after the nav, so the position is back before the first paint; the `pagehide`
+  // listener saves it on the way out. Storage can throw (private mode, blocked site
+  // data): then the sidebar simply starts at the top.
+  (function () {
+    const nav = document.currentScript && document.currentScript.previousElementSibling;
+    // Only the column keeps a position. The sheet is built again on every page, and it
+    // is the dialog that scrolls there, not the nav.
+    if (!nav || nav.classList.contains('ac-sidebar--touch')) return;
+    const CLAVE = 'ac:sidebar';
+    try {
+      const guardado = sessionStorage.getItem(CLAVE);
+      if (guardado) nav.scrollTop = Number(guardado) || 0;
+    } catch {
+      // No storage: the sidebar starts at the top.
+    }
+    window.addEventListener('pagehide', function () {
+      // Below 1280 the column is not rendered and its scrollTop is 0: saving it would
+      // throw away the position the next wide page has to restore.
+      if (nav.clientHeight === 0) return;
+      try {
+        sessionStorage.setItem(CLAVE, String(nav.scrollTop));
+      } catch {
+        // No storage: there is nothing to restore next time.
+      }
+    });
+  })();
+</script>

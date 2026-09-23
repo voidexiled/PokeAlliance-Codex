@@ -8,7 +8,11 @@ The wiki now includes a local guild-ranking tool:
 - English: `/en/herramientas/guild/`
 - Index: `/es/herramientas/` and `/en/herramientas/`
 
-The tool accepts one or several JSON exports from the PokeAlliance client either as files or pasted text. It validates member names and numeric fields, rejects normalized duplicate names, keeps one in-session export per local date and replaces a repeated date before calculating deltas. Imports are staged as a visible preview: the action identifies the local weekday and explicitly adds or updates the selected date before changing the committed history. Without an account, the analysis remains local; an authenticated owner/officer can explicitly save the current export to the selected guild.
+The tool accepts one or several JSON exports from the PokeAlliance client either as files or pasted text. It validates member names and numeric fields, rejects normalized duplicate names, keeps one export per local date and replaces a repeated date before calculating deltas. A valid import is registered immediately, and every recorded date can be selected to restore its ranking and original JSON. The latest 120 daily exports and operator settings are retained in browser storage; an authenticated owner/officer can additionally save the current export to the selected guild.
+
+The interface is one operational workspace rather than a dashboard plus utility rail. `Ranking`, `Activity` and `History` are mutually exclusive views; import uses a dialog, while goals, account persistence and member detail use a single contextual sheet. Ranking is paginated at ten members, keeps only decision columns in the table and moves eligibility, failed-goal detail and difficulty correction into the member sheet. Historical snapshots are explicitly marked and provide a return-to-latest action. Desktop and mobile use the document as the primary scroll surface; no decorative hero, metric-card row or unsupported kick/capture state is rendered.
+
+Goal edits have explicit save and cancel behavior: invalid values are identified before saving, cancelling restores the last saved matrix and saved goals survive a browser reload. The workspace also distinguishes initial hydration from an empty history, reports offline browser-only operation, exposes missing days between stored snapshots and surfaces PNG-generation failure instead of failing silently.
 
 ## Weekly cycle
 
@@ -31,7 +35,7 @@ derived donation pace  = (weekly total target - weekly dailies × member daily v
 
 The table exposes a per-member breakdown action with Normal, Wildscape and Primal counts. The automatic calculation compares the member's level in consecutive exports. An interval that stays within one tier is calculated directly; an interval that crosses a tier is numeric but explicitly marked `estimated`, because the cumulative JSON does not include the timestamp or difficulty of each individual task. The selected transition policy can estimate from the current tier, the previous tier or flag the interval for review.
 
-The editor accepts a manual allocation for the active export date and requires its counts to equal the dailies in that interval. Manual allocations are included in the ranking totals and in the WhatsApp/Discord breakdown. They currently live in the browser session; durable account-level correction storage belongs to the next guild-persistence schema increment.
+The editor accepts a manual allocation for the active export date and requires its counts to equal the dailies in that interval. Manual allocations are included in the ranking totals and in the WhatsApp/Discord breakdown. They persist in browser storage; durable account-level correction storage belongs to the next guild-persistence schema increment.
 
 Each of the three goal families—total points, dailies and contribution—can independently have a daily target, a weekly target, both or neither. If both are filled, both constraints are checked. A weekly-only target is prorated to the current day for pace classification. The interface shows week start/end, control day, elapsed days, remaining days and the active accumulated targets. Premium goals use the same daily/weekly model in a separate goal set.
 
@@ -46,9 +50,9 @@ dailies eligible from       = d + 1 Server Save date
 contribution eligible from  = d + 2 Server Save dates
 ```
 
-The implementation uses Temporal calendar arithmetic in `America/Sao_Paulo`. A member waiting for access is not classified below goal for an unavailable day. Dailies and total-points pacing use the number of daily-eligible days; contribution pacing uses the number of contribution-eligible days. Members already present in the first loaded snapshot are treated as pre-existing and eligible for the full cycle because the export contains no join timestamp; the interface labels that assumption instead of inventing a date.
+The implementation uses Temporal calendar arithmetic in `America/Sao_Paulo`. A member waiting for access is not classified below goal for an unavailable day. Dailies and total-points pacing use the number of daily-eligible days; contribution pacing uses the number of contribution-eligible days. Members already present in the first loaded snapshot are treated as pre-existing, but their goal pacing begins on the first date actually tracked instead of charging unobserved days earlier in that week; the interface labels the unknown join date instead of inventing one.
 
-The activity panel shows weekly levels gained, joins/returns, departures and members still waiting. Each ranking row shows that player's recorded level gain and access status. Discord daily-history output includes the same aggregate counts.
+The Activity view shows weekly levels gained, joins/returns, departures and members still waiting. Per-member level, eligibility and access details are available from the row's contextual sheet. Discord daily-history output includes the same aggregate counts.
 
 ## Exports
 
@@ -74,5 +78,7 @@ Lifecycle and level statistics are derived from the already persisted daily memb
 - Daily-history tests cover same-day replacement, cumulative-to-daily delta calculation, gaps, weekly reset baselines and coverage summaries without inventing missing dates.
 - Difficulty tests cover Normal/Wildscape/Primal boundaries, estimated tier transitions and manual interval allocations. The browser smoke flow also opens the breakdown editor and saves a valid correction.
 - Lifecycle tests cover the Monday opening baseline, level gains, join/departure/return detection, the 24/48-hour Server Save windows, eligibility-aware goal bands and same-date replacement recalculation.
-- The Playwright smoke flow loads an anonymized fixture through the file input, checks the localized route, table contribution column, sample contribution and day-of-cycle summary, then verifies the new-date confirmation label and same-day replacement label.
-- A dedicated Playwright flow loads Monday and Tuesday snapshots, verifies an observed join, the Wednesday daily date, the Thursday contribution date, weekly level gain and the adjusted-goal label in the member row.
+- The Playwright smoke flow loads an anonymized fixture through the import dialog, checks the localized route, compact operational layout, table contribution column and sample contribution, then verifies direct registration and same-day replacement.
+- A dedicated Playwright flow loads Monday and Tuesday snapshots, verifies an observed join, the Wednesday daily date, the Thursday contribution date, weekly level gain and the member detail sheet.
+- A pagination/overlay flow verifies ten rows per ranking page, navigation to the remaining rows and that contextual work opens one sheet at a time.
+- The same flow verifies invalid daily-goal input, disabled save, cancellation without persistence and restoration of the last saved value.

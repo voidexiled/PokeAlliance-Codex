@@ -31,8 +31,11 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
+      # `pnpm ci` is pnpm's own clean-install command and shadows the script of
+      # the same name (pnpm 11.6.0), so the gate of spec 14.1 has to be invoked
+      # with `pnpm run`.
       - name: Run deterministic quality checks
-        run: pnpm ci
+        run: pnpm run ci
 
   browser:
     runs-on: ubuntu-latest
@@ -53,8 +56,61 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
-      - name: Install Chromium
-        run: pnpm exec playwright install --with-deps chromium
+      # WebKit is the browser of the webkit-mobile project (spec 14.3).
+      - name: Install browsers
+        run: pnpm exec playwright install --with-deps chromium webkit
 
-      - name: Run browser smoke tests
+      # The prod project serves .vercel/output, so the build has to exist first.
+      - name: Build
+        run: pnpm build
+
+      - name: Run end-to-end tests
         run: pnpm test:e2e
+
+      - name: Upload failed run
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: browser-test-results
+          path: test-results/
+          if-no-files-found: ignore
+          retention-days: 7
+
+  # The goldens are rendered on Windows with Verdana; on Linux it falls back to
+  # DejaVu Sans and every comparison would differ (spec 14.6).
+  visual:
+    runs-on: windows-latest
+    needs: quality
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22.16.0
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Install browsers
+        run: pnpm exec playwright install chromium
+
+      # test:visual checks the board goldens, then builds with VISUAL=1 and runs the
+      # visual Playwright project against the board cases and the 390 px baselines
+      # (spec 14.5).
+      - name: Run visual tests
+        run: pnpm test:visual
+
+      - name: Upload failed run
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: visual-test-results
+          path: test-results/
+          if-no-files-found: ignore
+          retention-days: 7

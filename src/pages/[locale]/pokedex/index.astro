@@ -1,8 +1,35 @@
 ---
-import AppLayout from '../../../layouts/AppLayout.astro';
-import { ContentSearch, type SearchItem } from '../../../components/wiki/ContentSearch';
-import { getFact, getRecords } from '../../../lib/content/repository';
-import { getLocale, locales, type Locale } from '../../../i18n/config';
+// Pokédex (spec 8.2, `Lienzo:Pokedex`): every variant of `content/pokemon.json` in the
+// `pokedex` list, in template B (8.0.2): breadcrumb, PageTitle, then the list island —
+// FilterBar, results bar, the active view and the pagination — and the footer that
+// PageLayout adds. Prerendered with the island of 7.7, which loads on `client:load` (7.3).
+//
+// Data (PR5). `buildPokedexData` of ./datos.json.ts writes the whole list in the order of
+// 8.0.5; this page prints its first page and gives the island only those rows, the length of
+// the list, the values its filters accept and the element chips and drops of that first
+// page, panels included. The island asks for the rest, the other elements and items with it,
+// when it hydrates. A prerendered page never reads its query (PR2): the state of the URL is
+// the island's.
+//
+// Text. The h1 and the breadcrumb are the labels of the menu entry and of its group, which
+// src/lib/nav/groups.ts owns (8.0.3). The description (13.5) and every text of the list —
+// the filters, the count, the empty state, the captions and column headers of the Lista and
+// the card texts of `DexCard` — come from `messages.pokedex` and `messages.ui` of the page's
+// locale (DP1, 13.2): the island receives those two namespaces and nothing else of the
+// dictionary.
+import { getAlternatePath, getLocale, locales, type Locale } from '@/i18n/config';
+import type { Messages } from '@/i18n/messages/en';
+import { en } from '@/i18n/messages/en';
+import { es } from '@/i18n/messages/es';
+import { fill } from '@/i18n/messages/types';
+import { formatInteger } from '@/lib/format/numbers';
+import { buildNav } from '@/lib/nav/groups';
+import { PageTitle } from '@/components/layout/PageTitle';
+import { POKEDEX_PAGE_SIZE, decodePokedex } from '@/components/pokedex/config';
+import { PokedexRoot } from '@/components/pokedex/PokedexRoot';
+import PageLayout from '@/layouts/PageLayout.astro';
+
+import { buildPokedexData, pokedexDrops, pokedexElements, pokedexIds } from './datos.json.ts';
 
 export const prerender = true;
 
@@ -10,72 +37,52 @@ export function getStaticPaths() {
   return locales.map((locale) => ({ params: { locale } }));
 }
 
-const locale = getLocale(Astro.params.locale) as Locale;
-const records = getRecords('pokemon');
-const strings =
-  locale === 'es'
-    ? {
-        title: 'Pokédex',
-        description: 'Índice de especies y variantes con hechos revisados y evidencia enlazada.',
-        eyebrow: 'Wiki Core / Pokédex',
-        intro: 'Una primera capa de conocimiento navegable, basada en registros normalizados.',
-        status: 'Muestra investigada',
-      }
-    : {
-        title: 'Pokédex',
-        description: 'Species and variant index with reviewed facts and linked evidence.',
-        eyebrow: 'Wiki Core / Pokédex',
-        intro: 'A first navigable knowledge layer built from normalized records.',
-        status: 'Research sample',
-      };
+const dictionaries: Record<Locale, Messages> = { es, en };
 
-const items: SearchItem[] = records.map((record) => {
-  const tier = getFact<string>(record, 'tier')?.value;
-  const role = getFact<string>(record, 'function')?.value;
-  const hp = getFact<number>(record, 'hp')?.value;
-  return {
-    id: record.id,
-    name: record.canonicalName,
-    collection: 'Pokémon',
-    href: `/${locale}/pokedex/${record.canonicalSlug}/`,
-    meta: [
-      record.pokedexNumber ? `#${record.pokedexNumber}` : '',
-      record.variant ?? '',
-      tier ? `Tier ${tier}` : '',
-      role ?? '',
-    ]
-      .filter(Boolean)
-      .join(' · '),
-    summary: hp ? `HP ${hp}` : '',
-    status: Object.values(record.facts)[0]?.status ?? 'unknown',
-  };
+const locale = getLocale(Astro.params.locale);
+const path = Astro.url.pathname;
+const alternates = Object.fromEntries(
+  locales.map((option) => [option, getAlternatePath(path, option)]),
+) as Record<Locale, string>;
+
+// 8.0.4: «Pokémon › Pokédex». The group has no index page, so its crumb is text.
+const group = buildNav(locale, path).groups.find((entry) => entry.id === 'pokemon');
+const entry = group?.items.find((item) => item.id === 'pokedex');
+if (group === undefined || entry === undefined) {
+  throw new Error('src/lib/nav/groups.ts: no «pokedex» entry in the «pokemon» group (8.0.3).');
+}
+const title = entry.label;
+
+const messages = dictionaries[locale];
+const data = buildPokedexData(locale);
+const records = decodePokedex(data);
+const first = { v: data.v, campos: data.campos, filas: data.filas.slice(0, POKEDEX_PAGE_SIZE) };
+const firstRows = decodePokedex(first);
+const description = fill(messages.pokedex.description, {
+  n: formatInteger(records.length, locale),
 });
-const initialQuery = Astro.url.searchParams.get('q') ?? '';
 ---
 
-<AppLayout locale={locale} title={strings.title} description={strings.description}>
-  <div>
-    <nav
-      class="wiki-breadcrumbs"
-      aria-label={locale === 'es' ? 'Ruta de navegación' : 'Breadcrumb'}
-    >
-      <a href={`/${locale}/`}>{locale === 'es' ? 'Inicio' : 'Home'}</a>
-      <span class="wiki-breadcrumb-separator">/</span>
-      <span>{strings.title}</span>
-    </nav>
-    <header class="wiki-page-header">
-      <p class="eyebrow">{strings.eyebrow}</p>
-      <div class="wiki-page-header-row">
-        <div>
-          <h1 class="display-title">{strings.title}</h1>
-          <p class="muted-copy">{strings.intro}</p>
-        </div>
-        <span class="wiki-section-count">{strings.status} · {items.length}</span>
-      </div>
-    </header>
-
-    <section class="wiki-section" aria-label={strings.title}>
-      <ContentSearch items={items} locale={locale} initialQuery={initialQuery} client:load />
-    </section>
-  </div>
-</AppLayout>
+<PageLayout
+  locale={locale}
+  title={title}
+  description={description}
+  alternates={alternates}
+  breadcrumb={[{ label: group.label }, { label: title }]}
+>
+  <PageTitle title={title} />
+  <PokedexRoot
+    client:load
+    locale={locale}
+    path={path}
+    dataUrl={`/${locale}/pokedex/datos.json`}
+    data={first}
+    total={records.length}
+    ids={pokedexIds(records, data.refs.elementos)}
+    elements={pokedexElements(firstRows, locale, messages.ui.tooltip)}
+    drops={pokedexDrops(firstRows, records, data.refs.items, locale, messages.ui.tooltip)}
+    title={title}
+    ui={messages.ui}
+    pokedex={messages.pokedex}
+  />
+</PageLayout>

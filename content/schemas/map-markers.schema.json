@@ -1,0 +1,39 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://alliance-codex.local/schemas/map-markers.schema.json",
+  "title": "Marcadores del mapa",
+  "description": "content/map/markers.json: marcadores del minimapa del cliente, en coordenadas del juego.",
+  "type": "object",
+  "required": ["marcadores"],
+  "additionalProperties": false,
+  "properties": {
+    "$schema": { "type": "string" },
+    "marcadores": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/marcador" }
+    }
+  },
+  "$defs": {
+    "coordenada": { "type": "integer", "minimum": 0 },
+    "marcador": {
+      "type": "object",
+      "required": ["id", "descripcion", "x", "y", "z", "icono"],
+      "additionalProperties": false,
+      "properties": {
+        "id": { "type": "integer", "minimum": 1, "description": "Número único del marcador." },
+        "descripcion": {
+          "type": ["string", "null"],
+          "description": "Texto del marcador en el cliente. null si no tiene."
+        },
+        "x": { "$ref": "#/$defs/coordenada" },
+        "y": { "$ref": "#/$defs/coordenada" },
+        "z": { "type": "integer", "minimum": 0, "maximum": 15, "description": "Piso." },
+        "icono": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "Número del icono del minimapa en el cliente."
+        }
+      }
+    }
+  }
+}

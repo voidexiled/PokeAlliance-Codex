@@ -1,0 +1,220 @@
+---
+// Crear anuncio (spec 9.7, template G of 8.0.2; 9.3): `/{l}/comercio/publicar/`, the form of a
+// listing and its live preview. Phase A publishes nothing — no Supabase, no account, no contact
+// (9.2) — and its action is «Copiar anuncio» (9.7.7). The page exists in every build, production
+// included: it reads no listing and no seller of content/comercio/, so COMERCIO_DEMO changes
+// nothing here (9.2, CA-9.1).
+//
+// Render (9.3): «Prerender del marco e isla» in both phases, so the page exports `prerender`
+// itself. src/integrations/comercio-fases.ts sets the render mode of the other Comercio pages
+// and leaves this one out. Not indexable (9.3, 13.5): `noindex`, and so out of the sitemap.
+//
+// Template G (8.0.2) on PageLayout: the crumbs «Comunidad › Comercio › Crear anuncio» (8.0.4,
+// 9.3; «Comunidad» has no index, so its crumb is text), the PageTitle and the island, which
+// draws the two columns of the template — the form, and from 768 the preview of 304 beside it —
+// and nothing else. PageLayout adds the footer.
+//
+// Data (13.6). The island's props carry the small registries in the language of the page
+// (worlds, auras, the addons of each Pokémon, the names of the Market categories), the sprites
+// the adapter resolves here (DP2) and the Diamonds panel; the Pokémon roster and the items are
+// the two PR5 files of the Pokédex and of the Items list, which the island reads once hydrated.
+// Text (13.2, DP1): the form's labels come from `messages.trade`, and the island takes only the
+// leaves of `messages.ui` it reads.
+import { getAlternatePath, getLocale, locales, type Locale } from '@/i18n/config';
+import type { Messages } from '@/i18n/messages/en';
+import { en } from '@/i18n/messages/en';
+import { es } from '@/i18n/messages/es';
+import {
+  getAuras,
+  getCategorias,
+  getMonedaDiamantes,
+  getMundos,
+  getOutfits,
+  getSpriteRegistry,
+} from '@/lib/content/registry';
+import { diamondsTip } from '@/lib/game/tips';
+import { buildNav } from '@/lib/nav/groups';
+import { spriteOrNull } from '@/lib/sprites/resolve';
+
+import { PageTitle } from '@/components/layout/PageTitle';
+import {
+  ListingForm,
+  type ListingFormAddon,
+  type ListingFormProps,
+  type ListingFormSprites,
+} from '@/components/trade/ListingForm';
+import PageLayout from '@/layouts/PageLayout.astro';
+
+export const prerender = true;
+
+export function getStaticPaths() {
+  return locales.map((locale) => ({ params: { locale } }));
+}
+
+const dictionaries: Record<Locale, Messages> = { es, en };
+
+const locale = getLocale(Astro.params.locale);
+const path = Astro.url.pathname;
+const alternates = Object.fromEntries(
+  locales.map((option) => [option, getAlternatePath(path, option)]),
+) as Record<Locale, string>;
+
+const { trade, ui } = dictionaries[locale];
+// 9.7.7: the lines of the copied text. `listingText` calls «Next Boost chance» `nextBoostChance`.
+const { nextBoost, ...copyLines } = trade.copy;
+
+// 8.0.4, 9.3: «Comunidad › Comercio › Crear anuncio». The group and the entry are the menu's
+// (8.0.3), so the crumbs and the sidebar always say the same.
+const community = buildNav(locale, path).groups.find((group) => group.id === 'comunidad');
+const market = community?.items.find((item) => item.id === 'comercio');
+if (community === undefined || market === undefined) {
+  throw new Error('src/lib/nav/groups.ts: no «comunidad › comercio» entry for the crumbs (8.0.3).');
+}
+
+// DP2: every sprite through the adapter. The keys of the tabs and of the stages are the fixed
+// ones of 9.5.1 and 9.7.3 (FIXED_SPRITE_KEYS): a registry without one gives `null`, and the
+// place shows the missing mark or no sprite at all, never another icon (R11). The Diamond
+// spins in Comercio (7.8), so it carries its animation.
+const registry = getSpriteRegistry();
+const diamond = spriteOrNull(registry, 'ui/diamond', { animado: true });
+const moneda = getMonedaDiamantes();
+const pokedolares = spriteOrNull(registry, 'ui/pokedolares');
+const sprites: ListingFormSprites = {
+  item: spriteOrNull(registry, 'ui/comercio/item'),
+  diamond,
+  pokedolares,
+  tabs: {
+    pokemon: spriteOrNull(registry, 'outfits/5'),
+    items: spriteOrNull(registry, 'items/stones/fire-stone'),
+    diamonds: diamond,
+    pokedolares,
+  },
+};
+
+// 9.7.2: the addons of a Pokémon are the ones of its own record in content/outfits.json, never
+// the ones of its base species, so they travel by the id of the Pokémon that owns them.
+const addons: Record<string, ListingFormAddon[]> = Object.fromEntries(
+  getOutfits()
+    .filter((outfit) => outfit.addons.length > 0)
+    .map((outfit) => [
+      outfit.pokemon,
+      outfit.addons.map((addon) => ({ id: addon.id, nombre: addon.nombre })),
+    ]),
+);
+
+const form: ListingFormProps = {
+  locale,
+  pokedexUrl: `/${locale}/pokedex/datos.json`,
+  itemsUrl: `/${locale}/items/datos.json`,
+  worlds: getMundos(locale).map((world) => ({ id: world.id, nombre: world.nombre })),
+  auras: getAuras().map((aura) => ({
+    id: aura.id,
+    nombre: aura.nombre,
+    icono: spriteOrNull(registry, aura.icono),
+  })),
+  addons,
+  categories: Object.fromEntries(
+    getCategorias()
+      .filter((category) => !category.virtual)
+      .map((category) => [category.id, category.nombre[locale]]),
+  ),
+  sprites,
+  // The rows of the Diamonds panel and the facts «Se compran en» and «Se usan en» come from the
+  // `moneda` object of content/items/diamantes.json (§3.13). A list the owner has not filled makes
+  // no row; with neither, there is no panel and the Diamonds of a price stay plain text (R2).
+  diamonds: {
+    tip: diamondsTip(moneda, locale, ui.tooltip, { sprite: diamond, animated: true }),
+    boughtAt: moneda?.seCompranEn?.[locale] ?? [],
+    usedFor: moneda?.seUsanEn?.[locale] ?? [],
+  },
+  // The words the form shares with the list, the card and the copied text are those keys, so
+  // a field and the fact it becomes say the same (13.2): `listing.keys` names the Pokémon fields
+  // and the quantity, `listing` the price rows, and the rest of the form is `form`.
+  labels: {
+    assetType: trade.typeLabel,
+    types: trade.types,
+    pokemon: trade.types.pokemon,
+    ball: trade.listing.keys.ball,
+    aura: trade.listing.keys.aura,
+    auraNone: trade.form.auraNone,
+    boost: trade.listing.keys.boost,
+    boostHelp: trade.form.boostHelp,
+    starLevel: trade.listing.keys.starLevel,
+    nickname: trade.listing.keys.nickname,
+    memorySlots: trade.listing.keys.memorySlots,
+    memory: trade.form.memory,
+    heldItems: trade.form.heldItems,
+    heldItem: trade.form.heldItem,
+    tier: trade.listing.keys.tier,
+    addon: trade.detail.addon,
+    addonNone: trade.form.addonNone,
+    nextBoostChance: trade.form.nextBoost,
+    training: ui.money.training,
+    level: trade.form.level,
+    progress: trade.form.progress,
+    npcPrice: trade.listing.keys.npcPrice,
+    npcNone: trade.form.npcUndeclared,
+    npcUnsellable: trade.unsellable,
+    amount: trade.form.amount,
+    item: trade.typeNames.items,
+    quantity: trade.listing.keys.quantity,
+    price: trade.price,
+    fiat: trade.listing.fiat,
+    currency: trade.currency,
+    game: trade.listing.game,
+    removeOption: trade.form.removeOption,
+    addOption: trade.form.addOption,
+    negotiable: trade.listing.negotiable,
+    world: trade.world,
+    copy: trade.form.copy,
+    copied: trade.form.copied,
+    copyFailed: trade.form.copyFailed,
+    copyText: trade.form.copyText,
+    preview: trade.form.preview,
+    errors: trade.form.errors,
+  },
+  preview: {
+    card: { ...trade.listing, reserved: trade.states.reservado },
+    now: trade.now,
+    unsellable: trade.unsellable,
+  },
+  // 9.7.7: the lines of the copied text; «o», «A convenir» and «Unsellable» are the words the page
+  // already shows.
+  text: {
+    ...copyLines,
+    nextBoostChance: nextBoost,
+    unsellable: trade.unsellable,
+    price: trade.price,
+    negotiable: trade.listing.negotiable,
+    or: ui.or,
+  },
+  ui: {
+    pinHint: ui.pinHint,
+    or: ui.or,
+    shiny: ui.shiny,
+    tooltip: ui.tooltip,
+    money: ui.money,
+    decrease: ui.decrease,
+    increase: ui.increase,
+    dismiss: ui.dismiss,
+    dataError: ui.dataError,
+    cards: { number: ui.cards.number },
+  },
+};
+---
+
+<PageLayout
+  locale={locale}
+  title={trade.create}
+  description={trade.createDescription}
+  alternates={alternates}
+  breadcrumb={[
+    { label: community.label },
+    { label: market.label, href: market.href },
+    { label: trade.create },
+  ]}
+  noindex
+>
+  <PageTitle title={trade.create} />
+  <ListingForm client:load {...form} />
+</PageLayout>

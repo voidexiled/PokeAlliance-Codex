@@ -1,0 +1,174 @@
+/* GENERADO por scripts/design/tokens.mjs desde src/design/tokens.json. No editar. */
+
+/* Tokens del sistema de diseño (§3.4). Un solo tema, «Oscuro»: todo vive en :root. */
+
+@theme static {
+  /* Ningún token del tema por defecto de Tailwind sobrevive. */
+  --*: initial;
+
+  /* El número de una utilidad de espacio es su valor en píxeles: p-16 son 16px. */
+  --spacing: 1px;
+
+  /* Puntos de corte, de layout-bp-md y layout-bp-xl ÷ 16. */
+  --breakpoint-md: 48rem;
+  --breakpoint-xl: 80rem;
+
+  /* Valores por defecto de Tailwind. */
+  --default-transition-duration: var(--duration-fast);
+  --default-transition-timing-function: var(--ease-standard);
+  --default-font-family: var(--font-sans);
+  --default-mono-font-family: var(--font-mono);
+
+  /* Radios: el nombre del token ya es el espacio de nombres --radius-* de Tailwind. */
+  --radius-2: 2px;
+  --radius-3: 3px;
+  --radius-4: 4px;
+  --radius-6: 6px;
+  --radius-8: 8px;
+  --radius-10: 10px;
+  --radius-11: 11px;
+  --radius-12: 12px;
+  --radius-full: 9999px;
+
+  /* Familias (type.families). */
+  --font-sans: Verdana, "DejaVu Sans", "Bitstream Vera Sans", system-ui, sans-serif;
+  --font-game: Poppins, Verdana, sans-serif;
+  --font-mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+
+  /* Sombra de texto: espacio de nombres --text-shadow-* de Tailwind. */
+  --text-shadow-game: 0 1px 1px rgba(0, 0, 0, 0.85);
+
+  /* Curvas: espacio de nombres --ease-* de Tailwind. */
+  --ease-standard: cubic-bezier(0.4, 0, 0.2, 1);
+  --ease-pulse: cubic-bezier(0.4, 0, 0.6, 1);
+  --ease-bounce: ease-in-out;
+}
+
+@layer theme {
+  :root {
+    /* Color */
+    --bg-primary: #0c0e12;
+    --bg-secondary: #13161b;
+    --bg-tertiary: #22262f;
+    --bg-quaternary: #373a41;
+    --border-secondary: #22262f;
+    --border-primary: #373a41;
+    --text-primary: #f7f7f7;
+    --text-secondary: #cecfd2;
+    --text-tertiary: #94979c;
+    --text-quaternary: #85888e;
+    --text-quinary: #61656c;
+    --helper: #a1a1aa;
+    --link: #93c5fd;
+    --link-prose: #3b82f6;
+    --white: #ffffff;
+    --black: #000000;
+    --ring: #444ce7;
+    --selected: #d97706;
+    --amber: #f59e0b;
+    --banner: #991b1b;
+    --inactive-row: rgba(153, 27, 27, 0.18);
+    --overlay: #000000cc;
+    --tt-panel: #21252c;
+    --tt-panel-deep: #1d232b;
+    --tt-track: #262b32;
+    --tt-divider: #2e343d;
+    --tt-label: #e8c66a;
+    --tt-value: #ffffff;
+    --tt-muted: #9aa0a8;
+    --tt-hint: #8a91a0;
+    --tt-shiny: #4a9eff;
+
+    /* Espaciado */
+    --space-2: 2px;
+    --space-4: 4px;
+    --space-6: 6px;
+    --space-8: 8px;
+    --space-10: 10px;
+    --space-12: 12px;
+    --space-16: 16px;
+    --space-20: 20px;
+    --space-24: 24px;
+    --space-32: 32px;
+    --space-40: 40px;
+    --space-48: 48px;
+
+    /* Sombras y anillos */
+    --ring-selected: 0 0 0 1px #d97706;
+    --inset-missing: inset 0 0 0 1px #373a41;
+    --inset-tt-empty: inset 0 0 0 1px #2e343d;
+
+    /* Marco */
+    --layout-header: 64px;
+    --layout-sidebar: 208px;
+    --layout-gap: 40px;
+    --layout-main-rail: 896px;
+    --layout-main: 944px;
+    --layout-main-full: 1192px;
+    --layout-main-max: 1536px;
+    --layout-rail: 256px;
+    --layout-rail-content: 240px;
+    --layout-spacer: 208px;
+    --layout-sheet: 288px;
+    --layout-search: 448px;
+    --layout-bp-md: 768px;
+    --layout-bp-xl: 1280px;
+    --layout-dex-compact: 495px;
+
+    /* Tamaños */
+    --size-cell: 32px;
+    --size-stage: 72px;
+    --size-art: 64px;
+    --size-slot: 40px;
+    --size-slot-drop: 36px;
+    --size-slot-held: 32px;
+    --size-missing: 16px;
+    --size-sprite-nav: 16px;
+    --size-sprite-panel: 24px;
+    --size-sprite-featured: 36px;
+    --size-tt-head: 70px;
+    --size-control: 40px;
+    --size-touch: 44px;
+    --size-tab: 50px;
+    --size-chip: 24px;
+    --size-meter: 4px;
+    --size-tt: 282px;
+    --size-tt-narrow: 240px;
+    --size-tt-wide: 300px;
+    --size-tt-chart: 200px;
+    --size-bar: 24px;
+    --size-plot: 220px;
+    --size-spark-w: 68px;
+    --size-spark-h: 20px;
+
+    /* Rejillas */
+    --grid-listing: 280px;
+    --grid-dex: 260px;
+    --grid-loot: 240px;
+    --grid-featured: 200px;
+    --grid-index: 290px;
+    --grid-kpi: 200px;
+    --grid-info: 280px;
+    --grid-compact: 240px;
+
+    /* Opacidades */
+    --opacity-chevron: 0.5;
+    --opacity-partial: 0.45;
+    --opacity-shiny-back: 0.6;
+
+    /* Capas z */
+    --z-header: 30;
+    --z-tooltip: 40;
+    --z-listbox: 45;
+    --z-scrim: 50;
+    --z-sheet: 51;
+    --z-skip: 60;
+
+    /* Duraciones */
+    --duration-fast: 150ms;
+    --duration-sprite-in: 300ms;
+    --duration-sheet: 500ms;
+    --duration-pulse: 2s;
+    --duration-bounce: 5s;
+  }
+}

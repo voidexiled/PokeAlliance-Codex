@@ -1,0 +1,74 @@
+/* The seller profile (spec 9.8, template H of 8.0.2): src/pages/[locale]/comercio/vendedor/
+   [handle].astro and its «Reseñas» block, `SellerReviews` of src/components/trade/SellerCard.tsx.
+   The data row, the channels, the listings and the table are design-system components; there
+   is no board for this page, so the reviews are composed only of tokens (R16).
+
+   Per-page stylesheet (plan M12, D-018, §13.6): only this page draws these blocks, so
+   global.css does not import it; the page imports it and the build writes it next to the page.
+   It repeats the layer order of global.css before its block, so the `components` layer keeps
+   its place whichever of the two sheets the browser reads first (§3.6).
+
+   - The head: `PageTitle` and, 16 under its rule, the data row (`FactLines`, 14/32), as the head
+     of `Lienzo:Guild`.
+   - The reviews block is a column 16 apart: the table «Reseñas por puntuación», the reviews
+     and their pagination, the rhythm of the pieces of a list (7.7.4 V6).
+   - PR4 (7.7.5): while the block carries `data-ac-pending` it keeps the height of the
+     prerendered HTML and paints nothing of it. It is the last section of the page, so nothing
+     after it in its column moves.
+   - A review is 14/22 text, 4 apart: «{n} de 5» in 700, the buyer and the date, «Operación:»
+     (a `FactLine`) and the comment. H4 moves the focus to the reviews after a page change, and
+     they come 16 under the header like the results of a list. */
+
+@reference '../theme.css';
+
+@layer properties, theme, base, components, utilities;
+
+@layer components {
+  .ac-seller-head {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-16);
+    min-width: 0;
+  }
+
+  .ac-seller-reviews {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-16);
+    min-width: 0;
+  }
+
+  .ac-seller-reviews[data-ac-pending] {
+    visibility: hidden;
+  }
+
+  .ac-seller-reviews__list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-16);
+    min-width: 0;
+    scroll-margin-top: var(--space-16);
+  }
+
+  .ac-seller-review {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+    min-width: 0;
+    @apply type-body;
+  }
+
+  .ac-seller-review__head,
+  .ac-seller-review__comment {
+    margin: 0;
+  }
+
+  .ac-seller-review__score {
+    font-weight: 700;
+  }
+
+  /* The comment is the buyer's own text: a long word breaks inside the column. */
+  .ac-seller-review__comment {
+    overflow-wrap: anywhere;
+  }
+}

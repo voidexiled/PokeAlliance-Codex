@@ -8,16 +8,16 @@ import {
   summarizeGuildDailyHistory,
 } from '@/lib/tools/guild-daily-history';
 import {
-  buildGuildDiscordText,
-  buildGuildWhatsAppText,
   calculateGuildRanking,
+  formatGuildRank,
   getGuildDailyValue,
   getGuildDerivedContributionPerDay,
   getGuildMemberBand,
+  getGuildMemberGoalEvaluations,
   getGuildWeekContext,
   normalizePacingSettings,
   parseGuildExport,
-  parseGuildExportText,
+  parseGuildExportedAt,
 } from '@/lib/tools/guild-ranking';
 
 const samplePayload = {
@@ -122,49 +122,50 @@ describe('guild ranking', () => {
     expect(ranking.totalPoints).toBe(1700);
   });
 
-  it('keeps contribution in the WhatsApp export', () => {
-    const parsed = parseGuildExportText(JSON.stringify(samplePayload));
-    expect(parsed.ok).toBe(true);
-    if (!parsed.ok) return;
+  it('explains the active metric that keeps a member below target', () => {
+    const ranking = calculateGuildRanking(samplePayload, {
+      standard: {
+        totalPoints: { daily: null, weekly: 2950 },
+        dailies: { daily: 1, weekly: 7 },
+        contribution: { daily: null, weekly: null },
+      },
+      premium: {
+        totalPoints: { daily: null, weekly: null },
+        dailies: { daily: null, weekly: null },
+        contribution: { daily: null, weekly: null },
+      },
+    });
+    const alpha = ranking.members.find((member) => member.name === 'Alpha Player');
+    expect(alpha).toBeDefined();
+    if (!alpha) return;
 
-    const text = buildGuildWhatsAppText(
-      calculateGuildRanking(parsed.payload, {
-        standard: {
-          totalPoints: { daily: null, weekly: 2950 },
-          dailies: { daily: 1, weekly: null },
-          contribution: { daily: null, weekly: null },
-        },
-      }),
+    expect(getGuildMemberBand(alpha, ranking)).toBe('below');
+    const evaluations = getGuildMemberGoalEvaluations(
+      alpha,
+      ranking.settings.standard,
+      ranking.week,
     );
-
-    expect(text).toContain('*Contribución total:* 800');
-    expect(text).toContain('700 contribución');
-    expect(text).toContain('150 pts');
-    expect(text).toContain('Meta acumulada al día 4');
+    expect(evaluations).toMatchObject([
+      { metric: 'totalPoints', observed: 1300, meets: false },
+      { metric: 'dailies', observed: 4, expected: 4, meets: true },
+    ]);
+    expect(evaluations[0]?.expected).toBeCloseTo(2950 * (4 / 7));
   });
 
-  it('builds a Markdown Discord export with loaded daily and monthly summaries', () => {
-    const parsed = parseGuildExportText(JSON.stringify(samplePayload));
-    expect(parsed.ok).toBe(true);
-    if (!parsed.ok) return;
+  it('shows ranks with the game client terms in both languages (E13, CA-10.10)', () => {
+    expect(formatGuildRank('the Leader')).toBe('Leader');
+    expect(formatGuildRank('a Vice-Leader')).toBe('Vice-Leader');
+    expect(formatGuildRank('a Member')).toBe('Member');
+    expect(formatGuildRank('Officer')).toBe('Officer');
+    expect(formatGuildRank(null)).toBe('—');
+    expect(formatGuildRank('  ')).toBe('—');
+  });
 
-    const ranking = calculateGuildRanking(parsed.payload);
-    const text = buildGuildDiscordText(ranking, [
-      {
-        observationDate: '2026-09-10',
-        weekStartDate: '2026-09-07',
-        dayIndex: 4,
-        dailyDailies: 6,
-        dailyContribution: 800,
-        dailyPoints: 900,
-      },
-    ]);
-
-    expect(text).toContain('# 🏆 Test Guild · Ranking de guild');
-    expect(text).toContain('## Metas activas');
-    expect(text).toContain('## Registro diario cargado');
-    expect(text).toContain('## Resumen mensual con snapshots cargados');
-    expect(text).toContain('**#1 · Alpha Player**');
+  it('reads exportedAt in the Server Save zone unless it carries an offset (A12)', () => {
+    expect(parseGuildExportedAt('2026-09-22 23:00:00')?.toString()).toBe('2026-09-23T02:00:00Z');
+    expect(parseGuildExportedAt('2026-09-22T23:00:00Z')?.toString()).toBe('2026-09-22T23:00:00Z');
+    expect(parseGuildExportedAt('not a date')).toBeNull();
+    expect(parseGuildExportedAt(null)).toBeNull();
   });
 
   it('rejects duplicate names and invalid numeric fields', () => {
@@ -307,6 +308,32 @@ describe('guild daily history', () => {
       key: '2026-09',
       daysObserved: 2,
       complete: false,
+    });
+  });
+
+  it('starts baseline goal pacing on the first tracked day, not on Monday', () => {
+    const wednesday = createGuildDailySnapshot('late-start-wednesday', {
+      exportedAt: '2026-09-16 23:00:00',
+      guild: 'Test Guild',
+      members: [{ name: 'Alpha Player', level: 120, dailiesCompleted: 1, contribution: 150 }],
+    });
+    const thursday = createGuildDailySnapshot('late-start-thursday', {
+      exportedAt: '2026-09-17 23:00:00',
+      guild: 'Test Guild',
+      members: [{ name: 'Alpha Player', level: 121, dailiesCompleted: 2, contribution: 300 }],
+    });
+
+    const history = calculateGuildDailyHistory([wednesday, thursday]);
+    const summaries = history.weeks[0]?.summaries ?? [];
+
+    expect(summaries[0]?.memberDeltas[0]).toMatchObject({
+      firstObservedDate: '2026-09-16',
+      eligibleDailyDays: 1,
+      eligibleContributionDays: 1,
+    });
+    expect(summaries[1]?.memberDeltas[0]).toMatchObject({
+      eligibleDailyDays: 2,
+      eligibleContributionDays: 2,
     });
   });
 

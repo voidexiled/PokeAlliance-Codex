@@ -1,0 +1,52 @@
+/* Textarea (spec 7.2.8): a site piece without a design system component, composed only from
+   tokens and text styles (R16) on a native `<textarea>`. It takes the look of TextField
+   (text-field.css): the 14/22 label 8 above, `border-secondary` on `bg-primary` with radius 11
+   and `type-field`, and the 12/16 helper 4 below. The height is the `rows` of the element,
+   never under the 40 of a field, and the reader may only stretch it downwards. The focus ring
+   is the one of base.css (spec 5.2). */
+
+.ac-textarea {
+  position: relative;
+  min-width: 0;
+}
+
+.ac-textarea__label {
+  display: block;
+  margin-bottom: var(--space-8);
+  color: var(--text-primary);
+  @apply type-body;
+}
+
+.ac-textarea__input {
+  display: block;
+  width: 100%;
+  min-width: 0;
+  min-height: var(--size-control);
+  margin: 0;
+  padding: var(--space-8) var(--space-12);
+  border: 1px solid var(--border-secondary);
+  border-radius: var(--radius-11);
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  font-family: var(--font-sans);
+  @apply type-field;
+  resize: vertical;
+}
+
+.ac-textarea__input:disabled {
+  color: var(--text-quaternary);
+  cursor: not-allowed;
+}
+
+.ac-textarea__helper {
+  margin: var(--space-4) 0 0;
+  color: var(--helper);
+  @apply type-ui;
+}
+
+/* Touch (spec 13.7, S14): never under `size-touch`. */
+@media (pointer: coarse) {
+  .ac-textarea__input {
+    min-height: var(--size-touch);
+  }
+}

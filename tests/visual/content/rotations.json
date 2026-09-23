@@ -1,0 +1,14 @@
+{
+  "$schema": "../../../content/schemas/rotations.schema.json",
+  "rotaciones": [
+    {
+      "id": "special-shiny-tiers-primal-only",
+      "nombre": "Special Shiny tiers — Primal Area availability",
+      "tipo": "availability_scope",
+      "disponibilidad": "Ultra Rare, Legendary and Mythic Shiny variants appear naturally only in compatible Primal Areas.",
+      "condicion": "The species must be configured for the specific Primal Area.",
+      "excluye": ["common respawns", "Wildscape"],
+      "comparacion": ["common respawn", "Wildscape", "compatible Primal Area"]
+    }
+  ]
+}

@@ -1,0 +1,506 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://alliance-codex.local/schemas/sistemas.schema.json",
+  "title": "Página de sistema",
+  "description": "content/sistemas/<id>.json: una página de sistema del juego, /sistemas/<id>/. El nombre del archivo es el id. Si un valor no se conoce, va null. Un registro de relleno lleva \"borrador\": true y OCULTAR_BORRADORES=1 lo oculta de la página, el índice, el menú, el Inicio y la búsqueda.",
+  "type": "object",
+  "required": ["id", "titulo", "sprite", "orden", "tooltip", "intro", "secciones"],
+  "additionalProperties": false,
+  "properties": {
+    "$schema": { "type": "string" },
+    "id": {
+      "$ref": "#/$defs/slug",
+      "description": "Igual al nombre del archivo sin .json. También es la dirección de la página: /sistemas/<id>/."
+    },
+    "titulo": {
+      "$ref": "#/$defs/texto",
+      "description": "Nombre del sistema en la página, el menú, el índice y su tooltip."
+    },
+    "subtitulo": {
+      "$ref": "#/$defs/texto",
+      "description": "Opcional. Va junto al título, tal como se escribe: \"(Potenciación)\"."
+    },
+    "sprite": {
+      "$ref": "#/$defs/spriteOpcional",
+      "description": "Sprite del sistema en su tooltip y en el índice. null mientras no exista."
+    },
+    "orden": {
+      "type": "integer",
+      "minimum": 1,
+      "description": "Posición en el menú, el índice y el Inicio, de menor a mayor. No se repite entre sistemas."
+    },
+    "tooltip": {
+      "type": "array",
+      "description": "Filas del tooltip del sistema, en orden. [] mientras no tenga: entonces sus menciones son texto sin enlace.",
+      "items": { "$ref": "#/$defs/filaTooltip" }
+    },
+    "intro": {
+      "type": "array",
+      "description": "Párrafos de entrada, bajo el título y antes del banner.",
+      "items": { "$ref": "#/$defs/bloqueParrafo" }
+    },
+    "banner": { "$ref": "#/$defs/banner" },
+    "secciones": {
+      "type": "array",
+      "description": "Secciones de la página, en orden. El índice de la página (Resumen) las lista con sus títulos.",
+      "items": { "$ref": "#/$defs/seccion" }
+    },
+    "borrador": {
+      "const": true,
+      "description": "true en registros de relleno. Para publicar el sistema, se borra la clave."
+    }
+  },
+  "$defs": {
+    "slug": {
+      "type": "string",
+      "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$",
+      "description": "Minúsculas, números y guiones (kebab-case)."
+    },
+    "spriteKey": {
+      "type": "string",
+      "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*(?:/[a-z0-9]+(?:-[a-z0-9]+)*)*$",
+      "description": "Clave de public/sprites/sprites.json, por ejemplo \"ui/balls/alliance-ball\"."
+    },
+    "spriteOpcional": {
+      "type": ["string", "null"],
+      "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*(?:/[a-z0-9]+(?:-[a-z0-9]+)*)*$",
+      "description": "Clave de public/sprites/sprites.json, o null mientras no exista."
+    },
+    "texto": {
+      "type": "object",
+      "description": "Texto sin enlaces en los dos idiomas: { \"es\": \"…\", \"en\": \"…\" }.",
+      "required": ["es", "en"],
+      "additionalProperties": false,
+      "properties": {
+        "es": { "type": "string", "pattern": "\\S" },
+        "en": { "type": "string", "pattern": "\\S" }
+      }
+    },
+    "elemento": {
+      "description": "id de un elemento de content/elementos.json. pnpm content:check comprueba que esta lista sea la de elementos.schema.json.",
+      "enum": [
+        "normal",
+        "fire",
+        "water",
+        "grass",
+        "electric",
+        "ice",
+        "fighting",
+        "poison",
+        "ground",
+        "flying",
+        "psychic",
+        "bug",
+        "rock",
+        "ghost",
+        "dragon",
+        "fairy",
+        "dark",
+        "steel"
+      ]
+    },
+    "ref": {
+      "type": "object",
+      "description": "Entidad con registro propio: un Pokémon, un ítem, una página de sistema o una actividad.",
+      "required": ["tipo", "id"],
+      "additionalProperties": false,
+      "properties": {
+        "tipo": { "enum": ["pokemon", "item", "sistema", "actividad"] },
+        "id": {
+          "$ref": "#/$defs/slug",
+          "description": "id en content/pokemon.json, content/items/, content/sistemas/ o content/quests.json, según el tipo."
+        }
+      }
+    },
+    "textoEnLinea": {
+      "type": "object",
+      "description": "Texto de un bloque en los dos idiomas. Cada idioma es una lista de piezas que se leen seguidas: texto, enlaces, entidades e importes. es y en nombran las mismas entidades, enlaces e importes.",
+      "required": ["es", "en"],
+      "additionalProperties": false,
+      "properties": {
+        "es": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "$ref": "#/$defs/enLinea" }
+        },
+        "en": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "$ref": "#/$defs/enLinea" }
+        }
+      }
+    },
+    "enLinea": {
+      "type": ["string", "object"],
+      "minLength": 1,
+      "description": "Una pieza del texto: \"texto\", { \"ancla\", \"texto\" }, { \"ruta\", \"texto\" }, { \"entidad\", \"texto\"? }, { \"pd\" } o { \"dia\" }. Un importe del juego nunca va como texto.",
+      "if": { "type": "object" },
+      "then": { "$ref": "#/$defs/enLineaObjeto" }
+    },
+    "enLineaObjeto": {
+      "if": { "required": ["ancla"] },
+      "then": { "$ref": "#/$defs/enLineaAncla" },
+      "else": {
+        "if": { "required": ["ruta"] },
+        "then": { "$ref": "#/$defs/enLineaRuta" },
+        "else": {
+          "if": { "required": ["entidad"] },
+          "then": { "$ref": "#/$defs/enLineaEntidad" },
+          "else": {
+            "if": { "required": ["pd"] },
+            "then": { "$ref": "#/$defs/enLineaPd" },
+            "else": {
+              "if": { "required": ["dia"] },
+              "then": { "$ref": "#/$defs/enLineaDia" },
+              "else": false
+            }
+          }
+        }
+      }
+    },
+    "enLineaAncla": {
+      "type": "object",
+      "description": "Enlace a una sección de esta misma página, por su id (sin #).",
+      "required": ["ancla", "texto"],
+      "additionalProperties": false,
+      "properties": {
+        "ancla": { "$ref": "#/$defs/slug" },
+        "texto": { "type": "string", "pattern": "\\S" }
+      }
+    },
+    "enLineaRuta": {
+      "type": "object",
+      "description": "Enlace a otra página del sitio, sin idioma y con barra final: \"/pokedex/tiers/\".",
+      "required": ["ruta", "texto"],
+      "additionalProperties": false,
+      "properties": {
+        "ruta": { "type": "string", "pattern": "^/(?:[a-z0-9]+(?:-[a-z0-9]+)*/)*$" },
+        "texto": { "type": "string", "pattern": "\\S" }
+      }
+    },
+    "enLineaEntidad": {
+      "type": "object",
+      "description": "Mención de una entidad con registro: abre su tooltip. Sin \"texto\" se lee su nombre.",
+      "required": ["entidad"],
+      "additionalProperties": false,
+      "properties": {
+        "entidad": { "$ref": "#/$defs/ref" },
+        "texto": { "type": "string", "pattern": "\\S" }
+      }
+    },
+    "enLineaPd": {
+      "type": "object",
+      "description": "Importe de Pokédólares en unidades enteras: { \"pd\": 150000 } se lee 150k con su sprite.",
+      "required": ["pd"],
+      "additionalProperties": false,
+      "properties": {
+        "pd": { "type": "integer", "minimum": 1 }
+      }
+    },
+    "enLineaDia": {
+      "type": "object",
+      "description": "Importe de Diamonds en unidades enteras: { \"dia\": 20 }.",
+      "required": ["dia"],
+      "additionalProperties": false,
+      "properties": {
+        "dia": { "type": "integer", "minimum": 1 }
+      }
+    },
+    "filaTooltip": {
+      "type": "object",
+      "required": ["etiqueta", "valor"],
+      "additionalProperties": false,
+      "properties": {
+        "etiqueta": {
+          "$ref": "#/$defs/texto",
+          "description": "Etiqueta de la fila, con los dos puntos: \"Límite:\"."
+        },
+        "valor": { "$ref": "#/$defs/texto" }
+      }
+    },
+    "banner": {
+      "type": "object",
+      "description": "Opcional. Franja bajo la entrada con un sprite y de 1 a 4 datos breves por idioma, sin punto final.",
+      "required": ["sprite", "datos"],
+      "additionalProperties": false,
+      "properties": {
+        "sprite": { "$ref": "#/$defs/spriteOpcional" },
+        "datos": {
+          "type": "object",
+          "description": "Los mismos datos en los dos idiomas, en el mismo orden.",
+          "required": ["es", "en"],
+          "additionalProperties": false,
+          "properties": {
+            "es": {
+              "type": "array",
+              "minItems": 1,
+              "maxItems": 4,
+              "items": { "type": "string", "pattern": "\\S" }
+            },
+            "en": {
+              "type": "array",
+              "minItems": 1,
+              "maxItems": 4,
+              "items": { "type": "string", "pattern": "\\S" }
+            }
+          }
+        }
+      }
+    },
+    "seccion": {
+      "type": "object",
+      "required": ["id", "titulo", "bloques"],
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/slug",
+          "description": "Ancla de la sección (/sistemas/<id>/#<id de la sección>). No se repite en la página; \"items\" y \"item-…\" son de la sección automática de ítems."
+        },
+        "titulo": { "$ref": "#/$defs/texto" },
+        "bloques": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "$ref": "#/$defs/bloque" }
+        }
+      }
+    },
+    "bloque": {
+      "type": "object",
+      "description": "Un bloque de la sección. \"tipo\" decide sus demás campos.",
+      "required": ["tipo"],
+      "properties": {
+        "tipo": {
+          "enum": ["parrafo", "subtitulo", "pasos", "tabla", "nota", "tarjetas", "chips", "lista"]
+        }
+      },
+      "allOf": [
+        {
+          "if": { "required": ["tipo"], "properties": { "tipo": { "const": "parrafo" } } },
+          "then": { "$ref": "#/$defs/bloqueParrafo" }
+        },
+        {
+          "if": { "required": ["tipo"], "properties": { "tipo": { "const": "subtitulo" } } },
+          "then": { "$ref": "#/$defs/bloqueSubtitulo" }
+        },
+        {
+          "if": { "required": ["tipo"], "properties": { "tipo": { "const": "pasos" } } },
+          "then": { "$ref": "#/$defs/bloquePasos" }
+        },
+        {
+          "if": { "required": ["tipo"], "properties": { "tipo": { "const": "tabla" } } },
+          "then": { "$ref": "#/$defs/bloqueTabla" }
+        },
+        {
+          "if": { "required": ["tipo"], "properties": { "tipo": { "const": "nota" } } },
+          "then": { "$ref": "#/$defs/bloqueNota" }
+        },
+        {
+          "if": { "required": ["tipo"], "properties": { "tipo": { "const": "tarjetas" } } },
+          "then": { "$ref": "#/$defs/bloqueTarjetas" }
+        },
+        {
+          "if": { "required": ["tipo"], "properties": { "tipo": { "const": "chips" } } },
+          "then": { "$ref": "#/$defs/bloqueChips" }
+        },
+        {
+          "if": { "required": ["tipo"], "properties": { "tipo": { "const": "lista" } } },
+          "then": { "$ref": "#/$defs/bloqueLista" }
+        }
+      ]
+    },
+    "bloqueParrafo": {
+      "type": "object",
+      "description": "Párrafo justificado.",
+      "required": ["tipo", "texto"],
+      "additionalProperties": false,
+      "properties": {
+        "tipo": { "const": "parrafo" },
+        "texto": { "$ref": "#/$defs/textoEnLinea" }
+      }
+    },
+    "bloqueSubtitulo": {
+      "type": "object",
+      "description": "Subtítulo (h3) dentro de la sección.",
+      "required": ["tipo", "texto"],
+      "additionalProperties": false,
+      "properties": {
+        "tipo": { "const": "subtitulo" },
+        "texto": { "$ref": "#/$defs/texto" }
+      }
+    },
+    "bloquePasos": {
+      "type": "object",
+      "description": "Pasos numerados. La etiqueta «Paso {n}:» la pone la página. Si cada paso tiene sprite se dibujan como línea de tiempo.",
+      "required": ["tipo", "pasos"],
+      "additionalProperties": false,
+      "properties": {
+        "tipo": { "const": "pasos" },
+        "pasos": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "$ref": "#/$defs/paso" }
+        }
+      }
+    },
+    "paso": {
+      "type": "object",
+      "required": ["sprite", "texto"],
+      "additionalProperties": false,
+      "properties": {
+        "sprite": {
+          "$ref": "#/$defs/spriteOpcional",
+          "description": "Sprite del nodo del paso, o null."
+        },
+        "texto": { "$ref": "#/$defs/textoEnLinea" },
+        "chips": {
+          "type": "array",
+          "description": "Opcional. Chips bajo el texto del paso.",
+          "minItems": 1,
+          "items": { "$ref": "#/$defs/textoEnLinea" }
+        }
+      }
+    },
+    "bloqueTabla": {
+      "type": "object",
+      "description": "Tabla de datos. Cada fila tiene una celda por columna.",
+      "required": ["tipo", "caption", "columnas", "filas"],
+      "additionalProperties": false,
+      "properties": {
+        "tipo": { "const": "tabla" },
+        "caption": {
+          "$ref": "#/$defs/texto",
+          "description": "Título de la tabla para lectores de pantalla."
+        },
+        "columnas": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "$ref": "#/$defs/columna" }
+        },
+        "filas": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "array",
+            "minItems": 1,
+            "items": { "$ref": "#/$defs/celda" }
+          }
+        },
+        "variasLineas": {
+          "type": "boolean",
+          "description": "Opcional. true si alguna celda ocupa varias líneas: las celdas ganan 8 px arriba y abajo."
+        }
+      }
+    },
+    "columna": {
+      "type": "object",
+      "required": ["titulo"],
+      "additionalProperties": false,
+      "properties": {
+        "titulo": { "$ref": "#/$defs/texto" },
+        "ancho": {
+          "type": "integer",
+          "minimum": 1,
+          "description": "Opcional. Ancho de la columna en px."
+        },
+        "conSprite": {
+          "type": "boolean",
+          "description": "Opcional. true si las entidades de esta columna se muestran con su sprite."
+        }
+      }
+    },
+    "celda": {
+      "type": ["null", "number", "object"],
+      "description": "null (se lee «—»), una cifra, un texto con sus piezas { \"es\": […], \"en\": […] } o un elemento { \"elemento\": \"fire\" }.",
+      "if": { "type": "object" },
+      "then": {
+        "if": { "required": ["elemento"] },
+        "then": { "$ref": "#/$defs/celdaElemento" },
+        "else": { "$ref": "#/$defs/textoEnLinea" }
+      }
+    },
+    "celdaElemento": {
+      "type": "object",
+      "description": "Un elemento con su icono y su nombre en cada idioma, de content/elementos.json.",
+      "required": ["elemento"],
+      "additionalProperties": false,
+      "properties": {
+        "elemento": { "$ref": "#/$defs/elemento" }
+      }
+    },
+    "bloqueNota": {
+      "type": "object",
+      "description": "Observación de la sección; la página pone «Observación:» delante. Una por sección como mucho.",
+      "required": ["tipo", "texto"],
+      "additionalProperties": false,
+      "properties": {
+        "tipo": { "const": "nota" },
+        "texto": { "$ref": "#/$defs/textoEnLinea" }
+      }
+    },
+    "bloqueTarjetas": {
+      "type": "object",
+      "description": "Ideas paralelas en tarjetas, dos por fila.",
+      "required": ["tipo", "tarjetas"],
+      "additionalProperties": false,
+      "properties": {
+        "tipo": { "const": "tarjetas" },
+        "tarjetas": {
+          "type": "array",
+          "minItems": 2,
+          "items": { "$ref": "#/$defs/tarjeta" }
+        }
+      }
+    },
+    "tarjeta": {
+      "type": "object",
+      "required": ["titulo", "sprite", "texto"],
+      "additionalProperties": false,
+      "properties": {
+        "titulo": { "$ref": "#/$defs/texto" },
+        "sprite": {
+          "$ref": "#/$defs/spriteOpcional",
+          "description": "Sprite a los dos lados del título, o null."
+        },
+        "texto": { "$ref": "#/$defs/textoEnLinea" }
+      }
+    },
+    "bloqueChips": {
+      "type": "object",
+      "description": "Una etiqueta y una lista de chips.",
+      "required": ["tipo", "etiqueta", "chips"],
+      "additionalProperties": false,
+      "properties": {
+        "tipo": { "const": "chips" },
+        "etiqueta": {
+          "type": "object",
+          "description": "Etiqueta con los dos puntos: \"Ejemplo:\".",
+          "required": ["es", "en"],
+          "additionalProperties": false,
+          "properties": {
+            "es": { "type": "string", "pattern": "\\S.*:$" },
+            "en": { "type": "string", "pattern": "\\S.*:$" }
+          }
+        },
+        "chips": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "$ref": "#/$defs/textoEnLinea" }
+        }
+      }
+    },
+    "bloqueLista": {
+      "type": "object",
+      "description": "Lista con viñetas.",
+      "required": ["tipo", "puntos"],
+      "additionalProperties": false,
+      "properties": {
+        "tipo": { "const": "lista" },
+        "puntos": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "$ref": "#/$defs/textoEnLinea" }
+        }
+      }
+    }
+  }
+}

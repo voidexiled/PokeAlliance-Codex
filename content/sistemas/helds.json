@@ -1,0 +1,14 @@
+{
+  "$schema": "../schemas/sistemas.schema.json",
+  "id": "helds",
+  "titulo": {
+    "es": "Held Items",
+    "en": "Held Items"
+  },
+  "sprite": null,
+  "orden": 2,
+  "tooltip": [],
+  "intro": [],
+  "secciones": [],
+  "borrador": true
+}

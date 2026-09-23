@@ -1,0 +1,59 @@
+/* KpiCard (spec 7.2.6, 7.6.2; CARD_GRID_SYSTEM §6.6; DS:KpiCard), ported from the
+   `.ac-kpi-card` block of the design system's components/bundle.css. global.css imports
+   this file with layer(components).
+
+   Three subgrid tracks — label, value, comparison — so the values of a row line up when a
+   label or a comparison takes two lines: `bg-primary`, 1 px `border-secondary`, radius 11,
+   padding 16, tracks 8 apart. No hover: it is not a link. The span of 3 is the card's in
+   every grid (`trackCount('kpi')`), so it lives here, as in the reference.
+
+   The only difference against the reference is the type, written as `@apply type-*`
+   (spec 3.7). The total after the value writes only a size and a weight in the reference, so
+   it keeps the 28 px line height of the figure it sits in: its 14 px text on that line is
+   what makes the value track 30 tall there and on the board, one track shared by the row.
+   Here it is `type-body` with the line height of its parent (`leading-[inherit]`), the same
+   cascade in the terms of spec 3.7. */
+
+.ac-kpi-card {
+  grid-row: span 3;
+  display: grid;
+  grid-template-rows: subgrid;
+  row-gap: var(--space-8);
+  min-width: 0;
+  padding: var(--space-16);
+  border: 1px solid var(--border-secondary);
+  border-radius: var(--radius-11);
+  background: var(--bg-primary);
+  color: var(--text-primary);
+}
+
+.ac-kpi-card__label {
+  margin: 0;
+  color: var(--text-secondary);
+  @apply type-body;
+}
+
+.ac-kpi-card__value {
+  margin: 0;
+  font-variant-numeric: tabular-nums;
+  @apply type-figure;
+}
+
+.ac-kpi-card__of {
+  color: var(--text-tertiary);
+  @apply type-body leading-[inherit];
+}
+
+.ac-kpi-card__comparison {
+  margin: 0;
+  color: var(--text-tertiary);
+  font-variant-numeric: tabular-nums;
+  @apply type-ui;
+}
+
+@supports not (grid-template-rows: subgrid) {
+  .ac-kpi-card {
+    display: flex;
+    flex-direction: column;
+  }
+}

@@ -1,0 +1,24 @@
+/* TextLink (spec 7.2.2, DS:TextLink), ported from the `.ac-text-link` block of the
+   design system's components/bundle.css. global.css imports this file with
+   layer(components).
+
+   Size and line height come from the surrounding text. The entity link is `link` and
+   only underlines on hover, with no hover background (5.2); the prose link is
+   `link-prose` and always underlined. */
+
+.ac-text-link {
+  color: var(--link);
+  text-decoration: none;
+}
+
+.ac-text-link:hover {
+  color: var(--link);
+  text-decoration: underline;
+}
+
+/* Prose: only inside a paragraph, always underlined. */
+.ac-text-link--prose,
+.ac-text-link--prose:hover {
+  color: var(--link-prose);
+  text-decoration: underline;
+}

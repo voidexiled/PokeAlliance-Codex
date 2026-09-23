@@ -1,0 +1,3976 @@
+{
+ "declaredHeight": 6535,
+ "renderedHeight": 6535,
+ "width": 1440,
+ "contentHeight": 6511,
+ "overflow": false,
+ "emptyTail": 24,
+ "lowest": {
+  "path": "#dc-root > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > section:nth-child(11) > div:nth-child(4) > div:nth-child(2) > div:nth-child(3) > div:nth-child(2)",
+  "kind": "box"
+ },
+ "rawHoles": [],
+ "brokenImages": [],
+ "webFontsLoaded": [
+  "Poppins 500",
+  "Poppins 600"
+ ],
+ "grids": [
+  {
+   "kind": "grid",
+   "path": "#dc-root > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > section:nth-child(2) > div:nth-child(2) > div:nth-child(1)",
+   "rect": {
+    "x": 56,
+    "y": 206,
+    "w": 1328,
+    "h": 112
+   },
+   "columns": 2,
+   "children": 2,
+   "painted": 0,
+   "cards": false,
+   "inTooltip": false,
+   "alignItems": "start",
+   "label": "Superficies",
+   "maxSpread": 96,
+   "rows": [
+    {
+     "y": 206,
+     "children": [
+      0,
+      1
+     ],
+     "heights": [
+      16,
+      112
+     ],
+     "heightSpread": 96,
+     "hollowBottom": [
+      1,
+      1
+     ],
+     "padBottom": [
+      0,
+      0
+     ]
+    }
+   ]
+  },
+  {
+   "kind": "grid",
+   "path": "#dc-root > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > section:nth-child(2) > div:nth-child(2) > div:nth-child(1) > div:nth-child(2)",
+   "rect": {
+    "x": 240,
+    "y": 206,
+    "w": 1144,
+    "h": 112
+   },
+   "columns": 8,
+   "children": 4,
+   "painted": 0,
+   "cards": false,
+   "inTooltip": false,
+   "alignItems": "normal",
+   "label": "bg-primary #0C0E12 Página, tabla, campos",
+   "maxSpread": 0,
+   "rows": [
+    {
+     "y": 206,
+     "children": [
+      0,
+      1,
+      2,
+      3
+     ],
+     "heights": [
+      112,
+      112,
+      112,
+      112
+     ],
+     "heightSpread": 0,
+     "hollowBottom": [
+      1,
+      1,
+      1,
+      17
+     ],
+     "padBottom": [
+      0,
+      0,
+      0,
+      0
+     ]
+    }
+   ]
+  },
+  {
+   "kind": "grid",
+   "path": "#dc-root > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > section:nth-child(2) > div:nth-child(2) > div:nth-child(2)",
+   "rect": {
+    "x": 56,
+    "y": 338,
+    "w": 1328,
+    "h": 112
+   },
+   "columns": 2,
+   "children": 2,
+   "painted": 0,
+   "cards": false,
+   "inTooltip": false,
+   "alignItems": "start",
+   "label": "Bordes",
+   "maxSpread": 96,
+   "rows": [
+    {
+     "y": 338,
+     "children": [
+      0,
+      1
+     ],
+     "heights": [
+      16,
+      112
+     ],
+     "heightSpread": 96,
+     "hollowBottom": [
+      1,
+      1
+     ],
+     "padBottom": [
+      0,
+      0
+     ]
+    }
+   ]
+  },
+  {
+   "kind": "grid",
+   "path": "#dc-root > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > section:nth-child(2) > div:nth-child(2) > div:nth-child(2) > div:nth-child(2)",
+   "rect": {
+    "x": 240,
+    "y": 338,
+    "w": 1144,
+    "h": 112
+   },
+   "columns": 8,
+   "children": 2,
+   "painted": 0,
+   "cards": false,
+   "inTooltip": false,
+   "alignItems": "normal",
+   "label": "border-secondary #22262F Borde por defecto",
+   "maxSpread": 0,
+   "rows": [
+    {
+     "y": 338,
+     "children": [
+      0,
+      1
+     ],
+     "heights": [
+      112,
+      112
+     ],
+     "heightSpread": 0,
+     "hollowBottom": [
+      17,
+      1
+     ],
+     "padBottom": [
+      0,
+      0
+     ]
+    }
+   ]
+  },
+  {
+   "kind": "grid",
+   "path": "#dc-root > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > section:nth-child(2) > div:nth-child(2) > div:nth-child(3)",
+   "rect": {
+    "x": 56,
+    "y": 470,
+    "w": 1328,
+    "h": 112
+   },
+   "columns": 2,
+   "children": 2,
+   "painted": 0,
+   "cards": false,
+   "inTooltip": false,
+   "alignItems": "start",
+   "label": "Texto",
+   "maxSpread": 96,
+   "rows": [
+    {
+     "y": 470,
+     "children": [
+      0,
+      1
+     ],
+     "heights": [
+      16,
+      112
+     ],
+     "heightSpread": 96,
+     "hollowBottom": [
+      1,
+      1
+     ],
+     "padBottom": [
+      0,
+      0
+     ]
+    }
+   ]
+  },
+  {
+   "kind": "grid",
+   "path": "#dc-root > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > section:nth-child(2) > div:nth-child(2) > div:nth-child(3) > div:nth-child(2)",
+   "rect": {
+    "x": 240,
+    "y": 470,
+    "w": 1144,
+    "h": 112
+   },
+   "columns": 8,
+   "children": 7,
+   "painted": 0,
+   "cards": false,
+   "inTooltip": false,
+   "alignItems": "normal",
+   "label": "text-primary #F7F7F7 Texto, títulos",
+   "maxSpread": 0,
+   "rows": [
+    {
+     "y": 470,
+     "children": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6
+     ],
+     "heights": [
+      112,
+      112,
+      112,
+      112,
+      112,
+      112,
+      112
+     ],
+     "heightSpread": 0,
+     "hollowBottom": [
+      17,
+      1,
+      17,
+      1,
+      1,
+      17,
+      17
+     ],
+     "padBottom": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+     ]
+    }
+   ]
+  },
+  {
+   "kind": "grid",
+   "path": "#dc-root > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > section:nth-child(2) > div:nth-child(2) > div:nth-child(4)",
+   "rect": {
+    "x": 56,
+    "y": 602,
+    "w": 1328,
+    "h": 112
+   },
+   "columns": 2,
+   "children": 2,
+   "painted": 0,
+   "cards": false,
+   "inTooltip": false,
+   "alignItems": "start",
+   "label": "Estado y contenido",
+   "maxSpread": 96,
+   "rows": [
+    {
+     "y": 602,
+     "children": [
+      0,
+      1
+     ],
+     "heights": [
+      16,
+      112
+     ],
+     "heightSpread": 96,
+     "hollowBottom": [
+      1,
+      1
+     ],
+     "padBottom": [
+      0,
+      0
+     ]
+    }
+   ]
+  },
+  {
+   "kind": "grid",
+   "path": "#dc-root > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > section:nth-child(2) > div:nth-child(2) > div:nth-child(4) > div:nth-child(2)",
+   "rect": {
+    "x": 240,
+    "y": 602,
+    "w": 1144,
+    "h": 112
+   },
+   "columns": 8,
+   "children": 6,
+   "painted": 0,
+   "cards": false,
+   "inTooltip": false,
+   "alignItems": "normal",
+   "label": "ring #444CE7 Foco visible",
+   "maxSpread": 0,
+   "rows": [
+    {
+     "y": 602,
+     "children": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5
+     ],
+     "heights": [
+      112,
+      112,
+      112,
+      112,
+      112,
+      112
+     ],
+     "heightSpread": 0,
+     "hollowBottom": [
+      17,
+      17,
+      17,
+      17,
+      17,
+      1
+     ],
+     "padBottom": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+     ]
+    }
+   ]
+  },
+  {
+   "kind": "grid",
+   "path": "#dc-root > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > section:nth-child(2) > div:nth-child(2) > div:nth-child(5)",
+   "rect": {
+    "x": 56,
+    "y": 734,
+    "w": 1328,
+    "h": 112
+   },
+   "columns": 2,
+   "children": 2,
+   "painted": 0,
+   "cards": false,
+   "inTooltip": false,
+   "alignItems": "start",
+   "label": "GameTooltip",
+   "maxSpread": 96,
+   "rows": [
+    {
+     "y": 734,
+     "children": [
+      0,
+      1
+     ],
+     "heights": [
+      16,
+      112
+     ],
+     "heightSpread": 96,
+     "hollowBottom": [
+      1,
+      1
+     ],
+     "padBottom": [
+      0,
+      0
+     ]
+    }
+   ]
+  },
+  {
+   "kind": "grid",
+   "path": "#dc-root > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > section:nth-child(2) > div:nth-child(2) > div:nth-child(5) > div:nth-child(2)",
+   "rect": {
+    "x": 240,
+    "y": 734,
+    "w": 1144,
+    "h": 112
+   },
+   "columns": 8,
+   "children": 8,
+   "painted": 0,
+   "cards": false,
+   "inTooltip": false,
+   "alignItems": "normal",
+   "label": "tt-panel #21252C Panel",
+   "maxSpread": 0,
+   "rows": [
+    {
+     "y": 734,
+     "children": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7
+     ],
+     "heights": [
+      112,
+      112,
+      112,
+      112,
+      112,
+      112,
+      112,
+      112
+     ],
+     "heightSpread": 0,
+     "hollowBottom": [
+      17,
+      17,
+      17,
+      17,
+      17,
+      17,
+      1,
+      17
+     ],
+     "padBottom": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+     ]
+    }
+   ]
+  },
+  {
+   "kind": "grid",
+   "path": "#dc-root > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > section:nth-child(2) > div:nth-child(2) > div:nth-child(6)",
+   "rect": {
+    "x": 56,
+    "y": 866,
+    "w": 1328,
+    "h": 96
+   },
+   "columns": 2,
+   "children": 2,
+   "painted": 0,
+   "cards": false,
+   "inTooltip": false,
+   "alignItems": "start",
+   "label": "Radios",
+   "maxSpread": 80,
+   "rows": [
+    {
+     "y": 866,
+     "children": [
+      0,
+      1
+     ],
+     "heights": [
+      16,
+      96
+     ],
+     "heightSpread": 80,
+     "hollowBottom": [
+      1,
+      1
+     ],
+     "padBottom": [
+      0,
+      0
+     ]
+    }
+   ]
+  },
+  {
+   "kind": "grid",
+   "path": "#dc-root > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > section:nth-child(2) > div:nth-child(2) > div:nth-child(6) > div:nth-child(2)",
+   "rect": {
+    "x": 240,
+    "y": 866,
+    "w": 1144,
+    "h": 96
+   },
+   "columns": 8,
+   "children": 6,
+   "painted": 0,
+   "cards": false,
+   "inTooltip": false,
+   "alignItems": "normal",
+   "label": "4 Keycap, tooltip",
+   "maxSpread": 0,
+   "rows": [
+    {
+     "y": 866,
+     "children": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5
+     ],
+     "heights": [
+      96,
+      96,
+      96,
+      96,
+      96,
+      96
+     ],
+     "heightSpread": 0,
+     "hollowBottom": [
+      17,
+      17,
+      1,
+      17,
+      1,
+      17
+     ],
+     "padBottom": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+     ]
+    }
+   ]
+  },
+  {
+   "kind": "grid",
+   "path": "#dc-root > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(3)",
+   "rect": {
+    "x": 56,
+    "y": 1018,
+    "w": 1328,
+    "h": 705
+   },
+   "columns": 3,
+   "children": 2,
+   "painted": 0,
+   "cards": false,
+   "inTooltip": false,
+   "alignItems": "start",
+   "label": "Tipografía 30/36 · Bold · h1 Star Machine 20/28 ",
+   "maxSpread": 236,
+   "rows": [
+    {
+     "y": 1018,
+     "children": [
+      0,
+      1
+     ],
+     "heights": [
+      705,
+      469
+     ],
+     "heightSpread": 236,
+     "hollowBottom": [
+      0,
+      3
+     ],
+     "padBottom": [
+      0,
+      0
+     ]
+    }
+   ]
+  },
+  {
+   "kind": "grid",
+   "path": "#dc-root > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(3) > section:nth-child(1) > div:nth-child(2)",
+   "rect": {
+    "x": 56,
+    "y": 1055,
+    "w": 872,
+    "h": 61
+   },
+   "columns": 2,
+   "children": 2,
+   "painted": 0,
+   "cards": false,
+   "inTooltip": false,
+   "alignItems": "center",
+   "label": "30/36 · Bold · h1",
+   "maxSpread": 0,
+   "rows": [
+    {
+     "y": 1067,
+     "children": [
+      1
+     ],
+     "heights": [
+      36
+     ],
+     "heightSpread": 0,
+     "hollowBottom": [
+      0
+     ],
+     "padBottom": [
+      0
+     ]
+    },
+    {
+     "y": 1077,
+     "children": [
+      0
+     ],
+     "heights": [
+      16
+     ],
+     "heightSpread": 0,
+     "hollowBottom": [
+      1
+     ],
+     "padBottom": [
+      0
+     ]
+    }
+   ]
+  },
+  {
+   "kind": "grid",
+   "path": "#dc-root > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(3) > section:nth-child(1) > div:nth-child(3)",
+   "rect": {
+    "x": 56,
+    "y": 1116,
+    "w": 872,
+    "h": 53
+   },
+   "columns": 2,
+   "children": 2,
+   "painted": 0,
+   "cards": false,
+   "inTooltip": false,
+   "alignItems": "center",
+   "label": "20/28 · Bold · h2",
+   "maxSpread": 0,
+   "rows": [
+    {
+     "y": 1128,
+     "children": [
+      1
+     ],
+     "heights": [
+      28
+     ],
+     "heightSpread": 0,
+     "hollowBottom": [
+      2
+     ],
+     "padBottom": [
+      0
+     ]
+    },
+    {
+     "y": 1134,
+     "children": [
+      0
+     ],
+     "heights": [
+      16
+     ],
+     "heightSpread": 0,
+     "hollowBottom": [
+      1
+     ],
+     "padBottom": [
+      0
+     ]
+    }
+   ]
+  },
+  {
+   "kind": "grid",
+   "path": "#dc-root > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(3) > section:nth-child(1) > div:nth-child(4)",
+   "rect": {
+    "x": 56,
+    "y": 1169,
+    "w": 872,
+    "h": 53
+   },
+   "columns": 2,
+   "children": 2,
+   "painted": 0,
+   "cards": false,
+   "inTooltip": false,
+   "alignItems": "center",
+   "label": "18/28 · Bold · subtítulo",
+   "maxSpread": 0,
+   "rows": [
+    {
+     "y": 1181,
+     "children": [
+      1
+     ],
+     "heights": [
+      28
+     ],
+     "heightSpread": 0,
+     "hollowBottom": [
+      3
+     ],
+     "padBottom": [
+      0
+     ]
+    },
+    {
+     "y": 1187,
+     "children": [
+      0
+     ],
+     "heights": [
+      16
+     ],
+     "heightSpread": 0,
+     "hollowBottom": [
+      1
+     ],
+     "padBottom": [
+      0
+     ]
+    }
+   ]
+  },
+  {
+   "kind": "grid",
+   "path": "#dc-root > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(3) > section:nth-child(1) > div:nth-child(5)",
+   "rect": {
+    "x": 56,
+    "y": 1222,
+    "w": 872,
+    "h": 49
+   },
+   "columns": 2,
+   "children": 2,
+   "painted": 0,
+   "cards": false,
+   "inTooltip": false,
+   "alignItems": "center",
+   "label": "16/24 · Bold · h1 inicio, h3",
+   "maxSpread": 0,
+   "rows": [
+    {
+     "y": 1234,
+     "children": [
+      1
+     ],
+     "heights": [
+      24
+     ],
+     "heightSpread": 0,
+     "hollowBottom": [
+      3
+     ],
+     "padBottom": [
+      0
+     ]
+    },
+    {
+     "y": 1238,
+     "children": [
+      0
+     ],
+     "heights": [
+      16
+     ],
+     "heightSpread": 0,
+     "hollowBottom": [
+      1
+     ],
+     "padBottom": [
+      0
+     ]
+    }
+   ]
+  },
+  {
+   "kind": "grid",
+   "path": "#dc-root > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(3) > section:nth-child(1) > div:nth-child(6)",
+   "rect": {
+    "x": 56,
+    "y": 1271,
+    "w": 872,
+    "h": 69
+   },
+   "columns": 2,
+   "children": 2,
+   "painted": 0,
+   "cards": false,
+   "inTooltip": false,
+   "alignItems": "center",
+   "label": "14/22 · Regular · texto",
+   "maxSpread": 0,
+   "rows": [
+    {
+     "y": 1283,
+     "children": [
+      1
+     ],
+     "heights": [
+      44
+     ],
+     "heightSpread": 0,
+     "hollowBottom": [
+      3
+     ],
+     "padBottom": [
+      0
+     ]
+    },
+    {
+     "y": 1297,
+     "children": [
+      0
+     ],
+     "heights": [
+      16
+     ],
+     "heightSpread": 0,
+     "hollowBottom": [
+      1
+     ],
+     "padBottom": [
+      0
+     ]
+    }
+   ]
+  },
+  {
+   "kind": "grid",
+   "path": "#dc-root > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(3) > section:nth-child(1) > div:nth-child(7)",
+   "rect": {
+    "x": 56,
+    "y": 1340,
+    "w": 872,
+    "h": 41
+   },
+   "columns": 2,
+   "children": 2,
+   "painted": 0,
+   "cards": false,
+   "inTooltip": false,
+   "alignItems": "center",
+   "label": "12/16 · Regular · interfaz",
+   "maxSpread": 0,
+   "rows": [
+    {
+     "y": 1352,
+     "children": [
+      0,
+      1
+     ],
+     "heights": [
+      16,
+      16
+     ],
+     "heightSpread": 0,
+     "hollowBottom": [
+      1,
+      1
+     ],
+     "padBottom": [
+      0,
+      0
+     ]
+    }
+   ]
+  },
+  {
+   "kind": "grid",
+   "path": "#dc-root > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(3) > section:nth-child(1) > div:nth-child(8)",
+   "rect": {
+    "x": 56,
+    "y": 1381,
+    "w": 872,
+    "h": 41
+   },
+   "columns": 2,
+   "children": 2,
+   "painted": 0,
+   "cards": false,
+   "inTooltip": false,
+   "alignItems": "center",
+   "label": "12/16 · Bold · grupo, panel",
+   "maxSpread": 0,
+   "rows": [
+    {
+     "y": 1393,
+     "children": [
+      0,
+      1
+     ],
+     "heights": [
+      16,
+      16
+     ],
+     "heightSpread": 0,
+     "hollowBottom": [
+      1,
+      1
+     ],
+     "padBottom": [
+      0,
+      0
+     ]
+    }
+   ]
+  },
+  {
+   "kind": "grid",
+   "path": "#dc-root > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(3) > section:nth-child(1) > div:nth-child(9)",
+   "rect": {
+    "x": 56,
+    "y": 1422,
+    "w": 872,
+    "h": 57
+   },
+   "columns": 2,
+   "children": 2,
+   "painted": 0,
+   "cards": false,
+   "inTooltip": false,
+   "alignItems": "center",
+   "label": "12/16 · Bold · +1.2px · único",
+   "maxSpread": 0,
+   "rows": [
+    {
+     "y": 1434,
+     "children": [
+      0
+     ],
+     "heights": [
+      32
+     ],
+     "heightSpread": 0,
+     "hollowBottom": [
+      1
+     ],
+     "padBottom": [
+      0
+     ]
+    },
+    {
+     "y": 1442,
+     "children": [
+      1
+     ],
+     "heights": [
+      16
+     ],
+     "heightSpread": 0,
+     "hollowBottom": [
+      1
+     ],
+     "padBottom": [
+      0
+     ]
+    }
+   ]
+  },
+  {
+   "kind": "grid",
+   "path": "#dc-root > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(3) > section:nth-child(1) > div:nth-child(10)",
+   "rect": {
+    "x": 56,
+    "y": 1479,
+    "w": 872,
+    "h": 41
+   },
+   "columns": 2,
+   "children": 2,
+   "painted": 0,
+   "cards": false,
+   "inTooltip": false,
+   "alignItems": "center",
+   "label": "12/16 · Regular · conteo",
+   "maxSpread": 0,
+   "rows": [
+    {
+     "y": 1491,
+     "children": [
+      0,
+      1
+     ],
+     "heights": [
+      16,
+      16
+     ],
+     "heightSpread": 0,
+     "hollowBottom": [
+      1,
+      1
+     ],
+     "padBottom": [
+      0,
+      0
+     ]
+    }
+   ]
+  },
+  {
+   "kind": "grid",
+   "path": "#dc-root > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(3) > section:nth-child(1) > div:nth-child(11)",
+   "rect": {
+    "x": 56,
+    "y": 1520,
+    "w": 872,
+    "h": 41
+   },
+   "columns": 2,
+   "children": 2,
+   "painted": 0,
+   "cards": false,
+   "inTooltip": false,
+   "alignItems": "center",
+   "label": "12/16 · Regular · pie",
+   "maxSpread": 0,
+   "rows": [
+    {
+     "y": 1532,
+     "children": [
+      0,
+      1
+     ],
+     "heights": [
+      16,
+      16
+     ],
+     "heightSpread": 0,
+     "hollowBottom": [
+      1,
+      1
+     ],
+     "padBottom": [
+      0,
+      0
+     ]
+    }
+   ]
+  },
+  {
+   "kind": "grid",
+   "path": "#dc-root > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(3) > section:nth-child(1) > div:nth-child(12)",
+   "rect": {
+    "x": 56,
+    "y": 1561,
+    "w": 872,
+    "h": 48
+   },
+   "columns": 2,
+   "children": 2,
+   "painted": 1,
+   "cards": false,
+   "inTooltip": false,
+   "alignItems": "center",
+   "label": "12 · Mono · solo kbd",
+   "maxSpread": 0,
+   "rows": [
+    {
+     "y": 1573,
+     "children": [
+      1
+     ],
+     "heights": [
+      16
+     ],
+     "heightSpread": 0,
+     "hollowBottom": [
+      1
+     ],
+     "padBottom": [
+      1
+     ],
+     "itemHeights": [
+      23
+     ]
+    },
+    {
+     "y": 1576.5,
+     "children": [
+      0
+     ],
+     "heights": [
+      16
+     ],
+     "heightSpread": 0,
+     "hollowBottom": [
+      1
+     ],
+     "padBottom": [
+      0
+     ]
+    }
+   ]
+  },
+  {
+   "kind": "grid",
+   "path": "#dc-root > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(3) > section:nth-child(1) > div:nth-child(13)",
+   "rect": {
+    "x": 56,
+    "y": 1609,
+    "w": 872,
+    "h": 57
+   },
+   "columns": 2,
+   "children": 2,
+   "painted": 1,
+   "cards": false,
+   "inTooltip": false,
+   "alignItems": "center",
+   "label": "Poppins 600 · 15/20 · 0.35em · solo GameTooltip",
+   "maxSpread": 0,
+   "rows": [
+    {
+     "y": 1621,
+     "children": [
+      0,
+      1
+     ],
+     "heights": [
+      32,
+      32
+     ],
+     "heightSpread": 0,
+     "hollowBottom": [
+      1,
+      6
+     ],
+     "padBottom": [
+      0,
+      6
+     ]
+    }
+   ]
+  },
+  {
+   "kind": "grid",
+   "path": "#dc-root > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(3) > section:nth-child(1) > div:nth-child(14)",
+   "rect": {
+    "x": 56,
+    "y": 1666,
+    "w": 872,
+    "h": 57
+   },
+   "columns": 2,
+   "children": 2,
+   "painted": 1,
+   "cards": false,
+   "inTooltip": false,
+   "alignItems": "center",
+   "label": "Poppins 600 · 12/21 · solo GameTooltip",
+   "maxSpread": 3,
+   "rows": [
+    {
+     "y": 1678,
+     "children": [
+      0,
+      1
+     ],
+     "heights": [
+      32,
+      29
+     ],
+     "heightSpread": 3,
+     "hollowBottom": [
+      1,
+      6
+     ],
+     "padBottom": [
+      0,
+      4
+     ]
+    }
+   ]
+  },
+  {
+   "kind": "grid",
+   "path": "#dc-root > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(3) > section:nth-child(2) > div:nth-child(2) > div:nth-child(1) > div:nth-child(2)",
+   "rect": {
+    "x": 968,
+    "y": 1091,
+    "w": 416,
+    "h": 62
+   },
+   "columns": 4,
+   "children": 8,
+   "painted": 4,
+   "cards": false,
+   "inTooltip": false,
+   "alignItems": "normal",
+   "label": "Importar",
+   "maxSpread": 0,
+   "rows": [
+    {
+     "y": 1091,
+     "children": [
+      0,
+      1,
+      2,
+      3
+     ],
+     "heights": [
+      40,
+      40,
+      40,
+      40
+     ],
+     "heightSpread": 0,
+     "hollowBottom": [
+      12,
+      12,
+      12,
+      12
+     ],
+     "padBottom": [
+      1,
+      1,
+      1,
+      1
+     ]
+    },
+    {
+     "y": 1137,
+     "children": [
+      4,
+      5,
+      6,
+      7
+     ],
+     "heights": [
+      16,
+      16,
+      16,
+      16
+     ],
+     "heightSpread": 0,
+     "hollowBottom": [
+      1,
+      1,
+      1,
+      1
+     ],
+     "padBottom": [
+      0,
+      0,
+      0,
+      0
+     ]
+    }
+   ]
+  },
+  {
+   "kind": "grid",
+   "path": "#dc-root > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(4)",
+   "rect": {
+    "x": 56,
+    "y": 1779,
+    "w": 1328,
+    "h": 541
+   },
+   "columns": 3,
+   "children": 3,
+   "painted": 0,
+   "cards": false,
+   "inTooltip": false,
+   "alignItems": "start",
+   "label": "Campos y búsqueda Nombre o número Nivel mínimo F",
+   "maxSpread": 274,
+   "rows": [
+    {
+     "y": 1779,
+     "children": [
+      0,
+      1,
+      2
+     ],
+     "heights": [
+      423,
+      541,
+      267
+     ],
+     "heightSpread": 274,
+     "hollowBottom": [
+      0,
+      0,
+      0
+     ],
+     "padBottom": [
+      0,
+      0,
+      0
+     ]
+    }
+   ]
+  },
+  {
+   "kind": "grid",
+   "path": "#dc-root > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(4) > section:nth-child(3) > div:nth-child(2) > div:nth-child(1) > div:nth-child(2)",
+   "rect": {
+    "x": 968,
+    "y": 1852,
+    "w": 416,
+    "h": 106
+   },
+   "columns": 2,
+   "children": 3,
+   "painted": 3,
+   "cards": false,
+   "inTooltip": false,
+   "alignItems": "normal",
+   "label": "Alliance",
+   "maxSpread": 0,
+   "rows": [
+    {
+     "y": 1852,
+     "children": [
+      0,
+      1
+     ],
+     "heights": [
+      50,
+      50
+     ],
+     "heightSpread": 0,
+     "hollowBottom": [
+      9,
+      10
+     ],
+     "padBottom": [
+      9,
+      9
+     ]
+    },
+    {
+     "y": 1910,
+     "children": [
+      2
+     ],
+     "heights": [
+      48
+     ],
+     "heightSpread": 0,
+     "hollowBottom": [
+      9
+     ],
+     "padBottom": [
+      9
+     ]
+    }
+   ]
+  },
+  {
+   "kind": "grid",
+   "path": "#dc-root > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(5)",
+   "rect": {
+    "x": 56,
+    "y": 2376,
+    "w": 1328,
+    "h": 565
+   },
+   "columns": 3,
+   "children": 2,
+   "painted": 0,
+   "cards": false,
+   "inTooltip": false,
+   "alignItems": "start",
+   "label": "Chips Entidad · sprite 16, abre su tooltip 50 Em",
+   "maxSpread": 264,
+   "rows": [
+    {
+     "y": 2376,
+     "children": [
+      0,
+      1
+     ],
+     "heights": [
+      301,
+      565
+     ],
+     "heightSpread": 264,
+     "hollowBottom": [
+      0,
+      0
+     ],
+     "padBottom": [
+      0,
+      0
+     ]
+    }
+   ]
+  },
+  {
+   "kind": "grid",
+   "path": "#dc-root > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(7)",
+   "rect": {
+    "x": 56,
+    "y": 3166,
+    "w": 1328,
+    "h": 565
+   },
+   "columns": 3,
+   "children": 2,
+   "painted": 0,
+   "cards": false,
+   "inTooltip": false,
+   "alignItems": "start",
+   "label": "Tarjetas informativas Medal System Requiere Nive",
+   "maxSpread": 75,
+   "rows": [
+    {
+     "y": 3166,
+     "children": [
+      0,
+      1
+     ],
+     "heights": [
+      490,
+      565
+     ],
+     "heightSpread": 75,
+     "hollowBottom": [
+      0,
+      0
+     ],
+     "padBottom": [
+      0,
+      0
+     ]
+    }
+   ]
+  },
+  {
+   "kind": "grid",
+   "path": "#dc-root > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(7) > div:nth-child(1) > section:nth-child(1) > div:nth-child(2)",
+   "rect": {
+    "x": 56,
+    "y": 3215,
+    "w": 872,
+    "h": 124
+   },
+   "columns": 2,
+   "children": 2,
+   "painted": 2,
+   "cards": true,
+   "inTooltip": false,
+   "alignItems": "normal",
+   "label": "Medal System Requiere Nivel 350 y completar la s",
+   "maxSpread": 0,
+   "rows": [
+    {
+     "y": 3215,
+     "children": [
+      0,
+      1
+     ],
+     "heights": [
+      124,
+      124
+     ],
+     "heightSpread": 0,
+     "hollowBottom": [
+      19,
+      41
+     ],
+     "padBottom": [
+      16,
+      16
+     ]
+    }
+   ]
+  },
+  {
+   "kind": "grid",
+   "path": "#dc-root > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(7) > div:nth-child(1) > section:nth-child(2) > div:nth-child(2)",
+   "rect": {
+    "x": 56,
+    "y": 3444,
+    "w": 872,
+    "h": 212
+   },
+   "columns": 2,
+   "children": 2,
+   "painted": 0,
+   "cards": false,
+   "inTooltip": false,
+   "alignItems": "normal",
+   "label": "Precio de anuncio · Diamonds abre su tooltip Din",
+   "maxSpread": 0,
+   "rows": [
+    {
+     "y": 3444,
+     "children": [
+      0,
+      1
+     ],
+     "heights": [
+      212,
+      212
+     ],
+     "heightSpread": 0,
+     "hollowBottom": [
+      26,
+      0
+     ],
+     "padBottom": [
+      0,
+      0
+     ]
+    }
+   ]
+  },
+  {
+   "kind": "grid",
+   "path": "#dc-root > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(7) > div:nth-child(1) > section:nth-child(2) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > dl:nth-child(2)",
+   "rect": {
+    "x": 56,
+    "y": 3468,
+    "w": 428,
+    "h": 46
+   },
+   "columns": 1,
+   "children": 2,
+   "painted": 0,
+   "cards": false,
+   "inTooltip": false,
+   "alignItems": "normal",
+   "label": "Dinero real US$ 120",
+   "maxSpread": 0,
+   "rows": [
+    {
+     "y": 3468,
+     "children": [
+      0
+     ],
+     "heights": [
+      22
+     ],
+     "heightSpread": 0,
+     "hollowBottom": [
+      3
+     ],
+     "padBottom": [
+      0
+     ]
+    },
+    {
+     "y": 3498,
+     "children": [
+      1
+     ],
+     "heights": [
+      16
+     ],
+     "heightSpread": 0,
+     "hollowBottom": [
+      0
+     ],
+     "padBottom": [
+      0
+     ]
+    }
+   ]
+  },
+  {
+   "kind": "grid",
+   "path": "#dc-root > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(8)",
+   "rect": {
+    "x": 56,
+    "y": 3787,
+    "w": 1328,
+    "h": 483
+   },
+   "columns": 3,
+   "children": 2,
+   "painted": 0,
+   "cards": false,
+   "inTooltip": false,
+   "alignItems": "start",
+   "label": "Panel de índice Poké Balls 12 páginas Alliance B",
+   "maxSpread": 121,
+   "rows": [
+    {
+     "y": 3787,
+     "children": [
+      0,
+      1
+     ],
+     "heights": [
+      362,
+      483
+     ],
+     "heightSpread": 121,
+     "hollowBottom": [
+      0,
+      0
+     ],
+     "padBottom": [
+      0,
+      0
+     ]
+    }
+   ]
+  },
+  {
+   "kind": "grid",
+   "path": "#dc-root > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(8) > section:nth-child(1) > section:nth-child(2) > ul:nth-child(2)",
+   "rect": {
+    "x": 57,
+    "y": 3882,
+    "w": 414,
+    "h": 266
+   },
+   "columns": 2,
+   "children": 12,
+   "painted": 0,
+   "cards": false,
+   "inTooltip": false,
+   "alignItems": "normal",
+   "label": "Alliance Ball",
+   "maxSpread": 0,
+   "rows": [
+    {
+     "y": 3890,
+     "children": [
+      0,
+      1
+     ],
+     "heights": [
+      40,
+      40
+     ],
+     "heightSpread": 0,
+     "hollowBottom": [
+      12,
+      12.5
+     ],
+     "padBottom": [
+      4,
+      4
+     ]
+    },
+    {
+     "y": 3932,
+     "children": [
+      2,
+      3
+     ],
+     "heights": [
+      40,
+      40
+     ],
+     "heightSpread": 0,
+     "hollowBottom": [
+      12.5,
+      12.5
+     ],
+     "padBottom": [
+      4,
+      4
+     ]
+    },
+    {
+     "y": 3974,
+     "children": [
+      4,
+      5
+     ],
+     "heights": [
+      40,
+      40
+     ],
+     "heightSpread": 0,
+     "hollowBottom": [
+      12.5,
+      12.5
+     ],
+     "padBottom": [
+      4,
+      4
+     ]
+    },
+    {
+     "y": 4016,
+     "children": [
+      6,
+      7
+     ],
+     "heights": [
+      40,
+      40
+     ],
+     "heightSpread": 0,
+     "hollowBottom": [
+      12.5,
+      12.5
+     ],
+     "padBottom": [
+      4,
+      4
+     ]
+    },
+    {
+     "y": 4058,
+     "children": [
+      8,
+      9
+     ],
+     "heights": [
+      40,
+      40
+     ],
+     "heightSpread": 0,
+     "hollowBottom": [
+      12.5,
+      12
+     ],
+     "padBottom": [
+      4,
+      4
+     ]
+    },
+    {
+     "y": 4100,
+     "children": [
+      10,
+      11
+     ],
+     "heights": [
+      40,
+      40
+     ],
+     "heightSpread": 0,
+     "hollowBottom": [
+      12.5,
+      12.5
+     ],
+     "padBottom": [
+      4,
+      4
+     ]
+    }
+   ]
+  },
+  {
+   "kind": "grid",
+   "path": "#dc-root > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(9)",
+   "rect": {
+    "x": 56,
+    "y": 4326,
+    "w": 1328,
+    "h": 365
+   },
+   "columns": 3,
+   "children": 3,
+   "painted": 0,
+   "cards": false,
+   "inTooltip": false,
+   "alignItems": "start",
+   "label": "Paginación, aviso y vacío Paginación · anuncios ",
+   "maxSpread": 149,
+   "rows": [
+    {
+     "y": 4326,
+     "children": [
+      0,
+      1,
+      2
+     ],
+     "heights": [
+      365,
+      281,
+      216
+     ],
+     "heightSpread": 149,
+     "hollowBottom": [
+      2,
+      0,
+      1
+     ],
+     "padBottom": [
+      0,
+      0,
+      0
+     ]
+    }
+   ]
+  },
+  {
+   "kind": "grid",
+   "path": "#dc-root > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(9) > section:nth-child(2) > div:nth-child(2)",
+   "rect": {
+    "x": 512,
+    "y": 4375,
+    "w": 416,
+    "h": 232
+   },
+   "columns": 2,
+   "children": 2,
+   "painted": 1,
+   "cards": true,
+   "inTooltip": false,
+   "alignItems": "normal",
+   "label": "Destacados Pokédex Tier list Sistemas Boost Held",
+   "maxSpread": 0,
+   "rows": [
+    {
+     "y": 4375,
+     "children": [
+      0,
+      1
+     ],
+     "heights": [
+      232,
+      232
+     ],
+     "heightSpread": 0,
+     "hollowBottom": [
+      12,
+      9
+     ],
+     "padBottom": [
+      0,
+      0
+     ]
+    }
+   ]
+  },
+  {
+   "kind": "grid",
+   "path": "#dc-root > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(10)",
+   "rect": {
+    "x": 56,
+    "y": 4747,
+    "w": 1328,
+    "h": 621
+   },
+   "columns": 3,
+   "children": 2,
+   "painted": 0,
+   "cards": false,
+   "inTooltip": false,
+   "alignItems": "start",
+   "label": "GameTooltip SHINY DITTO Requisito: Nivel 1 Aura:",
+   "maxSpread": 64,
+   "rows": [
+    {
+     "y": 4747,
+     "children": [
+      0,
+      1
+     ],
+     "heights": [
+      557,
+      621
+     ],
+     "heightSpread": 64,
+     "hollowBottom": [
+      1,
+      0
+     ],
+     "padBottom": [
+      0,
+      0
+     ]
+    }
+   ]
+  },
+  {
+   "kind": "grid",
+   "path": "#dc-root > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(10) > section:nth-child(2) > div:nth-child(2) > div:nth-child(1) > div:nth-child(3)",
+   "rect": {
+    "x": 512,
+    "y": 4850,
+    "w": 872,
+    "h": 70
+   },
+   "columns": 8,
+   "children": 8,
+   "painted": 0,
+   "cards": false,
+   "inTooltip": false,
+   "alignItems": "normal",
+   "label": "1",
+   "maxSpread": 0,
+   "rows": [
+    {
+     "y": 4850,
+     "children": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7
+     ],
+     "heights": [
+      70,
+      70,
+      70,
+      70,
+      70,
+      70,
+      70,
+      70
+     ],
+     "heightSpread": 0,
+     "hollowBottom": [
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1
+     ],
+     "padBottom": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+     ]
+    }
+   ]
+  },
+  {
+   "kind": "grid",
+   "path": "#dc-root > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(10) > section:nth-child(2) > div:nth-child(2) > div:nth-child(2) > div:nth-child(3) > div:nth-child(2)",
+   "rect": {
+    "x": 656,
+    "y": 5024,
+    "w": 328,
+    "h": 68
+   },
+   "columns": 7,
+   "children": 7,
+   "painted": 0,
+   "cards": false,
+   "inTooltip": false,
+   "alignItems": "normal",
+   "label": "110 ms",
+   "maxSpread": 0,
+   "rows": [
+    {
+     "y": 5024,
+     "children": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6
+     ],
+     "heights": [
+      68,
+      68,
+      68,
+      68,
+      68,
+      68,
+      68
+     ],
+     "heightSpread": 0,
+     "hollowBottom": [
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1
+     ],
+     "padBottom": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+     ]
+    }
+   ]
+  },
+  {
+   "kind": "grid",
+   "path": "#dc-root > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(10) > section:nth-child(2) > div:nth-child(2) > div:nth-child(3) > div:nth-child(3)",
+   "rect": {
+    "x": 512,
+    "y": 5178,
+    "w": 872,
+    "h": 84
+   },
+   "columns": 8,
+   "children": 8,
+   "painted": 0,
+   "cards": false,
+   "inTooltip": false,
+   "alignItems": "normal",
+   "label": "0",
+   "maxSpread": 0,
+   "rows": [
+    {
+     "y": 5178,
+     "children": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7
+     ],
+     "heights": [
+      84,
+      84,
+      84,
+      84,
+      84,
+      84,
+      84,
+      84
+     ],
+     "heightSpread": 0,
+     "hollowBottom": [
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1
+     ],
+     "padBottom": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+     ]
+    }
+   ]
+  },
+  {
+   "kind": "grid",
+   "path": "#dc-root > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > section:nth-child(11) > div:nth-child(3)",
+   "rect": {
+    "x": 56,
+    "y": 5529,
+    "w": 1328,
+    "h": 628
+   },
+   "columns": 4,
+   "children": 5,
+   "painted": 5,
+   "cards": true,
+   "inTooltip": false,
+   "alignItems": "normal",
+   "label": "Bulbasaur Nº 1 · Generación 1 Requisito Nivel 1 ",
+   "maxSpread": 0,
+   "rows": [
+    {
+     "y": 5529,
+     "children": [
+      0,
+      1,
+      2,
+      3
+     ],
+     "heights": [
+      326,
+      326,
+      326,
+      326
+     ],
+     "heightSpread": 0,
+     "hollowBottom": [
+      57,
+      57,
+      17,
+      45
+     ],
+     "padBottom": [
+      17,
+      17,
+      17,
+      17
+     ],
+     "zones": {
+      "head": {
+       "offsets": [
+        17,
+        17,
+        17,
+        17
+       ],
+       "spread": 0,
+       "missing": 0
+      },
+      "facts": {
+       "offsets": [
+        93,
+        93,
+        93,
+        93
+       ],
+       "spread": 0,
+       "missing": 0
+      },
+      "elements": {
+       "offsets": [
+        187,
+        187,
+        187,
+        187
+       ],
+       "spread": 0,
+       "missing": 0
+      },
+      "drops": {
+       "offsets": [
+        223,
+        223,
+        223,
+        223
+       ],
+       "spread": 0,
+       "missing": 0
+      }
+     }
+    },
+    {
+     "y": 5871,
+     "children": [
+      4
+     ],
+     "heights": [
+      286
+     ],
+     "heightSpread": 0,
+     "hollowBottom": [
+      17
+     ],
+     "padBottom": [
+      17
+     ],
+     "zones": {
+      "head": {
+       "offsets": [
+        17
+       ],
+       "spread": 0,
+       "missing": 0
+      },
+      "facts": {
+       "offsets": [
+        93
+       ],
+       "spread": 0,
+       "missing": 0
+      },
+      "elements": {
+       "offsets": [
+        187
+       ],
+       "spread": 0,
+       "missing": 0
+      },
+      "drops": {
+       "offsets": [
+        223
+       ],
+       "spread": 0,
+       "missing": 0
+      }
+     }
+    }
+   ]
+  },
+  {
+   "kind": "grid",
+   "path": "#dc-root > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > section:nth-child(11) > div:nth-child(3) > article:nth-child(1)",
+   "rect": {
+    "x": 56,
+    "y": 5529,
+    "w": 320,
+    "h": 326
+   },
+   "columns": 1,
+   "children": 4,
+   "painted": 0,
+   "cards": false,
+   "inTooltip": false,
+   "alignItems": "normal",
+   "label": "Bulbasaur Nº 1 · Generación 1",
+   "maxSpread": 0,
+   "rows": [
+    {
+     "y": 5546,
+     "children": [
+      0
+     ],
+     "heights": [
+      64
+     ],
+     "heightSpread": 0,
+     "hollowBottom": [
+      0
+     ],
+     "padBottom": [
+      0
+     ]
+    },
+    {
+     "y": 5622,
+     "children": [
+      1
+     ],
+     "heights": [
+      82
+     ],
+     "heightSpread": 0,
+     "hollowBottom": [
+      1
+     ],
+     "padBottom": [
+      0
+     ]
+    },
+    {
+     "y": 5716,
+     "children": [
+      2
+     ],
+     "heights": [
+      24
+     ],
+     "heightSpread": 0,
+     "hollowBottom": [
+      0
+     ],
+     "padBottom": [
+      0
+     ]
+    },
+    {
+     "y": 5752,
+     "children": [
+      3
+     ],
+     "heights": [
+      86
+     ],
+     "heightSpread": 0,
+     "hollowBottom": [
+      40
+     ],
+     "padBottom": [
+      0
+     ]
+    }
+   ]
+  },
+  {
+   "kind": "grid",
+   "path": "#dc-root > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > section:nth-child(11) > div:nth-child(3) > article:nth-child(1) > dl:nth-child(2)",
+   "rect": {
+    "x": 73,
+    "y": 5622,
+    "w": 286,
+    "h": 82
+   },
+   "columns": 1,
+   "children": 4,
+   "painted": 0,
+   "cards": false,
+   "inTooltip": false,
+   "alignItems": "normal",
+   "label": "Requisito Nivel 1",
+   "maxSpread": 0,
+   "rows": [
+    {
+     "y": 5622,
+     "children": [
+      0
+     ],
+     "heights": [
+      16
+     ],
+     "heightSpread": 0,
+     "hollowBottom": [
+      1
+     ],
+     "padBottom": [
+      0
+     ]
+    },
+    {
+     "y": 5644,
+     "children": [
+      1
+     ],
+     "heights": [
+      16
+     ],
+     "heightSpread": 0,
+     "hollowBottom": [
+      1
+     ],
+     "padBottom": [
+      0
+     ]
+    },
+    {
+     "y": 5666,
+     "children": [
+      2
+     ],
+     "heights": [
+      16
+     ],
+     "heightSpread": 0,
+     "hollowBottom": [
+      1
+     ],
+     "padBottom": [
+      0
+     ]
+    },
+    {
+     "y": 5688,
+     "children": [
+      3
+     ],
+     "heights": [
+      16
+     ],
+     "heightSpread": 0,
+     "hollowBottom": [
+      1
+     ],
+     "padBottom": [
+      0
+     ]
+    }
+   ]
+  },
+  {
+   "kind": "grid",
+   "path": "#dc-root > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > section:nth-child(11) > div:nth-child(3) > article:nth-child(2)",
+   "rect": {
+    "x": 392,
+    "y": 5529,
+    "w": 320,
+    "h": 326
+   },
+   "columns": 1,
+   "children": 4,
+   "painted": 1,
+   "cards": false,
+   "inTooltip": false,
+   "alignItems": "normal",
+   "label": "Charmander Nº 4 · Generación 1",
+   "maxSpread": 0,
+   "rows": [
+    {
+     "y": 5546,
+     "children": [
+      0
+     ],
+     "heights": [
+      64
+     ],
+     "heightSpread": 0,
+     "hollowBottom": [
+      0
+     ],
+     "padBottom": [
+      0
+     ]
+    },
+    {
+     "y": 5622,
+     "children": [
+      1
+     ],
+     "heights": [
+      82
+     ],
+     "heightSpread": 0,
+     "hollowBottom": [
+      1
+     ],
+     "padBottom": [
+      0
+     ]
+    },
+    {
+     "y": 5716,
+     "children": [
+      2
+     ],
+     "heights": [
+      24
+     ],
+     "heightSpread": 0,
+     "hollowBottom": [
+      4
+     ],
+     "padBottom": [
+      4
+     ]
+    },
+    {
+     "y": 5752,
+     "children": [
+      3
+     ],
+     "heights": [
+      86
+     ],
+     "heightSpread": 0,
+     "hollowBottom": [
+      40
+     ],
+     "padBottom": [
+      0
+     ]
+    }
+   ]
+  },
+  {
+   "kind": "grid",
+   "path": "#dc-root > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > section:nth-child(11) > div:nth-child(3) > article:nth-child(2) > dl:nth-child(2)",
+   "rect": {
+    "x": 409,
+    "y": 5622,
+    "w": 286,
+    "h": 82
+   },
+   "columns": 1,
+   "children": 4,
+   "painted": 0,
+   "cards": false,
+   "inTooltip": false,
+   "alignItems": "normal",
+   "label": "Requisito Nivel 1",
+   "maxSpread": 0,
+   "rows": [
+    {
+     "y": 5622,
+     "children": [
+      0
+     ],
+     "heights": [
+      16
+     ],
+     "heightSpread": 0,
+     "hollowBottom": [
+      1
+     ],
+     "padBottom": [
+      0
+     ]
+    },
+    {
+     "y": 5644,
+     "children": [
+      1
+     ],
+     "heights": [
+      16
+     ],
+     "heightSpread": 0,
+     "hollowBottom": [
+      1
+     ],
+     "padBottom": [
+      0
+     ]
+    },
+    {
+     "y": 5666,
+     "children": [
+      2
+     ],
+     "heights": [
+      16
+     ],
+     "heightSpread": 0,
+     "hollowBottom": [
+      1
+     ],
+     "padBottom": [
+      0
+     ]
+    },
+    {
+     "y": 5688,
+     "children": [
+      3
+     ],
+     "heights": [
+      16
+     ],
+     "heightSpread": 0,
+     "hollowBottom": [
+      1
+     ],
+     "padBottom": [
+      0
+     ]
+    }
+   ]
+  },
+  {
+   "kind": "grid",
+   "path": "#dc-root > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > section:nth-child(11) > div:nth-child(3) > article:nth-child(3)",
+   "rect": {
+    "x": 728,
+    "y": 5529,
+    "w": 320,
+    "h": 326
+   },
+   "columns": 1,
+   "children": 4,
+   "painted": 0,
+   "cards": false,
+   "inTooltip": false,
+   "alignItems": "normal",
+   "label": "Charizard Nº 6 · Generación 1",
+   "maxSpread": 0,
+   "rows": [
+    {
+     "y": 5546,
+     "children": [
+      0
+     ],
+     "heights": [
+      64
+     ],
+     "heightSpread": 0,
+     "hollowBottom": [
+      0
+     ],
+     "padBottom": [
+      0
+     ]
+    },
+    {
+     "y": 5622,
+     "children": [
+      1
+     ],
+     "heights": [
+      82
+     ],
+     "heightSpread": 0,
+     "hollowBottom": [
+      1
+     ],
+     "padBottom": [
+      0
+     ]
+    },
+    {
+     "y": 5716,
+     "children": [
+      2
+     ],
+     "heights": [
+      24
+     ],
+     "heightSpread": 0,
+     "hollowBottom": [
+      0
+     ],
+     "padBottom": [
+      0
+     ]
+    },
+    {
+     "y": 5752,
+     "children": [
+      3
+     ],
+     "heights": [
+      86
+     ],
+     "heightSpread": 0,
+     "hollowBottom": [
+      0
+     ],
+     "padBottom": [
+      0
+     ]
+    }
+   ]
+  },
+  {
+   "kind": "grid",
+   "path": "#dc-root > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > section:nth-child(11) > div:nth-child(3) > article:nth-child(3) > dl:nth-child(2)",
+   "rect": {
+    "x": 745,
+    "y": 5622,
+    "w": 286,
+    "h": 82
+   },
+   "columns": 1,
+   "children": 4,
+   "painted": 0,
+   "cards": false,
+   "inTooltip": false,
+   "alignItems": "normal",
+   "label": "Requisito Nivel 80",
+   "maxSpread": 0,
+   "rows": [
+    {
+     "y": 5622,
+     "children": [
+      0
+     ],
+     "heights": [
+      16
+     ],
+     "heightSpread": 0,
+     "hollowBottom": [
+      1
+     ],
+     "padBottom": [
+      0
+     ]
+    },
+    {
+     "y": 5644,
+     "children": [
+      1
+     ],
+     "heights": [
+      16
+     ],
+     "heightSpread": 0,
+     "hollowBottom": [
+      1
+     ],
+     "padBottom": [
+      0
+     ]
+    },
+    {
+     "y": 5666,
+     "children": [
+      2
+     ],
+     "heights": [
+      16
+     ],
+     "heightSpread": 0,
+     "hollowBottom": [
+      1
+     ],
+     "padBottom": [
+      0
+     ]
+    },
+    {
+     "y": 5688,
+     "children": [
+      3
+     ],
+     "heights": [
+      16
+     ],
+     "heightSpread": 0,
+     "hollowBottom": [
+      1
+     ],
+     "padBottom": [
+      0
+     ]
+    }
+   ]
+  },
+  {
+   "kind": "grid",
+   "path": "#dc-root > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > section:nth-child(11) > div:nth-child(3) > article:nth-child(4)",
+   "rect": {
+    "x": 1064,
+    "y": 5529,
+    "w": 320,
+    "h": 326
+   },
+   "columns": 1,
+   "children": 4,
+   "painted": 0,
+   "cards": false,
+   "inTooltip": false,
+   "alignItems": "normal",
+   "label": "Shiny Charizard Nº 6 · Generación 1",
+   "maxSpread": 0,
+   "rows": [
+    {
+     "y": 5546,
+     "children": [
+      0
+     ],
+     "heights": [
+      64
+     ],
+     "heightSpread": 0,
+     "hollowBottom": [
+      0
+     ],
+     "padBottom": [
+      0
+     ]
+    },
+    {
+     "y": 5622,
+     "children": [
+      1
+     ],
+     "heights": [
+      82
+     ],
+     "heightSpread": 0,
+     "hollowBottom": [
+      1
+     ],
+     "padBottom": [
+      0
+     ]
+    },
+    {
+     "y": 5716,
+     "children": [
+      2
+     ],
+     "heights": [
+      24
+     ],
+     "heightSpread": 0,
+     "hollowBottom": [
+      0
+     ],
+     "padBottom": [
+      0
+     ]
+    },
+    {
+     "y": 5752,
+     "children": [
+      3
+     ],
+     "heights": [
+      86
+     ],
+     "heightSpread": 0,
+     "hollowBottom": [
+      28
+     ],
+     "padBottom": [
+      0
+     ]
+    }
+   ]
+  },
+  {
+   "kind": "grid",
+   "path": "#dc-root > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > section:nth-child(11) > div:nth-child(3) > article:nth-child(4) > dl:nth-child(2)",
+   "rect": {
+    "x": 1081,
+    "y": 5622,
+    "w": 286,
+    "h": 82
+   },
+   "columns": 1,
+   "children": 4,
+   "painted": 0,
+   "cards": false,
+   "inTooltip": false,
+   "alignItems": "normal",
+   "label": "Requisito Nivel 120",
+   "maxSpread": 0,
+   "rows": [
+    {
+     "y": 5622,
+     "children": [
+      0
+     ],
+     "heights": [
+      16
+     ],
+     "heightSpread": 0,
+     "hollowBottom": [
+      1
+     ],
+     "padBottom": [
+      0
+     ]
+    },
+    {
+     "y": 5644,
+     "children": [
+      1
+     ],
+     "heights": [
+      16
+     ],
+     "heightSpread": 0,
+     "hollowBottom": [
+      1
+     ],
+     "padBottom": [
+      0
+     ]
+    },
+    {
+     "y": 5666,
+     "children": [
+      2
+     ],
+     "heights": [
+      16
+     ],
+     "heightSpread": 0,
+     "hollowBottom": [
+      1
+     ],
+     "padBottom": [
+      0
+     ]
+    },
+    {
+     "y": 5688,
+     "children": [
+      3
+     ],
+     "heights": [
+      16
+     ],
+     "heightSpread": 0,
+     "hollowBottom": [
+      1
+     ],
+     "padBottom": [
+      0
+     ]
+    }
+   ]
+  },
+  {
+   "kind": "grid",
+   "path": "#dc-root > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > section:nth-child(11) > div:nth-child(3) > article:nth-child(5)",
+   "rect": {
+    "x": 56,
+    "y": 5871,
+    "w": 320,
+    "h": 286
+   },
+   "columns": 1,
+   "children": 4,
+   "painted": 1,
+   "cards": false,
+   "inTooltip": false,
+   "alignItems": "normal",
+   "label": "Squirtle Nº 7 · Generación 1",
+   "maxSpread": 0,
+   "rows": [
+    {
+     "y": 5888,
+     "children": [
+      0
+     ],
+     "heights": [
+      64
+     ],
+     "heightSpread": 0,
+     "hollowBottom": [
+      0
+     ],
+     "padBottom": [
+      0
+     ]
+    },
+    {
+     "y": 5964,
+     "children": [
+      1
+     ],
+     "heights": [
+      82
+     ],
+     "heightSpread": 0,
+     "hollowBottom": [
+      1
+     ],
+     "padBottom": [
+      0
+     ]
+    },
+    {
+     "y": 6058,
+     "children": [
+      2
+     ],
+     "heights": [
+      24
+     ],
+     "heightSpread": 0,
+     "hollowBottom": [
+      4
+     ],
+     "padBottom": [
+      4
+     ]
+    },
+    {
+     "y": 6094,
+     "children": [
+      3
+     ],
+     "heights": [
+      46
+     ],
+     "heightSpread": 0,
+     "hollowBottom": [
+      0
+     ],
+     "padBottom": [
+      0
+     ]
+    }
+   ]
+  },
+  {
+   "kind": "grid",
+   "path": "#dc-root > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > section:nth-child(11) > div:nth-child(3) > article:nth-child(5) > dl:nth-child(2)",
+   "rect": {
+    "x": 73,
+    "y": 5964,
+    "w": 286,
+    "h": 82
+   },
+   "columns": 1,
+   "children": 4,
+   "painted": 0,
+   "cards": false,
+   "inTooltip": false,
+   "alignItems": "normal",
+   "label": "Requisito Nivel 1",
+   "maxSpread": 0,
+   "rows": [
+    {
+     "y": 5964,
+     "children": [
+      0
+     ],
+     "heights": [
+      16
+     ],
+     "heightSpread": 0,
+     "hollowBottom": [
+      1
+     ],
+     "padBottom": [
+      0
+     ]
+    },
+    {
+     "y": 5986,
+     "children": [
+      1
+     ],
+     "heights": [
+      16
+     ],
+     "heightSpread": 0,
+     "hollowBottom": [
+      1
+     ],
+     "padBottom": [
+      0
+     ]
+    },
+    {
+     "y": 6008,
+     "children": [
+      2
+     ],
+     "heights": [
+      16
+     ],
+     "heightSpread": 0,
+     "hollowBottom": [
+      1
+     ],
+     "padBottom": [
+      0
+     ]
+    },
+    {
+     "y": 6030,
+     "children": [
+      3
+     ],
+     "heights": [
+      16
+     ],
+     "heightSpread": 0,
+     "hollowBottom": [
+      1
+     ],
+     "padBottom": [
+      0
+     ]
+    }
+   ]
+  },
+  {
+   "kind": "grid",
+   "path": "#dc-root > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > section:nth-child(11) > div:nth-child(4)",
+   "rect": {
+    "x": 56,
+    "y": 6205,
+    "w": 1328,
+    "h": 306
+   },
+   "columns": 2,
+   "children": 2,
+   "painted": 0,
+   "cards": false,
+   "inTooltip": false,
+   "alignItems": "start",
+   "label": "Slot de ítem · hover abierto Sprite 1x en slot d",
+   "maxSpread": 63,
+   "rows": [
+    {
+     "y": 6205,
+     "children": [
+      0,
+      1
+     ],
+     "heights": [
+      243,
+      306
+     ],
+     "heightSpread": 63,
+     "hollowBottom": [
+      0,
+      0
+     ],
+     "padBottom": [
+      0,
+      0
+     ]
+    }
+   ]
+  }
+ ],
+ "flexWraps": [
+  {
+   "kind": "flex-wrap",
+   "path": "#dc-root > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(4) > section:nth-child(3) > div:nth-child(2) > div:nth-child(2) > div:nth-child(2)",
+   "rect": {
+    "x": 968,
+    "y": 2006,
+    "w": 416,
+    "h": 40
+   },
+   "columns": 4,
+   "children": 4,
+   "painted": 4,
+   "cards": false,
+   "inTooltip": false,
+   "alignItems": "normal",
+   "label": "Todos",
+   "maxSpread": 0,
+   "rows": [
+    {
+     "y": 2006,
+     "children": [
+      0,
+      1,
+      2,
+      3
+     ],
+     "heights": [
+      40,
+      40,
+      40,
+      40
+     ],
+     "heightSpread": 0,
+     "hollowBottom": [
+      13,
+      13,
+      13,
+      13
+     ],
+     "padBottom": [
+      1,
+      1,
+      1,
+      1
+     ]
+    }
+   ]
+  },
+  {
+   "kind": "flex-wrap",
+   "path": "#dc-root > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(5) > section:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(2)",
+   "rect": {
+    "x": 56,
+    "y": 2449,
+    "w": 416,
+    "h": 24
+   },
+   "columns": 2,
+   "children": 2,
+   "painted": 2,
+   "cards": false,
+   "inTooltip": false,
+   "alignItems": "normal",
+   "label": "50 Empty Alliance Ball",
+   "maxSpread": 0,
+   "rows": [
+    {
+     "y": 2449,
+     "children": [
+      0,
+      1
+     ],
+     "heights": [
+      24,
+      24
+     ],
+     "heightSpread": 0,
+     "hollowBottom": [
+      4,
+      4.5
+     ],
+     "padBottom": [
+      4,
+      4
+     ]
+    }
+   ]
+  },
+  {
+   "kind": "flex-wrap",
+   "path": "#dc-root > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(5) > section:nth-child(1) > div:nth-child(2) > div:nth-child(2) > div:nth-child(2)",
+   "rect": {
+    "x": 56,
+    "y": 2517,
+    "w": 416,
+    "h": 24
+   },
+   "columns": 2,
+   "children": 2,
+   "painted": 2,
+   "cards": false,
+   "inTooltip": false,
+   "alignItems": "normal",
+   "label": "5.000.000 de experiencia",
+   "maxSpread": 0,
+   "rows": [
+    {
+     "y": 2517,
+     "children": [
+      0,
+      1
+     ],
+     "heights": [
+      24,
+      24
+     ],
+     "heightSpread": 0,
+     "hollowBottom": [
+      5,
+      5
+     ],
+     "padBottom": [
+      4,
+      4
+     ]
+    }
+   ]
+  },
+  {
+   "kind": "flex-wrap",
+   "path": "#dc-root > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(5) > section:nth-child(1) > div:nth-child(2) > div:nth-child(3) > div:nth-child(2)",
+   "rect": {
+    "x": 56,
+    "y": 2585,
+    "w": 416,
+    "h": 24
+   },
+   "columns": 3,
+   "children": 3,
+   "painted": 3,
+   "cards": false,
+   "inTooltip": false,
+   "alignItems": "normal",
+   "label": "Fuego",
+   "maxSpread": 0,
+   "rows": [
+    {
+     "y": 2585,
+     "children": [
+      0,
+      1,
+      2
+     ],
+     "heights": [
+      24,
+      24,
+      24
+     ],
+     "heightSpread": 0,
+     "hollowBottom": [
+      4,
+      4,
+      4
+     ],
+     "padBottom": [
+      4,
+      4,
+      4
+     ]
+    }
+   ]
+  },
+  {
+   "kind": "flex-wrap",
+   "path": "#dc-root > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(5) > section:nth-child(1) > div:nth-child(2) > div:nth-child(4) > div:nth-child(2)",
+   "rect": {
+    "x": 56,
+    "y": 2653,
+    "w": 416,
+    "h": 24
+   },
+   "columns": 4,
+   "children": 4,
+   "painted": 4,
+   "cards": false,
+   "inTooltip": false,
+   "alignItems": "normal",
+   "label": "Shiny",
+   "maxSpread": 0,
+   "rows": [
+    {
+     "y": 2653,
+     "children": [
+      0,
+      1,
+      2,
+      3
+     ],
+     "heights": [
+      24,
+      24,
+      24,
+      24
+     ],
+     "heightSpread": 0,
+     "hollowBottom": [
+      5,
+      5,
+      5,
+      5
+     ],
+     "padBottom": [
+      4,
+      4,
+      4,
+      4
+     ]
+    }
+   ]
+  },
+  {
+   "kind": "flex-wrap",
+   "path": "#dc-root > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(5) > section:nth-child(2) > div:nth-child(2) > nav:nth-child(1) > ol:nth-child(1)",
+   "rect": {
+    "x": 537,
+    "y": 2450,
+    "w": 822,
+    "h": 16
+   },
+   "columns": 3,
+   "children": 3,
+   "painted": 0,
+   "cards": false,
+   "inTooltip": false,
+   "alignItems": "center",
+   "label": "Sistemas",
+   "maxSpread": 9,
+   "rows": [
+    {
+     "y": 2450,
+     "children": [
+      0,
+      1,
+      2
+     ],
+     "heights": [
+      16,
+      7,
+      16
+     ],
+     "heightSpread": 9,
+     "hollowBottom": [
+      1,
+      7,
+      1
+     ],
+     "padBottom": [
+      0,
+      0,
+      0
+     ],
+     "itemHeights": [
+      16,
+      14,
+      16
+     ]
+    }
+   ]
+  },
+  {
+   "kind": "flex-wrap",
+   "path": "#dc-root > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(7) > div:nth-child(1) > section:nth-child(2) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > dl:nth-child(2) > div:nth-child(2) > dd:nth-child(2) > span:nth-child(1)",
+   "rect": {
+    "x": 263.5,
+    "y": 3498,
+    "w": 220.5,
+    "h": 16
+   },
+   "columns": 2,
+   "children": 2,
+   "painted": 0,
+   "cards": false,
+   "inTooltip": false,
+   "alignItems": "center",
+   "label": "900kk 900.000.000 Pokédólares",
+   "maxSpread": 0,
+   "rows": [
+    {
+     "y": 3498,
+     "children": [
+      0,
+      1
+     ],
+     "heights": [
+      16,
+      16
+     ],
+     "heightSpread": 0,
+     "hollowBottom": [
+      0,
+      0
+     ],
+     "padBottom": [
+      0,
+      0
+     ]
+    }
+   ]
+  },
+  {
+   "kind": "flex-wrap",
+   "path": "#dc-root > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(7) > section:nth-child(2) > ol:nth-child(2) > li:nth-child(2) > div:nth-child(2) > div:nth-child(3)",
+   "rect": {
+    "x": 994,
+    "y": 3423,
+    "w": 390,
+    "h": 24
+   },
+   "columns": 2,
+   "children": 2,
+   "painted": 2,
+   "cards": false,
+   "inTooltip": false,
+   "alignItems": "normal",
+   "label": "45 minutos",
+   "maxSpread": 0,
+   "rows": [
+    {
+     "y": 3423,
+     "children": [
+      0,
+      1
+     ],
+     "heights": [
+      24,
+      24
+     ],
+     "heightSpread": 0,
+     "hollowBottom": [
+      5,
+      5
+     ],
+     "padBottom": [
+      4,
+      4
+     ]
+    }
+   ]
+  },
+  {
+   "kind": "flex-wrap",
+   "path": "#dc-root > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(7) > section:nth-child(2) > ol:nth-child(2) > li:nth-child(5) > div:nth-child(2) > div:nth-child(2)",
+   "rect": {
+    "x": 994,
+    "y": 3679,
+    "w": 390,
+    "h": 52
+   },
+   "columns": 2,
+   "children": 4,
+   "painted": 4,
+   "cards": false,
+   "inTooltip": false,
+   "alignItems": "normal",
+   "label": "5.000.000 de experiencia",
+   "maxSpread": 0,
+   "rows": [
+    {
+     "y": 3679,
+     "children": [
+      0,
+      1
+     ],
+     "heights": [
+      24,
+      24
+     ],
+     "heightSpread": 0,
+     "hollowBottom": [
+      5,
+      4
+     ],
+     "padBottom": [
+      4,
+      4
+     ]
+    },
+    {
+     "y": 3707,
+     "children": [
+      2,
+      3
+     ],
+     "heights": [
+      24,
+      24
+     ],
+     "heightSpread": 0,
+     "hollowBottom": [
+      4.5,
+      5
+     ],
+     "padBottom": [
+      4,
+      4
+     ]
+    }
+   ]
+  },
+  {
+   "kind": "flex-wrap",
+   "path": "#dc-root > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(10) > section:nth-child(1) > div:nth-child(2) > div:nth-child(3) > div:nth-child(2)",
+   "rect": {
+    "x": 64,
+    "y": 5073,
+    "w": 266,
+    "h": 42
+   },
+   "columns": 2,
+   "children": 2,
+   "painted": 2,
+   "cards": false,
+   "inTooltip": true,
+   "alignItems": "normal",
+   "label": "X-Attack T5",
+   "maxSpread": 0,
+   "rows": [
+    {
+     "y": 5077,
+     "children": [
+      0,
+      1
+     ],
+     "heights": [
+      16,
+      16
+     ],
+     "heightSpread": 0,
+     "hollowBottom": [
+      16,
+      16
+     ],
+     "padBottom": [
+      0,
+      0
+     ],
+     "itemHeights": [
+      32,
+      32
+     ]
+    }
+   ]
+  },
+  {
+   "kind": "flex-wrap",
+   "path": "#dc-root > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > section:nth-child(11) > div:nth-child(3) > article:nth-child(1) > div:nth-child(3)",
+   "rect": {
+    "x": 73,
+    "y": 5716,
+    "w": 286,
+    "h": 24
+   },
+   "columns": 2,
+   "children": 2,
+   "painted": 2,
+   "cards": false,
+   "inTooltip": false,
+   "alignItems": "normal",
+   "label": "Planta",
+   "maxSpread": 0,
+   "rows": [
+    {
+     "y": 5716,
+     "children": [
+      0,
+      1
+     ],
+     "heights": [
+      24,
+      24
+     ],
+     "heightSpread": 0,
+     "hollowBottom": [
+      4,
+      4
+     ],
+     "padBottom": [
+      4,
+      4
+     ]
+    }
+   ]
+  },
+  {
+   "kind": "flex-wrap",
+   "path": "#dc-root > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > section:nth-child(11) > div:nth-child(3) > article:nth-child(1) > div:nth-child(4) > ul:nth-child(2)",
+   "rect": {
+    "x": 73,
+    "y": 5774,
+    "w": 286,
+    "h": 24
+   },
+   "columns": 3,
+   "children": 3,
+   "painted": 3,
+   "cards": false,
+   "inTooltip": false,
+   "alignItems": "center",
+   "label": "Seed",
+   "maxSpread": 0,
+   "rows": [
+    {
+     "y": 5774,
+     "children": [
+      0,
+      1,
+      2
+     ],
+     "heights": [
+      24,
+      24,
+      24
+     ],
+     "heightSpread": 0,
+     "hollowBottom": [
+      5,
+      5,
+      5
+     ],
+     "padBottom": [
+      0,
+      0,
+      0
+     ]
+    }
+   ]
+  },
+  {
+   "kind": "flex-wrap",
+   "path": "#dc-root > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > section:nth-child(11) > div:nth-child(3) > article:nth-child(2) > div:nth-child(4) > ul:nth-child(2)",
+   "rect": {
+    "x": 409,
+    "y": 5774,
+    "w": 286,
+    "h": 24
+   },
+   "columns": 2,
+   "children": 2,
+   "painted": 2,
+   "cards": false,
+   "inTooltip": false,
+   "alignItems": "center",
+   "label": "Essence of Fire",
+   "maxSpread": 0,
+   "rows": [
+    {
+     "y": 5774,
+     "children": [
+      0,
+      1
+     ],
+     "heights": [
+      24,
+      24
+     ],
+     "heightSpread": 0,
+     "hollowBottom": [
+      5,
+      5
+     ],
+     "padBottom": [
+      0,
+      0
+     ]
+    }
+   ]
+  },
+  {
+   "kind": "flex-wrap",
+   "path": "#dc-root > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > section:nth-child(11) > div:nth-child(3) > article:nth-child(3) > div:nth-child(3)",
+   "rect": {
+    "x": 745,
+    "y": 5716,
+    "w": 286,
+    "h": 24
+   },
+   "columns": 2,
+   "children": 2,
+   "painted": 2,
+   "cards": false,
+   "inTooltip": false,
+   "alignItems": "normal",
+   "label": "Fuego",
+   "maxSpread": 0,
+   "rows": [
+    {
+     "y": 5716,
+     "children": [
+      0,
+      1
+     ],
+     "heights": [
+      24,
+      24
+     ],
+     "heightSpread": 0,
+     "hollowBottom": [
+      4,
+      4
+     ],
+     "padBottom": [
+      4,
+      4
+     ]
+    }
+   ]
+  },
+  {
+   "kind": "flex-wrap",
+   "path": "#dc-root > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > section:nth-child(11) > div:nth-child(3) > article:nth-child(3) > div:nth-child(4) > ul:nth-child(2)",
+   "rect": {
+    "x": 745,
+    "y": 5774,
+    "w": 286,
+    "h": 64
+   },
+   "columns": 2,
+   "children": 5,
+   "painted": 5,
+   "cards": false,
+   "inTooltip": false,
+   "alignItems": "center",
+   "label": "",
+   "maxSpread": 0,
+   "rows": [
+    {
+     "y": 5774,
+     "children": [
+      0,
+      1
+     ],
+     "heights": [
+      36,
+      36
+     ],
+     "heightSpread": 0,
+     "hollowBottom": [
+      8,
+      10
+     ],
+     "padBottom": [
+      1,
+      1
+     ]
+    },
+    {
+     "y": 5780,
+     "children": [
+      2,
+      3
+     ],
+     "heights": [
+      24,
+      24
+     ],
+     "heightSpread": 0,
+     "hollowBottom": [
+      5,
+      5
+     ],
+     "padBottom": [
+      0,
+      0
+     ]
+    },
+    {
+     "y": 5814,
+     "children": [
+      4
+     ],
+     "heights": [
+      24
+     ],
+     "heightSpread": 0,
+     "hollowBottom": [
+      5
+     ],
+     "padBottom": [
+      0
+     ]
+    }
+   ]
+  },
+  {
+   "kind": "flex-wrap",
+   "path": "#dc-root > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > section:nth-child(11) > div:nth-child(3) > article:nth-child(4) > div:nth-child(3)",
+   "rect": {
+    "x": 1081,
+    "y": 5716,
+    "w": 286,
+    "h": 24
+   },
+   "columns": 2,
+   "children": 2,
+   "painted": 2,
+   "cards": false,
+   "inTooltip": false,
+   "alignItems": "normal",
+   "label": "Fuego",
+   "maxSpread": 0,
+   "rows": [
+    {
+     "y": 5716,
+     "children": [
+      0,
+      1
+     ],
+     "heights": [
+      24,
+      24
+     ],
+     "heightSpread": 0,
+     "hollowBottom": [
+      4,
+      4
+     ],
+     "padBottom": [
+      4,
+      4
+     ]
+    }
+   ]
+  },
+  {
+   "kind": "flex-wrap",
+   "path": "#dc-root > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > section:nth-child(11) > div:nth-child(3) > article:nth-child(4) > div:nth-child(4) > ul:nth-child(2)",
+   "rect": {
+    "x": 1081,
+    "y": 5774,
+    "w": 286,
+    "h": 36
+   },
+   "columns": 3,
+   "children": 5,
+   "painted": 5,
+   "cards": false,
+   "inTooltip": false,
+   "alignItems": "center",
+   "label": "",
+   "maxSpread": 0,
+   "rows": [
+    {
+     "y": 5774,
+     "children": [
+      0,
+      1
+     ],
+     "heights": [
+      36,
+      36
+     ],
+     "heightSpread": 0,
+     "hollowBottom": [
+      8,
+      10
+     ],
+     "padBottom": [
+      1,
+      1
+     ]
+    },
+    {
+     "y": 5780,
+     "children": [
+      2,
+      3,
+      4
+     ],
+     "heights": [
+      24,
+      24,
+      24
+     ],
+     "heightSpread": 0,
+     "hollowBottom": [
+      5,
+      5,
+      5
+     ],
+     "padBottom": [
+      0,
+      0,
+      4
+     ]
+    }
+   ]
+  },
+  {
+   "kind": "flex-wrap",
+   "path": "#dc-root > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > section:nth-child(11) > div:nth-child(3) > article:nth-child(5) > div:nth-child(4) > ul:nth-child(2)",
+   "rect": {
+    "x": 73,
+    "y": 6116,
+    "w": 286,
+    "h": 24
+   },
+   "columns": 2,
+   "children": 2,
+   "painted": 2,
+   "cards": false,
+   "inTooltip": false,
+   "alignItems": "center",
+   "label": "Water Gem",
+   "maxSpread": 0,
+   "rows": [
+    {
+     "y": 6116,
+     "children": [
+      0,
+      1
+     ],
+     "heights": [
+      24,
+      24
+     ],
+     "heightSpread": 0,
+     "hollowBottom": [
+      5,
+      5
+     ],
+     "padBottom": [
+      0,
+      0
+     ]
+    }
+   ]
+  }
+ ],
+ "board": "Componentes.dc.html",
+ "state": {
+  "tip": null
+ },
+ "viewport": {
+  "width": 1440,
+  "height": 6535
+ },
+ "missingBlobs": [],
+ "consoleErrors": []
+}

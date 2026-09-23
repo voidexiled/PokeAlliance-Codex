@@ -1,0 +1,124 @@
+/* Inicio (spec 8.1, template A of 8.0.2): the composition that belongs to the page and to no
+   component of the design system. Two blocks, both placed by src/pages/[locale]/index.astro:
+
+   - `ac-home-search`, the slot of the search trigger: `SearchTrigger variant="home"` (40 tall,
+     with its keycap) from `layout-bp-md`, and `variant="mobile"` (44 tall, no keycap) below it
+     (8.1, Lienzo:Inicio-movil). The page renders both and this sheet shows one per width, as
+     header.css does with the header trigger and its lens: the hidden one is `display: none`, so
+     it takes no gap of the column, no Tab stop and no place in the accessibility tree, and
+     Ctrl + K answers the visible one (src/scripts/search-shortcut.ts; DS:SearchTrigger «Si hay
+     varios en la página, solo el visible responde»). Each trigger sits in its own `div`, so no
+     rule here competes with the `display` of search-trigger.css;
+   - `ac-home-bento`, the bento of E17: a layout grid, not a card grid, that places the four
+     `IndexPanel` and the `WorldsTable` with `grid-template-areas`.
+
+   Per-page stylesheet (plan M10, D-018, §13.6): only Inicio draws these blocks, so global.css
+   does not import this file. The page imports it and the build writes it next to that page, so
+   the shared sheet keeps its S17 budget. It repeats the layer order of global.css before its
+   block, so the `components` layer keeps its place whichever sheet the browser reads first
+   (§3.6).
+
+   The bento (E17, 8.1 step 4, CARD_GRID_SYSTEM §6.5). The outer `.ac-home-bento` is the size
+   container and the inner `.ac-home-bento__grid` the grid, as in card-grid.css; the columns are
+   those of the `index` family (7.6.1): 1, then 2 from 596 (2 × grid-index 290 + gap 16) and 3
+   from 902 (3 × 290 + 2 × 16), gap 16 in both axes. Container queries cannot read custom
+   properties, so the two steps are px literals, like every family of card-grid.css. With the
+   main columns of CARD_GRID_SYSTEM §3 that gives 3 at 1440 (944) and 1024 (992), 2 at 1280
+   (784) and 768 (736), and 1 at 390 (358).
+
+   The areas come from the page, not from here: `--ac-areas-3` and `--ac-areas-2` on
+   `.ac-home-bento` hold the templates for 3 and 2 columns, written in the frontmatter with only
+   the panels the page renders (8.1 step 4): a panel with no link, or the table with no world,
+   leaves its area as an empty cell and the others keep theirs, and a row left with no panel
+   goes away. With every panel present:
+
+     3 columns   'sistemas items mundos' 'actividades pokedex pokedex'
+     2 columns   'sistemas items' 'actividades mundos' 'pokedex pokedex'
+     1 column    no areas: the order of the DOM
+
+   The DOM keeps the order of one column — Sistemas, Ítems, Actividades, Pokédex, Mundos — and
+   Mundos goes 3rd, 4th or last by its area alone: no `order`, no line numbers, no inline
+   position (IN4) and no second copy of the table. The table has no focusable element while it
+   has no «En línea» column (X3), so the Tab order of the panels is the visual one at every width
+   (S13). The prohibitions of R4 and 7.6.5 (`order`, explicit placement) are those of card grids,
+   which this is not (E17).
+
+   Each panel is a direct child of the grid and names its area with `data-area` (the `area` prop
+   of `IndexPanel` and `WorldsTable`). A grid item stretches to its row, so the panels of a row
+   end on one line (CARD_GRID_SYSTEM §6.5, «Bento rule») and the table has the definite height its
+   rows stretch to (DS:WorldsTable). The areas apply only inside the container queries: in one
+   column the panels flow in DOM order, and an area name that no template holds would put its
+   panel on implicit lines after the grid. */
+
+@layer properties, theme, base, components, utilities;
+
+@layer components {
+  /* ------------------------------------------------------------------ search trigger slot */
+
+  .ac-home-search {
+    display: flex;
+    min-width: 0;
+  }
+
+  @media (width < 48rem) {
+    .ac-home-search--wide {
+      display: none;
+    }
+  }
+
+  @media (width >= 48rem) {
+    .ac-home-search--narrow {
+      display: none;
+    }
+  }
+
+  /* ------------------------------------------------------------------------------ bento */
+
+  .ac-home-bento {
+    container-name: ac-home-bento;
+    container-type: inline-size;
+    min-width: 0;
+  }
+
+  .ac-home-bento__grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--space-16);
+  }
+
+  /* Index family: 2 columns from 596 (2 × --grid-index + --space-16). */
+  @container ac-home-bento (width >= 596px) {
+    .ac-home-bento__grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      grid-template-areas: var(--ac-areas-2);
+    }
+
+    .ac-home-bento__grid > [data-area='sistemas'] {
+      grid-area: sistemas;
+    }
+
+    .ac-home-bento__grid > [data-area='items'] {
+      grid-area: items;
+    }
+
+    .ac-home-bento__grid > [data-area='actividades'] {
+      grid-area: actividades;
+    }
+
+    .ac-home-bento__grid > [data-area='pokedex'] {
+      grid-area: pokedex;
+    }
+
+    .ac-home-bento__grid > [data-area='mundos'] {
+      grid-area: mundos;
+    }
+  }
+
+  /* Index family: 3 columns from 902 (3 × --grid-index + 2 × --space-16). */
+  @container ac-home-bento (width >= 902px) {
+    .ac-home-bento__grid {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      grid-template-areas: var(--ac-areas-3);
+    }
+  }
+}

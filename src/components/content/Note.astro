@@ -1,0 +1,38 @@
+---
+// Note (spec 7.2.3, DS:Note): the italic remark on `bg-secondary` that qualifies a
+// section, with a bold lead — «Observación: un Pokémon con Stars no puede recibir
+// Mega Stone.» At most one per section (8.4.2, `nota`), never a system message
+// (that is Notice) and never a remark about where the data comes from (R6).
+//
+// Markup of the reference (`bundle.js`, Note): one `<p class="ac-note">` with the
+// lead in `<strong class="ac-note__lead">`, a space, then the remark. The remark is
+// the default slot and is inline content, because it renders inside that `<p>`.
+//
+// The lead is visible text, so it is a prop (DP1): the composer passes the
+// dictionary value in both locales and never relies on the design system's Spanish
+// default «Observación:» (13.2). `null` draws the remark without a lead. With an
+// empty slot there is nothing to qualify and the component draws nothing (C-R5).
+
+interface Props {
+  /** Bold lead, colon included (T33), from the dictionary; `null` for none. */
+  lead: string | null;
+  /** Utilities added by the caller, after the component's own classes (3.8). */
+  class?: string;
+}
+
+const { lead, class: className } = Astro.props;
+const hasRemark = Astro.slots.has('default');
+---
+
+{
+  hasRemark && (
+    <p class:list={['ac-note', className]}>
+      {lead ? (
+        <>
+          <strong class="ac-note__lead">{lead}</strong>{' '}
+        </>
+      ) : null}
+      <slot />
+    </p>
+  )
+}

@@ -1,0 +1,772 @@
+{
+ "declaredHeight": 2360,
+ "renderedHeight": 2360,
+ "width": 390,
+ "contentHeight": 2336,
+ "overflow": false,
+ "emptyTail": 24,
+ "lowest": {
+  "path": "#dc-root > div:nth-child(1) > div:nth-child(1) > main:nth-child(3) > footer:nth-child(5)",
+  "kind": "box"
+ },
+ "rawHoles": [],
+ "brokenImages": [],
+ "webFontsLoaded": [],
+ "grids": [
+  {
+   "kind": "grid",
+   "path": "#dc-root > div:nth-child(1) > div:nth-child(1) > main:nth-child(3) > section:nth-child(3) > div:nth-child(2)",
+   "rect": {
+    "x": 16,
+    "y": 256,
+    "w": 358,
+    "h": 272
+   },
+   "columns": 1,
+   "children": 4,
+   "painted": 4,
+   "cards": true,
+   "inTooltip": false,
+   "alignItems": "normal",
+   "label": "Pokédex",
+   "maxSpread": 0,
+   "rows": [
+    {
+     "y": 256,
+     "children": [
+      0
+     ],
+     "heights": [
+      62
+     ],
+     "heightSpread": 0,
+     "hollowBottom": [
+      16.1
+     ],
+     "padBottom": [
+      13
+     ]
+    },
+    {
+     "y": 326,
+     "children": [
+      1
+     ],
+     "heights": [
+      62
+     ],
+     "heightSpread": 0,
+     "hollowBottom": [
+      17.1
+     ],
+     "padBottom": [
+      13
+     ]
+    },
+    {
+     "y": 396,
+     "children": [
+      2
+     ],
+     "heights": [
+      62
+     ],
+     "heightSpread": 0,
+     "hollowBottom": [
+      19.1
+     ],
+     "padBottom": [
+      13
+     ]
+    },
+    {
+     "y": 466,
+     "children": [
+      3
+     ],
+     "heights": [
+      62
+     ],
+     "heightSpread": 0,
+     "hollowBottom": [
+      16.1
+     ],
+     "padBottom": [
+      13
+     ]
+    }
+   ]
+  },
+  {
+   "kind": "grid",
+   "path": "#dc-root > div:nth-child(1) > div:nth-child(1) > main:nth-child(3) > div:nth-child(4)",
+   "rect": {
+    "x": 16,
+    "y": 544,
+    "w": 358,
+    "h": 1679
+   },
+   "columns": 1,
+   "children": 5,
+   "painted": 5,
+   "cards": true,
+   "inTooltip": false,
+   "alignItems": "normal",
+   "label": "Sistemas 10 páginas Boost Held Items Star Machin",
+   "maxSpread": 0,
+   "rows": [
+    {
+     "y": 544,
+     "children": [
+      0
+     ],
+     "heights": [
+      291
+     ],
+     "heightSpread": 0,
+     "hollowBottom": [
+      15
+     ],
+     "padBottom": [
+      1
+     ]
+    },
+    {
+     "y": 851,
+     "children": [
+      1
+     ],
+     "heights": [
+      291
+     ],
+     "heightSpread": 0,
+     "hollowBottom": [
+      16
+     ],
+     "padBottom": [
+      1
+     ]
+    },
+    {
+     "y": 1158,
+     "children": [
+      2
+     ],
+     "heights": [
+      291
+     ],
+     "heightSpread": 0,
+     "hollowBottom": [
+      19
+     ],
+     "padBottom": [
+      1
+     ]
+    },
+    {
+     "y": 1465,
+     "children": [
+      3
+     ],
+     "heights": [
+      475
+     ],
+     "heightSpread": 0,
+     "hollowBottom": [
+      24
+     ],
+     "padBottom": [
+      1
+     ]
+    },
+    {
+     "y": 1956,
+     "children": [
+      4
+     ],
+     "heights": [
+      267
+     ],
+     "heightSpread": 0,
+     "hollowBottom": [
+      15
+     ],
+     "padBottom": [
+      1
+     ]
+    }
+   ]
+  },
+  {
+   "kind": "grid",
+   "path": "#dc-root > div:nth-child(1) > div:nth-child(1) > main:nth-child(3) > div:nth-child(4) > section:nth-child(1) > ul:nth-child(2)",
+   "rect": {
+    "x": 17,
+    "y": 590,
+    "w": 356,
+    "h": 244
+   },
+   "columns": 2,
+   "children": 10,
+   "painted": 0,
+   "cards": false,
+   "inTooltip": false,
+   "alignItems": "normal",
+   "label": "Boost",
+   "maxSpread": 0,
+   "rows": [
+    {
+     "y": 598,
+     "children": [
+      0,
+      1
+     ],
+     "heights": [
+      44,
+      44
+     ],
+     "heightSpread": 0,
+     "hollowBottom": [
+      7,
+      15
+     ],
+     "padBottom": [
+      4,
+      4
+     ]
+    },
+    {
+     "y": 644,
+     "children": [
+      2,
+      3
+     ],
+     "heights": [
+      44,
+      44
+     ],
+     "heightSpread": 0,
+     "hollowBottom": [
+      6,
+      9
+     ],
+     "padBottom": [
+      4,
+      4
+     ]
+    },
+    {
+     "y": 690,
+     "children": [
+      4,
+      5
+     ],
+     "heights": [
+      44,
+      44
+     ],
+     "heightSpread": 0,
+     "hollowBottom": [
+      15,
+      7
+     ],
+     "padBottom": [
+      4,
+      4
+     ]
+    },
+    {
+     "y": 736,
+     "children": [
+      6,
+      7
+     ],
+     "heights": [
+      44,
+      44
+     ],
+     "heightSpread": 0,
+     "hollowBottom": [
+      15,
+      11
+     ],
+     "padBottom": [
+      4,
+      4
+     ]
+    },
+    {
+     "y": 782,
+     "children": [
+      8,
+      9
+     ],
+     "heights": [
+      44,
+      44
+     ],
+     "heightSpread": 0,
+     "hollowBottom": [
+      6,
+      10
+     ],
+     "padBottom": [
+      4,
+      4
+     ]
+    }
+   ]
+  },
+  {
+   "kind": "grid",
+   "path": "#dc-root > div:nth-child(1) > div:nth-child(1) > main:nth-child(3) > div:nth-child(4) > section:nth-child(2) > ul:nth-child(2)",
+   "rect": {
+    "x": 17,
+    "y": 897,
+    "w": 356,
+    "h": 244
+   },
+   "columns": 2,
+   "children": 10,
+   "painted": 0,
+   "cards": false,
+   "inTooltip": false,
+   "alignItems": "normal",
+   "label": "Poké Balls",
+   "maxSpread": 0,
+   "rows": [
+    {
+     "y": 905,
+     "children": [
+      0,
+      1
+     ],
+     "heights": [
+      44,
+      44
+     ],
+     "heightSpread": 0,
+     "hollowBottom": [
+      14,
+      7
+     ],
+     "padBottom": [
+      4,
+      4
+     ]
+    },
+    {
+     "y": 951,
+     "children": [
+      2,
+      3
+     ],
+     "heights": [
+      44,
+      44
+     ],
+     "heightSpread": 0,
+     "hollowBottom": [
+      7,
+      7
+     ],
+     "padBottom": [
+      4,
+      4
+     ]
+    },
+    {
+     "y": 997,
+     "children": [
+      4,
+      5
+     ],
+     "heights": [
+      44,
+      44
+     ],
+     "heightSpread": 0,
+     "hollowBottom": [
+      13,
+      6
+     ],
+     "padBottom": [
+      4,
+      4
+     ]
+    },
+    {
+     "y": 1043,
+     "children": [
+      6,
+      7
+     ],
+     "heights": [
+      44,
+      44
+     ],
+     "heightSpread": 0,
+     "hollowBottom": [
+      11,
+      11
+     ],
+     "padBottom": [
+      4,
+      4
+     ]
+    },
+    {
+     "y": 1089,
+     "children": [
+      8,
+      9
+     ],
+     "heights": [
+      44,
+      44
+     ],
+     "heightSpread": 0,
+     "hollowBottom": [
+      10,
+      7
+     ],
+     "padBottom": [
+      4,
+      4
+     ]
+    }
+   ]
+  },
+  {
+   "kind": "grid",
+   "path": "#dc-root > div:nth-child(1) > div:nth-child(1) > main:nth-child(3) > div:nth-child(4) > section:nth-child(3) > ul:nth-child(2)",
+   "rect": {
+    "x": 17,
+    "y": 1204,
+    "w": 356,
+    "h": 244
+   },
+   "columns": 2,
+   "children": 10,
+   "painted": 0,
+   "cards": false,
+   "inTooltip": false,
+   "alignItems": "normal",
+   "label": "Porygon Quest",
+   "maxSpread": 0,
+   "rows": [
+    {
+     "y": 1212,
+     "children": [
+      0,
+      1
+     ],
+     "heights": [
+      44,
+      44
+     ],
+     "heightSpread": 0,
+     "hollowBottom": [
+      15,
+      10
+     ],
+     "padBottom": [
+      4,
+      4
+     ]
+    },
+    {
+     "y": 1258,
+     "children": [
+      2,
+      3
+     ],
+     "heights": [
+      44,
+      44
+     ],
+     "heightSpread": 0,
+     "hollowBottom": [
+      15,
+      10
+     ],
+     "padBottom": [
+      4,
+      4
+     ]
+    },
+    {
+     "y": 1304,
+     "children": [
+      4,
+      5
+     ],
+     "heights": [
+      44,
+      44
+     ],
+     "heightSpread": 0,
+     "hollowBottom": [
+      13,
+      11
+     ],
+     "padBottom": [
+      4,
+      4
+     ]
+    },
+    {
+     "y": 1350,
+     "children": [
+      6,
+      7
+     ],
+     "heights": [
+      44,
+      44
+     ],
+     "heightSpread": 0,
+     "hollowBottom": [
+      11,
+      7
+     ],
+     "padBottom": [
+      4,
+      4
+     ]
+    },
+    {
+     "y": 1396,
+     "children": [
+      8,
+      9
+     ],
+     "heights": [
+      44,
+      44
+     ],
+     "heightSpread": 0,
+     "hollowBottom": [
+      10,
+      15
+     ],
+     "padBottom": [
+      4,
+      4
+     ]
+    }
+   ]
+  },
+  {
+   "kind": "grid",
+   "path": "#dc-root > div:nth-child(1) > div:nth-child(1) > main:nth-child(3) > div:nth-child(4) > section:nth-child(4) > ul:nth-child(2)",
+   "rect": {
+    "x": 17,
+    "y": 1511,
+    "w": 356,
+    "h": 428
+   },
+   "columns": 2,
+   "children": 18,
+   "painted": 0,
+   "cards": false,
+   "inTooltip": false,
+   "alignItems": "normal",
+   "label": "Normal",
+   "maxSpread": 0,
+   "rows": [
+    {
+     "y": 1519,
+     "children": [
+      0,
+      1
+     ],
+     "heights": [
+      44,
+      44
+     ],
+     "heightSpread": 0,
+     "hollowBottom": [
+      10,
+      10
+     ],
+     "padBottom": [
+      4,
+      4
+     ]
+    },
+    {
+     "y": 1565,
+     "children": [
+      2,
+      3
+     ],
+     "heights": [
+      44,
+      44
+     ],
+     "heightSpread": 0,
+     "hollowBottom": [
+      10,
+      10
+     ],
+     "padBottom": [
+      4,
+      4
+     ]
+    },
+    {
+     "y": 1611,
+     "children": [
+      4,
+      5
+     ],
+     "heights": [
+      44,
+      44
+     ],
+     "heightSpread": 0,
+     "hollowBottom": [
+      10,
+      10
+     ],
+     "padBottom": [
+      4,
+      4
+     ]
+    },
+    {
+     "y": 1657,
+     "children": [
+      6,
+      7
+     ],
+     "heights": [
+      44,
+      44
+     ],
+     "heightSpread": 0,
+     "hollowBottom": [
+      10,
+      10
+     ],
+     "padBottom": [
+      4,
+      4
+     ]
+    },
+    {
+     "y": 1703,
+     "children": [
+      8,
+      9
+     ],
+     "heights": [
+      44,
+      44
+     ],
+     "heightSpread": 0,
+     "hollowBottom": [
+      10,
+      10
+     ],
+     "padBottom": [
+      4,
+      4
+     ]
+    },
+    {
+     "y": 1749,
+     "children": [
+      10,
+      11
+     ],
+     "heights": [
+      44,
+      44
+     ],
+     "heightSpread": 0,
+     "hollowBottom": [
+      10,
+      10
+     ],
+     "padBottom": [
+      4,
+      4
+     ]
+    },
+    {
+     "y": 1795,
+     "children": [
+      12,
+      13
+     ],
+     "heights": [
+      44,
+      44
+     ],
+     "heightSpread": 0,
+     "hollowBottom": [
+      10,
+      10
+     ],
+     "padBottom": [
+      4,
+      4
+     ]
+    },
+    {
+     "y": 1841,
+     "children": [
+      14,
+      15
+     ],
+     "heights": [
+      44,
+      44
+     ],
+     "heightSpread": 0,
+     "hollowBottom": [
+      10,
+      10
+     ],
+     "padBottom": [
+      4,
+      4
+     ]
+    },
+    {
+     "y": 1887,
+     "children": [
+      16,
+      17
+     ],
+     "heights": [
+      44,
+      44
+     ],
+     "heightSpread": 0,
+     "hollowBottom": [
+      15,
+      15
+     ],
+     "padBottom": [
+      4,
+      4
+     ]
+    }
+   ]
+  }
+ ],
+ "flexWraps": [],
+ "board": "Inicio-movil.dc.html",
+ "state": {
+  "tip": null
+ },
+ "viewport": {
+  "width": 390,
+  "height": 2360
+ },
+ "missingBlobs": [],
+ "consoleErrors": []
+}

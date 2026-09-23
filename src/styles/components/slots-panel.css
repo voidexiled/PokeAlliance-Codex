@@ -1,0 +1,80 @@
+/* SlotsPanel (spec 7.2.6, 7.7.4 V3; DS:SlotsPanel), ported from the `.ac-slots-panel`
+   block of the design system's components/bundle.css. global.css imports this file with
+   layer(components), after list-row.css.
+
+   A `bg-secondary` panel of radius 12. The single list: padding 16, slots 8 apart that
+   wrap. `side` (Comercio): padding 4 16, groups of padding 12 0 with an 88 px label column
+   and a 1 px `border-secondary` line between them. `stacked` (Pokédex): padding 16, 16
+   between groups and 12 between a group's 12/16 700 heading and its slots.
+
+   The one difference from the reference: the type pairs are the text styles of theme.css
+   (spec 3.7), `ui` for the side label and `ui-strong` for the stacked heading. */
+
+.ac-slots-panel {
+  border-radius: var(--radius-12);
+  background: var(--bg-secondary);
+  color: var(--text-primary);
+}
+
+.ac-slots-panel__list,
+.ac-slots-panel__slots {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-8);
+  margin: 0;
+  list-style: none;
+}
+
+.ac-slots-panel__list {
+  padding: var(--space-16);
+}
+
+.ac-slots-panel__slots {
+  padding: 0;
+}
+
+.ac-slots-panel__li {
+  position: relative;
+  display: flex;
+}
+
+.ac-slots-panel__label {
+  margin: 0;
+  @apply type-ui;
+}
+
+/* Side layout (Comercio): 88 px label column, groups divided by a 1 px line. */
+.ac-slots-panel--side {
+  display: flex;
+  flex-direction: column;
+  padding: var(--space-4) var(--space-16);
+}
+
+.ac-slots-panel--side > .ac-slots-panel__group {
+  display: flex;
+  align-items: center;
+  gap: var(--space-16);
+  padding: var(--space-12) 0;
+}
+
+.ac-slots-panel--side > .ac-slots-panel__group + .ac-slots-panel__group {
+  border-top: 1px solid var(--border-secondary);
+}
+
+.ac-slots-panel--side .ac-slots-panel__label {
+  width: 88px; /* sin token: la columna de etiquetas de tipo de Comercio, como en bundle.css */
+  flex: none;
+}
+
+/* Stacked layout (Pokédex): a ui-strong heading over each group's slots. */
+.ac-slots-panel--stacked {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-16);
+  padding: var(--space-16);
+}
+
+.ac-slots-panel--stacked .ac-slots-panel__label {
+  margin-bottom: var(--space-12);
+  @apply type-ui-strong;
+}

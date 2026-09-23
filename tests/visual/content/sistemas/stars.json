@@ -1,0 +1,14 @@
+{
+  "$schema": "../../../../content/schemas/sistemas.schema.json",
+  "id": "stars",
+  "titulo": {
+    "es": "Star Machine",
+    "en": "Star Machine"
+  },
+  "sprite": null,
+  "orden": 3,
+  "tooltip": [],
+  "intro": [],
+  "secciones": [],
+  "borrador": true
+}

@@ -1,0 +1,48 @@
+/* FactLine and FactLines (spec 7.2.3, T33; DS:FactLine), ported from the `.ac-fact-line`
+   and `.ac-fact-lines` blocks of the design system's components/bundle.css. global.css
+   imports this file with layer(components).
+
+   14/32 label/value lines (Guild head, «Dónde encontrarlo»): the label in bold with its
+   colon, the values in the text colour — or the link colour when they are entities, which
+   `.ac-nested-entity__trigger--link` draws — and the « · » separator in `text-quinary`.
+   The only change from the reference is the type pair, which is the `fact-line` text style
+   of theme.css (spec 3.7).
+
+   Touch (spec 13.7): the links of a fact line are one of the two exceptions to the 44 px
+   target. Their box is the 32 px line and the « · » between two of them leaves more than
+   8 px, so they meet WCAG 2.5.8 without a rule of their own. */
+
+.ac-fact-line {
+  margin: 0;
+  @apply type-fact-line;
+}
+
+.ac-fact-line__label {
+  display: inline;
+  font-weight: 700;
+}
+
+.ac-fact-line__value {
+  display: inline;
+  margin: 0;
+}
+
+.ac-fact-line__sep {
+  color: var(--text-quinary);
+}
+
+/* FactLines: `row` wraps the lines with 24 px between them (Guild head); `column` stacks
+   them (Dónde encontrarlo). */
+.ac-fact-lines {
+  display: flex;
+  margin: 0;
+}
+
+.ac-fact-lines--row {
+  flex-wrap: wrap;
+  column-gap: var(--space-24);
+}
+
+.ac-fact-lines--column {
+  flex-direction: column;
+}

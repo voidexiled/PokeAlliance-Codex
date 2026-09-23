@@ -1,0 +1,49 @@
+/* The results page of Buscar (spec 8.6, 8.0.2 template B): the root of the `buscar` list,
+   src/components/search/SearchResultsRoot.tsx. The design system has no block for it and there
+   is no board: it is composed only of tokens and of pieces of the design system (R16), with the
+   geometry of the other lists of template B (`Lienzo:Pokedex`, `Lienzo:Comercio`).
+
+   Per-page stylesheet (plan M10, D-018, §13.6): only this page draws the root, so global.css
+   does not import it. The island imports it and the build writes it next to the page. It repeats
+   the layer order of global.css before its block, so the `components` layer keeps its place
+   whichever of the two sheets the browser reads first (3.6).
+
+   - The root is a column 16 apart, the rhythm of the controls of a list (7.7.4 V6): the search
+     region, then the list — results bar, results, pagination, which `EntityList` spaces itself.
+   - Destacados is a block of the page of its own, 48 under what precedes it, the rhythm of the
+     main column of an inner page (8.0.2, DS:PageLayout): 16 of the column plus 32.
+   - PR4 (7.7.5): while the root carries `data-ac-pending` it keeps the height of the prerendered
+     HTML and paints nothing of it; neither does what follows it in the main column (the footer),
+     which would otherwise jump when the query of the URL is applied. The same two rules as
+     entity-list.css, for this root: the island's `astro-island` wrapper is the element that
+     holds it, and what follows is that wrapper's siblings. */
+
+@layer properties, theme, base, components, utilities;
+
+@layer components {
+  .ac-search-results {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-16);
+    min-width: 0;
+  }
+
+  .ac-search-results[data-ac-pending] {
+    visibility: hidden;
+  }
+
+  :has(> .ac-search-results[data-ac-pending]) ~ * {
+    visibility: hidden;
+  }
+
+  .ac-search-results__featured {
+    margin-top: var(--space-32);
+    min-width: 0;
+  }
+
+  /* The empty line quotes the query as the reader typed it (8.6 step 6, V7): a long word
+     breaks inside the column instead of widening the page (WG1, 13.7 reflow). */
+  .ac-search-results .ac-empty-state {
+    overflow-wrap: anywhere;
+  }
+}

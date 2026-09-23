@@ -1,0 +1,99 @@
+/* NumberField (spec 7.2.2; DS:NumberField), ported from the `.ac-number-field` block of the
+   design system's components/bundle.css. global.css imports this file with layer(components).
+
+   A 40 px group with a 1 px `border-primary` border and radius 12 (spec 5.1, «campo
+   numérico»), the figure in tabular numerals and two 40 px steppers split off by 1 px
+   `border-primary` lines. `--ac-number-field-width` is the `width` prop (C-R2). */
+
+.ac-number-field {
+  width: var(--ac-number-field-width, auto);
+  min-width: 0;
+}
+
+.ac-number-field__label {
+  display: block;
+  margin-bottom: var(--space-8);
+  color: var(--text-primary);
+  @apply type-body;
+}
+
+/* The group draws the box. Its children round their own outer corners instead of clipping
+   with `overflow: hidden`, so the focus ring of the input and of the steppers stays visible. */
+.ac-number-field__group {
+  display: flex;
+  height: var(--size-control);
+  border: 1px solid var(--border-primary);
+  border-radius: var(--radius-12);
+  background: var(--bg-primary);
+}
+
+.ac-number-field__input {
+  flex: 1;
+  min-width: 0;
+  height: 100%;
+  margin: 0;
+  padding: var(--space-8) var(--space-12);
+  border: 0;
+  border-radius: calc(var(--radius-12) - 1px) 0 0 calc(var(--radius-12) - 1px);
+  background: transparent;
+  color: var(--text-primary);
+  font-family: var(--font-sans);
+  @apply type-field;
+  font-variant-numeric: tabular-nums;
+}
+
+.ac-number-field__step {
+  display: flex;
+  width: var(--size-control);
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  border-left: 1px solid var(--border-primary);
+  border-radius: 0;
+  background: transparent;
+  color: var(--text-primary);
+  cursor: pointer;
+}
+
+.ac-number-field__step:last-child {
+  border-radius: 0 calc(var(--radius-12) - 1px) calc(var(--radius-12) - 1px) 0;
+}
+
+.ac-number-field__step:hover:not(:disabled) {
+  background: var(--bg-tertiary);
+}
+
+.ac-number-field__step:disabled,
+.ac-number-field__input:disabled {
+  color: var(--text-quaternary);
+  cursor: not-allowed;
+}
+
+.ac-number-field__helper {
+  margin: var(--space-4) 0 0;
+  color: var(--helper);
+  @apply type-ui;
+}
+
+/* Hover of a stepper: `background-color` over duration-fast, the first row of spec 6.2. */
+@media (prefers-reduced-motion: no-preference) {
+  .ac-number-field__step {
+    transition: background-color var(--duration-fast) var(--ease-standard);
+  }
+}
+
+/* Touch (spec 13.7, S14): the steppers are 44 wide and the input and the steppers 44 tall.
+   The design system writes the group at `size-touch` including its border, which leaves its
+   children at 42; spec 13.7 counts the target itself, so the 1 px border goes around the 44. */
+@media (pointer: coarse) {
+  .ac-number-field__group {
+    height: calc(var(--size-touch) + 2px);
+  }
+
+  .ac-number-field__step {
+    width: var(--size-touch);
+  }
+}

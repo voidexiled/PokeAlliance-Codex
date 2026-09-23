@@ -1,0 +1,67 @@
+/* The shared keyframes of the site (spec 6.2), with the names and the frames of the design
+   system's components/bundle.css. Nothing outside the inventory of spec 6.2 animates.
+
+   This file stays outside every cascade layer (spec 3.6): @keyframes are not layered.
+
+   Each component references these from its own file in src/styles/components/, with its
+   duration and its curve as tokens and always inside @media (prefers-reduced-motion:
+   no-preference) (spec 6.4). The reduced-motion override that bundle.css applies to every ac-*
+   class is not ported: this CSS overrides nothing (spec 3.6, T6). */
+
+/* Featured sprites and the "Destacados" group of the menu: duration-bounce, ease-bounce. */
+@keyframes ac-bounce {
+  0%,
+  50%,
+  100% {
+    transform: translateY(0);
+  }
+
+  25%,
+  75% {
+    transform: translateY(-3px);
+  }
+}
+
+/* Entry of the game tooltip, the Select listbox, the "+N" popover and the Guild chart tooltip:
+   duration-fast, ease-standard. There is no exit animation. */
+@keyframes ac-tt-in {
+  from {
+    opacity: 0;
+    transform: translateY(4px) scale(0.95);
+  }
+
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* Loading box of a sprite: duration-pulse, ease-pulse, infinite. */
+@keyframes ac-pulse {
+  50% {
+    opacity: 0.5;
+  }
+}
+
+/* Scrim of the mobile sheet and of the search palette (duration-fast) and a sprite that
+   finished loading (duration-sprite-in), both with ease-standard. */
+@keyframes ac-fade {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+/* Mobile sheet: duration-sheet, ease-standard. There is no exit animation. */
+@keyframes ac-sheet-in {
+  from {
+    transform: translateX(100%);
+  }
+
+  to {
+    transform: none;
+  }
+}

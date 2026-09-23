@@ -1,0 +1,73 @@
+---
+// SearchTrigger (spec 7.2.1, 7.9.1, DS:SearchTrigger): the button that opens the
+// search palette. It is never an `<input>`: the query is typed in the palette.
+//
+// Four shapes: `header` (448 x 40, centred by Header on inner pages), `home`
+// (full width of the main column on Inicio), `mobile` (Inicio on a phone, 44
+// tall and no keycap) and `icon` (the 44 lens of the phone header).
+//
+// It carries no handler of its own: `src/scripts/search-shortcut.ts` listens for
+// clicks on `[data-ac-search-open]` and for Ctrl + K / Cmd + K, and opens
+// `dialog#buscar-dialogo`. The `onOpen` prop of the design system does not exist
+// here (DP4). Without that script and the palette the button would be a fake
+// control (S11, R12), so the two travel together in `PageLayout`.
+//
+// `aria-keyshortcuts` goes on the two variants that show the keycap (7.2.1): the
+// lens and the phone trigger show no key, and only the visible trigger answers
+// the shortcut.
+import type { Locale } from '@/i18n/config';
+import type { Messages } from '@/i18n/messages/en';
+import { en } from '@/i18n/messages/en';
+import { es } from '@/i18n/messages/es';
+import { Glyph } from '@/components/icons/Glyph';
+
+type Variant = 'header' | 'home' | 'mobile' | 'icon';
+
+interface Props {
+  /** Shape of the button. */
+  variant?: Variant;
+  /** Page locale: it picks the dictionary this frame component reads (13.2). */
+  locale: Locale;
+  /** Utilities added by the caller, after the component's own classes (3.8). */
+  class?: string;
+}
+
+const { variant = 'header', locale, class: className } = Astro.props;
+
+const dictionaries: Record<Locale, Messages> = { es, en };
+const shell = dictionaries[locale].shell;
+
+// `header` says «Buscar...»; `home` and `mobile` say the long invitation.
+const placeholder = variant === 'header' ? shell.searchHeader : shell.searchHome;
+const showsKeycap = variant === 'header' || variant === 'home';
+---
+
+{
+  variant === 'icon' ? (
+    <button
+      type="button"
+      class:list={['ac-search-trigger', 'ac-search-trigger--icon', className]}
+      data-ac-search-open={variant}
+      aria-haspopup="dialog"
+      aria-controls="buscar-dialogo"
+      aria-label={shell.searchIcon}
+    >
+      <Glyph name="search" size={18} className="ac-search-trigger__icon" />
+    </button>
+  ) : (
+    <button
+      type="button"
+      class:list={['ac-search-trigger', `ac-search-trigger--${variant}`, className]}
+      data-ac-search-open={variant}
+      aria-haspopup="dialog"
+      aria-controls="buscar-dialogo"
+      aria-keyshortcuts={showsKeycap ? 'Control+K Meta+K' : undefined}
+    >
+      <span class="ac-search-trigger__label">
+        <Glyph name="search" size={16} className="ac-search-trigger__icon" />
+        <span class="ac-search-trigger__text">{placeholder}</span>
+      </span>
+      {showsKeycap && <kbd class="ac-search-trigger__kbd">{shell.shortcut}</kbd>}
+    </button>
+  )
+}

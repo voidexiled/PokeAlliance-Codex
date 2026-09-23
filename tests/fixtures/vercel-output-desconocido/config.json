@@ -1,0 +1,27 @@
+{
+  "version": 3,
+  "routes": [
+    { "handle": "filesystem" },
+    {
+      "src": "^/es/comercio/(.*)$",
+      "has": [{ "type": "cookie", "key": "sesion" }],
+      "continue": true
+    },
+    {
+      "src": "^/en/(.*)$",
+      "missing": [{ "type": "header", "key": "x-prerender-revalidate" }],
+      "continue": true
+    },
+    {
+      "src": "^/_astro/(.*)$",
+      "headers": { "cache-control": "public, max-age=31536000, immutable" },
+      "continue": true,
+      "check": true
+    },
+    {
+      "src": "^/.*$",
+      "middlewarePath": "_middleware",
+      "continue": true
+    }
+  ]
+}

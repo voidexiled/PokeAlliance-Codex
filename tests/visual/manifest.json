@@ -1,0 +1,2342 @@
+{
+  "version": 1,
+  "cases": [
+    {
+      "id": "main",
+      "board": "Main",
+      "state": {
+        "tip": null
+      },
+      "width": 1440,
+      "height": 1033,
+      "route": "/es/",
+      "siteState": [],
+      "crops": [
+        {
+          "name": "cabecera",
+          "boardSelector": "header",
+          "siteSelector": "header.ac-header"
+        },
+        {
+          "name": "titulo",
+          "boardSelector": "main#contenido > div:nth-child(1) h1",
+          "siteSelector": ".ac-home-intro__title"
+        },
+        {
+          "name": "intro",
+          "boardSelector": "main#contenido > div:nth-child(1)",
+          "siteSelector": ".ac-home-intro",
+          "pending": "Datos del propietario: la clave ui/inicio no está en public/sprites/sprites.json, así que la caja de 48 de HomeIntro queda vacía (§3.13, §8.1 paso 1); el tablero dibuja su sprite a 3x."
+        },
+        {
+          "name": "buscador",
+          "boardSelector": "main#contenido > button",
+          "siteSelector": ".ac-home-search--wide .ac-search-trigger"
+        },
+        {
+          "name": "destacados",
+          "boardSelector": "main#contenido > section",
+          "siteSelector": ".ac-featured-section",
+          "pending": "Datos del propietario: los sprites de Destacados del tablero (Pokédex, Tier list y Linked Tasks) no están en public/sprites/sprites.json; sus entradas de tests/visual/content/destacados.json llevan sprite: null y su caja de 36 queda vacía. Comercio lleva el Diamond del registro."
+        }
+      ],
+      "masks": [
+        {
+          "id": "DV1",
+          "crop": "cabecera",
+          "rect": {
+            "x": 1174,
+            "y": 10,
+            "w": 251,
+            "h": 44
+          }
+        },
+        {
+          "id": "DV4",
+          "crop": "intro",
+          "rect": {
+            "x": 64,
+            "y": 26,
+            "w": 40,
+            "h": 16
+          }
+        },
+        {
+          "id": "DV6",
+          "crop": "intro",
+          "rect": {
+            "x": 64,
+            "y": 26,
+            "w": 320,
+            "h": 32
+          }
+        }
+      ],
+      "fullPage": false
+    },
+    {
+      "id": "inicio-movil",
+      "board": "Inicio-movil",
+      "state": {
+        "tip": null
+      },
+      "width": 390,
+      "height": 2360,
+      "route": "/es/",
+      "siteState": [],
+      "crops": [
+        {
+          "name": "cabecera",
+          "boardSelector": "header",
+          "siteSelector": "header.ac-header"
+        },
+        {
+          "name": "intro",
+          "boardSelector": "main#contenido > div:nth-child(1)",
+          "siteSelector": ".ac-home-intro"
+        },
+        {
+          "name": "buscador",
+          "boardSelector": "main#contenido > button",
+          "siteSelector": ".ac-home-search--narrow .ac-search-trigger"
+        },
+        {
+          "name": "destacados",
+          "boardSelector": "main#contenido > section",
+          "siteSelector": ".ac-featured-section"
+        }
+      ],
+      "masks": [
+        {
+          "id": "DV1",
+          "crop": "cabecera",
+          "rect": {
+            "x": 271,
+            "y": 8,
+            "w": 51,
+            "h": 48
+          }
+        },
+        {
+          "id": "DV4",
+          "crop": "intro",
+          "rect": {
+            "x": 0,
+            "y": 26,
+            "w": 40,
+            "h": 16
+          }
+        },
+        {
+          "id": "DV6",
+          "crop": "intro",
+          "rect": {
+            "x": 0,
+            "y": 26,
+            "w": 320,
+            "h": 32
+          }
+        }
+      ],
+      "fullPage": false
+    },
+    {
+      "id": "pokedex",
+      "board": "Pokedex",
+      "state": {
+        "tip": null
+      },
+      "width": 1440,
+      "height": 1904,
+      "route": "/es/pokedex/",
+      "siteState": [],
+      "crops": [
+        {
+          "name": "migas",
+          "boardSelector": "main#contenido > nav",
+          "siteSelector": "nav.ac-breadcrumb"
+        },
+        {
+          "name": "titulo",
+          "boardSelector": "main#contenido > div:nth-child(2)",
+          "siteSelector": ".ac-page-title"
+        },
+        {
+          "name": "filtros",
+          "boardSelector": "main#contenido > div:nth-child(3) > div:nth-child(1)",
+          "siteSelector": ".ac-entity-list[data-ac-list=\"pokedex\"] .ac-filter-bar"
+        },
+        {
+          "name": "barra",
+          "boardSelector": "main#contenido > div:nth-child(3) > div:nth-child(2)",
+          "siteSelector": ".ac-entity-list[data-ac-list=\"pokedex\"] > .ac-entity-list__bar"
+        },
+        {
+          "name": "hechos",
+          "boardSelector": "main#contenido > div:nth-child(3) > div:nth-child(3) > div:nth-child(1) > article:nth-child(1) > dl:nth-child(2)",
+          "siteSelector": ".ac-entity-list[data-ac-list=\"pokedex\"] [data-card-grid] .ac-card-grid__grid > article:first-child > dl"
+        }
+      ],
+      "masks": [
+        {
+          "id": "DV4",
+          "crop": "barra",
+          "rect": {
+            "x": 0,
+            "y": 0,
+            "w": 400,
+            "h": 40
+          }
+        }
+      ],
+      "fullPage": false,
+      "geometry": {
+        "anchors": [
+          {
+            "name": "cabecera",
+            "boardSelector": "header",
+            "siteSelector": "header.ac-header"
+          },
+          {
+            "name": "barra-lateral",
+            "boardSelector": "nav",
+            "siteSelector": ".ac-page-layout__sidebar",
+            "fields": ["x", "y", "w"]
+          },
+          {
+            "name": "columna",
+            "boardSelector": "main#contenido",
+            "siteSelector": "main#contenido",
+            "fields": ["x", "y", "w"]
+          },
+          {
+            "name": "h1",
+            "boardSelector": "main#contenido h1",
+            "siteSelector": "main#contenido h1"
+          },
+          {
+            "name": "conmutador",
+            "boardSelector": "main#contenido > div:nth-child(3) > div:nth-child(2) > div:last-child",
+            "siteSelector": ".ac-entity-list[data-ac-list=\"pokedex\"] > .ac-entity-list__bar .ac-view-toggle"
+          },
+          {
+            "name": "pie",
+            "boardSelector": "footer",
+            "siteSelector": "footer.ac-footer"
+          }
+        ],
+        "grids": [
+          {
+            "path": "#dc-root > div:nth-child(1) > div:nth-child(1) > div:nth-child(3) > main:nth-child(2) > div:nth-child(3) > div:nth-child(3) > div:nth-child(1)",
+            "siteSelector": ".ac-entity-list[data-ac-list=\"pokedex\"] [data-card-grid] .ac-card-grid__grid"
+          }
+        ]
+      },
+      "pending": "Datos del propietario: 36 de los 41 ítems de drops del tablero no tienen sprite en sprites.json (filas de 298 px frente a 326), y el tablero dibuja la paginación de 910 variantes sobre fixtures de 12, 7 y 5 resultados (pie 64 px más arriba). D-018."
+    },
+    {
+      "id": "pokedex-slots",
+      "board": "Pokedex",
+      "state": {
+        "view": "slots",
+        "tip": null
+      },
+      "width": 1440,
+      "height": 1904,
+      "route": "/es/pokedex/",
+      "siteState": [
+        {
+          "action": "click",
+          "selector": ".ac-entity-list[data-ac-list=\"pokedex\"] .ac-view-toggle button:nth-child(2)"
+        },
+        {
+          "action": "waitFor",
+          "selector": ".ac-entity-list[data-ac-list=\"pokedex\"] [data-slots] .ac-slots-panel"
+        }
+      ],
+      "crops": [
+        {
+          "name": "barra",
+          "boardSelector": "main#contenido > div:nth-child(3) > div:nth-child(2)",
+          "siteSelector": ".ac-entity-list[data-ac-list=\"pokedex\"] > .ac-entity-list__bar"
+        },
+        {
+          "name": "slots",
+          "boardSelector": "main#contenido > div:nth-child(3) > div:nth-child(3) > div:nth-child(1)",
+          "siteSelector": ".ac-entity-list[data-ac-list=\"pokedex\"] [data-slots] .ac-slots-panel"
+        }
+      ],
+      "masks": [
+        {
+          "id": "DV4",
+          "crop": "barra",
+          "rect": {
+            "x": 0,
+            "y": 0,
+            "w": 400,
+            "h": 40
+          }
+        }
+      ],
+      "fullPage": false,
+      "geometry": {
+        "anchors": [
+          {
+            "name": "cabecera",
+            "boardSelector": "header",
+            "siteSelector": "header.ac-header"
+          },
+          {
+            "name": "barra-lateral",
+            "boardSelector": "nav",
+            "siteSelector": ".ac-page-layout__sidebar",
+            "fields": ["x", "y", "w"]
+          },
+          {
+            "name": "columna",
+            "boardSelector": "main#contenido",
+            "siteSelector": "main#contenido",
+            "fields": ["x", "y", "w"]
+          },
+          {
+            "name": "h1",
+            "boardSelector": "main#contenido h1",
+            "siteSelector": "main#contenido h1"
+          },
+          {
+            "name": "conmutador",
+            "boardSelector": "main#contenido > div:nth-child(3) > div:nth-child(2) > div:last-child",
+            "siteSelector": ".ac-entity-list[data-ac-list=\"pokedex\"] > .ac-entity-list__bar .ac-view-toggle"
+          },
+          {
+            "name": "pie",
+            "boardSelector": "footer",
+            "siteSelector": "footer.ac-footer"
+          }
+        ],
+        "grids": []
+      },
+      "pending": "Datos del propietario: 36 de los 41 ítems de drops del tablero no tienen sprite en sprites.json (filas de 298 px frente a 326), y el tablero dibuja la paginación de 910 variantes sobre fixtures de 12, 7 y 5 resultados (pie 64 px más arriba). D-018."
+    },
+    {
+      "id": "pokedex-lista",
+      "board": "Pokedex",
+      "state": {
+        "view": "list",
+        "tip": null
+      },
+      "width": 1440,
+      "height": 1904,
+      "route": "/es/pokedex/",
+      "siteState": [
+        {
+          "action": "click",
+          "selector": ".ac-entity-list[data-ac-list=\"pokedex\"] .ac-view-toggle button:nth-child(3)"
+        },
+        {
+          "action": "waitFor",
+          "selector": ".ac-entity-list[data-ac-list=\"pokedex\"] [data-list] .ac-data-table"
+        }
+      ],
+      "crops": [
+        {
+          "name": "barra",
+          "boardSelector": "main#contenido > div:nth-child(3) > div:nth-child(2)",
+          "siteSelector": ".ac-entity-list[data-ac-list=\"pokedex\"] > .ac-entity-list__bar"
+        },
+        {
+          "name": "lista-cabecera",
+          "boardSelector": "main#contenido > div:nth-child(3) > div:nth-child(3) > div:nth-child(1) > table > thead",
+          "siteSelector": ".ac-entity-list[data-ac-list=\"pokedex\"] [data-list] .ac-data-table thead"
+        }
+      ],
+      "masks": [
+        {
+          "id": "DV4",
+          "crop": "barra",
+          "rect": {
+            "x": 0,
+            "y": 0,
+            "w": 400,
+            "h": 40
+          }
+        }
+      ],
+      "fullPage": false,
+      "geometry": {
+        "anchors": [
+          {
+            "name": "cabecera",
+            "boardSelector": "header",
+            "siteSelector": "header.ac-header"
+          },
+          {
+            "name": "barra-lateral",
+            "boardSelector": "nav",
+            "siteSelector": ".ac-page-layout__sidebar",
+            "fields": ["x", "y", "w"]
+          },
+          {
+            "name": "columna",
+            "boardSelector": "main#contenido",
+            "siteSelector": "main#contenido",
+            "fields": ["x", "y", "w"]
+          },
+          {
+            "name": "h1",
+            "boardSelector": "main#contenido h1",
+            "siteSelector": "main#contenido h1"
+          },
+          {
+            "name": "conmutador",
+            "boardSelector": "main#contenido > div:nth-child(3) > div:nth-child(2) > div:last-child",
+            "siteSelector": ".ac-entity-list[data-ac-list=\"pokedex\"] > .ac-entity-list__bar .ac-view-toggle"
+          },
+          {
+            "name": "pie",
+            "boardSelector": "footer",
+            "siteSelector": "footer.ac-footer"
+          }
+        ],
+        "grids": []
+      },
+      "pending": "Datos del propietario: 36 de los 41 ítems de drops del tablero no tienen sprite en sprites.json (filas de 298 px frente a 326), y el tablero dibuja la paginación de 910 variantes sobre fixtures de 12, 7 y 5 resultados (pie 64 px más arriba). D-018."
+    },
+    {
+      "id": "pokedex-normal",
+      "board": "Pokedex",
+      "state": {
+        "variant": "normal",
+        "tip": null
+      },
+      "width": 1440,
+      "height": 1904,
+      "route": "/es/pokedex/",
+      "siteState": [
+        {
+          "action": "click",
+          "selector": ".ac-entity-list[data-ac-list=\"pokedex\"] .ac-filter-bar .ac-toggle-group button:nth-child(2)"
+        },
+        {
+          "action": "waitFor",
+          "selector": ".ac-entity-list[data-ac-list=\"pokedex\"] .ac-filter-bar .ac-toggle-group button:nth-child(2)[aria-pressed=\"true\"]"
+        }
+      ],
+      "crops": [
+        {
+          "name": "filtros",
+          "boardSelector": "main#contenido > div:nth-child(3) > div:nth-child(1)",
+          "siteSelector": ".ac-entity-list[data-ac-list=\"pokedex\"] .ac-filter-bar"
+        },
+        {
+          "name": "barra",
+          "boardSelector": "main#contenido > div:nth-child(3) > div:nth-child(2)",
+          "siteSelector": ".ac-entity-list[data-ac-list=\"pokedex\"] > .ac-entity-list__bar"
+        }
+      ],
+      "masks": [
+        {
+          "id": "DV4",
+          "crop": "barra",
+          "rect": {
+            "x": 0,
+            "y": 0,
+            "w": 400,
+            "h": 40
+          }
+        }
+      ],
+      "fullPage": false,
+      "geometry": {
+        "anchors": [
+          {
+            "name": "cabecera",
+            "boardSelector": "header",
+            "siteSelector": "header.ac-header"
+          },
+          {
+            "name": "barra-lateral",
+            "boardSelector": "nav",
+            "siteSelector": ".ac-page-layout__sidebar",
+            "fields": ["x", "y", "w"]
+          },
+          {
+            "name": "columna",
+            "boardSelector": "main#contenido",
+            "siteSelector": "main#contenido",
+            "fields": ["x", "y", "w"]
+          },
+          {
+            "name": "h1",
+            "boardSelector": "main#contenido h1",
+            "siteSelector": "main#contenido h1"
+          },
+          {
+            "name": "conmutador",
+            "boardSelector": "main#contenido > div:nth-child(3) > div:nth-child(2) > div:last-child",
+            "siteSelector": ".ac-entity-list[data-ac-list=\"pokedex\"] > .ac-entity-list__bar .ac-view-toggle"
+          },
+          {
+            "name": "pie",
+            "boardSelector": "footer",
+            "siteSelector": "footer.ac-footer"
+          }
+        ],
+        "grids": [
+          {
+            "path": "#dc-root > div:nth-child(1) > div:nth-child(1) > div:nth-child(3) > main:nth-child(2) > div:nth-child(3) > div:nth-child(3) > div:nth-child(1)",
+            "siteSelector": ".ac-entity-list[data-ac-list=\"pokedex\"] [data-card-grid] .ac-card-grid__grid"
+          }
+        ]
+      },
+      "pending": "Datos del propietario: 36 de los 41 ítems de drops del tablero no tienen sprite en sprites.json (filas de 298 px frente a 326), y el tablero dibuja la paginación de 910 variantes sobre fixtures de 12, 7 y 5 resultados (pie 64 px más arriba). D-018."
+    },
+    {
+      "id": "pokedex-shiny",
+      "board": "Pokedex",
+      "state": {
+        "variant": "shiny",
+        "tip": null
+      },
+      "width": 1440,
+      "height": 1904,
+      "route": "/es/pokedex/",
+      "siteState": [
+        {
+          "action": "click",
+          "selector": ".ac-entity-list[data-ac-list=\"pokedex\"] .ac-filter-bar .ac-toggle-group button:nth-child(3)"
+        },
+        {
+          "action": "waitFor",
+          "selector": ".ac-entity-list[data-ac-list=\"pokedex\"] .ac-filter-bar .ac-toggle-group button:nth-child(3)[aria-pressed=\"true\"]"
+        }
+      ],
+      "crops": [
+        {
+          "name": "filtros",
+          "boardSelector": "main#contenido > div:nth-child(3) > div:nth-child(1)",
+          "siteSelector": ".ac-entity-list[data-ac-list=\"pokedex\"] .ac-filter-bar"
+        },
+        {
+          "name": "barra",
+          "boardSelector": "main#contenido > div:nth-child(3) > div:nth-child(2)",
+          "siteSelector": ".ac-entity-list[data-ac-list=\"pokedex\"] > .ac-entity-list__bar"
+        }
+      ],
+      "masks": [
+        {
+          "id": "DV4",
+          "crop": "barra",
+          "rect": {
+            "x": 0,
+            "y": 0,
+            "w": 400,
+            "h": 40
+          }
+        }
+      ],
+      "fullPage": false,
+      "geometry": {
+        "anchors": [
+          {
+            "name": "cabecera",
+            "boardSelector": "header",
+            "siteSelector": "header.ac-header"
+          },
+          {
+            "name": "barra-lateral",
+            "boardSelector": "nav",
+            "siteSelector": ".ac-page-layout__sidebar",
+            "fields": ["x", "y", "w"]
+          },
+          {
+            "name": "columna",
+            "boardSelector": "main#contenido",
+            "siteSelector": "main#contenido",
+            "fields": ["x", "y", "w"]
+          },
+          {
+            "name": "h1",
+            "boardSelector": "main#contenido h1",
+            "siteSelector": "main#contenido h1"
+          },
+          {
+            "name": "conmutador",
+            "boardSelector": "main#contenido > div:nth-child(3) > div:nth-child(2) > div:last-child",
+            "siteSelector": ".ac-entity-list[data-ac-list=\"pokedex\"] > .ac-entity-list__bar .ac-view-toggle"
+          },
+          {
+            "name": "pie",
+            "boardSelector": "footer",
+            "siteSelector": "footer.ac-footer"
+          }
+        ],
+        "grids": [
+          {
+            "path": "#dc-root > div:nth-child(1) > div:nth-child(1) > div:nth-child(3) > main:nth-child(2) > div:nth-child(3) > div:nth-child(3) > div:nth-child(1)",
+            "siteSelector": ".ac-entity-list[data-ac-list=\"pokedex\"] [data-card-grid] .ac-card-grid__grid"
+          }
+        ]
+      },
+      "pending": "Datos del propietario: 36 de los 41 ítems de drops del tablero no tienen sprite en sprites.json (filas de 298 px frente a 326), y el tablero dibuja la paginación de 910 variantes sobre fixtures de 12, 7 y 5 resultados (pie 64 px más arriba). D-018."
+    },
+    {
+      "id": "pokedex-slots-normal",
+      "board": "Pokedex",
+      "state": {
+        "view": "slots",
+        "variant": "normal",
+        "tip": null
+      },
+      "width": 1440,
+      "height": 1904,
+      "route": "/es/pokedex/",
+      "siteState": [
+        {
+          "action": "click",
+          "selector": ".ac-entity-list[data-ac-list=\"pokedex\"] .ac-filter-bar .ac-toggle-group button:nth-child(2)"
+        },
+        {
+          "action": "waitFor",
+          "selector": ".ac-entity-list[data-ac-list=\"pokedex\"] .ac-filter-bar .ac-toggle-group button:nth-child(2)[aria-pressed=\"true\"]"
+        },
+        {
+          "action": "click",
+          "selector": ".ac-entity-list[data-ac-list=\"pokedex\"] .ac-view-toggle button:nth-child(2)"
+        },
+        {
+          "action": "waitFor",
+          "selector": ".ac-entity-list[data-ac-list=\"pokedex\"] [data-slots] .ac-slots-panel"
+        }
+      ],
+      "crops": [
+        {
+          "name": "barra",
+          "boardSelector": "main#contenido > div:nth-child(3) > div:nth-child(2)",
+          "siteSelector": ".ac-entity-list[data-ac-list=\"pokedex\"] > .ac-entity-list__bar"
+        },
+        {
+          "name": "slots",
+          "boardSelector": "main#contenido > div:nth-child(3) > div:nth-child(3) > div:nth-child(1)",
+          "siteSelector": ".ac-entity-list[data-ac-list=\"pokedex\"] [data-slots] .ac-slots-panel"
+        }
+      ],
+      "masks": [
+        {
+          "id": "DV4",
+          "crop": "barra",
+          "rect": {
+            "x": 0,
+            "y": 0,
+            "w": 400,
+            "h": 40
+          }
+        }
+      ],
+      "fullPage": false,
+      "geometry": {
+        "anchors": [
+          {
+            "name": "cabecera",
+            "boardSelector": "header",
+            "siteSelector": "header.ac-header"
+          },
+          {
+            "name": "barra-lateral",
+            "boardSelector": "nav",
+            "siteSelector": ".ac-page-layout__sidebar",
+            "fields": ["x", "y", "w"]
+          },
+          {
+            "name": "columna",
+            "boardSelector": "main#contenido",
+            "siteSelector": "main#contenido",
+            "fields": ["x", "y", "w"]
+          },
+          {
+            "name": "h1",
+            "boardSelector": "main#contenido h1",
+            "siteSelector": "main#contenido h1"
+          },
+          {
+            "name": "conmutador",
+            "boardSelector": "main#contenido > div:nth-child(3) > div:nth-child(2) > div:last-child",
+            "siteSelector": ".ac-entity-list[data-ac-list=\"pokedex\"] > .ac-entity-list__bar .ac-view-toggle"
+          },
+          {
+            "name": "pie",
+            "boardSelector": "footer",
+            "siteSelector": "footer.ac-footer"
+          }
+        ],
+        "grids": []
+      },
+      "pending": "Datos del propietario: 36 de los 41 ítems de drops del tablero no tienen sprite en sprites.json (filas de 298 px frente a 326), y el tablero dibuja la paginación de 910 variantes sobre fixtures de 12, 7 y 5 resultados (pie 64 px más arriba). D-018."
+    },
+    {
+      "id": "pokedex-lista-normal",
+      "board": "Pokedex",
+      "state": {
+        "view": "list",
+        "variant": "normal",
+        "tip": null
+      },
+      "width": 1440,
+      "height": 1904,
+      "route": "/es/pokedex/",
+      "siteState": [
+        {
+          "action": "click",
+          "selector": ".ac-entity-list[data-ac-list=\"pokedex\"] .ac-filter-bar .ac-toggle-group button:nth-child(2)"
+        },
+        {
+          "action": "waitFor",
+          "selector": ".ac-entity-list[data-ac-list=\"pokedex\"] .ac-filter-bar .ac-toggle-group button:nth-child(2)[aria-pressed=\"true\"]"
+        },
+        {
+          "action": "click",
+          "selector": ".ac-entity-list[data-ac-list=\"pokedex\"] .ac-view-toggle button:nth-child(3)"
+        },
+        {
+          "action": "waitFor",
+          "selector": ".ac-entity-list[data-ac-list=\"pokedex\"] [data-list] .ac-data-table"
+        }
+      ],
+      "crops": [
+        {
+          "name": "barra",
+          "boardSelector": "main#contenido > div:nth-child(3) > div:nth-child(2)",
+          "siteSelector": ".ac-entity-list[data-ac-list=\"pokedex\"] > .ac-entity-list__bar"
+        },
+        {
+          "name": "lista-cabecera",
+          "boardSelector": "main#contenido > div:nth-child(3) > div:nth-child(3) > div:nth-child(1) > table > thead",
+          "siteSelector": ".ac-entity-list[data-ac-list=\"pokedex\"] [data-list] .ac-data-table thead",
+          "pending": "Anchos de columna fijados en el estado «Todas»: en «Normal» el tablero los reparte hasta 1,3 px distinto (1,32 % frente a 1 %). D-018."
+        }
+      ],
+      "masks": [
+        {
+          "id": "DV4",
+          "crop": "barra",
+          "rect": {
+            "x": 0,
+            "y": 0,
+            "w": 400,
+            "h": 40
+          }
+        }
+      ],
+      "fullPage": false,
+      "geometry": {
+        "anchors": [
+          {
+            "name": "cabecera",
+            "boardSelector": "header",
+            "siteSelector": "header.ac-header"
+          },
+          {
+            "name": "barra-lateral",
+            "boardSelector": "nav",
+            "siteSelector": ".ac-page-layout__sidebar",
+            "fields": ["x", "y", "w"]
+          },
+          {
+            "name": "columna",
+            "boardSelector": "main#contenido",
+            "siteSelector": "main#contenido",
+            "fields": ["x", "y", "w"]
+          },
+          {
+            "name": "h1",
+            "boardSelector": "main#contenido h1",
+            "siteSelector": "main#contenido h1"
+          },
+          {
+            "name": "conmutador",
+            "boardSelector": "main#contenido > div:nth-child(3) > div:nth-child(2) > div:last-child",
+            "siteSelector": ".ac-entity-list[data-ac-list=\"pokedex\"] > .ac-entity-list__bar .ac-view-toggle"
+          },
+          {
+            "name": "pie",
+            "boardSelector": "footer",
+            "siteSelector": "footer.ac-footer"
+          }
+        ],
+        "grids": []
+      },
+      "pending": "Datos del propietario: 36 de los 41 ítems de drops del tablero no tienen sprite en sprites.json (filas de 298 px frente a 326), y el tablero dibuja la paginación de 910 variantes sobre fixtures de 12, 7 y 5 resultados (pie 64 px más arriba). D-018."
+    },
+    {
+      "id": "pokedex-slots-shiny",
+      "board": "Pokedex",
+      "state": {
+        "view": "slots",
+        "variant": "shiny",
+        "tip": null
+      },
+      "width": 1440,
+      "height": 1904,
+      "route": "/es/pokedex/",
+      "siteState": [
+        {
+          "action": "click",
+          "selector": ".ac-entity-list[data-ac-list=\"pokedex\"] .ac-filter-bar .ac-toggle-group button:nth-child(3)"
+        },
+        {
+          "action": "waitFor",
+          "selector": ".ac-entity-list[data-ac-list=\"pokedex\"] .ac-filter-bar .ac-toggle-group button:nth-child(3)[aria-pressed=\"true\"]"
+        },
+        {
+          "action": "click",
+          "selector": ".ac-entity-list[data-ac-list=\"pokedex\"] .ac-view-toggle button:nth-child(2)"
+        },
+        {
+          "action": "waitFor",
+          "selector": ".ac-entity-list[data-ac-list=\"pokedex\"] [data-slots] .ac-slots-panel"
+        }
+      ],
+      "crops": [
+        {
+          "name": "barra",
+          "boardSelector": "main#contenido > div:nth-child(3) > div:nth-child(2)",
+          "siteSelector": ".ac-entity-list[data-ac-list=\"pokedex\"] > .ac-entity-list__bar"
+        },
+        {
+          "name": "slots",
+          "boardSelector": "main#contenido > div:nth-child(3) > div:nth-child(3) > div:nth-child(1)",
+          "siteSelector": ".ac-entity-list[data-ac-list=\"pokedex\"] [data-slots] .ac-slots-panel"
+        }
+      ],
+      "masks": [
+        {
+          "id": "DV4",
+          "crop": "barra",
+          "rect": {
+            "x": 0,
+            "y": 0,
+            "w": 400,
+            "h": 40
+          }
+        }
+      ],
+      "fullPage": false,
+      "geometry": {
+        "anchors": [
+          {
+            "name": "cabecera",
+            "boardSelector": "header",
+            "siteSelector": "header.ac-header"
+          },
+          {
+            "name": "barra-lateral",
+            "boardSelector": "nav",
+            "siteSelector": ".ac-page-layout__sidebar",
+            "fields": ["x", "y", "w"]
+          },
+          {
+            "name": "columna",
+            "boardSelector": "main#contenido",
+            "siteSelector": "main#contenido",
+            "fields": ["x", "y", "w"]
+          },
+          {
+            "name": "h1",
+            "boardSelector": "main#contenido h1",
+            "siteSelector": "main#contenido h1"
+          },
+          {
+            "name": "conmutador",
+            "boardSelector": "main#contenido > div:nth-child(3) > div:nth-child(2) > div:last-child",
+            "siteSelector": ".ac-entity-list[data-ac-list=\"pokedex\"] > .ac-entity-list__bar .ac-view-toggle"
+          },
+          {
+            "name": "pie",
+            "boardSelector": "footer",
+            "siteSelector": "footer.ac-footer"
+          }
+        ],
+        "grids": []
+      },
+      "pending": "Datos del propietario: 36 de los 41 ítems de drops del tablero no tienen sprite en sprites.json (filas de 298 px frente a 326), y el tablero dibuja la paginación de 910 variantes sobre fixtures de 12, 7 y 5 resultados (pie 64 px más arriba). D-018."
+    },
+    {
+      "id": "pokedex-lista-shiny",
+      "board": "Pokedex",
+      "state": {
+        "view": "list",
+        "variant": "shiny",
+        "tip": null
+      },
+      "width": 1440,
+      "height": 1904,
+      "route": "/es/pokedex/",
+      "siteState": [
+        {
+          "action": "click",
+          "selector": ".ac-entity-list[data-ac-list=\"pokedex\"] .ac-filter-bar .ac-toggle-group button:nth-child(3)"
+        },
+        {
+          "action": "waitFor",
+          "selector": ".ac-entity-list[data-ac-list=\"pokedex\"] .ac-filter-bar .ac-toggle-group button:nth-child(3)[aria-pressed=\"true\"]"
+        },
+        {
+          "action": "click",
+          "selector": ".ac-entity-list[data-ac-list=\"pokedex\"] .ac-view-toggle button:nth-child(3)"
+        },
+        {
+          "action": "waitFor",
+          "selector": ".ac-entity-list[data-ac-list=\"pokedex\"] [data-list] .ac-data-table"
+        }
+      ],
+      "crops": [
+        {
+          "name": "barra",
+          "boardSelector": "main#contenido > div:nth-child(3) > div:nth-child(2)",
+          "siteSelector": ".ac-entity-list[data-ac-list=\"pokedex\"] > .ac-entity-list__bar"
+        },
+        {
+          "name": "lista-cabecera",
+          "boardSelector": "main#contenido > div:nth-child(3) > div:nth-child(3) > div:nth-child(1) > table > thead",
+          "siteSelector": ".ac-entity-list[data-ac-list=\"pokedex\"] [data-list] .ac-data-table thead"
+        }
+      ],
+      "masks": [
+        {
+          "id": "DV4",
+          "crop": "barra",
+          "rect": {
+            "x": 0,
+            "y": 0,
+            "w": 400,
+            "h": 40
+          }
+        }
+      ],
+      "fullPage": false,
+      "geometry": {
+        "anchors": [
+          {
+            "name": "cabecera",
+            "boardSelector": "header",
+            "siteSelector": "header.ac-header"
+          },
+          {
+            "name": "barra-lateral",
+            "boardSelector": "nav",
+            "siteSelector": ".ac-page-layout__sidebar",
+            "fields": ["x", "y", "w"]
+          },
+          {
+            "name": "columna",
+            "boardSelector": "main#contenido",
+            "siteSelector": "main#contenido",
+            "fields": ["x", "y", "w"]
+          },
+          {
+            "name": "h1",
+            "boardSelector": "main#contenido h1",
+            "siteSelector": "main#contenido h1"
+          },
+          {
+            "name": "conmutador",
+            "boardSelector": "main#contenido > div:nth-child(3) > div:nth-child(2) > div:last-child",
+            "siteSelector": ".ac-entity-list[data-ac-list=\"pokedex\"] > .ac-entity-list__bar .ac-view-toggle"
+          },
+          {
+            "name": "pie",
+            "boardSelector": "footer",
+            "siteSelector": "footer.ac-footer"
+          }
+        ],
+        "grids": []
+      },
+      "pending": "Datos del propietario: 36 de los 41 ítems de drops del tablero no tienen sprite en sprites.json (filas de 298 px frente a 326), y el tablero dibuja la paginación de 910 variantes sobre fixtures de 12, 7 y 5 resultados (pie 64 px más arriba). D-018."
+    },
+    {
+      "id": "ficha",
+      "board": "Pokedex-Shiny-Charizard",
+      "state": {
+        "tip": null
+      },
+      "width": 1440,
+      "height": 2486,
+      "route": "/es/pokedex/shiny-charizard/",
+      "siteState": [
+        {
+          "action": "waitFor",
+          "selector": ".ac-outfit-preview .ac-toggle-group__items button[aria-pressed=\"true\"]"
+        }
+      ],
+      "crops": [
+        {
+          "name": "migas",
+          "boardSelector": "main#contenido > nav",
+          "siteSelector": "nav.ac-breadcrumb"
+        },
+        {
+          "name": "titulo",
+          "boardSelector": "main#contenido > div:nth-child(2)",
+          "siteSelector": ".ac-page-title"
+        },
+        {
+          "name": "aura-ninguna",
+          "boardSelector": "main#contenido > div:nth-child(3) > div:nth-child(3) > div:nth-child(2) > div[role=\"group\"] > button:nth-child(1)",
+          "siteSelector": ".ac-outfit-preview .ac-toggle-group__items > button:nth-child(1)"
+        },
+        {
+          "name": "ataques",
+          "boardSelector": "#ataques > div:nth-child(2)",
+          "siteSelector": "#ataques .ac-data-table"
+        }
+      ],
+      "masks": [],
+      "fullPage": false,
+      "geometry": {
+        "anchors": [
+          {
+            "name": "cabecera",
+            "boardSelector": "header",
+            "siteSelector": "header.ac-header"
+          },
+          {
+            "name": "barra-lateral",
+            "boardSelector": "nav",
+            "siteSelector": ".ac-page-layout__sidebar",
+            "fields": ["x", "y", "w"]
+          },
+          {
+            "name": "columna",
+            "boardSelector": "main#contenido",
+            "siteSelector": "main#contenido",
+            "fields": ["x", "y", "w"]
+          },
+          {
+            "name": "h1",
+            "boardSelector": "main#contenido h1",
+            "siteSelector": "main#contenido h1"
+          },
+          {
+            "name": "conmutador-drops",
+            "boardSelector": "main#contenido > div:nth-child(4) > section:nth-child(1) > div:nth-child(2) > div:last-child",
+            "siteSelector": "#drops .ac-view-toggle"
+          },
+          {
+            "name": "pie",
+            "boardSelector": "footer",
+            "siteSelector": "footer.ac-footer"
+          }
+        ],
+        "grids": [
+          {
+            "path": "#dc-root > div:nth-child(1) > div:nth-child(1) > div:nth-child(3) > main:nth-child(2) > div:nth-child(4) > section:nth-child(1) > div:nth-child(3) > div:nth-child(1)",
+            "siteSelector": "#drops [data-card-grid] .ac-card-grid__grid"
+          }
+        ]
+      },
+      "pending": "Datos del propietario: los drops del tablero no tienen sprite en sprites.json (1 drop frente a 6); además la ficha fija usa el arte a 70 del sistema de diseño frente al sprite de 64 del tablero (+8 px) y la Tier list lleva conteo y conmutador por la regla de tres vistas (+56 px). D-018."
+    },
+    {
+      "id": "ficha-aura-ninguna",
+      "board": "Pokedex-Shiny-Charizard",
+      "state": {
+        "aura": "none",
+        "tip": null
+      },
+      "width": 1440,
+      "height": 2486,
+      "route": "/es/pokedex/shiny-charizard/",
+      "siteState": [
+        {
+          "action": "waitFor",
+          "selector": ".ac-outfit-preview .ac-toggle-group__items button[aria-pressed=\"true\"]"
+        },
+        {
+          "action": "click",
+          "selector": ".ac-outfit-preview .ac-toggle-group__items button:nth-child(1)"
+        },
+        {
+          "action": "waitFor",
+          "selector": ".ac-outfit-preview .ac-toggle-group__items button:nth-child(1)[aria-pressed=\"true\"]"
+        }
+      ],
+      "crops": [
+        {
+          "name": "aura-ninguna",
+          "boardSelector": "main#contenido > div:nth-child(3) > div:nth-child(3) > div:nth-child(2) > div[role=\"group\"] > button:nth-child(1)",
+          "siteSelector": ".ac-outfit-preview .ac-toggle-group__items > button:nth-child(1)"
+        }
+      ],
+      "masks": [],
+      "fullPage": false,
+      "geometry": {
+        "anchors": [
+          {
+            "name": "cabecera",
+            "boardSelector": "header",
+            "siteSelector": "header.ac-header"
+          },
+          {
+            "name": "barra-lateral",
+            "boardSelector": "nav",
+            "siteSelector": ".ac-page-layout__sidebar",
+            "fields": ["x", "y", "w"]
+          },
+          {
+            "name": "columna",
+            "boardSelector": "main#contenido",
+            "siteSelector": "main#contenido",
+            "fields": ["x", "y", "w"]
+          },
+          {
+            "name": "h1",
+            "boardSelector": "main#contenido h1",
+            "siteSelector": "main#contenido h1"
+          },
+          {
+            "name": "conmutador-drops",
+            "boardSelector": "main#contenido > div:nth-child(4) > section:nth-child(1) > div:nth-child(2) > div:last-child",
+            "siteSelector": "#drops .ac-view-toggle"
+          },
+          {
+            "name": "pie",
+            "boardSelector": "footer",
+            "siteSelector": "footer.ac-footer"
+          }
+        ],
+        "grids": [
+          {
+            "path": "#dc-root > div:nth-child(1) > div:nth-child(1) > div:nth-child(3) > main:nth-child(2) > div:nth-child(4) > section:nth-child(1) > div:nth-child(3) > div:nth-child(1)",
+            "siteSelector": "#drops [data-card-grid] .ac-card-grid__grid"
+          }
+        ]
+      },
+      "pending": "Datos del propietario: los drops del tablero no tienen sprite en sprites.json (1 drop frente a 6); además la ficha fija usa el arte a 70 del sistema de diseño frente al sprite de 64 del tablero (+8 px) y la Tier list lleva conteo y conmutador por la regla de tres vistas (+56 px). D-018."
+    },
+    {
+      "id": "ficha-drops-slots",
+      "board": "Pokedex-Shiny-Charizard",
+      "state": {
+        "dv": "slots",
+        "tip": null
+      },
+      "width": 1440,
+      "height": 2486,
+      "route": "/es/pokedex/shiny-charizard/",
+      "siteState": [
+        {
+          "action": "waitFor",
+          "selector": ".ac-outfit-preview .ac-toggle-group__items button[aria-pressed=\"true\"]"
+        },
+        {
+          "action": "waitFor",
+          "selector": "#drops astro-island:not([ssr]) .ac-view-toggle"
+        },
+        {
+          "action": "click",
+          "selector": "#drops .ac-view-toggle button:nth-child(2)"
+        },
+        {
+          "action": "waitFor",
+          "selector": "#drops .ac-view-toggle button:nth-child(2)[aria-pressed=\"true\"]"
+        }
+      ],
+      "crops": [
+        {
+          "name": "drops-conmutador",
+          "boardSelector": "main#contenido > div:nth-child(4) > section:nth-child(1) > div:nth-child(2) > div:last-child",
+          "siteSelector": "#drops .ac-view-toggle"
+        }
+      ],
+      "masks": [],
+      "fullPage": false,
+      "geometry": {
+        "anchors": [
+          {
+            "name": "cabecera",
+            "boardSelector": "header",
+            "siteSelector": "header.ac-header"
+          },
+          {
+            "name": "barra-lateral",
+            "boardSelector": "nav",
+            "siteSelector": ".ac-page-layout__sidebar",
+            "fields": ["x", "y", "w"]
+          },
+          {
+            "name": "columna",
+            "boardSelector": "main#contenido",
+            "siteSelector": "main#contenido",
+            "fields": ["x", "y", "w"]
+          },
+          {
+            "name": "h1",
+            "boardSelector": "main#contenido h1",
+            "siteSelector": "main#contenido h1"
+          },
+          {
+            "name": "conmutador-drops",
+            "boardSelector": "main#contenido > div:nth-child(4) > section:nth-child(1) > div:nth-child(2) > div:last-child",
+            "siteSelector": "#drops .ac-view-toggle"
+          },
+          {
+            "name": "pie",
+            "boardSelector": "footer",
+            "siteSelector": "footer.ac-footer"
+          }
+        ],
+        "grids": []
+      },
+      "pending": "Datos del propietario: los drops del tablero no tienen sprite en sprites.json (1 drop frente a 6); además la ficha fija usa el arte a 70 del sistema de diseño frente al sprite de 64 del tablero (+8 px) y la Tier list lleva conteo y conmutador por la regla de tres vistas (+56 px). D-018."
+    },
+    {
+      "id": "ficha-drops-lista",
+      "board": "Pokedex-Shiny-Charizard",
+      "state": {
+        "dv": "list",
+        "tip": null
+      },
+      "width": 1440,
+      "height": 2505,
+      "route": "/es/pokedex/shiny-charizard/",
+      "siteState": [
+        {
+          "action": "waitFor",
+          "selector": ".ac-outfit-preview .ac-toggle-group__items button[aria-pressed=\"true\"]"
+        },
+        {
+          "action": "waitFor",
+          "selector": "#drops astro-island:not([ssr]) .ac-view-toggle"
+        },
+        {
+          "action": "click",
+          "selector": "#drops .ac-view-toggle button:nth-child(3)"
+        },
+        {
+          "action": "waitFor",
+          "selector": "#drops .ac-view-toggle button:nth-child(3)[aria-pressed=\"true\"]"
+        }
+      ],
+      "crops": [
+        {
+          "name": "drops-conmutador",
+          "boardSelector": "main#contenido > div:nth-child(4) > section:nth-child(1) > div:nth-child(2) > div:last-child",
+          "siteSelector": "#drops .ac-view-toggle"
+        }
+      ],
+      "masks": [],
+      "fullPage": false,
+      "geometry": {
+        "anchors": [
+          {
+            "name": "cabecera",
+            "boardSelector": "header",
+            "siteSelector": "header.ac-header"
+          },
+          {
+            "name": "barra-lateral",
+            "boardSelector": "nav",
+            "siteSelector": ".ac-page-layout__sidebar",
+            "fields": ["x", "y", "w"]
+          },
+          {
+            "name": "columna",
+            "boardSelector": "main#contenido",
+            "siteSelector": "main#contenido",
+            "fields": ["x", "y", "w"]
+          },
+          {
+            "name": "h1",
+            "boardSelector": "main#contenido h1",
+            "siteSelector": "main#contenido h1"
+          },
+          {
+            "name": "conmutador-drops",
+            "boardSelector": "main#contenido > div:nth-child(4) > section:nth-child(1) > div:nth-child(2) > div:last-child",
+            "siteSelector": "#drops .ac-view-toggle"
+          },
+          {
+            "name": "pie",
+            "boardSelector": "footer",
+            "siteSelector": "footer.ac-footer"
+          }
+        ],
+        "grids": []
+      },
+      "pending": "Datos del propietario: los drops del tablero no tienen sprite en sprites.json (1 drop frente a 6); además la ficha fija usa el arte a 70 del sistema de diseño frente al sprite de 64 del tablero (+8 px) y la Tier list lleva conteo y conmutador por la regla de tres vistas (+56 px). D-018."
+    },
+    {
+      "id": "ficha-aura-premier",
+      "board": "Pokedex-Shiny-Charizard",
+      "state": {
+        "aura": "premier",
+        "tip": null
+      },
+      "width": 1440,
+      "height": 2486,
+      "route": "/es/pokedex/shiny-charizard/",
+      "siteState": [
+        {
+          "action": "waitFor",
+          "selector": ".ac-outfit-preview .ac-toggle-group__items button[aria-pressed=\"true\"]"
+        },
+        {
+          "action": "click",
+          "selector": ".ac-outfit-preview .ac-toggle-group__items button:nth-child(3)"
+        },
+        {
+          "action": "waitFor",
+          "selector": ".ac-outfit-preview .ac-toggle-group__items button:nth-child(3)[aria-pressed=\"true\"]"
+        }
+      ],
+      "crops": [
+        {
+          "name": "aura-ninguna",
+          "boardSelector": "main#contenido > div:nth-child(3) > div:nth-child(3) > div:nth-child(2) > div[role=\"group\"] > button:nth-child(1)",
+          "siteSelector": ".ac-outfit-preview .ac-toggle-group__items > button:nth-child(1)"
+        }
+      ],
+      "masks": [],
+      "fullPage": false,
+      "geometry": {
+        "anchors": [
+          {
+            "name": "cabecera",
+            "boardSelector": "header",
+            "siteSelector": "header.ac-header"
+          },
+          {
+            "name": "barra-lateral",
+            "boardSelector": "nav",
+            "siteSelector": ".ac-page-layout__sidebar",
+            "fields": ["x", "y", "w"]
+          },
+          {
+            "name": "columna",
+            "boardSelector": "main#contenido",
+            "siteSelector": "main#contenido",
+            "fields": ["x", "y", "w"]
+          },
+          {
+            "name": "h1",
+            "boardSelector": "main#contenido h1",
+            "siteSelector": "main#contenido h1"
+          },
+          {
+            "name": "conmutador-drops",
+            "boardSelector": "main#contenido > div:nth-child(4) > section:nth-child(1) > div:nth-child(2) > div:last-child",
+            "siteSelector": "#drops .ac-view-toggle"
+          },
+          {
+            "name": "pie",
+            "boardSelector": "footer",
+            "siteSelector": "footer.ac-footer"
+          }
+        ],
+        "grids": [
+          {
+            "path": "#dc-root > div:nth-child(1) > div:nth-child(1) > div:nth-child(3) > main:nth-child(2) > div:nth-child(4) > section:nth-child(1) > div:nth-child(3) > div:nth-child(1)",
+            "siteSelector": "#drops [data-card-grid] .ac-card-grid__grid"
+          }
+        ]
+      },
+      "pending": "Datos del propietario: los drops del tablero no tienen sprite en sprites.json (1 drop frente a 6); además la ficha fija usa el arte a 70 del sistema de diseño frente al sprite de 64 del tablero (+8 px) y la Tier list lleva conteo y conmutador por la regla de tres vistas (+56 px). D-018."
+    },
+    {
+      "id": "sistema-boost",
+      "board": "Sistema-Boost",
+      "state": {
+        "tip": null
+      },
+      "width": 1440,
+      "height": 3647,
+      "route": "/es/sistemas/boost/",
+      "siteState": [],
+      "geometry": {
+        "anchors": [
+          {
+            "name": "cabecera",
+            "boardSelector": "header",
+            "siteSelector": "header.ac-header"
+          },
+          {
+            "name": "barra-lateral",
+            "boardSelector": "nav[aria-label=\"Principal\"]",
+            "siteSelector": ".ac-page-layout__sidebar",
+            "fields": ["x", "y", "w"]
+          },
+          {
+            "name": "columna",
+            "boardSelector": "main#contenido",
+            "siteSelector": "main#contenido",
+            "fields": ["x", "y", "w"]
+          },
+          {
+            "name": "h1",
+            "boardSelector": "main#contenido h1",
+            "siteSelector": "main#contenido h1"
+          },
+          {
+            "name": "entrada",
+            "boardSelector": "main#contenido > p:nth-child(3)",
+            "siteSelector": ".ac-system-intro > p"
+          },
+          {
+            "name": "banner",
+            "boardSelector": "main#contenido > div:nth-child(4)",
+            "siteSelector": "main#contenido > .ac-info-banner"
+          },
+          {
+            "name": "pasos",
+            "boardSelector": "#como-aplicar > ol",
+            "siteSelector": "#como-aplicar > .ac-timeline"
+          },
+          {
+            "name": "tabla-bandas",
+            "boardSelector": "#bandas > div:nth-child(3)",
+            "siteSelector": "#bandas .ac-data-table"
+          },
+          {
+            "name": "nota",
+            "boardSelector": "#bandas > p:nth-child(4)",
+            "siteSelector": "#bandas .ac-note"
+          },
+          {
+            "name": "ejemplo",
+            "boardSelector": "#si-falla > div:nth-child(3)",
+            "siteSelector": "#si-falla .ac-system-block__chips"
+          },
+          {
+            "name": "indice",
+            "boardSelector": "aside[aria-label=\"En esta página\"] > nav",
+            "siteSelector": "aside.ac-toc .ac-toc__nav"
+          },
+          {
+            "name": "pie",
+            "boardSelector": "main#contenido > footer",
+            "siteSelector": "footer.ac-footer"
+          }
+        ],
+        "grids": [
+          {
+            "path": "#dc-root > div:nth-child(1) > div:nth-child(1) > div:nth-child(3) > main:nth-child(2) > div:nth-child(5) > section:nth-child(3) > div:nth-child(2)",
+            "siteSelector": "#si-falla .ac-card-grid__grid"
+          }
+        ]
+      },
+      "crops": [
+        {
+          "name": "migas",
+          "boardSelector": "main#contenido > nav",
+          "siteSelector": "nav.ac-breadcrumb"
+        },
+        {
+          "name": "titulo",
+          "boardSelector": "main#contenido > div:nth-child(2)",
+          "siteSelector": ".ac-page-title"
+        },
+        {
+          "name": "entrada",
+          "boardSelector": "main#contenido > p:nth-child(3)",
+          "siteSelector": ".ac-system-intro > p",
+          "pending": "Datos del propietario: «Enhanced Normal Stone» no está en content/items ni tiene sprite en sprites.json, así que la mención es texto y se parte en dos líneas; en el tablero es un NestedEntity que no se parte."
+        },
+        {
+          "name": "banner",
+          "boardSelector": "main#contenido > div:nth-child(4)",
+          "siteSelector": "main#contenido > .ac-info-banner"
+        },
+        {
+          "name": "pasos",
+          "boardSelector": "#como-aplicar > ol",
+          "siteSelector": "#como-aplicar > .ac-timeline"
+        },
+        {
+          "name": "tabla-bandas",
+          "boardSelector": "#bandas > div:nth-child(3)",
+          "siteSelector": "#bandas .ac-data-table"
+        },
+        {
+          "name": "nota",
+          "boardSelector": "#bandas > p:nth-child(4)",
+          "siteSelector": "#bandas .ac-note"
+        },
+        {
+          "name": "tarjetas",
+          "boardSelector": "#si-falla > div:nth-child(2)",
+          "siteSelector": "#si-falla .ac-card-grid__grid"
+        },
+        {
+          "name": "ejemplo",
+          "boardSelector": "#si-falla > div:nth-child(3)",
+          "siteSelector": "#si-falla .ac-system-block__chips"
+        },
+        {
+          "name": "tabla-stones",
+          "boardSelector": "#stones > div:nth-child(4)",
+          "siteSelector": "#stones .ac-data-table",
+          "pending": "Datos del propietario: los iconos de los elementos, las Stones (salvo Fire, Heart, Leaf, Thunder y Water), los Fragments y los ítems de Pokémon de la tabla no tienen registro ni sprite en sprites.json; sin ellos sus menciones son texto sin enlace (SI2) y la columna Stone lleva la marca de sprite que falta en lugar de su sprite. La diferencia de altura de las filas «Planta» y «Acero» ya no está: M9 llevó sus celdas de sprite del tablero a la envoltura del sistema de diseño, así que las dos miden lo que el sitio (D-020)."
+        },
+        {
+          "name": "orden",
+          "boardSelector": "#orden",
+          "siteSelector": "#orden"
+        },
+        {
+          "name": "pie",
+          "boardSelector": "main#contenido > footer",
+          "siteSelector": "footer.ac-footer"
+        }
+      ],
+      "masks": [
+        {
+          "id": "DV1",
+          "rect": {
+            "x": 1174,
+            "y": 10,
+            "w": 251,
+            "h": 44
+          }
+        },
+        {
+          "id": "DV2",
+          "rect": {
+            "x": 0,
+            "y": 186,
+            "w": 208,
+            "h": 3461
+          }
+        }
+      ],
+      "fullPage": true
+    },
+    {
+      "id": "comercio",
+      "board": "Comercio",
+      "state": {
+        "tip": null
+      },
+      "width": 1440,
+      "height": 2568,
+      "route": "/es/comercio/",
+      "siteState": [],
+      "crops": [
+        {
+          "name": "migas",
+          "boardSelector": "main#contenido > nav",
+          "siteSelector": "nav.ac-breadcrumb"
+        },
+        {
+          "name": "titulo",
+          "boardSelector": "main#contenido > div:nth-child(2)",
+          "siteSelector": ".ac-page-title"
+        },
+        {
+          "name": "banner",
+          "boardSelector": "main#contenido > div:nth-child(3)",
+          "siteSelector": "main#contenido > .ac-info-banner"
+        },
+        {
+          "name": "busqueda",
+          "boardSelector": "main#contenido > div:nth-child(4) > div:nth-child(1)",
+          "siteSelector": ".ac-entity-list[data-ac-list=\"comercio\"] > .ac-trade-list__search"
+        },
+        {
+          "name": "tipos",
+          "boardSelector": "main#contenido > div:nth-child(4) > div:nth-child(2)",
+          "siteSelector": ".ac-entity-list[data-ac-list=\"comercio\"] > .ac-toggle-group"
+        },
+        {
+          "name": "filtro-mundo",
+          "boardSelector": "main#contenido > div:nth-child(4) > div:nth-child(3) > *:nth-child(1)",
+          "siteSelector": ".ac-entity-list[data-ac-list=\"comercio\"] .ac-filter-bar > :nth-child(1)"
+        },
+        {
+          "name": "filtro-moneda",
+          "boardSelector": "main#contenido > div:nth-child(4) > div:nth-child(3) > *:nth-child(2)",
+          "siteSelector": ".ac-entity-list[data-ac-list=\"comercio\"] .ac-filter-bar > :nth-child(2)"
+        },
+        {
+          "name": "filtro-precio",
+          "boardSelector": "main#contenido > div:nth-child(4) > div:nth-child(3) > *:nth-child(3) > *:nth-child(2)",
+          "siteSelector": ".ac-entity-list[data-ac-list=\"comercio\"] .ac-filter-bar > :nth-child(3) .ac-range-field__row"
+        },
+        {
+          "name": "filtro-valoracion",
+          "boardSelector": "main#contenido > div:nth-child(4) > div:nth-child(3) > *:nth-child(4)",
+          "siteSelector": ".ac-entity-list[data-ac-list=\"comercio\"] .ac-filter-bar > :nth-child(4)"
+        },
+        {
+          "name": "barra",
+          "boardSelector": "main#contenido > div:nth-child(4) > div:nth-child(4)",
+          "siteSelector": ".ac-entity-list[data-ac-list=\"comercio\"] > .ac-entity-list__bar"
+        },
+        {
+          "name": "pokemon",
+          "boardSelector": "main#contenido > div:nth-child(4) > div:nth-child(5) > div:nth-child(1) > div:nth-child(1)",
+          "siteSelector": ".ac-entity-list[data-ac-list=\"comercio\"] [data-card-grid] .ac-card-group:nth-child(1)",
+          "pending": "Las tarjetas de Pokémon difieren del tablero por datos y por D-017: con dos filas de hechos seguidas que llevan objetivo (Elementos y Ball) los hechos van a 8 px y no a 6 (WCAG 2.5.8, D-017); la Ball es el sprite de 32 de public/sprites/sprites.json y el tablero dibuja una de 16; el icono del elemento Lucha no está en sprites.json; el Ditto de tests/visual/content/pokemon.json tiene el elemento Normal donde el tablero dibuja «—»; y tests/visual/content/auras.json, como content/auras.json, llama «Premier» al aura que el tablero escribe «premier»."
+        },
+        {
+          "name": "items",
+          "boardSelector": "main#contenido > div:nth-child(4) > div:nth-child(5) > div:nth-child(1) > div:nth-child(2)",
+          "siteSelector": ".ac-entity-list[data-ac-list=\"comercio\"] [data-card-grid] .ac-card-group:nth-child(2)"
+        },
+        {
+          "name": "diamonds",
+          "boardSelector": "main#contenido > div:nth-child(4) > div:nth-child(5) > div:nth-child(1) > div:nth-child(3)",
+          "siteSelector": ".ac-entity-list[data-ac-list=\"comercio\"] [data-card-grid] .ac-card-group:nth-child(3)"
+        },
+        {
+          "name": "pokedolares",
+          "boardSelector": "main#contenido > div:nth-child(4) > div:nth-child(5) > div:nth-child(1) > div:nth-child(4)",
+          "siteSelector": ".ac-entity-list[data-ac-list=\"comercio\"] [data-card-grid] .ac-card-group:nth-child(4)"
+        }
+      ],
+      "masks": [
+        {
+          "id": "DV9",
+          "crop": "busqueda",
+          "rect": {
+            "x": 772,
+            "y": 0,
+            "w": 172,
+            "h": 40
+          }
+        }
+      ],
+      "fullPage": false,
+      "geometry": {
+        "anchors": [
+          {
+            "name": "cabecera",
+            "boardSelector": "header",
+            "siteSelector": "header.ac-header"
+          },
+          {
+            "name": "barra-lateral",
+            "boardSelector": "nav",
+            "siteSelector": ".ac-page-layout__sidebar",
+            "fields": ["x", "y", "w"]
+          },
+          {
+            "name": "columna",
+            "boardSelector": "main#contenido",
+            "siteSelector": "main#contenido",
+            "fields": ["x", "y", "w"]
+          },
+          {
+            "name": "h1",
+            "boardSelector": "main#contenido h1",
+            "siteSelector": "main#contenido h1"
+          },
+          {
+            "name": "conmutador",
+            "boardSelector": "main#contenido > div:nth-child(4) > div:nth-child(4) > div:last-child",
+            "siteSelector": ".ac-entity-list[data-ac-list=\"comercio\"] > .ac-entity-list__bar .ac-entity-list__tools"
+          },
+          {
+            "name": "pie",
+            "boardSelector": "footer",
+            "siteSelector": "footer.ac-footer"
+          }
+        ],
+        "grids": [
+          {
+            "path": "#dc-root > div:nth-child(1) > div:nth-child(1) > div:nth-child(3) > main:nth-child(2) > div:nth-child(4) > div:nth-child(5) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2)",
+            "siteSelector": ".ac-entity-list[data-ac-list=\"comercio\"] [data-card-grid] .ac-card-group:nth-child(1) .ac-card-grid__grid"
+          },
+          {
+            "path": "#dc-root > div:nth-child(1) > div:nth-child(1) > div:nth-child(3) > main:nth-child(2) > div:nth-child(4) > div:nth-child(5) > div:nth-child(1) > div:nth-child(2) > div:nth-child(2)",
+            "siteSelector": ".ac-entity-list[data-ac-list=\"comercio\"] [data-card-grid] .ac-card-group:nth-child(2) .ac-card-grid__grid"
+          }
+        ]
+      },
+      "pending": "La rejilla de Pokémon mide 647 px frente a 613 (hechos a 8 px por WCAG 2.5.8, D-017, y la Ball de 32 del registro) y baja 34 px todo lo que sigue, el pie incluido (y = 2529 frente a 2495)."
+    },
+    {
+      "id": "guild",
+      "board": "Guild",
+      "state": {
+        "tip": null
+      },
+      "width": 1440,
+      "height": 2360,
+      "route": null,
+      "siteState": [],
+      "crops": [],
+      "masks": [],
+      "fullPage": false
+    },
+    {
+      "id": "componentes",
+      "board": "Componentes",
+      "state": {
+        "tip": null
+      },
+      "width": 1440,
+      "height": 6535,
+      "route": null,
+      "siteState": [],
+      "crops": [],
+      "masks": [],
+      "fullPage": true
+    },
+    {
+      "id": "componentes-paridad",
+      "board": "Componentes",
+      "state": {
+        "tip": null
+      },
+      "width": 1440,
+      "height": 6535,
+      "route": "/es/_paridad/componentes/",
+      "siteState": [],
+      "crops": [
+        {
+          "name": "boton",
+          "boardSelector": "section[aria-labelledby=\"s-botones\"] > div:nth-child(2) > div:nth-child(1) > div > button:nth-child(1)",
+          "siteSelector": "#botones a.ac-button"
+        },
+        {
+          "name": "boton-seleccionado",
+          "boardSelector": "section[aria-labelledby=\"s-botones\"] > div:nth-child(2) > div:nth-child(2) > div",
+          "siteSelector": "#botones div:has(> button.ac-button[aria-pressed])"
+        },
+        {
+          "name": "boton-solido",
+          "boardSelector": "section[aria-labelledby=\"s-botones\"] > div:nth-child(2) > div:nth-child(4) > button",
+          "siteSelector": "#botones .ac-button--solid"
+        },
+        {
+          "name": "enlaces",
+          "boardSelector": "section[aria-labelledby=\"s-botones\"] > div:nth-child(2) > div:nth-child(5) > p:nth-child(2)",
+          "siteSelector": "#botones p:has(> .ac-text-link)"
+        },
+        {
+          "name": "campo",
+          "boardSelector": "section[aria-labelledby=\"s-campos\"] > div:nth-child(2) > div:nth-child(1)",
+          "siteSelector": "#campos .ac-text-field:first-child"
+        },
+        {
+          "name": "numero",
+          "boardSelector": "section[aria-labelledby=\"s-campos\"] > div:nth-child(2) > div:nth-child(3)",
+          "siteSelector": "#campos .ac-number-field"
+        },
+        {
+          "name": "select",
+          "boardSelector": "section[aria-labelledby=\"s-select\"] > div:nth-child(2) > div:nth-child(1)",
+          "siteSelector": "#select .ac-select:has(#tier)"
+        },
+        {
+          "name": "pestanas",
+          "boardSelector": "section[aria-labelledby=\"s-tabs\"] > div:nth-child(2) > div:nth-child(2) > div",
+          "siteSelector": "#pestanas .ac-toggle-group--text .ac-toggle-group__items"
+        },
+        {
+          "name": "chips-texto",
+          "boardSelector": "section[aria-labelledby=\"s-chips\"] > div:nth-child(2) > div:nth-child(2) > div",
+          "siteSelector": "#chips > div:nth-child(2) > div:nth-child(1)"
+        },
+        {
+          "name": "chips-variante",
+          "boardSelector": "section[aria-labelledby=\"s-chips\"] > div:nth-child(2) > div:nth-child(4) > div",
+          "siteSelector": "#chips > div:nth-child(2) > div:nth-child(2)"
+        },
+        {
+          "name": "seccion",
+          "boardSelector": "section[aria-labelledby=\"s-pagina\"] > div:nth-child(2) > div:nth-child(3)",
+          "siteSelector": "#bonus-por-tier"
+        },
+        {
+          "name": "nota",
+          "boardSelector": "section[aria-labelledby=\"s-pagina\"] p:has(> strong)",
+          "siteSelector": "#bonus-por-tier .ac-note"
+        },
+        {
+          "name": "tabla",
+          "boardSelector": "section[aria-labelledby=\"s-tabla\"] > div:nth-child(2)",
+          "siteSelector": "#tabla .ac-data-table"
+        },
+        {
+          "name": "paginacion",
+          "boardSelector": "section[aria-labelledby=\"s-pag\"] nav",
+          "siteSelector": "#paginacion .ac-pagination"
+        },
+        {
+          "name": "aviso",
+          "boardSelector": "section[aria-labelledby=\"s-pag\"] [role=\"status\"]",
+          "siteSelector": "#paginacion .ac-notice"
+        },
+        {
+          "name": "vacio",
+          "boardSelector": "section[aria-labelledby=\"s-pag\"] > div:nth-child(2) > div:nth-child(3) > p:nth-child(2)",
+          "siteSelector": "#paginacion p.ac-empty-state"
+        },
+        {
+          "name": "vacio-accion",
+          "boardSelector": "section[aria-labelledby=\"s-pag\"] > div:nth-child(2) > div:nth-child(4) > div",
+          "siteSelector": "#paginacion .ac-empty-state--action"
+        }
+      ],
+      "masks": [],
+      "fullPage": false
+    },
+    {
+      "id": "componentes-select",
+      "board": "Componentes",
+      "state": {
+        "tip": null
+      },
+      "width": 1440,
+      "height": 6535,
+      "route": "/es/_paridad/componentes/",
+      "siteState": [
+        {
+          "action": "click",
+          "selector": "#generacion"
+        },
+        {
+          "action": "waitFor",
+          "selector": "#generacion-list[data-open]"
+        },
+        {
+          "action": "hover",
+          "selector": "#generacion-opt-2"
+        }
+      ],
+      "crops": [
+        {
+          "name": "disparador",
+          "boardSelector": "section[aria-labelledby=\"s-select\"] > div:nth-child(2) > div:nth-child(2) > button",
+          "siteSelector": "#generacion"
+        },
+        {
+          "name": "lista",
+          "boardSelector": "#sel-gen-list",
+          "siteSelector": "#generacion-list"
+        }
+      ],
+      "masks": [],
+      "fullPage": false
+    },
+    {
+      "id": "tarjetas",
+      "board": "Tarjetas",
+      "state": {
+        "tip": null
+      },
+      "width": 1440,
+      "height": 10749,
+      "route": null,
+      "siteState": [],
+      "crops": [],
+      "masks": [],
+      "fullPage": true,
+      "gridExceptions": [
+        {
+          "path": "#dc-root > div:nth-child(1) > div:nth-child(1) > div:nth-child(3) > main:nth-child(2) > section:nth-child(10) > div:nth-child(2) > div:nth-child(1) > div:nth-child(2)",
+          "maxSpread": 44,
+          "reason": "Board-only counter-example: the ragged \"Antes\" column of \"Antes y ahora\", drawn next to the fixed \"Ahora\" grid, which measures 0. Not a grid of the design (§14.5, docs/design/CARD_GRID_SYSTEM.md)."
+        }
+      ]
+    },
+    {
+      "id": "tarjetas-paridad",
+      "board": "Tarjetas",
+      "state": {
+        "tip": null
+      },
+      "width": 1440,
+      "height": 10749,
+      "route": "/es/_paridad/tarjetas/",
+      "siteState": [],
+      "crops": [
+        {
+          "name": "grupo-cabeza",
+          "boardSelector": "#comercio > div:nth-child(3) > div:nth-child(1) > h3",
+          "siteSelector": "#comercio .ac-card-group:nth-child(1) > .ac-card-group__head"
+        },
+        {
+          "name": "items",
+          "boardSelector": "#comercio > div:nth-child(3) > div:nth-child(2) > div:nth-child(2)",
+          "siteSelector": "#comercio .ac-card-group:nth-child(2) .ac-card-grid"
+        },
+        {
+          "name": "diamonds",
+          "boardSelector": "#comercio > div:nth-child(3) > div:nth-child(3) > div:nth-child(2)",
+          "siteSelector": "#comercio .ac-card-group:nth-child(3) .ac-card-grid"
+        },
+        {
+          "name": "pokedolares",
+          "boardSelector": "#comercio > div:nth-child(3) > div:nth-child(4) > div:nth-child(2)",
+          "siteSelector": "#comercio .ac-card-group:nth-child(4) .ac-card-grid"
+        },
+        {
+          "name": "drops-cards",
+          "boardSelector": "#vistas > div:nth-child(2) > div:nth-child(1) > div:nth-child(2)",
+          "siteSelector": "#drops .ac-card-grid"
+        },
+        {
+          "name": "guild-cifras",
+          "boardSelector": "#otras > div:nth-child(2) > div:nth-child(1) > div:nth-child(2)",
+          "siteSelector": "#guild-cifras .ac-card-grid"
+        },
+        {
+          "name": "movil-items",
+          "boardSelector": "#movil > div:nth-child(2) > div:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(2) > div:nth-child(2)",
+          "siteSelector": "#movil .ac-card-group:nth-child(2) .ac-card-grid"
+        },
+        {
+          "name": "movil-pokedolares",
+          "boardSelector": "#movil > div:nth-child(2) > div:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(3) > div:nth-child(2)",
+          "siteSelector": "#movil .ac-card-group:nth-child(3) .ac-card-grid"
+        },
+        {
+          "name": "movil-drops",
+          "boardSelector": "#movil > div:nth-child(2) > div:nth-child(2) > div:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(2)",
+          "siteSelector": "#movil .ac-card-grid[data-family=\"loot\"]"
+        }
+      ],
+      "masks": [],
+      "fullPage": false,
+      "gridExceptions": [
+        {
+          "path": "#dc-root > div:nth-child(1) > div:nth-child(1) > div:nth-child(3) > main:nth-child(2) > section:nth-child(10) > div:nth-child(2) > div:nth-child(1) > div:nth-child(2)",
+          "maxSpread": 44,
+          "reason": "Board-only counter-example: the ragged \"Antes\" column of \"Antes y ahora\", drawn next to the fixed \"Ahora\" grid, which measures 0. Not a grid of the design (§14.5, docs/design/CARD_GRID_SYSTEM.md)."
+        }
+      ]
+    },
+    {
+      "id": "marco",
+      "board": "Main",
+      "state": {
+        "tip": null
+      },
+      "width": 1440,
+      "height": 1033,
+      "route": "/es/_paridad/marco-sin-rail/",
+      "siteState": [],
+      "crops": [
+        {
+          "name": "cabecera",
+          "boardSelector": "header",
+          "siteSelector": "header.ac-header"
+        },
+        {
+          "name": "pie",
+          "boardSelector": "main#contenido > footer",
+          "siteSelector": "footer.ac-footer"
+        }
+      ],
+      "masks": [
+        {
+          "id": "DV1",
+          "crop": "cabecera",
+          "rect": {
+            "x": 1174,
+            "y": 10,
+            "w": 251,
+            "h": 44
+          }
+        }
+      ],
+      "fullPage": false
+    },
+    {
+      "id": "marco-movil",
+      "board": "Inicio-movil",
+      "state": {
+        "tip": null
+      },
+      "width": 390,
+      "height": 2360,
+      "route": "/es/_paridad/marco/",
+      "siteState": [],
+      "crops": [
+        {
+          "name": "cabecera",
+          "boardSelector": "header",
+          "siteSelector": "header.ac-header"
+        },
+        {
+          "name": "pie",
+          "boardSelector": "main#contenido > footer",
+          "siteSelector": "footer.ac-footer"
+        }
+      ],
+      "masks": [
+        {
+          "id": "DV1",
+          "crop": "cabecera",
+          "rect": {
+            "x": 271,
+            "y": 8,
+            "w": 51,
+            "h": 48
+          }
+        }
+      ],
+      "fullPage": false
+    },
+    {
+      "id": "tooltip-abierto",
+      "board": "Componentes",
+      "state": {
+        "view": "slots",
+        "tip": "sShc"
+      },
+      "width": 1440,
+      "height": 6535,
+      "route": "/es/_paridad/marco/",
+      "siteState": [
+        {
+          "action": "hover",
+          "selector": "[data-ac-tt] a[href$=\"/pokedex/shiny-charizard/\"]"
+        },
+        {
+          "action": "waitFor",
+          "selector": "[role=\"tooltip\"][data-open]"
+        }
+      ],
+      "crops": [
+        {
+          "name": "requisito",
+          "boardSelector": "#tt-s-shc > dl > div:nth-child(1)",
+          "siteSelector": "[role=\"tooltip\"][data-open] .ac-game-tooltip__row:nth-child(1)"
+        },
+        {
+          "name": "tier",
+          "boardSelector": "#tt-s-shc > dl > div:nth-child(2)",
+          "siteSelector": "[role=\"tooltip\"][data-open] .ac-game-tooltip__row:nth-child(2)"
+        },
+        {
+          "name": "franja",
+          "boardSelector": "#tt-s-shc > p:last-child",
+          "siteSelector": "[role=\"tooltip\"][data-open] > .ac-game-tooltip__footer"
+        }
+      ],
+      "masks": [],
+      "fullPage": false
+    },
+    {
+      "id": "tooltip-fijado",
+      "board": "Componentes",
+      "state": {
+        "view": "slots",
+        "tip": "sShc"
+      },
+      "width": 1440,
+      "height": 6535,
+      "route": "/es/_paridad/marco/",
+      "siteState": [
+        {
+          "action": "hover",
+          "selector": "[data-ac-tt] a[href$=\"/pokedex/shiny-charizard/\"]"
+        },
+        {
+          "action": "waitFor",
+          "selector": "[role=\"tooltip\"][data-open]"
+        },
+        {
+          "action": "press",
+          "key": "Shift"
+        },
+        {
+          "action": "hover",
+          "selector": "h1"
+        },
+        {
+          "action": "waitFor",
+          "selector": "[role=\"tooltip\"][data-pinned]"
+        }
+      ],
+      "crops": [
+        {
+          "name": "requisito",
+          "boardSelector": "#tt-s-shc > dl > div:nth-child(1)",
+          "siteSelector": "[role=\"tooltip\"][data-pinned] .ac-game-tooltip__row:nth-child(1)"
+        },
+        {
+          "name": "tier",
+          "boardSelector": "#tt-s-shc > dl > div:nth-child(2)",
+          "siteSelector": "[role=\"tooltip\"][data-pinned] .ac-game-tooltip__row:nth-child(2)"
+        },
+        {
+          "name": "franja",
+          "boardSelector": "#tt-s-shc > p:last-child",
+          "siteSelector": "[role=\"tooltip\"][data-pinned] > .ac-game-tooltip__footer"
+        }
+      ],
+      "masks": [],
+      "fullPage": false
+    },
+    {
+      "id": "tooltip-item-abierto",
+      "board": "Pokedex-Shiny-Charizard",
+      "state": {
+        "dv": "slots",
+        "tip": "dsFireStone"
+      },
+      "width": 1440,
+      "height": 2486,
+      "route": "/es/_paridad/marco/",
+      "siteState": [
+        {
+          "action": "hover",
+          "selector": "[data-ac-tt] button[aria-label=\"Fire Stone\"]"
+        },
+        {
+          "action": "waitFor",
+          "selector": "[role=\"tooltip\"][data-open]"
+        }
+      ],
+      "crops": [
+        {
+          "name": "cabeza",
+          "boardSelector": "#tt-dsFireStone > div:nth-child(1) > span",
+          "siteSelector": "[role=\"tooltip\"][data-open] .ac-game-tooltip__head > .ac-sprite-stage"
+        },
+        {
+          "name": "franja",
+          "boardSelector": "#tt-dsFireStone > p:last-child",
+          "siteSelector": "[role=\"tooltip\"][data-open] > .ac-game-tooltip__footer"
+        },
+        {
+          "name": "slot",
+          "boardSelector": "a[aria-describedby=\"tt-dsFireStone\"]",
+          "siteSelector": "[data-ac-tt] button[aria-label=\"Fire Stone\"]"
+        }
+      ],
+      "masks": [],
+      "fullPage": false
+    },
+    {
+      "id": "tooltip-item-fijado",
+      "board": "Tarjetas",
+      "state": {
+        "tip": "sFireStone"
+      },
+      "width": 1440,
+      "height": 10749,
+      "route": "/es/_paridad/marco/",
+      "siteState": [
+        {
+          "action": "hover",
+          "selector": "[data-ac-tt] button[aria-label=\"Fire Stone\"]"
+        },
+        {
+          "action": "waitFor",
+          "selector": "[role=\"tooltip\"][data-open]"
+        },
+        {
+          "action": "press",
+          "key": "Shift"
+        },
+        {
+          "action": "hover",
+          "selector": "h1"
+        },
+        {
+          "action": "waitFor",
+          "selector": "[role=\"tooltip\"][data-pinned]"
+        }
+      ],
+      "crops": [
+        {
+          "name": "cabeza",
+          "boardSelector": "#tt-sFireStone > div:nth-child(1) > span",
+          "siteSelector": "[role=\"tooltip\"][data-pinned] .ac-game-tooltip__head > .ac-sprite-stage"
+        },
+        {
+          "name": "franja",
+          "boardSelector": "#tt-sFireStone > p:last-child",
+          "siteSelector": "[role=\"tooltip\"][data-pinned] > .ac-game-tooltip__footer"
+        },
+        {
+          "name": "slot",
+          "boardSelector": "a[aria-describedby=\"tt-sFireStone\"]",
+          "siteSelector": "[data-ac-tt] button[aria-label=\"Fire Stone\"]"
+        }
+      ],
+      "masks": [],
+      "fullPage": false,
+      "gridExceptions": [
+        {
+          "path": "#dc-root > div:nth-child(1) > div:nth-child(1) > div:nth-child(3) > main:nth-child(2) > section:nth-child(10) > div:nth-child(2) > div:nth-child(1) > div:nth-child(2)",
+          "maxSpread": 44,
+          "reason": "Board-only counter-example: the ragged \"Antes\" column of \"Antes y ahora\", drawn next to the fixed \"Ahora\" grid, which measures 0. Not a grid of the design (§14.5, docs/design/CARD_GRID_SYSTEM.md)."
+        }
+      ]
+    },
+    {
+      "id": "tooltip-diamond-fijado",
+      "board": "Comercio",
+      "state": {
+        "tip": "cAllRecentAllianceBallDia1"
+      },
+      "width": 1440,
+      "height": 2568,
+      "route": "/es/_paridad/marco/",
+      "siteState": [
+        {
+          "action": "hover",
+          "selector": "[data-ac-tt] button[aria-label=\"Diamond\"]"
+        },
+        {
+          "action": "waitFor",
+          "selector": "[role=\"tooltip\"][data-open]"
+        },
+        {
+          "action": "press",
+          "key": "Shift"
+        },
+        {
+          "action": "hover",
+          "selector": "h1"
+        },
+        {
+          "action": "waitFor",
+          "selector": "[role=\"tooltip\"][data-pinned]"
+        }
+      ],
+      "crops": [
+        {
+          "name": "cabeza",
+          "boardSelector": "#tt-cAllRecentAllianceBallDia1 > div:nth-child(1) > span",
+          "siteSelector": "[role=\"tooltip\"][data-pinned] .ac-game-tooltip__head > .ac-sprite-stage"
+        },
+        {
+          "name": "franja",
+          "boardSelector": "#tt-cAllRecentAllianceBallDia1 > p:last-child",
+          "siteSelector": "[role=\"tooltip\"][data-pinned] > .ac-game-tooltip__footer"
+        }
+      ],
+      "masks": [],
+      "fullPage": false
+    }
+  ],
+  "baselines": [
+    {
+      "id": "pokedex-390",
+      "route": "/es/pokedex/",
+      "width": 390,
+      "height": 844,
+      "siteState": []
+    },
+    {
+      "id": "ficha-390",
+      "route": "/es/pokedex/shiny-charizard/",
+      "width": 390,
+      "height": 844,
+      "siteState": []
+    },
+    {
+      "id": "tiers-390",
+      "route": "/es/pokedex/tiers/",
+      "width": 390,
+      "height": 844,
+      "siteState": []
+    },
+    {
+      "id": "items-390",
+      "route": "/es/items/",
+      "width": 390,
+      "height": 844,
+      "siteState": []
+    },
+    {
+      "id": "items-categoria-390",
+      "route": "/es/items/c/stones/",
+      "width": 390,
+      "height": 844,
+      "siteState": []
+    },
+    {
+      "id": "buscar-390",
+      "route": "/es/buscar/",
+      "width": 390,
+      "height": 844,
+      "siteState": []
+    },
+    {
+      "id": "cambios-390",
+      "route": "/es/cambios/",
+      "width": 390,
+      "height": 844,
+      "siteState": []
+    },
+    {
+      "id": "actividades-390",
+      "route": "/es/actividades/",
+      "width": 390,
+      "height": 844,
+      "siteState": []
+    },
+    {
+      "id": "actividad-390",
+      "route": "/es/actividades/porygon-quest-dr-vektor/",
+      "width": 390,
+      "height": 844,
+      "siteState": []
+    },
+    {
+      "id": "herramientas-390",
+      "route": "/es/herramientas/",
+      "width": 390,
+      "height": 844,
+      "siteState": []
+    },
+    {
+      "id": "mapa-390",
+      "route": "/es/mapa/",
+      "width": 390,
+      "height": 844,
+      "siteState": []
+    },
+    {
+      "id": "comparar-390",
+      "route": "/es/herramientas/pokemon/",
+      "width": 390,
+      "height": 844,
+      "siteState": []
+    },
+    {
+      "id": "no-encontrada-390",
+      "route": "/es/no-existe/",
+      "status": 404,
+      "width": 390,
+      "height": 844,
+      "siteState": []
+    },
+    {
+      "id": "comercio-390",
+      "route": "/es/comercio/",
+      "width": 390,
+      "height": 844,
+      "siteState": []
+    },
+    {
+      "id": "comercio-anuncio-390",
+      "route": "/es/comercio/anuncio/shiny-ditto-susanoo/",
+      "width": 390,
+      "height": 844,
+      "siteState": []
+    },
+    {
+      "id": "comercio-vendedor-390",
+      "route": "/es/comercio/vendedor/kaiser/",
+      "width": 390,
+      "height": 844,
+      "siteState": []
+    },
+    {
+      "id": "comercio-publicar-390",
+      "route": "/es/comercio/publicar/",
+      "width": 390,
+      "height": 844,
+      "siteState": []
+    }
+  ]
+}

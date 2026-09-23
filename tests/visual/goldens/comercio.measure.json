@@ -1,0 +1,2001 @@
+{
+ "declaredHeight": 2568,
+ "renderedHeight": 2568,
+ "width": 1440,
+ "contentHeight": 2544,
+ "overflow": false,
+ "emptyTail": 24,
+ "lowest": {
+  "path": "#dc-root > div:nth-child(1) > div:nth-child(1) > div:nth-child(3) > main:nth-child(2) > footer:nth-child(5)",
+  "kind": "box"
+ },
+ "rawHoles": [],
+ "brokenImages": [],
+ "webFontsLoaded": [],
+ "grids": [
+  {
+   "kind": "grid",
+   "path": "#dc-root > div:nth-child(1) > div:nth-child(1) > div:nth-child(3) > main:nth-child(2) > div:nth-child(4) > div:nth-child(3)",
+   "rect": {
+    "x": 248,
+    "y": 517,
+    "w": 944,
+    "h": 70
+   },
+   "columns": 4,
+   "children": 4,
+   "painted": 0,
+   "cards": false,
+   "inTooltip": false,
+   "alignItems": "end",
+   "label": "Mundo Todos",
+   "maxSpread": 0,
+   "rows": [
+    {
+     "y": 517,
+     "children": [
+      0,
+      1,
+      2,
+      3
+     ],
+     "heights": [
+      70,
+      70,
+      70,
+      70
+     ],
+     "heightSpread": 0,
+     "hollowBottom": [
+      0,
+      0,
+      0,
+      0
+     ],
+     "padBottom": [
+      0,
+      0,
+      0,
+      0
+     ]
+    }
+   ]
+  },
+  {
+   "kind": "grid",
+   "path": "#dc-root > div:nth-child(1) > div:nth-child(1) > div:nth-child(3) > main:nth-child(2) > div:nth-child(4) > div:nth-child(5) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2)",
+   "rect": {
+    "x": 248,
+    "y": 703,
+    "w": 944,
+    "h": 613
+   },
+   "columns": 3,
+   "children": 2,
+   "painted": 2,
+   "cards": true,
+   "inTooltip": false,
+   "alignItems": "normal",
+   "label": "Shiny Ditto Shiny Sun · hace 12 min Requisito Ni",
+   "maxSpread": 0,
+   "rows": [
+    {
+     "y": 703,
+     "children": [
+      0,
+      1
+     ],
+     "heights": [
+      613,
+      613
+     ],
+     "heightSpread": 0,
+     "hollowBottom": [
+      17,
+      17
+     ],
+     "padBottom": [
+      17,
+      17
+     ],
+     "zones": {
+      "head": {
+       "offsets": [
+        17,
+        17
+       ],
+       "spread": 0,
+       "missing": 0
+      },
+      "facts": {
+       "offsets": [
+        101,
+        101
+       ],
+       "spread": 0,
+       "missing": 0
+      },
+      "held": {
+       "offsets": [
+        327,
+        327
+       ],
+       "spread": 0,
+       "missing": 0
+      },
+      "train": {
+       "offsets": [
+        397,
+        397
+       ],
+       "spread": 0,
+       "missing": 0
+      },
+      "footer": {
+       "offsets": [
+        435,
+        435
+       ],
+       "spread": 0,
+       "missing": 0
+      }
+     }
+    }
+   ]
+  },
+  {
+   "kind": "grid",
+   "path": "#dc-root > div:nth-child(1) > div:nth-child(1) > div:nth-child(3) > main:nth-child(2) > div:nth-child(4) > div:nth-child(5) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > article:nth-child(1)",
+   "rect": {
+    "x": 248,
+    "y": 703,
+    "w": 304,
+    "h": 613
+   },
+   "columns": 1,
+   "children": 5,
+   "painted": 1,
+   "cards": false,
+   "inTooltip": false,
+   "alignItems": "normal",
+   "label": "Shiny Ditto Shiny Sun · hace 12 min",
+   "maxSpread": 0,
+   "rows": [
+    {
+     "y": 720,
+     "children": [
+      0
+     ],
+     "heights": [
+      72
+     ],
+     "heightSpread": 0,
+     "hollowBottom": [
+      4
+     ],
+     "padBottom": [
+      0
+     ]
+    },
+    {
+     "y": 804,
+     "children": [
+      1
+     ],
+     "heights": [
+      214
+     ],
+     "heightSpread": 0,
+     "hollowBottom": [
+      1
+     ],
+     "padBottom": [
+      0
+     ]
+    },
+    {
+     "y": 1030,
+     "children": [
+      2
+     ],
+     "heights": [
+      58
+     ],
+     "heightSpread": 0,
+     "hollowBottom": [
+      4
+     ],
+     "padBottom": [
+      0
+     ]
+    },
+    {
+     "y": 1100,
+     "children": [
+      3
+     ],
+     "heights": [
+      26
+     ],
+     "heightSpread": 0,
+     "hollowBottom": [
+      0
+     ],
+     "padBottom": [
+      0
+     ]
+    },
+    {
+     "y": 1138,
+     "children": [
+      4
+     ],
+     "heights": [
+      161
+     ],
+     "heightSpread": 0,
+     "hollowBottom": [
+      0
+     ],
+     "padBottom": [
+      0
+     ]
+    }
+   ]
+  },
+  {
+   "kind": "grid",
+   "path": "#dc-root > div:nth-child(1) > div:nth-child(1) > div:nth-child(3) > main:nth-child(2) > div:nth-child(4) > div:nth-child(5) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > article:nth-child(1) > dl:nth-child(2)",
+   "rect": {
+    "x": 265,
+    "y": 804,
+    "w": 270,
+    "h": 214
+   },
+   "columns": 1,
+   "children": 10,
+   "painted": 0,
+   "cards": false,
+   "inTooltip": false,
+   "alignItems": "normal",
+   "label": "Requisito Nivel 1",
+   "maxSpread": 0,
+   "rows": [
+    {
+     "y": 804,
+     "children": [
+      0
+     ],
+     "heights": [
+      16
+     ],
+     "heightSpread": 0,
+     "hollowBottom": [
+      1
+     ],
+     "padBottom": [
+      0
+     ]
+    },
+    {
+     "y": 826,
+     "children": [
+      1
+     ],
+     "heights": [
+      16
+     ],
+     "heightSpread": 0,
+     "hollowBottom": [
+      1
+     ],
+     "padBottom": [
+      0
+     ]
+    },
+    {
+     "y": 848,
+     "children": [
+      2
+     ],
+     "heights": [
+      16
+     ],
+     "heightSpread": 0,
+     "hollowBottom": [
+      1
+     ],
+     "padBottom": [
+      0
+     ]
+    },
+    {
+     "y": 870,
+     "children": [
+      3
+     ],
+     "heights": [
+      16
+     ],
+     "heightSpread": 0,
+     "hollowBottom": [
+      0.5
+     ],
+     "padBottom": [
+      0
+     ]
+    },
+    {
+     "y": 892,
+     "children": [
+      4
+     ],
+     "heights": [
+      16
+     ],
+     "heightSpread": 0,
+     "hollowBottom": [
+      1
+     ],
+     "padBottom": [
+      0
+     ]
+    },
+    {
+     "y": 914,
+     "children": [
+      5
+     ],
+     "heights": [
+      16
+     ],
+     "heightSpread": 0,
+     "hollowBottom": [
+      1
+     ],
+     "padBottom": [
+      0
+     ]
+    },
+    {
+     "y": 936,
+     "children": [
+      6
+     ],
+     "heights": [
+      16
+     ],
+     "heightSpread": 0,
+     "hollowBottom": [
+      1
+     ],
+     "padBottom": [
+      0
+     ]
+    },
+    {
+     "y": 958,
+     "children": [
+      7
+     ],
+     "heights": [
+      16
+     ],
+     "heightSpread": 0,
+     "hollowBottom": [
+      1
+     ],
+     "padBottom": [
+      0
+     ]
+    },
+    {
+     "y": 980,
+     "children": [
+      8
+     ],
+     "heights": [
+      16
+     ],
+     "heightSpread": 0,
+     "hollowBottom": [
+      1
+     ],
+     "padBottom": [
+      0
+     ]
+    },
+    {
+     "y": 1002,
+     "children": [
+      9
+     ],
+     "heights": [
+      16
+     ],
+     "heightSpread": 0,
+     "hollowBottom": [
+      1
+     ],
+     "padBottom": [
+      0
+     ]
+    }
+   ]
+  },
+  {
+   "kind": "grid",
+   "path": "#dc-root > div:nth-child(1) > div:nth-child(1) > div:nth-child(3) > main:nth-child(2) > div:nth-child(4) > div:nth-child(5) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > article:nth-child(1) > div:nth-child(3) > div:nth-child(2)",
+   "rect": {
+    "x": 261,
+    "y": 1048,
+    "w": 274,
+    "h": 40
+   },
+   "columns": 2,
+   "children": 2,
+   "painted": 0,
+   "cards": false,
+   "inTooltip": false,
+   "alignItems": "normal",
+   "label": "X-Attack T5",
+   "maxSpread": 0,
+   "rows": [
+    {
+     "y": 1048,
+     "children": [
+      0,
+      1
+     ],
+     "heights": [
+      40,
+      40
+     ],
+     "heightSpread": 0,
+     "hollowBottom": [
+      4,
+      4
+     ],
+     "padBottom": [
+      4,
+      4
+     ]
+    }
+   ]
+  },
+  {
+   "kind": "grid",
+   "path": "#dc-root > div:nth-child(1) > div:nth-child(1) > div:nth-child(3) > main:nth-child(2) > div:nth-child(4) > div:nth-child(5) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > article:nth-child(1) > dl:nth-child(5)",
+   "rect": {
+    "x": 265,
+    "y": 1138,
+    "w": 270,
+    "h": 161
+   },
+   "columns": 1,
+   "children": 4,
+   "painted": 0,
+   "cards": false,
+   "inTooltip": false,
+   "alignItems": "normal",
+   "label": "Dinero real R$ 90",
+   "maxSpread": 0,
+   "rows": [
+    {
+     "y": 1151,
+     "children": [
+      0
+     ],
+     "heights": [
+      22
+     ],
+     "heightSpread": 0,
+     "hollowBottom": [
+      3
+     ],
+     "padBottom": [
+      0
+     ]
+    },
+    {
+     "y": 1181,
+     "children": [
+      1
+     ],
+     "heights": [
+      40
+     ],
+     "heightSpread": 0,
+     "hollowBottom": [
+      0
+     ],
+     "padBottom": [
+      0
+     ]
+    },
+    {
+     "y": 1229,
+     "children": [
+      2
+     ],
+     "heights": [
+      16
+     ],
+     "heightSpread": 0,
+     "hollowBottom": [
+      1
+     ],
+     "padBottom": [
+      0
+     ]
+    },
+    {
+     "y": 1253,
+     "children": [
+      3
+     ],
+     "heights": [
+      46
+     ],
+     "heightSpread": 0,
+     "hollowBottom": [
+      0
+     ],
+     "padBottom": [
+      0
+     ]
+    }
+   ]
+  },
+  {
+   "kind": "grid",
+   "path": "#dc-root > div:nth-child(1) > div:nth-child(1) > div:nth-child(3) > main:nth-child(2) > div:nth-child(4) > div:nth-child(5) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > article:nth-child(2)",
+   "rect": {
+    "x": 568,
+    "y": 703,
+    "w": 304,
+    "h": 613
+   },
+   "columns": 1,
+   "children": 5,
+   "painted": 1,
+   "cards": false,
+   "inTooltip": false,
+   "alignItems": "normal",
+   "label": "Shiny Hitmontop Shiny Moon · hace 40 min",
+   "maxSpread": 0,
+   "rows": [
+    {
+     "y": 720,
+     "children": [
+      0
+     ],
+     "heights": [
+      72
+     ],
+     "heightSpread": 0,
+     "hollowBottom": [
+      4
+     ],
+     "padBottom": [
+      0
+     ]
+    },
+    {
+     "y": 804,
+     "children": [
+      1
+     ],
+     "heights": [
+      214
+     ],
+     "heightSpread": 0,
+     "hollowBottom": [
+      1
+     ],
+     "padBottom": [
+      0
+     ]
+    },
+    {
+     "y": 1030,
+     "children": [
+      2
+     ],
+     "heights": [
+      58
+     ],
+     "heightSpread": 0,
+     "hollowBottom": [
+      4
+     ],
+     "padBottom": [
+      0
+     ]
+    },
+    {
+     "y": 1100,
+     "children": [
+      3
+     ],
+     "heights": [
+      16
+     ],
+     "heightSpread": 0,
+     "hollowBottom": [
+      1
+     ],
+     "padBottom": [
+      0
+     ],
+     "itemHeights": [
+      26
+     ]
+    },
+    {
+     "y": 1138,
+     "children": [
+      4
+     ],
+     "heights": [
+      161
+     ],
+     "heightSpread": 0,
+     "hollowBottom": [
+      0
+     ],
+     "padBottom": [
+      0
+     ]
+    }
+   ]
+  },
+  {
+   "kind": "grid",
+   "path": "#dc-root > div:nth-child(1) > div:nth-child(1) > div:nth-child(3) > main:nth-child(2) > div:nth-child(4) > div:nth-child(5) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > article:nth-child(2) > dl:nth-child(2)",
+   "rect": {
+    "x": 585,
+    "y": 804,
+    "w": 270,
+    "h": 214
+   },
+   "columns": 1,
+   "children": 10,
+   "painted": 0,
+   "cards": false,
+   "inTooltip": false,
+   "alignItems": "normal",
+   "label": "Requisito Nivel 120",
+   "maxSpread": 0,
+   "rows": [
+    {
+     "y": 804,
+     "children": [
+      0
+     ],
+     "heights": [
+      16
+     ],
+     "heightSpread": 0,
+     "hollowBottom": [
+      1
+     ],
+     "padBottom": [
+      0
+     ]
+    },
+    {
+     "y": 826,
+     "children": [
+      1
+     ],
+     "heights": [
+      16
+     ],
+     "heightSpread": 0,
+     "hollowBottom": [
+      1
+     ],
+     "padBottom": [
+      0
+     ]
+    },
+    {
+     "y": 848,
+     "children": [
+      2
+     ],
+     "heights": [
+      16
+     ],
+     "heightSpread": 0,
+     "hollowBottom": [
+      0
+     ],
+     "padBottom": [
+      0
+     ]
+    },
+    {
+     "y": 870,
+     "children": [
+      3
+     ],
+     "heights": [
+      16
+     ],
+     "heightSpread": 0,
+     "hollowBottom": [
+      0.5
+     ],
+     "padBottom": [
+      0
+     ]
+    },
+    {
+     "y": 892,
+     "children": [
+      4
+     ],
+     "heights": [
+      16
+     ],
+     "heightSpread": 0,
+     "hollowBottom": [
+      1
+     ],
+     "padBottom": [
+      0
+     ]
+    },
+    {
+     "y": 914,
+     "children": [
+      5
+     ],
+     "heights": [
+      16
+     ],
+     "heightSpread": 0,
+     "hollowBottom": [
+      1
+     ],
+     "padBottom": [
+      0
+     ]
+    },
+    {
+     "y": 936,
+     "children": [
+      6
+     ],
+     "heights": [
+      16
+     ],
+     "heightSpread": 0,
+     "hollowBottom": [
+      1
+     ],
+     "padBottom": [
+      0
+     ]
+    },
+    {
+     "y": 958,
+     "children": [
+      7
+     ],
+     "heights": [
+      16
+     ],
+     "heightSpread": 0,
+     "hollowBottom": [
+      1
+     ],
+     "padBottom": [
+      0
+     ]
+    },
+    {
+     "y": 980,
+     "children": [
+      8
+     ],
+     "heights": [
+      16
+     ],
+     "heightSpread": 0,
+     "hollowBottom": [
+      1
+     ],
+     "padBottom": [
+      0
+     ]
+    },
+    {
+     "y": 1002,
+     "children": [
+      9
+     ],
+     "heights": [
+      16
+     ],
+     "heightSpread": 0,
+     "hollowBottom": [
+      1
+     ],
+     "padBottom": [
+      0
+     ]
+    }
+   ]
+  },
+  {
+   "kind": "grid",
+   "path": "#dc-root > div:nth-child(1) > div:nth-child(1) > div:nth-child(3) > main:nth-child(2) > div:nth-child(4) > div:nth-child(5) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > article:nth-child(2) > dl:nth-child(5)",
+   "rect": {
+    "x": 585,
+    "y": 1138,
+    "w": 270,
+    "h": 161
+   },
+   "columns": 1,
+   "children": 4,
+   "painted": 0,
+   "cards": false,
+   "inTooltip": false,
+   "alignItems": "normal",
+   "label": "Dinero real US$ 35",
+   "maxSpread": 0,
+   "rows": [
+    {
+     "y": 1151,
+     "children": [
+      0
+     ],
+     "heights": [
+      22
+     ],
+     "heightSpread": 0,
+     "hollowBottom": [
+      3
+     ],
+     "padBottom": [
+      0
+     ]
+    },
+    {
+     "y": 1181,
+     "children": [
+      1
+     ],
+     "heights": [
+      40
+     ],
+     "heightSpread": 0,
+     "hollowBottom": [
+      16
+     ],
+     "padBottom": [
+      0
+     ]
+    },
+    {
+     "y": 1229,
+     "children": [
+      2
+     ],
+     "heights": [
+      16
+     ],
+     "heightSpread": 0,
+     "hollowBottom": [
+      1
+     ],
+     "padBottom": [
+      0
+     ]
+    },
+    {
+     "y": 1253,
+     "children": [
+      3
+     ],
+     "heights": [
+      46
+     ],
+     "heightSpread": 0,
+     "hollowBottom": [
+      0
+     ],
+     "padBottom": [
+      0
+     ]
+    }
+   ]
+  },
+  {
+   "kind": "grid",
+   "path": "#dc-root > div:nth-child(1) > div:nth-child(1) > div:nth-child(3) > main:nth-child(2) > div:nth-child(4) > div:nth-child(5) > div:nth-child(1) > div:nth-child(2) > div:nth-child(2)",
+   "rect": {
+    "x": 248,
+    "y": 1392,
+    "w": 944,
+    "h": 341
+   },
+   "columns": 3,
+   "children": 2,
+   "painted": 2,
+   "cards": true,
+   "inTooltip": false,
+   "alignItems": "normal",
+   "label": "25 Fire Stone Sun · hace 1 h Cantidad 25 Categor",
+   "maxSpread": 0,
+   "rows": [
+    {
+     "y": 1392,
+     "children": [
+      0,
+      1
+     ],
+     "heights": [
+      341,
+      341
+     ],
+     "heightSpread": 0,
+     "hollowBottom": [
+      17,
+      17
+     ],
+     "padBottom": [
+      17,
+      17
+     ],
+     "zones": {
+      "head": {
+       "offsets": [
+        17,
+        17
+       ],
+       "spread": 0,
+       "missing": 0
+      },
+      "facts": {
+       "offsets": [
+        101,
+        101
+       ],
+       "spread": 0,
+       "missing": 0
+      },
+      "footer": {
+       "offsets": [
+        217,
+        217
+       ],
+       "spread": 0,
+       "missing": 0
+      }
+     }
+    }
+   ]
+  },
+  {
+   "kind": "grid",
+   "path": "#dc-root > div:nth-child(1) > div:nth-child(1) > div:nth-child(3) > main:nth-child(2) > div:nth-child(4) > div:nth-child(5) > div:nth-child(1) > div:nth-child(2) > div:nth-child(2) > article:nth-child(1)",
+   "rect": {
+    "x": 248,
+    "y": 1392,
+    "w": 304,
+    "h": 341
+   },
+   "columns": 1,
+   "children": 3,
+   "painted": 1,
+   "cards": false,
+   "inTooltip": false,
+   "alignItems": "normal",
+   "label": "25 Fire Stone Sun · hace 1 h",
+   "maxSpread": 0,
+   "rows": [
+    {
+     "y": 1409,
+     "children": [
+      0
+     ],
+     "heights": [
+      72
+     ],
+     "heightSpread": 0,
+     "hollowBottom": [
+      0
+     ],
+     "padBottom": [
+      0
+     ]
+    },
+    {
+     "y": 1493,
+     "children": [
+      1
+     ],
+     "heights": [
+      104
+     ],
+     "heightSpread": 0,
+     "hollowBottom": [
+      1
+     ],
+     "padBottom": [
+      0
+     ]
+    },
+    {
+     "y": 1609,
+     "children": [
+      2
+     ],
+     "heights": [
+      107
+     ],
+     "heightSpread": 0,
+     "hollowBottom": [
+      0
+     ],
+     "padBottom": [
+      0
+     ]
+    }
+   ]
+  },
+  {
+   "kind": "grid",
+   "path": "#dc-root > div:nth-child(1) > div:nth-child(1) > div:nth-child(3) > main:nth-child(2) > div:nth-child(4) > div:nth-child(5) > div:nth-child(1) > div:nth-child(2) > div:nth-child(2) > article:nth-child(1) > dl:nth-child(2)",
+   "rect": {
+    "x": 265,
+    "y": 1493,
+    "w": 270,
+    "h": 104
+   },
+   "columns": 1,
+   "children": 5,
+   "painted": 0,
+   "cards": false,
+   "inTooltip": false,
+   "alignItems": "normal",
+   "label": "Cantidad 25",
+   "maxSpread": 0,
+   "rows": [
+    {
+     "y": 1493,
+     "children": [
+      0
+     ],
+     "heights": [
+      16
+     ],
+     "heightSpread": 0,
+     "hollowBottom": [
+      1
+     ],
+     "padBottom": [
+      0
+     ]
+    },
+    {
+     "y": 1515,
+     "children": [
+      1
+     ],
+     "heights": [
+      16
+     ],
+     "heightSpread": 0,
+     "hollowBottom": [
+      1
+     ],
+     "padBottom": [
+      0
+     ]
+    },
+    {
+     "y": 1537,
+     "children": [
+      2
+     ],
+     "heights": [
+      16
+     ],
+     "heightSpread": 0,
+     "hollowBottom": [
+      0
+     ],
+     "padBottom": [
+      0
+     ]
+    },
+    {
+     "y": 1559,
+     "children": [
+      3
+     ],
+     "heights": [
+      16
+     ],
+     "heightSpread": 0,
+     "hollowBottom": [
+      1
+     ],
+     "padBottom": [
+      0
+     ]
+    },
+    {
+     "y": 1581,
+     "children": [
+      4
+     ],
+     "heights": [
+      16
+     ],
+     "heightSpread": 0,
+     "hollowBottom": [
+      1
+     ],
+     "padBottom": [
+      0
+     ]
+    }
+   ]
+  },
+  {
+   "kind": "grid",
+   "path": "#dc-root > div:nth-child(1) > div:nth-child(1) > div:nth-child(3) > main:nth-child(2) > div:nth-child(4) > div:nth-child(5) > div:nth-child(1) > div:nth-child(2) > div:nth-child(2) > article:nth-child(1) > dl:nth-child(3)",
+   "rect": {
+    "x": 265,
+    "y": 1609,
+    "w": 270,
+    "h": 107
+   },
+   "columns": 1,
+   "children": 3,
+   "painted": 0,
+   "cards": false,
+   "inTooltip": false,
+   "alignItems": "normal",
+   "label": "En el juego 3kk 3.000.000 Pokédólares",
+   "maxSpread": 0,
+   "rows": [
+    {
+     "y": 1622,
+     "children": [
+      0
+     ],
+     "heights": [
+      16
+     ],
+     "heightSpread": 0,
+     "hollowBottom": [
+      0
+     ],
+     "padBottom": [
+      0
+     ]
+    },
+    {
+     "y": 1646,
+     "children": [
+      1
+     ],
+     "heights": [
+      16
+     ],
+     "heightSpread": 0,
+     "hollowBottom": [
+      1
+     ],
+     "padBottom": [
+      0
+     ]
+    },
+    {
+     "y": 1670,
+     "children": [
+      2
+     ],
+     "heights": [
+      46
+     ],
+     "heightSpread": 0,
+     "hollowBottom": [
+      0
+     ],
+     "padBottom": [
+      0
+     ]
+    }
+   ]
+  },
+  {
+   "kind": "grid",
+   "path": "#dc-root > div:nth-child(1) > div:nth-child(1) > div:nth-child(3) > main:nth-child(2) > div:nth-child(4) > div:nth-child(5) > div:nth-child(1) > div:nth-child(2) > div:nth-child(2) > article:nth-child(2)",
+   "rect": {
+    "x": 568,
+    "y": 1392,
+    "w": 304,
+    "h": 341
+   },
+   "columns": 1,
+   "children": 3,
+   "painted": 1,
+   "cards": false,
+   "inTooltip": false,
+   "alignItems": "normal",
+   "label": "100 Alliance Ball Moon · hace 8 h",
+   "maxSpread": 0,
+   "rows": [
+    {
+     "y": 1409,
+     "children": [
+      0
+     ],
+     "heights": [
+      72
+     ],
+     "heightSpread": 0,
+     "hollowBottom": [
+      0
+     ],
+     "padBottom": [
+      0
+     ]
+    },
+    {
+     "y": 1493,
+     "children": [
+      1
+     ],
+     "heights": [
+      104
+     ],
+     "heightSpread": 0,
+     "hollowBottom": [
+      1
+     ],
+     "padBottom": [
+      0
+     ]
+    },
+    {
+     "y": 1609,
+     "children": [
+      2
+     ],
+     "heights": [
+      107
+     ],
+     "heightSpread": 0,
+     "hollowBottom": [
+      0
+     ],
+     "padBottom": [
+      0
+     ]
+    }
+   ]
+  },
+  {
+   "kind": "grid",
+   "path": "#dc-root > div:nth-child(1) > div:nth-child(1) > div:nth-child(3) > main:nth-child(2) > div:nth-child(4) > div:nth-child(5) > div:nth-child(1) > div:nth-child(2) > div:nth-child(2) > article:nth-child(2) > dl:nth-child(2)",
+   "rect": {
+    "x": 585,
+    "y": 1493,
+    "w": 270,
+    "h": 104
+   },
+   "columns": 1,
+   "children": 5,
+   "painted": 0,
+   "cards": false,
+   "inTooltip": false,
+   "alignItems": "normal",
+   "label": "Cantidad 100",
+   "maxSpread": 0,
+   "rows": [
+    {
+     "y": 1493,
+     "children": [
+      0
+     ],
+     "heights": [
+      16
+     ],
+     "heightSpread": 0,
+     "hollowBottom": [
+      1
+     ],
+     "padBottom": [
+      0
+     ]
+    },
+    {
+     "y": 1515,
+     "children": [
+      1
+     ],
+     "heights": [
+      16
+     ],
+     "heightSpread": 0,
+     "hollowBottom": [
+      1
+     ],
+     "padBottom": [
+      0
+     ]
+    },
+    {
+     "y": 1537,
+     "children": [
+      2
+     ],
+     "heights": [
+      16
+     ],
+     "heightSpread": 0,
+     "hollowBottom": [
+      1
+     ],
+     "padBottom": [
+      0
+     ]
+    },
+    {
+     "y": 1559,
+     "children": [
+      3
+     ],
+     "heights": [
+      16
+     ],
+     "heightSpread": 0,
+     "hollowBottom": [
+      1
+     ],
+     "padBottom": [
+      0
+     ]
+    },
+    {
+     "y": 1581,
+     "children": [
+      4
+     ],
+     "heights": [
+      16
+     ],
+     "heightSpread": 0,
+     "hollowBottom": [
+      1
+     ],
+     "padBottom": [
+      0
+     ]
+    }
+   ]
+  },
+  {
+   "kind": "grid",
+   "path": "#dc-root > div:nth-child(1) > div:nth-child(1) > div:nth-child(3) > main:nth-child(2) > div:nth-child(4) > div:nth-child(5) > div:nth-child(1) > div:nth-child(2) > div:nth-child(2) > article:nth-child(2) > dl:nth-child(3)",
+   "rect": {
+    "x": 585,
+    "y": 1609,
+    "w": 270,
+    "h": 107
+   },
+   "columns": 1,
+   "children": 3,
+   "painted": 0,
+   "cards": false,
+   "inTooltip": false,
+   "alignItems": "normal",
+   "label": "En el juego 4kk 4.000.000 Pokédólares o 10 Diamo",
+   "maxSpread": 0,
+   "rows": [
+    {
+     "y": 1622,
+     "children": [
+      0
+     ],
+     "heights": [
+      16
+     ],
+     "heightSpread": 0,
+     "hollowBottom": [
+      0
+     ],
+     "padBottom": [
+      0
+     ]
+    },
+    {
+     "y": 1646,
+     "children": [
+      1
+     ],
+     "heights": [
+      16
+     ],
+     "heightSpread": 0,
+     "hollowBottom": [
+      1
+     ],
+     "padBottom": [
+      0
+     ]
+    },
+    {
+     "y": 1670,
+     "children": [
+      2
+     ],
+     "heights": [
+      46
+     ],
+     "heightSpread": 0,
+     "hollowBottom": [
+      0
+     ],
+     "padBottom": [
+      0
+     ]
+    }
+   ]
+  },
+  {
+   "kind": "grid",
+   "path": "#dc-root > div:nth-child(1) > div:nth-child(1) > div:nth-child(3) > main:nth-child(2) > div:nth-child(4) > div:nth-child(5) > div:nth-child(1) > div:nth-child(3) > div:nth-child(2) > article:nth-child(1)",
+   "rect": {
+    "x": 248,
+    "y": 1809,
+    "w": 304,
+    "h": 303
+   },
+   "columns": 1,
+   "children": 3,
+   "painted": 1,
+   "cards": false,
+   "inTooltip": false,
+   "alignItems": "normal",
+   "label": "300 300 Diamonds Titan 1 · hace 2 h",
+   "maxSpread": 0,
+   "rows": [
+    {
+     "y": 1826,
+     "children": [
+      0
+     ],
+     "heights": [
+      72
+     ],
+     "heightSpread": 0,
+     "hollowBottom": [
+      0
+     ],
+     "padBottom": [
+      0
+     ]
+    },
+    {
+     "y": 1910,
+     "children": [
+      1
+     ],
+     "heights": [
+      60
+     ],
+     "heightSpread": 0,
+     "hollowBottom": [
+      1
+     ],
+     "padBottom": [
+      0
+     ]
+    },
+    {
+     "y": 1982,
+     "children": [
+      2
+     ],
+     "heights": [
+      113
+     ],
+     "heightSpread": 0,
+     "hollowBottom": [
+      0
+     ],
+     "padBottom": [
+      0
+     ]
+    }
+   ]
+  },
+  {
+   "kind": "grid",
+   "path": "#dc-root > div:nth-child(1) > div:nth-child(1) > div:nth-child(3) > main:nth-child(2) > div:nth-child(4) > div:nth-child(5) > div:nth-child(1) > div:nth-child(3) > div:nth-child(2) > article:nth-child(1) > dl:nth-child(2)",
+   "rect": {
+    "x": 265,
+    "y": 1910,
+    "w": 270,
+    "h": 60
+   },
+   "columns": 1,
+   "children": 3,
+   "painted": 0,
+   "cards": false,
+   "inTooltip": false,
+   "alignItems": "normal",
+   "label": "Cantidad 300 Diamonds",
+   "maxSpread": 0,
+   "rows": [
+    {
+     "y": 1910,
+     "children": [
+      0
+     ],
+     "heights": [
+      16
+     ],
+     "heightSpread": 0,
+     "hollowBottom": [
+      0
+     ],
+     "padBottom": [
+      0
+     ]
+    },
+    {
+     "y": 1932,
+     "children": [
+      1
+     ],
+     "heights": [
+      16
+     ],
+     "heightSpread": 0,
+     "hollowBottom": [
+      1
+     ],
+     "padBottom": [
+      0
+     ]
+    },
+    {
+     "y": 1954,
+     "children": [
+      2
+     ],
+     "heights": [
+      16
+     ],
+     "heightSpread": 0,
+     "hollowBottom": [
+      1
+     ],
+     "padBottom": [
+      0
+     ]
+    }
+   ]
+  },
+  {
+   "kind": "grid",
+   "path": "#dc-root > div:nth-child(1) > div:nth-child(1) > div:nth-child(3) > main:nth-child(2) > div:nth-child(4) > div:nth-child(5) > div:nth-child(1) > div:nth-child(3) > div:nth-child(2) > article:nth-child(1) > dl:nth-child(3)",
+   "rect": {
+    "x": 265,
+    "y": 1982,
+    "w": 270,
+    "h": 113
+   },
+   "columns": 1,
+   "children": 3,
+   "painted": 0,
+   "cards": false,
+   "inTooltip": false,
+   "alignItems": "normal",
+   "label": "Dinero real R$ 60",
+   "maxSpread": 0,
+   "rows": [
+    {
+     "y": 1995,
+     "children": [
+      0
+     ],
+     "heights": [
+      22
+     ],
+     "heightSpread": 0,
+     "hollowBottom": [
+      3
+     ],
+     "padBottom": [
+      0
+     ]
+    },
+    {
+     "y": 2025,
+     "children": [
+      1
+     ],
+     "heights": [
+      16
+     ],
+     "heightSpread": 0,
+     "hollowBottom": [
+      1
+     ],
+     "padBottom": [
+      0
+     ]
+    },
+    {
+     "y": 2049,
+     "children": [
+      2
+     ],
+     "heights": [
+      46
+     ],
+     "heightSpread": 0,
+     "hollowBottom": [
+      0
+     ],
+     "padBottom": [
+      0
+     ]
+    }
+   ]
+  },
+  {
+   "kind": "grid",
+   "path": "#dc-root > div:nth-child(1) > div:nth-child(1) > div:nth-child(3) > main:nth-child(2) > div:nth-child(4) > div:nth-child(5) > div:nth-child(1) > div:nth-child(4) > div:nth-child(2) > article:nth-child(1)",
+   "rect": {
+    "x": 248,
+    "y": 2188,
+    "w": 304,
+    "h": 259
+   },
+   "columns": 1,
+   "children": 3,
+   "painted": 1,
+   "cards": false,
+   "inTooltip": false,
+   "alignItems": "normal",
+   "label": "50kk Pokédólares Sun · hace 3 h",
+   "maxSpread": 0,
+   "rows": [
+    {
+     "y": 2205,
+     "children": [
+      0
+     ],
+     "heights": [
+      72
+     ],
+     "heightSpread": 0,
+     "hollowBottom": [
+      0
+     ],
+     "padBottom": [
+      0
+     ]
+    },
+    {
+     "y": 2289,
+     "children": [
+      1
+     ],
+     "heights": [
+      16
+     ],
+     "heightSpread": 0,
+     "hollowBottom": [
+      0
+     ],
+     "padBottom": [
+      0
+     ]
+    },
+    {
+     "y": 2317,
+     "children": [
+      2
+     ],
+     "heights": [
+      113
+     ],
+     "heightSpread": 0,
+     "hollowBottom": [
+      0
+     ],
+     "padBottom": [
+      0
+     ]
+    }
+   ]
+  },
+  {
+   "kind": "grid",
+   "path": "#dc-root > div:nth-child(1) > div:nth-child(1) > div:nth-child(3) > main:nth-child(2) > div:nth-child(4) > div:nth-child(5) > div:nth-child(1) > div:nth-child(4) > div:nth-child(2) > article:nth-child(1) > dl:nth-child(3)",
+   "rect": {
+    "x": 265,
+    "y": 2317,
+    "w": 270,
+    "h": 113
+   },
+   "columns": 1,
+   "children": 3,
+   "painted": 0,
+   "cards": false,
+   "inTooltip": false,
+   "alignItems": "normal",
+   "label": "Dinero real MX$ 180",
+   "maxSpread": 0,
+   "rows": [
+    {
+     "y": 2330,
+     "children": [
+      0
+     ],
+     "heights": [
+      22
+     ],
+     "heightSpread": 0,
+     "hollowBottom": [
+      3
+     ],
+     "padBottom": [
+      0
+     ]
+    },
+    {
+     "y": 2360,
+     "children": [
+      1
+     ],
+     "heights": [
+      16
+     ],
+     "heightSpread": 0,
+     "hollowBottom": [
+      1
+     ],
+     "padBottom": [
+      0
+     ]
+    },
+    {
+     "y": 2384,
+     "children": [
+      2
+     ],
+     "heights": [
+      46
+     ],
+     "heightSpread": 0,
+     "hollowBottom": [
+      0
+     ],
+     "padBottom": [
+      0
+     ]
+    }
+   ]
+  }
+ ],
+ "flexWraps": [
+  {
+   "kind": "flex-wrap",
+   "path": "#dc-root > div:nth-child(1) > div:nth-child(1) > div:nth-child(3) > main:nth-child(2) > nav:nth-child(1) > ol:nth-child(1)",
+   "rect": {
+    "x": 248,
+    "y": 96,
+    "w": 944,
+    "h": 16
+   },
+   "columns": 3,
+   "children": 3,
+   "painted": 0,
+   "cards": false,
+   "inTooltip": false,
+   "alignItems": "center",
+   "label": "Comunidad",
+   "maxSpread": 9,
+   "rows": [
+    {
+     "y": 96,
+     "children": [
+      0,
+      1,
+      2
+     ],
+     "heights": [
+      16,
+      7,
+      16
+     ],
+     "heightSpread": 9,
+     "hollowBottom": [
+      1,
+      7,
+      1
+     ],
+     "padBottom": [
+      0,
+      0,
+      0
+     ],
+     "itemHeights": [
+      16,
+      14,
+      16
+     ]
+    }
+   ]
+  },
+  {
+   "kind": "flex-wrap",
+   "path": "#dc-root > div:nth-child(1) > div:nth-child(1) > div:nth-child(3) > main:nth-child(2) > div:nth-child(4) > div:nth-child(2) > div:nth-child(2)",
+   "rect": {
+    "x": 248,
+    "y": 451,
+    "w": 944,
+    "h": 50
+   },
+   "columns": 5,
+   "children": 5,
+   "painted": 5,
+   "cards": false,
+   "inTooltip": false,
+   "alignItems": "normal",
+   "label": "Todos",
+   "maxSpread": 0,
+   "rows": [
+    {
+     "y": 451,
+     "children": [
+      0,
+      1,
+      2,
+      3,
+      4
+     ],
+     "heights": [
+      50,
+      50,
+      50,
+      50,
+      50
+     ],
+     "heightSpread": 0,
+     "hollowBottom": [
+      17,
+      9,
+      9,
+      9,
+      9
+     ],
+     "padBottom": [
+      9,
+      9,
+      9,
+      9,
+      9
+     ]
+    }
+   ]
+  },
+  {
+   "kind": "flex-wrap",
+   "path": "#dc-root > div:nth-child(1) > div:nth-child(1) > div:nth-child(3) > main:nth-child(2) > div:nth-child(4) > div:nth-child(5) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > article:nth-child(1) > dl:nth-child(5) > div:nth-child(2) > dd:nth-child(2) > span:nth-child(1)",
+   "rect": {
+    "x": 340.7,
+    "y": 1181,
+    "w": 194.3,
+    "h": 40
+   },
+   "columns": 1,
+   "children": 2,
+   "painted": 0,
+   "cards": false,
+   "inTooltip": false,
+   "alignItems": "center",
+   "label": "150kk 150.000.000 Pokédólares",
+   "maxSpread": 0,
+   "rows": [
+    {
+     "y": 1181,
+     "children": [
+      0
+     ],
+     "heights": [
+      16
+     ],
+     "heightSpread": 0,
+     "hollowBottom": [
+      0
+     ],
+     "padBottom": [
+      0
+     ]
+    },
+    {
+     "y": 1205,
+     "children": [
+      1
+     ],
+     "heights": [
+      16
+     ],
+     "heightSpread": 0,
+     "hollowBottom": [
+      0
+     ],
+     "padBottom": [
+      0
+     ]
+    }
+   ]
+  },
+  {
+   "kind": "flex-wrap",
+   "path": "#dc-root > div:nth-child(1) > div:nth-child(1) > div:nth-child(3) > main:nth-child(2) > div:nth-child(4) > div:nth-child(5) > div:nth-child(1) > div:nth-child(2) > div:nth-child(2) > article:nth-child(2) > dl:nth-child(3) > div:nth-child(1) > dd:nth-child(2) > span:nth-child(1)",
+   "rect": {
+    "x": 669.4,
+    "y": 1622,
+    "w": 185.6,
+    "h": 16
+   },
+   "columns": 2,
+   "children": 2,
+   "painted": 0,
+   "cards": false,
+   "inTooltip": false,
+   "alignItems": "center",
+   "label": "4kk 4.000.000 Pokédólares",
+   "maxSpread": 0,
+   "rows": [
+    {
+     "y": 1622,
+     "children": [
+      0,
+      1
+     ],
+     "heights": [
+      16,
+      16
+     ],
+     "heightSpread": 0,
+     "hollowBottom": [
+      0,
+      0
+     ],
+     "padBottom": [
+      0,
+      0
+     ]
+    }
+   ]
+  }
+ ],
+ "board": "Comercio.dc.html",
+ "state": {
+  "tip": null
+ },
+ "viewport": {
+  "width": 1440,
+  "height": 2568
+ },
+ "missingBlobs": [],
+ "consoleErrors": []
+}

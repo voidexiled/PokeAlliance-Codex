@@ -1,0 +1,245 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://alliance-codex.local/schemas/pokemon.schema.json",
+  "title": "Pokémon del Pokédex",
+  "description": "content/pokemon.json: un registro por Pokémon o variante. Si un valor no se conoce, va null (la web muestra «—»). Los campos opcionales pueden faltar: mientras falten, su fila o su sección no aparece.",
+  "type": "object",
+  "required": ["pokemon"],
+  "additionalProperties": false,
+  "properties": {
+    "$schema": { "type": "string" },
+    "pokemon": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/pokemon" }
+    }
+  },
+  "$defs": {
+    "slug": {
+      "type": "string",
+      "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$",
+      "description": "Minúsculas, números y guiones (kebab-case)."
+    },
+    "variante": {
+      "enum": ["normal", "shiny"]
+    },
+    "funcion": {
+      "enum": ["PVE", "PVP", null]
+    },
+    "tierEspecial": {
+      "enum": ["Super Rare", "Ultra Rare", "Legendary", "Mythic", "ULTIMATE"]
+    },
+    "elemento": {
+      "description": "id de un elemento de content/elementos.json, en su orden. pnpm content:check comprueba que esta lista sea la de elementos.schema.json.",
+      "enum": [
+        "normal",
+        "fire",
+        "water",
+        "grass",
+        "electric",
+        "ice",
+        "fighting",
+        "poison",
+        "ground",
+        "flying",
+        "psychic",
+        "bug",
+        "rock",
+        "ghost",
+        "dragon",
+        "fairy",
+        "dark",
+        "steel"
+      ]
+    },
+    "drop": {
+      "type": "object",
+      "required": ["item", "cantidad"],
+      "additionalProperties": false,
+      "properties": {
+        "item": {
+          "$ref": "#/$defs/slug",
+          "description": "id de un ítem de content/items/."
+        },
+        "cantidad": {
+          "type": ["object", "null"],
+          "description": "Cuántos suelta: { \"min\": 1, \"max\": 3 }, o min y max iguales si siempre es la misma cantidad. null si no se conoce.",
+          "required": ["min", "max"],
+          "additionalProperties": false,
+          "properties": {
+            "min": { "type": "integer", "minimum": 1 },
+            "max": {
+              "type": "integer",
+              "minimum": 1,
+              "description": "Mayor o igual que min."
+            }
+          }
+        }
+      }
+    },
+    "evolucion": {
+      "type": "object",
+      "required": ["a", "nivel", "items"],
+      "additionalProperties": false,
+      "properties": {
+        "a": {
+          "$ref": "#/$defs/slug",
+          "description": "id del Pokémon al que evoluciona. La cadena no puede volver a un Pokémon anterior."
+        },
+        "nivel": {
+          "type": ["integer", "null"],
+          "minimum": 1,
+          "description": "Nivel necesario para evolucionar. null si no se conoce."
+        },
+        "items": {
+          "type": "array",
+          "description": "Ítems que pide la evolución; [] si no pide ninguno.",
+          "items": { "$ref": "#/$defs/itemEvolucion" }
+        }
+      }
+    },
+    "itemEvolucion": {
+      "type": "object",
+      "required": ["item", "cantidad"],
+      "additionalProperties": false,
+      "properties": {
+        "item": {
+          "$ref": "#/$defs/slug",
+          "description": "id de un ítem de content/items/."
+        },
+        "cantidad": { "type": "integer", "minimum": 1 }
+      }
+    },
+    "ref": {
+      "type": "object",
+      "description": "Entidad con registro propio: un Pokémon, un ítem, una página de sistema o una actividad.",
+      "required": ["tipo", "id"],
+      "additionalProperties": false,
+      "properties": {
+        "tipo": { "enum": ["pokemon", "item", "sistema", "actividad"] },
+        "id": {
+          "$ref": "#/$defs/slug",
+          "description": "id en content/pokemon.json, content/items/, content/sistemas/ o content/quests.json, según el tipo."
+        }
+      }
+    },
+    "enlaceDato": {
+      "type": "object",
+      "required": ["texto"],
+      "additionalProperties": false,
+      "properties": {
+        "texto": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Lo que se lee, tal como lo escribe el juego."
+        },
+        "ref": {
+          "$ref": "#/$defs/ref",
+          "description": "Opcional. Con ref, el texto abre el tooltip de esa entidad; sin ref, es texto."
+        }
+      }
+    },
+    "enlacesDato": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/enlaceDato" }
+    },
+    "pokemon": {
+      "type": "object",
+      "required": [
+        "id",
+        "nombre",
+        "numero",
+        "generacion",
+        "variante",
+        "nivel",
+        "tier",
+        "funcion",
+        "elementos",
+        "imagen"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/slug",
+          "description": "Identificador único. También es la dirección de la ficha: /pokedex/<id>/. No puede ser \"tiers\", que es la dirección de la Tier list."
+        },
+        "nombre": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Nombre canónico del juego, en inglés."
+        },
+        "numero": {
+          "type": ["integer", "null"],
+          "minimum": 1,
+          "description": "Número de la Pokédex nacional."
+        },
+        "generacion": { "type": ["integer", "null"], "minimum": 1 },
+        "variante": { "$ref": "#/$defs/variante" },
+        "nivel": {
+          "type": ["integer", "null"],
+          "minimum": 1,
+          "description": "Nivel mínimo para usarlo."
+        },
+        "tier": {
+          "type": ["integer", "string", "null"],
+          "minimum": 1,
+          "description": "Tier numérico (1, 2, 3…) o una categoría especial.",
+          "if": { "type": "string" },
+          "then": { "$ref": "#/$defs/tierEspecial" }
+        },
+        "funcion": { "$ref": "#/$defs/funcion" },
+        "elementos": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/elemento" },
+          "maxItems": 2
+        },
+        "imagen": {
+          "type": ["string", "null"],
+          "pattern": "^/pokemon/[0-9]+(?:\\.[0-9]+)?\\.png$",
+          "description": "Ruta de la imagen en la wiki del juego, por ejemplo \"/pokemon/001.png\"."
+        },
+        "hp": {
+          "type": ["integer", "null"],
+          "minimum": 1,
+          "description": "Opcional. HP del Pokémon. null si no se conoce."
+        },
+        "experiencia": {
+          "type": ["integer", "null"],
+          "minimum": 0,
+          "description": "Opcional. Experiencia que da. null si no se conoce."
+        },
+        "drops": {
+          "type": "array",
+          "description": "Opcional. Ítems que suelta, en el orden en que se muestran; cada ítem una sola vez.",
+          "items": { "$ref": "#/$defs/drop" }
+        },
+        "evolucion": {
+          "type": "array",
+          "description": "Opcional. Evoluciones que salen de este Pokémon, una por Pokémon destino. La primera etapa de una cadena es el Pokémon que ningún registro nombra en \"a\".",
+          "items": { "$ref": "#/$defs/evolucion" }
+        },
+        "habilidades": {
+          "type": "array",
+          "description": "Opcional. Habilidades con el nombre del juego, sin traducir (\"Fly\", \"Strength\").",
+          "items": { "type": "string", "minLength": 1 }
+        },
+        "donde": {
+          "type": "object",
+          "description": "Opcional. Dónde encontrarlo. Una lista vacía no se muestra.",
+          "required": ["hunts", "linkedTasks", "equiposNpc"],
+          "additionalProperties": false,
+          "properties": {
+            "hunts": { "$ref": "#/$defs/enlacesDato" },
+            "linkedTasks": { "$ref": "#/$defs/enlacesDato" },
+            "equiposNpc": { "$ref": "#/$defs/enlacesDato" }
+          }
+        },
+        "elementoMoveset": {
+          "type": ["string", "null"],
+          "description": "Opcional. id del elemento de su moveset, de content/elementos.json. null si no se conoce.",
+          "if": { "type": "string" },
+          "then": { "$ref": "#/$defs/elemento" }
+        }
+      }
+    }
+  }
+}

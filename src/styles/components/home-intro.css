@@ -1,0 +1,70 @@
+/* HomeIntro (spec 7.2.7, 8.1; DS:HomeIntro), ported from the `.ac-home-intro` block of the
+   design system's components/bundle.css: the greeting of Inicio, a 48 px sprite beside the h1
+   and one line of figures from the registries under it.
+
+   Per-page stylesheet (plan M10, D-018, §13.6). Only Inicio draws this block, so global.css does
+   not import it: src/components/home/HomeIntro.astro imports it and the build writes it next to
+   the page that renders the component, which keeps the shared sheet inside S17. Like the other
+   per-page sheets it repeats the layer order of global.css before its block, so the
+   `components` layer keeps its place whichever of the two sheets the browser reads first
+   (§3.6), and `@reference` brings the text styles of theme.css to `@apply` without writing them
+   here again.
+
+   Geometry of Lienzo:Main at 1440: the sprite box of 48 at x 248, 16 before the text, both
+   centred on one line; the h1 at 16/24 and the line 2 below it at 12/16, cut at 320, so the
+   board's line takes two rows and the block measures 58. Lienzo:Inicio-movil at 390 has no
+   sprite: the text starts at the edge of the column.
+
+   Differences against the reference:
+
+   - the box stays when the registry has no `ui/inicio` yet, empty (8.1 step 1), instead of
+     going away with its sprite: the h1 keeps its x;
+   - the phone drops the box with a media query below `layout-bp-md` (§5.4), because a
+     prerendered page cannot leave out a prop per width;
+   - the type pairs are `@apply type-h3` and `@apply type-ui` (spec 3.7, §4.1: `type-h3` is
+     «h1 del Inicio»). */
+
+@reference '../theme.css';
+
+@layer properties, theme, base, components, utilities;
+
+@layer components {
+  .ac-home-intro {
+    display: flex;
+    align-items: center;
+    gap: var(--space-16);
+  }
+
+  /* 48 = the 16 px sprite of `ui/inicio` at 3x. It is `aria-hidden`: the h1 names the page. */
+  .ac-home-intro__sprite {
+    display: flex;
+    width: calc(var(--size-sprite-nav) * 3);
+    height: calc(var(--size-sprite-nav) * 3);
+    flex: none;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .ac-home-intro__text {
+    min-width: 0;
+  }
+
+  .ac-home-intro__title {
+    margin: 0;
+    @apply type-h3;
+  }
+
+  .ac-home-intro__description {
+    max-width: 320px; /* sin token: ancho de la línea de HomeIntro (DS:HomeIntro) */
+    margin: var(--space-2) 0 0;
+    color: var(--text-secondary);
+    @apply type-ui;
+  }
+
+  /* Phone (8.1, Lienzo:Inicio-movil): title and line alone. */
+  @media (width < 48rem) {
+    .ac-home-intro__sprite {
+      display: none;
+    }
+  }
+}

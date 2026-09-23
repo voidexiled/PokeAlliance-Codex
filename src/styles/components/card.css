@@ -1,0 +1,212 @@
+/* Card kit (spec 7.6.2, 7.6.4, 7.6.5; CARD_GRID_SYSTEM §5; DS:guias/30 «La tarjeta»), ported
+   from the card box of the `.ac-card-grid` block of the design system's components/bundle.css.
+   global.css imports this file with layer(components).
+
+   The `article` every card family shares: 1 px `border-secondary`, radius 12, padding 16, no
+   background and no shadow. It spans the Z row tracks of its type (`grid-row: span Z`, the one
+   inline style of a card, written by `Card` from `trackCount`) and lays its zones on them with
+   `grid-template-rows: subgrid`, 12 apart, one zone per track. The nested lists of facts and the
+   listing footer are subgrids too (`FactList`). So the cards of a row share one height and each
+   zone starts at the same height in all of them; text zoom and text spacing only grow tracks,
+   because no zone has a fixed height.
+
+   Never `content-visibility: auto` here: an off-screen card would size its tracks from a
+   placeholder and break the alignment of its row (CARD_GRID_SYSTEM §14). */
+
+.ac-card {
+  display: grid;
+  grid-template-rows: subgrid;
+  row-gap: var(--space-12);
+  min-width: 0;
+  padding: var(--space-16);
+  border: 1px solid var(--border-secondary);
+  border-radius: var(--radius-12);
+  color: var(--text-primary);
+  @apply type-body;
+}
+
+.ac-card__zone {
+  min-width: 0;
+}
+
+/* Head zone: the stage, then the title and its lines. */
+.ac-card__head {
+  display: flex;
+  align-items: center;
+  gap: var(--space-12);
+}
+
+.ac-card__text {
+  display: flex;
+  min-width: 0;
+  flex: 1;
+  flex-direction: column;
+}
+
+/* Title: `body-strong` at any heading level, clamped to 2 lines (the Pokédex, to 1).
+
+   The clamp needs `overflow: hidden`, which would cut the focus ring of the link inside: 2 px
+   plus its 1 px offset (spec 13.7) reach past the first letter and a hair above the first line.
+   Padding pulled back by the same negative margin gives the clip box that room without moving a
+   line or changing where the lines break; the 1 px below only uncovers the leading of the line
+   the clamp hides, which holds no ink. The reference writes `margin: 0` and no padding. */
+.ac-card__title {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+  margin: -1px calc(var(--space-4) * -1);
+  padding: 1px var(--space-4);
+  @apply type-body-strong;
+}
+
+.ac-card__title--clamp1 {
+  -webkit-line-clamp: 1;
+}
+
+.ac-card__title-link {
+  color: var(--text-primary);
+  text-decoration: none;
+}
+
+.ac-card__title-link:hover {
+  text-decoration: underline;
+}
+
+/* Touch (S14, spec 13.7): the title link is one 22 px line, and a hit area of its own would be
+   cut by the `overflow: hidden` of the clamp above. So its area hangs from the head zone
+   instead: the head becomes the containing block, which the title is not, and the clip of the
+   title does not reach a box positioned outside it. The area is the whole width of the head and
+   its height, at least 44 (a loot head is 40), centred on it. Nothing else in the head is
+   interactive — the stage, the Shiny line and the meta are text and pictures — so a tap on the
+   head opens the entity, and the card itself is still no link: the facts, the drops and the
+   footer keep their own targets. The reference draws no touch rule for the title. */
+@media (pointer: coarse) {
+  .ac-card__head {
+    position: relative;
+  }
+
+  .ac-card__title-link::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 0;
+    width: 100%;
+    height: max(100%, var(--size-touch));
+    transform: translateY(-50%);
+  }
+}
+
+.ac-card__meta {
+  margin: 0;
+  overflow: hidden;
+  color: var(--text-tertiary);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  @apply type-ui;
+}
+
+.ac-card__shiny {
+  display: flex;
+  align-items: center;
+  gap: var(--space-6);
+  margin: 0;
+  color: var(--text-tertiary);
+  @apply type-ui;
+}
+
+/* Compact anatomy (spec 7.6.4, CARD_GRID_SYSTEM §6.2 and §6.3): a card narrower than
+   --grid-compact (240). Container queries on the grid, never JS or a prop, so the DOM is the one
+   of the regular anatomy. The reference's `.ac-card--compact`, `.ac-card__head--compact` and the
+   `--center` modifiers become these rules: padding 12, and the head stacked and centred, 4 apart,
+   with the title on up to 2 centred lines. `display: contents` lifts the title and its lines into
+   the stacked head, as the reference's compact head holds them. Their `max-width` keeps a long
+   line inside the card, where the reference would let a fit-content line overflow it; the
+   title's counts the room its focus ring takes on each side.
+
+   Pokédex cards under 495 of grid (--layout-dex-compact), two columns of cards under 240. The
+   panels of their element chips and drops then anchor by the column of the card in its grid
+   (`--ac-tt-align: column`, read by src/scripts/game-tooltip.ts, 7.5.5). The rest of that
+   anatomy belongs to its pieces: the round element chip to element-chip.css, the drops and the
+   short meta text to the DexCard styles. */
+@container ac-card-grid (width < 495px) {
+  .ac-card-grid[data-family='pokedex'] .ac-card {
+    --ac-tt-align: column;
+    padding: var(--space-12);
+  }
+
+  .ac-card-grid[data-family='pokedex'] .ac-card__head {
+    flex-direction: column;
+    gap: var(--space-4);
+  }
+
+  .ac-card-grid[data-family='pokedex'] .ac-card__text {
+    display: contents;
+  }
+
+  .ac-card-grid[data-family='pokedex'] .ac-card__title {
+    max-width: calc(100% + var(--space-4) * 2);
+    -webkit-line-clamp: 2;
+    text-align: center;
+  }
+
+  .ac-card-grid[data-family='pokedex'] .ac-card__meta {
+    max-width: 100%;
+    text-align: center;
+  }
+
+  .ac-card-grid[data-family='pokedex'] .ac-card__shiny {
+    max-width: 100%;
+    justify-content: center;
+  }
+}
+
+/* Loot and drop cards under 240 of grid (one column): padding 12 and the head centred. Their
+   facts stack label over value in the LootCard styles. */
+@container ac-card-grid (width < 240px) {
+  .ac-card-grid[data-family='loot'] .ac-card {
+    padding: var(--space-12);
+  }
+
+  .ac-card-grid[data-family='loot'] .ac-card__head {
+    flex-direction: column;
+    gap: var(--space-4);
+  }
+
+  .ac-card-grid[data-family='loot'] .ac-card__text {
+    display: contents;
+  }
+
+  .ac-card-grid[data-family='loot'] .ac-card__title {
+    max-width: calc(100% + var(--space-4) * 2);
+    text-align: center;
+  }
+
+  .ac-card-grid[data-family='loot'] .ac-card__meta {
+    max-width: 100%;
+    text-align: center;
+  }
+
+  .ac-card-grid[data-family='loot'] .ac-card__shiny {
+    max-width: 100%;
+    justify-content: center;
+  }
+}
+
+/* Without subgrid the card becomes a flex column (spec 7.6.5, CARD_GRID_SYSTEM §5.5): it keeps
+   the height of its row, the zones keep their 12 apart and the footer stays at the bottom; only
+   the alignment of wrapped content across cards is lost. */
+@supports not (grid-template-rows: subgrid) {
+  .ac-card[data-anat] {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .ac-card[data-anat] > * {
+    align-self: stretch;
+  }
+
+  .ac-card[data-anat] > [data-zone='footer'] {
+    margin-top: auto;
+  }
+}

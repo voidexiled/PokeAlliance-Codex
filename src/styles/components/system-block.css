@@ -1,0 +1,145 @@
+/* The blocks of a system page (spec 8.4, 8.4.2; `Lienzo:Sistema-Boost`): what
+   src/components/systems/Block.astro draws that no design-system component carries — the
+   paragraph, the h3, the plain lists, the chips block, an entity with its sprite in a table
+   cell and the punctuation glued to an entity — and the lead column of src/pages/[locale]/sistemas/[id].astro. Every other piece of
+   the page — Section, Timeline, Note, InfoCard, InfoBanner, DataTable, Chip, NestedEntity — is a
+   design-system component whose rules global.css already carries.
+
+   A per-page sheet of this page family alone (13.6, D-018): Block.astro imports it, so it
+   travels with the system pages and never reaches the shared sheet. The layer order of
+   global.css is repeated before the block, so `components` keeps its place whichever of the two
+   sheets the browser reads first (3.6); `@reference` brings the text styles `@apply` needs
+   without writing them here again.
+
+   The values are section.css's and the board's. They are written on classes of their own,
+   because the plain-content rules of section.css key on the Section's own children and Astro
+   may hand a TSX component its children inside a `display: contents` slot element. */
+
+@reference '../theme.css';
+
+@layer properties, theme, base, components, utilities;
+
+@layer components {
+  /* The lead paragraphs under the title (8.4.2 step 3): 16 apart, as the blocks of a
+     Section; the column of the page keeps its 48 around the group. */
+  .ac-system-intro {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-16);
+  }
+
+  /* `parrafo`: justified, in the text of its column. Inside a Section that is the Section's
+     `body` (14/22); a lead paragraph sits in the page column and keeps the page's 16/24
+     (DS:PageLayout), as the board draws the lead of Boost — 96 tall, which puts the
+     InfoCard grid at the y 1650 of 8.4's acceptance. */
+  .ac-system-block__paragraph {
+    margin: 0;
+    text-align: justify;
+  }
+
+  /* `subtitulo`: the 16/24 h3, 24 under the previous block (8 of margin over the 16 of the
+     Section's gap). */
+  .ac-system-block__subtitle {
+    margin: var(--space-8) 0 0;
+    @apply type-h3;
+  }
+
+  /* `lista` and the `<ol>` of `pasos` without a sprite on every step: markers inside, items
+     8 apart (the board's «Orden de inversión»). */
+  .ac-system-block__list,
+  .ac-system-block__steps {
+    margin: 0;
+    padding: 0;
+    list-style-position: inside;
+    @apply type-body;
+  }
+
+  .ac-system-block__list {
+    list-style-type: disc;
+  }
+
+  .ac-system-block__steps {
+    list-style-type: decimal;
+  }
+
+  .ac-system-block__list > li,
+  .ac-system-block__steps > li {
+    margin: 0;
+  }
+
+  .ac-system-block__list > li + li,
+  .ac-system-block__steps > li + li {
+    margin-top: var(--space-8);
+  }
+
+  /* The sentence of an item (Block.astro): a paragraph, so its links are links in a
+     paragraph (13.7), inline so the marker drawn inside stays on its first line. */
+  .ac-system-block__item-text {
+    display: inline;
+    margin: 0;
+  }
+
+  /* `chips`: the label in `ui-step` over the chips, 8 apart; the chips 4 apart and wrapping
+     («Ejemplo con una piedra de 20%:» on the board). */
+  .ac-system-block__chips {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-8);
+  }
+
+  .ac-system-block__chips-label {
+    margin: 0;
+    @apply type-ui-step;
+  }
+
+  .ac-system-block__chip-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-4);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .ac-system-block__chip-list > li {
+    display: flex;
+    margin: 0;
+  }
+
+  /* The chips of a step of the `<ol>`: under its text, as in the Timeline. */
+  .ac-system-block__steps .ac-system-block__chip-list {
+    margin-top: var(--space-8);
+  }
+
+  /* An entity of a table column with `conSprite` («Stones por elemento»): its sprite centred
+     in a game cell of 32, 8 from the name. The trigger rules of nested-entity.css carry no
+     specificity, so this gap wins over their 4. The static form is an entity of a cell
+     without a panel (R2), with or without its sprite: one line, as the name of a link, so a
+     list of names breaks between names and never inside one. */
+  .ac-system-block__entity {
+    gap: var(--space-8);
+  }
+
+  .ac-system-block__entity-static {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-8);
+    vertical-align: top;
+    white-space: nowrap;
+  }
+
+  /* An entity or an amount with the punctuation that follows it (Block.astro, `glue`): one
+     line, so the comma or the stop never starts the next one. */
+  .ac-system-block__glue {
+    white-space: nowrap;
+  }
+
+  .ac-system-block__sprite {
+    display: flex;
+    width: var(--size-cell);
+    height: var(--size-cell);
+    flex: none;
+    align-items: center;
+    justify-content: center;
+  }
+}

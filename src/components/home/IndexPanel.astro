@@ -1,0 +1,194 @@
+---
+// IndexPanel (spec 7.2.7, 8.1 step 4, E17, PZ-04, WD1; DS:IndexPanel; CARD_GRID_SYSTEM §6.5): one
+// panel of the bento of the home — «Sistemas», «Ítems», «Actividades» or «Pokédex». A strip of 44
+// with the sprite of the panel in its box of 24, the title and the number of links, over the grid
+// of links of 40: each one with its game icon in the cell of 32 and its name.
+//
+// Markup and classes of the reference (`bundle.js` IndexPanel, C-R2): a `section` named by its
+// heading (`aria-labelledby` = `id`), the strip, and a `ul` of `li` with one link each. A link
+// whose entity has tooltip rows — a system, 8.4 — is a `NestedEntity` with the shape of the link
+// (`plain`): its panel opens above it, anchored to its left edge (`up` and `start`, 7.2.7), and
+// Shift pins it and Escape closes it like every other panel. A link without rows is a plain `<a>`
+// (R2). Both kinds are drawn by one React component, `PanelLink`, so the body of a link reaches
+// `NestedEntity` as its own children: through a slot, Astro would wrap it in an element of its own
+// inside the trigger, between the link and its two flex children.
+//
+// The count is the number of links the panel draws (PZ-04, WD1): there is no prop for it, so it
+// can never say more or less than what the reader finds under it. The figure is grouped with the
+// format of the page (13.3) and followed, for the screen reader only, by the word of the
+// dictionary: « páginas» / « pages», or « elementos» / « elements» in the Pokédex panel; a plural
+// entry picks its form for that same count. A panel with no link is not drawn at all (8.1 step
+// 4, WG5): its area of the bento stays empty. Which routes exist is the composer's to know: the
+// panel links what it receives, and every link it receives is a route of the build.
+//
+// Icons (DS:guias/20, DS:IndexPanel): a pixel sprite at 1x centred on whole pixels in its game
+// cell (`cell`), a frame of 32 filling the cell of 32; an illustration (an element icon of 100) at
+// 24, as the Pokédex panel draws its 18 elements. A link without a sprite keeps the empty cell,
+// so its name starts at the same x as the others. The sprite of the strip is centred the same
+// way in its box of 24, even when its cell is larger than the box.
+//
+// Placement (E17): the bento places its panels with `grid-template-areas`; `area` names the cell
+// this panel fills (`data-area`) and the panel never writes an inline position (IN4). `span`
+// keeps what it means inside the panel, two link columns per bento column: index-panel.css gives
+// a panel of `span` 2 four link columns while it is at least as wide as two bento columns, and
+// two in the single column of a phone.
+//
+// Texts come from the dictionary of the page (DP1): `title`, `countLabel` and `hint`
+// (`ui.pinHint`), required as soon as one link opens a panel. Link labels and sprites come from
+// the registries, resolved by the composer (DP2, DP3); a label that exists only in the other
+// language carries `labelLang` (8.0.5, WA4). Astro: the panel is only ever drawn by the home page,
+// never inside an island (C-R1). Styles: index-panel.css, a per-page sheet this component imports
+// (D-018).
+import '@/styles/components/index-panel.css';
+
+import { createElement, type ReactElement } from 'react';
+
+import { NestedEntity } from '@/components/game/NestedEntity';
+import { Sprite, type SpriteProps } from '@/components/game/Sprite';
+import type { Locale } from '@/i18n/config';
+import { plural, type PluralMessage } from '@/i18n/messages/types';
+import { formatInteger } from '@/lib/format/numbers';
+import type { TipData } from '@/lib/game/tips';
+
+/** One link of a panel, already resolved by the composer (DP1, DP2, DP3). */
+export interface IndexPanelLink {
+  /** Stable id of the entry (the registry `id`). */
+  id: string;
+  /** Visible name of the page. */
+  label: string;
+  /** Language of a label that exists only in the other locale (8.0.5, T22, WA4). */
+  labelLang?: Locale;
+  /** Route of the page, with its locale segment and trailing slash (8.0.1); may carry a query. */
+  href: string;
+  /** Sprite at 1x from the adapter (`spriteOrNull`); `null` leaves the cell of 32 empty. */
+  icon: SpriteProps | null;
+  /** Panel of the entity (`systemTip`, 7.5.3); a panel with no row is not a tooltip (R2). */
+  tip?: TipData;
+}
+
+interface Props {
+  /** Id of the heading, which names the section. Unique in the page. */
+  id: string;
+  /** The heading: «Sistemas» / «Systems», «Ítems» / «Items», «Actividades», «Pokédex». */
+  title: string;
+  /** Sprite of the strip (`ui/indice/*`, 3.13); `null` leaves the box of 24 empty. */
+  sprite: SpriteProps | null;
+  /** The links, in the order of their registry. */
+  links: readonly IndexPanelLink[];
+  /** The word after the count, for the screen reader: « páginas», « elementos»… */
+  countLabel: string | PluralMessage;
+  /** Bento columns the panel is drawn across: 2 link columns each. Default 1. */
+  span?: 1 | 2 | 3;
+  /** Level of the heading. Default 2. */
+  level?: 2 | 3;
+  /** Language of the page: the format of the count and of the amounts inside a panel. */
+  locale: Locale;
+  /** Strip of the panels, `ui.pinHint`. Required as soon as one link carries a `tip`. */
+  hint?: string;
+  /** Cell of the bento (`data-area`): `sistemas`, `items`, `actividades` or `pokedex`. */
+  area?: string;
+  /** Utilities added by the caller, after the component's own classes (3.8). */
+  class?: string;
+}
+
+const {
+  id,
+  title,
+  sprite,
+  links,
+  countLabel,
+  span = 1,
+  level = 2,
+  locale,
+  hint,
+  area,
+  class: className,
+} = Astro.props;
+
+/** An illustration — an element icon — is drawn at 24 inside its cell (DS:IndexPanel). */
+const ILLUSTRATION = 24;
+
+const count = links.length;
+const word = typeof countLabel === 'string' ? countLabel : plural(locale, count, countLabel);
+const Heading = level === 3 ? 'h3' : 'h2';
+const spanClass = span === 2 || span === 3 ? `ac-index-panel--span-${span}` : null;
+
+/** A sprite of the panel: a pixel sprite at 1x in its game cell, an illustration at 24. */
+function image(icon: SpriteProps): ReactElement {
+  return icon.smooth
+    ? createElement(Sprite, { ...icon, width: ILLUSTRATION, height: ILLUSTRATION })
+    : createElement(Sprite, { ...icon, scale: 1, cell: true });
+}
+
+/** The sprite of the strip, through the same rule as the icons of the links. */
+function StripSprite({ icon }: { icon: SpriteProps }): ReactElement {
+  return image(icon);
+}
+
+/** One link: the icon cell and the name, as a plain link or as the trigger of its panel. */
+function PanelLink({ link }: { link: IndexPanelLink }): ReactElement {
+  const body = [
+    createElement(
+      'span',
+      { key: 'icon', className: 'ac-index-panel__icon', 'aria-hidden': true },
+      link.icon === null ? null : image(link.icon),
+    ),
+    createElement(
+      'span',
+      { key: 'label', className: 'ac-index-panel__label', lang: link.labelLang },
+      link.label,
+    ),
+  ];
+  if (link.tip === undefined || link.tip.rows.length === 0) {
+    return createElement('a', { href: link.href, className: 'ac-index-panel__link' }, body);
+  }
+  if (hint === undefined) {
+    throw new Error(
+      `IndexPanel: el enlace «${link.id}» abre un panel y falta \`hint\` (ui.pinHint).`,
+    );
+  }
+  return createElement(NestedEntity, {
+    tip: link.tip,
+    href: link.href,
+    variant: 'plain',
+    placement: 'up',
+    align: 'start',
+    block: true,
+    locale,
+    hint,
+    className: 'ac-index-panel__link',
+    wrapperClassName: 'ac-index-panel__tip',
+    children: body,
+  });
+}
+---
+
+{
+  count > 0 && (
+    <section
+      class:list={['ac-index-panel', spanClass, className]}
+      aria-labelledby={id}
+      data-area={area}
+    >
+      <div class="ac-index-panel__head">
+        <span class="ac-index-panel__sprite" aria-hidden="true">
+          {sprite && <StripSprite icon={sprite} />}
+        </span>
+        <Heading id={id} class="ac-index-panel__title">
+          {title}
+        </Heading>
+        <span class="ac-index-panel__count">
+          {formatInteger(count, locale)}
+          <span class="sr-only">{` ${word.trim()}`}</span>
+        </span>
+      </div>
+      <ul class="ac-index-panel__links">
+        {links.map((link) => (
+          <li class="ac-index-panel__item">
+            <PanelLink link={link} />
+          </li>
+        ))}
+      </ul>
+    </section>
+  )
+}

@@ -1,7 +1,31 @@
 ---
-import AppLayout from '../../../layouts/AppLayout.astro';
-import { getLocale, locales, type Locale } from '../../../i18n/config';
-import { GuildRankingTool } from '../../../components/tools/GuildRankingTool';
+// Guild (spec 10, `Lienzo:Guild`; template H of 8.0.2): `/{l}/herramientas/guild/`, the 944
+// column without a rail and without `Toc`, prerendered.
+//
+// Render (10.5, CA-10.13). The build cannot know whether the reader has a session or
+// snapshots, so the page is the frame and one island, `GuildRoot` (`client:load`), which also
+// draws the crumbs and the h1: it repaints both once a guild is loaded (C-R1). Its prerendered
+// HTML is the crumbs «Herramientas › Guild», the h1 «Guild» and the empty region with
+// `aria-busy="true"`; the data row, the empty state and the sections exist only in the browser.
+// No `breadcrumb` goes to PageLayout for that reason.
+//
+// Data: the island gets the `guild` namespace, the leaves of `ui` its sections read (13.2),
+// the «Sin resultados» of `search` for «Buscar miembro», the worlds of content/mundos.json in
+// the page language for «Mundo:» (account mode, 10.4) and the link to `/{l}/cuenta/`, which
+// exists only when the build has the public Supabase settings (9.3); without them Guild stays
+// in local mode and the link is not drawn. `guild.empty` stays out of the props, which are
+// written into the HTML: the island reads that sentence itself (CA-10.13).
+//
+// Styles: the island and its sections bring their per-page sheets (guild-*.css, D-018).
+import { getAlternatePath, getLocale, locales, type Locale } from '@/i18n/config';
+import type { Messages } from '@/i18n/messages/en';
+import { en } from '@/i18n/messages/en';
+import { es } from '@/i18n/messages/es';
+import { getMundos } from '@/lib/content/registry';
+import { getSupabasePublicConfig } from '@/lib/supabase/env';
+
+import { GuildRoot } from '@/components/guild/GuildRoot';
+import PageLayout from '@/layouts/PageLayout.astro';
 
 export const prerender = true;
 
@@ -9,48 +33,52 @@ export function getStaticPaths() {
   return locales.map((locale) => ({ params: { locale } }));
 }
 
-const locale = getLocale(Astro.params.locale) as Locale;
-const copy =
-  locale === 'es'
-    ? {
-        title: 'Ranking de guild',
-        description:
-          'Calcula el progreso semanal de una guild a partir del JSON exportado por el cliente.',
-        home: 'Inicio',
-        tools: 'Herramientas',
-        eyebrow: 'Herramientas / Guild',
-        intro:
-          'La semana se mide desde el lunes 00:00 de Server Save BR. El valor de cada daily sigue el nivel de cada miembro y las metas de puntos, dailies y contribución pueden combinarse por día, semana o ambas.',
-      }
-    : {
-        title: 'Guild ranking',
-        description: 'Calculate weekly guild progress from the JSON exported by the client.',
-        home: 'Home',
-        tools: 'Tools',
-        eyebrow: 'Tools / Guild',
-        intro:
-          'The week is measured from Monday 00:00 BR Server Save. Daily values follow each member level, while total points, dailies and contribution goals can be combined by day, week or both.',
-      };
+const dictionaries: Record<Locale, Messages> = { es, en };
+
+const locale = getLocale(Astro.params.locale);
+const path = Astro.url.pathname;
+const alternates = Object.fromEntries(
+  locales.map((option) => [option, getAlternatePath(path, option)]),
+) as Record<Locale, string>;
+
+const { guild, ui, shell, tools, search } = dictionaries[locale];
+// The island reads `guild.empty` itself (guild-empty.ts), so it never reaches the HTML.
+const { empty, ...guildMessages } = guild;
+void empty;
+const worlds = getMundos(locale).map((world) => ({ id: world.id, nombre: world.nombre }));
+const accountHref = getSupabasePublicConfig() === null ? null : `/${locale}/cuenta/`;
 ---
 
-<AppLayout locale={locale} title={copy.title} description={copy.description}>
-  <div>
-    <nav
-      class="wiki-breadcrumbs"
-      aria-label={locale === 'es' ? 'Ruta de navegación' : 'Breadcrumb'}
-    >
-      <a href={`/${locale}/`}>{copy.home}</a>
-      <span class="wiki-breadcrumb-separator">/</span>
-      <a href={`/${locale}/herramientas/`}>{copy.tools}</a>
-      <span class="wiki-breadcrumb-separator">/</span>
-      <span>{copy.title}</span>
-    </nav>
-    <header class="wiki-page-header">
-      <p class="eyebrow">{copy.eyebrow}</p>
-      <h1 class="display-title">{copy.title}</h1>
-      <p class="muted-copy">{copy.intro}</p>
-    </header>
-
-    <GuildRankingTool client:load locale={locale} />
-  </div>
-</AppLayout>
+<PageLayout
+  locale={locale}
+  title={guild.title}
+  description={guild.description}
+  alternates={alternates}
+>
+  <GuildRoot
+    client:load
+    locale={locale}
+    messages={guildMessages}
+    ui={{
+      close: ui.close,
+      dismiss: ui.dismiss,
+      decrease: ui.decrease,
+      increase: ui.increase,
+      pinHint: ui.pinHint,
+      inactive: ui.inactive,
+      pagination: ui.pagination,
+      prev: ui.prev,
+      next: ui.next,
+      page: ui.page,
+    }}
+    searchEmpty={search.empty}
+    breadcrumb={{
+      label: shell.breadcrumb,
+      tools: tools.title,
+      toolsHref: `/${locale}/herramientas/`,
+      guildHref: `/${locale}/herramientas/guild/`,
+    }}
+    worlds={worlds}
+    accountHref={accountHref}
+  />
+</PageLayout>

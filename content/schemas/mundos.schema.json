@@ -1,0 +1,40 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://alliance-codex.local/schemas/mundos.schema.json",
+  "title": "Mundos",
+  "description": "Los mundos del juego. El Inicio los lista en su tabla «Mundos», ordenados por nombre con los números en orden (Titan 2 antes que Titan 10). Con la lista vacía, o sin este archivo, el Inicio no muestra la tabla.",
+  "type": "object",
+  "required": ["mundos"],
+  "additionalProperties": false,
+  "properties": {
+    "$schema": { "type": "string" },
+    "mundos": {
+      "type": "array",
+      "description": "Un mundo por servidor del juego. Ni el id ni el nombre se repiten.",
+      "items": { "$ref": "#/$defs/mundo" }
+    }
+  },
+  "$defs": {
+    "slug": {
+      "type": "string",
+      "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$",
+      "description": "Minúsculas, números y guiones (kebab-case)."
+    },
+    "mundo": {
+      "type": "object",
+      "required": ["id", "nombre"],
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/slug",
+          "description": "Identificador estable del mundo: \"titan-1\". No cambia aunque cambie el nombre."
+        },
+        "nombre": {
+          "type": "string",
+          "pattern": "\\S",
+          "description": "Nombre del mundo tal como lo muestra el juego, igual en los dos idiomas: \"Titan 1\"."
+        }
+      }
+    }
+  }
+}

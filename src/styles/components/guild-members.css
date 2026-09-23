@@ -1,0 +1,133 @@
+/* «Miembros» of the Guild page (spec 10.9; `Lienzo:Guild`): the toolbar over the members table,
+   the name buttons of its first column, the help and status lines, and the member dialog
+   (src/components/guild/GuildMembers.tsx, src/components/guild/MemberDialog.tsx). The table,
+   its inactive rows and chip are DataTable's (data-table.css); the search, the toggles, the
+   buttons, the pages and the dialog frame are their components' own sheets.
+
+   Per-page stylesheet (D-018, §13.6): only the Guild page draws it, so global.css does not
+   import it; GuildMembers.tsx and MemberDialog.tsx do. It repeats the layer order of
+   global.css before its block (§3.6), and `@reference` brings the text styles of theme.css. */
+
+@reference '../theme.css';
+
+@layer properties, theme, base, components, utilities;
+
+@layer components {
+  /* Toolbar: search and filter on the left, the exports on the right; it wraps on a phone. */
+  .ac-guild-members__toolbar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-16);
+  }
+
+  .ac-guild-members__filters {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-16);
+    min-width: 0;
+  }
+
+  .ac-guild-members__exports {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-8);
+  }
+
+  /* «Imagen descargada.»: 12/16 beside the buttons, so an empty region takes no row. */
+  .ac-guild-members__status {
+    margin: 0;
+    @apply type-ui;
+    color: var(--text-tertiary);
+  }
+
+  /* The name opens the member dialog (X10): it reads as the cell's text, as the board draws
+     it, with the underline of a control under the pointer. 24 px keeps the target size
+     (WCAG 2.5.8); the focus ring is the global one. */
+  .ac-guild-members__name {
+    display: inline-flex;
+    align-items: center;
+    min-height: 24px; /* sin token: área mínima del objetivo (WCAG 2.5.8) */
+    max-width: 100%;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    border-radius: var(--radius-4);
+    background: transparent;
+    color: inherit;
+    font: inherit;
+    text-align: left;
+    overflow-wrap: anywhere;
+    cursor: pointer;
+  }
+
+  .ac-guild-members__name:hover {
+    text-decoration: underline;
+    text-underline-offset: 3px; /* sin token: subrayado de un control bajo el puntero */
+  }
+
+  /* «Sin dailies ni contribución desde hace X días o más.»: 12/16 in `helper`, as the board. */
+  .ac-guild-members__help {
+    margin: 0;
+    @apply type-ui;
+    color: var(--helper);
+  }
+
+  .ac-guild-members__empty {
+    margin: 0;
+    color: var(--text-tertiary);
+  }
+
+  /* Member dialog: the blocks keep the 16 rhythm of the dialog body; a heading sits 8 over
+     its table or editor. */
+  .ac-member-dialog__days,
+  .ac-member-dialog__split {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-8);
+  }
+
+  .ac-member-dialog__heading {
+    margin: 0;
+    @apply type-body-strong;
+  }
+
+  .ac-member-dialog__help {
+    margin: 0;
+    @apply type-ui;
+    color: var(--helper);
+  }
+
+  .ac-member-dialog__text {
+    margin: 0;
+    color: var(--text-tertiary);
+  }
+
+  /* «2.340 de 2.950 puntos» and the band chip on one line, wrapping on a narrow phone. */
+  .ac-member-dialog__week {
+    display: inline-flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-8);
+  }
+
+  /* Normal, Wildscape and Primal side by side; stacked when the dialog narrows. */
+  .ac-member-dialog__fields {
+    display: grid;
+    grid-template-columns: repeat(
+      auto-fit,
+      minmax(120px, 1fr)
+    ); /* sin token: campo de dificultad */
+    gap: var(--space-8);
+  }
+
+  .ac-member-dialog__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-8);
+    padding-top: var(--space-8);
+  }
+}

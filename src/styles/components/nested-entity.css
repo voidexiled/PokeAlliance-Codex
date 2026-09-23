@@ -1,0 +1,102 @@
+/* NestedEntity (spec 7.5.1, 7.5.5, 7.5.7; DS:NestedEntity), ported from the
+   `.ac-nested-entity` block of the design system's components/bundle.css. global.css
+   imports this file with layer(components).
+
+   The wrapper of a trigger and its panel, and the four shapes a trigger takes: the entity
+   link, the chip with its 16 sprite, the text chip and `plain`, which is the caller's own
+   shape (a slot, a held row, a cell of the Lista).
+
+   What is not ported, and why: the reference positions a `.ac-nested-entity__pop` holder
+   with CSS and has nine placement modifiers for it (`--up-left`, `--side-right`,
+   `--row-right`…). Here the panel is the popover itself (C-R2) and
+   `src/scripts/game-tooltip.ts` writes its position with @floating-ui/dom, so
+   `game-tooltip.css` owns the popover reset, the safe bridge of 7.5.6 and the scroll of
+   7.5.5, and this file must not restyle `.ac-game-tooltip[popover]`. The wrapper keeps the
+   reference's `position: relative`: a panel in the top layer does not read it, and the
+   rules of other components that key on it (the name cell of a Lista row) port unchanged. */
+
+.ac-nested-entity {
+  position: relative;
+  display: inline-flex;
+  flex: none;
+  vertical-align: top;
+}
+
+/* A trigger that has to share a line and may shrink: a slot, a held row, a Lista cell. */
+.ac-nested-entity--block {
+  display: flex;
+  flex: 0 1 auto;
+  min-width: 0;
+}
+
+/* The trigger variants carry zero specificity, so the caller's own class — `plain`, or an
+   override on top of a chip — always wins without raising it. */
+:where(button.ac-nested-entity__trigger) {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  text-align: inherit;
+  cursor: pointer;
+}
+
+/* Entity link: the link colour, underlined on hover, with 2 px of air that does not move
+   the text it sits in. */
+:where(.ac-nested-entity__trigger--link) {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-4);
+  margin: 0 calc(var(--space-2) * -1);
+  padding: 0 var(--space-2);
+  border-radius: var(--radius-4);
+  color: var(--link);
+  white-space: nowrap;
+  text-decoration: none;
+}
+
+:where(.ac-nested-entity__trigger--link):hover {
+  text-decoration: underline;
+}
+
+/* Entity chip: a 16 sprite and the name; the text chip is the same pill without a sprite. */
+:where(.ac-nested-entity__trigger--chip, .ac-nested-entity__trigger--chip-text) {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-4);
+  padding: var(--space-4) var(--space-10) var(--space-4) var(--space-8);
+  border-radius: var(--radius-full);
+  background: var(--bg-tertiary);
+  color: var(--text-primary);
+  white-space: nowrap;
+  text-decoration: none;
+  @apply type-ui;
+}
+
+/* No sprite: the padding closes on the side the sprite left empty. */
+:where(.ac-nested-entity__trigger--chip-text) {
+  padding: var(--space-4) var(--space-8);
+}
+
+/* Touch: the 24 px entity chip keeps its size and gets a hit area of 44 × 44 at least (S14,
+   spec 13.7), the zone the link chip has in chip.css and the «+N» pill in plus-n.css: the
+   chip's own width, or 44 when the chip is narrower (the round icon chip of the compact
+   Pokédex card is 24), centred on it. The reference draws no touch rule for this trigger.
+   The chip becomes a containing block and nothing moves for it: the panel is its sibling
+   in the top layer, and the name the compact chip hides stays a clipped pixel. */
+@media (pointer: coarse) {
+  :where(.ac-nested-entity__trigger--chip, .ac-nested-entity__trigger--chip-text) {
+    position: relative;
+  }
+
+  :where(.ac-nested-entity__trigger--chip, .ac-nested-entity__trigger--chip-text)::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: max(100%, var(--size-touch));
+    height: var(--size-touch);
+    transform: translate(-50%, -50%);
+  }
+}

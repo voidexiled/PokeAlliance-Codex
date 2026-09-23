@@ -1,0 +1,114 @@
+/* Timeline (spec 7.2.3, 7.2.8, DS:Timeline), ported from the `.ac-timeline` block of the
+   design system's components/bundle.css. global.css imports this file with
+   layer(components).
+
+   Each step is a row: the 20 px rail, 6 apart from the body. The body is a column 8
+   apart with 24 under it (0 under the last step): label of 12/16 in italic bold
+   (`ui-step`), text of 14/22 (`body`), the points and the chips, 4 apart. */
+
+.ac-timeline {
+  margin: 0;
+  padding: var(--space-8) 0 0;
+  list-style: none;
+}
+
+/* `margin: 0` is not in the reference: a Timeline placed right inside a Section is an `ol`
+   child of it, and the zero-specificity «li + li» rhythm of section.css would add 8 px
+   above every step. The boards (Componentes, Sistema-Boost «Cómo aplicar») keep the 24 of
+   the body's padding as the only space between steps. */
+.ac-timeline__step {
+  display: flex;
+  gap: var(--space-6);
+  margin: 0;
+}
+
+/* 20 px rail, raised 2 px so the node centres on the first line of the label. */
+.ac-timeline__rail {
+  position: relative;
+  width: var(--space-20);
+  flex: none;
+  margin-top: calc(var(--space-2) * -1);
+}
+
+/* 20 × 20 on `bg-primary`, covering the line. It comes after the line in the DOM, so it
+   paints over it without a z-index. */
+.ac-timeline__node {
+  position: relative;
+  display: flex;
+  width: var(--space-20);
+  height: var(--space-20);
+  align-items: center;
+  justify-content: center;
+  background: var(--bg-primary);
+}
+
+/* Dashed 1 px line in `border-primary` from the node down to the next step: a 6 px dash
+   (`space-6`) and a 4 px gap (`space-4`), so the pattern repeats every 10. The hard-stop
+   gradient is how the reference draws a dash of exact length (a `dashed` border leaves
+   the dash length to the browser); it paints two flat inks, the token and `transparent`,
+   and blends none (S6). */
+.ac-timeline__line {
+  position: absolute;
+  left: 50%;
+  top: 0;
+  width: 1px;
+  height: 100%;
+  margin-top: var(--space-4);
+  margin-left: -0.5px; /* sin token: media línea de 1 px, para centrarla en el raíl */
+  background-image: linear-gradient(
+    var(--border-primary) var(--space-6),
+    transparent var(--space-6)
+  );
+  background-position: 50% 50%;
+  background-size: 1px calc(var(--space-6) + var(--space-4));
+  background-repeat: repeat-y;
+}
+
+.ac-timeline__body {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  gap: var(--space-8);
+  padding-bottom: var(--space-24);
+}
+
+.ac-timeline__step--last .ac-timeline__body {
+  padding-bottom: 0;
+}
+
+.ac-timeline__label {
+  margin: 0;
+  @apply type-ui-step;
+}
+
+.ac-timeline__text {
+  margin: 0;
+  @apply type-body;
+}
+
+/* Points of a step (spec 7.2.8): the plain list under the step text, drawn like the lists
+   of a Section (markers inside, items 8 apart, 14/22). It has no class of its own, so the
+   step keeps exactly the classes of the reference. */
+.ac-timeline__body > ul:not(.ac-timeline__chips) {
+  margin: 0;
+  padding: 0;
+  list-style: disc inside;
+  @apply type-body;
+}
+
+.ac-timeline__body > ul:not(.ac-timeline__chips) > li + li {
+  margin-top: var(--space-8);
+}
+
+.ac-timeline__chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-4);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.ac-timeline__chip {
+  display: flex;
+}

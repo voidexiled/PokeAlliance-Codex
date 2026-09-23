@@ -1,0 +1,1871 @@
+{
+  "anuncios": [
+    {
+      "id": "shiny-ditto-susanoo",
+      "tipo": "pokemon",
+      "vendedor": "kaiser",
+      "mundo": "sun",
+      "publicado": "2026-09-18T17:20:00Z",
+      "expira": "2030-10-02T17:20:00Z",
+      "estado": "publicado",
+      "precio": {
+        "real": {
+          "moneda": "BRL",
+          "importe": "90"
+        },
+        "juego": [
+          {
+            "tipo": "pokedolares",
+            "cantidad": 150000000
+          },
+          {
+            "tipo": "diamonds",
+            "cantidad": 400
+          }
+        ],
+        "aConvenir": false
+      },
+      "pokemon": {
+        "pokemon": "shiny-ditto",
+        "ball": {
+          "item": "premier-ball",
+          "nombre": "Premier Ball"
+        },
+        "aura": "premier",
+        "boost": 20,
+        "starLevel": 0,
+        "nickname": "S U S A N O O",
+        "memorySlots": 6,
+        "memorias": [null, null, null, null, null, null],
+        "helds": [
+          {
+            "item": null,
+            "nombre": "X-Attack",
+            "tier": 5
+          },
+          {
+            "item": null,
+            "nombre": "X-Lucky",
+            "tier": 3
+          }
+        ],
+        "addon": null,
+        "nextBoostChance": null,
+        "entrenamiento": [
+          {
+            "habilidad": "Attack",
+            "nivel": 16,
+            "progreso": "53"
+          }
+        ],
+        "precioNpc": {
+          "tipo": "unsellable"
+        }
+      }
+    },
+    {
+      "id": "shiny-hitmontop",
+      "tipo": "pokemon",
+      "vendedor": "tsubame",
+      "mundo": "moon",
+      "publicado": "2026-09-18T16:52:00Z",
+      "expira": "2030-10-02T16:52:00Z",
+      "estado": "publicado",
+      "precio": {
+        "real": {
+          "moneda": "USD",
+          "importe": "35"
+        },
+        "juego": [
+          {
+            "tipo": "pokedolares",
+            "cantidad": 220000000
+          }
+        ],
+        "aConvenir": false
+      },
+      "pokemon": {
+        "pokemon": "shiny-hitmontop",
+        "ball": {
+          "item": "ultra-ball",
+          "nombre": "Ultra Ball"
+        },
+        "aura": null,
+        "boost": 35,
+        "starLevel": 2,
+        "nickname": null,
+        "memorySlots": null,
+        "memorias": [],
+        "helds": [
+          {
+            "item": null,
+            "nombre": "X-Attack",
+            "tier": 4
+          }
+        ],
+        "addon": null,
+        "nextBoostChance": null,
+        "entrenamiento": [],
+        "precioNpc": null
+      }
+    },
+    {
+      "id": "fire-stone-25",
+      "tipo": "items",
+      "vendedor": "leafar",
+      "mundo": "sun",
+      "publicado": "2026-09-18T16:32:00Z",
+      "expira": "2030-10-02T16:32:00Z",
+      "estado": "publicado",
+      "precio": {
+        "real": null,
+        "juego": [
+          {
+            "tipo": "pokedolares",
+            "cantidad": 3000000
+          }
+        ],
+        "aConvenir": false
+      },
+      "item": {
+        "item": "fire-stone",
+        "nombre": "Fire Stone",
+        "cantidad": 25
+      }
+    },
+    {
+      "id": "diamonds-300",
+      "tipo": "diamonds",
+      "vendedor": "mariana",
+      "mundo": "titan-1",
+      "publicado": "2026-09-18T15:32:00Z",
+      "expira": "2030-10-02T15:32:00Z",
+      "estado": "publicado",
+      "precio": {
+        "real": {
+          "moneda": "BRL",
+          "importe": "60"
+        },
+        "juego": [],
+        "aConvenir": false
+      },
+      "cantidad": 300
+    },
+    {
+      "id": "pokedolares-50kk",
+      "tipo": "pokedolares",
+      "vendedor": "renzo",
+      "mundo": "sun",
+      "publicado": "2026-09-18T14:32:00Z",
+      "expira": "2030-10-02T14:32:00Z",
+      "estado": "publicado",
+      "precio": {
+        "real": {
+          "moneda": "MXN",
+          "importe": "180"
+        },
+        "juego": [],
+        "aConvenir": false
+      },
+      "cantidad": 50000000
+    },
+    {
+      "id": "alliance-ball-100",
+      "tipo": "items",
+      "vendedor": "kaiser",
+      "mundo": "moon",
+      "publicado": "2026-09-18T09:32:00Z",
+      "expira": "2030-10-02T09:32:00Z",
+      "estado": "publicado",
+      "precio": {
+        "real": null,
+        "juego": [
+          {
+            "tipo": "pokedolares",
+            "cantidad": 4000000
+          },
+          {
+            "tipo": "diamonds",
+            "cantidad": 10
+          }
+        ],
+        "aConvenir": false
+      },
+      "item": {
+        "item": "alliance-ball",
+        "nombre": "Alliance Ball",
+        "cantidad": 100
+      }
+    },
+    {
+      "id": "shiny-charizard-amaterasu",
+      "tipo": "pokemon",
+      "vendedor": "hikari",
+      "mundo": "titan-3",
+      "publicado": "2026-09-18T17:07:00Z",
+      "expira": "2030-10-02T17:07:00Z",
+      "estado": "publicado",
+      "precio": {
+        "real": {
+          "moneda": "USD",
+          "importe": "120"
+        },
+        "juego": [
+          {
+            "tipo": "pokedolares",
+            "cantidad": 900000000
+          },
+          {
+            "tipo": "diamonds",
+            "cantidad": 2400
+          }
+        ],
+        "aConvenir": false
+      },
+      "pokemon": {
+        "pokemon": "shiny-charizard",
+        "ball": {
+          "item": "ultra-ball",
+          "nombre": "Ultra Ball"
+        },
+        "aura": "alliance",
+        "boost": 50,
+        "starLevel": 2,
+        "nickname": "A M A T E R A S U  O M I K A M I",
+        "memorySlots": 6,
+        "memorias": [null, null, null, null, null, null],
+        "helds": [
+          {
+            "item": null,
+            "nombre": "X-Attack",
+            "tier": 5
+          },
+          {
+            "item": null,
+            "nombre": "X-Lucky",
+            "tier": 4
+          },
+          {
+            "item": null,
+            "nombre": "X-Boost",
+            "tier": 3
+          }
+        ],
+        "addon": null,
+        "nextBoostChance": null,
+        "entrenamiento": [
+          {
+            "habilidad": "Critical Damage",
+            "nivel": 12,
+            "progreso": "40"
+          }
+        ],
+        "precioNpc": null
+      }
+    },
+    {
+      "id": "pikachu",
+      "tipo": "pokemon",
+      "vendedor": "leafar",
+      "mundo": "moon",
+      "publicado": "2026-09-18T12:32:00Z",
+      "expira": "2030-10-02T12:32:00Z",
+      "estado": "publicado",
+      "precio": {
+        "real": {
+          "moneda": "BRL",
+          "importe": "15"
+        },
+        "juego": [],
+        "aConvenir": false
+      },
+      "pokemon": {
+        "pokemon": "pikachu",
+        "ball": {
+          "item": "ultra-ball",
+          "nombre": "Ultra Ball"
+        },
+        "aura": null,
+        "boost": null,
+        "starLevel": null,
+        "nickname": null,
+        "memorySlots": null,
+        "memorias": [],
+        "helds": [],
+        "addon": null,
+        "nextBoostChance": null,
+        "entrenamiento": [],
+        "precioNpc": null
+      }
+    },
+    {
+      "id": "enhanced-normal-stone-12",
+      "tipo": "items",
+      "vendedor": "bruma",
+      "mundo": "titan-2",
+      "publicado": "2026-09-18T17:02:00Z",
+      "expira": "2030-10-02T17:02:00Z",
+      "estado": "publicado",
+      "precio": {
+        "real": {
+          "moneda": "USD",
+          "importe": "6"
+        },
+        "juego": [
+          {
+            "tipo": "pokedolares",
+            "cantidad": 18000000
+          }
+        ],
+        "aConvenir": false
+      },
+      "item": {
+        "item": null,
+        "nombre": "Enhanced Normal Stone",
+        "cantidad": 12
+      }
+    },
+    {
+      "id": "diamonds-1000",
+      "tipo": "diamonds",
+      "vendedor": "tsubame",
+      "mundo": "moon",
+      "publicado": "2026-09-17T17:32:00Z",
+      "expira": "2030-10-01T17:32:00Z",
+      "estado": "publicado",
+      "precio": {
+        "real": null,
+        "juego": [
+          {
+            "tipo": "pokedolares",
+            "cantidad": 380000000
+          }
+        ],
+        "aConvenir": false
+      },
+      "cantidad": 1000
+    },
+    {
+      "id": "pokedolares-500kk",
+      "tipo": "pokedolares",
+      "vendedor": "renzo",
+      "mundo": "sun",
+      "publicado": "2026-09-18T14:32:00Z",
+      "expira": "2030-10-02T14:32:00Z",
+      "estado": "publicado",
+      "precio": {
+        "real": {
+          "moneda": "MXN",
+          "importe": "1800"
+        },
+        "juego": [],
+        "aConvenir": false
+      },
+      "cantidad": 500000000
+    }
+  ],
+  "vendedores": [
+    {
+      "id": "kaiser",
+      "nombre": "Kaiser",
+      "desde": null,
+      "canales": [
+        {
+          "tipo": "discord",
+          "etiqueta": null
+        },
+        {
+          "tipo": "correo",
+          "etiqueta": null
+        },
+        {
+          "tipo": "telefono",
+          "etiqueta": "+55"
+        }
+      ],
+      "resenas": [
+        {
+          "puntuacion": 5,
+          "comentario": null,
+          "fecha": "2026-09-18T17:31:30Z",
+          "anuncio": "shiny-ditto-susanoo",
+          "comprador": "comprador-001"
+        },
+        {
+          "puntuacion": 5,
+          "comentario": null,
+          "fecha": "2026-09-18T16:52:00Z",
+          "anuncio": "alliance-ball-100",
+          "comprador": "comprador-002"
+        },
+        {
+          "puntuacion": 5,
+          "comentario": null,
+          "fecha": "2026-09-18T17:30:30Z",
+          "anuncio": "shiny-ditto-susanoo",
+          "comprador": "comprador-003"
+        },
+        {
+          "puntuacion": 5,
+          "comentario": null,
+          "fecha": "2026-09-18T16:12:00Z",
+          "anuncio": "alliance-ball-100",
+          "comprador": "comprador-004"
+        },
+        {
+          "puntuacion": 5,
+          "comentario": null,
+          "fecha": "2026-09-18T17:29:30Z",
+          "anuncio": "shiny-ditto-susanoo",
+          "comprador": "comprador-005"
+        },
+        {
+          "puntuacion": 5,
+          "comentario": null,
+          "fecha": "2026-09-18T15:32:00Z",
+          "anuncio": "alliance-ball-100",
+          "comprador": "comprador-006"
+        },
+        {
+          "puntuacion": 5,
+          "comentario": null,
+          "fecha": "2026-09-18T17:28:30Z",
+          "anuncio": "shiny-ditto-susanoo",
+          "comprador": "comprador-007"
+        },
+        {
+          "puntuacion": 5,
+          "comentario": null,
+          "fecha": "2026-09-18T14:52:00Z",
+          "anuncio": "alliance-ball-100",
+          "comprador": "comprador-008"
+        },
+        {
+          "puntuacion": 5,
+          "comentario": null,
+          "fecha": "2026-09-18T17:27:30Z",
+          "anuncio": "shiny-ditto-susanoo",
+          "comprador": "comprador-009"
+        },
+        {
+          "puntuacion": 5,
+          "comentario": null,
+          "fecha": "2026-09-18T14:12:00Z",
+          "anuncio": "alliance-ball-100",
+          "comprador": "comprador-010"
+        },
+        {
+          "puntuacion": 5,
+          "comentario": null,
+          "fecha": "2026-09-18T17:26:30Z",
+          "anuncio": "shiny-ditto-susanoo",
+          "comprador": "comprador-011"
+        },
+        {
+          "puntuacion": 5,
+          "comentario": null,
+          "fecha": "2026-09-18T13:32:00Z",
+          "anuncio": "alliance-ball-100",
+          "comprador": "comprador-012"
+        },
+        {
+          "puntuacion": 5,
+          "comentario": null,
+          "fecha": "2026-09-18T17:25:30Z",
+          "anuncio": "shiny-ditto-susanoo",
+          "comprador": "comprador-013"
+        },
+        {
+          "puntuacion": 5,
+          "comentario": null,
+          "fecha": "2026-09-18T12:52:00Z",
+          "anuncio": "alliance-ball-100",
+          "comprador": "comprador-014"
+        },
+        {
+          "puntuacion": 4,
+          "comentario": null,
+          "fecha": "2026-09-18T17:24:30Z",
+          "anuncio": "shiny-ditto-susanoo",
+          "comprador": "comprador-015"
+        },
+        {
+          "puntuacion": 4,
+          "comentario": null,
+          "fecha": "2026-09-18T12:12:00Z",
+          "anuncio": "alliance-ball-100",
+          "comprador": "comprador-016"
+        },
+        {
+          "puntuacion": 4,
+          "comentario": null,
+          "fecha": "2026-09-18T17:23:30Z",
+          "anuncio": "shiny-ditto-susanoo",
+          "comprador": "comprador-017"
+        },
+        {
+          "puntuacion": 4,
+          "comentario": null,
+          "fecha": "2026-09-18T11:32:00Z",
+          "anuncio": "alliance-ball-100",
+          "comprador": "comprador-018"
+        },
+        {
+          "puntuacion": 4,
+          "comentario": null,
+          "fecha": "2026-09-18T17:22:30Z",
+          "anuncio": "shiny-ditto-susanoo",
+          "comprador": "comprador-019"
+        },
+        {
+          "puntuacion": 4,
+          "comentario": null,
+          "fecha": "2026-09-18T10:52:00Z",
+          "anuncio": "alliance-ball-100",
+          "comprador": "comprador-020"
+        },
+        {
+          "puntuacion": 4,
+          "comentario": null,
+          "fecha": "2026-09-18T17:21:30Z",
+          "anuncio": "shiny-ditto-susanoo",
+          "comprador": "comprador-021"
+        },
+        {
+          "puntuacion": 4,
+          "comentario": null,
+          "fecha": "2026-09-18T10:12:00Z",
+          "anuncio": "alliance-ball-100",
+          "comprador": "comprador-022"
+        },
+        {
+          "puntuacion": 4,
+          "comentario": null,
+          "fecha": "2026-09-18T17:20:30Z",
+          "anuncio": "shiny-ditto-susanoo",
+          "comprador": "comprador-023"
+        }
+      ]
+    },
+    {
+      "id": "tsubame",
+      "nombre": "Tsubame",
+      "desde": null,
+      "canales": [
+        {
+          "tipo": "discord",
+          "etiqueta": null
+        },
+        {
+          "tipo": "twitch",
+          "etiqueta": null
+        }
+      ],
+      "resenas": [
+        {
+          "puntuacion": 5,
+          "comentario": null,
+          "fecha": "2026-09-18T17:31:02Z",
+          "anuncio": "shiny-hitmontop",
+          "comprador": "comprador-024"
+        },
+        {
+          "puntuacion": 5,
+          "comentario": null,
+          "fecha": "2026-09-18T16:23:25Z",
+          "anuncio": "diamonds-1000",
+          "comprador": "comprador-025"
+        },
+        {
+          "puntuacion": 5,
+          "comentario": null,
+          "fecha": "2026-09-18T17:29:08Z",
+          "anuncio": "shiny-hitmontop",
+          "comprador": "comprador-026"
+        },
+        {
+          "puntuacion": 5,
+          "comentario": null,
+          "fecha": "2026-09-18T15:14:51Z",
+          "anuncio": "diamonds-1000",
+          "comprador": "comprador-027"
+        },
+        {
+          "puntuacion": 5,
+          "comentario": null,
+          "fecha": "2026-09-18T17:27:14Z",
+          "anuncio": "shiny-hitmontop",
+          "comprador": "comprador-028"
+        },
+        {
+          "puntuacion": 5,
+          "comentario": null,
+          "fecha": "2026-09-18T14:06:17Z",
+          "anuncio": "diamonds-1000",
+          "comprador": "comprador-029"
+        },
+        {
+          "puntuacion": 5,
+          "comentario": null,
+          "fecha": "2026-09-18T17:25:20Z",
+          "anuncio": "shiny-hitmontop",
+          "comprador": "comprador-030"
+        },
+        {
+          "puntuacion": 5,
+          "comentario": null,
+          "fecha": "2026-09-18T12:57:42Z",
+          "anuncio": "diamonds-1000",
+          "comprador": "comprador-031"
+        },
+        {
+          "puntuacion": 5,
+          "comentario": null,
+          "fecha": "2026-09-18T17:23:25Z",
+          "anuncio": "shiny-hitmontop",
+          "comprador": "comprador-032"
+        },
+        {
+          "puntuacion": 5,
+          "comentario": null,
+          "fecha": "2026-09-18T11:49:08Z",
+          "anuncio": "diamonds-1000",
+          "comprador": "comprador-033"
+        },
+        {
+          "puntuacion": 5,
+          "comentario": null,
+          "fecha": "2026-09-18T17:21:31Z",
+          "anuncio": "shiny-hitmontop",
+          "comprador": "comprador-034"
+        },
+        {
+          "puntuacion": 5,
+          "comentario": null,
+          "fecha": "2026-09-18T10:40:34Z",
+          "anuncio": "diamonds-1000",
+          "comprador": "comprador-035"
+        },
+        {
+          "puntuacion": 5,
+          "comentario": null,
+          "fecha": "2026-09-18T17:19:37Z",
+          "anuncio": "shiny-hitmontop",
+          "comprador": "comprador-036"
+        },
+        {
+          "puntuacion": 5,
+          "comentario": null,
+          "fecha": "2026-09-18T09:32:00Z",
+          "anuncio": "diamonds-1000",
+          "comprador": "comprador-037"
+        },
+        {
+          "puntuacion": 5,
+          "comentario": null,
+          "fecha": "2026-09-18T17:17:42Z",
+          "anuncio": "shiny-hitmontop",
+          "comprador": "comprador-038"
+        },
+        {
+          "puntuacion": 5,
+          "comentario": null,
+          "fecha": "2026-09-18T08:23:25Z",
+          "anuncio": "diamonds-1000",
+          "comprador": "comprador-039"
+        },
+        {
+          "puntuacion": 5,
+          "comentario": null,
+          "fecha": "2026-09-18T17:15:48Z",
+          "anuncio": "shiny-hitmontop",
+          "comprador": "comprador-040"
+        },
+        {
+          "puntuacion": 5,
+          "comentario": null,
+          "fecha": "2026-09-18T07:14:51Z",
+          "anuncio": "diamonds-1000",
+          "comprador": "comprador-041"
+        },
+        {
+          "puntuacion": 5,
+          "comentario": null,
+          "fecha": "2026-09-18T17:13:54Z",
+          "anuncio": "shiny-hitmontop",
+          "comprador": "comprador-042"
+        },
+        {
+          "puntuacion": 5,
+          "comentario": null,
+          "fecha": "2026-09-18T06:06:17Z",
+          "anuncio": "diamonds-1000",
+          "comprador": "comprador-043"
+        },
+        {
+          "puntuacion": 5,
+          "comentario": null,
+          "fecha": "2026-09-18T17:12:00Z",
+          "anuncio": "shiny-hitmontop",
+          "comprador": "comprador-044"
+        },
+        {
+          "puntuacion": 5,
+          "comentario": null,
+          "fecha": "2026-09-18T04:57:42Z",
+          "anuncio": "diamonds-1000",
+          "comprador": "comprador-045"
+        },
+        {
+          "puntuacion": 5,
+          "comentario": null,
+          "fecha": "2026-09-18T17:10:05Z",
+          "anuncio": "shiny-hitmontop",
+          "comprador": "comprador-046"
+        },
+        {
+          "puntuacion": 5,
+          "comentario": null,
+          "fecha": "2026-09-18T03:49:08Z",
+          "anuncio": "diamonds-1000",
+          "comprador": "comprador-047"
+        },
+        {
+          "puntuacion": 5,
+          "comentario": null,
+          "fecha": "2026-09-18T17:08:11Z",
+          "anuncio": "shiny-hitmontop",
+          "comprador": "comprador-048"
+        },
+        {
+          "puntuacion": 5,
+          "comentario": null,
+          "fecha": "2026-09-18T02:40:34Z",
+          "anuncio": "diamonds-1000",
+          "comprador": "comprador-049"
+        },
+        {
+          "puntuacion": 5,
+          "comentario": null,
+          "fecha": "2026-09-18T17:06:17Z",
+          "anuncio": "shiny-hitmontop",
+          "comprador": "comprador-050"
+        },
+        {
+          "puntuacion": 5,
+          "comentario": null,
+          "fecha": "2026-09-18T01:32:00Z",
+          "anuncio": "diamonds-1000",
+          "comprador": "comprador-051"
+        },
+        {
+          "puntuacion": 5,
+          "comentario": null,
+          "fecha": "2026-09-18T17:04:22Z",
+          "anuncio": "shiny-hitmontop",
+          "comprador": "comprador-052"
+        },
+        {
+          "puntuacion": 5,
+          "comentario": null,
+          "fecha": "2026-09-18T00:23:25Z",
+          "anuncio": "diamonds-1000",
+          "comprador": "comprador-053"
+        },
+        {
+          "puntuacion": 5,
+          "comentario": null,
+          "fecha": "2026-09-18T17:02:28Z",
+          "anuncio": "shiny-hitmontop",
+          "comprador": "comprador-054"
+        },
+        {
+          "puntuacion": 5,
+          "comentario": null,
+          "fecha": "2026-09-17T23:14:51Z",
+          "anuncio": "diamonds-1000",
+          "comprador": "comprador-055"
+        },
+        {
+          "puntuacion": 5,
+          "comentario": null,
+          "fecha": "2026-09-18T17:00:34Z",
+          "anuncio": "shiny-hitmontop",
+          "comprador": "comprador-056"
+        },
+        {
+          "puntuacion": 5,
+          "comentario": null,
+          "fecha": "2026-09-17T22:06:17Z",
+          "anuncio": "diamonds-1000",
+          "comprador": "comprador-057"
+        },
+        {
+          "puntuacion": 5,
+          "comentario": null,
+          "fecha": "2026-09-18T16:58:40Z",
+          "anuncio": "shiny-hitmontop",
+          "comprador": "comprador-058"
+        },
+        {
+          "puntuacion": 5,
+          "comentario": null,
+          "fecha": "2026-09-17T20:57:42Z",
+          "anuncio": "diamonds-1000",
+          "comprador": "comprador-059"
+        },
+        {
+          "puntuacion": 5,
+          "comentario": null,
+          "fecha": "2026-09-18T16:56:45Z",
+          "anuncio": "shiny-hitmontop",
+          "comprador": "comprador-060"
+        },
+        {
+          "puntuacion": 4,
+          "comentario": null,
+          "fecha": "2026-09-17T19:49:08Z",
+          "anuncio": "diamonds-1000",
+          "comprador": "comprador-061"
+        },
+        {
+          "puntuacion": 4,
+          "comentario": null,
+          "fecha": "2026-09-18T16:54:51Z",
+          "anuncio": "shiny-hitmontop",
+          "comprador": "comprador-062"
+        },
+        {
+          "puntuacion": 4,
+          "comentario": null,
+          "fecha": "2026-09-17T18:40:34Z",
+          "anuncio": "diamonds-1000",
+          "comprador": "comprador-063"
+        },
+        {
+          "puntuacion": 4,
+          "comentario": null,
+          "fecha": "2026-09-18T16:52:57Z",
+          "anuncio": "shiny-hitmontop",
+          "comprador": "comprador-064"
+        }
+      ]
+    },
+    {
+      "id": "leafar",
+      "nombre": "Leafar",
+      "desde": null,
+      "canales": [
+        {
+          "tipo": "discord",
+          "etiqueta": null
+        }
+      ],
+      "resenas": [
+        {
+          "puntuacion": 5,
+          "comentario": null,
+          "fecha": "2026-09-18T17:26:00Z",
+          "anuncio": "fire-stone-25",
+          "comprador": "comprador-065"
+        },
+        {
+          "puntuacion": 5,
+          "comentario": null,
+          "fecha": "2026-09-18T16:32:00Z",
+          "anuncio": "pikachu",
+          "comprador": "comprador-066"
+        },
+        {
+          "puntuacion": 4,
+          "comentario": null,
+          "fecha": "2026-09-18T17:14:00Z",
+          "anuncio": "fire-stone-25",
+          "comprador": "comprador-067"
+        },
+        {
+          "puntuacion": 4,
+          "comentario": null,
+          "fecha": "2026-09-18T15:32:00Z",
+          "anuncio": "pikachu",
+          "comprador": "comprador-068"
+        },
+        {
+          "puntuacion": 4,
+          "comentario": null,
+          "fecha": "2026-09-18T17:02:00Z",
+          "anuncio": "fire-stone-25",
+          "comprador": "comprador-069"
+        },
+        {
+          "puntuacion": 4,
+          "comentario": null,
+          "fecha": "2026-09-18T14:32:00Z",
+          "anuncio": "pikachu",
+          "comprador": "comprador-070"
+        },
+        {
+          "puntuacion": 4,
+          "comentario": null,
+          "fecha": "2026-09-18T16:50:00Z",
+          "anuncio": "fire-stone-25",
+          "comprador": "comprador-071"
+        },
+        {
+          "puntuacion": 4,
+          "comentario": null,
+          "fecha": "2026-09-18T13:32:00Z",
+          "anuncio": "pikachu",
+          "comprador": "comprador-072"
+        },
+        {
+          "puntuacion": 4,
+          "comentario": null,
+          "fecha": "2026-09-18T16:38:00Z",
+          "anuncio": "fire-stone-25",
+          "comprador": "comprador-073"
+        }
+      ]
+    },
+    {
+      "id": "mariana",
+      "nombre": "Mariana",
+      "desde": null,
+      "canales": [
+        {
+          "tipo": "correo",
+          "etiqueta": null
+        },
+        {
+          "tipo": "telefono",
+          "etiqueta": "+55"
+        },
+        {
+          "tipo": "discord",
+          "etiqueta": null
+        }
+      ],
+      "resenas": [
+        {
+          "puntuacion": 5,
+          "comentario": null,
+          "fecha": "2026-09-18T17:22:46Z",
+          "anuncio": "diamonds-300",
+          "comprador": "comprador-074"
+        },
+        {
+          "puntuacion": 5,
+          "comentario": null,
+          "fecha": "2026-09-18T17:13:32Z",
+          "anuncio": "diamonds-300",
+          "comprador": "comprador-075"
+        },
+        {
+          "puntuacion": 5,
+          "comentario": null,
+          "fecha": "2026-09-18T17:04:18Z",
+          "anuncio": "diamonds-300",
+          "comprador": "comprador-076"
+        },
+        {
+          "puntuacion": 5,
+          "comentario": null,
+          "fecha": "2026-09-18T16:55:04Z",
+          "anuncio": "diamonds-300",
+          "comprador": "comprador-077"
+        },
+        {
+          "puntuacion": 5,
+          "comentario": null,
+          "fecha": "2026-09-18T16:45:50Z",
+          "anuncio": "diamonds-300",
+          "comprador": "comprador-078"
+        },
+        {
+          "puntuacion": 5,
+          "comentario": null,
+          "fecha": "2026-09-18T16:36:36Z",
+          "anuncio": "diamonds-300",
+          "comprador": "comprador-079"
+        },
+        {
+          "puntuacion": 5,
+          "comentario": null,
+          "fecha": "2026-09-18T16:27:23Z",
+          "anuncio": "diamonds-300",
+          "comprador": "comprador-080"
+        },
+        {
+          "puntuacion": 5,
+          "comentario": null,
+          "fecha": "2026-09-18T16:18:09Z",
+          "anuncio": "diamonds-300",
+          "comprador": "comprador-081"
+        },
+        {
+          "puntuacion": 5,
+          "comentario": null,
+          "fecha": "2026-09-18T16:08:55Z",
+          "anuncio": "diamonds-300",
+          "comprador": "comprador-082"
+        },
+        {
+          "puntuacion": 5,
+          "comentario": null,
+          "fecha": "2026-09-18T15:59:41Z",
+          "anuncio": "diamonds-300",
+          "comprador": "comprador-083"
+        },
+        {
+          "puntuacion": 5,
+          "comentario": null,
+          "fecha": "2026-09-18T15:50:27Z",
+          "anuncio": "diamonds-300",
+          "comprador": "comprador-084"
+        },
+        {
+          "puntuacion": 5,
+          "comentario": null,
+          "fecha": "2026-09-18T15:41:13Z",
+          "anuncio": "diamonds-300",
+          "comprador": "comprador-085"
+        }
+      ]
+    },
+    {
+      "id": "renzo",
+      "nombre": "Renzo",
+      "desde": null,
+      "canales": [
+        {
+          "tipo": "discord",
+          "etiqueta": null
+        },
+        {
+          "tipo": "telefono",
+          "etiqueta": "+52"
+        }
+      ],
+      "resenas": [
+        {
+          "puntuacion": 5,
+          "comentario": null,
+          "fecha": "2026-09-18T17:26:22Z",
+          "anuncio": "pokedolares-50kk",
+          "comprador": "comprador-086"
+        },
+        {
+          "puntuacion": 5,
+          "comentario": null,
+          "fecha": "2026-09-18T17:20:45Z",
+          "anuncio": "pokedolares-500kk",
+          "comprador": "comprador-087"
+        },
+        {
+          "puntuacion": 5,
+          "comentario": null,
+          "fecha": "2026-09-18T17:15:07Z",
+          "anuncio": "pokedolares-50kk",
+          "comprador": "comprador-088"
+        },
+        {
+          "puntuacion": 5,
+          "comentario": null,
+          "fecha": "2026-09-18T17:09:30Z",
+          "anuncio": "pokedolares-500kk",
+          "comprador": "comprador-089"
+        },
+        {
+          "puntuacion": 5,
+          "comentario": null,
+          "fecha": "2026-09-18T17:03:52Z",
+          "anuncio": "pokedolares-50kk",
+          "comprador": "comprador-090"
+        },
+        {
+          "puntuacion": 5,
+          "comentario": null,
+          "fecha": "2026-09-18T16:58:15Z",
+          "anuncio": "pokedolares-500kk",
+          "comprador": "comprador-091"
+        },
+        {
+          "puntuacion": 5,
+          "comentario": null,
+          "fecha": "2026-09-18T16:52:37Z",
+          "anuncio": "pokedolares-50kk",
+          "comprador": "comprador-092"
+        },
+        {
+          "puntuacion": 5,
+          "comentario": null,
+          "fecha": "2026-09-18T16:47:00Z",
+          "anuncio": "pokedolares-500kk",
+          "comprador": "comprador-093"
+        },
+        {
+          "puntuacion": 5,
+          "comentario": null,
+          "fecha": "2026-09-18T16:41:22Z",
+          "anuncio": "pokedolares-50kk",
+          "comprador": "comprador-094"
+        },
+        {
+          "puntuacion": 5,
+          "comentario": null,
+          "fecha": "2026-09-18T16:35:45Z",
+          "anuncio": "pokedolares-500kk",
+          "comprador": "comprador-095"
+        },
+        {
+          "puntuacion": 5,
+          "comentario": null,
+          "fecha": "2026-09-18T16:30:07Z",
+          "anuncio": "pokedolares-50kk",
+          "comprador": "comprador-096"
+        },
+        {
+          "puntuacion": 5,
+          "comentario": null,
+          "fecha": "2026-09-18T16:24:30Z",
+          "anuncio": "pokedolares-500kk",
+          "comprador": "comprador-097"
+        },
+        {
+          "puntuacion": 4,
+          "comentario": null,
+          "fecha": "2026-09-18T16:18:52Z",
+          "anuncio": "pokedolares-50kk",
+          "comprador": "comprador-098"
+        },
+        {
+          "puntuacion": 4,
+          "comentario": null,
+          "fecha": "2026-09-18T16:13:15Z",
+          "anuncio": "pokedolares-500kk",
+          "comprador": "comprador-099"
+        },
+        {
+          "puntuacion": 4,
+          "comentario": null,
+          "fecha": "2026-09-18T16:07:37Z",
+          "anuncio": "pokedolares-50kk",
+          "comprador": "comprador-100"
+        },
+        {
+          "puntuacion": 4,
+          "comentario": null,
+          "fecha": "2026-09-18T16:02:00Z",
+          "anuncio": "pokedolares-500kk",
+          "comprador": "comprador-101"
+        },
+        {
+          "puntuacion": 4,
+          "comentario": null,
+          "fecha": "2026-09-18T15:56:22Z",
+          "anuncio": "pokedolares-50kk",
+          "comprador": "comprador-102"
+        },
+        {
+          "puntuacion": 4,
+          "comentario": null,
+          "fecha": "2026-09-18T15:50:45Z",
+          "anuncio": "pokedolares-500kk",
+          "comprador": "comprador-103"
+        },
+        {
+          "puntuacion": 4,
+          "comentario": null,
+          "fecha": "2026-09-18T15:45:07Z",
+          "anuncio": "pokedolares-50kk",
+          "comprador": "comprador-104"
+        },
+        {
+          "puntuacion": 4,
+          "comentario": null,
+          "fecha": "2026-09-18T15:39:30Z",
+          "anuncio": "pokedolares-500kk",
+          "comprador": "comprador-105"
+        },
+        {
+          "puntuacion": 4,
+          "comentario": null,
+          "fecha": "2026-09-18T15:33:52Z",
+          "anuncio": "pokedolares-50kk",
+          "comprador": "comprador-106"
+        },
+        {
+          "puntuacion": 4,
+          "comentario": null,
+          "fecha": "2026-09-18T15:28:15Z",
+          "anuncio": "pokedolares-500kk",
+          "comprador": "comprador-107"
+        },
+        {
+          "puntuacion": 4,
+          "comentario": null,
+          "fecha": "2026-09-18T15:22:37Z",
+          "anuncio": "pokedolares-50kk",
+          "comprador": "comprador-108"
+        },
+        {
+          "puntuacion": 4,
+          "comentario": null,
+          "fecha": "2026-09-18T15:17:00Z",
+          "anuncio": "pokedolares-500kk",
+          "comprador": "comprador-109"
+        },
+        {
+          "puntuacion": 4,
+          "comentario": null,
+          "fecha": "2026-09-18T15:11:22Z",
+          "anuncio": "pokedolares-50kk",
+          "comprador": "comprador-110"
+        },
+        {
+          "puntuacion": 4,
+          "comentario": null,
+          "fecha": "2026-09-18T15:05:45Z",
+          "anuncio": "pokedolares-500kk",
+          "comprador": "comprador-111"
+        },
+        {
+          "puntuacion": 4,
+          "comentario": null,
+          "fecha": "2026-09-18T15:00:07Z",
+          "anuncio": "pokedolares-50kk",
+          "comprador": "comprador-112"
+        },
+        {
+          "puntuacion": 4,
+          "comentario": null,
+          "fecha": "2026-09-18T14:54:30Z",
+          "anuncio": "pokedolares-500kk",
+          "comprador": "comprador-113"
+        },
+        {
+          "puntuacion": 4,
+          "comentario": null,
+          "fecha": "2026-09-18T14:48:52Z",
+          "anuncio": "pokedolares-50kk",
+          "comprador": "comprador-114"
+        },
+        {
+          "puntuacion": 4,
+          "comentario": null,
+          "fecha": "2026-09-18T14:43:15Z",
+          "anuncio": "pokedolares-500kk",
+          "comprador": "comprador-115"
+        },
+        {
+          "puntuacion": 4,
+          "comentario": null,
+          "fecha": "2026-09-18T14:37:37Z",
+          "anuncio": "pokedolares-50kk",
+          "comprador": "comprador-116"
+        }
+      ]
+    },
+    {
+      "id": "hikari",
+      "nombre": "Hikari",
+      "desde": null,
+      "canales": [
+        {
+          "tipo": "discord",
+          "etiqueta": null
+        },
+        {
+          "tipo": "twitch",
+          "etiqueta": null
+        },
+        {
+          "tipo": "correo",
+          "etiqueta": null
+        },
+        {
+          "tipo": "telefono",
+          "etiqueta": "+55"
+        },
+        {
+          "tipo": "telefono",
+          "etiqueta": "+1"
+        }
+      ],
+      "resenas": [
+        {
+          "puntuacion": 5,
+          "comentario": null,
+          "fecha": "2026-09-18T17:31:34Z",
+          "anuncio": "shiny-charizard-amaterasu",
+          "comprador": "comprador-117"
+        },
+        {
+          "puntuacion": 5,
+          "comentario": null,
+          "fecha": "2026-09-18T17:31:08Z",
+          "anuncio": "shiny-charizard-amaterasu",
+          "comprador": "comprador-118"
+        },
+        {
+          "puntuacion": 5,
+          "comentario": null,
+          "fecha": "2026-09-18T17:30:42Z",
+          "anuncio": "shiny-charizard-amaterasu",
+          "comprador": "comprador-119"
+        },
+        {
+          "puntuacion": 5,
+          "comentario": null,
+          "fecha": "2026-09-18T17:30:16Z",
+          "anuncio": "shiny-charizard-amaterasu",
+          "comprador": "comprador-120"
+        },
+        {
+          "puntuacion": 5,
+          "comentario": null,
+          "fecha": "2026-09-18T17:29:50Z",
+          "anuncio": "shiny-charizard-amaterasu",
+          "comprador": "comprador-121"
+        },
+        {
+          "puntuacion": 5,
+          "comentario": null,
+          "fecha": "2026-09-18T17:29:24Z",
+          "anuncio": "shiny-charizard-amaterasu",
+          "comprador": "comprador-122"
+        },
+        {
+          "puntuacion": 5,
+          "comentario": null,
+          "fecha": "2026-09-18T17:28:58Z",
+          "anuncio": "shiny-charizard-amaterasu",
+          "comprador": "comprador-123"
+        },
+        {
+          "puntuacion": 5,
+          "comentario": null,
+          "fecha": "2026-09-18T17:28:33Z",
+          "anuncio": "shiny-charizard-amaterasu",
+          "comprador": "comprador-124"
+        },
+        {
+          "puntuacion": 5,
+          "comentario": null,
+          "fecha": "2026-09-18T17:28:07Z",
+          "anuncio": "shiny-charizard-amaterasu",
+          "comprador": "comprador-125"
+        },
+        {
+          "puntuacion": 5,
+          "comentario": null,
+          "fecha": "2026-09-18T17:27:41Z",
+          "anuncio": "shiny-charizard-amaterasu",
+          "comprador": "comprador-126"
+        },
+        {
+          "puntuacion": 5,
+          "comentario": null,
+          "fecha": "2026-09-18T17:27:15Z",
+          "anuncio": "shiny-charizard-amaterasu",
+          "comprador": "comprador-127"
+        },
+        {
+          "puntuacion": 5,
+          "comentario": null,
+          "fecha": "2026-09-18T17:26:49Z",
+          "anuncio": "shiny-charizard-amaterasu",
+          "comprador": "comprador-128"
+        },
+        {
+          "puntuacion": 5,
+          "comentario": null,
+          "fecha": "2026-09-18T17:26:23Z",
+          "anuncio": "shiny-charizard-amaterasu",
+          "comprador": "comprador-129"
+        },
+        {
+          "puntuacion": 5,
+          "comentario": null,
+          "fecha": "2026-09-18T17:25:57Z",
+          "anuncio": "shiny-charizard-amaterasu",
+          "comprador": "comprador-130"
+        },
+        {
+          "puntuacion": 5,
+          "comentario": null,
+          "fecha": "2026-09-18T17:25:32Z",
+          "anuncio": "shiny-charizard-amaterasu",
+          "comprador": "comprador-131"
+        },
+        {
+          "puntuacion": 5,
+          "comentario": null,
+          "fecha": "2026-09-18T17:25:06Z",
+          "anuncio": "shiny-charizard-amaterasu",
+          "comprador": "comprador-132"
+        },
+        {
+          "puntuacion": 5,
+          "comentario": null,
+          "fecha": "2026-09-18T17:24:40Z",
+          "anuncio": "shiny-charizard-amaterasu",
+          "comprador": "comprador-133"
+        },
+        {
+          "puntuacion": 5,
+          "comentario": null,
+          "fecha": "2026-09-18T17:24:14Z",
+          "anuncio": "shiny-charizard-amaterasu",
+          "comprador": "comprador-134"
+        },
+        {
+          "puntuacion": 5,
+          "comentario": null,
+          "fecha": "2026-09-18T17:23:48Z",
+          "anuncio": "shiny-charizard-amaterasu",
+          "comprador": "comprador-135"
+        },
+        {
+          "puntuacion": 5,
+          "comentario": null,
+          "fecha": "2026-09-18T17:23:22Z",
+          "anuncio": "shiny-charizard-amaterasu",
+          "comprador": "comprador-136"
+        },
+        {
+          "puntuacion": 5,
+          "comentario": null,
+          "fecha": "2026-09-18T17:22:56Z",
+          "anuncio": "shiny-charizard-amaterasu",
+          "comprador": "comprador-137"
+        },
+        {
+          "puntuacion": 5,
+          "comentario": null,
+          "fecha": "2026-09-18T17:22:31Z",
+          "anuncio": "shiny-charizard-amaterasu",
+          "comprador": "comprador-138"
+        },
+        {
+          "puntuacion": 5,
+          "comentario": null,
+          "fecha": "2026-09-18T17:22:05Z",
+          "anuncio": "shiny-charizard-amaterasu",
+          "comprador": "comprador-139"
+        },
+        {
+          "puntuacion": 5,
+          "comentario": null,
+          "fecha": "2026-09-18T17:21:39Z",
+          "anuncio": "shiny-charizard-amaterasu",
+          "comprador": "comprador-140"
+        },
+        {
+          "puntuacion": 5,
+          "comentario": null,
+          "fecha": "2026-09-18T17:21:13Z",
+          "anuncio": "shiny-charizard-amaterasu",
+          "comprador": "comprador-141"
+        },
+        {
+          "puntuacion": 5,
+          "comentario": null,
+          "fecha": "2026-09-18T17:20:47Z",
+          "anuncio": "shiny-charizard-amaterasu",
+          "comprador": "comprador-142"
+        },
+        {
+          "puntuacion": 5,
+          "comentario": null,
+          "fecha": "2026-09-18T17:20:21Z",
+          "anuncio": "shiny-charizard-amaterasu",
+          "comprador": "comprador-143"
+        },
+        {
+          "puntuacion": 5,
+          "comentario": null,
+          "fecha": "2026-09-18T17:19:55Z",
+          "anuncio": "shiny-charizard-amaterasu",
+          "comprador": "comprador-144"
+        },
+        {
+          "puntuacion": 5,
+          "comentario": null,
+          "fecha": "2026-09-18T17:19:30Z",
+          "anuncio": "shiny-charizard-amaterasu",
+          "comprador": "comprador-145"
+        },
+        {
+          "puntuacion": 5,
+          "comentario": null,
+          "fecha": "2026-09-18T17:19:04Z",
+          "anuncio": "shiny-charizard-amaterasu",
+          "comprador": "comprador-146"
+        },
+        {
+          "puntuacion": 5,
+          "comentario": null,
+          "fecha": "2026-09-18T17:18:38Z",
+          "anuncio": "shiny-charizard-amaterasu",
+          "comprador": "comprador-147"
+        },
+        {
+          "puntuacion": 5,
+          "comentario": null,
+          "fecha": "2026-09-18T17:18:12Z",
+          "anuncio": "shiny-charizard-amaterasu",
+          "comprador": "comprador-148"
+        },
+        {
+          "puntuacion": 5,
+          "comentario": null,
+          "fecha": "2026-09-18T17:17:46Z",
+          "anuncio": "shiny-charizard-amaterasu",
+          "comprador": "comprador-149"
+        },
+        {
+          "puntuacion": 5,
+          "comentario": null,
+          "fecha": "2026-09-18T17:17:20Z",
+          "anuncio": "shiny-charizard-amaterasu",
+          "comprador": "comprador-150"
+        },
+        {
+          "puntuacion": 5,
+          "comentario": null,
+          "fecha": "2026-09-18T17:16:54Z",
+          "anuncio": "shiny-charizard-amaterasu",
+          "comprador": "comprador-151"
+        },
+        {
+          "puntuacion": 5,
+          "comentario": null,
+          "fecha": "2026-09-18T17:16:28Z",
+          "anuncio": "shiny-charizard-amaterasu",
+          "comprador": "comprador-152"
+        },
+        {
+          "puntuacion": 5,
+          "comentario": null,
+          "fecha": "2026-09-18T17:16:03Z",
+          "anuncio": "shiny-charizard-amaterasu",
+          "comprador": "comprador-153"
+        },
+        {
+          "puntuacion": 5,
+          "comentario": null,
+          "fecha": "2026-09-18T17:15:37Z",
+          "anuncio": "shiny-charizard-amaterasu",
+          "comprador": "comprador-154"
+        },
+        {
+          "puntuacion": 5,
+          "comentario": null,
+          "fecha": "2026-09-18T17:15:11Z",
+          "anuncio": "shiny-charizard-amaterasu",
+          "comprador": "comprador-155"
+        },
+        {
+          "puntuacion": 5,
+          "comentario": null,
+          "fecha": "2026-09-18T17:14:45Z",
+          "anuncio": "shiny-charizard-amaterasu",
+          "comprador": "comprador-156"
+        },
+        {
+          "puntuacion": 5,
+          "comentario": null,
+          "fecha": "2026-09-18T17:14:19Z",
+          "anuncio": "shiny-charizard-amaterasu",
+          "comprador": "comprador-157"
+        },
+        {
+          "puntuacion": 5,
+          "comentario": null,
+          "fecha": "2026-09-18T17:13:53Z",
+          "anuncio": "shiny-charizard-amaterasu",
+          "comprador": "comprador-158"
+        },
+        {
+          "puntuacion": 5,
+          "comentario": null,
+          "fecha": "2026-09-18T17:13:27Z",
+          "anuncio": "shiny-charizard-amaterasu",
+          "comprador": "comprador-159"
+        },
+        {
+          "puntuacion": 5,
+          "comentario": null,
+          "fecha": "2026-09-18T17:13:02Z",
+          "anuncio": "shiny-charizard-amaterasu",
+          "comprador": "comprador-160"
+        },
+        {
+          "puntuacion": 5,
+          "comentario": null,
+          "fecha": "2026-09-18T17:12:36Z",
+          "anuncio": "shiny-charizard-amaterasu",
+          "comprador": "comprador-161"
+        },
+        {
+          "puntuacion": 5,
+          "comentario": null,
+          "fecha": "2026-09-18T17:12:10Z",
+          "anuncio": "shiny-charizard-amaterasu",
+          "comprador": "comprador-162"
+        },
+        {
+          "puntuacion": 4,
+          "comentario": null,
+          "fecha": "2026-09-18T17:11:44Z",
+          "anuncio": "shiny-charizard-amaterasu",
+          "comprador": "comprador-163"
+        },
+        {
+          "puntuacion": 4,
+          "comentario": null,
+          "fecha": "2026-09-18T17:11:18Z",
+          "anuncio": "shiny-charizard-amaterasu",
+          "comprador": "comprador-164"
+        },
+        {
+          "puntuacion": 4,
+          "comentario": null,
+          "fecha": "2026-09-18T17:10:52Z",
+          "anuncio": "shiny-charizard-amaterasu",
+          "comprador": "comprador-165"
+        },
+        {
+          "puntuacion": 4,
+          "comentario": null,
+          "fecha": "2026-09-18T17:10:26Z",
+          "anuncio": "shiny-charizard-amaterasu",
+          "comprador": "comprador-166"
+        },
+        {
+          "puntuacion": 4,
+          "comentario": null,
+          "fecha": "2026-09-18T17:10:01Z",
+          "anuncio": "shiny-charizard-amaterasu",
+          "comprador": "comprador-167"
+        },
+        {
+          "puntuacion": 4,
+          "comentario": null,
+          "fecha": "2026-09-18T17:09:35Z",
+          "anuncio": "shiny-charizard-amaterasu",
+          "comprador": "comprador-168"
+        },
+        {
+          "puntuacion": 4,
+          "comentario": null,
+          "fecha": "2026-09-18T17:09:09Z",
+          "anuncio": "shiny-charizard-amaterasu",
+          "comprador": "comprador-169"
+        },
+        {
+          "puntuacion": 4,
+          "comentario": null,
+          "fecha": "2026-09-18T17:08:43Z",
+          "anuncio": "shiny-charizard-amaterasu",
+          "comprador": "comprador-170"
+        },
+        {
+          "puntuacion": 4,
+          "comentario": null,
+          "fecha": "2026-09-18T17:08:17Z",
+          "anuncio": "shiny-charizard-amaterasu",
+          "comprador": "comprador-171"
+        },
+        {
+          "puntuacion": 4,
+          "comentario": null,
+          "fecha": "2026-09-18T17:07:51Z",
+          "anuncio": "shiny-charizard-amaterasu",
+          "comprador": "comprador-172"
+        },
+        {
+          "puntuacion": 4,
+          "comentario": null,
+          "fecha": "2026-09-18T17:07:25Z",
+          "anuncio": "shiny-charizard-amaterasu",
+          "comprador": "comprador-173"
+        }
+      ]
+    },
+    {
+      "id": "bruma",
+      "nombre": "Bruma",
+      "desde": null,
+      "canales": [
+        {
+          "tipo": "discord",
+          "etiqueta": null
+        },
+        {
+          "tipo": "correo",
+          "etiqueta": null
+        },
+        {
+          "tipo": "twitch",
+          "etiqueta": null
+        },
+        {
+          "tipo": "telefono",
+          "etiqueta": "+57"
+        }
+      ],
+      "resenas": [
+        {
+          "puntuacion": 5,
+          "comentario": null,
+          "fecha": "2026-09-18T17:30:25Z",
+          "anuncio": "enhanced-normal-stone-12",
+          "comprador": "comprador-174"
+        },
+        {
+          "puntuacion": 5,
+          "comentario": null,
+          "fecha": "2026-09-18T17:28:50Z",
+          "anuncio": "enhanced-normal-stone-12",
+          "comprador": "comprador-175"
+        },
+        {
+          "puntuacion": 5,
+          "comentario": null,
+          "fecha": "2026-09-18T17:27:15Z",
+          "anuncio": "enhanced-normal-stone-12",
+          "comprador": "comprador-176"
+        },
+        {
+          "puntuacion": 5,
+          "comentario": null,
+          "fecha": "2026-09-18T17:25:41Z",
+          "anuncio": "enhanced-normal-stone-12",
+          "comprador": "comprador-177"
+        },
+        {
+          "puntuacion": 5,
+          "comentario": null,
+          "fecha": "2026-09-18T17:24:06Z",
+          "anuncio": "enhanced-normal-stone-12",
+          "comprador": "comprador-178"
+        },
+        {
+          "puntuacion": 5,
+          "comentario": null,
+          "fecha": "2026-09-18T17:22:31Z",
+          "anuncio": "enhanced-normal-stone-12",
+          "comprador": "comprador-179"
+        },
+        {
+          "puntuacion": 5,
+          "comentario": null,
+          "fecha": "2026-09-18T17:20:56Z",
+          "anuncio": "enhanced-normal-stone-12",
+          "comprador": "comprador-180"
+        },
+        {
+          "puntuacion": 5,
+          "comentario": null,
+          "fecha": "2026-09-18T17:19:22Z",
+          "anuncio": "enhanced-normal-stone-12",
+          "comprador": "comprador-181"
+        },
+        {
+          "puntuacion": 5,
+          "comentario": null,
+          "fecha": "2026-09-18T17:17:47Z",
+          "anuncio": "enhanced-normal-stone-12",
+          "comprador": "comprador-182"
+        },
+        {
+          "puntuacion": 5,
+          "comentario": null,
+          "fecha": "2026-09-18T17:16:12Z",
+          "anuncio": "enhanced-normal-stone-12",
+          "comprador": "comprador-183"
+        },
+        {
+          "puntuacion": 5,
+          "comentario": null,
+          "fecha": "2026-09-18T17:14:37Z",
+          "anuncio": "enhanced-normal-stone-12",
+          "comprador": "comprador-184"
+        },
+        {
+          "puntuacion": 5,
+          "comentario": null,
+          "fecha": "2026-09-18T17:13:03Z",
+          "anuncio": "enhanced-normal-stone-12",
+          "comprador": "comprador-185"
+        },
+        {
+          "puntuacion": 5,
+          "comentario": null,
+          "fecha": "2026-09-18T17:11:28Z",
+          "anuncio": "enhanced-normal-stone-12",
+          "comprador": "comprador-186"
+        },
+        {
+          "puntuacion": 4,
+          "comentario": null,
+          "fecha": "2026-09-18T17:09:53Z",
+          "anuncio": "enhanced-normal-stone-12",
+          "comprador": "comprador-187"
+        },
+        {
+          "puntuacion": 4,
+          "comentario": null,
+          "fecha": "2026-09-18T17:08:18Z",
+          "anuncio": "enhanced-normal-stone-12",
+          "comprador": "comprador-188"
+        },
+        {
+          "puntuacion": 4,
+          "comentario": null,
+          "fecha": "2026-09-18T17:06:44Z",
+          "anuncio": "enhanced-normal-stone-12",
+          "comprador": "comprador-189"
+        },
+        {
+          "puntuacion": 4,
+          "comentario": null,
+          "fecha": "2026-09-18T17:05:09Z",
+          "anuncio": "enhanced-normal-stone-12",
+          "comprador": "comprador-190"
+        },
+        {
+          "puntuacion": 4,
+          "comentario": null,
+          "fecha": "2026-09-18T17:03:34Z",
+          "anuncio": "enhanced-normal-stone-12",
+          "comprador": "comprador-191"
+        }
+      ]
+    }
+  ],
+  "tableros": {
+    "Comercio": [
+      "shiny-ditto-susanoo",
+      "shiny-hitmontop",
+      "fire-stone-25",
+      "diamonds-300",
+      "pokedolares-50kk",
+      "alliance-ball-100"
+    ],
+    "Tarjetas": [
+      "shiny-ditto-susanoo",
+      "shiny-hitmontop",
+      "fire-stone-25",
+      "diamonds-300",
+      "pokedolares-500kk",
+      "alliance-ball-100",
+      "shiny-charizard-amaterasu",
+      "pikachu",
+      "enhanced-normal-stone-12",
+      "diamonds-1000"
+    ]
+  }
+}

@@ -1,0 +1,195 @@
+{
+ "declaredHeight": 2486,
+ "renderedHeight": 2486,
+ "width": 1440,
+ "contentHeight": 2226,
+ "overflow": false,
+ "emptyTail": 260,
+ "lowest": {
+  "path": "#dc-root > div:nth-child(1) > div:nth-child(1) > div:nth-child(3) > main:nth-child(2) > footer:nth-child(5)",
+  "kind": "box"
+ },
+ "rawHoles": [],
+ "brokenImages": [],
+ "webFontsLoaded": [
+  "Poppins 500",
+  "Poppins 600"
+ ],
+ "grids": [],
+ "flexWraps": [
+  {
+   "kind": "flex-wrap",
+   "path": "#dc-root > div:nth-child(1) > div:nth-child(1) > div:nth-child(3) > main:nth-child(2) > nav:nth-child(1) > ol:nth-child(1)",
+   "rect": {
+    "x": 248,
+    "y": 96,
+    "w": 896,
+    "h": 16
+   },
+   "columns": 5,
+   "children": 5,
+   "painted": 0,
+   "cards": false,
+   "inTooltip": false,
+   "alignItems": "center",
+   "label": "Pokémon",
+   "maxSpread": 9,
+   "rows": [
+    {
+     "y": 96,
+     "children": [
+      0,
+      1,
+      2,
+      3,
+      4
+     ],
+     "heights": [
+      16,
+      7,
+      16,
+      7,
+      16
+     ],
+     "heightSpread": 9,
+     "hollowBottom": [
+      1,
+      7,
+      1,
+      7,
+      1
+     ],
+     "padBottom": [
+      0,
+      0,
+      0,
+      0,
+      0
+     ],
+     "itemHeights": [
+      16,
+      14,
+      16,
+      14,
+      16
+     ]
+    }
+   ]
+  },
+  {
+   "kind": "flex-wrap",
+   "path": "#dc-root > div:nth-child(1) > div:nth-child(1) > div:nth-child(3) > main:nth-child(2) > div:nth-child(4) > section:nth-child(1) > div:nth-child(3) > ul:nth-child(1)",
+   "rect": {
+    "x": 248,
+    "y": 675,
+    "w": 896,
+    "h": 72
+   },
+   "columns": 6,
+   "children": 6,
+   "painted": 6,
+   "cards": false,
+   "inTooltip": false,
+   "alignItems": "normal",
+   "label": "",
+   "maxSpread": 0,
+   "rows": [
+    {
+     "y": 691,
+     "children": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5
+     ],
+     "heights": [
+      40,
+      40,
+      40,
+      40,
+      40,
+      40
+     ],
+     "heightSpread": 0,
+     "hollowBottom": [
+      12,
+      12,
+      12,
+      10,
+      12,
+      12
+     ],
+     "padBottom": [
+      1,
+      1,
+      1,
+      1,
+      1,
+      1
+     ]
+    }
+   ]
+  },
+  {
+   "kind": "flex-wrap",
+   "path": "#dc-root > div:nth-child(1) > div:nth-child(1) > div:nth-child(3) > main:nth-child(2) > div:nth-child(4) > section:nth-child(4) > ul:nth-child(4)",
+   "rect": {
+    "x": 248,
+    "y": 1912,
+    "w": 896,
+    "h": 24
+   },
+   "columns": 4,
+   "children": 4,
+   "painted": 4,
+   "cards": false,
+   "inTooltip": false,
+   "alignItems": "normal",
+   "label": "Fly",
+   "maxSpread": 0,
+   "rows": [
+    {
+     "y": 1912,
+     "children": [
+      0,
+      1,
+      2,
+      3
+     ],
+     "heights": [
+      24,
+      24,
+      24,
+      24
+     ],
+     "heightSpread": 0,
+     "hollowBottom": [
+      5,
+      5,
+      5,
+      5
+     ],
+     "padBottom": [
+      4,
+      4,
+      4,
+      4
+     ]
+    }
+   ]
+  }
+ ],
+ "board": "Pokedex-Shiny-Charizard.dc.html",
+ "state": {
+  "dv": "slots",
+  "tip": "dsFireStone"
+ },
+ "viewport": {
+  "width": 1440,
+  "height": 2486
+ },
+ "missingBlobs": [],
+ "consoleErrors": []
+}

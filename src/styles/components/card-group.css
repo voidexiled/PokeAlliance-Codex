@@ -1,0 +1,43 @@
+/* CardGroup (spec 7.2.6, 9.5.8; DS:CardGroup, DS:guias/30 «Grupos»), ported from the
+   `.ac-card-group` block of the design system's components/bundle.css. global.css imports
+   this file with layer(components).
+
+   The heading of a group — the 32 game cell of its sprite, the name in `body-strong` and the
+   count in `ui` `text-quaternary` — 12 above its grid, and 32 between two groups in a row.
+   The only difference against the reference is the type, written as `@apply type-*`
+   (spec 3.7). */
+
+.ac-card-group {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  gap: var(--space-12);
+  color: var(--text-primary);
+}
+
+.ac-card-group + .ac-card-group {
+  margin-top: var(--space-32);
+}
+
+.ac-card-group__head {
+  display: flex;
+  align-items: center;
+  gap: var(--space-8);
+  margin: 0;
+  @apply type-body-strong;
+}
+
+.ac-card-group__sprite {
+  display: flex;
+  flex: none;
+  width: var(--size-cell);
+  height: var(--size-cell);
+  align-items: center;
+  justify-content: center;
+}
+
+.ac-card-group__count {
+  color: var(--text-quaternary);
+  font-variant-numeric: tabular-nums;
+  @apply type-ui;
+}

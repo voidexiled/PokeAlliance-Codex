@@ -1,0 +1,68 @@
+/* Toc (spec 7.11, DS:Toc), ported from the `.ac-toc` block of the design system's
+   components/bundle.css.
+
+   256 aside with 16 of right padding, 240 nav inside it, decimal markers painted inside
+   the list. The rail that holds it is what sticks below the header and what disappears
+   below 1280 (spec 5.7): that belongs to page-layout.css, not here.
+
+   Current section: the reference marks the item with `data-current` while the site marks
+   the link with `aria-current="location"` (spec 5.2, 7.11), which is the one attribute
+   scripts/toc-spy.ts moves. The colour still sits on the item so the decimal marker
+   changes with the text. */
+
+.ac-toc {
+  width: var(--layout-rail);
+  flex: none;
+  padding-right: var(--space-16);
+  color: var(--text-primary);
+  font-family: var(--font-sans);
+  @apply type-ui;
+}
+
+.ac-toc__nav {
+  display: flex;
+  width: var(--layout-rail-content);
+  max-width: 100%;
+  flex-direction: column;
+  gap: var(--space-10);
+}
+
+.ac-toc__head {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.ac-toc__title {
+  margin: 0;
+  @apply type-ui-strong;
+}
+
+.ac-toc__rule {
+  height: 1px;
+  background: var(--border-secondary);
+}
+
+.ac-toc__list {
+  margin: 0;
+  padding: 0;
+  color: var(--text-secondary);
+  list-style: decimal inside;
+}
+
+.ac-toc__item + .ac-toc__item {
+  margin-top: var(--space-8);
+}
+
+.ac-toc__item:has(> .ac-toc__link[aria-current='location']) {
+  color: var(--text-primary);
+}
+
+.ac-toc__link {
+  color: inherit;
+  text-decoration: none;
+}
+
+.ac-toc__link:hover {
+  text-decoration: underline;
+}

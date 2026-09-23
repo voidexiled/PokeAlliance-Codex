@@ -1,0 +1,180 @@
+---
+// Activity page (spec 8.9.2): one prerendered HTML per activity of content/quests.json and per
+// locale, on template C of 8.0.2 — the `Toc` rail with two sections or more, the 208 spacer and
+// a column of 944 with fewer (PageLayout decides both). An id that is not a record has no route
+// and falls to the 404 of 8.12 (NF3).
+//
+// Composition, in the order of 8.9.2:
+//   1. the crumbs «Actividades › {nombre}» (8.0.4): the group crumb links to the index;
+//   2. `PageTitle` with `nombre`, the name of the game (13.4: no `lang`);
+//   3. the lead: `resumen`, then `instrucciones`, one `<p>` each and only with a value, 16 apart
+//      in their column (activities.css);
+//   4. `InfoBanner` when there is at least one fact: «Requisito: Nivel {n}» / «Requirement:
+//      Level {n}» (13.3, the words of `ui.tooltip`) and «NPC: {npcs}», the names joined with
+//      «, », each label with its colon (T33). Its 64 × 32 box holds the activity's sprite at 1x,
+//      or the missing mark while the record has none;
+//   5. one `Section` per list with entries, in this order: «Requisitos» (`<ul>`), «Pasos»
+//      (`<ol>`: the markers are the list's own and no number is written by hand, AV3),
+//      «Recompensas» (`<ul>`) and «Observaciones» (`<ul>` of `notas`);
+//   6. the `Toc` with those sections — the same ids, titles and order (7.11) — and the footer.
+// The ids of the sections are the same in both locales, so the anchor of a section survives the
+// language switch (13.1).
+//
+// What 8.9.2 draws only when the registry can say it:
+//   - a step is a `Timeline` node only when every step has a sprite, and the registry gives a
+//     step no sprite (3.13), so «Pasos» is the `<ol>`;
+//   - a reward is a `NestedEntity` only when it is a reference to an item with a record, and the
+//     registry writes a reward as a sentence with no reference (content/schemas/
+//     quests.schema.json), so every reward is text (R2). Nothing is read out of a sentence: a
+//     name inside one is not a reference, and no fact is added to the record;
+//   - `lugares`, `pokemon` and `sistemas` are names with no entity and are not shown (R2).
+// What the retired Guías page drew — its intro and counts, the «Quest» kicker, «Nivel
+// requerido» with its dash, the art tied to one slug, the hand-written «01»…«06», the star
+// bullets and the locations with their travel routes (Q-01 to Q-13) — is gone.
+//
+// Language (8.0.5, T22, WA4). Every text of an activity is a `Texto` by language (3.13): the
+// page shows its own language and, while a text exists only in the other one, that text inside
+// the `lang` of its language — the paragraph or the list item that holds it (`textIn`). So an
+// untranslated English sentence carries `lang="en"` on the `es` page (AV1). The name, the NPCs
+// and every game term carry no `lang` of their own (13.4).
+//
+// Data (8.0.5, R7, X4). Everything shown comes from content/quests.json through `getQuests`
+// and from public/sprites/sprites.json through the adapter (3.12, DP2): a sprite key the
+// registry does not have fails the build.
+//
+// 13.5: the document title is PageLayout's «{nombre} · Alliance Codex», and the description
+// `pageDescription` with the activity's name: one per route and locale, in the page's
+// language — a `resumen` that exists only in English cannot describe the `es` page.
+//
+// Styles. The lead column lives in activities.css, a per-page sheet this page imports (13.6,
+// D-018); every other piece is a design-system component of the shared sheet.
+import '@/styles/components/activities.css';
+
+import { getAlternatePath, getLocale, locales, type Locale } from '@/i18n/config';
+import type { Messages } from '@/i18n/messages/en';
+import { en } from '@/i18n/messages/en';
+import { es } from '@/i18n/messages/es';
+import { fill } from '@/i18n/messages/types';
+import { textIn, type Quest, type QuestText, type ShownText } from '@/lib/content/content-schema';
+import { getSpriteRegistry } from '@/lib/content/registry';
+import { getQuests } from '@/lib/content/repository';
+import { formatInteger } from '@/lib/format/numbers';
+import { spriteOrNull } from '@/lib/sprites/resolve';
+
+import InfoBanner from '@/components/content/InfoBanner.astro';
+import { PageTitle } from '@/components/layout/PageTitle';
+import { Section } from '@/components/layout/Section';
+import type { TocItem } from '@/components/layout/Toc.astro';
+import PageLayout from '@/layouts/PageLayout.astro';
+
+export const prerender = true;
+
+export function getStaticPaths() {
+  return locales.flatMap((locale) =>
+    getQuests().map((activity) => ({
+      params: { locale, id: activity.id },
+      props: { activity },
+    })),
+  );
+}
+
+const dictionaries: Record<Locale, Messages> = { es, en };
+
+const locale = getLocale(Astro.params.locale);
+const { ui, activities: copy } = dictionaries[locale];
+const activity: Quest = Astro.props.activity;
+const title = activity.nombre;
+
+const path = Astro.url.pathname;
+const alternates = Object.fromEntries(
+  locales.map((option) => [option, getAlternatePath(path, option)]),
+) as Record<Locale, string>;
+
+// 8.9.2 step 3: `resumen`, then `instrucciones`, each one only with a value.
+const lead: ShownText[] = [activity.resumen, activity.instrucciones].flatMap((value) =>
+  value === null ? [] : [textIn(value, locale)],
+);
+
+// 8.9.2 step 4: the facts of the banner, only the ones with a value; `InfoBanner` draws nothing
+// without one. The sprite is `null` while the record has none: the box keeps the missing mark.
+const facts: string[] = [];
+if (activity.nivelRequerido !== null) {
+  const level = fill(ui.tooltip.level, { n: formatInteger(activity.nivelRequerido, locale) });
+  facts.push(`${ui.tooltip.requirement}: ${level}`);
+}
+if (activity.npcs.length > 0) facts.push(`${copy.npc}: ${activity.npcs.join(', ')}`);
+const sprite = spriteOrNull(getSpriteRegistry(), activity.sprite);
+
+// 8.9.2 step 5: the sections in their order, each one only when its list has entries.
+interface ListSection {
+  id: string;
+  title: string;
+  /** «Pasos» is the ordered list; the other three are bulleted. */
+  ordered: boolean;
+  items: ShownText[];
+}
+
+/** One section of step 5, or none when its list is empty. */
+function listSection(
+  id: string,
+  title: string,
+  texts: readonly QuestText[],
+  ordered = false,
+): ListSection[] {
+  if (texts.length === 0) return [];
+  return [{ id, title, ordered, items: texts.map((text) => textIn(text, locale)) }];
+}
+
+const sections: ListSection[] = [
+  ...listSection('requisitos', copy.sections.requirements, activity.requisitos),
+  ...listSection('pasos', copy.sections.steps, activity.pasos, true),
+  ...listSection('recompensas', copy.sections.rewards, activity.recompensas),
+  ...listSection('observaciones', copy.sections.notes, activity.notas),
+];
+
+// The `Toc` (7.11): one entry per section, with the section's own title.
+const toc: TocItem[] = sections.map((section) => ({ id: section.id, label: section.title }));
+---
+
+<PageLayout
+  locale={locale}
+  title={title}
+  description={fill(copy.pageDescription, { name: title })}
+  alternates={alternates}
+  breadcrumb={[{ label: copy.title, href: `/${locale}/actividades/` }, { label: title }]}
+  toc={toc}
+>
+  <PageTitle title={title} />
+
+  {
+    lead.length > 0 && (
+      <div class="ac-activity-intro">
+        {lead.map((paragraph) => (
+          <p lang={paragraph.lang}>{paragraph.text}</p>
+        ))}
+      </div>
+    )
+  }
+
+  <InfoBanner sprite={sprite} facts={facts} />
+
+  {
+    sections.map((section) => (
+      <Section id={section.id} title={section.title}>
+        {section.ordered ? (
+          <ol>
+            {section.items.map((item) => (
+              <li lang={item.lang}>{item.text}</li>
+            ))}
+          </ol>
+        ) : (
+          <ul>
+            {section.items.map((item) => (
+              <li lang={item.lang}>{item.text}</li>
+            ))}
+          </ul>
+        )}
+      </Section>
+    ))
+  }
+</PageLayout>

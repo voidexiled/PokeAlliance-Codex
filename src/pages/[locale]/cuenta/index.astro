@@ -1,0 +1,60 @@
+---
+// Cuenta (spec 9.9 without Comercio, 10.4; template H of 8.0.2): `/{l}/cuenta/`, the sections
+// «Acceso» and «Guilds». It is what opens account mode for Guild. `noindex` (9.3, 13.5), and no
+// crumbs: «Cuenta» belongs to no group of the menu (8.0.4, 9.3).
+//
+// Render (9.3): the prerendered frame and the island, which reads the session once hydrated. The
+// route exists only when getSupabasePublicConfig() is not null: without Supabase variables
+// `getStaticPaths` gives no path, the build writes no page and Guild stays in local mode.
+//
+// Data: the island gets the worlds of content/mundos.json in the language of the page (the
+// «Mundo» Select and the world of each guild), the `account` namespace and the leaves of `ui` it
+// reads (13.2).
+import { getAlternatePath, getLocale, locales, type Locale } from '@/i18n/config';
+import type { Messages } from '@/i18n/messages/en';
+import { en } from '@/i18n/messages/en';
+import { es } from '@/i18n/messages/es';
+import { getMundos } from '@/lib/content/registry';
+import { getSupabasePublicConfig } from '@/lib/supabase/env';
+
+import { AccountPanel } from '@/components/account/AccountPanel';
+import { PageTitle } from '@/components/layout/PageTitle';
+import PageLayout from '@/layouts/PageLayout.astro';
+
+import '@/styles/components/account.css';
+
+export const prerender = true;
+
+export function getStaticPaths() {
+  if (getSupabasePublicConfig() === null) return [];
+  return locales.map((locale) => ({ params: { locale } }));
+}
+
+const dictionaries: Record<Locale, Messages> = { es, en };
+
+const locale = getLocale(Astro.params.locale);
+const path = Astro.url.pathname;
+const alternates = Object.fromEntries(
+  locales.map((option) => [option, getAlternatePath(path, option)]),
+) as Record<Locale, string>;
+
+const { account, ui } = dictionaries[locale];
+const worlds = getMundos(locale).map((world) => ({ id: world.id, nombre: world.nombre }));
+---
+
+<PageLayout
+  locale={locale}
+  title={account.title}
+  description={account.description}
+  alternates={alternates}
+  noindex
+>
+  <PageTitle title={account.title} />
+  <AccountPanel
+    client:load
+    locale={locale}
+    worlds={worlds}
+    messages={account}
+    ui={{ close: ui.close, dismiss: ui.dismiss }}
+  />
+</PageLayout>

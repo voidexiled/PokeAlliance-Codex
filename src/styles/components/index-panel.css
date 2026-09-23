@@ -1,0 +1,178 @@
+/* IndexPanel (spec 7.2.7, 8.1 step 4, E17; CARD_GRID_SYSTEM §6.5; DS:IndexPanel), ported from
+   the `.ac-index-panel` block of the design system's components/bundle.css.
+
+   Per-page stylesheet. Only the home draws index panels, so this file is not one of the @imports
+   of global.css: src/components/home/IndexPanel.astro imports it and the build writes it next to
+   the page (plan M10, D-018, §13.6: the shared sheet keeps its S17 budget). It carries its own
+   `@layer components` block and repeats the layer order of global.css first, so the order holds
+   whichever of the sheets the browser reads first (§3.6), and `@reference` brings the text styles
+   of theme.css to `@apply` without writing them again.
+
+   The strip of 44 (10 + 24 + 10) on `bg-secondary` with the sprite box of 24, the title and the
+   count, then the grid of links: 2 link columns per bento column the panel spans, 4 apart, rows
+   of 40 two apart and 8 of padding, the icon cell of 32 always there so every label starts at
+   one x, labels of two lines at most inside the row. A panel of 10 links measures 271 and one of
+   14 measures 355 (44 + 1 + 16 + 7 × 40 + 6 × 2 + 2), as 8.1 measures them.
+
+   Differences against the reference:
+
+   - no `grid-column: span N`: the bento places its panels with `grid-template-areas`
+     (home-bento.css, E17), and a span here would fight that placement. `ac-index-panel--span-2`
+     keeps what the span means inside the panel, two link columns per bento column: the panel is
+     its own size container and takes 4 link columns from 596 (two columns of `grid-index` 290
+     and the gap of 16, the width at which the bento takes 2 columns) and 6 from 902 with
+     `--span-3`; narrower, as in the single column of a phone, it keeps 2. So the Pokédex panel
+     has 4 link columns at 1440, 1280, 1024 and 768 and 2 at 390, as `Lienzo:Main` and
+     `Lienzo:Inicio-movil` draw it;
+   - rows of 44 follow the width of the window (`width < 48rem`, 5.4, 5.8) as well as a coarse
+     pointer, not a `rowHeight` prop: the home is one prerendered page for every screen;
+   - the type pairs are `@apply type-ui-strong` and `@apply type-ui` (spec 3.7);
+   - the hover transition uses the motion tokens inside the reduced-motion guard (6.4). */
+
+@reference '../theme.css';
+
+@layer properties, theme, base, components, utilities;
+
+@layer components {
+  .ac-index-panel {
+    display: flex;
+    min-width: 0;
+    flex-direction: column;
+    border: 1px solid var(--border-secondary);
+    border-radius: var(--radius-12);
+    container-name: ac-index-panel;
+    container-type: inline-size;
+  }
+
+  /* Header strip: 10 + 24 + 10 = 44. The inner corner is the panel radius minus its border. */
+  .ac-index-panel__head {
+    display: flex;
+    align-items: center;
+    gap: var(--space-10);
+    padding: var(--space-10) var(--space-16);
+    border-bottom: 1px solid var(--border-secondary);
+    border-radius: calc(var(--radius-12) - 1px) calc(var(--radius-12) - 1px) 0 0;
+    background: var(--bg-secondary);
+  }
+
+  /* The sprite of the strip is centred in its box of 24, even when it is larger than the box:
+     its game cell keeps it on whole pixels. */
+  .ac-index-panel__sprite {
+    display: flex;
+    width: var(--size-sprite-panel);
+    height: var(--size-sprite-panel);
+    flex: none;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .ac-index-panel__title {
+    flex: 1;
+    margin: 0;
+    @apply type-ui-strong;
+  }
+
+  .ac-index-panel__count {
+    color: var(--text-quaternary);
+    font-variant-numeric: tabular-nums;
+    @apply type-ui;
+  }
+
+  /* Two link columns per bento column the panel spans. */
+  .ac-index-panel__links {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    align-content: start;
+    column-gap: var(--space-4);
+    row-gap: var(--space-2);
+    margin: 0;
+    padding: var(--space-8);
+    list-style: none;
+    @apply type-ui;
+  }
+
+  @container ac-index-panel (width >= 596px) {
+    .ac-index-panel--span-2 .ac-index-panel__links,
+    .ac-index-panel--span-3 .ac-index-panel__links {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+  }
+
+  @container ac-index-panel (width >= 902px) {
+    .ac-index-panel--span-3 .ac-index-panel__links {
+      grid-template-columns: repeat(6, minmax(0, 1fr));
+    }
+  }
+
+  .ac-index-panel__item {
+    position: relative;
+    display: flex;
+    min-width: 0;
+  }
+
+  /* A link with a tooltip sits in the NestedEntity wrapper, which fills the item as a plain link
+     does. Two classes, so it wins over `ac-nested-entity--block` whichever sheet the browser reads
+     first. */
+  .ac-index-panel__item > .ac-index-panel__tip {
+    flex: 1 1 auto;
+    min-width: 0;
+  }
+
+  .ac-index-panel__link {
+    display: flex;
+    width: 100%;
+    min-width: 0;
+    height: var(--size-control);
+    align-items: center;
+    gap: var(--space-6);
+    padding: var(--space-4) var(--space-8) var(--space-4) var(--space-4);
+    border-radius: var(--radius-6);
+    color: var(--text-secondary);
+    text-decoration: none;
+  }
+
+  .ac-index-panel__link:hover {
+    background: var(--bg-tertiary);
+    color: var(--text-primary);
+  }
+
+  /* The icon cell of 32 is always there, so every label starts at one x. */
+  .ac-index-panel__icon {
+    display: flex;
+    width: var(--size-cell);
+    height: var(--size-cell);
+    flex: none;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /* Two lines at most, inside the row of 40: a long label never moves the row. */
+  .ac-index-panel__label {
+    display: -webkit-box;
+    min-width: 0;
+    overflow: hidden;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+  }
+
+  /* A phone and a coarse pointer: link rows of 44 (5.8, S14). */
+  @media (width < 48rem) {
+    .ac-index-panel__link {
+      height: var(--size-touch);
+    }
+  }
+
+  @media (pointer: coarse) {
+    .ac-index-panel__link {
+      height: var(--size-touch);
+    }
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .ac-index-panel__link {
+      transition:
+        background-color var(--duration-fast) var(--ease-standard),
+        color var(--duration-fast) var(--ease-standard);
+    }
+  }
+}

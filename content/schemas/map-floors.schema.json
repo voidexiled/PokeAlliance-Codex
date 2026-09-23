@@ -1,0 +1,50 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://alliance-codex.local/schemas/map-floors.schema.json",
+  "title": "Pisos del mapa",
+  "description": "content/map/floors.json: una imagen por piso. Lo escribe scripts/map/extract-otmm-preview.mjs.",
+  "type": "object",
+  "required": ["pisos"],
+  "additionalProperties": false,
+  "properties": {
+    "$schema": { "type": "string" },
+    "pisos": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/piso" }
+    }
+  },
+  "$defs": {
+    "entero": { "type": "integer", "minimum": 0 },
+    "piso": {
+      "type": "object",
+      "required": ["z", "imagen", "ancho", "alto", "limites"],
+      "additionalProperties": false,
+      "properties": {
+        "z": { "type": "integer", "minimum": 0, "maximum": 15, "description": "Piso." },
+        "imagen": {
+          "type": "string",
+          "pattern": "^/data/map/otmm/floor-[0-9]+\\.png$",
+          "description": "Ruta dentro de public/, por ejemplo \"/data/map/otmm/floor-7.png\"."
+        },
+        "ancho": {
+          "type": "integer",
+          "minimum": 1,
+          "description": "Ancho de la imagen en píxeles."
+        },
+        "alto": { "type": "integer", "minimum": 1, "description": "Alto de la imagen en píxeles." },
+        "limites": {
+          "type": "object",
+          "description": "Coordenadas del juego que cubre la imagen.",
+          "required": ["minX", "minY", "maxX", "maxY"],
+          "additionalProperties": false,
+          "properties": {
+            "minX": { "$ref": "#/$defs/entero" },
+            "minY": { "$ref": "#/$defs/entero" },
+            "maxX": { "$ref": "#/$defs/entero" },
+            "maxY": { "$ref": "#/$defs/entero" }
+          }
+        }
+      }
+    }
+  }
+}

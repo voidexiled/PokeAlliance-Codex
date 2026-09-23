@@ -1,0 +1,89 @@
+---
+// HomeIntro (spec 7.2.7, 8.1 step 1; DS:HomeIntro): the greeting of Inicio. The sprite of
+// `ui/inicio` in a 48 px box beside the h1, and one line of figures from the registries under
+// the h1. It is the only h1 of Inicio and it comes before the search trigger.
+//
+// Markup of the reference (`bundle.js` HomeIntro): `div.ac-home-intro` with the sprite box
+// `span.ac-home-intro__sprite` (`aria-hidden`) and `div.ac-home-intro__text`, which holds
+// `h1.ac-home-intro__title` and `p.ac-home-intro__description`.
+//
+// Data, not nodes (C-R1, DP1-DP3). The page reads the registries and passes:
+//   - `title`: the h1, from the dictionary of its locale (never the Spanish default of the
+//     design system, 13.2);
+//   - `description`: the line, already written in the page's language with its figures
+//     computed from the registries (X4, X12): this component never counts anything;
+//   - `sprite`: `ui/inicio` as the adapter returns it (`spriteOrNull`, DP2), with no scale of
+//     its own. `null` while the registry has no such key (3.13): the 48 box stays, empty, so the
+//     h1 keeps its place. Never a generic icon (R11).
+//
+// The sprite (DS:guias/20, DS:HomeIntro): a pixel sprite at the largest integer scale that fits
+// the box of 48 — the 16 px sprite the design draws there at 3x — centred in it, and never above
+// 3x, the largest scale S7 allows: a sprite of 12 or less is drawn at 3x and does not fill the
+// box. An illustration scales smoothly to fit the same 48. A pixel sprite with a side above 48
+// has no integer scale that fits, and the build fails with the reason: the owner picked a sprite
+// that cannot go here (D-011). It never moves: no bounce and no animation (A21 lists where
+// sprites move).
+//
+// No kicker, no slogan and no call to action (DS:HomeIntro «No hacer», G1, G2). Below
+// `layout-bp-md` the box goes away and the text starts at the edge (Lienzo:Inicio-movil):
+// home-intro.css does it, because a prerendered page cannot drop a prop per width.
+//
+// Stylesheet: home-intro.css is per-page CSS (plan M10, D-018, §13.6), so this component
+// imports it and only Inicio carries it.
+import '@/styles/components/home-intro.css';
+
+import { Sprite, type SpriteProps } from '@/components/game/Sprite';
+import { size } from '@/lib/design/tokens';
+import { CELL } from '@/lib/sprites/resolve';
+
+interface Props {
+  /** The h1 of Inicio: «Bienvenido a Alliance Codex» / «Welcome to Alliance Codex». */
+  title: string;
+  /** The line under the h1, with the counts of the registries (8.1 step 1). */
+  description: string;
+  /** `ui/inicio` from the adapter, or `null` for an empty 48 box. */
+  sprite: SpriteProps | null;
+  /** Utilities added by the caller, after the component's own classes (3.8). */
+  class?: string;
+}
+
+const { title, description, sprite, class: className } = Astro.props;
+
+/** The largest scale of a pixel sprite (S7: 1x, 2x or 3x). */
+const MAX_SCALE = 3;
+
+/** The side of the sprite box: the 16 px navigation sprite at 3x (home-intro.css). */
+const BOX = Number.parseInt(size.sizeSpriteNav, 10) * 3;
+
+/** The sprite at the size of the box: an integer scale, or 48 for an illustration. */
+function fitted(data: SpriteProps): SpriteProps {
+  const [width, height] = data.size ?? [CELL, CELL];
+  const side = Math.max(width, height);
+  if (data.smooth) {
+    return {
+      ...data,
+      width: Math.round((width * BOX) / side),
+      height: Math.round((height * BOX) / side),
+    };
+  }
+  if (side > BOX) {
+    throw new Error(
+      `HomeIntro: un sprite de ${width} × ${height} no cabe en la caja de ${BOX} del Inicio a escala entera.`,
+    );
+  }
+  const scale = Math.min(MAX_SCALE, Math.floor(BOX / side));
+  return { ...data, scale, cell: false, bounce: false };
+}
+
+const image = sprite === null ? null : fitted(sprite);
+---
+
+<div class:list={['ac-home-intro', className]}>
+  <span class="ac-home-intro__sprite" aria-hidden="true">
+    {image !== null && <Sprite {...image} />}
+  </span>
+  <div class="ac-home-intro__text">
+    <h1 class="ac-home-intro__title">{title}</h1>
+    <p class="ac-home-intro__description">{description}</p>
+  </div>
+</div>

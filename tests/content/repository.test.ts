@@ -1,34 +1,28 @@
 import { describe, expect, it } from 'vitest';
-import {
-  getCatalogMetrics,
-  getRecord,
-  getRecordEvidence,
-  searchRecords,
-} from '../../src/lib/content/repository';
+import { formatTier, getCatalogMetrics, getPokemonById } from '../../src/lib/content/repository';
 
 describe('content repository', () => {
-  it('loads a normalized Pokémon record with linked provenance', () => {
-    const record = getRecord('pokemon', 'chimchar');
+  it('loads a Pokémon record from content/', () => {
+    const record = getPokemonById('chimchar');
 
-    expect(record?.canonicalName).toBe('Chimchar');
-    expect(record?.pokedexNumber).toBe(390);
-    expect(getRecordEvidence(record!)).toHaveLength(1);
+    expect(record?.nombre).toBe('Chimchar');
+    expect(record?.numero).toBe(390);
+    expect(record?.elementos).toContain('fire');
   });
 
-  it('searches across normalized collections without accents', () => {
-    const results = searchRecords('PORYGON', 'es');
+  it('keeps unknown values as null and renders them as a dash', () => {
+    const withoutTier = getPokemonById('piplup');
 
-    expect(results.map((result) => result.record.canonicalSlug)).toContain(
-      'porygon-quest-dr-vektor',
-    );
+    expect(withoutTier?.tier).toBeNull();
+    expect(formatTier(withoutTier?.tier)).toBe('—');
+    expect(formatTier(6)).toBe('T6');
+    expect(formatTier('ULTIMATE')).toBe('ULTIMATE');
   });
 
-  it('reports the catalog shape instead of inventing coverage', () => {
+  it('reports the catalog shape', () => {
     const metrics = getCatalogMetrics();
 
     expect(metrics.collections).toBe(6);
-    expect(metrics.records).toBe(6);
-    expect(metrics.sources).toBe(10);
-    expect(metrics.evidence).toBe(20);
+    expect(metrics.records).toBe(915);
   });
 });

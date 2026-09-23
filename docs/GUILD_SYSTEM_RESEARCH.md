@@ -4,13 +4,13 @@ Status: the local guild-ranking tool and first authenticated daily-history slice
 
 The current tool accepts an owner-provided client export, calculates the active weekly cycle and produces a complete table/WhatsApp/PNG summary. It can also save explicitly selected exports to a Supabase guild after authentication; anonymous visitors remain local-only.
 
-## Confirmed local evidence
+## Local export shape
 
 The owner-supplied export `GuildMembers_Void_Exiled_2026-09-09_071522.json` contains 25 member rows and these fields for every row:
 
 `level`, `dailiesCompleted`, `rank`, `status`, `contribution`, `name`, `lastLogin`.
 
-The export also has `exportedAt` and a guild label. The file is private guild data and remains ignored in the research inbox. The repository stores only its schema profile and SHA-256, not member names or values. `scripts/research/profile-guild-export.ps1` can repeat this structural profiling for future exports without emitting member values.
+The export also has `exportedAt` and a guild label. The file is private guild data and remains ignored in the research inbox. The repository stores no copy of it; the export format is implemented and tested in `src/lib/tools/guild-ranking.ts` with the synthetic fixture `tests/fixtures/guild-export.sample.json`.
 
 The current export has no separate numeric member ID field. Per the owner's game rule, in-game names are unique, so the normalized in-game name will be the member identifier within a guild/world scope. The display form is still stored as an observation, and a future rename needs an explicit alias transition if historical continuity is required.
 
@@ -23,7 +23,6 @@ Each capture is an immutable snapshot with:
 - capture instant in UTC;
 - Server Save reference as `00:00[America/Sao_Paulo]` plus the visitor-local rendering later;
 - phase: `before_server_save` or `after_server_save`;
-- source hash and exporter/client version;
 - member observations keyed by the normalized in-game name within the guild/world scope;
 - raw source retention policy and reviewer/consent status.
 

@@ -1,0 +1,411 @@
+---
+// The detail of a listing (spec 9.6, template F of 8.0.2): `noindex` (9.3), one page per listing
+// of the sample registry but the `retirado` ones, which are a 404 to the public (9.4).
+//
+// Composition, in the order of 9.6:
+//   1. the crumbs «Comunidad › Comercio › {título}» (8.0.4): «Comunidad» has no index page;
+//   2. `PageTitle` with the title of `listingTitle` (9.4), the visible form hidden from screen
+//      readers and the exact one in `sr-only` when they differ (Pokédólares), and under it, in
+//      12/16 `text-tertiary`, «{Mundo} · Publicado el {fecha}» and the state when the listing is
+//      not `publicado`: «Reservado», «Completado» or «Expirado»;
+//   3. from 768 two columns: the fixed sheet of 282 (`GameTooltip variant="sheet"`, 7.5.9) with
+//      the rows of the listing panel (9.5.9) plus «Addon:» and «Next Boost chance:», every held
+//      item, every trained skill and «Ditto Memory: N», each memorised Pokémon a `NestedEntity`
+//      with its panel; and 24 to its right the sections «Precio» (`FactList`), «Vendedor»
+//      (`SellerCard`) and «Contacto verificado» (`ChipRow` with no cap). Below 768 one column,
+//      the sheet first. Phase A has no action at all (9.6 step 4): the channels are chips.
+//
+// Render (9.3). No `prerender` export: src/integrations/comercio-fases.ts sets it by phase and
+// fails the build on one. In phase A the build writes one HTML per listing from `getStaticPaths`,
+// which is empty without COMERCIO_DEMO (9.2, CA-9.1): src/lib/trade/registry.ts gives no listing.
+//
+// Time (9.4, CA-9.20). The state is the one the visitor sees: a `publicado` or `reservado` listing
+// whose `expira` is behind the clock is «Expirado». The build writes it with its own clock, and a
+// small script writes it again with the visitor's, when the page opens and when `expira` comes.
+//
+// The sheet. `TipData` holds no entity inside a section (7.5.2), so the sheet is `GameTooltip`
+// with the listing's rows and its Held Items, continued by a panel of the same look with
+// «Entrenamiento: N» (every skill, the order of `HABILIDADES`) and «Ditto Memory: N»
+// (trade-detail.css joins the two into one sheet). The sheet paints Poppins on
+// load, so this page asks PageLayout to preload it (3.9).
+import { createElement } from 'react';
+
+import { getAlternatePath, getLocale, locales, type Locale } from '@/i18n/config';
+import type { Messages } from '@/i18n/messages/en';
+import { en } from '@/i18n/messages/en';
+import { es } from '@/i18n/messages/es';
+import { fill } from '@/i18n/messages/types';
+import {
+  getAuras,
+  getCategorias,
+  getElementos,
+  getItems,
+  getMonedaDiamantes,
+  getMundos,
+  getOutfits,
+  getSpriteRegistry,
+} from '@/lib/content/registry';
+import { getPokemon } from '@/lib/content/repository';
+import { formatDate } from '@/lib/format/dates';
+import { formatInteger, formatRealMoney } from '@/lib/format/numbers';
+import { diamondsTip } from '@/lib/game/tips';
+import { buildNav } from '@/lib/nav/groups';
+import { getAnuncio, getAnuncios, getVendedor, getVendedores } from '@/lib/trade/registry';
+import { hasPublicDetail, sellerRating, visibleStatus } from '@/lib/trade/types';
+import { FactList, type FactRow } from '@/components/cards/FactList';
+import { GameTooltip } from '@/components/game/GameTooltip';
+import { NestedEntity } from '@/components/game/NestedEntity';
+import { Glyph } from '@/components/icons/Glyph';
+import { PageTitle } from '@/components/layout/PageTitle';
+import { Section } from '@/components/layout/Section';
+import { ChipRow } from '@/components/money/ChipRow';
+import { PriceOptions } from '@/components/money/PriceOptions';
+import { TrainingMeter } from '@/components/money/TrainingMeter';
+import { SellerCard } from '@/components/trade/SellerCard';
+import {
+  listingTip,
+  listingTitleNode,
+  pokemonPanel,
+  sellerHref,
+  tradeDiamonds,
+  tradeLabels,
+  tradeRecords,
+  tradeSprites,
+  type TradeCatalog,
+  type TradeContext,
+} from '@/components/trade/TradeListRoot';
+import PageLayout from '@/layouts/PageLayout.astro';
+
+import '@/styles/components/trade-detail.css';
+
+export function getStaticPaths() {
+  const anuncios = getAnuncios().filter(hasPublicDetail);
+  return locales.flatMap((locale) =>
+    anuncios.map((anuncio) => ({ params: { locale, id: anuncio.id } })),
+  );
+}
+
+const dictionaries: Record<Locale, Messages> = { es, en };
+
+const locale = getLocale(Astro.params.locale);
+const anuncio = getAnuncio(Astro.params.id ?? '');
+// 9.4: a withdrawn listing, or one this build does not have, is not a page.
+if (anuncio === undefined || !hasPublicDetail(anuncio)) {
+  return new Response(null, { status: 404 });
+}
+
+const path = Astro.url.pathname;
+const alternates = Object.fromEntries(
+  locales.map((option) => [option, getAlternatePath(path, option)]),
+) as Record<Locale, string>;
+const messages = dictionaries[locale];
+const { ui, trade } = messages;
+
+// 8.0.4: «Comunidad › Comercio › {título}».
+const group = buildNav(locale, path).groups.find((entry) => entry.id === 'comunidad');
+const comercio = group?.items.find((item) => item.id === 'comercio');
+if (group === undefined || comercio === undefined) {
+  throw new Error('src/lib/nav/groups.ts: no «comercio» entry in the «comunidad» group (8.0.3).');
+}
+
+const registry = getSpriteRegistry();
+const catalog: TradeCatalog = {
+  pokemon: getPokemon(),
+  items: getItems(),
+  categorias: getCategorias(),
+  elementos: getElementos(),
+  auras: getAuras(),
+  outfits: getOutfits(),
+  mundos: getMundos(locale),
+  vendedores: getVendedores(),
+  sprites: registry,
+  channels: trade.channels,
+};
+const {
+  rows: [row],
+  refs,
+} = tradeRecords([anuncio], catalog, locale);
+// The `moneda` object of content/items/diamantes.json (§3.13): the facts «Se compran en» and
+// «Se usan en» of a Diamonds listing and the rows of the Diamonds panel its price opens (7.5.3).
+const moneda = getMonedaDiamantes();
+const sprites = tradeSprites(registry);
+const context: TradeContext = {
+  locale,
+  refs,
+  sprites,
+  diamonds: tradeDiamonds(moneda, locale),
+  ui,
+  labels: tradeLabels(messages),
+};
+// The Diamond turns in Comercio (7.8). Without a row there is no panel, and the Diamonds of the
+// price stay text (R2).
+const diamondsPanel = diamondsTip(moneda, locale, ui.tooltip, {
+  sprite: sprites.types.diamonds,
+  animated: true,
+});
+const title = listingTitleNode(row);
+
+// The head line (9.6 step 2): the world, the day of publication and the state the visitor sees.
+const builtAt = new Date();
+const status = visibleStatus(anuncio, builtAt);
+const state =
+  status === 'reservado'
+    ? trade.states.reservado
+    : status === 'completado'
+      ? trade.states.completado
+      : status === 'expirado'
+        ? trade.states.expirado
+        : null;
+// A listing that is still public can expire under the visitor's clock (see the script below).
+const canExpire = anuncio.estado === 'publicado' || anuncio.estado === 'reservado';
+const world = Object.hasOwn(refs.mundos, row.mundo) ? refs.mundos[row.mundo] : null;
+const meta = [world, fill(trade.detail.posted, { date: formatDate(row.publicado, locale) })]
+  .filter((part) => part !== null)
+  .join(' · ');
+
+// The sheet (7.5.9) and what continues it.
+const sheet = listingTip(row, context, {
+  addon: trade.detail.addon,
+  nextBoostChance: trade.detail.nextBoost,
+});
+const unit = row.pokemon;
+const trained = (unit?.entrenamiento ?? []).flatMap((entry) => {
+  const percent = entry.progreso === null ? Number.NaN : Number(entry.progreso);
+  return entry.nivel === null || !Number.isFinite(percent)
+    ? []
+    : [{ stat: entry.habilidad, level: entry.nivel, percent }];
+});
+const memories = (unit?.memorias ?? []).flatMap((id) => {
+  if (id === null || !Object.hasOwn(refs.pokemon, id)) return [];
+  const pokemon = refs.pokemon[id];
+  return [
+    {
+      id,
+      name: pokemon.nombre,
+      href: `/${locale}/pokedex/${id}/`,
+      tip: pokemonPanel(id, pokemon, context),
+    },
+  ];
+});
+const heldSection = (sheet.sections ?? []).length > 0;
+
+// «Precio» (9.6): real money in 700 or «A convenir», and the in-game options.
+const precio = row.precio;
+const importe = precio.real === null ? Number.NaN : Number(precio.real.importe);
+const fiat =
+  precio.real !== null && Number.isFinite(importe)
+    ? createElement(
+        'span',
+        { className: 'ac-trade-detail__fiat' },
+        formatRealMoney(importe, precio.real.moneda, locale),
+      )
+    : precio.aConvenir
+      ? trade.listing.negotiable
+      : null;
+const options = precio.juego.map((option) => ({
+  kind: option.tipo === 'pokedolares' ? ('pd' as const) : ('dia' as const),
+  amount: option.cantidad,
+}));
+const priceRows: FactRow[] = [
+  { key: 'fiat', label: trade.listing.fiat, value: fiat, mode: 'node' },
+  {
+    key: 'game',
+    label: trade.listing.game,
+    value:
+      options.length > 0
+        ? createElement(PriceOptions, {
+            options,
+            locale,
+            orLabel: ui.or,
+            link: diamondsPanel === null ? undefined : { tip: diamondsPanel, hint: ui.pinHint },
+          })
+        : null,
+    mode: 'nodetop',
+  },
+];
+
+// «Vendedor» and «Contacto verificado» (9.6): the seller's standing from its reviews (9.10).
+const seller = getVendedor(row.vendedor);
+const sellerRef = Object.hasOwn(refs.vendedores, row.vendedor)
+  ? refs.vendedores[row.vendedor]
+  : null;
+const operations = seller === undefined ? 0 : sellerRating(seller.resenas).operaciones;
+const channels = sellerRef?.canales ?? [];
+---
+
+<PageLayout
+  locale={locale}
+  title={row.accesible}
+  description={fill(trade.detailDescription, { title: row.accesible })}
+  alternates={alternates}
+  breadcrumb={[
+    { label: group.label },
+    { label: comercio.label, href: comercio.href },
+    { label: title },
+  ]}
+  preloadGameFont
+  noindex
+>
+  <div class="ac-trade-detail__head">
+    <PageTitle title={title} />
+    <p class="ac-trade-detail__meta">
+      {meta}{
+        canExpire ? (
+          <span data-ac-expira={row.expira} data-ac-expirado={` · ${trade.states.expirado}`}>
+            {state === null ? '' : ` · ${state}`}
+          </span>
+        ) : (
+          state !== null && ` · ${state}`
+        )
+      }
+    </p>
+  </div>
+
+  <div class="ac-trade-detail">
+    <div class="ac-trade-sheet">
+      <GameTooltip
+        tip={sheet}
+        variant="sheet"
+        ariaLabel={fill(ui.sheet, { name: row.accesible })}
+        locale={locale}
+        shinyLabel={ui.shiny}
+        orLabel={ui.or}
+      />
+      {
+        (trained.length > 0 || memories.length > 0) && (
+          <div class="ac-game-tooltip ac-game-tooltip--static ac-trade-sheet__more">
+            {trained.length > 0 && (
+              <details
+                class:list={[
+                  'ac-game-tooltip__section',
+                  !heldSection && 'ac-game-tooltip__section--first',
+                ]}
+                open
+              >
+                <summary class="ac-game-tooltip__toggle">
+                  {fill(trade.tip.training, { n: formatInteger(trained.length, locale) })}
+                  <span class="ac-game-tooltip__chevron" aria-hidden="true">
+                    <Glyph
+                      name="chevron-down"
+                      size={12}
+                      className="ac-game-tooltip__chevron-open"
+                    />
+                    <Glyph
+                      name="chevron-right"
+                      size={12}
+                      className="ac-game-tooltip__chevron-closed"
+                    />
+                  </span>
+                </summary>
+                <div class="ac-game-tooltip__section-body ac-trade-sheet__trainings">
+                  {trained.map((training) => (
+                    <TrainingMeter
+                      variant="tooltip"
+                      stat={training.stat}
+                      level={training.level}
+                      percent={training.percent}
+                      locale={locale}
+                      labels={ui.money}
+                    />
+                  ))}
+                </div>
+              </details>
+            )}
+            {memories.length > 0 && (
+              <details
+                class:list={[
+                  'ac-game-tooltip__section',
+                  !heldSection && trained.length === 0 && 'ac-game-tooltip__section--first',
+                ]}
+                open
+              >
+                <summary class="ac-game-tooltip__toggle">
+                  {fill(trade.detail.dittoMemory, { n: formatInteger(memories.length, locale) })}
+                  <span class="ac-game-tooltip__chevron" aria-hidden="true">
+                    <Glyph
+                      name="chevron-down"
+                      size={12}
+                      className="ac-game-tooltip__chevron-open"
+                    />
+                    <Glyph
+                      name="chevron-right"
+                      size={12}
+                      className="ac-game-tooltip__chevron-closed"
+                    />
+                  </span>
+                </summary>
+                <p class="ac-trade-sheet__memories">
+                  {memories.map((memory) => (
+                    <NestedEntity
+                      tip={memory.tip}
+                      href={memory.href}
+                      variant="link"
+                      placement="up"
+                      align="start"
+                      inline
+                      locale={locale}
+                      hint={ui.pinHint}
+                      shinyLabel={ui.shiny}
+                      orLabel={ui.or}
+                    >
+                      {memory.name}
+                    </NestedEntity>
+                  ))}
+                </p>
+              </details>
+            )}
+          </div>
+        )
+      }
+    </div>
+
+    <div class="ac-trade-detail__side">
+      <Section id="precio" title={trade.price}>
+        <FactList rows={priceRows} gap={8} zone={null} />
+      </Section>
+      {
+        sellerRef !== null && (
+          <Section id="vendedor" title={trade.listing.seller}>
+            <SellerCard
+              name={sellerRef.nombre}
+              href={sellerHref(locale, row.vendedor)}
+              score={sellerRef.valoracion}
+              reviews={sellerRef.resenas}
+              operations={operations}
+              locale={locale}
+              labels={{ operations: trade.confirmed, money: ui.money }}
+            />
+          </Section>
+        )
+      }
+      {
+        channels.length > 0 && (
+          <Section id="contacto" title={trade.listing.contact}>
+            {/* In a box of its own: the plain-list rules of section.css (markers, «li + li»)
+                are for a list written straight into a section, not for the chips. */}
+            <div>
+              <ChipRow items={channels} cap={channels.length} labels={ui.money} locale={locale} />
+            </div>
+          </Section>
+        )
+      }
+    </div>
+  </div>
+</PageLayout>
+
+<script>
+  // 9.4, CA-9.20: a public listing whose `expira` the visitor's clock has passed reads «Expirado»,
+  // at once if it already expired, or when it expires while the page is open. The build wrote the
+  // state its own clock saw; a timer longer than the browser holds is not set.
+  const LONGEST_TIMER = 2_147_483_647;
+  for (const state of document.querySelectorAll<HTMLElement>('[data-ac-expira]')) {
+    const end = Date.parse(state.dataset.acExpira ?? '');
+    if (Number.isNaN(end)) continue;
+    const expire = () => {
+      state.textContent = state.dataset.acExpirado ?? '';
+    };
+    const left = end - Date.now();
+    if (left <= 0) expire();
+    else if (left <= LONGEST_TIMER) window.setTimeout(expire, left);
+  }
+</script>

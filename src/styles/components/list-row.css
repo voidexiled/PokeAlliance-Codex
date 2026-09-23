@@ -1,0 +1,182 @@
+/* ListRow (spec 7.2.6, 7.7.4 V4; DS:ListRow), ported from the `.ac-list-row` block of the
+   design system's components/bundle.css. global.css imports this file with
+   layer(components), after kpi-card.css.
+
+   One row of a Lista table, inside DataTable's table (14/22 on bg-primary): 1 px
+   `border-secondary` dividers, centred cells, a sprite cell of 48 (a 40 slot or a 40 art
+   plus 4 and 4; 64 with the 48 box of a listing) and the name cell, left-aligned. The row
+   takes `bg-secondary` under the pointer.
+
+   Differences from the reference, none of which changes a value:
+   - The type pairs are the text styles of theme.css (spec 3.7): 12/16 `ui` and
+     `ui-strong`; where the reference sets only the size, the weight is inherited again.
+   - The stack count reads the white through the utility (a token read of `--white` is a
+     named-colour false positive of design:check rule 2).
+   - The transition sits inside `prefers-reduced-motion: no-preference` (spec 6.4).
+   - The panel the name opens is in the top layer (7.5.4) and the controller places it 12
+     px right of the name cell, so the cell's `position: relative` and the static wrapper
+     of the reference only keep the ported rules in their place. */
+
+.ac-list-row__cell {
+  padding: 0 var(--space-16);
+  border-right: 1px solid var(--border-secondary);
+  border-bottom: 1px solid var(--border-secondary);
+  text-align: center;
+}
+
+.ac-list-row--listing > .ac-list-row__cell {
+  padding: 0 var(--space-12);
+}
+
+.ac-list-row > .ac-list-row__cell:last-child {
+  border-right: 0;
+}
+
+.ac-list-row:last-child > .ac-list-row__cell,
+.ac-list-row--last > .ac-list-row__cell {
+  border-bottom: 0;
+}
+
+/* The last row's outer corners follow the table's 8 px radius (inner edge of its 1 px border). */
+.ac-list-row:last-child > .ac-list-row__cell:first-child,
+.ac-list-row--last > .ac-list-row__cell:first-child {
+  border-bottom-left-radius: calc(var(--radius-8) - 1px);
+}
+
+.ac-list-row:last-child > .ac-list-row__cell:last-child,
+.ac-list-row--last > .ac-list-row__cell:last-child {
+  border-bottom-right-radius: calc(var(--radius-8) - 1px);
+}
+
+.ac-list-row:hover > .ac-list-row__cell {
+  background: var(--bg-secondary);
+}
+
+/* Sprite cell: a 40 slot or a 40 art (row 48 = slot + 4 + 4), or the 48 box of a listing
+   (row 64), centred. */
+.ac-list-row > .ac-list-row__sprite {
+  height: calc(var(--size-slot) + var(--space-8));
+  padding: var(--space-4) var(--space-16);
+}
+
+.ac-list-row--pokedex > .ac-list-row__sprite {
+  padding: var(--space-4) var(--space-12);
+}
+
+.ac-list-row--listing > .ac-list-row__sprite {
+  height: calc(var(--space-48) + var(--space-16));
+  padding: var(--space-4) var(--space-12);
+}
+
+.ac-list-row__sprite-in {
+  display: flex;
+  justify-content: center;
+}
+
+/* Listing frame (Comercio Lista): 48 box, 1 px border, radius 8, bg-secondary, stack count
+   in the corner. */
+.ac-list-row__frame {
+  position: relative;
+  display: flex;
+  width: var(--space-48);
+  height: var(--space-48);
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--border-secondary);
+  border-radius: var(--radius-8);
+  background: var(--bg-secondary);
+}
+
+.ac-list-row__box {
+  display: flex;
+  width: var(--space-48);
+  height: var(--space-48);
+  flex: none;
+  align-items: center;
+  justify-content: center;
+}
+
+.ac-list-row__qty {
+  position: absolute;
+  right: var(--space-4);
+  bottom: 1px;
+  @apply type-ui-strong text-white;
+  font-variant-numeric: tabular-nums;
+  text-shadow: var(--text-shadow-game);
+}
+
+/* Name cell: the tooltip lines up with the cell (row: 12 px past its right border). */
+.ac-list-row__name {
+  position: relative;
+  text-align: left;
+}
+
+.ac-list-row__name .ac-nested-entity {
+  position: static;
+}
+
+.ac-list-row__name-in {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.ac-list-row__name--center {
+  text-align: center;
+}
+
+.ac-list-row__name--center > .ac-list-row__name-in {
+  align-items: center;
+}
+
+.ac-list-row__link {
+  color: var(--link);
+  text-decoration: none;
+}
+
+.ac-list-row__link:hover {
+  text-decoration: underline;
+}
+
+/* Touch (S14, spec 13.7): the name is the one target of its row and is one 22 px line. Its
+   hit area is the whole name cell, which is the containing block (the trigger's wrapper is
+   static here), at least 48 tall: the height of the shortest row. The sub line under the name
+   is text, so nothing else in the cell loses a tap. The reference draws no touch rule. */
+@media (pointer: coarse) {
+  .ac-list-row__name :is(.ac-list-row__link, .ac-nested-entity__trigger)::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+  }
+}
+
+/* The reference sets only the size of these two, so the weight still follows the row. */
+.ac-list-row__sub {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+  color: var(--text-tertiary);
+  @apply type-ui;
+  font-weight: inherit;
+}
+
+.ac-list-row__cell--left {
+  text-align: left;
+}
+
+.ac-list-row__cell--nowrap {
+  white-space: nowrap;
+}
+
+.ac-list-row__cell--small {
+  @apply type-ui;
+  font-weight: inherit;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .ac-list-row__cell {
+    transition: background-color var(--duration-fast) var(--ease-standard);
+  }
+}

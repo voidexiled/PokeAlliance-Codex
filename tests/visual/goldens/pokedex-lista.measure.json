@@ -1,0 +1,78 @@
+{
+ "declaredHeight": 1904,
+ "renderedHeight": 1904,
+ "width": 1440,
+ "contentHeight": 1177,
+ "overflow": false,
+ "emptyTail": 727,
+ "lowest": {
+  "path": "#dc-root > div:nth-child(1) > div:nth-child(1) > div:nth-child(3) > main:nth-child(2) > footer:nth-child(4)",
+  "kind": "box"
+ },
+ "rawHoles": [],
+ "brokenImages": [],
+ "webFontsLoaded": [],
+ "grids": [],
+ "flexWraps": [
+  {
+   "kind": "flex-wrap",
+   "path": "#dc-root > div:nth-child(1) > div:nth-child(1) > div:nth-child(3) > main:nth-child(2) > nav:nth-child(1) > ol:nth-child(1)",
+   "rect": {
+    "x": 248,
+    "y": 96,
+    "w": 944,
+    "h": 16
+   },
+   "columns": 3,
+   "children": 3,
+   "painted": 0,
+   "cards": false,
+   "inTooltip": false,
+   "alignItems": "center",
+   "label": "Pokémon",
+   "maxSpread": 9,
+   "rows": [
+    {
+     "y": 96,
+     "children": [
+      0,
+      1,
+      2
+     ],
+     "heights": [
+      16,
+      7,
+      16
+     ],
+     "heightSpread": 9,
+     "hollowBottom": [
+      1,
+      7,
+      1
+     ],
+     "padBottom": [
+      0,
+      0,
+      0
+     ],
+     "itemHeights": [
+      16,
+      14,
+      16
+     ]
+    }
+   ]
+  }
+ ],
+ "board": "Pokedex.dc.html",
+ "state": {
+  "view": "list",
+  "tip": null
+ },
+ "viewport": {
+  "width": 1440,
+  "height": 1904
+ },
+ "missingBlobs": [],
+ "consoleErrors": []
+}

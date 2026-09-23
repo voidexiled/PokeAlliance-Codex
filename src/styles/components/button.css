@@ -1,0 +1,113 @@
+/* Button (spec 7.2.2, DS:Button), ported from the `.ac-button` block of the design
+   system's components/bundle.css. global.css imports this file with layer(components).
+
+   The bordered 40 px button: 1 px `border-primary`, radius 11, 14/22, padding 0 16.
+   The solid one (one per view) is white with black 12/16 and radius 10; the icon one
+   is 40 × 40 with no border and an 18 px glyph. With a coarse pointer every button is
+   44 tall, and the icon one 44 wide.
+
+   Differences from the reference: the hover transition sits inside the reduced-motion
+   guard (6.4, rule 7 of 3.11) with its tokens, and the forced-colors rule at the end
+   draws the pressed state that the mode would otherwise lose (5.2). */
+
+.ac-button {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-8);
+  height: var(--size-control);
+  margin: 0;
+  padding: 0 var(--space-16);
+  border: 1px solid var(--border-primary);
+  border-radius: var(--radius-11);
+  background: transparent;
+  color: var(--text-primary);
+  font-family: var(--font-sans);
+  @apply type-body;
+  white-space: nowrap;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.ac-button:hover:not(:disabled):not([aria-pressed='true']) {
+  background: var(--bg-tertiary);
+}
+
+.ac-button:disabled {
+  border-color: var(--border-secondary);
+  color: var(--text-quaternary);
+  cursor: not-allowed;
+}
+
+/* Pressed toggle («Por semana»): 1 px amber border plus the 1 px amber ring, no fill. */
+.ac-button[aria-pressed='true'] {
+  border-color: var(--selected);
+  box-shadow: var(--ring-selected);
+  background: transparent;
+}
+
+.ac-button__icon {
+  display: flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+}
+
+.ac-button__icon > svg {
+  display: block;
+}
+
+/* Icon: 40 × 40, no border, 18 px glyph. */
+.ac-button--icon {
+  width: var(--size-control);
+  padding: 0;
+  border: 0;
+}
+
+/* Solid: one per view. White fill, black 12/16 text, radius 10, no hover ink.
+   The token reads `background: var(--white)` and `color: var(--black)` are named-colour
+   false positives of design:check rule 2; the utilities resolve to the same --white and
+   --black (theme.css). */
+.ac-button--solid {
+  border: 0;
+  border-radius: var(--radius-10);
+  @apply bg-white text-black type-ui;
+}
+
+.ac-button--solid:hover:not(:disabled):not([aria-pressed='true']) {
+  @apply bg-white;
+}
+
+.ac-button--touch {
+  height: var(--size-touch);
+}
+
+.ac-button--touch.ac-button--icon {
+  width: var(--size-touch);
+}
+
+@media (pointer: coarse) {
+  .ac-button {
+    height: var(--size-touch);
+  }
+
+  .ac-button--icon {
+    width: var(--size-touch);
+  }
+}
+
+/* Hover ink: background-color only, the first row of 6.2. */
+@media (prefers-reduced-motion: no-preference) {
+  .ac-button {
+    transition: background-color var(--duration-fast) var(--ease-standard);
+  }
+}
+
+/* Forced colors (5.2): the mode drops the ring's second pixel, so the selection becomes
+   a 2 px border in the system Highlight colour. */
+@media (forced-colors: active) {
+  .ac-button[aria-pressed='true'] {
+    border: 2px solid Highlight;
+  }
+}

@@ -1,0 +1,39 @@
+/* ListingPreview (spec 9.7.6): the live preview of the publish page, the real `ListingCard`
+   (listing-card.css, card.css, fact-list.css) standing alone in the preview column of
+   template G (listing-form.css). This sheet only holds what changes for a card outside any
+   grid and with no account behind it.
+
+   A per-page sheet (13.6, D-018): only the publish page draws a preview, so ListingPreview.tsx
+   imports it and global.css does not. The layer order of global.css is repeated before the
+   block, so `components` keeps its place whichever of the two sheets the browser reads first
+   (3.6).
+
+   - One card and no grid: nothing shares its row tracks, so its zones stack as a column 12
+     apart, the row gap of the card (card.css). As a grid of its own the card would keep the
+     tracks `trackCount` gives the phase B footer, and the hidden rows below would leave them
+     empty at the bottom of the card.
+   - Phase A (9.7.6): there is no account, so the footer only carries the price rows. The
+     footer of `ListingCard` always ends with «Vendedor» and «Contacto verificado» (7.6.2);
+     here both are out of the layout and of the accessibility tree, and a footer with no
+     price row at all goes with them. */
+
+@layer properties, theme, base, components, utilities;
+
+@layer components {
+  .ac-listing-preview {
+    min-width: 0;
+  }
+
+  .ac-listing-preview .ac-card {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .ac-listing-preview [data-zone='footer'] > .ac-fact-list__row:nth-last-child(-n + 2) {
+    display: none;
+  }
+
+  .ac-listing-preview [data-zone='footer']:not(:has(> .ac-fact-list__row:nth-last-child(3))) {
+    display: none;
+  }
+}

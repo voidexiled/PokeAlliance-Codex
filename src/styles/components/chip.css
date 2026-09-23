@@ -1,0 +1,64 @@
+/* Chip (spec 7.2.3; DS:Chip), ported from the `.ac-chip` block of the design system's
+   components/bundle.css. global.css imports this file with layer(components).
+
+   The 24 px pill of facts, the Shiny variant and links. An entity chip, the one with a
+   `tip`, is a NestedEntity trigger and takes its pill from nested-entity.css; of this file
+   it only uses `ac-chip__sprite` and, when it is Shiny, the 6 px gap of `ac-chip--shiny`,
+   which beats the zero-specificity trigger rules as it does in the reference. */
+
+.ac-chip {
+  display: inline-flex;
+  align-items: center;
+  padding: var(--space-4) var(--space-8);
+  border-radius: var(--radius-full);
+  background: var(--bg-tertiary);
+  @apply type-ui;
+}
+
+/* With a 16 px sprite (or the Shiny mark) the right side gets 10 px of air. */
+.ac-chip--sprite {
+  gap: var(--space-4);
+  padding: var(--space-4) var(--space-10) var(--space-4) var(--space-8);
+}
+
+.ac-chip--shiny {
+  gap: var(--space-6);
+}
+
+.ac-chip__sprite {
+  display: flex;
+  flex: none;
+}
+
+/* A chip that links without a tooltip. Its rest background is already the hover ink
+   (bg-tertiary), so hover shows no change; focus shows the global ring. */
+.ac-chip--link {
+  color: var(--text-primary);
+  text-decoration: none;
+}
+
+/* Touch: the 24 px chip keeps its size and gets a hit area of 44 × 44 at least (S14,
+   spec 13.7). The reference only makes it 44 tall, which leaves a short chip («T1», about
+   30 wide) under 44; the width follows the «+N» pill of the same reference (plus-n.css):
+   the chip's own width, or 44 when the chip is narrower, centred on it. */
+@media (pointer: coarse) {
+  .ac-chip--link {
+    position: relative;
+  }
+
+  .ac-chip--link::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: max(100%, var(--size-touch));
+    height: var(--size-touch);
+    transform: translate(-50%, -50%);
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .ac-chip--link {
+    transition: background-color var(--duration-fast) var(--ease-standard);
+  }
+}

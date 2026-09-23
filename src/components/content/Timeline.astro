@@ -1,0 +1,104 @@
+---
+// Timeline (spec 7.2.3, 7.2.8, DS:Timeline): ordered steps on a 20 px rail with a
+// dashed line. Each step has a game sprite as its node, an italic bold label, its
+// text, optional points and optional chips; the last step has no line. It carries
+// the steps of a mission or a system (8.4.2, `pasos`; 8.9.2) and the entries of
+// Cambios (8.7).
+//
+// Markup of the reference (`bundle.js`, Timeline): `ol.ac-timeline`, one
+// `li.ac-timeline__step` per step (`--last` on the last one), the rail
+// `div.ac-timeline__rail[aria-hidden]` with the line first and the node after it —
+// so the node paints over the line without a z-index — and the body
+// `div.ac-timeline__body` with `p.ac-timeline__label`, `p.ac-timeline__text` and
+// `ul.ac-timeline__chips` of `li.ac-timeline__chip`. It is an `ol`: screen readers
+// announce the order, and the sprites stay hidden from them.
+//
+// Points of a step (7.2.8) are the one piece the reference does not have: a plain
+// `<ul>` right under the step text, before the chips. It takes no class of its own,
+// so the markup keeps exactly the classes of the reference (C7-02); timeline.css
+// styles it as the body lists of a Section.
+//
+// Data, not nodes (C-R1, DP1-DP3): the node sprite is `SpriteProps` from the adapter,
+// drawn at 1x in the 20 px node (an item at 1x or an element icon drawn at 20);
+// `null` is a known entity with no sprite in the registry and shows the missing
+// mark; without `sprite` the node is empty, as in the reference. Label, text and
+// points are visible text already written in the page's locale. Chips are the props
+// of `Chip`, with the text as a string (`children`), which Astro hands to the TSX as
+// its slot, escaped. A chip with `tip` is a NestedEntity (7.5.10). Nothing is drawn
+// without steps (C-R5).
+
+import { Chip, type ChipProps } from '@/components/content/Chip';
+import { Sprite, type SpriteProps } from '@/components/game/Sprite';
+import { MissingSprite } from '@/components/game/SpriteStage';
+
+/** Props of a Chip (7.2.3) whose text is a string. */
+export type TimelineChip = ChipProps & { children: string };
+
+export interface TimelineStep {
+  /** Node sprite, at 1x in the 20 px box; `null` draws the missing mark. */
+  sprite?: SpriteProps | null;
+  /** Italic bold label, colon included (T33): 'Paso 1:', '18/09/2026:'. */
+  label?: string;
+  /** Step text. */
+  text?: string;
+  /** Points under the step text, as a plain list (7.2.8, 8.7). */
+  points?: string[];
+  /** Chips under the text and the points. */
+  chips?: TimelineChip[];
+}
+
+interface Props {
+  steps: TimelineStep[];
+  /** Utilities added by the caller, after the component's own classes (3.8). */
+  class?: string;
+}
+
+const { steps, class: className } = Astro.props;
+const lastIndex = steps.length - 1;
+---
+
+{
+  steps.length > 0 && (
+    <ol class:list={['ac-timeline', className]}>
+      {steps.map((step, index) => {
+        const last = index === lastIndex;
+        const points = (step.points ?? []).filter((point) => point.trim() !== '');
+        const chips = step.chips ?? [];
+        return (
+          <li class:list={['ac-timeline__step', last && 'ac-timeline__step--last']}>
+            <div class="ac-timeline__rail" aria-hidden="true">
+              {!last && <div class="ac-timeline__line" />}
+              <div class="ac-timeline__node">
+                {step.sprite === null ? (
+                  <MissingSprite size={16} />
+                ) : step.sprite ? (
+                  <Sprite {...step.sprite} scale={1} />
+                ) : null}
+              </div>
+            </div>
+            <div class="ac-timeline__body">
+              {step.label && <p class="ac-timeline__label">{step.label}</p>}
+              {step.text && <p class="ac-timeline__text">{step.text}</p>}
+              {points.length > 0 && (
+                <ul>
+                  {points.map((point) => (
+                    <li>{point}</li>
+                  ))}
+                </ul>
+              )}
+              {chips.length > 0 && (
+                <ul class="ac-timeline__chips">
+                  {chips.map(({ children, ...chip }) => (
+                    <li class="ac-timeline__chip">
+                      <Chip {...chip}>{children}</Chip>
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </div>
+          </li>
+        );
+      })}
+    </ol>
+  )
+}

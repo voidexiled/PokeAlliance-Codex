@@ -1,0 +1,18 @@
+{
+  "$schema": "./schemas/locations.schema.json",
+  "ubicaciones": [
+    {
+      "id": "saffron",
+      "nombre": "Saffron",
+      "tipo": "city",
+      "region": "Kanto",
+      "acceso": ["Visit the city", "Speak with the Pokémon Center Nurse or Nurse Joy"],
+      "viajes": [
+        {
+          "modo": "Teleport",
+          "comando": "h \"saffron"
+        }
+      ]
+    }
+  ]
+}

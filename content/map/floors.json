@@ -1,0 +1,101 @@
+{
+  "$schema": "../schemas/map-floors.schema.json",
+  "pisos": [
+    {
+      "z": 1,
+      "imagen": "/data/map/otmm/floor-1.png",
+      "ancho": 832,
+      "alto": 648,
+      "limites": {
+        "minX": 0,
+        "minY": 320,
+        "maxX": 6655,
+        "maxY": 5503
+      }
+    },
+    {
+      "z": 3,
+      "imagen": "/data/map/otmm/floor-3.png",
+      "ancho": 832,
+      "alto": 648,
+      "limites": {
+        "minX": 0,
+        "minY": 320,
+        "maxX": 6655,
+        "maxY": 5503
+      }
+    },
+    {
+      "z": 4,
+      "imagen": "/data/map/otmm/floor-4.png",
+      "ancho": 832,
+      "alto": 648,
+      "limites": {
+        "minX": 0,
+        "minY": 320,
+        "maxX": 6655,
+        "maxY": 5503
+      }
+    },
+    {
+      "z": 5,
+      "imagen": "/data/map/otmm/floor-5.png",
+      "ancho": 832,
+      "alto": 672,
+      "limites": {
+        "minX": 0,
+        "minY": 128,
+        "maxX": 6655,
+        "maxY": 5503
+      }
+    },
+    {
+      "z": 6,
+      "imagen": "/data/map/otmm/floor-6.png",
+      "ancho": 832,
+      "alto": 672,
+      "limites": {
+        "minX": 0,
+        "minY": 128,
+        "maxX": 6655,
+        "maxY": 5503
+      }
+    },
+    {
+      "z": 7,
+      "imagen": "/data/map/otmm/floor-7.png",
+      "ancho": 832,
+      "alto": 672,
+      "limites": {
+        "minX": 0,
+        "minY": 128,
+        "maxX": 6655,
+        "maxY": 5503
+      }
+    },
+    {
+      "z": 8,
+      "imagen": "/data/map/otmm/floor-8.png",
+      "ancho": 584,
+      "alto": 656,
+      "limites": {
+        "minX": 64,
+        "minY": 128,
+        "maxX": 4735,
+        "maxY": 5375
+      }
+    },
+    {
+      "z": 9,
+      "imagen": "/data/map/otmm/floor-9.png",
+      "ancho": 584,
+      "alto": 656,
+      "limites": {
+        "minX": 64,
+        "minY": 128,
+        "maxX": 4735,
+        "maxY": 5375
+      }
+    }
+  ]
+}

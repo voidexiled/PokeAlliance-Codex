@@ -1,0 +1,62 @@
+---
+// Toc (spec 7.11, DS:Toc): the "Resumen" index of the right rail, a numbered list of
+// links to the page's sections. It never travels inside an island, so it resolves its
+// own shell copy from the dictionary of the page locale instead of taking text props
+// (spec 7.2.1, 13.2).
+//
+// The rail only exists with two or more sections and only from 1280: PageLayout decides
+// both (spec 7.2.1, 5.7). There is no `current` prop — scripts/toc-spy.ts moves
+// `aria-current="location"` as the reader scrolls (spec 7.11).
+
+import type { Locale } from '@/i18n/config';
+import type { Messages } from '@/i18n/messages/en';
+import { en } from '@/i18n/messages/en';
+import { es } from '@/i18n/messages/es';
+
+export interface TocItem {
+  /** id of the Section this entry links to; scripts/build/check-toc.mjs keeps the two in step. */
+  id: string;
+  label: string;
+  /** 'en' for an English section title inside a Spanish page (spec 8.0.5, T22). */
+  lang?: string;
+}
+
+interface Props {
+  items: TocItem[];
+  locale: Locale;
+  class?: string;
+}
+
+const { items, locale, class: className } = Astro.props;
+
+const dictionaries: Record<Locale, Messages> = { es, en };
+const { shell } = dictionaries[locale];
+
+// There is one Toc per page, so the name of the nav can keep a fixed id (C-R4).
+const titleId = 'indice-titulo';
+---
+
+<aside class:list={['ac-toc', className]} aria-label={shell.tocLabel} data-ac-toc>
+  <nav class="ac-toc__nav" aria-labelledby={titleId}>
+    <div class="ac-toc__head">
+      <p id={titleId} class="ac-toc__title">{shell.toc}</p>
+      <div role="none" class="ac-toc__rule"></div>
+    </div>
+    <ol class="ac-toc__list">
+      {
+        items.map((item, index) => (
+          <li class="ac-toc__item">
+            <a
+              class="ac-toc__link"
+              href={`#${item.id}`}
+              lang={item.lang}
+              aria-current={index === 0 ? 'location' : undefined}
+            >
+              {item.label}
+            </a>
+          </li>
+        ))
+      }
+    </ol>
+  </nav>
+</aside>

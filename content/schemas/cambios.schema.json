@@ -1,0 +1,112 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://alliance-codex.local/schemas/cambios.schema.json",
+  "title": "Cambios",
+  "description": "Los cambios del juego y de la wiki que lista la página Cambios, agrupados por mes, del más reciente al más antiguo. Se escriben a mano. Con la lista vacía, o sin este archivo, la página dice «Aún no hay cambios publicados.». Un cambio de relleno lleva \"borrador\": true y OCULTAR_BORRADORES=1 lo oculta.",
+  "type": "object",
+  "required": ["cambios"],
+  "additionalProperties": false,
+  "properties": {
+    "$schema": { "type": "string" },
+    "cambios": {
+      "type": "array",
+      "description": "Un cambio por entrada, en cualquier orden: la página los ordena por fecha, del más reciente al más antiguo, y los del mismo día por id. El id no se repite.",
+      "items": { "$ref": "#/$defs/cambio" }
+    }
+  },
+  "$defs": {
+    "slug": {
+      "type": "string",
+      "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$",
+      "description": "Minúsculas, números y guiones (kebab-case)."
+    },
+    "spriteKey": {
+      "type": "string",
+      "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*(?:/[a-z0-9]+(?:-[a-z0-9]+)*)*$",
+      "description": "Clave de public/sprites/sprites.json, por ejemplo \"ui/balls/alliance-ball\"."
+    },
+    "fecha": {
+      "type": "string",
+      "pattern": "^(?:[0-9]{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12][0-9]|3[01])|(?:0[469]|11)-(?:0[1-9]|[12][0-9]|30)|02-(?:0[1-9]|1[0-9]|2[0-8]))|(?:[0-9]{2}(?:0[48]|[2468][048]|[13579][26])|(?:[02468][048]|[13579][26])00)-02-29)$",
+      "description": "Día del calendario, AAAA-MM-DD: \"2026-09-18\"."
+    },
+    "texto": {
+      "type": "object",
+      "description": "Texto en los dos idiomas: { \"es\": \"…\", \"en\": \"…\" }.",
+      "required": ["es", "en"],
+      "additionalProperties": false,
+      "properties": {
+        "es": { "type": "string", "pattern": "\\S" },
+        "en": { "type": "string", "pattern": "\\S" }
+      }
+    },
+    "puntos": {
+      "type": "object",
+      "description": "Los mismos puntos en los dos idiomas, en el mismo orden.",
+      "required": ["es", "en"],
+      "additionalProperties": false,
+      "properties": {
+        "es": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "type": "string", "pattern": "\\S" }
+        },
+        "en": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "type": "string", "pattern": "\\S" }
+        }
+      }
+    },
+    "ref": {
+      "type": "object",
+      "description": "Entidad con registro propio: un Pokémon, un ítem, una página de sistema o una actividad.",
+      "required": ["tipo", "id"],
+      "additionalProperties": false,
+      "properties": {
+        "tipo": { "enum": ["pokemon", "item", "sistema", "actividad"] },
+        "id": {
+          "$ref": "#/$defs/slug",
+          "description": "id en content/pokemon.json, content/items/, content/sistemas/ o content/quests.json, según el tipo."
+        }
+      }
+    },
+    "cambio": {
+      "type": "object",
+      "required": ["id", "fecha", "titulo"],
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/slug",
+          "description": "Identificador estable del cambio. No se repite entre cambios."
+        },
+        "fecha": {
+          "$ref": "#/$defs/fecha",
+          "description": "Día del cambio, AAAA-MM-DD. Da el mes de su sección y la etiqueta del paso: «18/09/2026:»."
+        },
+        "titulo": {
+          "$ref": "#/$defs/texto",
+          "description": "El cambio, en una frase."
+        },
+        "puntos": {
+          "$ref": "#/$defs/puntos",
+          "description": "Opcional. Detalles del cambio, uno por punto, bajo el título."
+        },
+        "entidades": {
+          "type": "array",
+          "minItems": 1,
+          "description": "Opcional. Pokémon, ítems, sistemas o actividades que toca el cambio, cada uno una vez: la página los muestra con su tooltip.",
+          "items": { "$ref": "#/$defs/ref" }
+        },
+        "sprite": {
+          "$ref": "#/$defs/spriteKey",
+          "description": "Opcional. Sprite del cambio en la línea de tiempo; sin él, la página usa el sprite ui/cambios."
+        },
+        "borrador": {
+          "const": true,
+          "description": "true en cambios de relleno. Para publicarlo, se borra la clave."
+        }
+      }
+    }
+  }
+}

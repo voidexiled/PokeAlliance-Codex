@@ -1,0 +1,40 @@
+/* SkipLink (spec 7.2.1), ported from the design system's components/bundle.css.
+   global.css imports this file with layer(components).
+
+   Off screen until it takes keyboard focus, then 16 from the left and 8 from the
+   top, above everything else (`z-skip`). It is never hidden with `display: none`
+   or `visibility: hidden`: it would stop being focusable (DS:SkipLink).
+
+   The `[data-visible]` selector of the design system is not ported: `visible` is
+   a preview-only prop (DP5). */
+
+.ac-skip-link {
+  position: absolute;
+  left: -9999px; /* sin token: fuera de la pantalla, no es una medida del marco */
+  top: var(--space-8);
+  z-index: var(--z-skip);
+  padding: var(--space-6) var(--space-12);
+  border-radius: var(--radius-8);
+  background: var(--text-primary);
+  color: var(--bg-secondary);
+  font-family: var(--font-sans);
+  @apply type-ui;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.ac-skip-link:focus {
+  left: var(--space-16);
+}
+
+/* 13.7: with a coarse pointer every interactive target is at least `size-touch`,
+   and the skip link is not one of the two exceptions of that section. The design
+   system raises its own controls the same way (`.ac-button`, `.ac-text-field__input`,
+   `.ac-select__trigger`), so the pill grows in height and keeps its 6/12 padding. */
+@media (pointer: coarse) {
+  .ac-skip-link {
+    display: inline-flex;
+    min-height: var(--size-touch);
+    align-items: center;
+  }
+}

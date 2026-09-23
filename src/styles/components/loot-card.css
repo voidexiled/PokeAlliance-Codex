@@ -1,0 +1,38 @@
+/* LootCard (spec 7.2.6, 7.5.5, 7.6.4; CARD_GRID_SYSTEM §6.3; DS:LootCard). global.css imports
+   this file with layer(components).
+
+   The reference draws nothing of its own for this card: the box, the head and the fact rows
+   are card.css and fact-list.css, and the 40 slot is SpriteStage. Its compact anatomy is the
+   `compact` prop, which stacks the facts with `FactList stacked` and anchors the panels by
+   the column of the card. Here the compact anatomy comes from a container query with the
+   same DOM (7.6.4): under 240 of grid (`grid-compact`, one column) card.css gives the card
+   padding 12 and centres its head, and this file turns the facts into the stacked rows of
+   fact-list.css — label over value, 8 apart, left-aligned — and lines the panels of the
+   values up with their left edge, where the values now start (`--ac-tt-align: start`, read
+   by the controller before the `end` of the attribute, 7.5.5). */
+
+@container ac-card-grid (width < 240px) {
+  .ac-card-grid[data-family='loot'] .ac-loot-card {
+    --ac-tt-align: start;
+  }
+
+  .ac-card-grid[data-family='loot'] .ac-loot-card .ac-fact-list {
+    row-gap: var(--space-8);
+  }
+
+  .ac-card-grid[data-family='loot'] .ac-loot-card .ac-fact-list__row {
+    flex-direction: column;
+    align-items: stretch;
+    justify-content: flex-start;
+    gap: 0;
+  }
+
+  .ac-card-grid[data-family='loot'] .ac-loot-card .ac-fact-list__value {
+    justify-content: flex-start;
+    text-align: left;
+  }
+
+  .ac-card-grid[data-family='loot'] .ac-loot-card .ac-fact-list__wrap {
+    text-align: left;
+  }
+}

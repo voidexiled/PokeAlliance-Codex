@@ -1,81 +1,43 @@
-# Discord Changelog Ingestion
+# Changelog Ingestion
 
-Status: **local launcher-feed ingestion available; Discord remains manual-only**. Bot access to the official Discord is not currently available.
+Status: **manual today**. The launcher feed importer is a future roadmap item; bot access to the official Discord is not available.
 
-## Decision
+## Paths
 
-Support three ingestion paths with one review/publishing pipeline:
+1. **Launcher feed (future, see `ROADMAP.md`):** a daily GitHub Action reads `https://pokealliance.com/launcher/feed` (the same news the launcher caches in `PokeAlliance/cache/feed.json`: news `id`, `cat`, `title`, `created_at` and an HTML body) and adds new entries by `id`.
+2. **Manual entry (current):** the owner or an administrator pastes a Discord announcement or a launcher news item.
+3. **Authorized Discord reader (optional future path):** a dedicated Alliance Codex app reads only the approved announcement/changelog channel if PokeAlliance administrators grant access.
 
-1. **Local launcher feed (current):** ingest the owner-supplied `PokeAlliance/cache/feed.json`, which currently exposes structured news IDs, categories, titles, HTML bodies and timestamps.
-2. **Manual moderated Discord import (current):** the project owner or an administrator pastes a message or supplies its Discord message link/export.
-3. **Authorized Discord ingestion (future optional path):** a dedicated Alliance Codex Discord app/bot reads only the approved changelog/announcement channel if access becomes available.
+Every path produces change entries that go through the same review before they update game data. No work waits for bot access.
 
-No path publishes game facts directly. Each creates immutable raw source records and candidate changes that require validation/review. No work should be blocked waiting for bot access.
-
-## Local launcher feed contract
-
-Record the source file hash, feed `updated_at`, news `id`, `cat`, `title`, `created_at` and sanitized body. The HTML body is untrusted input: parse with an allowlist and never render it directly. A changed source hash produces a diff against stable news IDs. Missing news in a later cache does not automatically delete prior evidence.
-
-The current structural extraction is reproducible with `scripts/research/profile-launcher-feed.ps1` and is summarized in `data/research/launcher-feed-profile.json`. It stores headings and content hashes while keeping raw HTML in the Git-ignored inbox.
-
-## Authorization required for future automation
-
-An administrator of the PokeAlliance Discord must:
-
-- add the Alliance Codex app/bot;
-- limit it to the relevant announcement/changelog channel;
-- grant `VIEW_CHANNEL` and `READ_MESSAGE_HISTORY`;
-- enable the minimum message-content access required by the selected API flow;
-- approve retention and public reuse expectations for changelog content.
-
-Discord's current API can retrieve channel messages using `before`/`after` pagination. Message content fields require appropriate message-content access. Incoming webhooks only send content *into* Discord; they do not provide historical channel ingestion. A bot/Gateway or authenticated REST reader is the relevant mechanism.
-
-## Raw record contract
-
-Store at least:
+## Change entry
 
 ```text
-discordGuildId
-discordChannelId
-discordMessageId
-authorId / authorRoleSnapshot
-publishedAt (instant)
-editedAt (instant or null)
-retrievedAt (instant)
-contentOriginal
-attachments metadata
-messageUrl
-contentHash
-ingestionMethod
+id            stable key (feed id or Discord message id)
+fecha         publication instant (UTC)
+titulo        original title
+resumen       own summary in es/en, never the copied body
+entidades     ids of the affected content/ records
 ```
 
-Discord IDs and tokens are never exposed in a client bundle. Bot tokens remain server-only secrets. Store only data approved for this product; do not mirror unrelated Discord conversation.
+The HTML body is untrusted input: parse it with an allowlist and never render it directly. An entry missing from a later feed does not delete the stored entry. Canonical game terms are protected before translation; the original text stays Portuguese unless an authored translation is added.
 
 ## Processing
 
 ```text
-Discord/manual raw message
-  → immutable source snapshot
-  → parsed change candidates
-  → reviewer confirms affected entities/facts
-  → normalized effective-dated changes
-  → stale dependent translations/guides flagged
-  → rebuild/revalidation
+feed entry or manual paste
+  → change entry
+  → owner confirms the affected content/ records
+  → content/ values updated
+  → translations and guides that depend on them flagged for review
+  → rebuild
 ```
 
-Edits and deletions create new audit events; they do not silently erase the prior snapshot. The source text remains Portuguese unless an authored translation is added. Canonical game terms are protected before translation.
+## Discord authorization (only if automation is revisited)
 
-## Freshness
-
-For automated ingestion, persist a cursor based on Discord snowflake/message ID and poll conservatively or receive Gateway events. A scheduled reconciliation fetch catches missed edits/events. Rate limits, backoff and idempotency are mandatory.
-
-## Manual operation — active policy
-
-Manual updates remain fully supported and use the same schema. The reviewer must provide the message link/ID when available, publication date, original content and any attachments. Manual ingestion is preferable to unauthorized automation.
+An administrator of the PokeAlliance Discord must add the Alliance Codex app, limit it to the announcement/changelog channel, grant `VIEW_CHANNEL` and `READ_MESSAGE_HISTORY` and the minimum message-content access, and approve public reuse of changelog content. Incoming webhooks only send content into Discord; historical reading needs a bot/Gateway or authenticated REST reader with a snowflake cursor, rate limits, backoff and idempotency. Bot tokens and Discord IDs stay server-only.
 
 ## Open decisions
 
-- Guild/channel IDs and whether the channel is an Announcement channel, only if automation is revisited.
-- Whether PokeAlliance administrators authorize the app, only if automation is revisited.
-- Polling versus Gateway event flow.
-- Review roles and publication SLA.
+- Whether PokeAlliance administrators authorize a Discord app.
+- Review roles and publication timing for change entries.

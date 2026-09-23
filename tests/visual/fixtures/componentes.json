@@ -1,0 +1,376 @@
+{
+  "es": {
+    "title": "Componentes",
+    "description": "Ruta de paridad de los controles y el contenido del sistema de diseño con las muestras del tablero Componentes.",
+    "sections": {
+      "buttons": "Botones",
+      "fields": "Campos",
+      "select": "Select",
+      "tabs": "Pestañas",
+      "chips": "Chips",
+      "section": "Sección",
+      "banner": "Banner de datos",
+      "infoCards": "Tarjetas informativas",
+      "timeline": "Línea de tiempo",
+      "table": "Tabla",
+      "feedback": "Paginación, aviso y vacío",
+      "filters": "Filtros y vistas",
+      "forms": "Formularios",
+      "facts": "Hechos"
+    },
+    "buttons": {
+      "import": "Importar",
+      "weekly": "Por semana",
+      "daily": "Por día",
+      "copy": "Copiar coordenadas",
+      "coordinates": "x 1721, y 2158, piso 7",
+      "proseLink": "ver bandas abajo"
+    },
+    "fields": {
+      "name": { "label": "Nombre o número", "placeholder": "Charizard o 6" },
+      "level": { "label": "Nivel mínimo", "value": "120" },
+      "boost": {
+        "label": "Boost mínimo",
+        "value": 20,
+        "min": 0,
+        "max": 50,
+        "helper": "De +0 a +50."
+      }
+    },
+    "selects": {
+      "tier": {
+        "label": "Tier",
+        "value": "t1",
+        "options": [
+          { "value": "t1", "label": "T1" },
+          { "value": "t2", "label": "T2" },
+          { "value": "t3", "label": "T3" },
+          { "value": "t4", "label": "T4" },
+          { "value": "t5", "label": "T5" },
+          { "value": "t6", "label": "T6" },
+          { "value": "t7", "label": "T7" }
+        ]
+      },
+      "generation": {
+        "label": "Generación",
+        "value": "1",
+        "options": [
+          { "value": "todas", "label": "Todas" },
+          { "value": "1", "label": "Generación 1" },
+          { "value": "2", "label": "Generación 2" },
+          { "value": "3", "label": "Generación 3" },
+          { "value": "4", "label": "Generación 4" },
+          { "value": "5", "label": "Generación 5" },
+          { "value": "6", "label": "Generación 6" },
+          { "value": "7", "label": "Generación 7" }
+        ]
+      }
+    },
+    "tabs": {
+      "aura": "Aura",
+      "goals": {
+        "label": "Filtrar miembros por meta",
+        "options": [
+          { "value": "todos", "label": "Todos" },
+          { "value": "en-meta", "label": "En meta" },
+          { "value": "por-debajo", "label": "Por debajo" },
+          { "value": "sin-meta", "label": "Sin meta" }
+        ]
+      }
+    },
+    "chips": {
+      "text": ["5.000.000 de experiencia", "45 minutos"],
+      "variant": ["T1", "Legendary"],
+      "level": 120
+    },
+    "section": {
+      "title": "Bonus por tier",
+      "text": "Cada Star aumenta el daño del Pokémon; no aumenta defensa, vida ni velocidad. El porcentaje depende del tier: Legendary suma +15% por Star y llega a +75% con 5 Stars; T3 suma +2% por Star.",
+      "listTitle": "Formas de pago",
+      "list": ["Mayor parte en Diamonds.", "Mayor parte en Pokédólares.", "Pago mixto."],
+      "note": "un Pokémon con Stars no puede recibir Mega Stone."
+    },
+    "banner": [
+      "Requisito: Nivel 200",
+      "NPC: Dr. Vektor",
+      "Tiempo límite: 45 minutos",
+      "Recompensa permanente: acceso al área de Porygon"
+    ],
+    "infoCards": [
+      {
+        "title": "Medal System",
+        "text": "Requiere Nivel 350 y completar la secuencia de la Professor Helena en Hoenn."
+      },
+      { "title": "Tasks del mundo", "text": "Cada entrega de task da Mighty Token." }
+    ],
+    "timeline": [
+      {
+        "label": "Paso 1:",
+        "text": "Hablar con Dr. Vektor y aceptar ayudar en la investigación.",
+        "chips": ["Nivel 200"]
+      },
+      {
+        "label": "Paso 2:",
+        "text": "Usar el computador junto a Dr. Vektor para entrar al Mundo Digital.",
+        "chips": ["45 minutos", "1 jugador por vez"]
+      },
+      {
+        "label": "Paso 3:",
+        "text": "Activar los computadores en el orden de las barreras: verde, rojo y azul."
+      },
+      {
+        "label": "Paso 4:",
+        "text": "Derrotar al Giant Porygon antes de que terminen los 45 minutos."
+      },
+      {
+        "label": "Entrega a Dr. Vektor:",
+        "chips": [
+          "5.000.000 de experiencia",
+          "50 Empty Alliance Ball",
+          "50 Empty Yume Ball",
+          "4 Enhanced Normal Stone"
+        ]
+      }
+    ],
+    "table": {
+      "caption": "Bandas de Boost",
+      "columns": ["Boost", "Boost Stone", "Probabilidad inicial"],
+      "rows": [
+        ["+0 a +5", "Novice", "50%"],
+        ["+5 a +10", "Elemental", "40%"],
+        ["+10 a +15", "Common", "30%"],
+        ["+15 a +20", "Enhanced", "20%"],
+        ["+20 a +25", "Potent", "18%"],
+        ["+25 a +30", "Advanced", "15%"],
+        ["+30 a +35", "Fortified", "12%"],
+        ["+35 a +40", "Supreme", "10%"],
+        ["+40 a +45", "Celestial", "8%"],
+        ["+45 a +50", "Mystic", "5%"]
+      ]
+    },
+    "pagination": { "page": 1, "pageCount": 9 },
+    "notice": "Coordenadas copiadas: x 1721, y 2158, piso 7.",
+    "empty": "Sin resultados para «zzzz».",
+    "emptyAction": "Importa un export de guild para ver el análisis.",
+    "filters": {
+      "price": {
+        "legend": "Precio",
+        "placeholders": ["Mín", "Máx"],
+        "labels": ["Precio mínimo", "Precio máximo"]
+      },
+      "sort": {
+        "label": "Ordenar por",
+        "options": [
+          { "value": "recientes", "label": "Recientes" },
+          { "value": "valoracion", "label": "Mejor valorados" },
+          { "value": "precio", "label": "Precio, menor primero" }
+        ]
+      },
+      "count": { "one": "{n} variante", "other": "{n} variantes" }
+    },
+    "forms": {
+      "pokemon": { "label": "Pokémon", "placeholder": "Charizard o 6" },
+      "shinyOnly": "Solo Shiny",
+      "export": { "label": "Export de guild" },
+      "discard": {
+        "trigger": "Descartar",
+        "title": "Descartar el export",
+        "text": "El texto pegado se borra.",
+        "cancel": "Cancelar",
+        "confirm": "Descartar"
+      }
+    },
+    "facts": [
+      { "label": "Requisito", "value": "Nivel 200" },
+      { "label": "NPC", "value": "Dr. Vektor" },
+      { "label": "Tiempo límite", "value": "45 minutos" }
+    ]
+  },
+  "en": {
+    "title": "Components",
+    "description": "Parity route of the design system controls and content with the samples of the Componentes board.",
+    "sections": {
+      "buttons": "Buttons",
+      "fields": "Fields",
+      "select": "Select",
+      "tabs": "Tabs",
+      "chips": "Chips",
+      "section": "Section",
+      "banner": "Data banner",
+      "infoCards": "Info cards",
+      "timeline": "Timeline",
+      "table": "Table",
+      "feedback": "Pagination, notice and empty",
+      "filters": "Filters and views",
+      "forms": "Forms",
+      "facts": "Facts"
+    },
+    "buttons": {
+      "import": "Import",
+      "weekly": "Weekly",
+      "daily": "Daily",
+      "copy": "Copy coordinates",
+      "coordinates": "x 1721, y 2158, floor 7",
+      "proseLink": "see the bands below"
+    },
+    "fields": {
+      "name": { "label": "Name or number", "placeholder": "Charizard or 6" },
+      "level": { "label": "Minimum level", "value": "120" },
+      "boost": {
+        "label": "Minimum Boost",
+        "value": 20,
+        "min": 0,
+        "max": 50,
+        "helper": "From +0 to +50."
+      }
+    },
+    "selects": {
+      "tier": {
+        "label": "Tier",
+        "value": "t1",
+        "options": [
+          { "value": "t1", "label": "T1" },
+          { "value": "t2", "label": "T2" },
+          { "value": "t3", "label": "T3" },
+          { "value": "t4", "label": "T4" },
+          { "value": "t5", "label": "T5" },
+          { "value": "t6", "label": "T6" },
+          { "value": "t7", "label": "T7" }
+        ]
+      },
+      "generation": {
+        "label": "Generation",
+        "value": "1",
+        "options": [
+          { "value": "todas", "label": "All" },
+          { "value": "1", "label": "Generation 1" },
+          { "value": "2", "label": "Generation 2" },
+          { "value": "3", "label": "Generation 3" },
+          { "value": "4", "label": "Generation 4" },
+          { "value": "5", "label": "Generation 5" },
+          { "value": "6", "label": "Generation 6" },
+          { "value": "7", "label": "Generation 7" }
+        ]
+      }
+    },
+    "tabs": {
+      "aura": "Aura",
+      "goals": {
+        "label": "Filter members by goal",
+        "options": [
+          { "value": "todos", "label": "All" },
+          { "value": "en-meta", "label": "On goal" },
+          { "value": "por-debajo", "label": "Below" },
+          { "value": "sin-meta", "label": "No goal" }
+        ]
+      }
+    },
+    "chips": {
+      "text": ["5,000,000 experience", "45 minutes"],
+      "variant": ["T1", "Legendary"],
+      "level": 120
+    },
+    "section": {
+      "title": "Bonus per tier",
+      "text": "Each Star raises the damage of the Pokémon; it does not raise defense, health or speed. The percentage depends on the tier: Legendary adds +15% per Star and reaches +75% with 5 Stars; T3 adds +2% per Star.",
+      "listTitle": "Payment options",
+      "list": ["Mostly in Diamonds.", "Mostly in Pokédollars.", "Mixed payment."],
+      "note": "a Pokémon with Stars cannot receive a Mega Stone."
+    },
+    "banner": [
+      "Requirement: Level 200",
+      "NPC: Dr. Vektor",
+      "Time limit: 45 minutes",
+      "Permanent reward: access to the Porygon area"
+    ],
+    "infoCards": [
+      {
+        "title": "Medal System",
+        "text": "Requires Level 350 and finishing the Professor Helena sequence in Hoenn."
+      },
+      { "title": "World tasks", "text": "Each task delivery gives a Mighty Token." }
+    ],
+    "timeline": [
+      {
+        "label": "Step 1:",
+        "text": "Talk to Dr. Vektor and agree to help with the research.",
+        "chips": ["Level 200"]
+      },
+      {
+        "label": "Step 2:",
+        "text": "Use the computer next to Dr. Vektor to enter the Digital World.",
+        "chips": ["45 minutes", "1 player at a time"]
+      },
+      {
+        "label": "Step 3:",
+        "text": "Turn on the computers in the order of the barriers: green, red and blue."
+      },
+      {
+        "label": "Step 4:",
+        "text": "Defeat Giant Porygon before the 45 minutes run out."
+      },
+      {
+        "label": "Deliver to Dr. Vektor:",
+        "chips": [
+          "5,000,000 experience",
+          "50 Empty Alliance Ball",
+          "50 Empty Yume Ball",
+          "4 Enhanced Normal Stone"
+        ]
+      }
+    ],
+    "table": {
+      "caption": "Boost bands",
+      "columns": ["Boost", "Boost Stone", "Starting chance"],
+      "rows": [
+        ["+0 to +5", "Novice", "50%"],
+        ["+5 to +10", "Elemental", "40%"],
+        ["+10 to +15", "Common", "30%"],
+        ["+15 to +20", "Enhanced", "20%"],
+        ["+20 to +25", "Potent", "18%"],
+        ["+25 to +30", "Advanced", "15%"],
+        ["+30 to +35", "Fortified", "12%"],
+        ["+35 to +40", "Supreme", "10%"],
+        ["+40 to +45", "Celestial", "8%"],
+        ["+45 to +50", "Mystic", "5%"]
+      ]
+    },
+    "pagination": { "page": 1, "pageCount": 9 },
+    "notice": "Coordinates copied: x 1721, y 2158, floor 7.",
+    "empty": "No results for “zzzz”.",
+    "emptyAction": "Import a guild export to see the analysis.",
+    "filters": {
+      "price": {
+        "legend": "Price",
+        "placeholders": ["Min", "Max"],
+        "labels": ["Minimum price", "Maximum price"]
+      },
+      "sort": {
+        "label": "Sort by",
+        "options": [
+          { "value": "recientes", "label": "Newest" },
+          { "value": "valoracion", "label": "Best rated" },
+          { "value": "precio", "label": "Price, lowest first" }
+        ]
+      },
+      "count": { "one": "{n} variant", "other": "{n} variants" }
+    },
+    "forms": {
+      "pokemon": { "label": "Pokémon", "placeholder": "Charizard or 6" },
+      "shinyOnly": "Shiny only",
+      "export": { "label": "Guild export" },
+      "discard": {
+        "trigger": "Discard",
+        "title": "Discard the export",
+        "text": "The pasted text is cleared.",
+        "cancel": "Cancel",
+        "confirm": "Discard"
+      }
+    },
+    "facts": [
+      { "label": "Requirement", "value": "Level 200" },
+      { "label": "NPC", "value": "Dr. Vektor" },
+      { "label": "Time limit", "value": "45 minutes" }
+    ]
+  }
+}

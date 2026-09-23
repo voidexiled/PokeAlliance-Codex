@@ -1,0 +1,56 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://alliance-codex.local/schemas/locations.schema.json",
+  "title": "Ubicaciones",
+  "description": "content/locations.json. Si un valor no se conoce, va null.",
+  "type": "object",
+  "required": ["ubicaciones"],
+  "additionalProperties": false,
+  "properties": {
+    "$schema": { "type": "string" },
+    "ubicaciones": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/ubicacion" }
+    }
+  },
+  "$defs": {
+    "slug": {
+      "type": "string",
+      "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$",
+      "description": "Minúsculas, números y guiones (kebab-case)."
+    },
+    "texto": { "type": ["string", "null"], "minLength": 1 },
+    "viaje": {
+      "type": "object",
+      "required": ["modo", "comando"],
+      "additionalProperties": false,
+      "properties": {
+        "modo": { "type": "string", "minLength": 1, "description": "Por ejemplo \"Teleport\"." },
+        "comando": { "$ref": "#/$defs/texto" }
+      }
+    },
+    "ubicacion": {
+      "type": "object",
+      "required": ["id", "nombre", "tipo", "region", "acceso", "viajes"],
+      "additionalProperties": false,
+      "properties": {
+        "id": { "$ref": "#/$defs/slug" },
+        "nombre": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Nombre canónico del juego, en inglés."
+        },
+        "tipo": { "$ref": "#/$defs/texto", "description": "Por ejemplo \"city\"." },
+        "region": { "$ref": "#/$defs/texto" },
+        "acceso": {
+          "type": "array",
+          "items": { "type": "string", "minLength": 1 }
+        },
+        "viajes": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/viaje" }
+        }
+      }
+    }
+  }
+}

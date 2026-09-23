@@ -1,0 +1,210 @@
+/* SpriteStage and MissingSprite (spec 7.4.3, 7.4.4), ported from the
+   `.ac-sprite-stage` and `.ac-missing-sprite` blocks of the design system's
+   components/bundle.css. global.css imports this file with layer(components).
+
+   The fixed boxes where a sprite is drawn: the 72 stage is a 64 cell at 2x with
+   3 px of air and a 1 px frame; 40 is a 32 cell with the same air; 36 is that cell
+   with 1 px of air; 32 is the held slot. The last block is the loading state of
+   remote art, which src/scripts/art-loading.ts drives with `data-state` (7.4.2). */
+
+.ac-sprite-stage {
+  position: relative;
+  display: flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  width: var(--size-stage);
+  height: var(--size-stage);
+}
+
+.ac-sprite-stage--64 {
+  width: calc(var(--size-cell) * 2);
+  height: calc(var(--size-cell) * 2);
+}
+
+.ac-sprite-stage--44 {
+  width: var(--size-touch);
+  height: var(--size-touch);
+}
+
+.ac-sprite-stage--40 {
+  width: var(--size-slot);
+  height: var(--size-slot);
+}
+
+.ac-sprite-stage--36 {
+  width: var(--size-slot-drop);
+  height: var(--size-slot-drop);
+}
+
+.ac-sprite-stage--32 {
+  width: var(--size-slot-held);
+  height: var(--size-slot-held);
+}
+
+.ac-sprite-stage--framed {
+  border: 1px solid var(--border-secondary);
+  border-radius: var(--radius-8);
+}
+
+/* Held slot: radius 6. */
+.ac-sprite-stage--32.ac-sprite-stage--framed {
+  border-radius: var(--radius-6);
+}
+
+.ac-sprite-stage--secondary {
+  background: var(--bg-secondary);
+}
+
+.ac-sprite-stage--primary {
+  background: var(--bg-primary);
+}
+
+/* The empty game cell: it holds the missing mark of a known entity, and nothing at
+   all when the empty slot is information of the game. */
+.ac-sprite-stage__cell {
+  display: flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  width: var(--size-cell);
+  height: var(--size-cell);
+}
+
+.ac-sprite-stage__cell--2x {
+  width: calc(var(--size-cell) * 2);
+  height: calc(var(--size-cell) * 2);
+}
+
+/* Loading: a 32 box that pulses; the sprite then fades in over 300 ms. */
+.ac-sprite-stage__loading {
+  display: block;
+  flex: none;
+  width: var(--size-cell);
+  height: var(--size-cell);
+  border-radius: var(--radius-4);
+  background: var(--bg-quaternary);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .ac-sprite-stage__loading {
+    animation: ac-pulse var(--duration-pulse) var(--ease-pulse) infinite;
+  }
+
+  .ac-sprite-stage__in {
+    animation: ac-fade var(--duration-sprite-in) var(--ease-standard);
+  }
+}
+
+/* Stack count: bottom right corner, 12/16 in 700 with the game text shadow. */
+.ac-sprite-stage__qty {
+  position: absolute;
+  right: var(--space-4);
+  bottom: 1px;
+  /* The token read `color: var(--white)` is a named-colour false positive of design:check
+     rule 2; the utility resolves to the same --white. */
+  @apply type-ui-strong text-white;
+  text-shadow: var(--text-shadow-game);
+  font-variant-numeric: tabular-nums;
+}
+
+/* MissingSprite: a dark square at half the cell — 16 inside a 32 cell, 32 inside a
+   64 one. It is what a known entity with no sprite in the registry shows (R7);
+   there is no fallback initial anywhere on the site. */
+.ac-missing-sprite {
+  display: block;
+  flex: none;
+  width: var(--size-missing);
+  height: var(--size-missing);
+  border-radius: var(--radius-3);
+  background: var(--tt-track);
+  box-shadow: var(--inset-missing);
+}
+
+.ac-missing-sprite--32 {
+  width: var(--size-cell);
+  height: var(--size-cell);
+}
+
+.ac-missing-sprite--40 {
+  width: var(--size-slot);
+  height: var(--size-slot);
+}
+
+/* Empty registry slot inside a game tooltip. */
+.ac-missing-sprite--tooltip {
+  border-radius: var(--radius-4);
+  box-shadow: var(--inset-tt-empty);
+}
+
+/* Remote art (7.4.2, 7.4.4). src/scripts/art-loading.ts marks every illustration it
+   finds still loading, and the box borrows the pulse of the loading state until the
+   image arrives. Art that never arrives leaves the missing mark in its box, with no
+   fallback initial (8.2). Both marks are drawn by the box, not by the image, because
+   the script runs with no React on the page. */
+
+.ac-sprite--smooth[data-state='loading'] {
+  visibility: hidden;
+}
+
+.ac-sprite--smooth[data-state='error'] {
+  display: none;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .ac-sprite--smooth[data-state='ready'] {
+    animation: ac-fade var(--duration-sprite-in) var(--ease-standard);
+  }
+}
+
+/* The boxes that hold remote art as a direct child: a `SpriteStage`, the 72 `EntitySlot`
+   of a Pokémon and the 72 art box of a game tooltip head. All three are
+   `position: relative`, and an art that never arrives must leave the missing mark in any
+   of them, never an empty frame (R7, 7.4.4). */
+.ac-sprite-stage:has(> .ac-sprite--smooth[data-state='loading'])::before,
+.ac-sprite-stage:has(> .ac-sprite--smooth[data-state='error'])::before,
+.ac-entity-slot:has(> .ac-sprite--smooth[data-state='loading'])::before,
+.ac-entity-slot:has(> .ac-sprite--smooth[data-state='error'])::before,
+.ac-game-tooltip__art:has(> .ac-sprite--smooth[data-state='loading'])::before,
+.ac-game-tooltip__art:has(> .ac-sprite--smooth[data-state='error'])::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  margin: auto;
+}
+
+.ac-sprite-stage:has(> .ac-sprite--smooth[data-state='loading'])::before,
+.ac-entity-slot:has(> .ac-sprite--smooth[data-state='loading'])::before,
+.ac-game-tooltip__art:has(> .ac-sprite--smooth[data-state='loading'])::before {
+  width: var(--size-cell);
+  height: var(--size-cell);
+  border-radius: var(--radius-4);
+  background: var(--bg-quaternary);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .ac-sprite-stage:has(> .ac-sprite--smooth[data-state='loading'])::before,
+  .ac-entity-slot:has(> .ac-sprite--smooth[data-state='loading'])::before,
+  .ac-game-tooltip__art:has(> .ac-sprite--smooth[data-state='loading'])::before {
+    animation: ac-pulse var(--duration-pulse) var(--ease-pulse) infinite;
+  }
+}
+
+.ac-sprite-stage:has(> .ac-sprite--smooth[data-state='error'])::before,
+.ac-entity-slot:has(> .ac-sprite--smooth[data-state='error'])::before,
+.ac-game-tooltip__art:has(> .ac-sprite--smooth[data-state='error'])::before {
+  width: var(--size-missing);
+  height: var(--size-missing);
+  border-radius: var(--radius-3);
+  background: var(--tt-track);
+  box-shadow: var(--inset-missing);
+}
+
+/* A 64 cell takes the 32 mark, as `MissingSprite` does at k = 2. */
+.ac-sprite-stage--72:has(> .ac-sprite--smooth[data-state='error'])::before,
+.ac-sprite-stage--64:has(> .ac-sprite--smooth[data-state='error'])::before,
+.ac-entity-slot--72:has(> .ac-sprite--smooth[data-state='error'])::before,
+.ac-game-tooltip__art:has(> .ac-sprite--smooth[data-state='error'])::before {
+  width: var(--size-cell);
+  height: var(--size-cell);
+}

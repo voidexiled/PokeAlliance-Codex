@@ -1,5 +1,5 @@
-import markerDataset from '../../../data/staging/local-minimap-flags.json';
-import otmmPreview from '../../../data/staging/local-otmm-preview.json';
+// Map types and pure helpers, safe for the MapExplorer island. The data itself
+// is loaded and validated on the server by map-data.ts and passed as props.
 
 export type ClientMinimapFlag = {
   flagId: number;
@@ -9,15 +9,6 @@ export type ClientMinimapFlag = {
   z: number;
   icon: number;
 };
-
-export const clientMinimapFlags = markerDataset.records as ClientMinimapFlag[];
-
-export const clientMinimapSource = {
-  sourceLocator: markerDataset.sourceLocator,
-  sourceSnapshot: markerDataset.sourceSha256,
-  markerCount: markerDataset.recordCount,
-  generatedAt: markerDataset.generatedAt,
-} as const;
 
 export type ClientMapBounds = {
   minX: number;
@@ -31,25 +22,21 @@ export type ClientMapPreviewFloor = {
   asset: string;
   width: number;
   height: number;
-  blockCount: number;
-  seenTiles: number;
   bounds: ClientMapBounds;
 };
 
-export const clientMapPreview = {
-  sourceLocator: otmmPreview.sourceLocator,
-  sourceSnapshot: otmmPreview.sourceSha256,
-  sourceModifiedAt: otmmPreview.sourceModifiedAt,
-  recordCount: otmmPreview.recordCount,
-  format: otmmPreview.format,
-  floors: otmmPreview.floors as ClientMapPreviewFloor[],
-} as const;
+export type ClientMapPreview = {
+  floors: readonly ClientMapPreviewFloor[];
+};
 
-export function getMapPreviewFloor(floor: number): ClientMapPreviewFloor | undefined {
-  return clientMapPreview.floors.find((item) => item.z === floor);
+export function getMapPreviewFloor(
+  preview: ClientMapPreview,
+  floor: number,
+): ClientMapPreviewFloor | undefined {
+  return preview.floors.find((item) => item.z === floor);
 }
 
-export function getMapFloors(flags: ClientMinimapFlag[] = clientMinimapFlags): number[] {
+export function getMapFloors(flags: readonly ClientMinimapFlag[]): number[] {
   return [...new Set(flags.map((flag) => flag.z))].sort((a, b) => a - b);
 }
 

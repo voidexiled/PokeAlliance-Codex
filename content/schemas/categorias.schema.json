@@ -1,0 +1,178 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://alliance-codex.local/schemas/categorias.schema.json",
+  "title": "Categorías del Market",
+  "description": "Las 14 categorías del Market del juego, en el orden del cliente. El orden y los ids son fijos: el esquema los comprueba posición por posición.",
+  "type": "object",
+  "required": ["categorias"],
+  "additionalProperties": false,
+  "properties": {
+    "$schema": { "type": "string" },
+    "categorias": {
+      "type": "array",
+      "description": "Exactamente estas 14 categorías, en este orden: todo, diamantes, pokemon, poke-balls, stones, helds, orbs, creature-items, general-items, utilities, addons, consumable, foods, furnitures. \"todo\" es virtual (reúne las demás y no tiene archivo).",
+      "minItems": 14,
+      "maxItems": 14,
+      "prefixItems": [
+        {
+          "$ref": "#/$defs/categoria",
+          "properties": {
+            "id": { "const": "todo" },
+            "orden": { "const": 0 },
+            "virtual": { "const": true }
+          },
+          "required": ["virtual"]
+        },
+        {
+          "$ref": "#/$defs/categoria",
+          "properties": {
+            "id": { "const": "diamantes" },
+            "orden": { "const": 1 },
+            "virtual": { "const": false }
+          }
+        },
+        {
+          "$ref": "#/$defs/categoria",
+          "properties": {
+            "id": { "const": "pokemon" },
+            "orden": { "const": 2 },
+            "virtual": { "const": false }
+          }
+        },
+        {
+          "$ref": "#/$defs/categoria",
+          "properties": {
+            "id": { "const": "poke-balls" },
+            "orden": { "const": 3 },
+            "virtual": { "const": false }
+          }
+        },
+        {
+          "$ref": "#/$defs/categoria",
+          "properties": {
+            "id": { "const": "stones" },
+            "orden": { "const": 4 },
+            "virtual": { "const": false }
+          }
+        },
+        {
+          "$ref": "#/$defs/categoria",
+          "properties": {
+            "id": { "const": "helds" },
+            "orden": { "const": 5 },
+            "virtual": { "const": false }
+          }
+        },
+        {
+          "$ref": "#/$defs/categoria",
+          "properties": {
+            "id": { "const": "orbs" },
+            "orden": { "const": 6 },
+            "virtual": { "const": false }
+          }
+        },
+        {
+          "$ref": "#/$defs/categoria",
+          "properties": {
+            "id": { "const": "creature-items" },
+            "orden": { "const": 7 },
+            "virtual": { "const": false }
+          }
+        },
+        {
+          "$ref": "#/$defs/categoria",
+          "properties": {
+            "id": { "const": "general-items" },
+            "orden": { "const": 8 },
+            "virtual": { "const": false }
+          }
+        },
+        {
+          "$ref": "#/$defs/categoria",
+          "properties": {
+            "id": { "const": "utilities" },
+            "orden": { "const": 9 },
+            "virtual": { "const": false }
+          }
+        },
+        {
+          "$ref": "#/$defs/categoria",
+          "properties": {
+            "id": { "const": "addons" },
+            "orden": { "const": 10 },
+            "virtual": { "const": false }
+          }
+        },
+        {
+          "$ref": "#/$defs/categoria",
+          "properties": {
+            "id": { "const": "consumable" },
+            "orden": { "const": 11 },
+            "virtual": { "const": false }
+          }
+        },
+        {
+          "$ref": "#/$defs/categoria",
+          "properties": {
+            "id": { "const": "foods" },
+            "orden": { "const": 12 },
+            "virtual": { "const": false }
+          }
+        },
+        {
+          "$ref": "#/$defs/categoria",
+          "properties": {
+            "id": { "const": "furnitures" },
+            "orden": { "const": 13 },
+            "virtual": { "const": false }
+          }
+        }
+      ],
+      "items": false
+    }
+  },
+  "$defs": {
+    "slug": {
+      "type": "string",
+      "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$",
+      "description": "Minúsculas, números y guiones (kebab-case)."
+    },
+    "spriteKey": {
+      "type": "string",
+      "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*(?:/[a-z0-9]+(?:-[a-z0-9]+)*)*$",
+      "description": "Clave de public/sprites/sprites.json, por ejemplo \"ui/diamond\"."
+    },
+    "texto": { "type": "string", "minLength": 1 },
+    "categoria": {
+      "type": "object",
+      "required": ["id", "nombre", "icono", "orden"],
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/slug",
+          "description": "Identificador. Cada categoría real tiene su archivo content/items/<id>.json."
+        },
+        "nombre": {
+          "type": "object",
+          "description": "Etiqueta tal como la muestra el cliente.",
+          "required": ["es", "en"],
+          "additionalProperties": false,
+          "properties": {
+            "es": { "$ref": "#/$defs/texto" },
+            "en": { "$ref": "#/$defs/texto" }
+          }
+        },
+        "icono": { "$ref": "#/$defs/spriteKey" },
+        "orden": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "Posición en el Market (0 = primera)."
+        },
+        "virtual": {
+          "type": "boolean",
+          "description": "true si la categoría no tiene archivo propio (\"Todo\" reúne las demás)."
+        }
+      }
+    }
+  }
+}

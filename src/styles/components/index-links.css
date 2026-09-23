@@ -1,0 +1,125 @@
+/* IndexLinks (spec 7.2.8, 8.0.2 template D, 8.4.1; DS:IndexPanel; CARD_GRID_SYSTEM §6.5), ported
+   from the link grid of the `.ac-index-panel` block of the design system's
+   components/bundle.css: the panel's frame and its links, without the 44 px title strip,
+   because the page title is the heading of an index page.
+
+   Per-page stylesheet (plan M8, D-018, §13.6): only the index pages of a menu group and the
+   Buscar results draw this grid, so global.css does not import it. src/components/home/
+   IndexLinks.tsx imports it and the build writes it next to the pages that render the
+   component. It repeats the layer order of global.css before its block, so the `components`
+   layer keeps its place whichever of the two sheets the browser reads first (3.6), and
+   `@reference` brings the text styles of theme.css to `@apply` without writing them again.
+
+   Template D (8.0.2): the grid spans the main column. 4 link columns when that column
+   measures 900 or more (944 at 1440, 992 at 1024) and 2 below it (784 at 1280, 736 at 768,
+   358 at 390). The column is not a size container and its width does not follow the window
+   (the sidebar goes away below 1280), so the root of the component is the container and the
+   query reads the main column's width, not a breakpoint. Rows of 40, 44 on a coarse pointer.
+
+   Differences against the reference:
+
+   - the column count comes from the container and not from a `span` prop: an index page has
+     no bento to span;
+   - the type pair is `@apply type-ui` (spec 3.7) instead of the literal 12/16;
+   - the hover transition uses the motion tokens inside the reduced-motion guard (6.4);
+   - rows grow to 44 only on a coarse pointer (8.0.2 D), not with a `--touch` modifier. */
+
+@reference '../theme.css';
+
+@layer properties, theme, base, components, utilities;
+
+@layer components {
+  .ac-index-links {
+    container-name: ac-index-links;
+    container-type: inline-size;
+    min-width: 0;
+  }
+
+  /* The panel's frame and link grid: two columns, 4 apart, rows 2 apart, 8 of padding. */
+  .ac-index-links__list {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    align-content: start;
+    column-gap: var(--space-4);
+    row-gap: var(--space-2);
+    margin: 0;
+    padding: var(--space-8);
+    border: 1px solid var(--border-secondary);
+    border-radius: var(--radius-12);
+    list-style: none;
+    @apply type-ui;
+  }
+
+  /* 8.0.2 D: 4 link columns with a main column of 900 or more. */
+  @container ac-index-links (width >= 900px) {
+    .ac-index-links__list {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+  }
+
+  .ac-index-links__item {
+    position: relative;
+    display: flex;
+    min-width: 0;
+  }
+
+  /* A link with a panel sits in the NestedEntity wrapper, which fills the item as a plain
+     link does. Two classes, so it wins over `ac-nested-entity--block` whichever sheet the
+     browser reads first. */
+  .ac-index-links__item > .ac-index-links__tip {
+    flex: 1 1 auto;
+    min-width: 0;
+  }
+
+  .ac-index-links__link {
+    display: flex;
+    width: 100%;
+    min-width: 0;
+    height: var(--size-control);
+    align-items: center;
+    gap: var(--space-6);
+    padding: var(--space-4) var(--space-8) var(--space-4) var(--space-4);
+    border-radius: var(--radius-6);
+    color: var(--text-secondary);
+    text-decoration: none;
+  }
+
+  .ac-index-links__link:hover {
+    background: var(--bg-tertiary);
+    color: var(--text-primary);
+  }
+
+  /* The 32 px icon cell is always there, so every label starts at one x. */
+  .ac-index-links__icon {
+    display: flex;
+    width: var(--size-cell);
+    height: var(--size-cell);
+    flex: none;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /* Two lines at most, inside the row of 40: a long label never moves the row. */
+  .ac-index-links__label {
+    display: -webkit-box;
+    min-width: 0;
+    overflow: hidden;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+  }
+
+  /* 8.0.2 D, S14: rows of 44 on a coarse pointer. */
+  @media (pointer: coarse) {
+    .ac-index-links__link {
+      height: var(--size-touch);
+    }
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .ac-index-links__link {
+      transition:
+        background-color var(--duration-fast) var(--ease-standard),
+        color var(--duration-fast) var(--ease-standard);
+    }
+  }
+}

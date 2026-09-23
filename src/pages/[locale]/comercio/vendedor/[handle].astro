@@ -1,0 +1,298 @@
+---
+// A seller's profile (spec 9.8, template H of 8.0.2): `noindex` (9.3), one page per seller of the
+// sample registry, and no `Toc` although it has several sections (template H).
+//
+// Composition, in the order of 9.8:
+//   1. the crumbs «Comunidad › Comercio › {nombre}» (8.0.4): «Comunidad» has no index page;
+//   2. `PageTitle` with the seller's name;
+//   3. the data row, `FactLines` in 14/32 with the labels in 700, 16 under the title as the head
+//      of `Lienzo:Guild`: «Miembro desde: 09/2026» (when the registry knows it), «Operaciones
+//      confirmadas: N» and «Valoración: 4.6 de 5 (23 reseñas)» or «Valoración: sin reseñas»;
+//   4. «Contacto verificado»: the public labels of the channels, a `ChipRow` with no cap;
+//   5. «Anuncios»: the seller's public listings (`publicado` and `reservado`, not expired) in the
+//      list island of Comercio with its three views, `Count` and `ViewToggle` and no filter
+//      (`TradeListRoot variant="seller"`, list `comercio-vendedor`), or «Sin anuncios activos.»;
+//   6. «Reseñas»: the table «Reseñas por puntuación» and the reviews, the newest first, 10 a page
+//      (`SellerReviews`), each with the listing of its trade.
+// Phase A has no «Reportar vendedor» (9.8 step 7 is phase B).
+//
+// Render (9.3). No `prerender` export: src/integrations/comercio-fases.ts sets it by phase and
+// fails the build on one. In phase A the build writes one HTML per seller from `getStaticPaths`,
+// empty without COMERCIO_DEMO (9.2, CA-9.1): src/lib/trade/registry.ts gives no seller.
+//
+// Data (9.8 «Fase A»). The seller and its reviews are content/comercio/vendedores.json; the score,
+// the table and «Operaciones confirmadas» are `sellerRating` of its reviews (9.10). The listings
+// travel whole in the island's props (PR5: a profile has few). Each reviewed trade is named once,
+// with its title (9.4), the panel of its Pokémon or its item and its detail, when it has one
+// (a withdrawn listing has none, 9.4).
+import { getAlternatePath, getLocale, locales, type Locale } from '@/i18n/config';
+import type { Messages } from '@/i18n/messages/en';
+import { en } from '@/i18n/messages/en';
+import { es } from '@/i18n/messages/es';
+import { fill, isPluralMessage, plural } from '@/i18n/messages/types';
+import {
+  getAuras,
+  getCategorias,
+  getElementos,
+  getItems,
+  getMonedaDiamantes,
+  getMundos,
+  getOutfits,
+  getSpriteRegistry,
+} from '@/lib/content/registry';
+import { getPokemon } from '@/lib/content/repository';
+import { formatDate } from '@/lib/format/dates';
+import { formatInteger, formatRating } from '@/lib/format/numbers';
+import { buildNav } from '@/lib/nav/groups';
+import { getAnuncio, getAnuncios, getVendedor, getVendedores } from '@/lib/trade/registry';
+import { sortListings } from '@/lib/trade/sort';
+import { channelLabel, hasPublicDetail, isListed, sellerRating } from '@/lib/trade/types';
+import type { Anuncio } from '@/lib/trade/types';
+import { EmptyState } from '@/components/content/EmptyState';
+import { FactLines, type FactLineData } from '@/components/content/FactLine';
+import { PageTitle } from '@/components/layout/PageTitle';
+import { Section } from '@/components/layout/Section';
+import { ChipRow } from '@/components/money/ChipRow';
+import {
+  REVIEWS_PAGE_SIZE,
+  SellerReviews,
+  type SellerOperation,
+  type SellerReview,
+  type SellerReviewsLabels,
+} from '@/components/trade/SellerCard';
+import {
+  TradeListRoot,
+  itemPanel,
+  listingHref,
+  pokemonPanel,
+  tradeData,
+  tradeDiamonds,
+  tradeLabels,
+  tradeRecords,
+  tradeSprites,
+  tradeUi,
+  type TradeCatalog,
+  type TradeContext,
+  type TradeRow,
+} from '@/components/trade/TradeListRoot';
+import PageLayout from '@/layouts/PageLayout.astro';
+
+import '@/styles/components/trade-seller.css';
+
+export function getStaticPaths() {
+  const vendedores = getVendedores();
+  return locales.flatMap((locale) =>
+    vendedores.map((vendedor) => ({ params: { locale, handle: vendedor.id } })),
+  );
+}
+
+const dictionaries: Record<Locale, Messages> = { es, en };
+
+const locale = getLocale(Astro.params.locale);
+const seller = getVendedor(Astro.params.handle ?? '');
+// A handle this build does not have is not a page.
+if (seller === undefined) return new Response(null, { status: 404 });
+
+const path = Astro.url.pathname;
+const alternates = Object.fromEntries(
+  locales.map((option) => [option, getAlternatePath(path, option)]),
+) as Record<Locale, string>;
+const messages = dictionaries[locale];
+const { ui, trade } = messages;
+
+// 8.0.4: «Comunidad › Comercio › {nombre}».
+const group = buildNav(locale, path).groups.find((entry) => entry.id === 'comunidad');
+const comercio = group?.items.find((item) => item.id === 'comercio');
+if (group === undefined || comercio === undefined) {
+  throw new Error('src/lib/nav/groups.ts: no «comercio» entry in the «comunidad» group (8.0.3).');
+}
+
+const registry = getSpriteRegistry();
+const catalog: TradeCatalog = {
+  pokemon: getPokemon(),
+  items: getItems(),
+  categorias: getCategorias(),
+  elementos: getElementos(),
+  auras: getAuras(),
+  outfits: getOutfits(),
+  mundos: getMundos(locale),
+  vendedores: getVendedores(),
+  sprites: registry,
+  channels: trade.channels,
+};
+const sprites = tradeSprites(registry);
+const labels = tradeLabels(messages);
+// The `moneda` lists of the Diamonds (§3.13): the facts of a Diamonds listing and the rows of the
+// Diamonds panel a price opens.
+const diamonds = tradeDiamonds(getMonedaDiamantes(), locale);
+
+// 3. The data row. «Miembro desde» is the month and the year of `formatDate` (13.3, dd/mm/aaaa
+// in Brasília time), the same digits in both languages: «09/2026».
+const rating = sellerRating(seller.resenas);
+const reviewsWord = (n: number) => {
+  const template = trade.seller.reviewCount;
+  const chosen = isPluralMessage(template) ? plural(locale, n, template) : template;
+  return fill(chosen, { n: formatInteger(n, locale) });
+};
+const facts: FactLineData[] = [
+  ...(seller.desde === null
+    ? []
+    : [{ label: trade.seller.memberSince, values: [formatDate(seller.desde, 'es').slice(3)] }]),
+  { label: trade.confirmed, values: [formatInteger(rating.operaciones, locale)] },
+  {
+    label: trade.seller.rating,
+    values: [
+      rating.valoracion === null
+        ? trade.seller.noReviews
+        : fill(trade.seller.ratingValue, {
+            score: formatRating(rating.valoracion),
+            reviews: reviewsWord(rating.resenas),
+          }),
+    ],
+  },
+];
+const channels = seller.canales.map((canal) => channelLabel(canal, trade.channels));
+
+// 5. The public listings when the build runs, «Recientes» first (9.5.5).
+const builtAt = new Date();
+const listed = sortListings(
+  getAnuncios().filter((anuncio) => anuncio.vendedor === seller.id && isListed(anuncio, builtAt)),
+  'recientes',
+);
+// The island reads the rows as one JSON text (TradeListRoot, «the wire format»).
+const data = JSON.stringify(tradeData(listed, catalog, locale));
+
+// 6. The reviews, the newest first, and the listing of each trade, once.
+const reviews: SellerReview[] = [...seller.resenas]
+  .sort((a, b) => Date.parse(b.fecha) - Date.parse(a.fecha))
+  .map((review) => ({ ...review }));
+const traded = [...new Set(seller.resenas.map((review) => review.anuncio))].flatMap((id) => {
+  const anuncio = getAnuncio(id);
+  return anuncio === undefined ? [] : [anuncio];
+});
+const tradedRecords = tradeRecords(traded, catalog, locale);
+const context: TradeContext = {
+  locale,
+  refs: tradedRecords.refs,
+  sprites,
+  diamonds,
+  ui,
+  labels,
+};
+
+/** The panel of the asset of a trade (7.5.3): its Pokémon or its item; none for the currencies. */
+function assetPanel(row: TradeRow) {
+  const refs = context.refs;
+  const pokemon = row.pokemon?.pokemon;
+  if (pokemon !== undefined && Object.hasOwn(refs.pokemon, pokemon)) {
+    return pokemonPanel(pokemon, refs.pokemon[pokemon], context);
+  }
+  const item = row.item?.item;
+  if (item !== null && item !== undefined && Object.hasOwn(refs.items, item)) {
+    return itemPanel(item, refs.items[item], context);
+  }
+  return null;
+}
+
+const operations: Record<string, SellerOperation> = Object.fromEntries(
+  tradedRecords.rows.map((row, index) => {
+    const anuncio: Anuncio = traded[index];
+    const operation: SellerOperation = {
+      titulo: row.titulo,
+      accesible: row.accesible,
+      href: hasPublicDetail(anuncio) ? listingHref(locale, anuncio.id) : null,
+      tip: assetPanel(row),
+    };
+    return [row.id, operation];
+  }),
+);
+// «Operación: {title}» (9.8): the label is the template before the title, colon included.
+const operationTemplate = trade.seller.operation;
+const reviewLabels: SellerReviewsLabels = {
+  caption: trade.seller.reviewsCaption,
+  score: trade.seller.columnScore,
+  reviews: trade.seller.columnReviews,
+  outOf: trade.seller.reviewScore,
+  operation: operationTemplate.slice(0, operationTemplate.indexOf('{title}')).trim(),
+  pagination: trade.seller.reviews,
+};
+---
+
+<PageLayout
+  locale={locale}
+  title={seller.nombre}
+  description={fill(trade.sellerDescription, { name: seller.nombre })}
+  alternates={alternates}
+  breadcrumb={[
+    { label: group.label },
+    { label: comercio.label, href: comercio.href },
+    { label: seller.nombre },
+  ]}
+  noindex
+>
+  <div class="ac-seller-head">
+    <PageTitle title={seller.nombre} />
+    <FactLines layout="row" lines={facts} />
+  </div>
+
+  {
+    channels.length > 0 && (
+      <Section id="contacto" title={trade.listing.contact}>
+        {/* In a box of its own: the plain-list rules of section.css (markers, «li + li») are
+            for a list written straight into a section, not for the chips. */}
+        <div>
+          <ChipRow items={channels} cap={channels.length} labels={ui.money} locale={locale} />
+        </div>
+      </Section>
+    )
+  }
+
+  <Section id="anuncios" title={trade.seller.listings}>
+    {
+      listed.length > 0 ? (
+        <TradeListRoot
+          client:load
+          variant="seller"
+          locale={locale}
+          path={path}
+          data={data}
+          total={listed.length}
+          builtAt={builtAt.toISOString()}
+          sprites={sprites}
+          diamonds={diamonds}
+          caption={trade.list.caption}
+          paginationLabel={trade.seller.listings}
+          ui={tradeUi(ui)}
+          labels={labels}
+        />
+      ) : (
+        <EmptyState>{trade.seller.noListings}</EmptyState>
+      )
+    }
+  </Section>
+
+  <Section id="resenas" title={trade.seller.reviews}>
+    {
+      reviews.length > REVIEWS_PAGE_SIZE ? (
+        <SellerReviews
+          client:load
+          locale={locale}
+          path={path}
+          reviews={reviews}
+          operations={operations}
+          ui={ui}
+          labels={reviewLabels}
+        />
+      ) : (
+        <SellerReviews
+          locale={locale}
+          path={path}
+          reviews={reviews}
+          operations={operations}
+          ui={ui}
+          labels={reviewLabels}
+        />
+      )
+    }
+  </Section>
+</PageLayout>

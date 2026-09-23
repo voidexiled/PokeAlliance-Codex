@@ -1,5 +1,7 @@
 # Architecture Proposal (historical)
 
+> **Updated 2026-09-18 (D-011, D-012):** the provenance parts of this proposal were removed. Game data lives in owner-editable JSON under `content/`; see `ARCHITECTURE.md` and `DATA_STRATEGY.md`.
+
 Status: superseded by [ARCHITECTURE.md](ARCHITECTURE.md), consolidated in Phase 2 on 2026-09-09. Retained to preserve the original pre-research proposal.
 
 ## Stack
@@ -22,27 +24,25 @@ src/
   features/{pokemon,rotations,hunts,search,tools,auth,marketplace}/
   content/{guides,systems,mechanics}/
   i18n/
-  lib/{domain,data,sources,supabase,validation}/
+  lib/{domain,data,supabase,validation}/
   pages/[locale]/
   styles/
-knowledge/{sources,research,conflicts,unknowns,localization}/
-data/{raw,staging,normalized,schemas,reports,fixtures}/
-scripts/{research,imports,validation}/
+content/
+knowledge/{unknowns,localization}/
+scripts/{imports,validation}/
 supabase/{migrations,tests,seed.sql}/
 docs/
 ```
 
-Raw data may live outside Git when redistribution or size rules require it; its manifest and provenance remain versioned.
-
 ## Rendering model
 
-Pokémon, guide, source and taxonomy pages should be prerendered from versioned normalized data wherever feasible. Locale route generation and metadata are centralized. Interactive filters use the smallest viable client payload and hydrate on visibility/idle unless immediate interaction requires otherwise. Authenticated/profile/marketplace surfaces can use on-demand server rendering later.
+Pokémon, guide and taxonomy pages should be prerendered from the versioned JSON in `content/` wherever feasible. Locale route generation and metadata are centralized. Interactive filters use the smallest viable client payload and hydrate on visibility/idle unless immediate interaction requires otherwise. Authenticated/profile/marketplace surfaces can use on-demand server rendering later.
 
 React is not the page shell. Domain functions are framework-independent and testable without rendering.
 
 ## Data access
 
-During early wiki phases, reviewed normalized datasets can feed static builds directly. Supabase becomes the authoritative serving layer only for data that benefits from database workflows, dynamic updates or user state. A repository/domain boundary prevents pages from depending directly on Supabase response shapes.
+During early wiki phases, the JSON in `content/` feeds static builds directly. Supabase becomes the authoritative serving layer only for data that benefits from database workflows, dynamic updates or user state. A repository/domain boundary prevents pages from depending directly on Supabase response shapes.
 
 Environment clients are separated: anonymous browser client, request-scoped server client and privileged maintenance scripts. Service-role credentials never enter client bundles.
 
@@ -52,17 +52,17 @@ Use explicit locale prefixes (`/es/...`, `/en/...`) and persist a user-selected 
 
 ## Search
 
-Initial search should be generated from normalized IDs, canonical names, aliases and locale-specific keywords. The architecture exposes a search-provider interface, but no external engine is introduced until corpus size and latency demonstrate need.
+Initial search should be generated from IDs, canonical names, aliases and locale-specific keywords. The architecture exposes a search-provider interface, but no external engine is introduced until corpus size and latency demonstrate need.
 
 ## Time and changelog ingestion
 
 Recurring game times are modeled as civil time plus an IANA zone, then converted through `Temporal` instants for viewer-local display. See `docs/TEMPORAL_ARCHITECTURE.md`.
 
-Official Discord changelogs can be ingested through a narrowly permissioned bot when PokeAlliance administrators authorize it. Manual moderated ingestion remains the fallback. Both paths produce immutable raw evidence and reviewed normalized changes; see `docs/CHANGELOG_INGESTION.md`.
+Official Discord changelogs can be ingested through a narrowly permissioned bot when PokeAlliance administrators authorize it. Manual moderated ingestion remains the fallback. Both paths end as reviewed changelog entries; see `docs/CHANGELOG_INGESTION.md`.
 
 ## Design system direction
 
-Alliance Codex should feel like a fast, information-dense game companion rather than a promotional landing page. The system will use a distinctive but restrained palette, strong information hierarchy, source/confidence affordances, keyboard-accessible controls and responsive layouts. Pokémon trademarks/artwork or PokeAlliance assets are not assumed available; asset rights and source permissions are checked first.
+Alliance Codex should feel like a fast, information-dense game companion rather than a promotional landing page. The system will use a distinctive but restrained palette, strong information hierarchy, keyboard-accessible controls and responsive layouts. Pokémon trademarks/artwork or PokeAlliance assets are not assumed available; asset rights are checked first.
 
 ## Security boundary
 

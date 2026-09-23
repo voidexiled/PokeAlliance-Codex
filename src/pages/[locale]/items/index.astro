@@ -1,0 +1,115 @@
+---
+// Ítems, «Todo» (spec 8.5): every item of the 13 Market categories in the `items` list, in
+// template B (8.0.2): the breadcrumb, PageTitle, then the list island — the category
+// navigation in the place of the FilterBar, the results bar, the active view grouped by
+// category and the pagination — and the footer that PageLayout adds. Prerendered with the
+// island of 7.7, which loads on `client:load` (7.3). `/{l}/items/c/{categoria}/` is the same
+// page for one category (./c/[categoria].astro).
+//
+// Data (PR5). `buildItemsData` of ./datos.json.ts writes every item in the Market order; this
+// page prints its first page and gives the island only those rows, with the part of `refs`
+// they name, the length of the list, the 14 tabs of the navigation and the element chips and
+// the one-Pokémon «Drop de» of that first page, panels included. The island asks for the rest
+// when it hydrates. A prerendered page never reads its query (PR2): the state of the URL is the
+// island's. With no item at all — every one a draft under OCULTAR_BORRADORES=1 (IT2) — the page
+// draws the navigation and the `EmptyState` of 8.5, without an island.
+//
+// Text. The h1 and its single crumb (8.0.4, T15) are the label of the «Ítems» group of the
+// menu, which src/lib/nav/groups.ts owns (8.0.3); the names of the tabs and of the groups are
+// the `nombre` of content/items/categorias.json. The description (13.5), the name of the
+// navigation, the count, the empty state, the Lista caption and headers and «Drop de» of an
+// item that several Pokémon drop come from `messages.items`; the rest of the list's text from
+// `messages.ui` of the page's locale (DP1, 13.2).
+import { getAlternatePath, getLocale, locales, type Locale } from '@/i18n/config';
+import type { Messages } from '@/i18n/messages/en';
+import { en } from '@/i18n/messages/en';
+import { es } from '@/i18n/messages/es';
+import { buildNav } from '@/lib/nav/groups';
+import { ALL_CATEGORY } from '@/components/items/config';
+import {
+  ItemsEmpty,
+  ItemsNavigation,
+  ItemsRoot,
+  type ItemsListLabels,
+} from '@/components/items/ItemsRoot';
+import { PageTitle } from '@/components/layout/PageTitle';
+import PageLayout from '@/layouts/PageLayout.astro';
+
+import {
+  buildItemsData,
+  itemTabs,
+  itemsDroppers,
+  itemsElements,
+  itemsFirstPage,
+} from './datos.json.ts';
+
+export const prerender = true;
+
+export function getStaticPaths() {
+  return locales.map((locale) => ({ params: { locale } }));
+}
+
+const dictionaries: Record<Locale, Messages> = { es, en };
+
+const locale = getLocale(Astro.params.locale);
+const path = Astro.url.pathname;
+const alternates = Object.fromEntries(
+  locales.map((option) => [option, getAlternatePath(path, option)]),
+) as Record<Locale, string>;
+
+// 8.0.4: the index of the group has one crumb, the current one (T15).
+const group = buildNav(locale, path).groups.find((entry) => entry.id === 'items');
+if (group === undefined) {
+  throw new Error('src/lib/nav/groups.ts: no «items» group with this page in it (8.0.3).');
+}
+const title = group.label;
+
+const messages = dictionaries[locale];
+const copy = messages.items;
+const tabs = itemTabs(locale);
+// The 13 real categories in the Market order: the groups of «Todo» and their headings.
+const categories = tabs.filter((tab) => tab.id !== ALL_CATEGORY);
+const first = itemsFirstPage(buildItemsData(locale), ALL_CATEGORY);
+const labels: ItemsListLabels = {
+  count: copy.count,
+  sprite: copy.columnSprite,
+  item: copy.columnItem,
+  droppedByCount: copy.droppedByCount,
+};
+---
+
+<PageLayout
+  locale={locale}
+  title={title}
+  description={copy.description}
+  alternates={alternates}
+  breadcrumb={[{ label: title }]}
+>
+  <PageTitle title={title} />
+  {
+    first.total > 0 ? (
+      <ItemsRoot
+        client:load
+        locale={locale}
+        path={path}
+        dataUrl={`/${locale}/items/datos.json`}
+        category={ALL_CATEGORY}
+        data={first.data}
+        total={first.total}
+        categories={categories}
+        elements={itemsElements(first.rows, first.data.refs, locale, messages.ui.tooltip)}
+        droppers={itemsDroppers(first.rows, first.data.refs, locale, messages.ui.tooltip)}
+        title={title}
+        caption={copy.captionAll}
+        ui={messages.ui}
+        labels={labels}
+      >
+        <ItemsNavigation tabs={tabs} category={ALL_CATEGORY} label={copy.categoriesLabel} />
+      </ItemsRoot>
+    ) : (
+      <ItemsEmpty tabs={tabs} category={ALL_CATEGORY} label={copy.categoriesLabel}>
+        {copy.empty}
+      </ItemsEmpty>
+    )
+  }
+</PageLayout>

@@ -1,7 +1,25 @@
 ---
-import AppLayout from '../../../layouts/AppLayout.astro';
-import { PokemonExplorer } from '../../../components/tools/PokemonExplorer';
-import { getLocale, locales, type Locale } from '../../../i18n/config';
+// Comparar Pokémon until F5 (spec 8.14, E18, R15): the placeholder that keeps the route of the
+// menu's «Comparar Pokémon» entry while the tool of §11 waits for its board. Template E of 8.0.2
+// on PageLayout, prerendered and `noindex` (13.5), which keeps it out of the sitemap too (CP1).
+// The crumbs «Pokémon › Comparar Pokémon» — «Pokémon» has no index, so its crumb is text
+// (8.0.4) —, the `PageTitle` and the one line of `EmptyState`; PageLayout adds the footer. No
+// button and no island (CP1). F5 replaces this page with the tool of §11 on the same route.
+//
+// The previous tool is gone with its island (§12.13): its two tabs, its heading and its rows can
+// not come back. «Explorar tiers» lives in the Tier list (R15, E1, 8.8).
+//
+// Text (13.2): the h1, the empty line and the description are `messages.compare`; the crumb of
+// the group is the label of the menu's «Pokémon» group, which src/lib/nav/groups.ts owns (8.0.3).
+import { getAlternatePath, getLocale, locales, type Locale } from '@/i18n/config';
+import type { Messages } from '@/i18n/messages/en';
+import { en } from '@/i18n/messages/en';
+import { es } from '@/i18n/messages/es';
+import { buildNav } from '@/lib/nav/groups';
+
+import { EmptyState } from '@/components/content/EmptyState';
+import { PageTitle } from '@/components/layout/PageTitle';
+import PageLayout from '@/layouts/PageLayout.astro';
 
 export const prerender = true;
 
@@ -9,47 +27,31 @@ export function getStaticPaths() {
   return locales.map((locale) => ({ params: { locale } }));
 }
 
-const locale = getLocale(Astro.params.locale) as Locale;
-const copy =
-  locale === 'es'
-    ? {
-        title: 'Comparar Pokémon',
-        description: 'Compara variantes y explora los tiers publicados por la wiki.',
-        eyebrow: 'Herramientas / Pokémon',
-        intro:
-          'Una consulta rápida para leer el roster público en paralelo. Los campos muestran lo que la fuente publica; no hay recomendaciones inventadas ni fórmulas ocultas.',
-        home: 'Inicio',
-        tools: 'Herramientas',
-      }
-    : {
-        title: 'Compare Pokémon',
-        description: 'Compare variants and explore the tiers published by the wiki.',
-        eyebrow: 'Tools / Pokémon',
-        intro:
-          'A quick way to read the public roster side by side. Fields show what the source publishes; there are no invented recommendations or hidden formulas.',
-        home: 'Home',
-        tools: 'Tools',
-      };
+const dictionaries: Record<Locale, Messages> = { es, en };
+
+const locale = getLocale(Astro.params.locale);
+const path = Astro.url.pathname;
+const alternates = Object.fromEntries(
+  locales.map((option) => [option, getAlternatePath(path, option)]),
+) as Record<Locale, string>;
+
+const { compare } = dictionaries[locale];
+
+// 8.0.4: «Pokémon › Comparar Pokémon». The group has no index page, so its crumb is text.
+const group = buildNav(locale, path).groups.find((entry) => entry.id === 'pokemon');
+if (group === undefined) {
+  throw new Error('src/lib/nav/groups.ts: no «pokemon» group with a link (8.0.3).');
+}
 ---
 
-<AppLayout locale={locale} title={copy.title} description={copy.description}>
-  <div>
-    <nav
-      class="wiki-breadcrumbs"
-      aria-label={locale === 'es' ? 'Ruta de navegación' : 'Breadcrumb'}
-    >
-      <a href={`/${locale}/`}>{copy.home}</a>
-      <span class="wiki-breadcrumb-separator">/</span>
-      <a href={`/${locale}/herramientas/`}>{copy.tools}</a>
-      <span class="wiki-breadcrumb-separator">/</span>
-      <span>{copy.title}</span>
-    </nav>
-    <header class="wiki-page-header">
-      <p class="eyebrow">{copy.eyebrow}</p>
-      <h1 class="display-title">{copy.title}</h1>
-      <p class="muted-copy">{copy.intro}</p>
-    </header>
-
-    <PokemonExplorer client:load locale={locale} />
-  </div>
-</AppLayout>
+<PageLayout
+  locale={locale}
+  title={compare.title}
+  description={compare.description}
+  alternates={alternates}
+  breadcrumb={[{ label: group.label }, { label: compare.title }]}
+  noindex
+>
+  <PageTitle title={compare.title} />
+  <EmptyState>{compare.empty}</EmptyState>
+</PageLayout>

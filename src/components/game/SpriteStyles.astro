@@ -1,0 +1,21 @@
+---
+// SpriteStyles (spec 3.12, 7.4.2): the `@keyframes` of every animated sheet of the
+// registry, written in the build and included once, in the `<head>` of PageLayout.
+//
+// The reference injects its keyframes into `document` from the client
+// (`ensureKeyframes` of the design system's bundle.js); that CSS would be missing from
+// the prerendered HTML, so the Diamond would not turn until React ran (E9). Here the
+// registry is read in the build: one block per distinct signature — frames, the
+// duration of each one and whether it loops — so two entries that move the same way
+// share a block, and changing `duracionMs` or the number of frames in the registry
+// changes the animation with no code to touch (6.3).
+//
+// Each block only runs inside `@media (prefers-reduced-motion: no-preference)`, which
+// leaves every sprite on frame 0 for reduced motion (6.4, S15).
+import { getSpriteRegistry } from '../../lib/content/registry';
+import { registryAnimationCss } from '../../lib/sprites/resolve';
+
+const css = registryAnimationCss(getSpriteRegistry());
+---
+
+{css && <style is:inline set:html={css} />}

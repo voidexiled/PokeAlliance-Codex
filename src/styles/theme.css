@@ -1,0 +1,196 @@
+/* GENERADO por scripts/design/tokens.mjs desde src/design/tokens.json. No editar. */
+
+/* Utilidades del sistema de diseño (§3.5). */
+
+@theme inline {
+  /* Fondo */
+  --background-color-primary: var(--bg-primary);
+  --background-color-secondary: var(--bg-secondary);
+  --background-color-tertiary: var(--bg-tertiary);
+  --background-color-quaternary: var(--bg-quaternary);
+
+  /* Texto */
+  --text-color-primary: var(--text-primary);
+  --text-color-secondary: var(--text-secondary);
+  --text-color-tertiary: var(--text-tertiary);
+  --text-color-quaternary: var(--text-quaternary);
+  --text-color-quinary: var(--text-quinary);
+
+  /* Borde */
+  --border-color-secondary: var(--border-secondary);
+  --border-color-primary: var(--border-primary);
+
+  /* Resto de colores, con cualquier prefijo de color */
+  --color-helper: var(--helper);
+  --color-link: var(--link);
+  --color-link-prose: var(--link-prose);
+  --color-white: var(--white);
+  --color-black: var(--black);
+  --color-ring: var(--ring);
+  --color-selected: var(--selected);
+  --color-amber: var(--amber);
+  --color-banner: var(--banner);
+  --color-inactive-row: var(--inactive-row);
+  --color-overlay: var(--overlay);
+  --color-tt-panel: var(--tt-panel);
+  --color-tt-panel-deep: var(--tt-panel-deep);
+  --color-tt-track: var(--tt-track);
+  --color-tt-divider: var(--tt-divider);
+  --color-tt-label: var(--tt-label);
+  --color-tt-value: var(--tt-value);
+  --color-tt-muted: var(--tt-muted);
+  --color-tt-hint: var(--tt-hint);
+  --color-tt-shiny: var(--tt-shiny);
+
+  /* Sombras */
+  --shadow-ring-selected: var(--ring-selected);
+  --shadow-inset-missing: var(--inset-missing);
+  --shadow-inset-tt-empty: var(--inset-tt-empty);
+}
+
+/* Estilos de texto (§4.1): los únicos 22 del sitio. */
+
+@utility type-h1 {
+  font-size: 30px;
+  line-height: 36px;
+  font-weight: 700;
+}
+
+@utility type-h1-sub {
+  font-size: 18px;
+  line-height: 28px;
+  font-weight: 700;
+}
+
+@utility type-h2 {
+  font-size: 20px;
+  line-height: 28px;
+  font-weight: 700;
+}
+
+@utility type-h3 {
+  font-size: 16px;
+  line-height: 24px;
+  font-weight: 700;
+}
+
+@utility type-brand {
+  font-size: 18px;
+  line-height: 28px;
+  font-weight: 700;
+  letter-spacing: -0.2px;
+}
+
+@utility type-figure {
+  font-size: 18px;
+  line-height: 28px;
+  font-weight: 700;
+}
+
+@utility type-base {
+  font-size: 16px;
+  line-height: 24px;
+  font-weight: 400;
+}
+
+@utility type-body {
+  font-size: 14px;
+  line-height: 22px;
+  font-weight: 400;
+}
+
+@utility type-body-strong {
+  font-size: 14px;
+  line-height: 22px;
+  font-weight: 700;
+}
+
+@utility type-note {
+  font-size: 14px;
+  line-height: 22px;
+  font-weight: 400;
+  font-style: italic;
+}
+
+@utility type-field {
+  font-size: 14px;
+  line-height: 20px;
+  font-weight: 400;
+}
+
+@utility type-fact-line {
+  font-size: 14px;
+  line-height: 32px;
+  font-weight: 400;
+}
+
+@utility type-ui {
+  font-size: 12px;
+  line-height: 16px;
+  font-weight: 400;
+}
+
+@utility type-ui-strong {
+  font-size: 12px;
+  line-height: 16px;
+  font-weight: 700;
+}
+
+@utility type-ui-caps {
+  font-size: 12px;
+  line-height: 16px;
+  font-weight: 700;
+  letter-spacing: 1.2px;
+  text-transform: uppercase;
+}
+
+@utility type-ui-step {
+  font-size: 12px;
+  line-height: 16px;
+  font-weight: 700;
+  font-style: italic;
+}
+
+@utility type-ui-featured {
+  font-size: 12px;
+  line-height: 16.5px;
+  font-weight: 400;
+}
+
+@utility type-ui-loose {
+  font-size: 12px;
+  line-height: 20px;
+  font-weight: 400;
+}
+
+@utility type-kbd {
+  font-size: 12px;
+  line-height: 22px;
+  font-weight: 400;
+  font-family: var(--font-mono);
+}
+
+@utility type-tt-title {
+  font-size: 15px;
+  line-height: 20px;
+  font-weight: 600;
+  font-family: var(--font-game);
+  letter-spacing: 0.35em;
+  text-transform: uppercase;
+}
+
+@utility type-tt-row {
+  font-size: 12px;
+  line-height: 21px;
+  font-weight: 600;
+  font-family: var(--font-game);
+  letter-spacing: 0.03em;
+}
+
+@utility type-tt-hint {
+  font-size: 12px;
+  line-height: 16px;
+  font-weight: 500;
+  font-family: var(--font-game);
+  letter-spacing: 0.02em;
+}

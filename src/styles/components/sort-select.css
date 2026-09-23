@@ -1,0 +1,14 @@
+/* SortSelect (spec 7.2.2, V6; DS:SortSelect), ported from the `.ac-sort-select` block of
+   the design system's components/bundle.css. global.css imports this file with
+   layer(components), after select.css.
+
+   The look is Select with `inline` and `compact` (select.css). It never shrinks in a
+   toolbar. The 208 px of the control is the default `width` the reference passes to its
+   Select; here it is the local property that `.ac-select--inline .ac-select__control`
+   reads, so a `width` prop, written on the same element, still overrides it. */
+
+.ac-sort-select {
+  --ac-select-width: 208px; /* sin token: ancho del control de orden (DS:SortSelect) */
+
+  flex: none;
+}

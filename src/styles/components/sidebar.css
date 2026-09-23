@@ -1,0 +1,183 @@
+/* Sidebar (spec 5.7, 7.10.2), ported from the `.ac-sidebar` block of the design system's
+   components/bundle.css. global.css imports this file with layer(components).
+
+   208 wide with 176 of usable width, rows of 12/16 with `radius-8`; `bg-tertiary` marks
+   both hover and the current page, and it is the only hover colour of the site (5.2). The
+   text colour never changes on hover (DS:Sidebar "No hacer").
+
+   Three differences against the reference:
+
+   - a collapsible group is `<details>` with a `<summary class="ac-sidebar__toggle">`
+     (C-R2), so `.ac-sidebar__list[hidden]` is not ported: `<details>` hides the list
+     itself. The summary drops the default marker and keeps the geometry of the reference
+     button;
+   - the toggle carries two chevron glyphs, up (`__chevron-open`) and down
+     (`__chevron-closed`), and this file shows the one the `[open]` state asks for. It
+     changes direction with no animation (6.2, DS:Sidebar);
+   - sticking below the header and scrolling on its own live here, not in page-layout.css:
+     `DS:PageLayout` says the frame does not do it (5.7). What belongs to the frame is
+     hiding the whole column below 1280.
+
+   The pinned group, «Destacados», is the only one that carries sprites: M10 fills it from
+   `content/destacados.json`, and each of its links draws the sprite of its record in the
+   16 px box below, which bounces (6.2). */
+
+.ac-sidebar {
+  width: var(--layout-sidebar);
+  flex: none;
+  color: var(--text-primary);
+  font-family: var(--font-sans);
+}
+
+/* From layout-bp-xl (1280): sticky 32 below the header with its own scroll, so a long menu
+   never pushes the page; `100dvh` is the height of the window, the only length here that
+   no token names. The sheet paints the same nav with `--touch` and must not stick inside
+   the dialog, which scrolls as a whole. */
+@media (width >= 80rem) {
+  .ac-sidebar:not(.ac-sidebar--touch) {
+    position: sticky;
+    top: calc(var(--layout-header) + var(--space-32));
+    max-height: calc(100dvh - var(--layout-header) - var(--space-32)); /* sin token: 100dvh */
+    overflow-y: auto;
+    overscroll-behavior: contain;
+  }
+}
+
+.ac-sidebar__inner {
+  display: flex;
+  flex-direction: column;
+  padding: 0 var(--space-16) var(--space-16);
+  @apply type-ui;
+}
+
+.ac-sidebar__top {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.ac-sidebar__list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  margin: 0 0 0 var(--space-6);
+  padding: 0 0 0 var(--space-6);
+  border-left: 1px solid var(--border-secondary);
+  list-style: none;
+}
+
+.ac-sidebar__link {
+  display: flex;
+  align-items: center;
+  gap: var(--space-8);
+  padding: var(--space-6) var(--space-4) var(--space-6) var(--space-8);
+  border-radius: var(--radius-8);
+  color: var(--text-primary);
+  text-decoration: none;
+}
+
+/* The entry of the section of a child route carries `aria-current="true"` and looks the
+   same as the entry of the page itself (E10). */
+.ac-sidebar__link:hover,
+.ac-sidebar__link[aria-current='page'],
+.ac-sidebar__link[aria-current='true'] {
+  background: var(--bg-tertiary);
+}
+
+/* 16 px sprite box of the pinned group; the sprite keeps its 1x size, centred. */
+.ac-sidebar__sprite {
+  display: flex;
+  width: var(--size-sprite-nav);
+  height: var(--size-sprite-nav);
+  flex: none;
+  align-items: center;
+  justify-content: center;
+}
+
+/* An odd side would centre between two pixels: 1 px after it puts the sprite at
+   floor((16 - side) / 2), on whole pixels (`spriteNode` of DS:Sidebar, which writes the
+   same margin inline). Sidebar.astro names the odd sides in `data-snap`. */
+.ac-sidebar__sprite[data-snap~='x'] > .ac-sprite {
+  margin-right: 1px;
+}
+
+.ac-sidebar__sprite[data-snap~='y'] > .ac-sprite {
+  margin-bottom: 1px;
+}
+
+/* «Destacados»: 700 with no uppercase and no chevron (C7-12). The `ui-caps` of the
+   home page is another heading. */
+.ac-sidebar__heading {
+  margin: 0;
+  padding: var(--space-8) 0;
+  font-weight: 700;
+  text-transform: none;
+}
+
+.ac-sidebar__toggle {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-8);
+  margin: 0;
+  padding: var(--space-8) 0;
+  border: 0;
+  background: transparent;
+  color: var(--text-primary);
+  @apply type-ui-strong;
+  text-align: left;
+  cursor: pointer;
+  list-style: none;
+}
+
+/* The `<summary>` marker of the reference group button does not exist. */
+.ac-sidebar__toggle::-webkit-details-marker {
+  display: none;
+}
+
+.ac-sidebar__chevron {
+  display: block;
+  flex: none;
+}
+
+/* Up when the group is open, down when it is closed. */
+.ac-sidebar__chevron-open {
+  display: none;
+}
+
+.ac-sidebar__group[open] > .ac-sidebar__toggle .ac-sidebar__chevron-open {
+  display: inline;
+}
+
+.ac-sidebar__group[open] > .ac-sidebar__toggle .ac-sidebar__chevron-closed {
+  display: none;
+}
+
+/* Inside the phone sheet: full width and 44 px rows (5.8, S14). */
+.ac-sidebar--touch {
+  width: auto;
+}
+
+.ac-sidebar--touch .ac-sidebar__link,
+.ac-sidebar--touch .ac-sidebar__toggle {
+  min-height: var(--size-touch);
+}
+
+.ac-sidebar--touch .ac-sidebar__heading {
+  display: flex;
+  min-height: var(--size-touch);
+  align-items: center;
+  padding: 0;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .ac-sidebar__link {
+    transition: background-color var(--duration-fast) var(--ease-standard);
+  }
+
+  /* The sprites of «Destacados» rise 3 px twice every turn (6.2). */
+  .ac-sidebar__sprite.ac-bounce {
+    animation: ac-bounce var(--duration-bounce) var(--ease-bounce) infinite;
+  }
+}

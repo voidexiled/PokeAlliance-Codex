@@ -1,0 +1,130 @@
+/* PageLayout (spec 5.5, 5.7, 5.9, 7.2.1), ported from the `.ac-page-layout` block of the
+   design system's components/bundle.css. global.css imports this file with layer(components).
+
+   The frame row of 5.5: sidebar 208 · 40 · main column · 40 · rail 256 or spacer 208, with
+   the row starting 32 below the 64 px header, so the content begins at y = 96. The main
+   column is `flex: 1` with `min-width: 0`, so 896 (with rail) and 944 (without) are what it
+   measures at 1440, not a width written down anywhere.
+
+   Three rules are the site's and not the design system's (`DS:PageLayout` says so itself:
+   «La posición fija de las columnas laterales … El armazón no lo hace»):
+
+   - `max-width: var(--layout-main-max)` on the main column (5.5), so a very wide window
+     stops widening the text instead of growing forever;
+   - `position: sticky` on the two side columns, 32 below the header (5.7, V5-2). They need
+     `align-self: flex-start` as well: a flex item is stretched to the height of the row by
+     default, and an item as tall as its containing block never moves while it sticks;
+   - hiding sidebar, rail and spacer below `layout-bp-xl` (5.4), where the navigation is the
+     sheet of 5.8.
+
+   What the columns hold is theirs: `.ac-sidebar` carries its own scroll (sidebar.css, 5.7)
+   and `.ac-toc` its width inside the rail (toc.css).
+
+   A fourth is the site's too: from `layout-bp-xl` the row is a grid with its three tracks
+   written down, not the flex row of the reference. The rail or the spacer comes after
+   `<main>` in the document, and a browser may paint a long page before it has parsed them:
+   in a flex row the main column then took their width too, and the Pokédex grid painted
+   four columns and moved to three once the spacer arrived (a shift of 0.12 to 0.30, over
+   the §13.6 budget). The tracks reserve the side column from the first paint. They give
+   the widths the flex row gave: the main track grows up to `layout-main-max` into what the
+   two side columns and the two gaps leave, and `space-between` spreads the rest. */
+
+.ac-page-layout {
+  position: relative;
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  font-family: var(--font-sans);
+  @apply type-base;
+}
+
+/* Sidebar 208 · gap 40 · main · gap 40 · rail 256 (or spacer 208); 32 below the header. */
+.ac-page-layout__row {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--layout-gap);
+  padding-top: var(--space-32);
+}
+
+.ac-page-layout__sidebar {
+  flex: none;
+}
+
+/* Right rail: its blocks (the Toc) stack 32 apart. */
+.ac-page-layout__rail {
+  display: flex;
+  flex: none;
+  flex-direction: column;
+  gap: var(--space-32);
+}
+
+.ac-page-layout__spacer {
+  width: var(--layout-spacer);
+  flex: none;
+}
+
+.ac-page-layout__main {
+  display: flex;
+  flex: 1;
+  min-width: 0;
+  max-width: var(--layout-main-max);
+  flex-direction: column;
+  gap: var(--space-48);
+  padding-bottom: var(--space-24);
+}
+
+/* Home: 24 between blocks; the footer keeps 48 above it (24 of gap plus this 24). */
+.ac-page-layout--home .ac-page-layout__main {
+  gap: var(--space-24);
+}
+
+.ac-page-layout--home .ac-page-layout__foot {
+  margin-top: var(--space-24);
+}
+
+/* From layout-bp-xl (1280): sidebar · main · spacer 208, or rail 256 with
+   `ac-page-layout__row--rail`, fixed before any column has content (see above); and the
+   two side columns stay 32 below the header while the main column scrolls past them (5.7,
+   V5-2). */
+@media (width >= 80rem) {
+  .ac-page-layout__row {
+    display: grid;
+    grid-template-columns:
+      var(--layout-sidebar) minmax(0, var(--layout-main-max))
+      var(--layout-spacer);
+  }
+
+  .ac-page-layout__row--rail {
+    grid-template-columns:
+      var(--layout-sidebar) minmax(0, var(--layout-main-max))
+      var(--layout-rail);
+  }
+
+  .ac-page-layout__sidebar,
+  .ac-page-layout__rail {
+    position: sticky;
+    top: calc(var(--layout-header) + var(--space-32));
+    align-self: flex-start;
+  }
+}
+
+/* Below layout-bp-xl (1280): no sidebar or rail, 16 px gutters; the home packs to 16
+   between blocks and keeps 48 above the footer. */
+@media (width < 80rem) {
+  .ac-page-layout__row {
+    padding: var(--space-32) var(--space-16) 0;
+  }
+
+  .ac-page-layout__sidebar,
+  .ac-page-layout__rail,
+  .ac-page-layout__spacer {
+    display: none;
+  }
+
+  .ac-page-layout--home .ac-page-layout__main {
+    gap: var(--space-16);
+  }
+
+  .ac-page-layout--home .ac-page-layout__foot {
+    margin-top: var(--space-32);
+  }
+}

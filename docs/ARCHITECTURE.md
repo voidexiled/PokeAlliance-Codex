@@ -1,43 +1,39 @@
 # Alliance Codex architecture
 
-Status: definitive Phase 2 architecture (2026-09-09). The earlier `ARCHITECTURE_PROPOSAL.md` is retained as historical planning context; this file is the implementation contract for Phase 3 onward.
+Status: definitive Phase 2 architecture (2026-09-09), updated 2026-09-18 for D-011 and D-012 (owner-editable `content/` JSON, no provenance). The earlier `ARCHITECTURE_PROPOSAL.md` is retained as historical planning context; this file is the implementation contract for Phase 3 onward.
 
 ## Product boundary
 
 Alliance Codex is a community knowledge product with three different trust surfaces:
 
-1. reviewed public wiki knowledge;
-2. interactive tools and map projections built from reviewed data;
+1. public wiki knowledge;
+2. interactive tools and map projections built from the same data;
 3. private, user-controlled workflows such as guild snapshots and future marketplace/profile features.
 
-The architecture keeps those surfaces separate in data, authorization and publication. A user contribution can be useful evidence without becoming a public fact automatically.
+The architecture keeps those surfaces separate in data, authorization and publication. A user contribution does not become public data until the owner accepts it.
 
 ## Runtime shape
 
 ```text
-Public source surfaces / local owner-authorized files
+Owner edits / small importers
         |
         v
-Import + validation scripts  --->  staging + evidence + import history
-        |                                      |
-        v                                      v
-Reviewed claims / typed model  ----------> Supabase PostgreSQL
-        |                                      |
-        +--> generated static wiki payloads   +--> authenticated dynamic data
-                         |                                  |
-                         v                                  v
-                 Astro pages + React islands       server routes/actions + RLS
+content/*.json  ----------------------->  Astro pages + React islands (prerendered)
+
+Supabase PostgreSQL  ------------------>  server routes/actions + RLS (accounts, guilds)
 ```
 
 The intended deployment remains one Astro application on Vercel and one Supabase backend. This is a bounded architecture, not a commitment to an ORM, GraphQL layer, microservices, separate search cluster or PostGIS before measured need.
 
-## Source and data boundaries
+## Data boundaries
 
-- `knowledge/` contains human-readable research, conflicts, unknowns and glossary material.
-- `data/research/` and `data/staging/` are provenance-preserving interchange/lead datasets.
-- `data/normalized/` contains reviewed sample contracts and later build inputs; it is not an unreviewed scrape dump.
-- `supabase/migrations/` defines the canonical relational serving model.
-- `scripts/` owns extraction, validation, profiling and synchronization. Scripts never place service-role credentials in browser code.
+- `content/` holds the game data the site reads: owner-editable JSON with Spanish keys, `null` for unknown values and `"borrador": true` for placeholders.
+- `content/items/`, `content/outfits.json` and `content/auras.json` are the owner-editable registries of D-011; `src/lib/content/registry.ts` loads them through a Zod mirror at build time. See [REGISTROS.md](REGISTROS.md).
+- Every JSON file under `content/` has a JSON Schema in `content/schemas/` and is checked by `pnpm content:check`. At build time `src/lib/content/repository.ts` and `src/lib/map/map-data.ts` parse the game data with the Zod mirrors in `src/lib/content/content-schema.ts`, so a malformed file stops the build. These modules are server-only: the map page passes markers and floors to `MapExplorer` as props, and `src/lib/tools/pokemon-roster.ts` gives the Pokémon explorer island the roster without Zod.
+- `public/sprites/` holds game images and `public/sprites/sprites.json` registers them by key (frame size, frame count, mode). `src/lib/sprites/resolve.ts` is the pure frame math; `src/components/sprites/Sprite.astro` and `Sprite.tsx` render a key without animation JavaScript. React islands receive resolved data or read the sprite registry directly; they never bundle the Zod schemas.
+- `knowledge/` contains the game rules text, the glossary and the open questions.
+- `supabase/migrations/` defines the relational model for accounts, guilds and future marketplace features.
+- `scripts/` owns asset extraction and small importers that write `content/`. Scripts never place service-role credentials in browser code.
 - `src/lib/domain/` will expose application-safe domain functions and DTOs. Pages and components will not depend on raw Supabase response shapes.
 - Protected client assets and raw guild exports remain outside public build inputs unless their reuse and retention scope has been reviewed.
 
@@ -45,7 +41,7 @@ The intended deployment remains one Astro application on Vercel and one Supabase
 
 ### Public wiki and tools
 
-Reviewed static or build-time data is preferred for Pokémon, moves, items, quests, guides, terminology, sources and stable map layers. Pages receive narrow DTOs, not entire source payloads. An interactive tool loads only the data required for the current view and can read public, published projections through an anonymous Supabase client or generated assets.
+Build-time data from `content/` is used for Pokémon, moves, items, quests, guides, terminology and stable map layers. Pages receive narrow DTOs, not whole JSON files. An interactive tool loads only the data required for the current view and can read public, published projections through an anonymous Supabase client or generated assets.
 
 The initial search index is generated from canonical slugs, names, aliases and localized keywords. A provider interface is allowed, but an external search service is not introduced until corpus size and latency are measured.
 
@@ -55,20 +51,15 @@ Profiles, favorites, saved teams, guild data and future marketplace actions use 
 
 ### Contributions
 
-Map/NPC/quest/travel observations enter as pending contribution records or claims with contributor, capture time, coordinate system, source locator and moderation state. Reviewed projections are published only through an explicit moderation/import step. The map never treats a player-provided coordinate as canonical solely because it was submitted.
+Map/NPC/quest/travel contributions enter as pending records with contributor, coordinate system and moderation state. They are published only after the owner accepts them. The map never treats a player-provided coordinate as canonical solely because it was submitted.
 
 ## Build and synchronization strategy
 
-The importer pipeline is idempotent and digest-based:
+Importers are idempotent and write `content/` directly; the build prerenders from it. They never delete records and keep hand-edited values unless told to overwrite them.
 
-```text
-discover -> capture snapshot -> stage -> validate -> map source keys
-   -> propose claims/relations -> review -> project -> build/revalidate
-```
+A daily launcher-feed job and a live `/api/mundos` endpoint are future roadmap items. Discord changelog updates are manual. Editorial revisions are immutable by revision number.
 
-The launcher feed is a structured local source that can be refreshed by digest. Discord changelog updates are manual until official bot access is authorized. A changed source creates a new import run; stale facts are deprecated or reconciled, never silently removed. Editorial revisions are immutable by revision number.
-
-The first application version can build public pages from reviewed repository data while the Supabase project is configured. Dynamic/private features should not be simulated by client-only local state once they are released.
+Public pages are built from repository data in `content/`. Dynamic/private features should not be simulated by client-only local state once they are released.
 
 ## Localization and time
 
@@ -78,7 +69,7 @@ Instants are UTC. Recurring schedules use civil time plus IANA zone. The Server 
 
 ## Security and privacy
 
-- Public read models expose only published rows and approved source metadata.
+- Public read models expose only published rows.
 - Supabase Auth owns account identity; application tables reference `auth.users` only where needed.
 - Guild tables have RLS enabled from the initial migration and default-deny behavior until Phase 3 policies are tested.
 - Guild member names are functional in-game identifiers, but guild observations remain private to authorized guild users.
@@ -88,17 +79,17 @@ Instants are UTC. Recurring schedules use civil time plus IANA zone. The Server 
 
 ## Failure and quality strategy
 
-The system treats incomplete evidence as a normal state. UI status labels should distinguish confirmed/supported, inferred, conflicted, unknown and outdated. Source freshness and import failures should be visible in maintenance surfaces, not silently converted into empty public data.
+Incomplete data is a normal state: unknown values are `null` and render as `—`, and a block with no data is omitted. The UI never shows sources, verification status or confidence labels (D-012). Import failures stop the importer instead of writing empty data.
 
 Phase 3 CI is expected to run:
 
 - formatting, lint, strict type checking and Astro checks;
 - unit tests for domain normalization, Temporal conversion, locale fallback and comparison logic;
-- JSON/schema and relational-contract validation;
+- `content/` schema validation (`pnpm content:check`, D-011);
 - browser smoke tests for the public shell and keyboard/accessibility behavior;
 - production build and generated-data drift checks.
 
-The Phase 2 static model audit is separate from a live Supabase migration run. It proves contract coverage and migration ordering; it does not claim that a remote database has been provisioned.
+Local migrations are reviewed before any remote run; a migration counts as applied only after it has run on the linked project.
 
 ## Planned source tree after Phase 3
 
@@ -108,12 +99,12 @@ src/
   features/{pokemon,systems,map,search,tools,guild,auth,marketplace}/
   content/{guides,systems,mechanics}/
   i18n/
-  lib/{domain,data,sources,supabase,validation,time}/
+  lib/{content,domain,map,supabase,time,tools,trade}/
   pages/[locale]/
   styles/
-data/{raw,staging,normalized,schemas,fixtures,reports}/
-knowledge/{sources,research,conflicts,unknowns,localization}/
-scripts/{research,imports,validation}/
+content/{items,map}/ + pokemon.json, moves.json, quests.json, locations.json, rotations.json, outfits.json, auras.json
+knowledge/{rules,unknowns,localization}/
+scripts/{assets,content,map}/
 supabase/{migrations,tests,seed.sql}/
 ```
 

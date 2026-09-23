@@ -1,0 +1,2903 @@
+{
+  "$schema": "../../../../content/schemas/sistemas.schema.json",
+  "id": "boost",
+  "titulo": {
+    "es": "Boost",
+    "en": "Boost"
+  },
+  "subtitulo": {
+    "es": "(Potenciación)",
+    "en": "(Enhancement)"
+  },
+  "sprite": null,
+  "orden": 1,
+  "tooltip": [
+    {
+      "etiqueta": {
+        "es": "Límite:",
+        "en": "Limit:"
+      },
+      "valor": {
+        "es": "+50",
+        "en": "+50"
+      }
+    },
+    {
+      "etiqueta": {
+        "es": "Cada punto:",
+        "en": "Each point:"
+      },
+      "valor": {
+        "es": "3 niveles de daño",
+        "en": "3 levels of damage"
+      }
+    },
+    {
+      "etiqueta": {
+        "es": "Se aplica con:",
+        "en": "Applied with:"
+      },
+      "valor": {
+        "es": "Boost Stone",
+        "en": "Boost Stone"
+      }
+    },
+    {
+      "etiqueta": {
+        "es": "Si falla:",
+        "en": "On failure:"
+      },
+      "valor": {
+        "es": "+10 puntos al siguiente",
+        "en": "+10 points on the next try"
+      }
+    }
+  ],
+  "intro": [
+    {
+      "tipo": "parrafo",
+      "texto": {
+        "es": [
+          "El Boost aumenta el poder de un Pokémon de forma permanente. Cada punto cuenta como 3 niveles extra en el cálculo de daño de las habilidades, así que un Pokémon +50 suma el equivalente a 150 niveles. Se aplica usando en la Poké Ball una Boost Stone de la banda y del elemento correctos; por ejemplo, ",
+          {
+            "entidad": {
+              "tipo": "item",
+              "id": "enhanced-normal-stone"
+            },
+            "texto": "Enhanced Normal Stone"
+          },
+          " para un Pokémon Normal que está entre +15 y +20."
+        ],
+        "en": [
+          "Boost permanently increases a Pokémon's power. Each point counts as 3 extra levels in the damage calculation of its moves, so a +50 Pokémon adds the equivalent of 150 levels. It is applied by using a Boost Stone of the right band and element on the Poké Ball; for example, an ",
+          {
+            "entidad": {
+              "tipo": "item",
+              "id": "enhanced-normal-stone"
+            },
+            "texto": "Enhanced Normal Stone"
+          },
+          " for a Normal Pokémon between +15 and +20."
+        ]
+      }
+    }
+  ],
+  "banner": {
+    "sprite": null,
+    "datos": {
+      "es": [
+        "Límite: +50",
+        "Cada punto: 3 niveles en el daño",
+        "Si falla: +10 puntos al siguiente intento"
+      ],
+      "en": [
+        "Limit: +50",
+        "Each point: 3 levels of damage",
+        "On failure: +10 points on the next attempt"
+      ]
+    }
+  },
+  "secciones": [
+    {
+      "id": "como-aplicar",
+      "titulo": {
+        "es": "Cómo aplicar",
+        "en": "How to apply"
+      },
+      "bloques": [
+        {
+          "tipo": "pasos",
+          "pasos": [
+            {
+              "sprite": "items/stones/heart-stone",
+              "texto": {
+                "es": [
+                  "Consigue la Boost Stone de la ",
+                  {
+                    "ancla": "bandas",
+                    "texto": "banda"
+                  },
+                  " que corresponde al Boost actual del Pokémon."
+                ],
+                "en": [
+                  "Get the Boost Stone of the ",
+                  {
+                    "ancla": "bandas",
+                    "texto": "band"
+                  },
+                  " that matches the Pokémon's current Boost."
+                ]
+              }
+            },
+            {
+              "sprite": "items/stones/fire-stone",
+              "texto": {
+                "es": [
+                  "Comprueba que el elemento de la piedra coincide con al menos uno de los elementos del Pokémon."
+                ],
+                "en": [
+                  "Check that the stone's element matches at least one of the Pokémon's elements."
+                ]
+              }
+            },
+            {
+              "sprite": "items/poke-balls/ultra-ball",
+              "texto": {
+                "es": ["Usa la piedra en la Poké Ball."],
+                "en": ["Use the stone on the Poké Ball."]
+              }
+            },
+            {
+              "sprite": "items/stones/heart-stone",
+              "texto": {
+                "es": ["Si acierta, el Pokémon gana +1 de Boost."],
+                "en": ["If it succeeds, the Pokémon gains +1 Boost."]
+              },
+              "chips": [
+                {
+                  "es": ["+1 de Boost"],
+                  "en": ["+1 Boost"]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "tipo": "parrafo",
+          "texto": {
+            "es": [
+              "El Boost, los ",
+              {
+                "entidad": {
+                  "tipo": "sistema",
+                  "id": "helds"
+                }
+              },
+              " y las demás propiedades quedan guardados en la Poké Ball."
+            ],
+            "en": [
+              "Boost, ",
+              {
+                "entidad": {
+                  "tipo": "sistema",
+                  "id": "helds"
+                }
+              },
+              " and the other properties are stored in the Poké Ball."
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "bandas",
+      "titulo": {
+        "es": "Bandas",
+        "en": "Bands"
+      },
+      "bloques": [
+        {
+          "tipo": "parrafo",
+          "texto": {
+            "es": [
+              "Cada banda de Boost usa su propia Boost Stone. La descripción de la piedra y el panel indican la banda que acepta."
+            ],
+            "en": [
+              "Each Boost band uses its own Boost Stone. The stone's description and the panel show the band it accepts."
+            ]
+          }
+        },
+        {
+          "tipo": "tabla",
+          "caption": {
+            "es": "Bandas de Boost",
+            "en": "Boost bands"
+          },
+          "columnas": [
+            {
+              "titulo": {
+                "es": "Boost",
+                "en": "Boost"
+              }
+            },
+            {
+              "titulo": {
+                "es": "Boost Stone",
+                "en": "Boost Stone"
+              }
+            },
+            {
+              "titulo": {
+                "es": "Probabilidad inicial",
+                "en": "Initial chance"
+              }
+            }
+          ],
+          "filas": [
+            [
+              {
+                "es": ["+0 a +5"],
+                "en": ["+0 to +5"]
+              },
+              {
+                "es": ["Novice"],
+                "en": ["Novice"]
+              },
+              {
+                "es": ["50%"],
+                "en": ["50%"]
+              }
+            ],
+            [
+              {
+                "es": ["+5 a +10"],
+                "en": ["+5 to +10"]
+              },
+              {
+                "es": ["Elemental"],
+                "en": ["Elemental"]
+              },
+              {
+                "es": ["40%"],
+                "en": ["40%"]
+              }
+            ],
+            [
+              {
+                "es": ["+10 a +15"],
+                "en": ["+10 to +15"]
+              },
+              {
+                "es": ["Common"],
+                "en": ["Common"]
+              },
+              {
+                "es": ["30%"],
+                "en": ["30%"]
+              }
+            ],
+            [
+              {
+                "es": ["+15 a +20"],
+                "en": ["+15 to +20"]
+              },
+              {
+                "es": ["Enhanced"],
+                "en": ["Enhanced"]
+              },
+              {
+                "es": ["20%"],
+                "en": ["20%"]
+              }
+            ],
+            [
+              {
+                "es": ["+20 a +25"],
+                "en": ["+20 to +25"]
+              },
+              {
+                "es": ["Potent"],
+                "en": ["Potent"]
+              },
+              {
+                "es": ["18%"],
+                "en": ["18%"]
+              }
+            ],
+            [
+              {
+                "es": ["+25 a +30"],
+                "en": ["+25 to +30"]
+              },
+              {
+                "es": ["Advanced"],
+                "en": ["Advanced"]
+              },
+              {
+                "es": ["15%"],
+                "en": ["15%"]
+              }
+            ],
+            [
+              {
+                "es": ["+30 a +35"],
+                "en": ["+30 to +35"]
+              },
+              {
+                "es": ["Fortified"],
+                "en": ["Fortified"]
+              },
+              {
+                "es": ["12%"],
+                "en": ["12%"]
+              }
+            ],
+            [
+              {
+                "es": ["+35 a +40"],
+                "en": ["+35 to +40"]
+              },
+              {
+                "es": ["Supreme"],
+                "en": ["Supreme"]
+              },
+              {
+                "es": ["10%"],
+                "en": ["10%"]
+              }
+            ],
+            [
+              {
+                "es": ["+40 a +45"],
+                "en": ["+40 to +45"]
+              },
+              {
+                "es": ["Celestial"],
+                "en": ["Celestial"]
+              },
+              {
+                "es": ["8%"],
+                "en": ["8%"]
+              }
+            ],
+            [
+              {
+                "es": ["+45 a +50"],
+                "en": ["+45 to +50"]
+              },
+              {
+                "es": ["Mystic"],
+                "en": ["Mystic"]
+              },
+              {
+                "es": ["5%"],
+                "en": ["5%"]
+              }
+            ]
+          ]
+        },
+        {
+          "tipo": "nota",
+          "texto": {
+            "es": [
+              "el sistema antiguo por encima de +50, con regresión y límite +70, ya no forma parte de la configuración actual."
+            ],
+            "en": [
+              "the old system above +50, with regression and a +70 limit, is no longer part of the current configuration."
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "si-falla",
+      "titulo": {
+        "es": "Si falla",
+        "en": "On failure"
+      },
+      "bloques": [
+        {
+          "tipo": "tarjetas",
+          "tarjetas": [
+            {
+              "titulo": {
+                "es": "Si acierta",
+                "en": "On success"
+              },
+              "sprite": null,
+              "texto": {
+                "es": ["El Pokémon gana +1 de Boost y el bono acumulado vuelve a 0."],
+                "en": ["The Pokémon gains +1 Boost and the accumulated bonus goes back to 0."]
+              }
+            },
+            {
+              "titulo": {
+                "es": "Si falla",
+                "en": "On failure"
+              },
+              "sprite": null,
+              "texto": {
+                "es": [
+                  "La piedra se consume y el Pokémon no pierde Boost. El siguiente intento en esa banda suma 10 puntos porcentuales."
+                ],
+                "en": [
+                  "The stone is consumed and the Pokémon does not lose Boost. The next attempt in that band adds 10 percentage points."
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "tipo": "chips",
+          "etiqueta": {
+            "es": "Ejemplo con una piedra de 20%:",
+            "en": "Example with a 20% stone:"
+          },
+          "chips": [
+            {
+              "es": ["1.er intento: 20%"],
+              "en": ["1st attempt: 20%"]
+            },
+            {
+              "es": ["2.º intento: 30%"],
+              "en": ["2nd attempt: 30%"]
+            },
+            {
+              "es": ["3.er intento: 40%"],
+              "en": ["3rd attempt: 40%"]
+            },
+            {
+              "es": ["4.º intento: 50%"],
+              "en": ["4th attempt: 50%"]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "stones",
+      "titulo": {
+        "es": "Stones por elemento",
+        "en": "Stones by element"
+      },
+      "bloques": [
+        {
+          "tipo": "parrafo",
+          "texto": {
+            "es": [
+              "La máquina de craft de Boost Stones usa ítems de Pokémon del elemento, Fragments de ese elemento, la stone elemental correspondiente y los demás materiales de la receta. Las recetas cambian con las actualizaciones: revisa la máquina antes de juntar materiales."
+            ],
+            "en": [
+              "The Boost Stone craft machine uses Pokémon items of the element, Fragments of that element, the matching elemental stone and the other materials of the recipe. Recipes change with updates: check the machine before gathering materials."
+            ]
+          }
+        },
+        {
+          "tipo": "parrafo",
+          "texto": {
+            "es": [
+              "Los Fragments salen sobre todo de Dungeons del mismo elemento; por ejemplo, la Dungeon de la familia Machop da materiales de Lucha."
+            ],
+            "en": [
+              "Fragments come mostly from Dungeons of the same element; for example, the Machop family Dungeon gives Fighting materials."
+            ]
+          }
+        },
+        {
+          "tipo": "tabla",
+          "caption": {
+            "es": "Stones, Fragments e ítems de craft por elemento",
+            "en": "Stones, Fragments and craft items by element"
+          },
+          "columnas": [
+            {
+              "titulo": {
+                "es": "Elemento",
+                "en": "Element"
+              },
+              "ancho": 150
+            },
+            {
+              "titulo": {
+                "es": "Stone",
+                "en": "Stone"
+              },
+              "ancho": 210,
+              "conSprite": true
+            },
+            {
+              "titulo": {
+                "es": "Fragment",
+                "en": "Fragment"
+              },
+              "ancho": 190
+            },
+            {
+              "titulo": {
+                "es": "Ítems de Pokémon",
+                "en": "Pokémon items"
+              }
+            }
+          ],
+          "filas": [
+            [
+              {
+                "elemento": "normal"
+              },
+              {
+                "es": [
+                  {
+                    "entidad": {
+                      "tipo": "item",
+                      "id": "heart-stone"
+                    }
+                  }
+                ],
+                "en": [
+                  {
+                    "entidad": {
+                      "tipo": "item",
+                      "id": "heart-stone"
+                    }
+                  }
+                ]
+              },
+              {
+                "es": [
+                  {
+                    "entidad": {
+                      "tipo": "item",
+                      "id": "normal-fragment"
+                    },
+                    "texto": "Normal Fragment"
+                  }
+                ],
+                "en": [
+                  {
+                    "entidad": {
+                      "tipo": "item",
+                      "id": "normal-fragment"
+                    },
+                    "texto": "Normal Fragment"
+                  }
+                ]
+              },
+              {
+                "es": [
+                  {
+                    "entidad": {
+                      "tipo": "item",
+                      "id": "cow-tail"
+                    },
+                    "texto": "Cow Tail"
+                  },
+                  ", ",
+                  {
+                    "entidad": {
+                      "tipo": "item",
+                      "id": "bull-tail"
+                    },
+                    "texto": "Bull Tail"
+                  },
+                  ", ",
+                  {
+                    "entidad": {
+                      "tipo": "item",
+                      "id": "kangaskhan-ear"
+                    },
+                    "texto": "Kangaskhan Ear"
+                  },
+                  ", ",
+                  {
+                    "entidad": {
+                      "tipo": "item",
+                      "id": "farfetch-d-wing"
+                    },
+                    "texto": "Farfetch'd Wing"
+                  },
+                  ", ",
+                  {
+                    "entidad": {
+                      "tipo": "item",
+                      "id": "big-crest"
+                    },
+                    "texto": "Big Crest"
+                  },
+                  ", ",
+                  {
+                    "entidad": {
+                      "tipo": "item",
+                      "id": "snorlax-paw"
+                    },
+                    "texto": "Snorlax Paw"
+                  }
+                ],
+                "en": [
+                  {
+                    "entidad": {
+                      "tipo": "item",
+                      "id": "cow-tail"
+                    },
+                    "texto": "Cow Tail"
+                  },
+                  ", ",
+                  {
+                    "entidad": {
+                      "tipo": "item",
+                      "id": "bull-tail"
+                    },
+                    "texto": "Bull Tail"
+                  },
+                  ", ",
+                  {
+                    "entidad": {
+                      "tipo": "item",
+                      "id": "kangaskhan-ear"
+                    },
+                    "texto": "Kangaskhan Ear"
+                  },
+                  ", ",
+                  {
+                    "entidad": {
+                      "tipo": "item",
+                      "id": "farfetch-d-wing"
+                    },
+                    "texto": "Farfetch'd Wing"
+                  },
+                  ", ",
+                  {
+                    "entidad": {
+                      "tipo": "item",
+                      "id": "big-crest"
+                    },
+                    "texto": "Big Crest"
+                  },
+                  ", ",
+                  {
+                    "entidad": {
+                      "tipo": "item",
+                      "id": "snorlax-paw"
+                    },
+                    "texto": "Snorlax Paw"
+                  }
+                ]
+              }
+            ],
+            [
+              {
+                "elemento": "fire"
+              },
+              {
+                "es": [
+                  {
+                    "entidad": {
+                      "tipo": "item",
+                      "id": "fire-stone"
+                    }
+                  }
+                ],
+                "en": [
+                  {
+                    "entidad": {
+                      "tipo": "item",
+                      "id": "fire-stone"
+                    }
+                  }
+                ]
+              },
+              {
+                "es": [
+                  {
+                    "entidad": {
+                      "tipo": "item",
+                      "id": "fire-fragment"
+                    },
+                    "texto": "Fire Fragment"
+                  }
+                ],
+                "en": [
+                  {
+                    "entidad": {
+                      "tipo": "item",
+                      "id": "fire-fragment"
+                    },
+                    "texto": "Fire Fragment"
+                  }
+                ]
+              },
+              {
+                "es": [
+                  {
+                    "entidad": {
+                      "tipo": "item",
+                      "id": "fire-roof"
+                    },
+                    "texto": "Fire Roof"
+                  },
+                  ", ",
+                  {
+                    "entidad": {
+                      "tipo": "item",
+                      "id": "magma-shell"
+                    },
+                    "texto": "Magma Shell"
+                  },
+                  ", ",
+                  {
+                    "entidad": {
+                      "tipo": "item",
+                      "id": "fox-tail"
+                    },
+                    "texto": "Fox Tail"
+                  },
+                  ", ",
+                  {
+                    "entidad": {
+                      "tipo": "item",
+                      "id": "dark-canine-horns"
+                    },
+                    "texto": "Dark Canine Horns"
+                  },
+                  ", ",
+                  {
+                    "entidad": {
+                      "tipo": "item",
+                      "id": "blaze-tail"
+                    },
+                    "texto": "Blaze Tail"
+                  },
+                  ", ",
+                  {
+                    "entidad": {
+                      "tipo": "item",
+                      "id": "giant-piece-of-fur"
+                    },
+                    "texto": "Giant Piece of Fur"
+                  },
+                  ", ",
+                  {
+                    "entidad": {
+                      "tipo": "item",
+                      "id": "magma-foot"
+                    },
+                    "texto": "Magma Foot"
+                  },
+                  ", ",
+                  {
+                    "entidad": {
+                      "tipo": "item",
+                      "id": "fire-wing"
+                    },
+                    "texto": "Fire Wing"
+                  }
+                ],
+                "en": [
+                  {
+                    "entidad": {
+                      "tipo": "item",
+                      "id": "fire-roof"
+                    },
+                    "texto": "Fire Roof"
+                  },
+                  ", ",
+                  {
+                    "entidad": {
+                      "tipo": "item",
+                      "id": "magma-shell"
+                    },
+                    "texto": "Magma Shell"
+                  },
+                  ", ",
+                  {
+                    "entidad": {
+                      "tipo": "item",
+                      "id": "fox-tail"
+                    },
+                    "texto": "Fox Tail"
+                  },
+                  ", ",
+                  {
+                    "entidad": {
+                      "tipo": "item",
+                      "id": "dark-canine-horns"
+                    },
+                    "texto": "Dark Canine Horns"
+                  },
+                  ", ",
+                  {
+                    "entidad": {
+                      "tipo": "item",
+                      "id": "blaze-tail"
+                    },
+                    "texto": "Blaze Tail"
+                  },
+                  ", ",
+                  {
+                    "entidad": {
+                      "tipo": "item",
+                      "id": "giant-piece-of-fur"
+                    },
+                    "texto": "Giant Piece of Fur"
+                  },
+                  ", ",
+                  {
+                    "entidad": {
+                      "tipo": "item",
+                      "id": "magma-foot"
+                    },
+                    "texto": "Magma Foot"
+                  },
+                  ", ",
+                  {
+                    "entidad": {
+                      "tipo": "item",
+                      "id": "fire-wing"
+                    },
+                    "texto": "Fire Wing"
+                  }
+                ]
+              }
+            ],
+            [
+              {
+                "elemento": "water"
+              },
+              {
+                "es": [
+                  {
+                    "entidad": {
+                      "tipo": "item",
+                      "id": "water-stone"
+                    }
+                  }
+                ],
+                "en": [
+                  {
+                    "entidad": {
+                      "tipo": "item",
+                      "id": "water-stone"
+                    }
+                  }
+                ]
+              },
+              {
+                "es": [
+                  {
+                    "entidad": {
+                      "tipo": "item",
+                      "id": "water-fragment"
+                    },
+                    "texto": "Water Fragment"
+                  }
+                ],
+                "en": [
+                  {
+                    "entidad": {
+                      "tipo": "item",
+                      "id": "water-fragment"
+                    },
+                    "texto": "Water Fragment"
+                  }
+                ]
+              },
+              {
+                "es": [
+                  {
+                    "entidad": {
+                      "tipo": "item",
+                      "id": "blue-ray-tail"
+                    },
+                    "texto": "Blue Ray Tail"
+                  },
+                  ", ",
+                  {
+                    "entidad": {
+                      "tipo": "item",
+                      "id": "frog-topknot"
+                    },
+                    "texto": "Frog Topknot"
+                  },
+                  ", ",
+                  {
+                    "entidad": {
+                      "tipo": "item",
+                      "id": "big-fist-gloves"
+                    },
+                    "texto": "Big Fist Gloves"
+                  },
+                  ", ",
+                  {
+                    "entidad": {
+                      "tipo": "item",
+                      "id": "red-hair"
+                    },
+                    "texto": "Red Hair"
+                  },
+                  ", ",
+                  {
+                    "entidad": {
+                      "tipo": "item",
+                      "id": "giant-ruby"
+                    },
+                    "texto": "Giant Ruby"
+                  },
+                  ", ",
+                  {
+                    "entidad": {
+                      "tipo": "item",
+                      "id": "lapras-fin"
+                    },
+                    "texto": "Lapras Fin"
+                  },
+                  ", ",
+                  {
+                    "entidad": {
+                      "tipo": "item",
+                      "id": "sea-dragon-fin"
+                    },
+                    "texto": "Sea Dragon Fin"
+                  },
+                  ", ",
+                  {
+                    "entidad": {
+                      "tipo": "item",
+                      "id": "aquatic-tail"
+                    },
+                    "texto": "Aquatic Tail"
+                  },
+                  ", ",
+                  {
+                    "entidad": {
+                      "tipo": "item",
+                      "id": "gyarados-tail"
+                    },
+                    "texto": "Gyarados Tail"
+                  }
+                ],
+                "en": [
+                  {
+                    "entidad": {
+                      "tipo": "item",
+                      "id": "blue-ray-tail"
+                    },
+                    "texto": "Blue Ray Tail"
+                  },
+                  ", ",
+                  {
+                    "entidad": {
+                      "tipo": "item",
+                      "id": "frog-topknot"
+                    },
+                    "texto": "Frog Topknot"
+                  },
+                  ", ",
+                  {
+                    "entidad": {
+                      "tipo": "item",
+                      "id": "big-fist-gloves"
+                    },
+                    "texto": "Big Fist Gloves"
+                  },
+                  ", ",
+                  {
+                    "entidad": {
+                      "tipo": "item",
+                      "id": "red-hair"
+                    },
+                    "texto": "Red Hair"
+                  },
+                  ", ",
+                  {
+                    "entidad": {
+                      "tipo": "item",
+                      "id": "giant-ruby"
+                    },
+                    "texto": "Giant Ruby"
+                  },
+                  ", ",
+                  {
+                    "entidad": {
+                      "tipo": "item",
+                      "id": "lapras-fin"
+                    },
+                    "texto": "Lapras Fin"
+                  },
+                  ", ",
+                  {
+                    "entidad": {
+                      "tipo": "item",
+                      "id": "sea-dragon-fin"
+                    },
+                    "texto": "Sea Dragon Fin"
+                  },
+                  ", ",
+                  {
+                    "entidad": {
+                      "tipo": "item",
+                      "id": "aquatic-tail"
+                    },
+                    "texto": "Aquatic Tail"
+                  },
+                  ", ",
+                  {
+                    "entidad": {
+                      "tipo": "item",
+                      "id": "gyarados-tail"
+                    },
+                    "texto": "Gyarados Tail"
+                  }
+                ]
+              }
+            ],
+            [
+              {
+                "elemento": "grass"
+              },
+              {
+                "es": [
+                  {
+                    "entidad": {
+                      "tipo": "item",
+                      "id": "leaf-stone"
+                    }
+                  }
+                ],
+                "en": [
+                  {
+                    "entidad": {
+                      "tipo": "item",
+                      "id": "leaf-stone"
+                    }
+                  }
+                ]
+              },
+              {
+                "es": [
+                  {
+                    "entidad": {
+                      "tipo": "item",
+                      "id": "grass-fragment"
+                    },
+                    "texto": "Grass Fragment"
+                  }
+                ],
+                "en": [
+                  {
+                    "entidad": {
+                      "tipo": "item",
+                      "id": "grass-fragment"
+                    },
+                    "texto": "Grass Fragment"
+                  }
+                ]
+              },
+              {
+                "es": [
+                  {
+                    "entidad": {
+                      "tipo": "item",
+                      "id": "red-petal"
+                    },
+                    "texto": "Red Petal"
+                  },
+                  ", ",
+                  {
+                    "entidad": {
+                      "tipo": "item",
+                      "id": "big-petal"
+                    },
+                    "texto": "Big Petal"
+                  },
+                  ", ",
+                  {
+                    "entidad": {
+                      "tipo": "item",
+                      "id": "gaia-hands"
+                    },
+                    "texto": "Gaia Hands"
+                  },
+                  ", ",
+                  {
+                    "entidad": {
+                      "tipo": "item",
+                      "id": "piece-of-rock"
+                    },
+                    "texto": "Piece of Rock"
+                  }
+                ],
+                "en": [
+                  {
+                    "entidad": {
+                      "tipo": "item",
+                      "id": "red-petal"
+                    },
+                    "texto": "Red Petal"
+                  },
+                  ", ",
+                  {
+                    "entidad": {
+                      "tipo": "item",
+                      "id": "big-petal"
+                    },
+                    "texto": "Big Petal"
+                  },
+                  ", ",
+                  {
+                    "entidad": {
+                      "tipo": "item",
+                      "id": "gaia-hands"
+                    },
+                    "texto": "Gaia Hands"
+                  },
+                  ", ",
+                  {
+                    "entidad": {
+                      "tipo": "item",
+                      "id": "piece-of-rock"
+                    },
+                    "texto": "Piece of Rock"
+                  }
+                ]
+              }
+            ],
+            [
+              {
+                "elemento": "electric"
+              },
+              {
+                "es": [
+                  {
+                    "entidad": {
+                      "tipo": "item",
+                      "id": "thunder-stone"
+                    }
+                  }
+                ],
+                "en": [
+                  {
+                    "entidad": {
+                      "tipo": "item",
+                      "id": "thunder-stone"
+                    }
+                  }
+                ]
+              },
+              {
+                "es": [
+                  {
+                    "entidad": {
+                      "tipo": "item",
+                      "id": "electric-fragment"
+                    },
+                    "texto": "Electric Fragment"
+                  }
+                ],
+                "en": [
+                  {
+                    "entidad": {
+                      "tipo": "item",
+                      "id": "electric-fragment"
+                    },
+                    "texto": "Electric Fragment"
+                  }
+                ]
+              },
+              {
+                "es": [
+                  {
+                    "entidad": {
+                      "tipo": "item",
+                      "id": "electric-collar"
+                    },
+                    "texto": "Electric Collar"
+                  },
+                  ", ",
+                  {
+                    "entidad": {
+                      "tipo": "item",
+                      "id": "electric-ear"
+                    },
+                    "texto": "Electric Ear"
+                  },
+                  ", ",
+                  {
+                    "entidad": {
+                      "tipo": "item",
+                      "id": "electric-tail"
+                    },
+                    "texto": "Electric Tail"
+                  },
+                  ", ",
+                  {
+                    "entidad": {
+                      "tipo": "item",
+                      "id": "electric-sheep-tail"
+                    },
+                    "texto": "Electric Sheep Tail"
+                  },
+                  ", ",
+                  {
+                    "entidad": {
+                      "tipo": "item",
+                      "id": "luxray-ear"
+                    },
+                    "texto": "Luxray Ear"
+                  }
+                ],
+                "en": [
+                  {
+                    "entidad": {
+                      "tipo": "item",
+                      "id": "electric-collar"
+                    },
+                    "texto": "Electric Collar"
+                  },
+                  ", ",
+                  {
+                    "entidad": {
+                      "tipo": "item",
+                      "id": "electric-ear"
+                    },
+                    "texto": "Electric Ear"
+                  },
+                  ", ",
+                  {
+                    "entidad": {
+                      "tipo": "item",
+                      "id": "electric-tail"
+                    },
+                    "texto": "Electric Tail"
+                  },
+                  ", ",
+                  {
+                    "entidad": {
+                      "tipo": "item",
+                      "id": "electric-sheep-tail"
+                    },
+                    "texto": "Electric Sheep Tail"
+                  },
+                  ", ",
+                  {
+                    "entidad": {
+                      "tipo": "item",
+                      "id": "luxray-ear"
+                    },
+                    "texto": "Luxray Ear"
+                  }
+                ]
+              }
+            ],
+            [
+              {
+                "elemento": "ice"
+              },
+              {
+                "es": [
+                  {
+                    "entidad": {
+                      "tipo": "item",
+                      "id": "ice-stone"
+                    },
+                    "texto": "Ice Stone"
+                  }
+                ],
+                "en": [
+                  {
+                    "entidad": {
+                      "tipo": "item",
+                      "id": "ice-stone"
+                    },
+                    "texto": "Ice Stone"
+                  }
+                ]
+              },
+              {
+                "es": [
+                  {
+                    "entidad": {
+                      "tipo": "item",
+                      "id": "ice-fragment"
+                    },
+                    "texto": "Ice Fragment"
+                  }
+                ],
+                "en": [
+                  {
+                    "entidad": {
+                      "tipo": "item",
+                      "id": "ice-fragment"
+                    },
+                    "texto": "Ice Fragment"
+                  }
+                ]
+              },
+              {
+                "es": [
+                  {
+                    "entidad": {
+                      "tipo": "item",
+                      "id": "lapras-fin"
+                    },
+                    "texto": "Lapras Fin"
+                  },
+                  ", ",
+                  {
+                    "entidad": {
+                      "tipo": "item",
+                      "id": "psychic-wig"
+                    },
+                    "texto": "Psychic Wig"
+                  }
+                ],
+                "en": [
+                  {
+                    "entidad": {
+                      "tipo": "item",
+                      "id": "lapras-fin"
+                    },
+                    "texto": "Lapras Fin"
+                  },
+                  ", ",
+                  {
+                    "entidad": {
+                      "tipo": "item",
+                      "id": "psychic-wig"
+                    },
+                    "texto": "Psychic Wig"
+                  }
+                ]
+              }
+            ],
+            [
+              {
+                "elemento": "fighting"
+              },
+              {
+                "es": [
+                  {
+                    "entidad": {
+                      "tipo": "item",
+                      "id": "punch-stone"
+                    },
+                    "texto": "Punch Stone"
+                  }
+                ],
+                "en": [
+                  {
+                    "entidad": {
+                      "tipo": "item",
+                      "id": "punch-stone"
+                    },
+                    "texto": "Punch Stone"
+                  }
+                ]
+              },
+              {
+                "es": [
+                  {
+                    "entidad": {
+                      "tipo": "item",
+                      "id": "fighting-fragment"
+                    },
+                    "texto": "Fighting Fragment"
+                  }
+                ],
+                "en": [
+                  {
+                    "entidad": {
+                      "tipo": "item",
+                      "id": "fighting-fragment"
+                    },
+                    "texto": "Fighting Fragment"
+                  }
+                ]
+              },
+              {
+                "es": [
+                  {
+                    "entidad": {
+                      "tipo": "item",
+                      "id": "belt-of-champions"
+                    },
+                    "texto": "Belt of Champions"
+                  },
+                  ", ",
+                  {
+                    "entidad": {
+                      "tipo": "item",
+                      "id": "big-fist-gloves"
+                    },
+                    "texto": "Big Fist Gloves"
+                  },
+                  ", ",
+                  {
+                    "entidad": {
+                      "tipo": "item",
+                      "id": "martial-arts-tail"
+                    },
+                    "texto": "Martial Arts Tail"
+                  },
+                  ", ",
+                  {
+                    "entidad": {
+                      "tipo": "item",
+                      "id": "kick-machine"
+                    },
+                    "texto": "Kick Machine"
+                  },
+                  ", ",
+                  {
+                    "entidad": {
+                      "tipo": "item",
+                      "id": "punching-machine"
+                    },
+                    "texto": "Punching Machine"
+                  },
+                  ", ",
+                  {
+                    "entidad": {
+                      "tipo": "item",
+                      "id": "poison-bladder"
+                    },
+                    "texto": "Poison Bladder"
+                  }
+                ],
+                "en": [
+                  {
+                    "entidad": {
+                      "tipo": "item",
+                      "id": "belt-of-champions"
+                    },
+                    "texto": "Belt of Champions"
+                  },
+                  ", ",
+                  {
+                    "entidad": {
+                      "tipo": "item",
+                      "id": "big-fist-gloves"
+                    },
+                    "texto": "Big Fist Gloves"
+                  },
+                  ", ",
+                  {
+                    "entidad": {
+                      "tipo": "item",
+                      "id": "martial-arts-tail"
+                    },
+                    "texto": "Martial Arts Tail"
+                  },
+                  ", ",
+                  {
+                    "entidad": {
+                      "tipo": "item",
+                      "id": "kick-machine"
+                    },
+                    "texto": "Kick Machine"
+                  },
+                  ", ",
+                  {
+                    "entidad": {
+                      "tipo": "item",
+                      "id": "punching-machine"
+                    },
+                    "texto": "Punching Machine"
+                  },
+                  ", ",
+                  {
+                    "entidad": {
+                      "tipo": "item",
+                      "id": "poison-bladder"
+                    },
+                    "texto": "Poison Bladder"
+                  }
+                ]
+              }
+            ],
+            [
+              {
+                "elemento": "poison"
+              },
+              {
+                "es": [
+                  {
+                    "entidad": {
+                      "tipo": "item",
+                      "id": "venom-stone"
+                    },
+                    "texto": "Venom Stone"
+                  }
+                ],
+                "en": [
+                  {
+                    "entidad": {
+                      "tipo": "item",
+                      "id": "venom-stone"
+                    },
+                    "texto": "Venom Stone"
+                  }
+                ]
+              },
+              {
+                "es": [
+                  {
+                    "entidad": {
+                      "tipo": "item",
+                      "id": "poison-fragment"
+                    },
+                    "texto": "Poison Fragment"
+                  }
+                ],
+                "en": [
+                  {
+                    "entidad": {
+                      "tipo": "item",
+                      "id": "poison-fragment"
+                    },
+                    "texto": "Poison Fragment"
+                  }
+                ]
+              },
+              {
+                "es": [
+                  {
+                    "entidad": {
+                      "tipo": "item",
+                      "id": "red-petal"
+                    },
+                    "texto": "Red Petal"
+                  },
+                  ", ",
+                  {
+                    "entidad": {
+                      "tipo": "item",
+                      "id": "ectoplasm"
+                    },
+                    "texto": "Ectoplasm"
+                  },
+                  ", ",
+                  {
+                    "entidad": {
+                      "tipo": "item",
+                      "id": "stinky-hand"
+                    },
+                    "texto": "Stinky Hand"
+                  },
+                  ", ",
+                  {
+                    "entidad": {
+                      "tipo": "item",
+                      "id": "giant-ruby"
+                    },
+                    "texto": "Giant Ruby"
+                  },
+                  ", ",
+                  {
+                    "entidad": {
+                      "tipo": "item",
+                      "id": "king-ear"
+                    },
+                    "texto": "King Ear"
+                  }
+                ],
+                "en": [
+                  {
+                    "entidad": {
+                      "tipo": "item",
+                      "id": "red-petal"
+                    },
+                    "texto": "Red Petal"
+                  },
+                  ", ",
+                  {
+                    "entidad": {
+                      "tipo": "item",
+                      "id": "ectoplasm"
+                    },
+                    "texto": "Ectoplasm"
+                  },
+                  ", ",
+                  {
+                    "entidad": {
+                      "tipo": "item",
+                      "id": "stinky-hand"
+                    },
+                    "texto": "Stinky Hand"
+                  },
+                  ", ",
+                  {
+                    "entidad": {
+                      "tipo": "item",
+                      "id": "giant-ruby"
+                    },
+                    "texto": "Giant Ruby"
+                  },
+                  ", ",
+                  {
+                    "entidad": {
+                      "tipo": "item",
+                      "id": "king-ear"
+                    },
+                    "texto": "King Ear"
+                  }
+                ]
+              }
+            ],
+            [
+              {
+                "elemento": "ground"
+              },
+              {
+                "es": [
+                  {
+                    "entidad": {
+                      "tipo": "item",
+                      "id": "earth-stone"
+                    },
+                    "texto": "Earth Stone"
+                  }
+                ],
+                "en": [
+                  {
+                    "entidad": {
+                      "tipo": "item",
+                      "id": "earth-stone"
+                    },
+                    "texto": "Earth Stone"
+                  }
+                ]
+              },
+              {
+                "es": [
+                  {
+                    "entidad": {
+                      "tipo": "item",
+                      "id": "ground-fragment"
+                    },
+                    "texto": "Ground Fragment"
+                  }
+                ],
+                "en": [
+                  {
+                    "entidad": {
+                      "tipo": "item",
+                      "id": "ground-fragment"
+                    },
+                    "texto": "Ground Fragment"
+                  }
+                ]
+              },
+              {
+                "es": [
+                  {
+                    "entidad": {
+                      "tipo": "item",
+                      "id": "king-ear"
+                    },
+                    "texto": "King Ear"
+                  },
+                  ", ",
+                  {
+                    "entidad": {
+                      "tipo": "item",
+                      "id": "queen-ear"
+                    },
+                    "texto": "Queen Ear"
+                  },
+                  ", ",
+                  {
+                    "entidad": {
+                      "tipo": "item",
+                      "id": "stone-rocks"
+                    },
+                    "texto": "Stone Rocks"
+                  },
+                  ", ",
+                  {
+                    "entidad": {
+                      "tipo": "item",
+                      "id": "rock-plate"
+                    },
+                    "texto": "Rock Plate"
+                  },
+                  ", ",
+                  {
+                    "entidad": {
+                      "tipo": "item",
+                      "id": "steelix-tail"
+                    },
+                    "texto": "Steelix Tail"
+                  },
+                  ", ",
+                  {
+                    "entidad": {
+                      "tipo": "item",
+                      "id": "bone"
+                    },
+                    "texto": "Bone"
+                  },
+                  ", ",
+                  {
+                    "entidad": {
+                      "tipo": "item",
+                      "id": "piece-of-rock"
+                    },
+                    "texto": "Piece of Rock"
+                  }
+                ],
+                "en": [
+                  {
+                    "entidad": {
+                      "tipo": "item",
+                      "id": "king-ear"
+                    },
+                    "texto": "King Ear"
+                  },
+                  ", ",
+                  {
+                    "entidad": {
+                      "tipo": "item",
+                      "id": "queen-ear"
+                    },
+                    "texto": "Queen Ear"
+                  },
+                  ", ",
+                  {
+                    "entidad": {
+                      "tipo": "item",
+                      "id": "stone-rocks"
+                    },
+                    "texto": "Stone Rocks"
+                  },
+                  ", ",
+                  {
+                    "entidad": {
+                      "tipo": "item",
+                      "id": "rock-plate"
+                    },
+                    "texto": "Rock Plate"
+                  },
+                  ", ",
+                  {
+                    "entidad": {
+                      "tipo": "item",
+                      "id": "steelix-tail"
+                    },
+                    "texto": "Steelix Tail"
+                  },
+                  ", ",
+                  {
+                    "entidad": {
+                      "tipo": "item",
+                      "id": "bone"
+                    },
+                    "texto": "Bone"
+                  },
+                  ", ",
+                  {
+                    "entidad": {
+                      "tipo": "item",
+                      "id": "piece-of-rock"
+                    },
+                    "texto": "Piece of Rock"
+                  }
+                ]
+              }
+            ],
+            [
+              {
+                "elemento": "flying"
+              },
+              {
+                "es": [
+                  {
+                    "entidad": {
+                      "tipo": "item",
+                      "id": "feather-stone"
+                    },
+                    "texto": "Feather Stone"
+                  }
+                ],
+                "en": [
+                  {
+                    "entidad": {
+                      "tipo": "item",
+                      "id": "feather-stone"
+                    },
+                    "texto": "Feather Stone"
+                  }
+                ]
+              },
+              {
+                "es": [
+                  {
+                    "entidad": {
+                      "tipo": "item",
+                      "id": "flying-fragment"
+                    },
+                    "texto": "Flying Fragment"
+                  }
+                ],
+                "en": [
+                  {
+                    "entidad": {
+                      "tipo": "item",
+                      "id": "flying-fragment"
+                    },
+                    "texto": "Flying Fragment"
+                  }
+                ]
+              },
+              {
+                "es": [
+                  {
+                    "entidad": {
+                      "tipo": "item",
+                      "id": "farfetch-d-wing"
+                    },
+                    "texto": "Farfetch'd Wing"
+                  },
+                  ", ",
+                  {
+                    "entidad": {
+                      "tipo": "item",
+                      "id": "fire-wing"
+                    },
+                    "texto": "Fire Wing"
+                  },
+                  ", ",
+                  {
+                    "entidad": {
+                      "tipo": "item",
+                      "id": "steel-wing"
+                    },
+                    "texto": "Steel Wing"
+                  },
+                  ", ",
+                  {
+                    "entidad": {
+                      "tipo": "item",
+                      "id": "dodrio-feather"
+                    },
+                    "texto": "Dodrio Feather"
+                  },
+                  ", ",
+                  {
+                    "entidad": {
+                      "tipo": "item",
+                      "id": "dragonite-tail"
+                    },
+                    "texto": "Dragonite Tail"
+                  },
+                  ", ",
+                  {
+                    "entidad": {
+                      "tipo": "item",
+                      "id": "gyarados-tail"
+                    },
+                    "texto": "Gyarados Tail"
+                  },
+                  ", ",
+                  {
+                    "entidad": {
+                      "tipo": "item",
+                      "id": "scythe"
+                    },
+                    "texto": "Scythe"
+                  },
+                  ", ",
+                  {
+                    "entidad": {
+                      "tipo": "item",
+                      "id": "blue-ray-tail"
+                    },
+                    "texto": "Blue Ray Tail"
+                  }
+                ],
+                "en": [
+                  {
+                    "entidad": {
+                      "tipo": "item",
+                      "id": "farfetch-d-wing"
+                    },
+                    "texto": "Farfetch'd Wing"
+                  },
+                  ", ",
+                  {
+                    "entidad": {
+                      "tipo": "item",
+                      "id": "fire-wing"
+                    },
+                    "texto": "Fire Wing"
+                  },
+                  ", ",
+                  {
+                    "entidad": {
+                      "tipo": "item",
+                      "id": "steel-wing"
+                    },
+                    "texto": "Steel Wing"
+                  },
+                  ", ",
+                  {
+                    "entidad": {
+                      "tipo": "item",
+                      "id": "dodrio-feather"
+                    },
+                    "texto": "Dodrio Feather"
+                  },
+                  ", ",
+                  {
+                    "entidad": {
+                      "tipo": "item",
+                      "id": "dragonite-tail"
+                    },
+                    "texto": "Dragonite Tail"
+                  },
+                  ", ",
+                  {
+                    "entidad": {
+                      "tipo": "item",
+                      "id": "gyarados-tail"
+                    },
+                    "texto": "Gyarados Tail"
+                  },
+                  ", ",
+                  {
+                    "entidad": {
+                      "tipo": "item",
+                      "id": "scythe"
+                    },
+                    "texto": "Scythe"
+                  },
+                  ", ",
+                  {
+                    "entidad": {
+                      "tipo": "item",
+                      "id": "blue-ray-tail"
+                    },
+                    "texto": "Blue Ray Tail"
+                  }
+                ]
+              }
+            ],
+            [
+              {
+                "elemento": "psychic"
+              },
+              {
+                "es": [
+                  {
+                    "entidad": {
+                      "tipo": "item",
+                      "id": "enigma-stone"
+                    },
+                    "texto": "Enigma Stone"
+                  }
+                ],
+                "en": [
+                  {
+                    "entidad": {
+                      "tipo": "item",
+                      "id": "enigma-stone"
+                    },
+                    "texto": "Enigma Stone"
+                  }
+                ]
+              },
+              {
+                "es": [
+                  {
+                    "entidad": {
+                      "tipo": "item",
+                      "id": "psychic-fragment"
+                    },
+                    "texto": "Psychic Fragment"
+                  }
+                ],
+                "en": [
+                  {
+                    "entidad": {
+                      "tipo": "item",
+                      "id": "psychic-fragment"
+                    },
+                    "texto": "Psychic Fragment"
+                  }
+                ]
+              },
+              {
+                "es": [
+                  {
+                    "entidad": {
+                      "tipo": "item",
+                      "id": "psychic-wig"
+                    },
+                    "texto": "Psychic Wig"
+                  },
+                  ", ",
+                  {
+                    "entidad": {
+                      "tipo": "item",
+                      "id": "mimic-clothes"
+                    },
+                    "texto": "Mimic Clothes"
+                  },
+                  ", ",
+                  {
+                    "entidad": {
+                      "tipo": "item",
+                      "id": "two-eyed-black-tail"
+                    },
+                    "texto": "Two-eyed Black Tail"
+                  },
+                  ", ",
+                  {
+                    "entidad": {
+                      "tipo": "item",
+                      "id": "psychic-moustache"
+                    },
+                    "texto": "Psychic Moustache"
+                  },
+                  ", ",
+                  {
+                    "entidad": {
+                      "tipo": "item",
+                      "id": "psychic-ears"
+                    },
+                    "texto": "Psychic Ears"
+                  },
+                  ", ",
+                  {
+                    "entidad": {
+                      "tipo": "item",
+                      "id": "slowking-necklace"
+                    },
+                    "texto": "Slowking Necklace"
+                  }
+                ],
+                "en": [
+                  {
+                    "entidad": {
+                      "tipo": "item",
+                      "id": "psychic-wig"
+                    },
+                    "texto": "Psychic Wig"
+                  },
+                  ", ",
+                  {
+                    "entidad": {
+                      "tipo": "item",
+                      "id": "mimic-clothes"
+                    },
+                    "texto": "Mimic Clothes"
+                  },
+                  ", ",
+                  {
+                    "entidad": {
+                      "tipo": "item",
+                      "id": "two-eyed-black-tail"
+                    },
+                    "texto": "Two-eyed Black Tail"
+                  },
+                  ", ",
+                  {
+                    "entidad": {
+                      "tipo": "item",
+                      "id": "psychic-moustache"
+                    },
+                    "texto": "Psychic Moustache"
+                  },
+                  ", ",
+                  {
+                    "entidad": {
+                      "tipo": "item",
+                      "id": "psychic-ears"
+                    },
+                    "texto": "Psychic Ears"
+                  },
+                  ", ",
+                  {
+                    "entidad": {
+                      "tipo": "item",
+                      "id": "slowking-necklace"
+                    },
+                    "texto": "Slowking Necklace"
+                  }
+                ]
+              }
+            ],
+            [
+              {
+                "elemento": "bug"
+              },
+              {
+                "es": [
+                  {
+                    "entidad": {
+                      "tipo": "item",
+                      "id": "cocoon-stone"
+                    },
+                    "texto": "Cocoon Stone"
+                  }
+                ],
+                "en": [
+                  {
+                    "entidad": {
+                      "tipo": "item",
+                      "id": "cocoon-stone"
+                    },
+                    "texto": "Cocoon Stone"
+                  }
+                ]
+              },
+              {
+                "es": [
+                  {
+                    "entidad": {
+                      "tipo": "item",
+                      "id": "bug-fragment"
+                    },
+                    "texto": "Bug Fragment"
+                  }
+                ],
+                "en": [
+                  {
+                    "entidad": {
+                      "tipo": "item",
+                      "id": "bug-fragment"
+                    },
+                    "texto": "Bug Fragment"
+                  }
+                ]
+              },
+              {
+                "es": [
+                  {
+                    "entidad": {
+                      "tipo": "item",
+                      "id": "scythe"
+                    },
+                    "texto": "Scythe"
+                  },
+                  ", ",
+                  {
+                    "entidad": {
+                      "tipo": "item",
+                      "id": "scizor-claw"
+                    },
+                    "texto": "Scizor Claw"
+                  },
+                  ", ",
+                  {
+                    "entidad": {
+                      "tipo": "item",
+                      "id": "pinsir-horn"
+                    },
+                    "texto": "Pinsir Horn"
+                  }
+                ],
+                "en": [
+                  {
+                    "entidad": {
+                      "tipo": "item",
+                      "id": "scythe"
+                    },
+                    "texto": "Scythe"
+                  },
+                  ", ",
+                  {
+                    "entidad": {
+                      "tipo": "item",
+                      "id": "scizor-claw"
+                    },
+                    "texto": "Scizor Claw"
+                  },
+                  ", ",
+                  {
+                    "entidad": {
+                      "tipo": "item",
+                      "id": "pinsir-horn"
+                    },
+                    "texto": "Pinsir Horn"
+                  }
+                ]
+              }
+            ],
+            [
+              {
+                "elemento": "rock"
+              },
+              {
+                "es": [
+                  {
+                    "entidad": {
+                      "tipo": "item",
+                      "id": "rock-stone"
+                    },
+                    "texto": "Rock Stone"
+                  }
+                ],
+                "en": [
+                  {
+                    "entidad": {
+                      "tipo": "item",
+                      "id": "rock-stone"
+                    },
+                    "texto": "Rock Stone"
+                  }
+                ]
+              },
+              {
+                "es": [
+                  {
+                    "entidad": {
+                      "tipo": "item",
+                      "id": "rock-fragment"
+                    },
+                    "texto": "Rock Fragment"
+                  }
+                ],
+                "en": [
+                  {
+                    "entidad": {
+                      "tipo": "item",
+                      "id": "rock-fragment"
+                    },
+                    "texto": "Rock Fragment"
+                  }
+                ]
+              },
+              {
+                "es": [
+                  {
+                    "entidad": {
+                      "tipo": "item",
+                      "id": "tyranitar-tail"
+                    },
+                    "texto": "Tyranitar Tail"
+                  },
+                  ", ",
+                  {
+                    "entidad": {
+                      "tipo": "item",
+                      "id": "magma-shell"
+                    },
+                    "texto": "Magma Shell"
+                  },
+                  ", ",
+                  {
+                    "entidad": {
+                      "tipo": "item",
+                      "id": "rock-plate"
+                    },
+                    "texto": "Rock Plate"
+                  },
+                  ", ",
+                  {
+                    "entidad": {
+                      "tipo": "item",
+                      "id": "stone-rocks"
+                    },
+                    "texto": "Stone Rocks"
+                  }
+                ],
+                "en": [
+                  {
+                    "entidad": {
+                      "tipo": "item",
+                      "id": "tyranitar-tail"
+                    },
+                    "texto": "Tyranitar Tail"
+                  },
+                  ", ",
+                  {
+                    "entidad": {
+                      "tipo": "item",
+                      "id": "magma-shell"
+                    },
+                    "texto": "Magma Shell"
+                  },
+                  ", ",
+                  {
+                    "entidad": {
+                      "tipo": "item",
+                      "id": "rock-plate"
+                    },
+                    "texto": "Rock Plate"
+                  },
+                  ", ",
+                  {
+                    "entidad": {
+                      "tipo": "item",
+                      "id": "stone-rocks"
+                    },
+                    "texto": "Stone Rocks"
+                  }
+                ]
+              }
+            ],
+            [
+              {
+                "elemento": "ghost"
+              },
+              {
+                "es": [
+                  {
+                    "entidad": {
+                      "tipo": "item",
+                      "id": "ghost-stone"
+                    },
+                    "texto": "Ghost Stone"
+                  }
+                ],
+                "en": [
+                  {
+                    "entidad": {
+                      "tipo": "item",
+                      "id": "ghost-stone"
+                    },
+                    "texto": "Ghost Stone"
+                  }
+                ]
+              },
+              {
+                "es": [
+                  {
+                    "entidad": {
+                      "tipo": "item",
+                      "id": "ghost-fragment"
+                    },
+                    "texto": "Ghost Fragment"
+                  }
+                ],
+                "en": [
+                  {
+                    "entidad": {
+                      "tipo": "item",
+                      "id": "ghost-fragment"
+                    },
+                    "texto": "Ghost Fragment"
+                  }
+                ]
+              },
+              {
+                "es": [
+                  {
+                    "entidad": {
+                      "tipo": "item",
+                      "id": "ectoplasm"
+                    },
+                    "texto": "Ectoplasm"
+                  },
+                  ", ",
+                  {
+                    "entidad": {
+                      "tipo": "item",
+                      "id": "miss-traces"
+                    },
+                    "texto": "Miss Traces"
+                  },
+                  ", ",
+                  {
+                    "entidad": {
+                      "tipo": "item",
+                      "id": "yellow-mimikyu-head"
+                    },
+                    "texto": "Yellow Mimikyu Head"
+                  }
+                ],
+                "en": [
+                  {
+                    "entidad": {
+                      "tipo": "item",
+                      "id": "ectoplasm"
+                    },
+                    "texto": "Ectoplasm"
+                  },
+                  ", ",
+                  {
+                    "entidad": {
+                      "tipo": "item",
+                      "id": "miss-traces"
+                    },
+                    "texto": "Miss Traces"
+                  },
+                  ", ",
+                  {
+                    "entidad": {
+                      "tipo": "item",
+                      "id": "yellow-mimikyu-head"
+                    },
+                    "texto": "Yellow Mimikyu Head"
+                  }
+                ]
+              }
+            ],
+            [
+              {
+                "elemento": "dragon"
+              },
+              {
+                "es": [
+                  {
+                    "entidad": {
+                      "tipo": "item",
+                      "id": "crystal-stone"
+                    },
+                    "texto": "Crystal Stone"
+                  }
+                ],
+                "en": [
+                  {
+                    "entidad": {
+                      "tipo": "item",
+                      "id": "crystal-stone"
+                    },
+                    "texto": "Crystal Stone"
+                  }
+                ]
+              },
+              {
+                "es": [
+                  {
+                    "entidad": {
+                      "tipo": "item",
+                      "id": "dragon-fragment"
+                    },
+                    "texto": "Dragon Fragment"
+                  }
+                ],
+                "en": [
+                  {
+                    "entidad": {
+                      "tipo": "item",
+                      "id": "dragon-fragment"
+                    },
+                    "texto": "Dragon Fragment"
+                  }
+                ]
+              },
+              {
+                "es": [
+                  {
+                    "entidad": {
+                      "tipo": "item",
+                      "id": "dragonair-tail"
+                    },
+                    "texto": "Dragonair Tail"
+                  },
+                  ", ",
+                  {
+                    "entidad": {
+                      "tipo": "item",
+                      "id": "shadow-tail"
+                    },
+                    "texto": "Shadow Tail"
+                  },
+                  ", ",
+                  {
+                    "entidad": {
+                      "tipo": "item",
+                      "id": "sea-dragon-fin"
+                    },
+                    "texto": "Sea Dragon Fin"
+                  },
+                  ", ",
+                  {
+                    "entidad": {
+                      "tipo": "item",
+                      "id": "dragonite-tail"
+                    },
+                    "texto": "Dragonite Tail"
+                  }
+                ],
+                "en": [
+                  {
+                    "entidad": {
+                      "tipo": "item",
+                      "id": "dragonair-tail"
+                    },
+                    "texto": "Dragonair Tail"
+                  },
+                  ", ",
+                  {
+                    "entidad": {
+                      "tipo": "item",
+                      "id": "shadow-tail"
+                    },
+                    "texto": "Shadow Tail"
+                  },
+                  ", ",
+                  {
+                    "entidad": {
+                      "tipo": "item",
+                      "id": "sea-dragon-fin"
+                    },
+                    "texto": "Sea Dragon Fin"
+                  },
+                  ", ",
+                  {
+                    "entidad": {
+                      "tipo": "item",
+                      "id": "dragonite-tail"
+                    },
+                    "texto": "Dragonite Tail"
+                  }
+                ]
+              }
+            ],
+            [
+              {
+                "elemento": "fairy"
+              },
+              {
+                "es": [
+                  {
+                    "entidad": {
+                      "tipo": "item",
+                      "id": "heart-stone"
+                    }
+                  }
+                ],
+                "en": [
+                  {
+                    "entidad": {
+                      "tipo": "item",
+                      "id": "heart-stone"
+                    }
+                  }
+                ]
+              },
+              {
+                "es": [
+                  {
+                    "entidad": {
+                      "tipo": "item",
+                      "id": "fairy-fragment"
+                    },
+                    "texto": "Fairy Fragment"
+                  }
+                ],
+                "en": [
+                  {
+                    "entidad": {
+                      "tipo": "item",
+                      "id": "fairy-fragment"
+                    },
+                    "texto": "Fairy Fragment"
+                  }
+                ]
+              },
+              {
+                "es": [
+                  {
+                    "entidad": {
+                      "tipo": "item",
+                      "id": "mimic-clothes"
+                    },
+                    "texto": "Mimic Clothes"
+                  },
+                  ", ",
+                  {
+                    "entidad": {
+                      "tipo": "item",
+                      "id": "pink-fairy-bow"
+                    },
+                    "texto": "Pink Fairy Bow"
+                  },
+                  ", ",
+                  {
+                    "entidad": {
+                      "tipo": "item",
+                      "id": "mystic-petal"
+                    },
+                    "texto": "Mystic Petal"
+                  },
+                  ", ",
+                  {
+                    "entidad": {
+                      "tipo": "item",
+                      "id": "yellow-mimikyu-head"
+                    },
+                    "texto": "Yellow Mimikyu Head"
+                  }
+                ],
+                "en": [
+                  {
+                    "entidad": {
+                      "tipo": "item",
+                      "id": "mimic-clothes"
+                    },
+                    "texto": "Mimic Clothes"
+                  },
+                  ", ",
+                  {
+                    "entidad": {
+                      "tipo": "item",
+                      "id": "pink-fairy-bow"
+                    },
+                    "texto": "Pink Fairy Bow"
+                  },
+                  ", ",
+                  {
+                    "entidad": {
+                      "tipo": "item",
+                      "id": "mystic-petal"
+                    },
+                    "texto": "Mystic Petal"
+                  },
+                  ", ",
+                  {
+                    "entidad": {
+                      "tipo": "item",
+                      "id": "yellow-mimikyu-head"
+                    },
+                    "texto": "Yellow Mimikyu Head"
+                  }
+                ]
+              }
+            ],
+            [
+              {
+                "elemento": "dark"
+              },
+              {
+                "es": [
+                  {
+                    "entidad": {
+                      "tipo": "item",
+                      "id": "darkness-stone"
+                    },
+                    "texto": "Darkness Stone"
+                  }
+                ],
+                "en": [
+                  {
+                    "entidad": {
+                      "tipo": "item",
+                      "id": "darkness-stone"
+                    },
+                    "texto": "Darkness Stone"
+                  }
+                ]
+              },
+              {
+                "es": [
+                  {
+                    "entidad": {
+                      "tipo": "item",
+                      "id": "dark-fragment"
+                    },
+                    "texto": "Dark Fragment"
+                  }
+                ],
+                "en": [
+                  {
+                    "entidad": {
+                      "tipo": "item",
+                      "id": "dark-fragment"
+                    },
+                    "texto": "Dark Fragment"
+                  }
+                ]
+              },
+              {
+                "es": [
+                  {
+                    "entidad": {
+                      "tipo": "item",
+                      "id": "tyranitar-tail"
+                    },
+                    "texto": "Tyranitar Tail"
+                  },
+                  ", ",
+                  {
+                    "entidad": {
+                      "tipo": "item",
+                      "id": "dark-canine-horns"
+                    },
+                    "texto": "Dark Canine Horns"
+                  },
+                  ", ",
+                  {
+                    "entidad": {
+                      "tipo": "item",
+                      "id": "shadow-tail"
+                    },
+                    "texto": "Shadow Tail"
+                  },
+                  ", ",
+                  {
+                    "entidad": {
+                      "tipo": "item",
+                      "id": "dark-ears"
+                    },
+                    "texto": "Dark Ears"
+                  }
+                ],
+                "en": [
+                  {
+                    "entidad": {
+                      "tipo": "item",
+                      "id": "tyranitar-tail"
+                    },
+                    "texto": "Tyranitar Tail"
+                  },
+                  ", ",
+                  {
+                    "entidad": {
+                      "tipo": "item",
+                      "id": "dark-canine-horns"
+                    },
+                    "texto": "Dark Canine Horns"
+                  },
+                  ", ",
+                  {
+                    "entidad": {
+                      "tipo": "item",
+                      "id": "shadow-tail"
+                    },
+                    "texto": "Shadow Tail"
+                  },
+                  ", ",
+                  {
+                    "entidad": {
+                      "tipo": "item",
+                      "id": "dark-ears"
+                    },
+                    "texto": "Dark Ears"
+                  }
+                ]
+              }
+            ],
+            [
+              {
+                "elemento": "steel"
+              },
+              {
+                "es": [
+                  {
+                    "entidad": {
+                      "tipo": "item",
+                      "id": "metal-stone"
+                    },
+                    "texto": "Metal Stone"
+                  }
+                ],
+                "en": [
+                  {
+                    "entidad": {
+                      "tipo": "item",
+                      "id": "metal-stone"
+                    },
+                    "texto": "Metal Stone"
+                  }
+                ]
+              },
+              {
+                "es": [
+                  {
+                    "entidad": {
+                      "tipo": "item",
+                      "id": "steel-fragment"
+                    },
+                    "texto": "Steel Fragment"
+                  }
+                ],
+                "en": [
+                  {
+                    "entidad": {
+                      "tipo": "item",
+                      "id": "steel-fragment"
+                    },
+                    "texto": "Steel Fragment"
+                  }
+                ]
+              },
+              {
+                "es": [
+                  {
+                    "entidad": {
+                      "tipo": "item",
+                      "id": "steel-wing"
+                    },
+                    "texto": "Steel Wing"
+                  },
+                  ", ",
+                  {
+                    "entidad": {
+                      "tipo": "item",
+                      "id": "steelix-tail"
+                    },
+                    "texto": "Steelix Tail"
+                  },
+                  ", ",
+                  {
+                    "entidad": {
+                      "tipo": "item",
+                      "id": "scizor-claw"
+                    },
+                    "texto": "Scizor Claw"
+                  }
+                ],
+                "en": [
+                  {
+                    "entidad": {
+                      "tipo": "item",
+                      "id": "steel-wing"
+                    },
+                    "texto": "Steel Wing"
+                  },
+                  ", ",
+                  {
+                    "entidad": {
+                      "tipo": "item",
+                      "id": "steelix-tail"
+                    },
+                    "texto": "Steelix Tail"
+                  },
+                  ", ",
+                  {
+                    "entidad": {
+                      "tipo": "item",
+                      "id": "scizor-claw"
+                    },
+                    "texto": "Scizor Claw"
+                  }
+                ]
+              }
+            ]
+          ],
+          "variasLineas": true
+        }
+      ]
+    },
+    {
+      "id": "orden",
+      "titulo": {
+        "es": "Orden de inversión",
+        "en": "Investment order"
+      },
+      "bloques": [
+        {
+          "tipo": "parrafo",
+          "texto": {
+            "es": [
+              "En un equipo nuevo conviene repartir los primeros Boosts entre los Pokémon que de verdad usas en la rotación. Cuando el grupo esté estable, concentra las piedras más raras en los que más daño hacen."
+            ],
+            "en": [
+              "In a new team, spread the first Boosts among the Pokémon you actually use in your rotation. Once the group is stable, focus the rarest stones on the ones that deal the most damage."
+            ]
+          }
+        },
+        {
+          "tipo": "parrafo",
+          "texto": {
+            "es": ["Antes de usar una piedra cara, comprueba:"],
+            "en": ["Before using an expensive stone, check:"]
+          }
+        },
+        {
+          "tipo": "lista",
+          "puntos": [
+            {
+              "es": ["que es la Poké Ball correcta;"],
+              "en": ["that it is the right Poké Ball;"]
+            },
+            {
+              "es": ["que la banda de la piedra coincide con el Boost actual;"],
+              "en": ["that the stone's band matches the current Boost;"]
+            },
+            {
+              "es": ["que el elemento es compatible;"],
+              "en": ["that the element is compatible;"]
+            },
+            {
+              "es": ["que el Pokémon seguirá en el equipo principal."],
+              "en": ["that the Pokémon will stay in the main team."]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -4,7 +4,7 @@ Status: planned research path; not executed yet.
 
 ## Purpose
 
-Determine whether the client's `Buscar Ubicación` action receives a structured relation between a Pokémon/variant and map coordinates. The objective is to understand the data shape and provenance, not to automate gameplay or reproduce private sessions.
+Determine whether the client's `Buscar Ubicación` action receives a structured relation between a Pokémon/variant and map coordinates. The objective is to understand the data shape, not to automate gameplay or reproduce private sessions.
 
 This is an optional future acquisition path. The map preview, client markers and reviewed community contributions can continue without it.
 
@@ -36,35 +36,28 @@ Do not collect or store:
 
 The capture must remain observational and read-only. The game's rules prohibit bots, macros and software that automates or interferes with the game; this protocol is not permission to build a gameplay automation tool.
 
-## Evidence record
+## Resulting record
 
-Store a scrubbed staging record only after reviewing the capture:
+After reviewing the capture, only the game data goes into `content/` (no source, capture date or client version, D-012):
 
 ```json
 {
-  "subject": "Charmander",
-  "variant": "normal",
-  "locations": [{ "x": 0, "y": 0, "z": 0, "kind": "spawn_area" }],
-  "sourceType": "client_visible_network_observation",
-  "clientVersion": "known-or-unknown",
-  "observedAt": "2026-09-09T00:00:00-06:00",
-  "evidence": "redacted request/response summary plus client screenshot",
-  "claimState": "pending_review"
+  "pokemon": "charmander",
+  "ubicaciones": [{ "x": null, "y": null, "z": null, "tipo": "spawn_area" }]
 }
 ```
 
-The zero values above are placeholders for the schema example and must never be published as coordinates. A real record must preserve the original instant and derive display time with Temporal. Raw captures should remain outside the repository unless their privacy and redistribution scope are explicitly reviewed.
+The `null` values above are placeholders for the example; unknown coordinates stay `null` and are never published as `0`. Raw captures remain outside the repository unless their privacy and redistribution scope are explicitly reviewed.
 
 ## Validation before map use
 
 1. Confirm the selected Pokémon and variant match the visible client state.
 2. Confirm that every returned coordinate includes its floor or coordinate-system context.
 3. Compare the location against the OTMM-derived base and the client screenshot.
-4. Keep multiple locations as separate claims; do not overwrite one location with another.
-5. Mark the record `pending_review` until the owner or a reviewer confirms it.
-6. Record client/version and capture date so future server or map changes can be diffed.
+4. Keep multiple locations as separate records; do not overwrite one location with another.
+5. Write the record to `content/` only after the owner confirms it.
 
-If the action returns only an area name or image reference, keep it as semantic/visual evidence. It is not an exact coordinate record.
+If the action returns only an area name or image reference, keep it as an area. It is not an exact coordinate record.
 
 ## Expected result
 

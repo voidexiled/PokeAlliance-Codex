@@ -1,0 +1,14 @@
+{
+  "$schema": "./schemas/moves.schema.json",
+  "movimientos": [
+    {
+      "id": "scratch",
+      "nombre": "Scratch",
+      "elemento": "normal",
+      "slot": "M1",
+      "cooldownSegundos": 12,
+      "modo": "PVE",
+      "pokemon": ["chimchar"]
+    }
+  ]
+}

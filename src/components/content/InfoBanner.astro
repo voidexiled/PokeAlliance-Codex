@@ -1,0 +1,66 @@
+---
+// InfoBanner (spec 7.2.3, DS:InfoBanner): the red strip under the title of a page —
+// a game sprite in a 64 × 32 box and terse facts separated by «|». Once per page,
+// right after PageTitle or its lead paragraph (8.0.2, template C), and only when
+// there is at least one fact (8.9.2); the `banner` red is used nowhere else.
+//
+// Markup of the reference (`bundle.js`, InfoBanner): `div.ac-info-banner` with the
+// sprite box `span.ac-info-banner__sprite[aria-hidden]` and `div.ac-info-banner__facts`,
+// one `p.ac-info-banner__fact` per fact and a `span.ac-info-banner__sep[aria-hidden]`
+// between two of them. Below 1024 the facts stack and the separators hide
+// (info-banner.css).
+//
+// The sprite arrives as `SpriteProps` from the adapter (DP2) and is drawn at 1x,
+// centred in the box; only the Diamond of Comercio is animated, and that is the
+// caller's data (its `durations`), not a prop here. `null` is a known entity with no
+// sprite in the registry: the box keeps its place and shows the missing mark (8.9.2).
+// Without `sprite` the strip has no box, as in the reference.
+//
+// The facts are visible text, so they arrive already written in the page's locale
+// (DP1), each a short phrase without a final stop, labels with their colon (T33).
+// Nothing here names where a fact comes from (R6).
+
+import { Sprite, type SpriteProps } from '@/components/game/Sprite';
+import { MissingSprite } from '@/components/game/SpriteStage';
+
+interface Props {
+  /** Sprite of the 64 × 32 box, at 1x; `null` draws the missing mark. */
+  sprite?: SpriteProps | null;
+  /** Facts in reading order ('Requisito: Nivel 200', 'NPC: Dr. Vektor'). */
+  facts: string[];
+  /** Divider between facts, hidden from assistive tech. Default '|'. */
+  separator?: string;
+  /** Utilities added by the caller, after the component's own classes (3.8). */
+  class?: string;
+}
+
+const { sprite, facts, separator = '|', class: className } = Astro.props;
+
+// An empty fact would leave two separators side by side: it is dropped, and a strip
+// with no fact left is not drawn at all (C-R5).
+const shown = facts.filter((fact) => fact.trim() !== '');
+---
+
+{
+  shown.length > 0 && (
+    <div class:list={['ac-info-banner', className]}>
+      {sprite !== undefined && (
+        <span class="ac-info-banner__sprite" aria-hidden="true">
+          {sprite === null ? <MissingSprite size={16} /> : <Sprite {...sprite} scale={1} />}
+        </span>
+      )}
+      <div class="ac-info-banner__facts">
+        {shown.map((fact, index) => (
+          <>
+            {index > 0 && (
+              <span class="ac-info-banner__sep" aria-hidden="true">
+                {separator}
+              </span>
+            )}
+            <p class="ac-info-banner__fact">{fact}</p>
+          </>
+        ))}
+      </div>
+    </div>
+  )
+}

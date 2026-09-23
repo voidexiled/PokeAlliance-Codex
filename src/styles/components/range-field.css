@@ -1,0 +1,59 @@
+/* RangeField (spec 7.2.2; DS:RangeField), ported from the `.ac-range-field` block of the design
+   system's components/bundle.css. global.css imports this file with layer(components).
+
+   A borderless fieldset: the 14/22 legend 8 above two 40 px fields of radius 11 in tabular
+   numerals, 8 apart with a dash in `text-quinary` between them. The focus ring is the one of
+   base.css (spec 5.2). */
+
+.ac-range-field {
+  position: relative;
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.ac-range-field__legend {
+  margin: 0 0 var(--space-8);
+  padding: 0;
+  color: var(--text-primary);
+  @apply type-body;
+}
+
+.ac-range-field__row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-8);
+}
+
+.ac-range-field__input {
+  display: block;
+  width: 100%;
+  min-width: 0;
+  height: var(--size-control);
+  margin: 0;
+  padding: var(--space-8) var(--space-12);
+  border: 1px solid var(--border-secondary);
+  border-radius: var(--radius-11);
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  font-family: var(--font-sans);
+  @apply type-field;
+  font-variant-numeric: tabular-nums;
+}
+
+.ac-range-field__input:disabled {
+  color: var(--text-quaternary);
+  cursor: not-allowed;
+}
+
+.ac-range-field__dash {
+  color: var(--text-quinary);
+}
+
+/* Touch (spec 13.7, S14): both fields grow to `size-touch`. */
+@media (pointer: coarse) {
+  .ac-range-field__input {
+    height: var(--size-touch);
+  }
+}

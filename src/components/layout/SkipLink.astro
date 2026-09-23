@@ -1,0 +1,29 @@
+---
+// SkipLink (spec 7.2.1, DS:SkipLink): the first focusable element of every page.
+// It sits off screen until it takes keyboard focus and then jumps to <main>.
+//
+// The target is fixed: `contenido` is one of the ids another file depends on
+// (C-R4), so it is not a prop. The `visible` prop of the design system is a
+// preview-only flag and is not implemented (DP5).
+//
+// The label comes from the dictionary of the page's locale (13.2), never from
+// the Spanish default of the design system.
+import type { Locale } from '@/i18n/config';
+import type { Messages } from '@/i18n/messages/en';
+import { en } from '@/i18n/messages/en';
+import { es } from '@/i18n/messages/es';
+
+interface Props {
+  /** Page locale: picks the dictionary. */
+  locale: Locale;
+  /** Utilities added by the caller, after the component's own classes (3.8). */
+  class?: string;
+}
+
+const dictionaries: Record<Locale, Messages> = { es, en };
+
+const { locale, class: className } = Astro.props;
+const shell = dictionaries[locale].shell;
+---
+
+<a class:list={['ac-skip-link', className]} href="#contenido">{shell.skipToContent}</a>

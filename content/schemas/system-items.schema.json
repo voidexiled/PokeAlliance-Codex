@@ -1,0 +1,51 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://alliance-codex.local/schemas/system-items.schema.json",
+  "title": "Objetos de sistemas",
+  "description": "content/system-items.json: objetos que pertenecen a un sistema del juego. Si un valor no se conoce, va null.",
+  "type": "object",
+  "required": ["objetos"],
+  "additionalProperties": false,
+  "properties": {
+    "$schema": { "type": "string" },
+    "objetos": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/objeto" }
+    }
+  },
+  "$defs": {
+    "slug": {
+      "type": "string",
+      "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$",
+      "description": "Minúsculas, números y guiones (kebab-case)."
+    },
+    "texto": { "type": ["string", "null"], "minLength": 1 },
+    "objeto": {
+      "type": "object",
+      "required": ["id", "nombre", "tipo", "descripcion", "sistema"],
+      "additionalProperties": false,
+      "properties": {
+        "id": { "$ref": "#/$defs/slug" },
+        "nombre": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Nombre canónico del juego, en inglés."
+        },
+        "tipo": { "$ref": "#/$defs/texto" },
+        "descripcion": {
+          "$ref": "#/$defs/texto",
+          "description": "Para qué sirve, en inglés. Es el «Uso» de su tarjeta, de su fila y de su tooltip."
+        },
+        "sistema": {
+          "$ref": "#/$defs/texto",
+          "description": "id de su página de sistema en content/sistemas/. El objeto sale en la lista «Ítems» de esa página."
+        },
+        "sprite": {
+          "type": ["string", "null"],
+          "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*(?:/[a-z0-9]+(?:-[a-z0-9]+)*)*$",
+          "description": "Opcional. Clave de public/sprites/sprites.json. null o sin el campo, su casilla muestra la marca de sprite que falta."
+        }
+      }
+    }
+  }
+}

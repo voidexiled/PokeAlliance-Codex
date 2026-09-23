@@ -1,0 +1,615 @@
+{
+  "drops": [
+    {
+      "pokemon": "charizard",
+      "drops": [
+        {
+          "item": "essence-of-fire",
+          "nombre": "Essence of Fire",
+          "cantidad": null
+        },
+        {
+          "item": "straw",
+          "nombre": "Straw",
+          "cantidad": null
+        },
+        {
+          "item": "fire-wing",
+          "nombre": "Fire Wing",
+          "cantidad": null
+        },
+        {
+          "item": "fire-stone",
+          "nombre": "Fire Stone",
+          "cantidad": null
+        },
+        {
+          "item": "feather-stone",
+          "nombre": "Feather Stone",
+          "cantidad": null
+        }
+      ]
+    },
+    {
+      "pokemon": "shiny-charizard",
+      "drops": [
+        {
+          "item": "essence-of-fire",
+          "nombre": "Essence of Fire",
+          "cantidad": null
+        },
+        {
+          "item": "straw",
+          "nombre": "Straw",
+          "cantidad": null
+        },
+        {
+          "item": "dark-wing",
+          "nombre": "Dark Wing",
+          "cantidad": null
+        },
+        {
+          "item": "fire-stone",
+          "nombre": "Fire Stone",
+          "cantidad": null
+        },
+        {
+          "item": "feather-stone",
+          "nombre": "Feather Stone",
+          "cantidad": null
+        },
+        {
+          "item": "mythic-fire-orb",
+          "nombre": "Mythic Fire Orb",
+          "cantidad": null
+        }
+      ]
+    },
+    {
+      "pokemon": "pikachu",
+      "drops": [
+        {
+          "item": "screw",
+          "nombre": "Screw",
+          "cantidad": null
+        },
+        {
+          "item": "electric-rat-tail",
+          "nombre": "Electric Rat Tail",
+          "cantidad": null
+        },
+        {
+          "item": "thunder-stone",
+          "nombre": "Thunder Stone",
+          "cantidad": null
+        }
+      ]
+    },
+    {
+      "pokemon": "gengar",
+      "drops": [
+        {
+          "item": "ghost-essence",
+          "nombre": "Ghost Essence",
+          "cantidad": null
+        },
+        {
+          "item": "bottle-of-poison",
+          "nombre": "Bottle of Poison",
+          "cantidad": null
+        },
+        {
+          "item": "ectoplasm",
+          "nombre": "Ectoplasm",
+          "cantidad": null
+        },
+        {
+          "item": "venom-stone",
+          "nombre": "Venom Stone",
+          "cantidad": null
+        },
+        {
+          "item": "ghost-stone",
+          "nombre": "Ghost Stone",
+          "cantidad": null
+        }
+      ]
+    },
+    {
+      "pokemon": "shiny-gengar",
+      "drops": [
+        {
+          "item": "ghost-essence",
+          "nombre": "Ghost Essence",
+          "cantidad": null
+        },
+        {
+          "item": "bottle-of-poison",
+          "nombre": "Bottle of Poison",
+          "cantidad": null
+        },
+        {
+          "item": "dark-ectoplasm",
+          "nombre": "Dark Ectoplasm",
+          "cantidad": null
+        },
+        {
+          "item": "darkness-stone",
+          "nombre": "Darkness Stone",
+          "cantidad": null
+        },
+        {
+          "item": "venom-stone",
+          "nombre": "Venom Stone",
+          "cantidad": null
+        },
+        {
+          "item": "mythic-ghost-orb",
+          "nombre": "Mythic Ghost Orb",
+          "cantidad": null
+        }
+      ]
+    },
+    {
+      "pokemon": "gyarados",
+      "drops": [
+        {
+          "item": "water-gem",
+          "nombre": "Water Gem",
+          "cantidad": null
+        },
+        {
+          "item": "straw",
+          "nombre": "Straw",
+          "cantidad": null
+        },
+        {
+          "item": "gyarados-tail",
+          "nombre": "Gyarados Tail",
+          "cantidad": null
+        },
+        {
+          "item": "water-stone",
+          "nombre": "Water Stone",
+          "cantidad": null
+        },
+        {
+          "item": "crystal-stone",
+          "nombre": "Crystal Stone",
+          "cantidad": null
+        }
+      ]
+    },
+    {
+      "pokemon": "shiny-ditto",
+      "drops": [
+        {
+          "item": "rubber-ball",
+          "nombre": "Rubber Ball",
+          "cantidad": null
+        },
+        {
+          "item": "mutant-gosme",
+          "nombre": "Mutant Gosme",
+          "cantidad": null
+        },
+        {
+          "item": "heart-stone",
+          "nombre": "Heart Stone",
+          "cantidad": null
+        },
+        {
+          "item": "simple-normal-orb",
+          "nombre": "Simple Normal Orb",
+          "cantidad": null
+        }
+      ]
+    },
+    {
+      "pokemon": "shiny-dragonite",
+      "drops": [
+        {
+          "item": "dragon-scale",
+          "nombre": "Dragon Scale",
+          "cantidad": null
+        },
+        {
+          "item": "straw",
+          "nombre": "Straw",
+          "cantidad": null
+        },
+        {
+          "item": "golden-dragon-tail",
+          "nombre": "Golden Dragon Tail",
+          "cantidad": null
+        },
+        {
+          "item": "crystal-stone",
+          "nombre": "Crystal Stone",
+          "cantidad": null
+        },
+        {
+          "item": "feather-stone",
+          "nombre": "Feather Stone",
+          "cantidad": null
+        },
+        {
+          "item": "mythic-dragon-orb",
+          "nombre": "Mythic Dragon Orb",
+          "cantidad": null
+        }
+      ]
+    },
+    {
+      "pokemon": "mewtwo",
+      "drops": []
+    },
+    {
+      "pokemon": "shiny-hitmontop",
+      "drops": [
+        {
+          "item": "band-aid",
+          "nombre": "Band Aid",
+          "cantidad": null
+        },
+        {
+          "item": "punch-stone",
+          "nombre": "Punch Stone",
+          "cantidad": null
+        },
+        {
+          "item": "macho-brace",
+          "nombre": "Macho Brace",
+          "cantidad": null
+        },
+        {
+          "item": "capoeira-tail",
+          "nombre": "Capoeira Tail",
+          "cantidad": null
+        },
+        {
+          "item": "mythic-fighting-orb",
+          "nombre": "Mythic Fighting Orb",
+          "cantidad": null
+        }
+      ]
+    },
+    {
+      "pokemon": "tyranitar",
+      "drops": [
+        {
+          "item": "small-stone",
+          "nombre": "Small Stone",
+          "cantidad": null
+        },
+        {
+          "item": "dark-gem",
+          "nombre": "Dark Gem",
+          "cantidad": null
+        },
+        {
+          "item": "tyranitar-tail",
+          "nombre": "Tyranitar Tail",
+          "cantidad": null
+        },
+        {
+          "item": "rock-stone",
+          "nombre": "Rock Stone",
+          "cantidad": null
+        },
+        {
+          "item": "darkness-stone",
+          "nombre": "Darkness Stone",
+          "cantidad": null
+        }
+      ]
+    },
+    {
+      "pokemon": "rayquaza",
+      "drops": []
+    }
+  ],
+  "items": [
+    {
+      "id": "essence-of-fire",
+      "nombre": "Essence of Fire",
+      "dropDe": "44 Pokémon",
+      "elemento": null,
+      "uso": null,
+      "cantidad": null,
+      "precioNpc": null
+    },
+    {
+      "id": "straw",
+      "nombre": "Straw",
+      "dropDe": "67 Pokémon",
+      "elemento": null,
+      "uso": null,
+      "cantidad": null,
+      "precioNpc": null
+    },
+    {
+      "id": "dark-wing",
+      "nombre": "Dark Wing",
+      "dropDe": "Shiny Charizard",
+      "elemento": null,
+      "uso": "Evolución a Shiny Charizard",
+      "cantidad": null,
+      "precioNpc": null
+    },
+    {
+      "id": "fire-stone",
+      "nombre": "Fire Stone",
+      "dropDe": "50 Pokémon",
+      "elemento": "fire",
+      "uso": "Evolución y craft",
+      "cantidad": null,
+      "precioNpc": null
+    },
+    {
+      "id": "feather-stone",
+      "nombre": "Feather Stone",
+      "dropDe": "74 Pokémon",
+      "elemento": "flying",
+      "uso": "Evolución y craft",
+      "cantidad": null,
+      "precioNpc": null
+    },
+    {
+      "id": "mythic-fire-orb",
+      "nombre": "Mythic Fire Orb",
+      "dropDe": "12 Pokémon Shiny",
+      "elemento": null,
+      "uso": null,
+      "cantidad": null,
+      "precioNpc": null
+    },
+    {
+      "id": "crystal-stone",
+      "nombre": "Crystal Stone",
+      "dropDe": "28 Pokémon",
+      "elemento": "dragon",
+      "uso": null,
+      "cantidad": null,
+      "precioNpc": null
+    },
+    {
+      "id": "dragon-scale",
+      "nombre": "Dragon Scale",
+      "dropDe": "16 Pokémon",
+      "elemento": null,
+      "uso": null,
+      "cantidad": null,
+      "precioNpc": null
+    },
+    {
+      "id": "metal-coat",
+      "nombre": "Metal Coat",
+      "dropDe": "5 Pokémon",
+      "elemento": null,
+      "uso": null,
+      "cantidad": null,
+      "precioNpc": null
+    },
+    {
+      "id": "enhanced-normal-stone",
+      "nombre": "Enhanced Normal Stone",
+      "dropDe": null,
+      "elemento": "normal",
+      "uso": "Boost, banda +15 a +20",
+      "cantidad": null,
+      "precioNpc": null
+    },
+    {
+      "id": "black-lizard-tail",
+      "nombre": "Black Lizard Tail",
+      "dropDe": "Shiny Charmeleon",
+      "elemento": null,
+      "uso": "Evolución a Shiny Charmeleon",
+      "cantidad": null,
+      "precioNpc": null
+    }
+  ],
+  "ficha": {
+    "pokemon": "shiny-charizard",
+    "hp": 1700,
+    "experiencia": 54000,
+    "elementoMoveset": "fire",
+    "habilidades": ["Fly", "Light", "Strength", "Headbutt"],
+    "familia": [
+      "charmander",
+      "shiny-charmander",
+      "charmeleon",
+      "shiny-charmeleon",
+      "charizard",
+      "shiny-charizard"
+    ],
+    "evolucion": [
+      {
+        "de": "shiny-charmander",
+        "a": "shiny-charmeleon",
+        "nivel": 40,
+        "items": [
+          {
+            "item": "fire-stone",
+            "cantidad": null
+          },
+          {
+            "item": "black-lizard-tail",
+            "cantidad": null
+          }
+        ]
+      },
+      {
+        "de": "shiny-charmeleon",
+        "a": "shiny-charizard",
+        "nivel": 100,
+        "items": [
+          {
+            "item": "fire-stone",
+            "cantidad": null
+          },
+          {
+            "item": "dark-wing",
+            "cantidad": null
+          }
+        ]
+      }
+    ],
+    "donde": {
+      "hunts": [
+        {
+          "texto": "Mapa normal",
+          "ref": null,
+          "tooltip": []
+        },
+        {
+          "texto": "Wildscape",
+          "ref": null,
+          "tooltip": [
+            {
+              "etiqueta": "Experiencia desde:",
+              "valor": "Nivel 150"
+            },
+            {
+              "etiqueta": "Pokémon:",
+              "valor": "más fuertes"
+            },
+            {
+              "etiqueta": "Drops:",
+              "valor": "más frecuentes"
+            },
+            {
+              "etiqueta": "Shiny:",
+              "valor": "aparecen más"
+            }
+          ]
+        }
+      ],
+      "linkedTasks": [
+        {
+          "texto": "Inferno Sovereign",
+          "ref": null,
+          "tooltip": [
+            {
+              "etiqueta": "Linked Task:",
+              "valor": "n.º 16"
+            },
+            {
+              "etiqueta": "Objetivo:",
+              "valor": "800 Charizard"
+            },
+            {
+              "etiqueta": "Región:",
+              "valor": "Johto o Kanto"
+            },
+            {
+              "etiqueta": "Recompensa:",
+              "valor": "4.320.000 de experiencia"
+            }
+          ]
+        },
+        {
+          "texto": "Wildscape Hunter: Charizard",
+          "ref": null,
+          "tooltip": [
+            {
+              "etiqueta": "Linked Task:",
+              "valor": "n.º 19"
+            },
+            {
+              "etiqueta": "Objetivo:",
+              "valor": "10.000 Charizard"
+            },
+            {
+              "etiqueta": "Región:",
+              "valor": "Wildscape"
+            },
+            {
+              "etiqueta": "Recompensa:",
+              "valor": "5.000.000 de experiencia"
+            }
+          ]
+        }
+      ],
+      "equiposNpc": [
+        {
+          "texto": "Gym de Cinnabar",
+          "ref": null,
+          "tooltip": [
+            {
+              "etiqueta": "Sistema:",
+              "valor": "Gyms de Kanto"
+            },
+            {
+              "etiqueta": "Shiny Charizard:",
+              "valor": "Pokémon 5 de 6"
+            },
+            {
+              "etiqueta": "Insignia:",
+              "valor": "talento de CDR de la bag"
+            }
+          ]
+        },
+        {
+          "texto": "Officer Blaze",
+          "ref": null,
+          "tooltip": [
+            {
+              "etiqueta": "Sistema:",
+              "valor": "Polices semanales"
+            },
+            {
+              "etiqueta": "Shiny Charizard:",
+              "valor": "Pokémon 1 de 6"
+            },
+            {
+              "etiqueta": "Requisito:",
+              "valor": "Giovanni derrotado"
+            },
+            {
+              "etiqueta": "Combate:",
+              "valor": "3 minutos"
+            }
+          ]
+        },
+        {
+          "texto": "Rocket Mirage",
+          "ref": null,
+          "tooltip": [
+            {
+              "etiqueta": "Sistema:",
+              "valor": "Rockets semanales"
+            },
+            {
+              "etiqueta": "Shiny Charizard:",
+              "valor": "Pokémon 2 de 6"
+            },
+            {
+              "etiqueta": "Combate:",
+              "valor": "5 minutos"
+            },
+            {
+              "etiqueta": "Se renueva:",
+              "valor": "cada lunes"
+            }
+          ]
+        }
+      ]
+    },
+    "tooltipLinkedTasks": [
+      {
+        "etiqueta": "Atajo:",
+        "valor": "Ctrl+L"
+      },
+      {
+        "etiqueta": "Activas a la vez:",
+        "valor": "1"
+      },
+      {
+        "etiqueta": "Al cancelar:",
+        "valor": "se pierde el progreso"
+      }
+    ]
+  }
+}

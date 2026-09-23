@@ -1,0 +1,53 @@
+/* The two secondary lists of the Pokémon page (spec 8.3, 8.0.6): «Drops» (DropsList) and
+   «Tier list» (FamilyList), both in src/components/pokemon/. A per-page sheet of this page
+   family alone (13.6, D-018): the two islands import it, so it travels with them and never
+   reaches the shared sheet of global.css. Every other piece of the two lists — the card grid, the loot
+   and Pokédex cards, the slots panel, the table and its rows — is a design-system component
+   whose rules global.css already carries.
+
+   The layer order is repeated before the block, so the `components` layer keeps its place
+   whichever of the two sheets the browser reads first (3.6). */
+
+@layer properties, theme, base, components, utilities;
+
+@layer components {
+  /* A slot that opens nothing: the page's own entry of the Tier list (8.3, «sin enlace ni
+     tooltip») and a drop whose panel would have nothing below its title (R2). It keeps the
+     frame, the size and the corner Shiny mark of `ac-entity-slot` and drops its hover: a
+     slot that answers the pointer would promise an action it does not have (C-R5). */
+  .ac-entity-slot.ac-drops__static:hover {
+    background: var(--bg-primary);
+  }
+
+  /* The Tier list row of the page's own Pokémon (8.3): bold, as the page's own row of
+     DS:DataTable, while `aria-current="page"` sits on its name and not on the row. */
+  .ac-data-table__row:has(.ac-family__self) > * {
+    font-weight: 700;
+  }
+
+  /* Touch (S14, spec 13.7): the name of a Tier list row is the one target of its row and a
+     22 px line in a row of 40, so on a coarse pointer it gets a box of 44 × 44 at least,
+     centred in its cell, and its trigger answers in the whole box, as the name of a
+     `ListRow` does (list-row.css). The row grows to 44 with it. */
+  @media (pointer: coarse) {
+    .ac-family__name {
+      position: relative;
+      display: inline-flex;
+      min-width: var(--size-touch);
+      min-height: var(--size-touch);
+      align-items: center;
+      justify-content: center;
+      vertical-align: middle;
+    }
+
+    .ac-family__name .ac-nested-entity {
+      position: static;
+    }
+
+    .ac-family__name .ac-nested-entity__trigger::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+    }
+  }
+}

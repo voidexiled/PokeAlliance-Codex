@@ -1,0 +1,159 @@
+/* FeaturedCard and FeaturedSection (spec 7.2.7, 8.1 step 3, 8.6, 8.12; CARD_GRID_SYSTEM §6.4;
+   DS:FeaturedCard), ported from the `.ac-featured-card` and `.ac-featured-section` blocks of the
+   design system's components/bundle.css.
+
+   Per-page stylesheet. Only the home, the Buscar page and the 404 draw «Destacados», so this file
+   is not one of the @imports of global.css: src/components/home/FeaturedCard.tsx imports it and
+   the build writes it next to the pages that render the component (plan M10, D-018, §13.6: the
+   shared sheet keeps its S17 budget). Two consequences:
+
+   - it carries its own `@layer components` block and repeats the layer order of global.css
+     first, so the order holds whichever of the sheets the browser reads first (§3.6: a layer
+     that is named first is the weakest one);
+   - `@apply` needs the text styles of theme.css, which `@reference` brings in without writing
+     any of them here again.
+
+   A link card of 62 (12 + 36 + 12 of padding and sprite box, 1 + 1 of border): the sprite box
+   of 36, the label on one line with an ellipsis and the arrow of 12. The section is its own size
+   container: 4 columns from 824, 2 from 408, 1 below (divisors of 4, from `grid-featured` 200
+   and the gap of 8: 2 × 200 + 8 = 408, 4 × 200 + 3 × 8 = 824), so the home at 1440 (944) and at
+   1024 (992) takes 4, at 1280 (784) and 768 (736) takes 2 and a phone (358) takes 1. An empty
+   cell at the end of the row stays empty (CARD_GRID_SYSTEM §4, IN2).
+
+   Differences against the reference:
+
+   - the type pairs are `@apply type-ui-featured` and `@apply type-ui-caps` (spec 3.7);
+   - the container is named, so a query always measures the section and never a container the
+     page puts around it;
+   - the bounce and the two hover transitions use the motion tokens (`duration-bounce` with
+     `ease-bounce`, `duration-fast` with `ease-standard`) inside the reduced-motion guard (6.4);
+     the reference's reduced-motion override is not ported, because nothing here runs without
+     motion allowed. The keyframes are `ac-bounce` of motion.css;
+   - the 2 px step of the arrow on hover sits inside the same guard: with reduced motion the
+     arrow only changes colour, at once (6.2);
+   - the bounce lives on the wrapper of the sprite and not on the sprite: an animated sheet (the
+     Diamond) runs its own frame animation on the image, and one element cannot run both. */
+
+@reference '../theme.css';
+
+@layer properties, theme, base, components, utilities;
+
+@layer components {
+  /* The whole card is the link: sprite box, label and arrow in a row, 12 apart. */
+  .ac-featured-card {
+    display: flex;
+    min-width: 0;
+    align-items: center;
+    gap: var(--space-12);
+    padding: var(--space-12) var(--space-16);
+    border: 1px solid var(--border-secondary);
+    border-radius: var(--radius-12);
+    color: var(--text-primary);
+    text-decoration: none;
+  }
+
+  .ac-featured-card:hover {
+    background: var(--bg-tertiary);
+  }
+
+  /* The sprite box of 36: the sprite, at most 32 at integer scale, sits centred inside it. */
+  .ac-featured-card__sprite {
+    display: flex;
+    width: var(--size-sprite-featured);
+    height: var(--size-sprite-featured);
+    flex: none;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .ac-featured-card__bounce {
+    display: flex;
+  }
+
+  /* One line: a long name ends in an ellipsis and never makes the card taller. */
+  .ac-featured-card__label {
+    flex: 1;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    @apply type-ui-featured;
+  }
+
+  .ac-featured-card__arrow {
+    display: block;
+    flex: none;
+    color: var(--text-quaternary);
+  }
+
+  /* The arrow takes `text-tertiary` on hover; it also steps 2 to the right only when motion is
+     allowed (6.2: with reduced motion, the colour alone). */
+  .ac-featured-card:hover .ac-featured-card__arrow {
+    color: var(--text-tertiary);
+  }
+
+  /* «Destacados»: the h2 in ui-caps, 10 above the grid of cards. */
+  .ac-featured-section {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-10);
+    container-name: ac-featured-section;
+    container-type: inline-size;
+  }
+
+  .ac-featured-section__title {
+    margin: 0;
+    color: var(--text-tertiary);
+    @apply type-ui-caps;
+  }
+
+  .ac-featured-section__grid {
+    display: grid;
+    grid-template-columns: repeat(1, minmax(0, 1fr));
+    gap: var(--space-8);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .ac-featured-section__item {
+    display: flex;
+    min-width: 0;
+  }
+
+  .ac-featured-section__item > .ac-featured-card {
+    flex: 1;
+  }
+
+  @container ac-featured-section (width >= 408px) {
+    .ac-featured-section__grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  @container ac-featured-section (width >= 824px) {
+    .ac-featured-section__grid {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .ac-featured-card {
+      transition: background-color var(--duration-fast) var(--ease-standard);
+    }
+
+    .ac-featured-card__arrow {
+      transition:
+        transform var(--duration-fast) var(--ease-standard),
+        color var(--duration-fast) var(--ease-standard);
+    }
+
+    .ac-featured-card:hover .ac-featured-card__arrow {
+      transform: translateX(var(--space-2));
+    }
+
+    .ac-featured-card__bounce.ac-bounce {
+      animation: ac-bounce var(--duration-bounce) var(--ease-bounce) infinite;
+    }
+  }
+}

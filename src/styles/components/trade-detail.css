@@ -1,0 +1,127 @@
+/* The listing detail (spec 9.6, template F of 8.0.2): src/pages/[locale]/comercio/anuncio/[id].astro
+   and the seller block it draws, `SellerCard` of src/components/trade/SellerCard.tsx. There is
+   no board for this page: it is composed only of tokens and of pieces of the design system
+   (R16), with the geometry template F gives.
+
+   Per-page stylesheet (plan M12, D-018, §13.6): only this page draws these blocks, so
+   global.css does not import it; the page imports it and the build writes it next to the page.
+   It repeats the layer order of global.css before its block, so the `components` layer keeps
+   its place whichever of the two sheets the browser reads first (§3.6).
+
+   - The head: `PageTitle` and, 16 under its rule, the data line «{Mundo} · Publicado el
+     {fecha}» and the state, 12/16 in `text-tertiary`: the distance `Lienzo:Guild` keeps between
+     its title and its data row, the only board with a line of data under an h1.
+   - From 768 (`md:`) two columns: the fixed sheet of `size-tt` (282) and, 24 to its right, the
+     rest of the width with its sections 24 apart; below 768 one column, the sheet first.
+   - The sheet is `GameTooltip variant="sheet"` and, when the listing declares training or
+     memories, the panel that continues it with those sections (a section of `TipData` holds
+     no entity, 7.5.2). The two read as one sheet: no seam, no second radius, no padding between
+     them. The build writes this sheet before the shared one, so inside `components` a rule here
+     that only matches the rule of `GameTooltip` it overrides would lose to it: each of these
+     rules names the sheet as well, and outweighs the `GameTooltip` rule in every build.
+   - The seller block (`SellerCard`): the seller's `Rating` on its line, «Operaciones
+     confirmadas: N» under it. */
+
+@reference '../theme.css';
+
+@layer properties, theme, base, components, utilities;
+
+@layer components {
+  .ac-trade-detail__head {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-16);
+    min-width: 0;
+  }
+
+  .ac-trade-detail__meta {
+    margin: 0;
+    color: var(--text-tertiary);
+    @apply type-ui;
+  }
+
+  .ac-trade-detail {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--space-24);
+    min-width: 0;
+  }
+
+  @media (width >= 48rem) {
+    .ac-trade-detail {
+      flex-direction: row;
+    }
+  }
+
+  .ac-trade-detail__side {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    gap: var(--space-24);
+    align-self: stretch;
+    min-width: 0;
+  }
+
+  .ac-trade-sheet {
+    display: flex;
+    flex: none;
+    flex-direction: column;
+    width: var(--size-tt);
+  }
+
+  .ac-trade-sheet > .ac-game-tooltip:has(+ .ac-trade-sheet__more) {
+    padding-bottom: 0;
+    border-bottom-right-radius: 0;
+    border-bottom-left-radius: 0;
+  }
+
+  .ac-trade-sheet > .ac-trade-sheet__more {
+    padding-top: 0;
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+  }
+
+  /* Every trained skill of the listing in one section, 8 apart. */
+  .ac-trade-sheet .ac-trade-sheet__trainings {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-8);
+  }
+
+  /* The Ditto Memory: a line of links to the memorised Pokémon that wraps, 16 x 8. They are
+     links in running text (13.7, WCAG 2.5.8): 8 px at least from any other target, the toggle
+     above included, whose box reaches 6 px into the section body. */
+  .ac-trade-sheet__memories {
+    display: flex;
+    flex-wrap: wrap;
+    column-gap: var(--space-16);
+    row-gap: var(--space-8);
+    margin: 0;
+    padding: var(--space-16) 0 var(--space-6);
+  }
+
+  /* The toggles of the sheet are targets on a phone and under a coarse pointer (S14): 44 tall,
+     like every control there. */
+  @media (width < 48rem), (pointer: coarse) {
+    .ac-trade-sheet .ac-game-tooltip__toggle {
+      min-height: var(--size-touch);
+    }
+  }
+
+  /* «Dinero real» in 700, tabular like every price (9.6). */
+  .ac-trade-detail__fiat {
+    font-variant-numeric: tabular-nums;
+    @apply type-body-strong;
+  }
+
+  .ac-seller-card {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+  }
+
+  .ac-seller-card__rating {
+    margin: 0;
+  }
+}

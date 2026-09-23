@@ -1,0 +1,14 @@
+{
+  "$schema": "../schemas/sistemas.schema.json",
+  "id": "linked-tasks",
+  "titulo": {
+    "es": "Linked Tasks",
+    "en": "Linked Tasks"
+  },
+  "sprite": null,
+  "orden": 4,
+  "tooltip": [],
+  "intro": [],
+  "secciones": [],
+  "borrador": true
+}

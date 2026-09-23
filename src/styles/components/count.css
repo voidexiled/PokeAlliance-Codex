@@ -1,0 +1,12 @@
+/* Count (spec 7.2.3; DS:Count), ported from the `.ac-count` block of the design system's
+   components/bundle.css. global.css imports this file with layer(components).
+
+   The result count of a list bar: 12/16 in text-tertiary with tabular figures, no margin,
+   never bold and never in a chip. */
+
+.ac-count {
+  margin: 0;
+  color: var(--text-tertiary);
+  @apply type-ui;
+  font-variant-numeric: tabular-nums;
+}

@@ -1,0 +1,99 @@
+{
+  "v": 3,
+  "createdOnFiles": {
+    "v": 1,
+    "at": "2026-09-19T03:10:00Z"
+  },
+  "title": "Diseño Alliance Codex",
+  "launch": {
+    "view": "canvas"
+  },
+  "pages": [],
+  "boards": {
+    "Main.dc.html": {
+      "x": 0,
+      "y": 0,
+      "w": 1440,
+      "h": 1033,
+      "title": "Inicio",
+      "is_interactive": true
+    },
+    "Inicio-movil.dc.html": {
+      "x": 1520,
+      "y": 0,
+      "w": 390,
+      "h": 2360,
+      "title": "Inicio, móvil",
+      "is_interactive": true
+    },
+    "Pokedex.dc.html": {
+      "x": 1990,
+      "y": 0,
+      "w": 1440,
+      "h": 1904,
+      "title": "Pokédex",
+      "is_interactive": true
+    },
+    "Pokedex-Shiny-Charizard.dc.html": {
+      "x": 3510,
+      "y": 0,
+      "w": 1440,
+      "h": 2486,
+      "title": "Shiny Charizard",
+      "is_interactive": true
+    },
+    "Sistema-Boost.dc.html": {
+      "x": 5030,
+      "y": 0,
+      "w": 1440,
+      "h": 3647,
+      "title": "Sistema Boost",
+      "is_interactive": true
+    },
+    "Comercio.dc.html": {
+      "x": 6550,
+      "y": 0,
+      "w": 1440,
+      "h": 2568,
+      "title": "Comercio",
+      "is_interactive": true
+    },
+    "Guild.dc.html": {
+      "x": 8070,
+      "y": 0,
+      "w": 1440,
+      "h": 2360,
+      "title": "Guild",
+      "is_interactive": true
+    },
+    "Componentes.dc.html": {
+      "x": 9590,
+      "y": 0,
+      "w": 1440,
+      "h": 6535,
+      "title": "Componentes",
+      "is_interactive": true
+    },
+    "Tarjetas.dc.html": {
+      "x": 11110,
+      "y": 0,
+      "w": 1440,
+      "h": 10749,
+      "title": "Tarjetas y rejillas",
+      "is_interactive": true
+    }
+  },
+  "order": [
+    "Main.dc.html",
+    "Inicio-movil.dc.html",
+    "Pokedex.dc.html",
+    "Pokedex-Shiny-Charizard.dc.html",
+    "Sistema-Boost.dc.html",
+    "Comercio.dc.html",
+    "Guild.dc.html",
+    "Componentes.dc.html",
+    "Tarjetas.dc.html"
+  ],
+  "notes": {},
+  "designSystems": []
+}

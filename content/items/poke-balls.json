@@ -1,0 +1,44 @@
+{
+  "$schema": "../schemas/items.schema.json",
+  "items": [
+    {
+      "id": "alliance-ball",
+      "nombre": "Alliance Ball",
+      "clientId": null,
+      "categoria": "poke-balls",
+      "sprite": "items/poke-balls/alliance-ball",
+      "apilable": true,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      },
+      "borrador": true
+    },
+    {
+      "id": "premier-ball",
+      "nombre": "Premier Ball",
+      "clientId": null,
+      "categoria": "poke-balls",
+      "sprite": "items/poke-balls/premier-ball",
+      "apilable": null,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      },
+      "borrador": true
+    },
+    {
+      "id": "ultra-ball",
+      "nombre": "Ultra Ball",
+      "clientId": null,
+      "categoria": "poke-balls",
+      "sprite": "items/poke-balls/ultra-ball",
+      "apilable": null,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      },
+      "borrador": true
+    }
+  ]
+}

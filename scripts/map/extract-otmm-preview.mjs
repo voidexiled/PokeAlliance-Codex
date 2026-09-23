@@ -1,12 +1,13 @@
-import crypto from 'node:crypto';
 import fs from 'node:fs';
 import path from 'node:path';
 import zlib from 'node:zlib';
 
+import { formatJson } from '../content/lib/format-json.mjs';
+
 const repositoryRoot = process.cwd();
 const sourcePath = process.argv[2];
 const outputDirectory = path.resolve(repositoryRoot, 'public/data/map/otmm');
-const stagingPath = path.resolve(repositoryRoot, 'data/staging/local-otmm-preview.json');
+const floorsPath = path.resolve(repositoryRoot, 'content/map/floors.json');
 const targetFloors = new Set([1, 3, 4, 5, 6, 7, 8, 9]);
 const blockDimension = 64;
 const tileBytes = 3;
@@ -18,8 +19,6 @@ if (!sourcePath) {
 }
 
 const sourceBuffer = fs.readFileSync(sourcePath);
-const sourceStat = fs.statSync(sourcePath);
-const sourceHash = crypto.createHash('sha256').update(sourceBuffer).digest('hex').toUpperCase();
 const levels = new Map();
 
 function getLevel(z) {
@@ -80,12 +79,7 @@ if (sourceBuffer.subarray(0, 4).toString('ascii') !== 'OTMM') {
 }
 
 const dataStart = sourceBuffer.readUInt16LE(4);
-const version = sourceBuffer.readUInt16LE(6);
-const descriptionLength = sourceBuffer.readUInt16LE(12);
-const description = sourceBuffer.subarray(14, 14 + descriptionLength).toString('utf8');
 let offset = dataStart;
-let recordCount = 0;
-let parsedBytes = dataStart;
 
 while (offset + 5 <= sourceBuffer.length) {
   const x = sourceBuffer.readUInt16LE(offset);
@@ -107,7 +101,6 @@ while (offset + 5 <= sourceBuffer.length) {
     throw new Error(`Unexpected OTMM block size: ${block.length}; expected ${blockBytes}.`);
   }
   offset = compressedEnd;
-  recordCount += 1;
 
   if (targetFloors.has(z)) {
     const level = getLevel(z);
@@ -117,11 +110,10 @@ while (offset + 5 <= sourceBuffer.length) {
     level.maxX = Math.max(level.maxX, x + blockDimension - 1);
     level.maxY = Math.max(level.maxY, y + blockDimension - 1);
   }
-  parsedBytes = offset;
 }
 
 fs.mkdirSync(outputDirectory, { recursive: true });
-const manifestFloors = [];
+const floors = [];
 
 for (const z of [...targetFloors].sort((a, b) => a - b)) {
   const level = levels.get(z);
@@ -137,7 +129,6 @@ for (const z of [...targetFloors].sort((a, b) => a - b)) {
     rgba[index + 3] = 255;
   }
 
-  let seenTiles = 0;
   for (const block of level.blocks) {
     for (let tileY = 0; tileY < blockDimension; tileY += 1) {
       for (let tileX = 0; tileX < blockDimension; tileX += 1) {
@@ -151,47 +142,23 @@ for (const z of [...targetFloors].sort((a, b) => a - b)) {
         rgba[pixelOffset] = red;
         rgba[pixelOffset + 1] = green;
         rgba[pixelOffset + 2] = blue;
-        seenTiles += 1;
       }
     }
   }
 
   const asset = `floor-${z}.png`;
   fs.writeFileSync(path.join(outputDirectory, asset), encodePng(width, height, rgba));
-  manifestFloors.push({
+  floors.push({
     z,
-    asset: `/data/map/otmm/${asset}`,
-    width,
-    height,
-    blockCount: level.blocks.length,
-    seenTiles,
-    bounds: { minX: level.minX, minY: level.minY, maxX: level.maxX, maxY: level.maxY },
+    imagen: `/data/map/otmm/${asset}`,
+    ancho: width,
+    alto: height,
+    limites: { minX: level.minX, minY: level.minY, maxX: level.maxX, maxY: level.maxY },
   });
 }
 
-const manifest = {
-  schemaVersion: '0.1.0',
-  generatedAt: new Date().toISOString(),
-  sourceLocator: 'PokeAllianceV3/minimap854.otmm',
-  sourceSizeBytes: sourceBuffer.length,
-  sourceModifiedAt: sourceStat.mtime.toISOString(),
-  sourceSha256: sourceHash,
-  format: { signature: 'OTMM', version, description, blockDimension, tileBytes, downsample },
-  recordCount,
-  parsedBytes,
-  floors: manifestFloors,
-  limitations: [
-    'La miniatura representa el estado explorado y guardado por un cliente local.',
-    'Los colores proceden de la paleta compacta del minimapa; no son una textura oficial completa.',
-    'El snapshot no proporciona por sí solo nombres de ciudades, NPCs ni spawns semánticos.',
-  ],
-};
-
-fs.writeFileSync(stagingPath, `${JSON.stringify(manifest, null, 2)}\n`);
-console.log(
-  JSON.stringify(
-    { outputDirectory, stagingPath, sourceSha256: sourceHash, recordCount, floors: manifestFloors },
-    null,
-    2,
-  ),
+fs.writeFileSync(
+  floorsPath,
+  formatJson({ $schema: '../schemas/map-floors.schema.json', pisos: floors }),
 );
+console.log(JSON.stringify({ outputDirectory, floorsPath, floors }, null, 2));

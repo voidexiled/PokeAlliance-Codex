@@ -1,99 +1,56 @@
-# Dirección de diseño — Wiki moderna
+# Dirección de diseño — wiki fiel a RubinOT
 
-Estado: referencia visual aprobada y shell wiki implementado  
-Última actualización: 2026-09-09
+Estado: diseño aprobado por el propietario el 2026-09-19 (D-014). Se implementa en el Corte 0, hitos M1–M15 de [docs/IMPLEMENTATION_PLAN.md](IMPLEMENTATION_PLAN.md); el avance de cada hito está en [docs/CURRENT_STATUS.md](CURRENT_STATUS.md). La aceptación visual es del propietario (S22).
+Última actualización: 2026-09-23
 
-## Corrección de alcance
+Este documento describe la dirección aprobada y dice dónde vive cada parte. Los nombres y valores exactos están en `src/design/tokens.json` y en [DESIGN.md](../DESIGN.md), que los resume para agentes y herramientas.
 
-La interfaz creada durante la fundación y la primera entrega de Wiki Core es un prototipo técnico funcional, no el diseño final de Alliance Codex. El shell actual tomó decisiones visuales sin una fase de diseño aprobada y no debe utilizarse como referencia para continuar el producto.
+## Fuentes de verdad
 
-La dirección confirmada por el propietario es:
+En este orden de precedencia (D-014):
 
-- Alliance Codex debe sentirse como una wiki moderna y completa, no como una landing page.
-- La navegación principal debe organizar el conocimiento de la wiki; no presentar un conjunto de acciones de producto como si fuera un dashboard.
-- Las herramientas deben vivir dentro de la wiki, agrupadas en un apartado de Herramientas, y compartir búsqueda, navegación, fuentes y lenguaje visual con los artículos.
-- La prioridad visual es leer, explorar y encontrar información del juego: categorías, índices, artículos, breadcrumbs, búsqueda, navegación contextual y procedencia.
-- La referencia visual aprobada son las tres capturas de una wiki moderna compartidas por el propietario el 2026-09-09. Se usa como criterio de estructura y densidad, no como permiso para copiar marca, textos o assets.
+| Orden | Fuente                                                                                                                                                                                      | En el repositorio                                                                         | Qué fija                                                                                                                                            |
+| ----- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 1     | **Lienzo v5** — <https://claude.ai/artifact/AA7ujE9mRRKsMBWriyNxFH> (tableros: Main, Inicio-movil, Pokedex, Pokedex-Shiny-Charizard, Sistema-Boost, Comercio, Guild, Componentes, Tarjetas) | `design/boards/*.dc.html`; `design/render/render.mjs` dibuja un tablero                   | Geometría y composición de cada página con tablero. Sus textos y cifras son muestras, nunca datos.                                                  |
+| 2     | **Sistema de diseño** — <https://claude.ai/artifact/RJoXBjrTVJHCyTZNFmKS5C> (110 tokens, 22 estilos de texto, 65 componentes, guías en español)                                             | `src/design/tokens.json`; los componentes en `src/components/` y `src/styles/components/` | Tokens, tipografía, componentes, estados y textos por defecto.                                                                                      |
+| 3     | [docs/design/CARD_GRID_SYSTEM.md](design/CARD_GRID_SYSTEM.md)                                                                                                                               | —                                                                                         | Familias de rejilla, anatomía de tarjeta sobre subgrid, claves por unión y agrupación.                                                              |
+| 4     | [Especificación del Corte 0](CORTE_0_CODEX_TOOLTIP_SPEC.md)                                                                                                                                 | —                                                                                         | Cómo se lleva todo lo anterior al código: arquitectura CSS, componentes, páginas, Comercio, Guild, i18n, SEO, rendimiento, accesibilidad y pruebas. |
 
-## Referencia aprobada y decisiones implementadas
+Medidas y contexto: [docs/design/RUBINOT_DESIGN_REFERENCE.md](design/RUBINOT_DESIGN_REFERENCE.md) (valores medidos de RubinOT) y [docs/design/GAP_ANALYSIS.md](design/GAP_ANALYSIS.md) (el sitio anterior frente a esa referencia).
 
-Las capturas fijan una wiki documental sobria y densa, con información visible sin ruido:
+## El diseño
 
-- barra superior global con identidad pequeña, búsqueda centrada e idioma;
-- navegación lateral persistente, agrupada por áreas y con estado activo;
-- portada como índice de acceso y categorías, no como hero comercial;
-- fichas con breadcrumbs, título, secciones, resumen contextual y procedencia;
-- herramientas y cambios dentro de la navegación de la wiki;
-- paneles compactos, bordes discretos, una paleta oscura neutra y un solo acento funcional;
-- estados vacíos y límites editoriales expresados directamente, sin métricas decorativas.
+Lenguaje de interfaz fiel a RubinOT con contenido y sprites de PokeAlliance. No se copian la marca, los textos ni los assets de RubinOT.
 
-El shell implementado en `src/layouts/AppLayout.astro` y `src/styles/global.css` sigue esta dirección. La portada, Pokédex, ficha de Pokémon, herramientas, cambios y páginas de procedencia se adaptaron sin alterar los contratos de datos.
+- **Marco:** Verdana del sistema en 400 y 700, texto de 12 a 14 px y un solo tema, «Oscuro». Tres grises: `bg-primary` (#0c0e12), `bg-secondary` (#13161b) y `bg-tertiary` (#22262f), que es también el único hover. Bordes de 1 px `border-secondary` (#22262f) y `border-primary` (#373a41) en controles. Sin degradados, sombras de elevación ni brillos.
+- **Medidas a 1440:** cabecera de 64 (`layout-header`), barra lateral de 208 (`layout-sidebar`), separación de 40, columna de 944 (`layout-main`) o de 896 con el rail «Resumen» de 256 (`layout-main-rail`, `layout-rail`) y pie de una línea. Por debajo de 1280 (`layout-bp-xl`) el menú pasa a una hoja de 288 y el contenido lleva gutters de 16; en teléfono los objetivos miden 44.
+- **Color con significado:** enlaces de entidad en `link` (#93c5fd); foco con `ring` (#444ce7), 2 px con 1 px de separación; selección ámbar `selected` (#d97706) con anillo de 2 px, nunca en un enlace; `banner` (#991b1b) como único bloque de color sólido. El resto del color lo ponen los sprites.
+- **Capa de juego:** el tooltip del juego (`tt-panel` #21252c, etiquetas `tt-label` #e8c66a, valores blancos, Poppins 500 y 600 autoalojada) es la única superficie con lenguaje de juego, y solo para entidades del juego. Cada mención de una entidad lo abre; una tarjeta no abre tooltip, pero sus entidades anidadas sí.
+- **Listas:** Cards, Slots y Lista en toda lista de entidades, sobre rejillas de anatomía fija (fuente 3).
+- **Iconografía:** sprites reales del registro `public/sprites/sprites.json`, a escala entera dentro de una celda de 32. Los SVG quedan para los glifos utilitarios de `src/components/icons/Glyph.tsx`. Sin emoji.
+- **Dinero:** Pokédólares con su sprite y forma k/kk antes de cada importe del juego (D-013).
+- **Contenido:** solo de los registros de `content/`, con «—» para lo desconocido. Sin relleno, texto decorativo o meta, controles falsos, cifras inventadas ni procedencia (D-010, D-012).
+- **Movimiento:** 150 ms en hover y en la entrada del tooltip, rebote de sprites solo en Destacados y nada animado con `prefers-reduced-motion: reduce`.
 
-## Criterio de autoría y calidad anti-IA
+El propietario rechazó el 2026-09-18 tres direcciones anteriores: el tooltip del juego en todo el sitio, la Pokédex «dispositivo» roja y el navy/bronce ornamentado. La corrección del 2026-09-15 («más personalidad visual») se resuelve con sprites reales y con la capa de juego del tooltip, no con decoración.
 
-La aplicación no debe parecer escrita por un generador automático. Esto aplica tanto al diseño como a los textos, nombres de secciones, descripciones, estados y ejemplos.
+## Cómo se construye
 
-### Contenido
+- `src/design/tokens.json` es la fuente única de tokens. `pnpm design:tokens` escribe `src/styles/tokens.css`, `src/styles/theme.css` (utilidades de Tailwind y los 22 estilos `type-*`) y `src/lib/design/tokens.ts`; ninguno de los tres se edita a mano.
+- `pnpm design:check` hace cumplir las once reglas de §3.11 de la especificación: sin literales de color, longitud, duración ni curva fuera de los tokens, tipografía solo desde `theme.css`, animaciones solo dentro de `prefers-reduced-motion: no-preference`, entre otras.
+- Los componentes usan clases `ac-` y su CSS vive en `src/styles/components/`. `src/styles/global.css` es la hoja del sitio (≤ 100.000 B, S17) y los importa con `layer(components)`; el CSS de una sola familia de páginas lo importa su página o componente dentro de `@layer components` (D-018), y cada carpeta de páginas tiene su línea `@source` (D-017).
+- `src/layouts/PageLayout.astro` es el layout de las páginas nuevas.
 
-- Escribir con voz editorial directa, concreta y propia de una wiki de juego; describir qué es algo, cómo se obtiene o qué condición tiene.
-- Usar los nombres, términos y diferencias que realmente aparecen en PokeAlliance y en las fuentes revisadas; no inventar sinónimos para sonar más creativo.
-- No usar slogans, metáforas de marketing ni frases genéricas como “lleva tu experiencia al siguiente nivel”, “centro de conocimiento”, “catálogo vivo” o equivalentes.
-- No rellenar fichas con texto de transición, resúmenes obvios, claims no respaldados, cifras redondas falsas o ejemplos inventados.
-- Mostrar “desconocido”, “no publicado por la fuente” o “pendiente de revisión” cuando corresponda. La ausencia de información también es información.
-- Mantener una separación visible entre dato del juego, interpretación de una guía, observación del cliente y aporte comunitario.
-- Redactar cada idioma como una versión editorial revisada; no publicar traducciones mecánicas que cambien términos canónicos.
+## Qué sustituye
 
-### Diseño
+- El contrato visual anterior de este documento (tokens propios, radios de 12, rail de 208, columna de 1536).
+- La parte visual de D-010: nombre del sistema, prefijos de token propios y la tipografía de interfaz que proponía.
+- Las cinco hojas anteriores (`src/styles/legacy/`, 10.151 líneas) y `src/layouts/AppLayout.astro`, que salen en el cierre del corte (M15) junto con sus clases y variables.
 
-- Evitar la huella visual de interfaces generadas: gradientes decorativos, exceso de badges, paneles de métricas sin función, filas repetitivas de tarjetas, iconos intercambiables y jerarquías de “hero + CTA”.
-- Los componentes deben existir porque ayudan a leer, comparar, navegar o verificar un dato; si sólo decoran, no se justifican.
-- Preferir una jerarquía de wiki reconocible: navegación de secciones, índice, artículo, enlaces relacionados, historial/procedencia y estados editoriales.
-- Introducir variación sólo cuando tenga una razón de contenido: una ficha, una tabla, una lista, una advertencia o una herramienta no deben verse como la misma tarjeta con distinto texto.
-- Usar estados de carga, vacío y error escritos para la situación concreta, con una acción clara y sin dramatización.
+## Qué se conserva
 
-### Revisión obligatoria
+Rutas `es`/`en`, registros de `content/`, búsqueda, mapa (marcador hasta su corte), importación e historial de Guild, exportaciones, autenticación, contratos de datos y límites de Supabase. El rediseño no quita funcionalidad.
 
-Antes de aceptar una pantalla, revisar:
+## Aceptación
 
-1. ¿Podría existir este texto en cualquier producto genérico sin cambiar una palabra? Si sí, reescribirlo.
-2. ¿El componente ayuda a encontrar, entender o verificar información? Si no, eliminarlo.
-3. ¿Cada cifra, nombre, fecha y afirmación tiene una fuente o está marcado como pendiente?
-4. ¿La pantalla se siente como una página de wiki o como una landing/dashboard?
-5. ¿La traducción mantiene la terminología canónica y la intención editorial?
-
-## Modelo de experiencia a diseñar
-
-La propuesta base que deberá validarse antes de codificar el rediseño es una estructura de documentación/wiki:
-
-1. Barra superior global con identidad, búsqueda prominente, idioma y acciones de cuenta cuando existan.
-2. Navegación lateral de secciones de conocimiento, colapsable en pantallas pequeñas.
-3. Columna principal de artículo o índice, con jerarquía editorial y enlaces internos.
-4. Columna contextual opcional para tabla de contenidos, metadatos, fuentes y acciones de artículo.
-5. Breadcrumbs y navegación de retorno en cada superficie profunda.
-6. Herramientas como una sección de contenido de primer nivel, no como un producto visualmente separado.
-7. Home tipo portal de wiki: búsqueda, navegación por categorías, cambios recientes y accesos a conocimiento; sin hero comercial ni panel de métricas como foco principal.
-
-Las capturas del propietario convierten esta arquitectura en la dirección aprobada para la primera versión visual. El detalle de tokens y reglas de uso queda registrado en el shell y en este documento.
-
-## Gate de diseño
-
-El gate quedó satisfecho con las capturas proporcionadas por el propietario. Las restricciones para continuar son:
-
-- mantener la estructura de wiki y evitar regresar a un shell de landing o dashboard;
-- conservar textos concretos, terminología canónica y separación entre hechos, fuentes y pendientes;
-- no convertir herramientas, cambios o Server Save en superficies promocionales;
-- revisar cada nueva pantalla contra la lista anti-IA y contra la densidad de las capturas.
-
-El design system inicial ya fue producido en el shell: tokens semánticos, tipografía Geist, layout lateral, tabla/lista documental, paneles compactos, breadcrumbs, tabla de contenidos, búsqueda, estados vacíos y responsive.
-
-## Qué queda descartado del shell provisional
-
-- Home dominada por un hero de producto o una tarjeta de readiness.
-- Tarjetas de métricas como sustituto de la navegación de conocimiento.
-- Barra superior como única estructura de exploración.
-- La estética oscura/acento del prototipo anterior como decisión de marca; la versión actual la redujo a una base neutra y un acento funcional.
-- Cualquier nueva pantalla visual construida sobre estas decisiones sin pasar el gate de diseño.
-
-## Preservar mientras se rediseña
-
-El rediseño debe conservar la funcionalidad ya verificada: rutas localizadas, repositorio de contenido, búsqueda, evidencia/procedencia, Server Save con Temporal, contratos de datos, pruebas y límites de Supabase. La corrección es visual y de arquitectura de información; no autoriza perder datos ni reescribir la base técnica sin una razón independiente.
+Los criterios S1–S22 de §2 de la especificación, con la tabla «Criterios por fase». Los checks automáticos demuestran el contrato técnico; no sustituyen a S22, la revisión página por página del propietario frente a su tablero. Hasta que la confirme, el estado correcto es «implementado y verificado técnicamente; aceptación visual pendiente».

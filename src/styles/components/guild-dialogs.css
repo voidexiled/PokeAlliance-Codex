@@ -1,0 +1,132 @@
+/* The two dialogs of Guild (spec 10.10, 10.11): «Importar export», with its «Cortes», and
+   «Metas y cálculo». There is no board for them, so they are composed of design-system
+   components (Dialog, TextField, Textarea, NumberField, Select, Button, Notice, DataTable,
+   Section) and tokens (R16); this sheet lays out only what those components do not carry.
+
+   Per-page sheet (D-018, 13.6): only the Guild page opens these dialogs, so
+   src/components/guild/GoalsDialog.tsx and ImportDialog.tsx import it and global.css does not.
+   The layer order of global.css is repeated before the block (3.6).
+
+   - Goals: each group («Metas normales», «Metas premium», «Puntos por daily») is a fieldset
+     with its legend in 14/22 700 and a table of fields — the row names in the first column,
+     the fields filling the others —, 4 between rows. The empty-field help is 12/16 `helper`.
+   - The count of invalid fields sits at the left of the footer, in 12/16, with the buttons
+     still at the right (A14). The DS has no error look, so it is not coloured.
+   - Import: the file picker is labelled like a `TextField` and its button takes the look of
+     the default `Button`; the result lines of the notice are one per line. */
+
+@reference '../theme.css';
+
+@layer properties, theme, base, components, utilities;
+
+@layer components {
+  .ac-guild-dialog__group {
+    min-width: 0;
+    margin: 0;
+    padding: 0;
+    border: 0;
+  }
+
+  .ac-guild-dialog__legend {
+    margin-bottom: var(--space-8);
+    padding: 0;
+    @apply type-body-strong;
+  }
+
+  .ac-guild-dialog__matrix {
+    width: 100%;
+    border-collapse: collapse;
+  }
+
+  .ac-guild-dialog__matrix th {
+    padding: var(--space-4) var(--space-8) var(--space-4) 0;
+    text-align: left;
+    white-space: nowrap;
+    @apply type-body;
+  }
+
+  .ac-guild-dialog__matrix thead th {
+    padding-top: 0;
+    @apply type-ui-strong;
+  }
+
+  .ac-guild-dialog__matrix td {
+    padding: var(--space-4) 0 var(--space-4) var(--space-8);
+  }
+
+  .ac-guild-dialog__matrix td:first-of-type {
+    padding-left: 0;
+  }
+
+  .ac-guild-dialog__matrix th + td {
+    padding-left: 0;
+  }
+
+  .ac-guild-dialog__range {
+    color: var(--text-tertiary);
+    white-space: nowrap;
+    @apply type-ui;
+  }
+
+  .ac-guild-dialog__range + td {
+    padding-left: var(--space-8);
+  }
+
+  .ac-guild-dialog__helper {
+    margin: 0;
+    color: var(--helper);
+    @apply type-ui;
+  }
+
+  .ac-guild-dialog__invalid {
+    margin: 0 auto 0 0;
+    align-self: center;
+    color: var(--text-secondary);
+    @apply type-ui;
+  }
+
+  .ac-guild-dialog__field {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-8);
+    min-width: 0;
+  }
+
+  .ac-guild-dialog__label {
+    color: var(--text-primary);
+    @apply type-body;
+  }
+
+  .ac-guild-dialog__file {
+    max-width: 100%;
+    color: var(--text-secondary);
+    font-family: var(--font-sans);
+    @apply type-body;
+  }
+
+  .ac-guild-dialog__file::file-selector-button {
+    height: var(--size-control);
+    margin-right: var(--space-12);
+    padding: 0 var(--space-16);
+    border: 1px solid var(--border-primary);
+    border-radius: var(--radius-11);
+    background: transparent;
+    color: var(--text-primary);
+    font-family: var(--font-sans);
+    cursor: pointer;
+    @apply type-body;
+  }
+
+  .ac-guild-dialog__file::file-selector-button:hover {
+    background: var(--bg-tertiary);
+  }
+
+  .ac-guild-dialog__submit {
+    display: flex;
+    justify-content: flex-end;
+  }
+
+  .ac-guild-dialog__line {
+    display: block;
+  }
+}

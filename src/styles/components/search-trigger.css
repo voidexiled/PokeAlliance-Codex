@@ -1,0 +1,125 @@
+/* SearchTrigger (spec 5.6, 7.9.1), ported from the design system's components/bundle.css.
+   global.css imports this file with layer(components).
+
+   One button with four shapes. The base is 40 tall with a 1 px `border-secondary`
+   rule, `radius-12` and placeholder text in `text-quaternary`; the lens is the
+   only piece in `text-primary` (`text-tertiary` in `home` and `mobile`).
+
+   The keycap is `type-kbd`: the mono family of 3.9 exists for this one string. */
+
+.ac-search-trigger {
+  display: flex;
+  align-items: center;
+  height: var(--size-control);
+  margin: 0;
+  border: 1px solid var(--border-secondary);
+  border-radius: var(--radius-12);
+  background: transparent;
+  color: var(--text-quaternary);
+  font-family: var(--font-sans);
+  @apply type-body;
+  text-align: left;
+  cursor: pointer;
+}
+
+.ac-search-trigger:hover {
+  background: var(--bg-tertiary);
+}
+
+.ac-search-trigger__label {
+  display: flex;
+  min-width: 0;
+  align-items: center;
+  gap: var(--space-8);
+}
+
+.ac-search-trigger__icon {
+  display: block;
+  flex: none;
+  color: var(--text-primary);
+}
+
+.ac-search-trigger__text {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.ac-search-trigger__kbd {
+  flex: none;
+  padding: 1px var(--space-6);
+  border-radius: var(--radius-8);
+  background: var(--bg-secondary);
+  color: var(--text-primary);
+  @apply type-kbd;
+}
+
+/* Header: 448 x 40, which Header centres on the whole band. */
+
+.ac-search-trigger--header {
+  justify-content: space-between;
+  width: var(--layout-search);
+  max-width: 100%;
+  padding: 0 var(--space-4) 0 var(--space-12);
+}
+
+/* Inicio: the width of the main column, wider gaps, grey lens. */
+
+.ac-search-trigger--home {
+  justify-content: space-between;
+  gap: var(--space-12);
+  width: 100%;
+  padding: 0 var(--space-16);
+}
+
+/* Inicio on a phone: 44 tall and no keycap. */
+
+.ac-search-trigger--mobile {
+  gap: var(--space-12);
+  width: 100%;
+  height: var(--size-touch);
+  padding: 0 var(--space-16);
+}
+
+.ac-search-trigger--home .ac-search-trigger__label,
+.ac-search-trigger--mobile .ac-search-trigger__label {
+  gap: var(--space-12);
+}
+
+.ac-search-trigger--home .ac-search-trigger__icon,
+.ac-search-trigger--mobile .ac-search-trigger__icon {
+  color: var(--text-tertiary);
+}
+
+/* Phone header: a 44 x 44 icon button, like the other header buttons. */
+
+.ac-search-trigger--icon {
+  justify-content: center;
+  width: var(--size-touch);
+  height: var(--size-touch);
+  padding: 0;
+  border: 0;
+  border-radius: var(--radius-11);
+  color: var(--text-primary);
+}
+
+/* Not in the reference, asked for by 13.7: with a coarse pointer every target
+   measures 44, which is the rule the design system already writes for the Select
+   trigger and the palette field (7.9.3). The two shapes below are the ones that
+   would stay at 40: `mobile` and `icon` are already 44. */
+
+@media (pointer: coarse) {
+  .ac-search-trigger--header,
+  .ac-search-trigger--home {
+    height: var(--size-touch);
+  }
+}
+
+/* Hover of a trigger: background-color only, the first row of 6.2. */
+
+@media (prefers-reduced-motion: no-preference) {
+  .ac-search-trigger {
+    transition: background-color var(--duration-fast) var(--ease-standard);
+  }
+}

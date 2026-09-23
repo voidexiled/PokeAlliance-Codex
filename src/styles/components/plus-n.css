@@ -1,0 +1,219 @@
+/* PlusN (spec 7.2.5, 7.5.8; DS:PlusN), ported from the `.ac-plus-n` block of the design
+   system's components/bundle.css. global.css imports this file with layer(components).
+
+   A pill in a chip line, or a square the size of the slot it follows. Its list is a
+   surface of the interface — `bg-tertiary`, a 1 px `border-primary` border, radius 8 —
+   and never the panel of the game tooltip, which is only for game entities (R2).
+
+   Three differences against the reference, the same ones `game-tooltip.css` takes for the
+   panel and for the same reason: the list is a `popover="manual"` that
+   `src/scripts/game-tooltip.ts` places with @floating-ui/dom, so the reference's six
+   placement modifiers are not ported, the declarations that undo the user agent styles of
+   `[popover]` are, and the bridge hangs off the `data-side` the controller writes.
+
+   The reference's `.ac-plus-n__button:hover` is not ported either: it repeats the
+   `bg-tertiary` the pill already has. The square does change ink on hover, and that rule
+   is here. */
+
+.ac-plus-n {
+  position: relative;
+  display: inline-flex;
+  flex: none;
+}
+
+.ac-plus-n__button {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  padding: var(--space-4) var(--space-8);
+  border: 0;
+  border-radius: var(--radius-full);
+  background: var(--bg-tertiary);
+  color: var(--text-primary);
+  font-variant-numeric: tabular-nums;
+  cursor: pointer;
+  @apply type-ui;
+}
+
+/* Hover of the square: `background-color` over duration-fast (spec 6.2). */
+@media (prefers-reduced-motion: no-preference) {
+  .ac-plus-n__button {
+    transition: background-color var(--duration-fast) var(--ease-standard);
+  }
+}
+
+/* Square: one more slot in a strip, the sixth of a compact drop line. */
+.ac-plus-n--square .ac-plus-n__button {
+  justify-content: center;
+  padding: 0;
+  border: 1px solid var(--border-secondary);
+  border-radius: var(--radius-8);
+  background: var(--bg-primary);
+}
+
+.ac-plus-n--square .ac-plus-n__button:hover {
+  background: var(--bg-tertiary);
+}
+
+.ac-plus-n--s32 .ac-plus-n__button {
+  width: var(--size-cell);
+  height: var(--size-cell);
+}
+
+.ac-plus-n--s36 .ac-plus-n__button {
+  width: var(--size-slot-drop);
+  height: var(--size-slot-drop);
+}
+
+.ac-plus-n--s40 .ac-plus-n__button {
+  width: var(--size-slot);
+  height: var(--size-slot);
+}
+
+.ac-plus-n--s44 .ac-plus-n__button {
+  width: var(--size-touch);
+  height: var(--size-touch);
+}
+
+.ac-plus-n--s72 .ac-plus-n__button {
+  width: var(--size-stage);
+  height: var(--size-stage);
+}
+
+/* The list as a popover: the top layer takes it out of every `overflow` and every stacking
+   context, and the controller writes `inset`, `margin`, `left`, `top` and the `max-height`
+   the `size` middleware computed. `position`, `inset`, `margin`, `border` and `padding`
+   are what the user agent styles of `[popover]` need undone.
+
+   `display` is not set here. An author `display` on a `[popover]` beats the user agent's
+   `display: none` for a closed one, whatever the layer, and would leave every list of the
+   page on screen; the column layout is only given to the open list, below. */
+.ac-plus-n__popover {
+  /* Gap between the list and its button, which the bridge below has to cover: 6 px above
+     and below, 8 px at the side, the offsets of 7.5.5. */
+  --ac-plus-n-gap: var(--space-6);
+
+  position: fixed;
+  inset: auto;
+  z-index: var(--z-tooltip);
+  flex-direction: column;
+  gap: var(--space-6);
+  margin: 0;
+  padding: var(--space-8) var(--space-10);
+  overflow: visible;
+  border: 1px solid var(--border-primary);
+  border-radius: var(--radius-8);
+  background: var(--bg-tertiary);
+  color: var(--text-primary);
+  list-style: none;
+  white-space: nowrap;
+  @apply type-ui;
+}
+
+/* Open: the controller writes `data-open` before `showPopover()` and removes it before
+   `hidePopover()`, so the attribute and the open state never disagree. */
+.ac-plus-n__popover[data-open] {
+  display: flex;
+}
+
+.ac-plus-n__button[data-ac-tt-placement='side'] + .ac-plus-n__popover {
+  --ac-plus-n-gap: var(--space-8);
+}
+
+/* Where `popover` is not supported (spec 6.5) the attribute is ignored and the user agent
+   hides nothing. The list is hidden here, before anything paints, and the rule above shows
+   it with the same `data-open`. */
+@supports not selector(:popover-open) {
+  .ac-plus-n__popover {
+    display: none;
+  }
+}
+
+/* Safe bridge (spec 7.5.6): a transparent strip of the list, on the side that faces the
+   button, as wide as the list and as deep as the gap plus 2 px. The list is a descendant
+   of `.ac-plus-n`, so a pointer crossing the gap never leaves the wrapper and the close
+   of TT2 is never scheduled. */
+.ac-plus-n__popover[data-side]::before {
+  content: '';
+  position: absolute;
+}
+
+.ac-plus-n__popover[data-side='top']::before {
+  top: 100%;
+  right: 0;
+  left: 0;
+  height: calc(var(--ac-plus-n-gap) + 2px);
+}
+
+.ac-plus-n__popover[data-side='bottom']::before {
+  right: 0;
+  bottom: 100%;
+  left: 0;
+  height: calc(var(--ac-plus-n-gap) + 2px);
+}
+
+.ac-plus-n__popover[data-side='right']::before {
+  top: 0;
+  right: 100%;
+  bottom: 0;
+  width: calc(var(--ac-plus-n-gap) + 2px);
+}
+
+.ac-plus-n__popover[data-side='left']::before {
+  top: 0;
+  bottom: 0;
+  left: 100%;
+  width: calc(var(--ac-plus-n-gap) + 2px);
+}
+
+.ac-plus-n__item {
+  display: flex;
+  align-items: center;
+  gap: var(--space-8);
+}
+
+/* A list that does not fit scrolls inside itself, on every device (spec 7.5.5). Like the
+   panel of `game-tooltip.css`, only the list the controller marks with `data-ac-tt-scroll`
+   does, because a scroll container clips the bridge that hangs outside it; a list that
+   fits keeps its bridge. */
+.ac-plus-n__popover[data-ac-tt-scroll] {
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+
+.ac-plus-n__popover[data-ac-tt-scroll]::before {
+  content: none;
+}
+
+/* Touch: the pill and the squares keep their size and get a 44 px hit area (spec 5.8); the
+   40 square alone grows, with the slots it follows. */
+@media (pointer: coarse) {
+  .ac-plus-n__button {
+    position: relative;
+  }
+
+  /* The 40 square follows a 40 `EntitySlot`, which grows to the 44 touch target here
+     (`entity-slot.css`): the square grows with it and stays the size of its strip. */
+  .ac-plus-n--s40 .ac-plus-n__button {
+    width: var(--size-touch);
+    height: var(--size-touch);
+  }
+
+  .ac-plus-n__button::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: max(100%, var(--size-touch));
+    height: var(--size-touch);
+    transform: translate(-50%, -50%);
+  }
+}
+
+/* The same 150 ms entry as the panel (spec 6.2, motion.css), replayed on every open
+   because the browser takes the list out of `display: none`. */
+@media (prefers-reduced-motion: no-preference) {
+  .ac-plus-n__popover {
+    animation: ac-tt-in var(--duration-fast) var(--ease-standard);
+  }
+}

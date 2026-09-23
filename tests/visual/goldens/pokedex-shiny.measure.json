@@ -1,0 +1,1535 @@
+{
+ "declaredHeight": 1904,
+ "renderedHeight": 1904,
+ "width": 1440,
+ "contentHeight": 1224,
+ "overflow": false,
+ "emptyTail": 680,
+ "lowest": {
+  "path": "#dc-root > div:nth-child(1) > div:nth-child(1) > div:nth-child(3) > main:nth-child(2) > footer:nth-child(4)",
+  "kind": "box"
+ },
+ "rawHoles": [],
+ "brokenImages": [],
+ "webFontsLoaded": [],
+ "grids": [
+  {
+   "kind": "grid",
+   "path": "#dc-root > div:nth-child(1) > div:nth-child(1) > div:nth-child(3) > main:nth-child(2) > div:nth-child(3) > div:nth-child(3) > div:nth-child(1)",
+   "rect": {
+    "x": 248,
+    "y": 395,
+    "w": 944,
+    "h": 668
+   },
+   "columns": 3,
+   "children": 5,
+   "painted": 5,
+   "cards": true,
+   "inTooltip": false,
+   "alignItems": "normal",
+   "label": "Shiny Charizard Nº 6 · Generación 1 Requisito Ni",
+   "maxSpread": 0,
+   "rows": [
+    {
+     "y": 395,
+     "children": [
+      0,
+      1,
+      2
+     ],
+     "heights": [
+      326,
+      326,
+      326
+     ],
+     "heightSpread": 0,
+     "hollowBottom": [
+      17,
+      17,
+      17
+     ],
+     "padBottom": [
+      17,
+      17,
+      17
+     ],
+     "zones": {
+      "head": {
+       "offsets": [
+        17,
+        17,
+        17
+       ],
+       "spread": 0,
+       "missing": 0
+      },
+      "facts": {
+       "offsets": [
+        93,
+        93,
+        93
+       ],
+       "spread": 0,
+       "missing": 0
+      },
+      "elements": {
+       "offsets": [
+        187,
+        187,
+        187
+       ],
+       "spread": 0,
+       "missing": 0
+      },
+      "drops": {
+       "offsets": [
+        223,
+        223,
+        223
+       ],
+       "spread": 0,
+       "missing": 0
+      }
+     }
+    },
+    {
+     "y": 737,
+     "children": [
+      3,
+      4
+     ],
+     "heights": [
+      326,
+      326
+     ],
+     "heightSpread": 0,
+     "hollowBottom": [
+      17,
+      45
+     ],
+     "padBottom": [
+      17,
+      17
+     ],
+     "zones": {
+      "head": {
+       "offsets": [
+        17,
+        17
+       ],
+       "spread": 0,
+       "missing": 0
+      },
+      "facts": {
+       "offsets": [
+        93,
+        93
+       ],
+       "spread": 0,
+       "missing": 0
+      },
+      "elements": {
+       "offsets": [
+        187,
+        187
+       ],
+       "spread": 0,
+       "missing": 0
+      },
+      "drops": {
+       "offsets": [
+        223,
+        223
+       ],
+       "spread": 0,
+       "missing": 0
+      }
+     }
+    }
+   ]
+  },
+  {
+   "kind": "grid",
+   "path": "#dc-root > div:nth-child(1) > div:nth-child(1) > div:nth-child(3) > main:nth-child(2) > div:nth-child(3) > div:nth-child(3) > div:nth-child(1) > article:nth-child(1)",
+   "rect": {
+    "x": 248,
+    "y": 395,
+    "w": 304,
+    "h": 326
+   },
+   "columns": 1,
+   "children": 4,
+   "painted": 0,
+   "cards": false,
+   "inTooltip": false,
+   "alignItems": "normal",
+   "label": "Shiny Charizard Nº 6 · Generación 1",
+   "maxSpread": 0,
+   "rows": [
+    {
+     "y": 412,
+     "children": [
+      0
+     ],
+     "heights": [
+      64
+     ],
+     "heightSpread": 0,
+     "hollowBottom": [
+      0
+     ],
+     "padBottom": [
+      0
+     ]
+    },
+    {
+     "y": 488,
+     "children": [
+      1
+     ],
+     "heights": [
+      82
+     ],
+     "heightSpread": 0,
+     "hollowBottom": [
+      1
+     ],
+     "padBottom": [
+      0
+     ]
+    },
+    {
+     "y": 582,
+     "children": [
+      2
+     ],
+     "heights": [
+      24
+     ],
+     "heightSpread": 0,
+     "hollowBottom": [
+      0
+     ],
+     "padBottom": [
+      0
+     ]
+    },
+    {
+     "y": 618,
+     "children": [
+      3
+     ],
+     "heights": [
+      86
+     ],
+     "heightSpread": 0,
+     "hollowBottom": [
+      0
+     ],
+     "padBottom": [
+      0
+     ]
+    }
+   ]
+  },
+  {
+   "kind": "grid",
+   "path": "#dc-root > div:nth-child(1) > div:nth-child(1) > div:nth-child(3) > main:nth-child(2) > div:nth-child(3) > div:nth-child(3) > div:nth-child(1) > article:nth-child(1) > dl:nth-child(2)",
+   "rect": {
+    "x": 265,
+    "y": 488,
+    "w": 270,
+    "h": 82
+   },
+   "columns": 1,
+   "children": 4,
+   "painted": 0,
+   "cards": false,
+   "inTooltip": false,
+   "alignItems": "normal",
+   "label": "Requisito Nivel 120",
+   "maxSpread": 0,
+   "rows": [
+    {
+     "y": 488,
+     "children": [
+      0
+     ],
+     "heights": [
+      16
+     ],
+     "heightSpread": 0,
+     "hollowBottom": [
+      1
+     ],
+     "padBottom": [
+      0
+     ]
+    },
+    {
+     "y": 510,
+     "children": [
+      1
+     ],
+     "heights": [
+      16
+     ],
+     "heightSpread": 0,
+     "hollowBottom": [
+      1
+     ],
+     "padBottom": [
+      0
+     ]
+    },
+    {
+     "y": 532,
+     "children": [
+      2
+     ],
+     "heights": [
+      16
+     ],
+     "heightSpread": 0,
+     "hollowBottom": [
+      1
+     ],
+     "padBottom": [
+      0
+     ]
+    },
+    {
+     "y": 554,
+     "children": [
+      3
+     ],
+     "heights": [
+      16
+     ],
+     "heightSpread": 0,
+     "hollowBottom": [
+      1
+     ],
+     "padBottom": [
+      0
+     ]
+    }
+   ]
+  },
+  {
+   "kind": "grid",
+   "path": "#dc-root > div:nth-child(1) > div:nth-child(1) > div:nth-child(3) > main:nth-child(2) > div:nth-child(3) > div:nth-child(3) > div:nth-child(1) > article:nth-child(2)",
+   "rect": {
+    "x": 568,
+    "y": 395,
+    "w": 304,
+    "h": 326
+   },
+   "columns": 1,
+   "children": 4,
+   "painted": 0,
+   "cards": false,
+   "inTooltip": false,
+   "alignItems": "normal",
+   "label": "Shiny Gengar Nº 94 · Generación 1",
+   "maxSpread": 0,
+   "rows": [
+    {
+     "y": 412,
+     "children": [
+      0
+     ],
+     "heights": [
+      64
+     ],
+     "heightSpread": 0,
+     "hollowBottom": [
+      0
+     ],
+     "padBottom": [
+      0
+     ]
+    },
+    {
+     "y": 488,
+     "children": [
+      1
+     ],
+     "heights": [
+      82
+     ],
+     "heightSpread": 0,
+     "hollowBottom": [
+      1
+     ],
+     "padBottom": [
+      0
+     ]
+    },
+    {
+     "y": 582,
+     "children": [
+      2
+     ],
+     "heights": [
+      24
+     ],
+     "heightSpread": 0,
+     "hollowBottom": [
+      0
+     ],
+     "padBottom": [
+      0
+     ]
+    },
+    {
+     "y": 618,
+     "children": [
+      3
+     ],
+     "heights": [
+      86
+     ],
+     "heightSpread": 0,
+     "hollowBottom": [
+      0
+     ],
+     "padBottom": [
+      0
+     ]
+    }
+   ]
+  },
+  {
+   "kind": "grid",
+   "path": "#dc-root > div:nth-child(1) > div:nth-child(1) > div:nth-child(3) > main:nth-child(2) > div:nth-child(3) > div:nth-child(3) > div:nth-child(1) > article:nth-child(2) > dl:nth-child(2)",
+   "rect": {
+    "x": 585,
+    "y": 488,
+    "w": 270,
+    "h": 82
+   },
+   "columns": 1,
+   "children": 4,
+   "painted": 0,
+   "cards": false,
+   "inTooltip": false,
+   "alignItems": "normal",
+   "label": "Requisito Nivel 120",
+   "maxSpread": 0,
+   "rows": [
+    {
+     "y": 488,
+     "children": [
+      0
+     ],
+     "heights": [
+      16
+     ],
+     "heightSpread": 0,
+     "hollowBottom": [
+      1
+     ],
+     "padBottom": [
+      0
+     ]
+    },
+    {
+     "y": 510,
+     "children": [
+      1
+     ],
+     "heights": [
+      16
+     ],
+     "heightSpread": 0,
+     "hollowBottom": [
+      1
+     ],
+     "padBottom": [
+      0
+     ]
+    },
+    {
+     "y": 532,
+     "children": [
+      2
+     ],
+     "heights": [
+      16
+     ],
+     "heightSpread": 0,
+     "hollowBottom": [
+      1
+     ],
+     "padBottom": [
+      0
+     ]
+    },
+    {
+     "y": 554,
+     "children": [
+      3
+     ],
+     "heights": [
+      16
+     ],
+     "heightSpread": 0,
+     "hollowBottom": [
+      1
+     ],
+     "padBottom": [
+      0
+     ]
+    }
+   ]
+  },
+  {
+   "kind": "grid",
+   "path": "#dc-root > div:nth-child(1) > div:nth-child(1) > div:nth-child(3) > main:nth-child(2) > div:nth-child(3) > div:nth-child(3) > div:nth-child(1) > article:nth-child(3)",
+   "rect": {
+    "x": 888,
+    "y": 395,
+    "w": 304,
+    "h": 326
+   },
+   "columns": 1,
+   "children": 4,
+   "painted": 1,
+   "cards": false,
+   "inTooltip": false,
+   "alignItems": "normal",
+   "label": "Shiny Ditto Nº 132 · Generación 1",
+   "maxSpread": 0,
+   "rows": [
+    {
+     "y": 412,
+     "children": [
+      0
+     ],
+     "heights": [
+      64
+     ],
+     "heightSpread": 0,
+     "hollowBottom": [
+      0
+     ],
+     "padBottom": [
+      0
+     ]
+    },
+    {
+     "y": 488,
+     "children": [
+      1
+     ],
+     "heights": [
+      82
+     ],
+     "heightSpread": 0,
+     "hollowBottom": [
+      1
+     ],
+     "padBottom": [
+      0
+     ]
+    },
+    {
+     "y": 582,
+     "children": [
+      2
+     ],
+     "heights": [
+      24
+     ],
+     "heightSpread": 0,
+     "hollowBottom": [
+      4
+     ],
+     "padBottom": [
+      4
+     ]
+    },
+    {
+     "y": 618,
+     "children": [
+      3
+     ],
+     "heights": [
+      86
+     ],
+     "heightSpread": 0,
+     "hollowBottom": [
+      0
+     ],
+     "padBottom": [
+      0
+     ]
+    }
+   ]
+  },
+  {
+   "kind": "grid",
+   "path": "#dc-root > div:nth-child(1) > div:nth-child(1) > div:nth-child(3) > main:nth-child(2) > div:nth-child(3) > div:nth-child(3) > div:nth-child(1) > article:nth-child(3) > dl:nth-child(2)",
+   "rect": {
+    "x": 905,
+    "y": 488,
+    "w": 270,
+    "h": 82
+   },
+   "columns": 1,
+   "children": 4,
+   "painted": 0,
+   "cards": false,
+   "inTooltip": false,
+   "alignItems": "normal",
+   "label": "Requisito Nivel 1",
+   "maxSpread": 0,
+   "rows": [
+    {
+     "y": 488,
+     "children": [
+      0
+     ],
+     "heights": [
+      16
+     ],
+     "heightSpread": 0,
+     "hollowBottom": [
+      1
+     ],
+     "padBottom": [
+      0
+     ]
+    },
+    {
+     "y": 510,
+     "children": [
+      1
+     ],
+     "heights": [
+      16
+     ],
+     "heightSpread": 0,
+     "hollowBottom": [
+      1
+     ],
+     "padBottom": [
+      0
+     ]
+    },
+    {
+     "y": 532,
+     "children": [
+      2
+     ],
+     "heights": [
+      16
+     ],
+     "heightSpread": 0,
+     "hollowBottom": [
+      1
+     ],
+     "padBottom": [
+      0
+     ]
+    },
+    {
+     "y": 554,
+     "children": [
+      3
+     ],
+     "heights": [
+      16
+     ],
+     "heightSpread": 0,
+     "hollowBottom": [
+      1
+     ],
+     "padBottom": [
+      0
+     ]
+    }
+   ]
+  },
+  {
+   "kind": "grid",
+   "path": "#dc-root > div:nth-child(1) > div:nth-child(1) > div:nth-child(3) > main:nth-child(2) > div:nth-child(3) > div:nth-child(3) > div:nth-child(1) > article:nth-child(4)",
+   "rect": {
+    "x": 248,
+    "y": 737,
+    "w": 304,
+    "h": 326
+   },
+   "columns": 1,
+   "children": 4,
+   "painted": 0,
+   "cards": false,
+   "inTooltip": false,
+   "alignItems": "normal",
+   "label": "Shiny Dragonite Nº 149 · Generación 1",
+   "maxSpread": 0,
+   "rows": [
+    {
+     "y": 754,
+     "children": [
+      0
+     ],
+     "heights": [
+      64
+     ],
+     "heightSpread": 0,
+     "hollowBottom": [
+      0
+     ],
+     "padBottom": [
+      0
+     ]
+    },
+    {
+     "y": 830,
+     "children": [
+      1
+     ],
+     "heights": [
+      82
+     ],
+     "heightSpread": 0,
+     "hollowBottom": [
+      1
+     ],
+     "padBottom": [
+      0
+     ]
+    },
+    {
+     "y": 924,
+     "children": [
+      2
+     ],
+     "heights": [
+      24
+     ],
+     "heightSpread": 0,
+     "hollowBottom": [
+      0
+     ],
+     "padBottom": [
+      0
+     ]
+    },
+    {
+     "y": 960,
+     "children": [
+      3
+     ],
+     "heights": [
+      86
+     ],
+     "heightSpread": 0,
+     "hollowBottom": [
+      0
+     ],
+     "padBottom": [
+      0
+     ]
+    }
+   ]
+  },
+  {
+   "kind": "grid",
+   "path": "#dc-root > div:nth-child(1) > div:nth-child(1) > div:nth-child(3) > main:nth-child(2) > div:nth-child(3) > div:nth-child(3) > div:nth-child(1) > article:nth-child(4) > dl:nth-child(2)",
+   "rect": {
+    "x": 265,
+    "y": 830,
+    "w": 270,
+    "h": 82
+   },
+   "columns": 1,
+   "children": 4,
+   "painted": 0,
+   "cards": false,
+   "inTooltip": false,
+   "alignItems": "normal",
+   "label": "Requisito Nivel 120",
+   "maxSpread": 0,
+   "rows": [
+    {
+     "y": 830,
+     "children": [
+      0
+     ],
+     "heights": [
+      16
+     ],
+     "heightSpread": 0,
+     "hollowBottom": [
+      1
+     ],
+     "padBottom": [
+      0
+     ]
+    },
+    {
+     "y": 852,
+     "children": [
+      1
+     ],
+     "heights": [
+      16
+     ],
+     "heightSpread": 0,
+     "hollowBottom": [
+      1
+     ],
+     "padBottom": [
+      0
+     ]
+    },
+    {
+     "y": 874,
+     "children": [
+      2
+     ],
+     "heights": [
+      16
+     ],
+     "heightSpread": 0,
+     "hollowBottom": [
+      1
+     ],
+     "padBottom": [
+      0
+     ]
+    },
+    {
+     "y": 896,
+     "children": [
+      3
+     ],
+     "heights": [
+      16
+     ],
+     "heightSpread": 0,
+     "hollowBottom": [
+      1
+     ],
+     "padBottom": [
+      0
+     ]
+    }
+   ]
+  },
+  {
+   "kind": "grid",
+   "path": "#dc-root > div:nth-child(1) > div:nth-child(1) > div:nth-child(3) > main:nth-child(2) > div:nth-child(3) > div:nth-child(3) > div:nth-child(1) > article:nth-child(5)",
+   "rect": {
+    "x": 568,
+    "y": 737,
+    "w": 304,
+    "h": 326
+   },
+   "columns": 1,
+   "children": 4,
+   "painted": 1,
+   "cards": false,
+   "inTooltip": false,
+   "alignItems": "normal",
+   "label": "Shiny Hitmontop Nº 237 · Generación 2",
+   "maxSpread": 0,
+   "rows": [
+    {
+     "y": 754,
+     "children": [
+      0
+     ],
+     "heights": [
+      64
+     ],
+     "heightSpread": 0,
+     "hollowBottom": [
+      0
+     ],
+     "padBottom": [
+      0
+     ]
+    },
+    {
+     "y": 830,
+     "children": [
+      1
+     ],
+     "heights": [
+      82
+     ],
+     "heightSpread": 0,
+     "hollowBottom": [
+      1
+     ],
+     "padBottom": [
+      0
+     ]
+    },
+    {
+     "y": 924,
+     "children": [
+      2
+     ],
+     "heights": [
+      24
+     ],
+     "heightSpread": 0,
+     "hollowBottom": [
+      4
+     ],
+     "padBottom": [
+      4
+     ]
+    },
+    {
+     "y": 960,
+     "children": [
+      3
+     ],
+     "heights": [
+      86
+     ],
+     "heightSpread": 0,
+     "hollowBottom": [
+      28
+     ],
+     "padBottom": [
+      0
+     ]
+    }
+   ]
+  },
+  {
+   "kind": "grid",
+   "path": "#dc-root > div:nth-child(1) > div:nth-child(1) > div:nth-child(3) > main:nth-child(2) > div:nth-child(3) > div:nth-child(3) > div:nth-child(1) > article:nth-child(5) > dl:nth-child(2)",
+   "rect": {
+    "x": 585,
+    "y": 830,
+    "w": 270,
+    "h": 82
+   },
+   "columns": 1,
+   "children": 4,
+   "painted": 0,
+   "cards": false,
+   "inTooltip": false,
+   "alignItems": "normal",
+   "label": "Requisito Nivel 120",
+   "maxSpread": 0,
+   "rows": [
+    {
+     "y": 830,
+     "children": [
+      0
+     ],
+     "heights": [
+      16
+     ],
+     "heightSpread": 0,
+     "hollowBottom": [
+      1
+     ],
+     "padBottom": [
+      0
+     ]
+    },
+    {
+     "y": 852,
+     "children": [
+      1
+     ],
+     "heights": [
+      16
+     ],
+     "heightSpread": 0,
+     "hollowBottom": [
+      1
+     ],
+     "padBottom": [
+      0
+     ]
+    },
+    {
+     "y": 874,
+     "children": [
+      2
+     ],
+     "heights": [
+      16
+     ],
+     "heightSpread": 0,
+     "hollowBottom": [
+      1
+     ],
+     "padBottom": [
+      0
+     ]
+    },
+    {
+     "y": 896,
+     "children": [
+      3
+     ],
+     "heights": [
+      16
+     ],
+     "heightSpread": 0,
+     "hollowBottom": [
+      1
+     ],
+     "padBottom": [
+      0
+     ]
+    }
+   ]
+  }
+ ],
+ "flexWraps": [
+  {
+   "kind": "flex-wrap",
+   "path": "#dc-root > div:nth-child(1) > div:nth-child(1) > div:nth-child(3) > main:nth-child(2) > nav:nth-child(1) > ol:nth-child(1)",
+   "rect": {
+    "x": 248,
+    "y": 96,
+    "w": 944,
+    "h": 16
+   },
+   "columns": 3,
+   "children": 3,
+   "painted": 0,
+   "cards": false,
+   "inTooltip": false,
+   "alignItems": "center",
+   "label": "Pokémon",
+   "maxSpread": 9,
+   "rows": [
+    {
+     "y": 96,
+     "children": [
+      0,
+      1,
+      2
+     ],
+     "heights": [
+      16,
+      7,
+      16
+     ],
+     "heightSpread": 9,
+     "hollowBottom": [
+      1,
+      7,
+      1
+     ],
+     "padBottom": [
+      0,
+      0,
+      0
+     ],
+     "itemHeights": [
+      16,
+      14,
+      16
+     ]
+    }
+   ]
+  },
+  {
+   "kind": "flex-wrap",
+   "path": "#dc-root > div:nth-child(1) > div:nth-child(1) > div:nth-child(3) > main:nth-child(2) > div:nth-child(3) > div:nth-child(3) > div:nth-child(1) > article:nth-child(1) > div:nth-child(3)",
+   "rect": {
+    "x": 265,
+    "y": 582,
+    "w": 270,
+    "h": 24
+   },
+   "columns": 2,
+   "children": 2,
+   "painted": 2,
+   "cards": false,
+   "inTooltip": false,
+   "alignItems": "normal",
+   "label": "Fuego",
+   "maxSpread": 0,
+   "rows": [
+    {
+     "y": 582,
+     "children": [
+      0,
+      1
+     ],
+     "heights": [
+      24,
+      24
+     ],
+     "heightSpread": 0,
+     "hollowBottom": [
+      4,
+      4
+     ],
+     "padBottom": [
+      4,
+      4
+     ]
+    }
+   ]
+  },
+  {
+   "kind": "flex-wrap",
+   "path": "#dc-root > div:nth-child(1) > div:nth-child(1) > div:nth-child(3) > main:nth-child(2) > div:nth-child(3) > div:nth-child(3) > div:nth-child(1) > article:nth-child(1) > div:nth-child(4) > ul:nth-child(2)",
+   "rect": {
+    "x": 265,
+    "y": 640,
+    "w": 270,
+    "h": 64
+   },
+   "columns": 2,
+   "children": 5,
+   "painted": 5,
+   "cards": false,
+   "inTooltip": false,
+   "alignItems": "center",
+   "label": "",
+   "maxSpread": 0,
+   "rows": [
+    {
+     "y": 640,
+     "children": [
+      0,
+      1
+     ],
+     "heights": [
+      36,
+      36
+     ],
+     "heightSpread": 0,
+     "hollowBottom": [
+      8,
+      10
+     ],
+     "padBottom": [
+      1,
+      1
+     ]
+    },
+    {
+     "y": 646,
+     "children": [
+      2,
+      3
+     ],
+     "heights": [
+      24,
+      24
+     ],
+     "heightSpread": 0,
+     "hollowBottom": [
+      5,
+      5
+     ],
+     "padBottom": [
+      0,
+      0
+     ]
+    },
+    {
+     "y": 680,
+     "children": [
+      4
+     ],
+     "heights": [
+      24
+     ],
+     "heightSpread": 0,
+     "hollowBottom": [
+      5
+     ],
+     "padBottom": [
+      4
+     ]
+    }
+   ]
+  },
+  {
+   "kind": "flex-wrap",
+   "path": "#dc-root > div:nth-child(1) > div:nth-child(1) > div:nth-child(3) > main:nth-child(2) > div:nth-child(3) > div:nth-child(3) > div:nth-child(1) > article:nth-child(2) > div:nth-child(3)",
+   "rect": {
+    "x": 585,
+    "y": 582,
+    "w": 270,
+    "h": 24
+   },
+   "columns": 2,
+   "children": 2,
+   "painted": 2,
+   "cards": false,
+   "inTooltip": false,
+   "alignItems": "normal",
+   "label": "Fantasma",
+   "maxSpread": 0,
+   "rows": [
+    {
+     "y": 582,
+     "children": [
+      0,
+      1
+     ],
+     "heights": [
+      24,
+      24
+     ],
+     "heightSpread": 0,
+     "hollowBottom": [
+      4,
+      4
+     ],
+     "padBottom": [
+      4,
+      4
+     ]
+    }
+   ]
+  },
+  {
+   "kind": "flex-wrap",
+   "path": "#dc-root > div:nth-child(1) > div:nth-child(1) > div:nth-child(3) > main:nth-child(2) > div:nth-child(3) > div:nth-child(3) > div:nth-child(1) > article:nth-child(2) > div:nth-child(4) > ul:nth-child(2)",
+   "rect": {
+    "x": 585,
+    "y": 640,
+    "w": 270,
+    "h": 64
+   },
+   "columns": 2,
+   "children": 4,
+   "painted": 4,
+   "cards": false,
+   "inTooltip": false,
+   "alignItems": "center",
+   "label": "",
+   "maxSpread": 0,
+   "rows": [
+    {
+     "y": 640,
+     "children": [
+      0
+     ],
+     "heights": [
+      36
+     ],
+     "heightSpread": 0,
+     "hollowBottom": [
+      9
+     ],
+     "padBottom": [
+      1
+     ]
+    },
+    {
+     "y": 646,
+     "children": [
+      1,
+      2
+     ],
+     "heights": [
+      24,
+      24
+     ],
+     "heightSpread": 0,
+     "hollowBottom": [
+      5,
+      5
+     ],
+     "padBottom": [
+      0,
+      0
+     ]
+    },
+    {
+     "y": 680,
+     "children": [
+      3
+     ],
+     "heights": [
+      24
+     ],
+     "heightSpread": 0,
+     "hollowBottom": [
+      5
+     ],
+     "padBottom": [
+      4
+     ]
+    }
+   ]
+  },
+  {
+   "kind": "flex-wrap",
+   "path": "#dc-root > div:nth-child(1) > div:nth-child(1) > div:nth-child(3) > main:nth-child(2) > div:nth-child(3) > div:nth-child(3) > div:nth-child(1) > article:nth-child(3) > div:nth-child(4) > ul:nth-child(2)",
+   "rect": {
+    "x": 905,
+    "y": 640,
+    "w": 270,
+    "h": 64
+   },
+   "columns": 2,
+   "children": 4,
+   "painted": 4,
+   "cards": false,
+   "inTooltip": false,
+   "alignItems": "center",
+   "label": "",
+   "maxSpread": 0,
+   "rows": [
+    {
+     "y": 640,
+     "children": [
+      0
+     ],
+     "heights": [
+      36
+     ],
+     "heightSpread": 0,
+     "hollowBottom": [
+      9
+     ],
+     "padBottom": [
+      1
+     ]
+    },
+    {
+     "y": 646,
+     "children": [
+      1,
+      2
+     ],
+     "heights": [
+      24,
+      24
+     ],
+     "heightSpread": 0,
+     "hollowBottom": [
+      5,
+      5
+     ],
+     "padBottom": [
+      0,
+      0
+     ]
+    },
+    {
+     "y": 680,
+     "children": [
+      3
+     ],
+     "heights": [
+      24
+     ],
+     "heightSpread": 0,
+     "hollowBottom": [
+      5
+     ],
+     "padBottom": [
+      0
+     ]
+    }
+   ]
+  },
+  {
+   "kind": "flex-wrap",
+   "path": "#dc-root > div:nth-child(1) > div:nth-child(1) > div:nth-child(3) > main:nth-child(2) > div:nth-child(3) > div:nth-child(3) > div:nth-child(1) > article:nth-child(4) > div:nth-child(3)",
+   "rect": {
+    "x": 265,
+    "y": 924,
+    "w": 270,
+    "h": 24
+   },
+   "columns": 2,
+   "children": 2,
+   "painted": 2,
+   "cards": false,
+   "inTooltip": false,
+   "alignItems": "normal",
+   "label": "Dragón",
+   "maxSpread": 0,
+   "rows": [
+    {
+     "y": 924,
+     "children": [
+      0,
+      1
+     ],
+     "heights": [
+      24,
+      24
+     ],
+     "heightSpread": 0,
+     "hollowBottom": [
+      4,
+      4
+     ],
+     "padBottom": [
+      4,
+      4
+     ]
+    }
+   ]
+  },
+  {
+   "kind": "flex-wrap",
+   "path": "#dc-root > div:nth-child(1) > div:nth-child(1) > div:nth-child(3) > main:nth-child(2) > div:nth-child(3) > div:nth-child(3) > div:nth-child(1) > article:nth-child(4) > div:nth-child(4) > ul:nth-child(2)",
+   "rect": {
+    "x": 265,
+    "y": 982,
+    "w": 270,
+    "h": 64
+   },
+   "columns": 3,
+   "children": 6,
+   "painted": 6,
+   "cards": false,
+   "inTooltip": false,
+   "alignItems": "center",
+   "label": "",
+   "maxSpread": 0,
+   "rows": [
+    {
+     "y": 982,
+     "children": [
+      0,
+      1,
+      2
+     ],
+     "heights": [
+      36,
+      36,
+      36
+     ],
+     "heightSpread": 0,
+     "hollowBottom": [
+      2,
+      7,
+      10
+     ],
+     "padBottom": [
+      1,
+      1,
+      1
+     ]
+    },
+    {
+     "y": 988,
+     "children": [
+      3
+     ],
+     "heights": [
+      24
+     ],
+     "heightSpread": 0,
+     "hollowBottom": [
+      5
+     ],
+     "padBottom": [
+      0
+     ]
+    },
+    {
+     "y": 1022,
+     "children": [
+      4,
+      5
+     ],
+     "heights": [
+      24,
+      24
+     ],
+     "heightSpread": 0,
+     "hollowBottom": [
+      5,
+      5
+     ],
+     "padBottom": [
+      0,
+      0
+     ]
+    }
+   ]
+  },
+  {
+   "kind": "flex-wrap",
+   "path": "#dc-root > div:nth-child(1) > div:nth-child(1) > div:nth-child(3) > main:nth-child(2) > div:nth-child(3) > div:nth-child(3) > div:nth-child(1) > article:nth-child(5) > div:nth-child(4) > ul:nth-child(2)",
+   "rect": {
+    "x": 585,
+    "y": 982,
+    "w": 270,
+    "h": 36
+   },
+   "columns": 3,
+   "children": 4,
+   "painted": 4,
+   "cards": false,
+   "inTooltip": false,
+   "alignItems": "center",
+   "label": "",
+   "maxSpread": 0,
+   "rows": [
+    {
+     "y": 982,
+     "children": [
+      0
+     ],
+     "heights": [
+      36
+     ],
+     "heightSpread": 0,
+     "hollowBottom": [
+      8
+     ],
+     "padBottom": [
+      1
+     ]
+    },
+    {
+     "y": 988,
+     "children": [
+      1,
+      2,
+      3
+     ],
+     "heights": [
+      24,
+      24,
+      24
+     ],
+     "heightSpread": 0,
+     "hollowBottom": [
+      5,
+      5,
+      5
+     ],
+     "padBottom": [
+      0,
+      0,
+      4
+     ]
+    }
+   ]
+  }
+ ],
+ "board": "Pokedex.dc.html",
+ "state": {
+  "variant": "shiny",
+  "tip": null
+ },
+ "viewport": {
+  "width": 1440,
+  "height": 1904
+ },
+ "missingBlobs": [],
+ "consoleErrors": []
+}

@@ -1,0 +1,35 @@
+{
+  "$schema": "../../../../content/schemas/items.schema.json",
+  "moneda": {
+    "seCompranEn": { "es": ["Store"], "en": ["Store"] },
+    "seUsanEn": { "es": ["VIP Account", "Star Machine"], "en": ["VIP Account", "Star Machine"] }
+  },
+  "items": [
+    {
+      "id": "diamond",
+      "nombre": "Diamond",
+      "clientId": null,
+      "categoria": "diamantes",
+      "sprite": "ui/diamond",
+      "apilable": null,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      },
+      "borrador": true
+    },
+    {
+      "id": "diamantes-ejemplo-1",
+      "nombre": "Item de ejemplo 1",
+      "clientId": null,
+      "categoria": "diamantes",
+      "sprite": "items/diamantes/diamantes-ejemplo-1",
+      "apilable": null,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      },
+      "borrador": true
+    }
+  ]
+}

@@ -1,0 +1,12 @@
+{
+  "$schema": "./schemas/system-items.schema.json",
+  "objetos": [
+    {
+      "id": "normal-training-charger",
+      "nombre": "Normal charger",
+      "tipo": "training_charger",
+      "descripcion": "Adds 20,000 standard-progress charges to the Punching Bag",
+      "sistema": "punching-bag-training"
+    }
+  ]
+}

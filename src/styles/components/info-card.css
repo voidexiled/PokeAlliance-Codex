@@ -1,0 +1,44 @@
+/* InfoCard (spec 7.2.3, DS:InfoCard), ported from the `.ac-info-card` block of the design
+   system's components/bundle.css. global.css imports this file with layer(components).
+
+   A centred column on `bg-secondary`, 16 apart, padding 16 × 32, radius 12, no border and
+   no shadow. It fills its grid cell, so the cards of one row share the row height and
+   their text starts at the top. The head puts 8 between each sprite box and the title. */
+
+.ac-info-card {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-16);
+  padding: var(--space-16) var(--space-32);
+  border-radius: var(--radius-12);
+  background: var(--bg-secondary);
+  text-align: center;
+}
+
+.ac-info-card__head {
+  display: flex;
+  align-items: center;
+  gap: var(--space-8);
+}
+
+/* One game cell of 32; the 1x sprite sits centred in it. */
+.ac-info-card__sprite {
+  display: flex;
+  width: var(--size-cell);
+  height: var(--size-cell);
+  flex: none;
+  align-items: center;
+  justify-content: center;
+}
+
+.ac-info-card__title {
+  margin: 0;
+  @apply type-h3;
+}
+
+.ac-info-card__body {
+  margin: 0;
+  @apply type-body;
+}

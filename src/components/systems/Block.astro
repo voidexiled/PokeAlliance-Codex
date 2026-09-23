@@ -1,0 +1,657 @@
+---
+// Block (spec 8.4, 3.13, 8.0.5; `Lienzo:Sistema-Boost`): the dispatcher that draws one block of
+// a system page — a `Bloque` of `content/sistemas/<id>.json` — with the design-system content
+// components, the same way on every system page (8.4: «sus bloques se generan desde el
+// registro, nunca a mano por página»). The page places each block in its `Section` (16 apart,
+// the Section's own gap) or, for `intro`, in the lead column under the title.
+//
+//   parrafo    `<p>` justified, with its inline pieces, in the text of its column (`body` in a
+//              Section, the page's 16/24 in the lead, as the board draws it)
+//   subtitulo  the h3 of the section (16/24, 24 under the previous block)
+//   pasos      the `Timeline` markup when every step has a sprite; the `<ol>` of the section
+//              otherwise. The label «Paso {n}:» is generated; each step may carry chips
+//   tabla      `DataTable` with its caption (WA2), and the column width, the sprite of the
+//              entities of a column and the 8 px of a multi-line table when the record asks;
+//              figures, lists of links and sprite rows are read from the cells, and the
+//              cells of a table that is not multi-line never break (`tableOf`)
+//   nota       `Note` with the dictionary's lead («Observación:» / «Note:»)
+//   tarjetas   `CardGrid family="info"` of `InfoCard` (2 columns, 1 at 390, DS:guias/30)
+//   chips      a label in `ui-step` over an `<ol>` of `Chip`
+//   lista      the `<ul>` of the section
+// The text of a step of the `<ol>` and of a point of the `<ul>` is a sentence: it sits in a
+// `<p>` of its item, so a link inside it is a link inside a paragraph, the exception of 13.7
+// to the 44 × 44 of S14 (8 px of separation instead).
+//
+// Inline pieces (`EnLinea`, 3.13, 8.4): text; a link to a section of this page or to a route
+// of the site (`TextLink` prose, `link-prose`); an entity, `NestedEntity inline` with its panel
+// placed `up` + `start` (7.5.5, 7.5.10) when the page resolves it to a panel with rows, plain
+// text otherwise (R2, 8.0.5); an amount of Pokédólares or Diamonds, `PokedolaresAmount` or
+// `DiamondsAmount` with its sprite (R5, S8). A run of pieces is drawn by this same component in
+// its `run` mode (`Astro.self`), so the prose of paragraphs, notes, cards, lists and steps has
+// one renderer; a table cell is a React node, so the cells build the same pieces with
+// `createElement`, as the Pokémon page does for its own cells. A chip is drawn in the `chip`
+// mode, the same in a step and in a `chips` block, and an entity or an amount of a run in the
+// `atom` mode, glued to the punctuation that follows it (`glue`).
+//
+// `pasos` repeats the markup and classes of `Timeline.astro` (`ac-timeline*`, styled by
+// timeline.css of the shared sheet) instead of composing it: `Timeline` takes a step text and
+// its chips as strings, and a step of the registry carries inline pieces — the first step of
+// the board links «banda» to `#bandas` — which a string would drop. Once `Timeline` accepts
+// inline content, this block composes it.
+//
+// Language. Every text of a block exists in both locales (content/schemas/sistemas.schema.json),
+// so a block shows the page's side and marks nothing; game and entity names carry no `lang`
+// (13.4).
+//
+// Data (8.0.5, R7, X4). Nothing here reads a registry: the page resolves entities, elements
+// and sprite keys through `context` (DP2, DP3) and hands over the dictionary strings (DP1).
+// A `null` cell is «—» (DataTable). A mention the page cannot name — no record in content/
+// and no `texto` of its own, which `pnpm content:check` already rejects — stops the build
+// with its reference instead of leaving a hole in the sentence.
+//
+// Styles. system-block.css is a per-page sheet (13.6, D-018): this component imports it and
+// it never enters global.css. The Timeline, Note, InfoCard, DataTable and Chip rules are the
+// shared ones.
+import '@/styles/components/system-block.css';
+
+// React's `Fragment` under another name: the Astro compiler declares its own `Fragment` in
+// every component.
+import { createElement, Fragment as ReactFragment, type ReactNode } from 'react';
+
+import { CardGrid } from '@/components/cards/CardGrid';
+import { Chip } from '@/components/content/Chip';
+import {
+  DataTable,
+  type DataTableColumn,
+  type DataTableProps,
+  type DataTableRow,
+} from '@/components/content/DataTable';
+import InfoCard from '@/components/content/InfoCard.astro';
+import Note from '@/components/content/Note.astro';
+import { TextLink } from '@/components/controls/TextLink';
+import { ElementChip, type ElementChipEntry } from '@/components/game/ElementChip';
+import { NestedEntity } from '@/components/game/NestedEntity';
+import { Sprite, type SpriteProps } from '@/components/game/Sprite';
+import { MissingSprite } from '@/components/game/SpriteStage';
+import { DiamondsAmount } from '@/components/money/DiamondsAmount';
+import { PokedolaresAmount } from '@/components/money/PokedolaresAmount';
+import type { Locale } from '@/i18n/config';
+import { fill } from '@/i18n/messages/types';
+import type {
+  Bloque,
+  BloqueDe,
+  Celda,
+  EnLinea,
+  Ref,
+  TextoEnLinea,
+} from '@/lib/content/registry-schema';
+import { formatDecimal, formatInteger } from '@/lib/format/numbers';
+import type { TipData } from '@/lib/game/tips';
+
+/** An entity of a mention, as the page resolves it from the registries (8.0.5). */
+export interface BlockEntity {
+  /** Its name, as the registry writes it (13.4); a mention's own `texto` replaces it. */
+  text: string;
+  /** Its panel (7.5.3). `null`, or a panel with nothing below its title, keeps it text (R2). */
+  tip: TipData | null;
+  /** Its page; without one the trigger is a button (7.5.7). */
+  href?: string;
+  /**
+   * Its sprite, drawn in a table column with `conSprite`; `null` draws the missing mark.
+   * Without it (a Pokémon, an activity) the column shows the name alone.
+   */
+  sprite?: SpriteProps | null;
+}
+
+/** The dictionary strings of the blocks (DP1). */
+export interface BlockLabels {
+  /** «Paso {n}:» / «Step {n}:», the generated label of a step (8.4, T33). */
+  step: string;
+  /** `ui.noteLead`: «Observación:» / «Note:». */
+  note: string;
+  /** `ui.pinHint`, the strip of every panel. */
+  pinHint: string;
+  /** `ui.shiny`, the accessible name of the Shiny mark in a panel head. */
+  shiny: string;
+  /** `ui.or`, the word between two price options in a panel. */
+  or: string;
+}
+
+/** What every block of one page shares: its locale, its resolvers and its strings. */
+export interface BlockContext {
+  locale: Locale;
+  /**
+   * The entity a mention names, or `null` when content/ has no record of it. A record this
+   * build hides (a draft under OCULTAR_BORRADORES) is its name without a panel (R2, SI4).
+   */
+  entity: (ref: Ref) => BlockEntity | null;
+  /** An element of content/elementos.json as `ElementChip` takes it, or `null`. */
+  element: (id: string) => ElementChipEntry | null;
+  /** A sprite key through the adapter (DP2); `null` stays `null` (the missing mark). */
+  sprite: (key: string | null) => SpriteProps | null;
+  labels: BlockLabels;
+}
+
+/** One chip: an entity, a link, or a run of pieces (a fact, an amount). */
+type ChipView =
+  | { kind: 'entity'; text: string; tip: TipData; href?: string }
+  | { kind: 'link'; text: string; href: string }
+  | { kind: 'run'; parts: readonly EnLinea[] };
+
+/** The four modes: a block, a run of prose, one chip, or one atomic piece of a run. */
+type Props =
+  | { block: Bloque; context: BlockContext; run?: never; chip?: never; atom?: never }
+  | { run: readonly EnLinea[]; context: BlockContext; block?: never; chip?: never; atom?: never }
+  | { chip: ChipView; context: BlockContext; block?: never; run?: never; atom?: never }
+  | { atom: Piece; context: BlockContext; block?: never; run?: never; chip?: never };
+
+const { block, run, chip, atom, context } = Astro.props;
+const { locale, labels } = context;
+
+// ------------------------------------------------------------------ pieces
+
+/** One inline piece, resolved: what the Astro template and the table cells both draw. */
+type Piece =
+  | { kind: 'text'; text: string }
+  | { kind: 'link'; text: string; href: string }
+  | {
+      kind: 'entity';
+      text: string;
+      /** A panel with rows (R2), or `null`: the mention is text. */
+      tip: TipData | null;
+      href?: string;
+      sprite?: SpriteProps | null;
+    }
+  | { kind: 'pd' | 'dia'; amount: number };
+
+/** A piece with the punctuation that travels with it (`glue`); `''` when none does. */
+interface Glued {
+  piece: Piece;
+  tail: string;
+}
+
+/** Punctuation that never starts a line: closing marks, stops, commas and the like. */
+const CLOSING = /^[,.;:!?…)\]}»”’%]+/u;
+
+/**
+ * An entity trigger and an amount are atomic inline boxes (`inline-flex`), and a browser may
+ * break the line right after one, before the comma or the stop that follows it, which it never
+ * does after a word. So that punctuation leaves the text that follows and travels with the
+ * box, on one line with it, as the board keeps «Cow Tail,» together.
+ */
+function glue(pieces: readonly Piece[], atomic: (value: Piece) => boolean): Glued[] {
+  const out: Glued[] = [];
+  for (const value of pieces) {
+    const last = out.at(-1);
+    if (value.kind === 'text' && last !== undefined && last.tail === '' && atomic(last.piece)) {
+      const tail = CLOSING.exec(value.text)?.[0] ?? '';
+      if (tail !== '') {
+        last.tail = tail;
+        const rest = value.text.slice(tail.length);
+        if (rest !== '') out.push({ piece: { kind: 'text', text: rest }, tail: '' });
+        continue;
+      }
+    }
+    out.push({ piece: value, tail: '' });
+  }
+  return out;
+}
+
+/** In prose an entity is a box only with its panel; without one it is text (R2). */
+function atomicInProse(value: Piece): boolean {
+  return (
+    value.kind === 'pd' || value.kind === 'dia' || (value.kind === 'entity' && value.tip !== null)
+  );
+}
+
+/** In a cell every entity is a box: with its panel, or the one-line static form. */
+function atomicInCell(value: Piece): boolean {
+  return value.kind === 'pd' || value.kind === 'dia' || value.kind === 'entity';
+}
+
+/** R2: a panel with nothing to show below its title is not a tooltip. */
+function hasContent(tip: TipData): boolean {
+  return tip.rows.length > 0 || Boolean(tip.sections?.length) || Boolean(tip.market?.length);
+}
+
+function piece(part: EnLinea): Piece {
+  if (typeof part === 'string') return { kind: 'text', text: part };
+  if ('ancla' in part) return { kind: 'link', text: part.texto, href: `#${part.ancla}` };
+  // A route of the site is written without its locale and with its final slash (3.13).
+  if ('ruta' in part) return { kind: 'link', text: part.texto, href: `/${locale}${part.ruta}` };
+  if ('pd' in part) return { kind: 'pd', amount: part.pd };
+  if ('dia' in part) return { kind: 'dia', amount: part.dia };
+  const found = context.entity(part.entidad);
+  const text = part.texto ?? found?.text;
+  if (text === undefined) {
+    throw new Error(
+      `content/sistemas: la mención ${part.entidad.tipo}:${part.entidad.id} no tiene registro ` +
+        'en content/ ni "texto" propio, así que no hay nombre que mostrar (8.0.5).',
+    );
+  }
+  const tip = found?.tip && hasContent(found.tip) ? found.tip : null;
+  // An entity this build has no record of keeps the cell of a sprite column with the missing
+  // mark (7.4.4), so every name of the column starts at one x; a Pokémon or an activity, which
+  // has no sprite of its own there, keeps the name alone.
+  const sprite = found === null ? null : found.sprite;
+  return {
+    kind: 'entity',
+    text,
+    tip,
+    // R2: an entity without a panel is text without a link.
+    ...(tip !== null && found?.href !== undefined ? { href: found.href } : {}),
+    ...(sprite !== undefined ? { sprite } : {}),
+  };
+}
+
+/** The shape of a chip: a lone entity or link keeps its own chip form (DS:Chip). */
+function chipView(text: TextoEnLinea): ChipView {
+  const parts = text[locale];
+  const [only] = parts;
+  if (parts.length === 1 && only !== undefined) {
+    const single = piece(only);
+    if (single.kind === 'entity' && single.tip !== null) {
+      return {
+        kind: 'entity',
+        text: single.text,
+        tip: single.tip,
+        ...(single.href !== undefined ? { href: single.href } : {}),
+      };
+    }
+    if (single.kind === 'link') return { kind: 'link', text: single.text, href: single.href };
+  }
+  return { kind: 'run', parts };
+}
+
+// ------------------------------------------------------------------ table cells (React)
+
+/** A whole number as 13.3 writes it; a fractional one keeps one decimal. */
+function figure(value: number): string {
+  return Number.isInteger(value) ? formatInteger(value, locale) : formatDecimal(value, locale, 1);
+}
+
+/** The sprite of an entity in its 32 cell (`conSprite`), hidden from screen readers. */
+function spriteCell(sprite: SpriteProps | null): ReactNode {
+  return createElement(
+    'span',
+    { className: 'ac-system-block__sprite', 'aria-hidden': true },
+    sprite === null
+      ? createElement(MissingSprite, { size: 16 })
+      : createElement(Sprite, { ...sprite, scale: 1 }),
+  );
+}
+
+function pieceNode(value: Piece, withSprite: boolean): ReactNode {
+  switch (value.kind) {
+    case 'text':
+      return value.text;
+    case 'link':
+      return createElement(TextLink, { href: value.href, variant: 'prose', children: value.text });
+    case 'pd':
+      return createElement(PokedolaresAmount, { amount: value.amount, locale });
+    case 'dia':
+      return createElement(DiamondsAmount, { amount: value.amount, locale });
+    case 'entity': {
+      const sprite = withSprite && value.sprite !== undefined ? spriteCell(value.sprite) : null;
+      if (value.tip === null) {
+        // R2: text without a link, on one line as the name of a link is, so a list of names
+        // in a cell breaks between names and never inside one.
+        return createElement(
+          'span',
+          { className: 'ac-system-block__entity-static' },
+          sprite,
+          value.text,
+        );
+      }
+      return createElement(NestedEntity, {
+        tip: value.tip,
+        ...(value.href !== undefined ? { href: value.href } : {}),
+        placement: 'up',
+        align: 'start',
+        inline: true,
+        locale,
+        hint: labels.pinHint,
+        shinyLabel: labels.shiny,
+        orLabel: labels.or,
+        ...(sprite === null
+          ? { children: value.text }
+          : {
+              className: 'ac-system-block__entity',
+              children: createElement(ReactFragment, null, sprite, value.text),
+            }),
+      });
+    }
+  }
+}
+
+function cellNode(cell: Celda, withSprite: boolean): ReactNode {
+  if (cell === null) return null;
+  if (typeof cell === 'number') return figure(cell);
+  if ('elemento' in cell) {
+    // The element's label with its icon: a table cell opens no panel (DS:ElementChip).
+    const element = context.element(cell.elemento);
+    return element === null
+      ? null
+      : createElement(ElementChip, { element, variant: 'label', locale, hint: labels.pinHint });
+  }
+  return createElement(
+    ReactFragment,
+    null,
+    ...glue(cell[locale].map(piece), atomicInCell).map(({ piece: value, tail }) => {
+      const node = pieceNode(value, withSprite);
+      return tail === ''
+        ? node
+        : createElement('span', { className: 'ac-system-block__glue' }, node, tail);
+    }),
+  );
+}
+
+/** A column of lists of links: 12/20 from the start of the cell, under a centred header. */
+const LINK_LIST: Pick<DataTableColumn, 'text' | 'align' | 'headAlign'> = {
+  text: 'ui-loose',
+  align: 'left',
+  headAlign: 'center',
+};
+
+/** DS:DataTable row heights: 40, and 48 for a row with a sprite cell. */
+const BODY_ROW: DataTableProps['rowHeight'] = 40;
+const SPRITE_ROW: DataTableProps['rowHeight'] = 48;
+
+/** The entities a text cell names, in the page's locale (`es` and `en` name the same ones). */
+function mentions(cell: Celda): number {
+  if (cell === null || typeof cell === 'number' || 'elemento' in cell) return 0;
+  return cell[locale].filter((part) => typeof part === 'object' && 'entidad' in part).length;
+}
+
+/**
+ * `tabla`: one column per `columnas`, in order, keyed by position. What the record does not
+ * say is read from the cells, so every system table is drawn the same way:
+ *   - a column whose values are all figures gets tabular figures (4.5);
+ *   - a column with a cell that names two entities or more is a list of links in a dense
+ *     cell: `ui-loose` (12/20, 4.1) from the start of the cell under a centred header, as
+ *     «Ítems de Pokémon» of the board's «Stones por elemento»;
+ *   - a table with a `conSprite` column has rows of 48, the height of DS:DataTable for a row
+ *     with a sprite cell (32 and 8 above and below it);
+ *   - `variasLineas` is the `wrap` of DataTable. Without it every cell of the record is one
+ *     line, so every column is `nowrap`: on a phone the table keeps its widths and scrolls
+ *     inside its border (8.4.2 «tablas con scroll», DS:DataTable «No hacer») instead of
+ *     breaking «+0 a +5» in two and growing its rows past 40.
+ */
+function tableOf(tabla: BloqueDe<'tabla'>) {
+  const { columnas, filas } = tabla;
+  const cellsOf = (index: number) => filas.map((fila) => fila[index] ?? null);
+  const numeric = (index: number) => {
+    const values = cellsOf(index).filter((cell) => cell !== null);
+    return values.length > 0 && values.every((cell) => typeof cell === 'number');
+  };
+  const linkList = (index: number) => cellsOf(index).some((cell) => mentions(cell) >= 2);
+  const wrap = tabla.variasLineas === true;
+  const columns: DataTableColumn[] = columnas.map((column, index) => ({
+    key: String(index),
+    label: column.titulo[locale],
+    ...(column.ancho !== undefined ? { width: column.ancho } : {}),
+    ...(numeric(index) ? { numeric: true } : {}),
+    ...(linkList(index) ? LINK_LIST : {}),
+    ...(wrap ? {} : { nowrap: true }),
+  }));
+  const rows: DataTableRow[] = filas.map((fila, rowIndex) => ({
+    key: rowIndex,
+    cells: Object.fromEntries(
+      columnas.map((column, index) => [
+        String(index),
+        cellNode(fila[index] ?? null, column.conSprite === true),
+      ]),
+    ),
+  }));
+  return {
+    caption: tabla.caption[locale],
+    columns,
+    rows,
+    rowHeight: columnas.some((column) => column.conSprite === true) ? SPRITE_ROW : BODY_ROW,
+    wrap,
+  };
+}
+
+// ------------------------------------------------------------------ one block
+
+const paragraph = block?.tipo === 'parrafo' ? block.texto[locale] : null;
+const note = block?.tipo === 'nota' ? block.texto[locale] : null;
+const subtitle = block?.tipo === 'subtitulo' ? block.texto[locale] : null;
+
+// `pasos`: a Timeline only when every step has a sprite (8.4); a fixed key the registry does
+// not have yet keeps the step's node with the missing mark (7.4.4).
+const steps =
+  block?.tipo === 'pasos'
+    ? block.pasos.map((step, index) => ({
+        sprite: context.sprite(step.sprite),
+        label: fill(labels.step, { n: formatInteger(index + 1, locale) }),
+        text: step.texto[locale],
+        chips: (step.chips ?? []).map(chipView),
+      }))
+    : null;
+const timeline = block?.tipo === 'pasos' && block.pasos.every((step) => step.sprite !== null);
+
+const table = block?.tipo === 'tabla' ? tableOf(block) : null;
+
+const cards =
+  block?.tipo === 'tarjetas'
+    ? block.tarjetas.map((card) => ({
+        title: card.titulo[locale],
+        sprite: context.sprite(card.sprite),
+        text: card.texto[locale],
+      }))
+    : null;
+
+const chips =
+  block?.tipo === 'chips'
+    ? { label: block.etiqueta[locale], items: block.chips.map(chipView) }
+    : null;
+
+const points = block?.tipo === 'lista' ? block.puntos.map((point) => point[locale]) : null;
+
+const pieces = run ? glue(run.map(piece), atomicInProse) : [];
+---
+
+{/* A run of pieces, the content of a paragraph, a note, a card, a list item or a step. */}
+{
+  pieces.map(({ piece: value, tail }) =>
+    value.kind === 'text' ? (
+      value.text
+    ) : value.kind === 'link' ? (
+      <TextLink href={value.href} variant="prose">
+        {value.text}
+      </TextLink>
+    ) : value.kind === 'entity' && value.tip === null ? (
+      value.text
+    ) : tail === '' ? (
+      <Astro.self atom={value} context={context} />
+    ) : (
+      <span class="ac-system-block__glue">
+        <Astro.self atom={value} context={context} />
+        {tail}
+      </span>
+    ),
+  )
+}
+
+{/* One atomic piece of a run: an entity that opens its panel, or an amount with its sprite. */}
+{
+  atom &&
+    (atom.kind === 'entity' && atom.tip !== null ? (
+      <NestedEntity
+        tip={atom.tip}
+        href={atom.href}
+        placement="up"
+        align="start"
+        inline
+        locale={locale}
+        hint={labels.pinHint}
+        shinyLabel={labels.shiny}
+        orLabel={labels.or}
+      >
+        {atom.text}
+      </NestedEntity>
+    ) : atom.kind === 'pd' ? (
+      <PokedolaresAmount amount={atom.amount} locale={locale} />
+    ) : atom.kind === 'dia' ? (
+      <DiamondsAmount amount={atom.amount} locale={locale} />
+    ) : null)
+}
+
+{/* One chip (DS:Chip): an entity opens its panel, a link is a link chip, the rest a fact. */}
+{
+  chip &&
+    (chip.kind === 'entity' ? (
+      <Chip
+        tip={chip.tip}
+        href={chip.href}
+        locale={locale}
+        hint={labels.pinHint}
+        shinyLabel={labels.shiny}
+        orLabel={labels.or}
+      >
+        {chip.text}
+      </Chip>
+    ) : chip.kind === 'link' ? (
+      <Chip href={chip.href}>{chip.text}</Chip>
+    ) : (
+      <Chip>
+        <Astro.self run={chip.parts} context={context} />
+      </Chip>
+    ))
+}
+
+{
+  paragraph && (
+    <p class="ac-system-block__paragraph">
+      <Astro.self run={paragraph} context={context} />
+    </p>
+  )
+}
+
+{subtitle && <h3 class="ac-system-block__subtitle">{subtitle}</h3>}
+
+{
+  steps && timeline && (
+    <ol class="ac-timeline">
+      {steps.map((step, index) => {
+        const last = index === steps.length - 1;
+        return (
+          <li class:list={['ac-timeline__step', last && 'ac-timeline__step--last']}>
+            <div class="ac-timeline__rail" aria-hidden="true">
+              {!last && <div class="ac-timeline__line" />}
+              <div class="ac-timeline__node">
+                {step.sprite === null ? (
+                  <MissingSprite size={16} />
+                ) : (
+                  <Sprite {...step.sprite} scale={1} />
+                )}
+              </div>
+            </div>
+            <div class="ac-timeline__body">
+              <p class="ac-timeline__label">{step.label}</p>
+              <p class="ac-timeline__text">
+                <Astro.self run={step.text} context={context} />
+              </p>
+              {step.chips.length > 0 && (
+                <ul class="ac-timeline__chips">
+                  {step.chips.map((value) => (
+                    <li class="ac-timeline__chip">
+                      <Astro.self chip={value} context={context} />
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </div>
+          </li>
+        );
+      })}
+    </ol>
+  )
+}
+
+{
+  steps && !timeline && (
+    <ol class="ac-system-block__steps">
+      {steps.map((step) => (
+        <li>
+          <p class="ac-system-block__item-text">
+            <Astro.self run={step.text} context={context} />
+          </p>
+          {step.chips.length > 0 && (
+            <ul class="ac-system-block__chip-list">
+              {step.chips.map((value) => (
+                <li>
+                  <Astro.self chip={value} context={context} />
+                </li>
+              ))}
+            </ul>
+          )}
+        </li>
+      ))}
+    </ol>
+  )
+}
+
+{
+  table && (
+    <DataTable
+      caption={table.caption}
+      columns={table.columns}
+      rows={table.rows}
+      locale={locale}
+      rowHeight={table.rowHeight}
+      wrap={table.wrap}
+      scroll
+    />
+  )
+}
+
+{
+  note && (
+    <Note lead={labels.note}>
+      <Astro.self run={note} context={context} />
+    </Note>
+  )
+}
+
+{
+  cards && (
+    <CardGrid family="info">
+      {cards.map((card) => (
+        <InfoCard title={card.title} sprite={card.sprite}>
+          <Astro.self run={card.text} context={context} />
+        </InfoCard>
+      ))}
+    </CardGrid>
+  )
+}
+
+{
+  chips && (
+    <div class="ac-system-block__chips">
+      <p class="ac-system-block__chips-label">{chips.label}</p>
+      <ol class="ac-system-block__chip-list">
+        {chips.items.map((value) => (
+          <li>
+            <Astro.self chip={value} context={context} />
+          </li>
+        ))}
+      </ol>
+    </div>
+  )
+}
+
+{
+  points && (
+    <ul class="ac-system-block__list">
+      {points.map((point) => (
+        <li>
+          <p class="ac-system-block__item-text">
+            <Astro.self run={point} context={context} />
+          </p>
+        </li>
+      ))}
+    </ul>
+  )
+}

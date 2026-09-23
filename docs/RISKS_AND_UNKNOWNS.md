@@ -1,15 +1,15 @@
 # Risks and Unknowns
 
-This is a living planning registry. Phase 1 will split entries into structured records with owners, evidence and status.
+This is a living planning registry. Unknown game values themselves are stored as `null` in `content/` (D-012).
 
 ## Critical unknowns
 
-### U-001 — Current authoritative source coverage
+### U-001 — Data coverage per domain
 
-- Status: `UNKNOWN`
-- Question: Which public PokeAlliance surfaces are official, current and complete for each domain?
-- Risk: A single “official” label could hide stale or partial pages.
-- Next evidence: Site ownership signals, update dates, cross-links, changelogs and game-visible corroboration.
+- Status: `OPEN`
+- Question: Which domains still have no usable data (drops rates, spawn coordinates, NPC locations, NPC prices)?
+- Risk: Pages built around empty data.
+- Handling: unknown values stay `null` and render as `—`; blocks without data are omitted; the owner fills the D-011 registries by hand.
 
 ### U-002 — Canonical entity identity and variants
 
@@ -39,25 +39,26 @@ This is a living planning registry. Phase 1 will split entries into structured r
 
 ### U-006 — Trading and marketplace rules
 
-- Status: `UNKNOWN / HIGH VOLATILITY`
+- Status: `CHANGED 2026-09-17 / HIGH VOLATILITY`
 - Question: What may be listed, advertised or exchanged, and what moderation obligations exist?
 - Risk: Facilitating prohibited conduct or designing unusable listing fields.
-- Gate: Must be reverified immediately before Phase 7.
+- Current state: official `https://www.pokealliance.com/terms` (text dated 11/06/2026, checked 2026-09-16) allows RMT outside official channels and forbids RMT advertising in in-game chat, official Discord and forums; the server disclaims responsibility for external trades. Its homepage presents RMT as enabled. No specific rule for resale of Diamonds or the independent site's exact moderation obligations was established. **Update 2026-09-18:** terms version `v1789689677` (published 2026-09-17, visible date unchanged) removed the explicit RMT permission and the RMT wording in §7.2; in-game trade of items/Pokémon and account sharing remain permitted, advertising real-money sales in official channels remains prohibited, and the homepage no longer shows the "RMT Liberado" card. RMT outside official channels is now neither explicitly permitted nor prohibited. The owner chose to keep a real-money lane without a payment gateway (D-009).
+- Gate: Reverify immediately before publishing listings and before any payment/contact workflow. First local compositor is documented in `TRADE_PRODUCT_PLAN.md` and does not publish or transact.
 
 ### U-007 — Content and asset rights
 
 - Status: `PARTIALLY SUPPORTED / SCOPE UNCLEAR`
 - Question: What text, images, sprites, maps and logos may be stored, transformed or redistributed?
 - Risk: Copyright/trademark or source-license violations.
-- Current evidence: owner-provided Discord rule 6 permits using client and wiki information to build community wikis/tools and encourages community knowledge contributions.
-- Mitigation: use that permission for factual research and tool construction, while avoiding an unsupported assumption that every client asset or third-party Pokémon work may be redistributed wholesale. Preserve the independent-community disclaimer.
+- Current state: owner-provided Discord rule 6 permits using client and wiki information to build community wikis/tools and encourages community knowledge contributions. Targeted 2026-09-17 inspection found that nominal sprite `.png` files in the installed client begin with `PKA1`, not a browser-readable PNG signature. The official public wiki serves ordinary PNGs for Ditto and Fire Stone, but this does not establish blanket redistribution rights for client or wiki imagery.
+- Mitigation: use that permission for factual research and tool construction, while avoiding an unsupported assumption that every client asset or third-party Pokémon work may be redistributed wholesale. Link individually verified public sprites where identity matches, keep editorial fallbacks clearly distinct, seek ordinary approved Diamonds/KKs/Balls images and web-use permission before packaging client sprites, and preserve the independent-community disclaimer.
 
 ### U-008 — Existing localization
 
 - Status: `UNKNOWN`
 - Question: Which in-game terms have reliable PokeAlliance-localized equivalents?
 - Risk: Invented translations prevent users matching the game UI.
-- Default: Canonical terminology only; evidence-backed localized names are optional.
+- Default: Canonical terminology only; a localized name is used only where the game itself uses it.
 
 ### U-009 — Per-task difficulty timing in guild exports
 
@@ -79,23 +80,25 @@ This is a living planning registry. Phase 1 will split entries into structured r
 | ID | Risk | Mitigation / gate |
 |---|---|---|
 | R-001 | Scrapers break or violate source expectations | Prefer public structured endpoints, rate limit, identify terms/robots, isolate importers |
-| R-002 | Stale facts look current | Store observed/verified dates, refresh classes and stale indicators |
-| R-003 | Confidence collapses into an opaque score | Preserve status, rationale, authority, freshness and evidence separately |
-| R-004 | UI literals diverge from data | Components consume normalized repositories; validation detects unsourced publishable facts |
+| R-002 | Stale values look current | Recheck affected `content/` records from the changelog (daily feed job planned in the roadmap) |
+| R-004 | UI literals diverge from data | Components read typed `content/` repositories; no game values hardcoded in components |
 | R-005 | Static builds become too large | Measure first; partition payloads and selectively render only when needed |
 | R-006 | Supabase free-tier/operational constraints | Static-first wiki, keep-alive only if permitted/needed, backups and usage monitoring |
 | R-007 | RLS or secret leakage in future account work | Deny-by-default RLS, SQL tests, environment separation and server-only privileged clients |
 | R-008 | Marketplace abuse/scams | Rules gate, reporting, moderation, rate limits, minimal personal data, no premature payments |
-| R-009 | Translation becomes silently outdated | Translation status and source-version dependency |
-| R-010 | Historical code is mistaken for current truth | Force `historical` authority and prohibit direct normalization without current evidence |
+| R-009 | Translation becomes silently outdated | Translation status per content revision |
+| R-010 | Old server code is mistaken for current behavior | Values from old repositories are not copied into `content/` without checking the current game |
 | R-011 | Overengineering slows the knowledge base | Add infrastructure only from measured constraints and ADRs |
 | R-012 | Prototype shortcuts become permanent | Phase gates, strict data contracts, CI and explicit technical debt registry |
+| R-013 | Email/phone checks shown in UI but not enforced | Enable real email confirmation and SMS provider; enforce both at server/database write boundary; test incomplete and changed contacts |
+| R-014 | Fake or retaliatory trade reviews | Bind one review to a confirmed transaction, disallow self-review, preserve disputes/moderation history and show sample size with ratings |
+| R-015 | Review screenshots expose private data | Private storage, file validation and metadata removal, least-privilege signed access, redaction/consent before public display |
 
-## Decisions not yet authorized by evidence
+## Decisions not yet made
 
 - Exact database schema and migrations.
 - Exact Astro content model.
-- Source-specific automated harvesting.
+- Automated harvesting from third-party sites.
 - Tier labels, numeric rankings and rotation recommendations.
 - Production brand assets derived from PokeAlliance/Pokémon material.
 - Auth providers beyond Supabase Auth.

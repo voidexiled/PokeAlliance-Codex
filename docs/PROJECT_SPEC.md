@@ -6,7 +6,7 @@ This file is the stable entry point for the original project brief. The complete
 2. [`requirements/02_EXECUTION_ORDER.md`](requirements/02_EXECUTION_ORDER.md) — controlling phase order, research requirements and exit gates. Where an earlier requirement appears to request application initialization immediately, this later and more explicit execution order controls: do not initialize the application before research and data-model consolidation.
 3. [`requirements/03_BRAND_AND_LOCALIZATION.md`](requirements/03_BRAND_AND_LOCALIZATION.md) — official Alliance Codex identity and complete bilingual/canonical-terminology policy.
 
-These three files are normative. Planning documents under `docs/`, research records under `knowledge/` and machine-readable datasets under `data/` implement or refine them but may not silently weaken them.
+These three files are normative. Planning documents under `docs/`, notes under `knowledge/` and game data under `content/` implement or refine them but may not silently weaken them. D-012 in `docs/DECISION_LOG.md` removes their provenance requirements: sources, evidence, claim status, verification dates and source hashes are not stored or shown anywhere.
 
 ## Precedence
 
@@ -22,7 +22,7 @@ If project documents disagree, use this order:
 
 Owner-granted operational authorizations that extend the original brief are recorded in dedicated policy files. Current local-client research authorization is defined in `docs/LOCAL_CLIENT_RESEARCH.md`.
 
-Never resolve a conflict silently. Record it in `docs/DECISION_LOG.md` or the appropriate conflict registry.
+Never resolve a conflict silently. Record it in `docs/DECISION_LOG.md`.
 
 ## Mandatory reading for a new chat
 
@@ -33,7 +33,7 @@ Read, in order:
 3. `docs/CURRENT_STATUS.md`
 4. the active phase plan and its exit criteria
 5. `docs/RISKS_AND_UNKNOWNS.md`
-6. relevant research/data files for the task
+6. the relevant `content/` files for the task
 
 The three full requirement documents need not be loaded on every small task after this index has been read, but they must be consulted for scope, phase transitions, architecture, localization, data, security, publishing or Definition-of-Done decisions.
 

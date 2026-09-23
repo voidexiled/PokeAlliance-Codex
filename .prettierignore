@@ -6,3 +6,8 @@ playwright-report
 test-results
 research-inbox
 data/reports
+
+# Written by scripts/design/tokens.mjs from src/design/tokens.json
+src/styles/tokens.css
+src/styles/theme.css
+src/lib/design/tokens.ts

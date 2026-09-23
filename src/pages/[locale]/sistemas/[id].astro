@@ -1,0 +1,445 @@
+---
+// System page (spec 8.4.2, `Lienzo:Sistema-Boost`): one prerendered HTML per record of
+// `content/sistemas/` and per locale, on template C of 8.0.2 — the `Toc` rail with two sections
+// or more, the 208 spacer and a column of 944 with fewer (PageLayout decides both). The board
+// is the template of every system page: everything below the title comes from the record, block
+// by block (`Block.astro`), never from code written for one page. An id that is not a record has
+// no route and falls to the 404 of 8.12.
+//
+// Composition, in the order of 8.4.2 and of the board:
+//   1. the crumbs «Sistemas › {titulo}» (8.0.4): the group crumb links to the index;
+//   2. `PageTitle` with `titulo` and, when the record has one, `subtitulo` beside it;
+//   3. the blocks of `intro`, 16 apart;
+//   4. `InfoBanner` when the record has a `banner`: its sprite in the 64 × 32 box and its facts
+//      separated by «|»;
+//   5. one `Section` per entry of `secciones`, in order, with the record's `id`, its blocks 16
+//      apart;
+//   6. the automatic «Ítems» section (`id="items"`), the last one, when content/system-items.json
+//      has items of this system: the `sistema-items` list of 8.0.6 in its three views (E16,
+//      `SystemItemsList`, `client:visible`), each item with `systemItemTip` and `item-{id}`;
+//   7. the `Toc` with the sections, in the same order and with the same titles (SI1).
+// A record without sections is its title, its lead and its banner (8.4.2 «Estados»).
+//
+// Data (8.0.5, R7, X4). Everything shown comes from `content/` and `public/sprites/sprites.json`
+// through the readers of src/lib/content/ and the sprite adapter (3.12). The page resolves what
+// a block names — an entity of a mention (`pokemonTip`, `itemTip`, `systemTip`; an activity has
+// no panel and stays text, R2), an element of a table and a sprite key — and `Block` draws it.
+// A draft is a record like any other: `getSistemas` leaves it out under OCULTAR_BORRADORES=1
+// (SI4) and nothing marks it on the page. A published record may still mention a draft that
+// such a build hides (`pnpm content:check` matches a mention against every record, drafts
+// included): the mention is then the draft's name as text (R2), read with the registry's
+// readers that include drafts (`getSistemaIncluidoBorrador`, `getItemIncluidoBorrador`). No
+// page reads a JSON of content/ directly (3.12).
+//
+// Text (DP1, 13.2): the page's own copy is `messages.systems`; what the components and the
+// tooltip builders share is `messages.ui`. `SystemItemsList` receives its strings as props and
+// nothing else of the dictionary. Game names carry no `lang` (13.4), and every text of a record
+// exists in both locales (content/schemas/sistemas.schema.json), so the page marks none; the one
+// English-only text, the `descripcion` of a system item, is marked by `SystemItemsList` (T22).
+//
+// 13.5: the document title is PageLayout's «{titulo} · Alliance Codex», and the description the
+// first sentence of the system's text, cut at a whole word under 160 characters, with the next
+// sentences while it is under 50; a system whose text does not reach 50 gets `pageDescription`.
+//
+// Styles. The page's one piece of its own, the lead column, lives in system-block.css with the
+// blocks (13.6, D-018); `Block` imports that sheet.
+import { getAlternatePath, getLocale, locales, type Locale } from '@/i18n/config';
+import type { Messages } from '@/i18n/messages/en';
+import { en } from '@/i18n/messages/en';
+import { es } from '@/i18n/messages/es';
+import { fill, type MessageLeaf } from '@/i18n/messages/types';
+import {
+  getCategorias,
+  getElementos,
+  getItem,
+  getItemIncluidoBorrador,
+  getSistemaIncluidoBorrador,
+  getSistemas,
+  getSpriteRegistry,
+} from '@/lib/content/registry';
+import type { EnLinea, Item, Ref, Sistema } from '@/lib/content/registry-schema';
+import { getPokemon, getQuests, getSystemItemsOf } from '@/lib/content/repository';
+import type { PokemonRecord } from '@/lib/content/types';
+import { formatDiamonds, formatPokedolaresLabel } from '@/lib/format/numbers';
+import { elementTip, itemTip, pokemonTip, systemTip, type TipData } from '@/lib/game/tips';
+import { spriteOrNull, type SpriteData } from '@/lib/sprites/resolve';
+
+import InfoBanner from '@/components/content/InfoBanner.astro';
+import type { ElementChipEntry } from '@/components/game/ElementChip';
+import { PageTitle } from '@/components/layout/PageTitle';
+import { Section } from '@/components/layout/Section';
+import type { TocItem } from '@/components/layout/Toc.astro';
+import type { EntityListLabels } from '@/components/lists/EntityList';
+import Block, { type BlockContext, type BlockEntity } from '@/components/systems/Block.astro';
+// From the list islands' shared entry, not from its own file (13.6, D-020).
+import { SystemItemsList } from '@/components/pokemon/PokemonLists';
+import type { SystemItemEntry } from '@/components/systems/SystemItemsList';
+import PageLayout from '@/layouts/PageLayout.astro';
+
+export const prerender = true;
+
+export function getStaticPaths() {
+  return locales.flatMap((locale) =>
+    getSistemas().map((system) => ({
+      params: { locale, id: system.id },
+      props: { system },
+    })),
+  );
+}
+
+/** The `systems` keys this page reads (13.2). `title` is also the index's h1 (8.4.1). */
+interface SystemPageCopy {
+  /** «Sistemas» / «Systems»: the group crumb, which links to the index. */
+  title: string;
+  /** The description of 13.5 when the system's text does not reach 50 characters. */
+  pageDescription: string;
+  /** «Paso {n}:» / «Step {n}:», the generated label of a step (8.4). */
+  step: string;
+  /** «Ítems» / «Items»: the automatic section, its `Toc` entry and its Slots list. */
+  items: string;
+  /** «{n} ítems» / «{n} items», singular «1 ítem» / «1 item». */
+  itemCount: MessageLeaf;
+  /** «Vista de ítems» / «Item view»: the name of its `ViewToggle`. */
+  itemView: string;
+  /** «Ítems de {title}» / «{title} items»: the caption of its Lista table. */
+  itemCaption: string;
+  /** «Sprite»: the header of the Lista's sprite column, for screen readers. */
+  columnSprite: string;
+  /** «Ítem» / «Item»: the header of the Lista's name column. */
+  columnItem: string;
+}
+
+/** 13.5: the bounds of a description. */
+const DESCRIPTION_MIN = 50;
+const DESCRIPTION_MAX = 160;
+
+/** 8.0.5: the `variante` of a shiny record. */
+const SHINY = 'shiny';
+
+const dictionaries: Record<Locale, Messages> = { es, en };
+
+const locale = getLocale(Astro.params.locale);
+const messages = dictionaries[locale];
+const { ui } = messages;
+const copy: SystemPageCopy = messages.systems;
+const labels = ui.tooltip;
+const system: Sistema = Astro.props.system;
+const title = system.titulo[locale];
+
+const path = Astro.url.pathname;
+const alternates = Object.fromEntries(
+  locales.map((option) => [option, getAlternatePath(path, option)]),
+) as Record<Locale, string>;
+
+const registry = getSpriteRegistry();
+const sprite = (key: string | null): SpriteData | null => spriteOrNull(registry, key);
+
+// ------------------------------------------------------------------------------ entities
+// What a block names, resolved once per page and only when a block names it.
+
+/** 8.0.5: `numero` ascending (unknown last), `normal` before `shiny`, then `nombre`. */
+const collator = new Intl.Collator(locale);
+function pokemonOrder(a: PokemonRecord, b: PokemonRecord): number {
+  if (a.numero !== b.numero) {
+    if (a.numero === null) return 1;
+    if (b.numero === null) return -1;
+    return a.numero - b.numero;
+  }
+  const rank = (entry: PokemonRecord) =>
+    entry.variante === 'normal' ? 0 : entry.variante === SHINY ? 1 : 2;
+  return rank(a) - rank(b) || collator.compare(a.nombre, b.nombre);
+}
+
+const allPokemon = getPokemon();
+const pokemonById = new Map(allPokemon.map((entry) => [entry.id, entry]));
+const elements = new Map(getElementos().map((element) => [element.id, element]));
+const itemName = (id: string | null) => (id === null ? null : (getItem(id)?.nombre ?? null));
+
+/** An element as `ElementChip` takes it, with its panel (7.5.3); `null` when unknown. */
+function elementEntry(id: string): ElementChipEntry | null {
+  const element = elements.get(id);
+  if (element === undefined) return null;
+  const icon = sprite(element.icono);
+  return {
+    id,
+    name: element.nombre[locale],
+    icon,
+    tip: elementTip(
+      {
+        id,
+        nombre: element.nombre,
+        icono: icon,
+        stone: itemName(element.stone),
+        fragment: itemName(element.fragment),
+      },
+      locale,
+      labels,
+    ),
+  };
+}
+
+/** The Pokémon panel of 7.5.3. */
+function pokemonTipOf(entry: PokemonRecord): TipData {
+  const names = entry.elementos.flatMap((id) => {
+    const element = elements.get(id);
+    return element === undefined ? [] : [{ nombre: element.nombre }];
+  });
+  return pokemonTip({ ...entry, elementos: names }, locale, labels);
+}
+
+// «Drop de» of an item (7.5.3): the Pokémon whose `drops` name it, in the order of 8.0.5.
+let droppers: Map<string, string[]> | null = null;
+function droppedBy(id: string): string[] {
+  if (droppers === null) {
+    const byItem = new Map<string, PokemonRecord[]>();
+    for (const entry of allPokemon) {
+      for (const drop of entry.drops ?? []) {
+        const list = byItem.get(drop.item) ?? [];
+        if (!list.includes(entry)) list.push(entry);
+        byItem.set(drop.item, list);
+      }
+    }
+    droppers = new Map(
+      [...byItem].map(([item, list]) => [item, list.sort(pokemonOrder).map((p) => p.nombre)]),
+    );
+  }
+  return droppers.get(id) ?? [];
+}
+
+const categoryNames = new Map(getCategorias().map((category) => [category.id, category.nombre]));
+
+/** The item panel of 7.5.3. */
+function itemTipOf(item: Item, itemSprite: SpriteData | null): TipData {
+  return itemTip(
+    {
+      id: item.id,
+      nombre: item.nombre,
+      categoria: item.categoria,
+      sprite: itemSprite,
+      precioNpc: item.precioNpc,
+      nombreCategoria: categoryNames.get(item.categoria) ?? null,
+      dropDe: droppedBy(item.id),
+      nombreElemento: item.elemento ? (elements.get(item.elemento)?.nombre ?? null) : null,
+      uso: item.uso ?? null,
+    },
+    locale,
+    labels,
+  );
+}
+
+/** The system panel of 7.5.3: the record's own rows. */
+function systemTipOf(entry: Sistema, systemSprite: SpriteData | null): TipData {
+  return systemTip(
+    { id: entry.id, titulo: entry.titulo, sprite: systemSprite, tooltip: entry.tooltip },
+    locale,
+  );
+}
+
+const systemsById = new Map(getSistemas().map((entry) => [entry.id, entry]));
+const questsById = new Map(getQuests().map((quest) => [quest.id, quest]));
+
+/**
+ * The name of a draft a build with OCULTAR_BORRADORES hides (SI4), read through the readers
+ * that include drafts (3.12), or `null` when content/ has no such record. Only the name is
+ * read, and only for a mention of a record not in this build.
+ */
+function hiddenName(ref: Ref): string | null {
+  if (ref.tipo === 'sistema') return getSistemaIncluidoBorrador(ref.id)?.titulo[locale] ?? null;
+  if (ref.tipo === 'item') return getItemIncluidoBorrador(ref.id)?.nombre ?? null;
+  return null;
+}
+
+/** The entity a mention names (8.0.5), or `null` when content/ has no record of it. */
+function resolveEntity(ref: Ref): BlockEntity | null {
+  switch (ref.tipo) {
+    case 'pokemon': {
+      const entry = pokemonById.get(ref.id);
+      return entry === undefined
+        ? null
+        : { text: entry.nombre, tip: pokemonTipOf(entry), href: `/${locale}/pokedex/${entry.id}/` };
+    }
+    case 'item': {
+      const item = getItem(ref.id);
+      if (item === undefined) {
+        // A hidden draft: its name as text, and the missing mark in a sprite column (7.4.4).
+        const name = hiddenName(ref);
+        return name === null ? null : { text: name, tip: null, sprite: null };
+      }
+      const itemSprite = sprite(item.sprite);
+      return { text: item.nombre, tip: itemTipOf(item, itemSprite), sprite: itemSprite };
+    }
+    case 'sistema': {
+      const entry = systemsById.get(ref.id);
+      if (entry === undefined) {
+        // A draft this build hides has no page and no panel: its name is text (SI4, R2).
+        const name = hiddenName(ref);
+        return name === null ? null : { text: name, tip: null };
+      }
+      const systemSprite = sprite(entry.sprite);
+      // This page names itself: text, as the page's own entry of a list (8.3).
+      if (entry.id === system.id)
+        return { text: entry.titulo[locale], tip: null, sprite: systemSprite };
+      return {
+        text: entry.titulo[locale],
+        tip: systemTipOf(entry, systemSprite),
+        href: `/${locale}/sistemas/${entry.id}/`,
+        sprite: systemSprite,
+      };
+    }
+    case 'actividad': {
+      // An activity has no panel (8.9): its name is text (R2).
+      const quest = questsById.get(ref.id);
+      return quest === undefined ? null : { text: quest.nombre, tip: null };
+    }
+  }
+}
+
+const entities = new Map<string, BlockEntity | null>();
+function entity(ref: Ref): BlockEntity | null {
+  const key = `${ref.tipo}:${ref.id}`;
+  if (!entities.has(key)) entities.set(key, resolveEntity(ref));
+  return entities.get(key) ?? null;
+}
+
+const context: BlockContext = {
+  locale,
+  entity,
+  element: elementEntry,
+  sprite,
+  labels: {
+    step: copy.step,
+    note: ui.noteLead,
+    pinHint: ui.pinHint,
+    shiny: ui.shiny,
+    or: ui.or,
+  },
+};
+
+// ------------------------------------------------------------------------------ page
+
+const subtitle = system.subtitulo?.[locale];
+
+// 8.4.2 step 4: the banner's sprite (`null` keeps its box with the missing mark) and facts.
+const banner = system.banner
+  ? { sprite: sprite(system.banner.sprite), facts: system.banner.datos[locale] }
+  : null;
+
+// 8.4.2 step 6: the items of content/system-items.json whose `sistema` is this page.
+const items: SystemItemEntry[] = getSystemItemsOf(system.id).map((item) => ({
+  id: item.id,
+  nombre: item.nombre,
+  descripcion: item.descripcion,
+  sprite: sprite(item.sprite ?? null),
+}));
+
+const listLabels: EntityListLabels = {
+  views: ui.views,
+  pagination: ui.pagination,
+  prev: ui.prev,
+  next: ui.next,
+  page: ui.page,
+  dataError: ui.dataError,
+};
+
+// The `Toc` (7.11): one entry per section, in the page's order, the automatic one last (SI1).
+const toc: TocItem[] = [
+  ...system.secciones.map((section) => ({ id: section.id, label: section.titulo[locale] })),
+  ...(items.length > 0 ? [{ id: 'items', label: copy.items }] : []),
+];
+
+// 13.5: the description. The text of the system is its paragraphs in reading order — the lead,
+// then the sections — in the page's language, as plain text.
+function plain(parts: readonly EnLinea[]): string {
+  return parts
+    .map((part) => {
+      if (typeof part === 'string') return part;
+      if ('pd' in part) return formatPokedolaresLabel(part.pd, locale);
+      if ('dia' in part) return formatDiamonds(part.dia, locale);
+      if ('entidad' in part) return part.texto ?? entity(part.entidad)?.text ?? '';
+      return part.texto;
+    })
+    .join('');
+}
+
+/** The first sentences up to 50 characters, cut at a whole word under 160; `null` if shorter. */
+function summarize(text: string): string | null {
+  let summary = '';
+  for (const sentence of text.split(/(?<=[.!?…])\s+/u)) {
+    summary = summary === '' ? sentence : `${summary} ${sentence}`;
+    if (summary.length >= DESCRIPTION_MIN) break;
+  }
+  if (summary.length > DESCRIPTION_MAX) {
+    // The last space at or before 159 leaves room for the ellipsis inside the 160; a first
+    // word longer than that is cut where the limit falls.
+    const space = summary.lastIndexOf(' ', DESCRIPTION_MAX - 1);
+    const end = space > 0 ? space : DESCRIPTION_MAX - 1;
+    summary = `${summary.slice(0, end).replace(/[\s,;:]+$/u, '')}…`;
+  }
+  return summary.length >= DESCRIPTION_MIN ? summary : null;
+}
+
+const prose = [...system.intro, ...system.secciones.flatMap((section) => section.bloques)]
+  .flatMap((block) => (block.tipo === 'parrafo' ? [plain(block.texto[locale])] : []))
+  .join(' ')
+  .replace(/\s+/gu, ' ')
+  .trim();
+const description = summarize(prose) ?? fill(copy.pageDescription, { title });
+---
+
+<PageLayout
+  locale={locale}
+  title={title}
+  description={description}
+  alternates={alternates}
+  breadcrumb={[{ label: copy.title, href: `/${locale}/sistemas/` }, { label: title }]}
+  toc={toc}
+>
+  <PageTitle title={title} subtitle={subtitle} />
+
+  {
+    system.intro.length > 0 && (
+      <div class="ac-system-intro">
+        {system.intro.map((block) => (
+          <Block block={block} context={context} />
+        ))}
+      </div>
+    )
+  }
+
+  {banner && <InfoBanner sprite={banner.sprite} facts={banner.facts} />}
+
+  {
+    system.secciones.map((section) => (
+      <Section id={section.id} title={section.titulo[locale]}>
+        {section.bloques.map((block) => (
+          <Block block={block} context={context} />
+        ))}
+      </Section>
+    ))
+  }
+
+  {
+    items.length > 0 && (
+      <Section id="items" title={copy.items}>
+        <SystemItemsList
+          client:visible
+          locale={locale}
+          path={path}
+          system={{ id: system.id, titulo: system.titulo }}
+          items={items}
+          caption={fill(copy.itemCaption, { title })}
+          labels={{
+            list: listLabels,
+            count: copy.itemCount,
+            view: copy.itemView,
+            slots: copy.items,
+            sprite: copy.columnSprite,
+            item: copy.columnItem,
+            pinHint: ui.pinHint,
+            tooltip: labels,
+          }}
+        />
+      </Section>
+    )
+  }
+</PageLayout>

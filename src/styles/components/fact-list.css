@@ -1,0 +1,129 @@
+/* FactList (spec 7.2.6, 7.6.2; CARD_GRID_SYSTEM §5.2, §5.6; DS:FactList), ported from the
+   `.ac-fact-list` block of the design system's components/bundle.css. global.css imports
+   this file with layer(components).
+
+   A `dl` that spans one card track per fact (a subgrid nested in the card's), rows 6 apart
+   (the listing footer, 8). Outside a card grid the subgrid has no parent grid and the list
+   falls back to plain rows with the same gap. The label is `text-tertiary`; the value is
+   always a flex box aligned to the right, so a link or a sprite inside it sits in the 16 px
+   row instead of growing a text line box around it.
+
+   The one difference against the reference is the 12/16 pair, written as `@apply type-ui`
+   (spec 3.7). */
+
+.ac-fact-list {
+  display: grid;
+  grid-template-rows: subgrid;
+  row-gap: var(--space-6);
+  min-width: 0;
+  margin: 0;
+  color: var(--text-primary);
+  @apply type-ui;
+}
+
+.ac-fact-list--gap8 {
+  row-gap: var(--space-8);
+}
+
+/* Listing footer: the divider above, rows 8 apart. */
+.ac-fact-list--divided {
+  padding-top: var(--space-12);
+  border-top: 1px solid var(--border-secondary);
+}
+
+.ac-fact-list__row {
+  display: flex;
+  min-width: 0;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-8);
+}
+
+/* `wrap` and `nodetop`: the label stays on the first line of a value that takes two. */
+.ac-fact-list__row--top {
+  align-items: flex-start;
+}
+
+/* Label over value, left-aligned: a narrow card. */
+.ac-fact-list__row--stacked {
+  flex-direction: column;
+  align-items: stretch;
+  justify-content: flex-start;
+  gap: 0;
+}
+
+/* `below`: the label, then the node 6 px under it («Contacto verificado»). */
+.ac-fact-list__row--below {
+  display: block;
+}
+
+.ac-fact-list__label {
+  flex: none;
+  color: var(--text-tertiary);
+}
+
+.ac-fact-list__row--below > .ac-fact-list__label {
+  margin-bottom: var(--space-6);
+}
+
+.ac-fact-list__value {
+  display: flex;
+  min-width: 0;
+  align-items: center;
+  justify-content: flex-end;
+  margin: 0;
+  text-align: right;
+}
+
+.ac-fact-list__value--start {
+  justify-content: flex-start;
+  text-align: left;
+}
+
+.ac-fact-list__below {
+  margin: 0;
+}
+
+/* `clip` and `pre`: one line with an ellipsis; `pre` keeps the spaces of a nickname. */
+.ac-fact-list__clip {
+  display: block;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.ac-fact-list__clip--pre {
+  white-space: pre;
+}
+
+/* `wrap`: at most two lines. */
+.ac-fact-list__wrap {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  min-width: 0;
+  overflow: hidden;
+  text-align: right;
+}
+
+.ac-fact-list__wrap--start {
+  text-align: left;
+}
+
+/* WCAG 2.5.8 on every pointer (S12, spec 13.7): two facts that both hold a target — an entity
+   link, an element — sit 22 px apart at the gap of 6, under the 24 px the criterion asks
+   between two targets. A grid that has such a pair takes the gap of 8 in every card, so its
+   rows still line up; every other grid keeps the 6 of the reference. */
+.ac-card-grid__grid:has(.ac-fact-list__row[data-target] + .ac-fact-list__row[data-target])
+  .ac-fact-list {
+  row-gap: var(--space-8);
+}
+
+/* Coarse pointers: 8 px between facts, so the 24 px targets around inline links do not
+   overlap (WCAG 2.5.8, spec 13.7). */
+@media (pointer: coarse) {
+  .ac-fact-list {
+    row-gap: var(--space-8);
+  }
+}

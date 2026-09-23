@@ -1,0 +1,33 @@
+---
+// Footer (spec 5.9, 7.2.1, DS:Footer): last block of the main column on every
+// page, one line of 12/16 with a 1 px rule above it, carrying the independence
+// notice of A5.
+//
+// It has no links and no buttons: no social networks, no copyright, no data
+// sources (DS:Footer "No hacer", R6). The 24 or 32 px above it belong to
+// `ac-page-layout__foot` in PageLayout, not here.
+//
+// The notice comes from the dictionary of the page's locale (13.2), never from
+// the Spanish default of the design system — `tests/components/contracts.test.tsx`
+// checks that the `en` markup carries none of those defaults.
+import type { Locale } from '@/i18n/config';
+import type { Messages } from '@/i18n/messages/en';
+import { en } from '@/i18n/messages/en';
+import { es } from '@/i18n/messages/es';
+
+interface Props {
+  /** Page locale: picks the dictionary. */
+  locale: Locale;
+  /** Utilities added by the caller, after the component's own classes (3.8). */
+  class?: string;
+}
+
+const dictionaries: Record<Locale, Messages> = { es, en };
+
+const { locale, class: className } = Astro.props;
+const shell = dictionaries[locale].shell;
+---
+
+<footer class:list={['ac-footer', className]}>
+  <p class="ac-footer__text">{shell.footer}</p>
+</footer>

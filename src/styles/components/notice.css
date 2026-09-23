@@ -1,0 +1,59 @@
+/* Notice (spec 7.2.3; DS:Notice), ported from the `.ac-notice` block of the design system's
+   components/bundle.css. global.css imports this file with layer(components).
+
+   One closable status line: 1 px border-secondary, radius 12, bg-secondary, 12/16. No state
+   colours, no icon besides the close glyph, no shadow. */
+
+.ac-notice {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-12);
+  padding: var(--space-12) var(--space-12) var(--space-12) var(--space-16);
+  border: 1px solid var(--border-secondary);
+  border-radius: var(--radius-12);
+  background: var(--bg-secondary);
+  @apply type-ui;
+}
+
+.ac-notice__text {
+  margin: 0;
+}
+
+/* 40 x 40 button pulled into the padding, so the notice keeps its 16 px text row. */
+.ac-notice__close {
+  display: flex;
+  width: var(--size-control);
+  height: var(--size-control);
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  margin: calc(var(--space-12) * -1) calc(var(--space-8) * -1) calc(var(--space-12) * -1) 0;
+  padding: 0;
+  border: 0;
+  border-radius: var(--radius-11);
+  background: transparent;
+  color: var(--text-tertiary);
+  cursor: pointer;
+}
+
+.ac-notice__close:hover {
+  background: var(--bg-tertiary);
+}
+
+/* Touch: 44 x 44, pulled 2 px further up and down so the row height does not change; it
+   grows to the left. */
+@media (pointer: coarse) {
+  .ac-notice__close {
+    width: var(--size-touch);
+    height: var(--size-touch);
+    margin: calc((var(--space-12) + var(--space-2)) * -1) calc(var(--space-8) * -1)
+      calc((var(--space-12) + var(--space-2)) * -1) 0;
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .ac-notice__close {
+    transition: background-color var(--duration-fast) var(--ease-standard);
+  }
+}

@@ -1,0 +1,147 @@
+/* ToggleGroup (spec 7.2.2, 7.2.8, DS:ToggleGroup), ported from the `.ac-toggle-group`
+   block of the design system's components/bundle.css. global.css imports this file
+   with layer(components).
+
+   Text (default): 40 tall, padding 0 12, radius 8, 12/16 700. Sprite (Aura): a 32 px
+   sprite 12 px before 14/22 700 text, padding 8 24 8 12, at least 50 tall. Tab
+   (Comercio «Tipo de activo»): 16 px between sprite and text, and a text-only tab
+   has padding 8 20. The chosen option has the `selected` border plus `ring-selected`
+   and no fill; the others `border-primary` with the `bg-tertiary` hover.
+
+   Differences from the reference: the hover transition sits inside the reduced-motion
+   guard (6.4, rule 7 of 3.11) with its tokens; the link tab of 7.2.8 has its rules
+   next to the button it replaces (C-R2); and the forced-colors rule at the end draws
+   the selection that the mode would otherwise lose (5.2). */
+
+.ac-toggle-group {
+  min-width: 0;
+}
+
+.ac-toggle-group__label {
+  margin: 0 0 var(--space-8);
+  color: var(--text-primary);
+  @apply type-body;
+}
+
+.ac-toggle-group__label--strong {
+  @apply type-body-strong;
+}
+
+.ac-toggle-group__items {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-8);
+}
+
+.ac-toggle-group--column .ac-toggle-group__items {
+  flex-direction: column;
+  flex-wrap: nowrap;
+}
+
+.ac-toggle-group--grid .ac-toggle-group__items {
+  display: grid;
+  grid-template-columns: repeat(var(--ac-toggle-cols, 2), max-content);
+}
+
+/* Text (default): 40 tall, padding 0 12, radius 8, 12/16 700. An optional mark
+   (ShinyMark) sits 6 px before the text. */
+.ac-toggle-group__item {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-6);
+  height: var(--size-control);
+  margin: 0;
+  padding: 0 var(--space-12);
+  border: 1px solid var(--border-primary);
+  border-radius: var(--radius-8);
+  background: transparent;
+  color: var(--text-primary);
+  font-family: var(--font-sans);
+  @apply type-ui-strong;
+  text-align: left;
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.ac-toggle-group__item[aria-pressed='false']:hover:not(:disabled) {
+  background: var(--bg-tertiary);
+}
+
+.ac-toggle-group__item[aria-pressed='true'] {
+  border-color: var(--selected);
+  box-shadow: var(--ring-selected);
+  background: transparent;
+}
+
+.ac-toggle-group__item:disabled {
+  border-color: var(--border-secondary);
+  color: var(--text-quaternary);
+  cursor: not-allowed;
+}
+
+.ac-toggle-group__item > img,
+.ac-toggle-group__item > svg {
+  display: block;
+  flex: none;
+}
+
+/* Link tab (7.2.8, Ítems por categoría): the option is an <a> with the tab's shape. It
+   is never underlined; the current page has the «Actual» state of 5.2, `bg-tertiary`,
+   which is also the hover of the other links. The amber never marks a link (T9). */
+a.ac-toggle-group__item {
+  text-decoration: none;
+}
+
+a.ac-toggle-group__item:hover,
+.ac-toggle-group__item[aria-current='page'] {
+  background: var(--bg-tertiary);
+}
+
+/* Sprite (Aura): 32 px sprite 12 px before 14/22 700 text, padding 8 24 8 12, at least
+   50 tall. */
+.ac-toggle-group--sprite .ac-toggle-group__item,
+.ac-toggle-group--tab .ac-toggle-group__item {
+  display: flex;
+  height: auto;
+  min-height: var(--size-tab);
+  gap: var(--space-12);
+  padding: var(--space-8) var(--space-24) var(--space-8) var(--space-12);
+  @apply type-body-strong;
+}
+
+/* Tab (Comercio «Tipo de activo»): 16 px between sprite and text; a text-only tab
+   («Todos») has padding 8 20. */
+.ac-toggle-group--tab .ac-toggle-group__item {
+  gap: var(--space-16);
+}
+
+.ac-toggle-group--tab .ac-toggle-group__item--text {
+  padding: var(--space-8) var(--space-20);
+}
+
+@media (pointer: coarse) {
+  .ac-toggle-group__item {
+    height: auto;
+    min-height: var(--size-touch);
+  }
+
+  .ac-toggle-group--sprite .ac-toggle-group__item,
+  .ac-toggle-group--tab .ac-toggle-group__item {
+    min-height: var(--size-tab);
+  }
+}
+
+/* Hover ink: background-color only, the first row of 6.2. */
+@media (prefers-reduced-motion: no-preference) {
+  .ac-toggle-group__item {
+    transition: background-color var(--duration-fast) var(--ease-standard);
+  }
+}
+
+/* Forced colors (5.2): the mode drops the ring's second pixel, so the selection becomes
+   a 2 px border in the system Highlight colour. */
+@media (forced-colors: active) {
+  .ac-toggle-group__item[aria-pressed='true'] {
+    border: 2px solid Highlight;
+  }
+}

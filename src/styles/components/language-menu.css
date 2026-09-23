@@ -1,0 +1,161 @@
+/* LanguageMenu (spec 7.10.1), ported from the design system's components/bundle.css.
+   global.css imports this file with layer(components).
+
+   The trigger keeps the classes of the reference, because the exception of C-R2
+   only replaces the popup: `ac-header__lang` in the header (192 x 40) and
+   `ac-mobile-menu__lang` in the sheet (full width, 44). Both rule sets live here,
+   in the file of the component that renders them; mobile-menu.css keeps the
+   wrapper `ac-mobile-menu__lang-wrap` and the rest of the sheet.
+
+   The list has no counterpart in the design system: it is composed with its
+   tokens, following the Select listbox (`bg-tertiary`, `radius-8`, padding 4,
+   options of `radius-2`). It does not animate on opening: the entry of 6.2
+   belongs to the game tooltip, the Select listbox, «+N» and the Guild chart, and
+   nothing outside that table moves.
+
+   Placement is `src/scripts/popover-anchor.ts`: it writes `left` and `top`, the
+   one inline style C-R2 allows for a popover. */
+
+.ac-header__lang {
+  display: flex;
+  align-items: center;
+  gap: var(--space-8);
+  width: 192px; /* sin token: el ancho del selector de idioma, como en bundle.css */
+  height: var(--size-control);
+  margin: 0;
+  padding: var(--space-8) var(--space-12);
+  border: 0;
+  border-radius: var(--radius-11);
+  background: transparent;
+  color: var(--text-primary);
+  @apply type-field;
+  cursor: pointer;
+}
+
+.ac-header__lang-text {
+  flex: 1;
+  min-width: 0;
+  text-align: left;
+}
+
+.ac-header__glyph {
+  display: block;
+  flex: none;
+}
+
+.ac-header__lang:hover,
+.ac-header__lang[aria-expanded='true'] {
+  background: var(--bg-tertiary);
+}
+
+/* Inside the menu sheet: the width of the sheet minus its 16 margins, 44 tall. */
+
+.ac-mobile-menu__lang {
+  display: flex;
+  align-items: center;
+  gap: var(--space-8);
+  width: 100%;
+  height: var(--size-touch);
+  margin: 0;
+  padding: var(--space-8) var(--space-12);
+  border: 0;
+  border-radius: var(--radius-11);
+  background: transparent;
+  color: var(--text-primary);
+  @apply type-field;
+  cursor: pointer;
+}
+
+.ac-mobile-menu__lang-text {
+  flex: 1;
+  min-width: 0;
+  text-align: left;
+}
+
+.ac-mobile-menu__glyph {
+  display: block;
+  flex: none;
+}
+
+.ac-mobile-menu__lang:hover,
+.ac-mobile-menu__lang[aria-expanded='true'] {
+  background: var(--bg-tertiary);
+}
+
+/* The list. Every declaration before `list-style` undoes a default of the popover
+   UA sheet (`inset: 0`, `margin: auto`, a border, a system background); without
+   them the panel would centre itself on the viewport before the script places it. */
+
+.ac-language-menu {
+  position: fixed;
+  inset: auto;
+  z-index: var(--z-listbox);
+  width: 192px; /* sin token: el mismo ancho del selector de idioma de la cabecera */
+  margin: 0;
+  padding: var(--space-4);
+  border: 0;
+  border-radius: var(--radius-8);
+  background: var(--bg-tertiary);
+  color: var(--text-primary);
+  font-family: var(--font-sans);
+  @apply type-field;
+  list-style: none;
+  overflow: visible;
+}
+
+.ac-language-menu--touch {
+  width: calc(var(--layout-sheet) - var(--space-16) - var(--space-16));
+}
+
+.ac-language-menu__option {
+  display: flex;
+  align-items: center;
+  gap: var(--space-8);
+  padding: var(--space-10) var(--space-8);
+  border-radius: var(--radius-2);
+  color: var(--text-primary);
+  text-decoration: none;
+}
+
+.ac-language-menu__option:hover {
+  background: var(--bg-quaternary);
+}
+
+.ac-language-menu__check {
+  display: block;
+  flex: none;
+  margin-left: auto;
+}
+
+/* Where `popover` is not supported (6.5) the attribute is ignored and the list
+   would stay on screen. It is hidden here instead, before anything paints, and
+   `src/scripts/popover-anchor.ts` opens it with `[data-ac-open]`. */
+
+@supports not selector(:popover-open) {
+  .ac-language-menu {
+    display: none;
+  }
+
+  .ac-language-menu[data-ac-open] {
+    display: block;
+  }
+}
+
+/* With a coarse pointer the row grows from 40 to 44 (13.7), the same way the
+   design system grows a Select option. */
+
+@media (pointer: coarse) {
+  .ac-language-menu__option {
+    padding-top: var(--space-12);
+    padding-bottom: var(--space-12);
+  }
+}
+
+/* Hover of the trigger: background-color only, the first row of 6.2. */
+
+@media (prefers-reduced-motion: no-preference) {
+  .ac-header__lang,
+  .ac-mobile-menu__lang {
+    transition: background-color var(--duration-fast) var(--ease-standard);
+  }
+}

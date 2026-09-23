@@ -1,0 +1,65 @@
+---
+// InfoCard (spec 7.2.3, DS:InfoCard): a centred card on `bg-secondary` with the same
+// game sprite on both sides of a short title and one or two sentences under it. Two
+// or three of them sit side by side in the grid of their page (8.4.2, `tarjetas`:
+// 2 columns, 1 at 390); the grid belongs to the page, not to the card. It is not a
+// link and has no hover: navigation cards are FeaturedCard.
+//
+// Markup of the reference (`bundle.js`, InfoCard): `div.ac-info-card` with the head
+// `div.ac-info-card__head` — sprite box, title, the same sprite box again — and the
+// body `p.ac-info-card__body`. The title is a `<p>` unless `level` makes it a heading
+// of that level. The body is the default slot and is inline content, because it
+// renders inside that `<p>`; with an empty slot the card is only its head.
+//
+// The sprite arrives as `SpriteProps` from the adapter (DP2) and is drawn at 1x in
+// each 32 px box, hidden from assistive tech. `null` is a known entity with no sprite
+// in the registry: both boxes show the missing mark. Without `sprite` the head is
+// the title alone, as in the reference. Title and body are visible text and arrive
+// already written in the page's locale (DP1).
+
+import { Sprite, type SpriteProps } from '@/components/game/Sprite';
+import { MissingSprite } from '@/components/game/SpriteStage';
+
+interface Props {
+  /** Card title ('Si falla', 'Medal System'). */
+  title: string;
+  /** Sprite drawn at 1x on both sides of the title; `null` draws the missing mark. */
+  sprite?: SpriteProps | null;
+  /** Draws the title as a heading of this level instead of a `<p>`. */
+  level?: 2 | 3 | 4;
+  /** Utilities added by the caller, after the component's own classes (3.8). */
+  class?: string;
+}
+
+const { title, sprite, level, class: className } = Astro.props;
+
+const Title = level === 2 || level === 3 || level === 4 ? (`h${level}` as const) : 'p';
+const hasBody = Astro.slots.has('default');
+---
+
+<div class:list={['ac-info-card', className]}>
+  <div class="ac-info-card__head">
+    {
+      sprite !== undefined && (
+        <span class="ac-info-card__sprite" aria-hidden="true">
+          {sprite === null ? <MissingSprite size={16} /> : <Sprite {...sprite} scale={1} />}
+        </span>
+      )
+    }
+    <Title class="ac-info-card__title">{title}</Title>
+    {
+      sprite !== undefined && (
+        <span class="ac-info-card__sprite" aria-hidden="true">
+          {sprite === null ? <MissingSprite size={16} /> : <Sprite {...sprite} scale={1} />}
+        </span>
+      )
+    }
+  </div>
+  {
+    hasBody && (
+      <p class="ac-info-card__body">
+        <slot />
+      </p>
+    )
+  }
+</div>

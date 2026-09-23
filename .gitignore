@@ -28,3 +28,7 @@ npm-debug.log*
 pnpm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+
+# Owner-requested community downloads (private research input).
+research-inbox/community-files/*
+!research-inbox/community-files/README.md

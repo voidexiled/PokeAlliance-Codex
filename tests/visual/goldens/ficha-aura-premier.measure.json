@@ -1,0 +1,967 @@
+{
+ "declaredHeight": 2486,
+ "renderedHeight": 2486,
+ "width": 1440,
+ "contentHeight": 2462,
+ "overflow": false,
+ "emptyTail": 24,
+ "lowest": {
+  "path": "#dc-root > div:nth-child(1) > div:nth-child(1) > div:nth-child(3) > main:nth-child(2) > footer:nth-child(5)",
+  "kind": "box"
+ },
+ "rawHoles": [],
+ "brokenImages": [],
+ "webFontsLoaded": [
+  "Poppins 600"
+ ],
+ "grids": [
+  {
+   "kind": "grid",
+   "path": "#dc-root > div:nth-child(1) > div:nth-child(1) > div:nth-child(3) > main:nth-child(2) > div:nth-child(4) > section:nth-child(1) > div:nth-child(3) > div:nth-child(1)",
+   "rect": {
+    "x": 248,
+    "y": 675,
+    "w": 896,
+    "h": 308
+   },
+   "columns": 3,
+   "children": 6,
+   "painted": 6,
+   "cards": true,
+   "inTooltip": false,
+   "alignItems": "normal",
+   "label": "Essence of Fire Drop de 44 Pokémon Elemento — Us",
+   "maxSpread": 0,
+   "rows": [
+    {
+     "y": 675,
+     "children": [
+      0,
+      1,
+      2
+     ],
+     "heights": [
+      146,
+      146,
+      146
+     ],
+     "heightSpread": 0,
+     "hollowBottom": [
+      18,
+      18,
+      18
+     ],
+     "padBottom": [
+      17,
+      17,
+      17
+     ],
+     "zones": {
+      "head": {
+       "offsets": [
+        17,
+        17,
+        17
+       ],
+       "spread": 0,
+       "missing": 0
+      },
+      "facts": {
+       "offsets": [
+        69,
+        69,
+        69
+       ],
+       "spread": 0,
+       "missing": 0
+      }
+     }
+    },
+    {
+     "y": 837,
+     "children": [
+      3,
+      4,
+      5
+     ],
+     "heights": [
+      146,
+      146,
+      146
+     ],
+     "heightSpread": 0,
+     "hollowBottom": [
+      18,
+      18,
+      18
+     ],
+     "padBottom": [
+      17,
+      17,
+      17
+     ],
+     "zones": {
+      "head": {
+       "offsets": [
+        17,
+        17,
+        17
+       ],
+       "spread": 0,
+       "missing": 0
+      },
+      "facts": {
+       "offsets": [
+        69,
+        69,
+        69
+       ],
+       "spread": 0,
+       "missing": 0
+      }
+     }
+    }
+   ]
+  },
+  {
+   "kind": "grid",
+   "path": "#dc-root > div:nth-child(1) > div:nth-child(1) > div:nth-child(3) > main:nth-child(2) > div:nth-child(4) > section:nth-child(1) > div:nth-child(3) > div:nth-child(1) > article:nth-child(1)",
+   "rect": {
+    "x": 248,
+    "y": 675,
+    "w": 288,
+    "h": 146
+   },
+   "columns": 1,
+   "children": 2,
+   "painted": 0,
+   "cards": false,
+   "inTooltip": false,
+   "alignItems": "normal",
+   "label": "Essence of Fire",
+   "maxSpread": 0,
+   "rows": [
+    {
+     "y": 692,
+     "children": [
+      0
+     ],
+     "heights": [
+      40
+     ],
+     "heightSpread": 0,
+     "hollowBottom": [
+      0
+     ],
+     "padBottom": [
+      0
+     ]
+    },
+    {
+     "y": 744,
+     "children": [
+      1
+     ],
+     "heights": [
+      60
+     ],
+     "heightSpread": 0,
+     "hollowBottom": [
+      1
+     ],
+     "padBottom": [
+      0
+     ]
+    }
+   ]
+  },
+  {
+   "kind": "grid",
+   "path": "#dc-root > div:nth-child(1) > div:nth-child(1) > div:nth-child(3) > main:nth-child(2) > div:nth-child(4) > section:nth-child(1) > div:nth-child(3) > div:nth-child(1) > article:nth-child(1) > dl:nth-child(2)",
+   "rect": {
+    "x": 265,
+    "y": 744,
+    "w": 254,
+    "h": 60
+   },
+   "columns": 1,
+   "children": 3,
+   "painted": 0,
+   "cards": false,
+   "inTooltip": false,
+   "alignItems": "normal",
+   "label": "Drop de 44 Pokémon",
+   "maxSpread": 0,
+   "rows": [
+    {
+     "y": 744,
+     "children": [
+      0
+     ],
+     "heights": [
+      16
+     ],
+     "heightSpread": 0,
+     "hollowBottom": [
+      1
+     ],
+     "padBottom": [
+      0
+     ]
+    },
+    {
+     "y": 766,
+     "children": [
+      1
+     ],
+     "heights": [
+      16
+     ],
+     "heightSpread": 0,
+     "hollowBottom": [
+      1
+     ],
+     "padBottom": [
+      0
+     ]
+    },
+    {
+     "y": 788,
+     "children": [
+      2
+     ],
+     "heights": [
+      16
+     ],
+     "heightSpread": 0,
+     "hollowBottom": [
+      1
+     ],
+     "padBottom": [
+      0
+     ]
+    }
+   ]
+  },
+  {
+   "kind": "grid",
+   "path": "#dc-root > div:nth-child(1) > div:nth-child(1) > div:nth-child(3) > main:nth-child(2) > div:nth-child(4) > section:nth-child(1) > div:nth-child(3) > div:nth-child(1) > article:nth-child(2)",
+   "rect": {
+    "x": 552,
+    "y": 675,
+    "w": 288,
+    "h": 146
+   },
+   "columns": 1,
+   "children": 2,
+   "painted": 0,
+   "cards": false,
+   "inTooltip": false,
+   "alignItems": "normal",
+   "label": "Straw",
+   "maxSpread": 0,
+   "rows": [
+    {
+     "y": 692,
+     "children": [
+      0
+     ],
+     "heights": [
+      40
+     ],
+     "heightSpread": 0,
+     "hollowBottom": [
+      0
+     ],
+     "padBottom": [
+      0
+     ]
+    },
+    {
+     "y": 744,
+     "children": [
+      1
+     ],
+     "heights": [
+      60
+     ],
+     "heightSpread": 0,
+     "hollowBottom": [
+      1
+     ],
+     "padBottom": [
+      0
+     ]
+    }
+   ]
+  },
+  {
+   "kind": "grid",
+   "path": "#dc-root > div:nth-child(1) > div:nth-child(1) > div:nth-child(3) > main:nth-child(2) > div:nth-child(4) > section:nth-child(1) > div:nth-child(3) > div:nth-child(1) > article:nth-child(2) > dl:nth-child(2)",
+   "rect": {
+    "x": 569,
+    "y": 744,
+    "w": 254,
+    "h": 60
+   },
+   "columns": 1,
+   "children": 3,
+   "painted": 0,
+   "cards": false,
+   "inTooltip": false,
+   "alignItems": "normal",
+   "label": "Drop de 67 Pokémon",
+   "maxSpread": 0,
+   "rows": [
+    {
+     "y": 744,
+     "children": [
+      0
+     ],
+     "heights": [
+      16
+     ],
+     "heightSpread": 0,
+     "hollowBottom": [
+      1
+     ],
+     "padBottom": [
+      0
+     ]
+    },
+    {
+     "y": 766,
+     "children": [
+      1
+     ],
+     "heights": [
+      16
+     ],
+     "heightSpread": 0,
+     "hollowBottom": [
+      1
+     ],
+     "padBottom": [
+      0
+     ]
+    },
+    {
+     "y": 788,
+     "children": [
+      2
+     ],
+     "heights": [
+      16
+     ],
+     "heightSpread": 0,
+     "hollowBottom": [
+      1
+     ],
+     "padBottom": [
+      0
+     ]
+    }
+   ]
+  },
+  {
+   "kind": "grid",
+   "path": "#dc-root > div:nth-child(1) > div:nth-child(1) > div:nth-child(3) > main:nth-child(2) > div:nth-child(4) > section:nth-child(1) > div:nth-child(3) > div:nth-child(1) > article:nth-child(3)",
+   "rect": {
+    "x": 856,
+    "y": 675,
+    "w": 288,
+    "h": 146
+   },
+   "columns": 1,
+   "children": 2,
+   "painted": 0,
+   "cards": false,
+   "inTooltip": false,
+   "alignItems": "normal",
+   "label": "Dark Wing",
+   "maxSpread": 0,
+   "rows": [
+    {
+     "y": 692,
+     "children": [
+      0
+     ],
+     "heights": [
+      40
+     ],
+     "heightSpread": 0,
+     "hollowBottom": [
+      0
+     ],
+     "padBottom": [
+      0
+     ]
+    },
+    {
+     "y": 744,
+     "children": [
+      1
+     ],
+     "heights": [
+      60
+     ],
+     "heightSpread": 0,
+     "hollowBottom": [
+      1
+     ],
+     "padBottom": [
+      0
+     ]
+    }
+   ]
+  },
+  {
+   "kind": "grid",
+   "path": "#dc-root > div:nth-child(1) > div:nth-child(1) > div:nth-child(3) > main:nth-child(2) > div:nth-child(4) > section:nth-child(1) > div:nth-child(3) > div:nth-child(1) > article:nth-child(3) > dl:nth-child(2)",
+   "rect": {
+    "x": 873,
+    "y": 744,
+    "w": 254,
+    "h": 60
+   },
+   "columns": 1,
+   "children": 3,
+   "painted": 0,
+   "cards": false,
+   "inTooltip": false,
+   "alignItems": "normal",
+   "label": "Drop de Shiny Charizard",
+   "maxSpread": 0,
+   "rows": [
+    {
+     "y": 744,
+     "children": [
+      0
+     ],
+     "heights": [
+      16
+     ],
+     "heightSpread": 0,
+     "hollowBottom": [
+      1
+     ],
+     "padBottom": [
+      0
+     ]
+    },
+    {
+     "y": 766,
+     "children": [
+      1
+     ],
+     "heights": [
+      16
+     ],
+     "heightSpread": 0,
+     "hollowBottom": [
+      1
+     ],
+     "padBottom": [
+      0
+     ]
+    },
+    {
+     "y": 788,
+     "children": [
+      2
+     ],
+     "heights": [
+      16
+     ],
+     "heightSpread": 0,
+     "hollowBottom": [
+      1
+     ],
+     "padBottom": [
+      0
+     ]
+    }
+   ]
+  },
+  {
+   "kind": "grid",
+   "path": "#dc-root > div:nth-child(1) > div:nth-child(1) > div:nth-child(3) > main:nth-child(2) > div:nth-child(4) > section:nth-child(1) > div:nth-child(3) > div:nth-child(1) > article:nth-child(4)",
+   "rect": {
+    "x": 248,
+    "y": 837,
+    "w": 288,
+    "h": 146
+   },
+   "columns": 1,
+   "children": 2,
+   "painted": 0,
+   "cards": false,
+   "inTooltip": false,
+   "alignItems": "normal",
+   "label": "Fire Stone",
+   "maxSpread": 0,
+   "rows": [
+    {
+     "y": 854,
+     "children": [
+      0
+     ],
+     "heights": [
+      40
+     ],
+     "heightSpread": 0,
+     "hollowBottom": [
+      0
+     ],
+     "padBottom": [
+      0
+     ]
+    },
+    {
+     "y": 906,
+     "children": [
+      1
+     ],
+     "heights": [
+      60
+     ],
+     "heightSpread": 0,
+     "hollowBottom": [
+      1
+     ],
+     "padBottom": [
+      0
+     ]
+    }
+   ]
+  },
+  {
+   "kind": "grid",
+   "path": "#dc-root > div:nth-child(1) > div:nth-child(1) > div:nth-child(3) > main:nth-child(2) > div:nth-child(4) > section:nth-child(1) > div:nth-child(3) > div:nth-child(1) > article:nth-child(4) > dl:nth-child(2)",
+   "rect": {
+    "x": 265,
+    "y": 906,
+    "w": 254,
+    "h": 60
+   },
+   "columns": 1,
+   "children": 3,
+   "painted": 0,
+   "cards": false,
+   "inTooltip": false,
+   "alignItems": "normal",
+   "label": "Drop de 50 Pokémon",
+   "maxSpread": 0,
+   "rows": [
+    {
+     "y": 906,
+     "children": [
+      0
+     ],
+     "heights": [
+      16
+     ],
+     "heightSpread": 0,
+     "hollowBottom": [
+      1
+     ],
+     "padBottom": [
+      0
+     ]
+    },
+    {
+     "y": 928,
+     "children": [
+      1
+     ],
+     "heights": [
+      16
+     ],
+     "heightSpread": 0,
+     "hollowBottom": [
+      0
+     ],
+     "padBottom": [
+      0
+     ]
+    },
+    {
+     "y": 950,
+     "children": [
+      2
+     ],
+     "heights": [
+      16
+     ],
+     "heightSpread": 0,
+     "hollowBottom": [
+      1
+     ],
+     "padBottom": [
+      0
+     ]
+    }
+   ]
+  },
+  {
+   "kind": "grid",
+   "path": "#dc-root > div:nth-child(1) > div:nth-child(1) > div:nth-child(3) > main:nth-child(2) > div:nth-child(4) > section:nth-child(1) > div:nth-child(3) > div:nth-child(1) > article:nth-child(5)",
+   "rect": {
+    "x": 552,
+    "y": 837,
+    "w": 288,
+    "h": 146
+   },
+   "columns": 1,
+   "children": 2,
+   "painted": 0,
+   "cards": false,
+   "inTooltip": false,
+   "alignItems": "normal",
+   "label": "Feather Stone",
+   "maxSpread": 0,
+   "rows": [
+    {
+     "y": 854,
+     "children": [
+      0
+     ],
+     "heights": [
+      40
+     ],
+     "heightSpread": 0,
+     "hollowBottom": [
+      0
+     ],
+     "padBottom": [
+      0
+     ]
+    },
+    {
+     "y": 906,
+     "children": [
+      1
+     ],
+     "heights": [
+      60
+     ],
+     "heightSpread": 0,
+     "hollowBottom": [
+      1
+     ],
+     "padBottom": [
+      0
+     ]
+    }
+   ]
+  },
+  {
+   "kind": "grid",
+   "path": "#dc-root > div:nth-child(1) > div:nth-child(1) > div:nth-child(3) > main:nth-child(2) > div:nth-child(4) > section:nth-child(1) > div:nth-child(3) > div:nth-child(1) > article:nth-child(5) > dl:nth-child(2)",
+   "rect": {
+    "x": 569,
+    "y": 906,
+    "w": 254,
+    "h": 60
+   },
+   "columns": 1,
+   "children": 3,
+   "painted": 0,
+   "cards": false,
+   "inTooltip": false,
+   "alignItems": "normal",
+   "label": "Drop de 74 Pokémon",
+   "maxSpread": 0,
+   "rows": [
+    {
+     "y": 906,
+     "children": [
+      0
+     ],
+     "heights": [
+      16
+     ],
+     "heightSpread": 0,
+     "hollowBottom": [
+      1
+     ],
+     "padBottom": [
+      0
+     ]
+    },
+    {
+     "y": 928,
+     "children": [
+      1
+     ],
+     "heights": [
+      16
+     ],
+     "heightSpread": 0,
+     "hollowBottom": [
+      0
+     ],
+     "padBottom": [
+      0
+     ]
+    },
+    {
+     "y": 950,
+     "children": [
+      2
+     ],
+     "heights": [
+      16
+     ],
+     "heightSpread": 0,
+     "hollowBottom": [
+      1
+     ],
+     "padBottom": [
+      0
+     ]
+    }
+   ]
+  },
+  {
+   "kind": "grid",
+   "path": "#dc-root > div:nth-child(1) > div:nth-child(1) > div:nth-child(3) > main:nth-child(2) > div:nth-child(4) > section:nth-child(1) > div:nth-child(3) > div:nth-child(1) > article:nth-child(6)",
+   "rect": {
+    "x": 856,
+    "y": 837,
+    "w": 288,
+    "h": 146
+   },
+   "columns": 1,
+   "children": 2,
+   "painted": 0,
+   "cards": false,
+   "inTooltip": false,
+   "alignItems": "normal",
+   "label": "Mythic Fire Orb",
+   "maxSpread": 0,
+   "rows": [
+    {
+     "y": 854,
+     "children": [
+      0
+     ],
+     "heights": [
+      40
+     ],
+     "heightSpread": 0,
+     "hollowBottom": [
+      0
+     ],
+     "padBottom": [
+      0
+     ]
+    },
+    {
+     "y": 906,
+     "children": [
+      1
+     ],
+     "heights": [
+      60
+     ],
+     "heightSpread": 0,
+     "hollowBottom": [
+      1
+     ],
+     "padBottom": [
+      0
+     ]
+    }
+   ]
+  },
+  {
+   "kind": "grid",
+   "path": "#dc-root > div:nth-child(1) > div:nth-child(1) > div:nth-child(3) > main:nth-child(2) > div:nth-child(4) > section:nth-child(1) > div:nth-child(3) > div:nth-child(1) > article:nth-child(6) > dl:nth-child(2)",
+   "rect": {
+    "x": 873,
+    "y": 906,
+    "w": 254,
+    "h": 60
+   },
+   "columns": 1,
+   "children": 3,
+   "painted": 0,
+   "cards": false,
+   "inTooltip": false,
+   "alignItems": "normal",
+   "label": "Drop de 12 Pokémon Shiny",
+   "maxSpread": 0,
+   "rows": [
+    {
+     "y": 906,
+     "children": [
+      0
+     ],
+     "heights": [
+      16
+     ],
+     "heightSpread": 0,
+     "hollowBottom": [
+      1
+     ],
+     "padBottom": [
+      0
+     ]
+    },
+    {
+     "y": 928,
+     "children": [
+      1
+     ],
+     "heights": [
+      16
+     ],
+     "heightSpread": 0,
+     "hollowBottom": [
+      1
+     ],
+     "padBottom": [
+      0
+     ]
+    },
+    {
+     "y": 950,
+     "children": [
+      2
+     ],
+     "heights": [
+      16
+     ],
+     "heightSpread": 0,
+     "hollowBottom": [
+      1
+     ],
+     "padBottom": [
+      0
+     ]
+    }
+   ]
+  }
+ ],
+ "flexWraps": [
+  {
+   "kind": "flex-wrap",
+   "path": "#dc-root > div:nth-child(1) > div:nth-child(1) > div:nth-child(3) > main:nth-child(2) > nav:nth-child(1) > ol:nth-child(1)",
+   "rect": {
+    "x": 248,
+    "y": 96,
+    "w": 896,
+    "h": 16
+   },
+   "columns": 5,
+   "children": 5,
+   "painted": 0,
+   "cards": false,
+   "inTooltip": false,
+   "alignItems": "center",
+   "label": "Pokémon",
+   "maxSpread": 9,
+   "rows": [
+    {
+     "y": 96,
+     "children": [
+      0,
+      1,
+      2,
+      3,
+      4
+     ],
+     "heights": [
+      16,
+      7,
+      16,
+      7,
+      16
+     ],
+     "heightSpread": 9,
+     "hollowBottom": [
+      1,
+      7,
+      1,
+      7,
+      1
+     ],
+     "padBottom": [
+      0,
+      0,
+      0,
+      0,
+      0
+     ],
+     "itemHeights": [
+      16,
+      14,
+      16,
+      14,
+      16
+     ]
+    }
+   ]
+  },
+  {
+   "kind": "flex-wrap",
+   "path": "#dc-root > div:nth-child(1) > div:nth-child(1) > div:nth-child(3) > main:nth-child(2) > div:nth-child(4) > section:nth-child(4) > ul:nth-child(4)",
+   "rect": {
+    "x": 248,
+    "y": 2148,
+    "w": 896,
+    "h": 24
+   },
+   "columns": 4,
+   "children": 4,
+   "painted": 4,
+   "cards": false,
+   "inTooltip": false,
+   "alignItems": "normal",
+   "label": "Fly",
+   "maxSpread": 0,
+   "rows": [
+    {
+     "y": 2148,
+     "children": [
+      0,
+      1,
+      2,
+      3
+     ],
+     "heights": [
+      24,
+      24,
+      24,
+      24
+     ],
+     "heightSpread": 0,
+     "hollowBottom": [
+      5,
+      5,
+      5,
+      5
+     ],
+     "padBottom": [
+      4,
+      4,
+      4,
+      4
+     ]
+    }
+   ]
+  }
+ ],
+ "board": "Pokedex-Shiny-Charizard.dc.html",
+ "state": {
+  "aura": "premier",
+  "tip": null
+ },
+ "viewport": {
+  "width": 1440,
+  "height": 2486
+ },
+ "missingBlobs": [],
+ "consoleErrors": []
+}

@@ -1,0 +1,140 @@
+/* Header (spec 5.6, 7.10.1), ported from the design system's components/bundle.css.
+   global.css imports this file with layer(components).
+
+   64 tall, padding 0 16, a 1 px rule below and an opaque background: the header is
+   sticky and never blurs what runs under it.
+
+   The centred trigger is absolute, so it sits in the middle of the header and not
+   in the middle of what the brand and the language selector leave over. That is
+   what puts it at x 496 of 1440 (448 wide).
+
+   The language selector of `ac-header__end` is LanguageMenu's: its rules live in
+   language-menu.css, the file of the component that renders it (C-R2).
+
+   The theme button of the reference and its rule are not ported: one theme means
+   the button would do nothing (X2, PZ-01). Neither is `ac-header--mobile`, a
+   preview-only prop (DP5). */
+
+.ac-header {
+  position: sticky;
+  top: 0;
+  z-index: var(--z-header);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-8);
+  height: var(--layout-header);
+  padding: 0 var(--space-16);
+  border-bottom: 1px solid var(--border-secondary);
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  font-family: var(--font-sans);
+  @apply type-base;
+}
+
+/* `align-self: stretch` is not in the reference: it makes the hit area of the
+   wordmark as tall as the header instead of the 28 of its line, which is what
+   answers the 44 x 44 of 13.7 on a phone. The text stays where it was, centred
+   by the flex box of the link itself. */
+
+.ac-header__brand {
+  display: flex;
+  flex: none;
+  align-items: center;
+  align-self: stretch;
+  color: var(--text-primary);
+  @apply type-brand;
+  text-decoration: none;
+}
+
+.ac-header__search {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  display: flex;
+  transform: translate(-50%, -50%);
+}
+
+.ac-header__end {
+  display: flex;
+  align-items: center;
+  gap: var(--space-8);
+}
+
+.ac-header__compact {
+  display: none;
+  align-items: center;
+  gap: var(--space-4);
+}
+
+.ac-header__sep {
+  width: 1px;
+  height: var(--space-16);
+  flex: none;
+  background: var(--border-secondary);
+}
+
+.ac-header__icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--size-control);
+  height: var(--size-control);
+  flex: none;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  border-radius: var(--radius-11);
+  background: transparent;
+  color: var(--text-primary);
+  cursor: pointer;
+}
+
+.ac-header__icon:hover,
+.ac-header__icon[aria-expanded='true'] {
+  background: var(--bg-tertiary);
+}
+
+/* Phone cluster: 44 px touch targets. */
+
+.ac-header__compact .ac-header__icon {
+  width: var(--size-touch);
+  height: var(--size-touch);
+}
+
+.ac-header__search-icon {
+  display: none;
+}
+
+/* Below layout-bp-xl (1280): the language selector moves into the menu sheet and
+   the menu button appears. */
+
+@media (width < 80rem) {
+  .ac-header__end {
+    display: none;
+  }
+
+  .ac-header__compact {
+    display: flex;
+  }
+}
+
+/* Below layout-bp-md (768): the lens replaces the centred trigger. */
+
+@media (width < 48rem) {
+  .ac-header__search {
+    display: none;
+  }
+
+  .ac-header__search-icon {
+    display: flex;
+  }
+}
+
+/* Hover of a header button: background-color only, the first row of 6.2. */
+
+@media (prefers-reduced-motion: no-preference) {
+  .ac-header__icon {
+    transition: background-color var(--duration-fast) var(--ease-standard);
+  }
+}

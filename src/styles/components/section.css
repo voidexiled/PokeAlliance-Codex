@@ -1,0 +1,67 @@
+/* Section (spec 5.9, 7.11), ported from the design system's components/bundle.css.
+   global.css imports this file with layer(components).
+
+   The h2 with its rule and a 16 px rhythm between blocks. `scroll-margin-top`
+   plus the `scroll-padding-top` of html (3.6) leave the heading 16 px under the
+   fixed header, 80 px from the top of the viewport (V5-3). */
+
+.ac-section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-16);
+  color: var(--text-primary);
+  font-family: var(--font-sans);
+  @apply type-body;
+  scroll-margin-top: var(--space-16);
+}
+
+.ac-section__head {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.ac-section__title {
+  margin: 0;
+  @apply type-h2;
+}
+
+.ac-section__rule {
+  height: 1px;
+  background: var(--border-secondary);
+}
+
+/* Plain content placed directly in a section. Zero specificity, so a component
+   dropped into the section keeps its own rules: justified paragraphs, lists with
+   inside markers 8 apart, and 16/24 sub-headings 24 below the previous block
+   (8 of margin over the 16 of the column gap). */
+
+:where(.ac-section) > :where(p) {
+  margin: 0;
+  text-align: justify;
+}
+
+:where(.ac-section) > :where(ul, ol) {
+  margin: 0;
+  padding: 0;
+  list-style-position: inside;
+}
+
+/* The reference leaves the marker to the browser's default, which Tailwind's preflight
+   resets to `none`; the Componentes board draws the disc (M5 parity crop «seccion»). */
+:where(.ac-section) > :where(ul) {
+  list-style-type: disc;
+}
+
+:where(.ac-section) > :where(ol) {
+  list-style-type: decimal;
+}
+
+:where(.ac-section) > :where(ul, ol) > :where(li + li) {
+  margin-top: var(--space-8);
+}
+
+:where(.ac-section) > :where(h3, h4) {
+  margin: var(--space-8) 0 0;
+  @apply type-h3;
+}

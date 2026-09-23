@@ -1,0 +1,14 @@
+{
+  "$schema": "../schemas/sistemas.schema.json",
+  "id": "punching-bag-training",
+  "titulo": {
+    "es": "Entrenamiento",
+    "en": "Training"
+  },
+  "sprite": null,
+  "orden": 5,
+  "tooltip": [],
+  "intro": [],
+  "secciones": [],
+  "borrador": true
+}

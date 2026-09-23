@@ -1,0 +1,86 @@
+{
+  "$schema": "../../../content/schemas/moves.schema.json",
+  "movimientos": [
+    {
+      "id": "ember",
+      "nombre": "Ember",
+      "elemento": "fire",
+      "slot": "M1",
+      "cooldownSegundos": 8,
+      "modo": null,
+      "pokemon": ["shiny-charizard"]
+    },
+    {
+      "id": "dragon-claw",
+      "nombre": "Dragon Claw",
+      "elemento": "dragon",
+      "slot": "M2",
+      "cooldownSegundos": 14,
+      "modo": null,
+      "pokemon": ["shiny-charizard"]
+    },
+    {
+      "id": "fire-fang",
+      "nombre": "Fire Fang",
+      "elemento": "fire",
+      "slot": "M3",
+      "cooldownSegundos": 20,
+      "modo": null,
+      "pokemon": ["shiny-charizard"]
+    },
+    {
+      "id": "fire-spin",
+      "nombre": "Fire Spin",
+      "elemento": "fire",
+      "slot": "M4",
+      "cooldownSegundos": 35,
+      "modo": null,
+      "pokemon": ["shiny-charizard"]
+    },
+    {
+      "id": "flame-burst",
+      "nombre": "Flame Burst",
+      "elemento": "flying",
+      "slot": "M5",
+      "cooldownSegundos": 35,
+      "modo": null,
+      "pokemon": ["shiny-charizard"]
+    },
+    {
+      "id": "heat-wave",
+      "nombre": "Heat Wave",
+      "elemento": "fire",
+      "slot": "M6",
+      "cooldownSegundos": 40,
+      "modo": null,
+      "pokemon": ["shiny-charizard"]
+    },
+    {
+      "id": "blast-burn",
+      "nombre": "Blast Burn",
+      "elemento": "fire",
+      "slot": "M7",
+      "cooldownSegundos": 50,
+      "modo": null,
+      "pokemon": ["shiny-charizard"]
+    },
+    {
+      "id": "magma-storm",
+      "nombre": "Magma Storm",
+      "elemento": "fire",
+      "slot": "M8",
+      "cooldownSegundos": 40,
+      "modo": null,
+      "pokemon": ["shiny-charizard"]
+    },
+    {
+      "id": "ancient-fury",
+      "nombre": "Ancient Fury",
+      "elemento": "normal",
+      "slot": "M9",
+      "cooldownSegundos": 40,
+      "modo": null,
+      "pokemon": ["shiny-charizard"]
+    }
+  ]
+}

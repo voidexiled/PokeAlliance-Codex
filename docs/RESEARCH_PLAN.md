@@ -1,114 +1,82 @@
 # PokeAlliance Research Plan
 
+> **Updated 2026-09-18 (D-011, D-012):** research results go straight into the owner-editable JSON under `content/`. There is no provenance: no source registry, evidence records, claims, confidence, retrieval dates or hashes.
+
 ## Goal
 
-Build a structured, auditable representation of PokeAlliance that the application and future agents can consume. The goal is not a prose game summary; it is evidence with coverage, provenance, uncertainty and refreshability.
+Build an accurate, structured representation of PokeAlliance that the site and future agents can use. The output is data in `content/`, not a prose game summary. Values nobody knows yet stay `null`.
 
 ## Research workflow
 
-1. Discover and register sources broadly across official, community, code, video and archive surfaces.
-2. Snapshot or record raw evidence without rewriting its claims.
-3. Extract candidates into staging records with source pointers.
-4. Normalize only after identity and terminology are reconciled.
-5. Triangulate material claims and record conflicts rather than selecting silently.
-6. Validate datasets mechanically and sample them manually.
-7. Publish coverage, freshness, conflicts and unknowns together.
+1. Search broadly: the official wiki, community wikis and repositories, videos and, within `docs/LOCAL_CLIENT_RESEARCH.md`, the owner's client.
+2. Settle identity and terminology before adding records: stable slug ids, canonical English names exactly as the game shows them.
+3. When two descriptions of the game disagree, the owner decides which value goes into `content/`. The file keeps only that value.
+4. Write the records into `content/`, by hand or with a small importer, and run `pnpm content:check`.
+5. Leave gaps as `null` and list open questions in `knowledge/unknowns/UNKNOWNS.md`.
 
-Research is breadth-first across all domains, then depth-first according to user value, uncertainty and source volatility.
+Research is breadth-first across all domains, then depth-first according to player value, how much is unknown and how often the game changes.
 
-## Initial sources
+## Where to look
 
-| Source | Initial classification | Intended use |
-|---|---|---|
-| `https://wiki.pokealliance.com` | official/current candidate | Core systems, rules, guides and terminology |
-| `https://wiki.pokealliance.com/pokemon` | official/current candidate | Pokémon roster and game-specific attributes |
-| `https://pokealliance-wiki.vercel.app` | community/current candidate | Coverage leads and cross-checks |
-| `https://github.com/thiagobfo/pokealliance-wiki` | community code/data | Reproducible data leads and field discovery |
-| `https://github.com/tanjirokamadoserver/PokeMonster` | historical | Mechanism/field hypotheses only; never automatic current proof |
+| Place                                                | Use                                                                   |
+| ---------------------------------------------------- | --------------------------------------------------------------------- |
+| `https://wiki.pokealliance.com`                      | Core systems, rules, guides and terminology                           |
+| `https://wiki.pokealliance.com/pokemon`              | Pokémon roster and attributes; `pnpm content:roster` imports it       |
+| `https://pokealliance-wiki.vercel.app`               | Leads and cross-checks                                                |
+| `https://github.com/thiagobfo/pokealliance-wiki`     | Field discovery                                                       |
+| `https://github.com/tanjirokamadoserver/PokeMonster` | Historical code: ideas about mechanisms, never proof of current rules |
 
-“Official” and “current” must be verified from the source itself. Additional sources will be discovered in Spanish, English, Portuguese and other useful languages; source language never determines canonical terminology.
+Material may be in Spanish, English, Portuguese or other languages; the language of a page never decides canonical terminology.
 
-The project owner has also authorized targeted read-only research of their local PokeAlliance client installation and related files. Use `docs/LOCAL_CLIENT_RESEARCH.md` as the controlling scope and safety policy. Local observations must carry client version, path metadata and hashes.
+The owner has authorized targeted read-only research of their local PokeAlliance client installation and related files. `docs/LOCAL_CLIENT_RESEARCH.md` is the scope and safety policy.
 
-## Primary acquisition surfaces
+## Acquisition surfaces
 
-Phase 1 prioritizes two acquisition families:
-
-1. PokeAlliance-related wikis and their publicly delivered web applications. Research may inspect rendered pages, public JavaScript bundles, route manifests, network/API contracts, static datasets and otherwise publicly accessible application resources. Hidden or unlinked public routes may be discovered, but authentication, access controls, encryption and technical protections must not be bypassed.
-2. Owner-authorized PokeAlliance files on the local computer or deliberately supplied through `research-inbox/client-files/`. Local evidence follows `docs/LOCAL_CLIENT_RESEARCH.md`, remains version-specific and is not automatically publishable.
-
-The administrator-maintained wiki is especially valuable because some content appears to have been authored or maintained by PokeAlliance administrators. That increases its authority for scoped claims, but every extracted fact still records its exact page/resource and retrieval date.
-
-## Source registry fields
-
-Every source record includes: stable ID, name, URL, source type, authority, scope, language, access method, last checked, last successful retrieval, observed update date, freshness classification, licensing/usage notes and operational notes. Individual evidence records add locator, captured excerpt or structured payload hash, retrieval timestamp and claim linkage.
-
-## Trust and contradiction policy
-
-Evidence is evaluated on authority for the exact claim, directness, recency, reproducibility and corroboration. A current official Pokémon page can outrank a broad official guide for a Pokémon field; a reproducible current game-visible observation may expose stale documentation. Historical code generates hypotheses but cannot establish current behavior.
-
-For disagreement, create a conflict with all candidate values, sources, dates, affected records, severity and resolution status. Never overwrite the losing value without preserving history.
+1. PokeAlliance-related wikis and their public web applications: rendered pages, public JavaScript bundles, route manifests, network/API contracts and static datasets. Hidden or unlinked public routes may be found, but authentication, access controls, encryption and technical protections must not be bypassed.
+2. Owner-authorized PokeAlliance files on the local computer or supplied through `research-inbox/client-files/`, following `docs/LOCAL_CLIENT_RESEARCH.md`. What the client shows can differ between versions.
 
 ## Research domains and target breadth
 
-| Domain | Questions | Breadth exit target |
-|---|---|---:|
-| Pokémon and variants | identities, forms, shiny/mega/other variants, stats, elements, availability | 95% roster identity; ≥80% core fields |
-| Moves and AoE | exact names, learnsets, geometry/range, cooldowns, effects | 90% identity; ≥70% verified mechanics |
-| Rotations and tiers | game/community meaning, eligibility, tactical roles, evidence and volatility | taxonomy complete; all published claims sourced |
-| Held/Lucky/Boost/Stars | slots, constraints, values, upgrade rules | 85% system concepts; unknown values explicit |
-| Pokéballs/materials/items/drops | identities, acquisition, use, quantities, dependencies | 85% identity; ≥70% relationships |
-| Hunts/locations/NPCs | canonical place identity, level/access, spawns, travel and rewards | 80% known locations; access gaps explicit |
-| Quests/systems | prerequisites, ordered steps, rewards, repeatability | 75% discovered; 100% published steps sourced |
-| Economy/trading/CACs | currencies, player practices, permitted/prohibited conduct | current rules verified before any product model |
-| Utilities | Teleport and other utility capabilities and eligible entities | taxonomy complete; lists may remain unknown |
-| Localization | canonical terms, aliases, translatable UI labels, existing official localizations | glossary for every normalized entity type |
+| Domain                         | Questions                                                                    | Breadth target                                     |
+| ------------------------------ | ---------------------------------------------------------------------------- | -------------------------------------------------: |
+| Pokémon and variants           | identities, forms, shiny/mega/other variants, stats, elements, availability  | 95% roster identity; ≥80% core fields              |
+| Moves and AoE                  | exact names, learnsets, geometry/range, cooldowns, effects                   | 90% identity; ≥70% mechanics                       |
+| Rotations and tiers            | game/community meaning, eligibility, tactical roles, how often they change   | taxonomy complete                                  |
+| Held/Lucky/Boost/Stars         | slots, constraints, values, upgrade rules                                    | 85% system concepts; unknown values `null`         |
+| Pokéballs/materials/items/drops | identities, acquisition, use, quantities, dependencies                      | 85% identity; ≥70% relationships                   |
+| Hunts/locations/NPCs           | canonical place identity, level/access, spawns, travel and rewards           | 80% known locations                                |
+| Quests/systems                 | prerequisites, ordered steps, rewards, repeatability                         | 75% discovered; published steps complete           |
+| Economy/trading/CACs           | currencies, player practices, permitted/prohibited conduct                   | current rules checked before any product model     |
+| Utilities                      | Teleport and other utility capabilities and eligible entities                | taxonomy complete; lists may stay unknown          |
+| Localization                   | canonical terms, aliases, translatable UI labels, official localizations     | glossary entry for every entity type               |
 
-Percentages use defined required-field matrices, not subjective impressions. The report will show identity coverage, field coverage, source coverage and freshness separately.
+Coverage is measured per file against its required fields, not by impression. `pnpm content:check` prints the record and draft counts of every file.
 
-## Raw and machine-readable outputs
+## Outputs
 
 ```text
+content/                 game data (JSON), one JSON Schema per file in content/schemas/
+public/sprites/          game images and sprites.json
 knowledge/
-  sources/
-  research/
-    raw/
-    notes/
-  conflicts/
-  unknowns/
+  unknowns/UNKNOWNS.md   open questions
   localization/GLOSSARY.md
-data/
-  staging/
-  normalized/
-  schemas/
-  reports/
+  rules/                 server rules text
 ```
-
-Raw captures are append-only where licenses and access permit storage. Otherwise records preserve URL, timestamp, locator, digest and a concise claim summary. Generated files carry generation metadata.
 
 ## Automation
 
-Source-specific importers must be small, deterministic, rate-limited and respectful of robots, terms and licensing. They write staging—not normalized production data. Fixtures and manual overrides live separately. Each importer reports added/changed/rejected records and stores enough metadata to reproduce the transformation.
+Importers are small, deterministic Node scripts that respect robots, terms and licensing. They write to `content/`, never remove records and keep values edited by hand unless asked to overwrite them (`scripts/content/import-roster.mjs` is the model). `pnpm content:check` checks ids, uniqueness, allowed values, references between files and images.
 
-Schema validation checks required IDs, uniqueness, enums, referential integrity, locale codes, provenance, date formats and forbidden “invented default” patterns. Semantic checks flag impossible references and suspicious mass changes.
+## Keeping data current
 
-## Freshness and stale-data handling
+The game changes with updates. Re-run the importers and read the launcher changelog after each update (a daily changelog job is a future item in `ROADMAP.md`). A failed fetch never erases data that is already in `content/`.
 
-Sources receive a refresh policy based on volatility. Retrieval failure does not erase the last good capture. Claims store observed/verified dates separately from retrieval dates. Material changes produce a diff and can mark dependent translations or conclusions `needs_review`/`outdated`.
+## Done criteria for a research pass
 
-## Phase 1 exit criteria
+A research pass on a domain is done when:
 
-Phase 1 completes only when:
+- its records are in `content/` and pass `pnpm content:check`;
+- values nobody knows are `null` and the open questions are in `knowledge/unknowns/UNKNOWNS.md`;
+- new entity types have canonical names and glossary entries.
 
-- a broad source map has been searched beyond the initial links;
-- the source registry and authority taxonomy are populated;
-- every domain has a field inventory and measured coverage;
-- raw/staging/normalized boundaries are demonstrated with validated datasets;
-- canonical terminology and localization glossary exist;
-- provenance is present for normalized facts;
-- conflicts and unknowns are published, not hidden;
-- automated schema validation passes;
-- a coverage report identifies safe-to-model areas and weak areas;
-- the research log records searches, access failures and next leads.
-
-The phase need not achieve 100% factual coverage. It must achieve enough breadth and traceability to distinguish stable model requirements from unknowns.
+A pass does not need 100% coverage. It needs enough breadth to separate stable model requirements from unknowns.

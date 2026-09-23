@@ -1,0 +1,38 @@
+{
+  "$schema": "./schemas/outfits.schema.json",
+  "outfits": [
+    {
+      "pokemon": "bulbasaur",
+      "outfitId": 2,
+      "addons": [
+        {
+          "id": "bulbasaur-addon-1",
+          "nombre": "Nombre del addon",
+          "outfitId": 1005,
+          "sprite": "outfits/1005",
+          "borrador": true
+        }
+      ]
+    },
+    {
+      "pokemon": "charmander",
+      "outfitId": 5,
+      "addons": []
+    },
+    {
+      "pokemon": "charizard",
+      "outfitId": 7,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-charizard",
+      "outfitId": 509,
+      "addons": []
+    },
+    {
+      "pokemon": "squirtle",
+      "outfitId": 8,
+      "addons": []
+    }
+  ]
+}

@@ -26,7 +26,7 @@ This is strong evidence that a map preview can reproduce the client interaction 
 | ------------------------------ | ------------------------------------------------------------------------ | ---------------------------------------------------------------------------- |
 | Base map and floors            | stable OTMM snapshot                                                     | client-format evidence; cache completeness is explicit                       |
 | Client markers                 | `config.otml` `Minimap.flags`                                            | direct client observation; versioned and account/config scoped               |
-| Pokémon/hunt/item locations    | official wiki, public launcher/client-visible data, corroborated records | only publish after entity and coordinate provenance                          |
+| Pokémon/hunt/item locations    | official wiki, public launcher/client-visible data, corroborated records | only publish after the entity and its coordinates are confirmed in the game  |
 | NPCs, quests and travel points | client markers, official pages, verified player observations             | unknown coordinates stay unknown; textual guidance may exist without a point |
 | Community contributions        | reviewed submissions                                                     | pending, approved, rejected and stale are distinct states                    |
 
@@ -50,7 +50,7 @@ The useful target interaction is:
 Pokédex entity → Buscar localização → location candidates → map coordinates/areas → marker details
 ```
 
-A Pokémon can have multiple records, variants, hunts or areas. The normalized relation must therefore support many-to-many links and conditions such as variant, level, time, access quest, hazard, world and freshness. A name-only location such as “Hoenn” is not equivalent to a coordinate point.
+A Pokémon can have multiple records, variants, hunts or areas. The relation must therefore support many-to-many links and conditions such as variant, level, time, access quest, hazard, world and freshness. A name-only location such as “Hoenn” is not equivalent to a coordinate point.
 
 ## Community contribution workflow
 
@@ -62,7 +62,7 @@ Contributors may submit:
 - guides and recommended routes;
 - corrections to stale or incorrect markers.
 
-Each submission should contain the subject, proposed value, source/evidence, client/world version, capture date, contributor identity, confidence and optional screenshot or guide link. It enters `pending_review`; only a reviewer can make it `approved` and visible as canonical. A later correction creates a revision and preserves the prior claim.
+Each submission contains the subject, proposed value, world and contributor, plus an optional screenshot or guide link to help the owner check it. It enters `pending_review`; only the owner can make it `approved` and visible. A later correction replaces the value; Git keeps the history.
 
 The project owner can manually read and implement approved contributions initially. Automation is optional and should not be introduced until abuse, moderation, attribution and deletion rules are defined.
 
@@ -70,11 +70,11 @@ The current wiki exposes this protocol at `/es/mapa/aportar/` and its localized 
 
 ## Semantic sources are not coordinate sources
 
-The official teleport guide is useful for the map's future semantic layer: it can seed normalized region, city, destination, unlock-condition and teleport-command aliases. It does not provide a structured coordinate payload. A destination such as `Saffron`, an area label such as `Hoenn` or a screenshot without an inspectable coordinate must therefore remain a semantic claim or contribution lead. It cannot create an `x/y/z` marker automatically.
+The official teleport guide is useful for the map's future semantic layer: it can seed region, city, destination, unlock-condition and teleport-command aliases. It does not provide a structured coordinate payload. A destination such as `Saffron`, an area label such as `Hoenn` or a screenshot without an inspectable coordinate must therefore remain a name or an area, not a point. It cannot create an `x/y/z` marker automatically.
 
-The public-source profile keeps these inputs under `semanticOnlySources`, separate from coordinate-bearing profiles. This separation is intentional: map labels may be added after review without implying that the underlying geometry or Pokémon spawn relation has been verified.
+Map labels may be added without implying that the underlying geometry or Pokémon spawn relation is known.
 
-The community wiki's [Hoenn Hunts index](https://pokealliance-wiki.vercel.app/hunts) is a stronger location lead than a plain area label: it lists 137 Pokémon/hunt entries and links each one to a map album. Those albums are visual evidence, not machine-readable coordinates. They can be staged as `map_image_lead` records and manually aligned with the OTMM surface later; they must not be published as exact points merely because an image exists.
+The community wiki's [Hoenn Hunts index](https://pokealliance-wiki.vercel.app/hunts) is a stronger location lead than a plain area label: it lists 137 Pokémon/hunt entries and links each one to a map album. Those albums are images, not machine-readable coordinates. They can be aligned with the OTMM surface by hand later; they must not be published as exact points merely because an image exists.
 
 If the owner later wants to investigate the in-game lookup path, the scope is documented in [POKEDEX_LOCATION_CAPTURE_PROTOCOL.md](POKEDEX_LOCATION_CAPTURE_PROTOCOL.md). It is intentionally limited to the ordinary `Buscar Ubicación` action, excludes credentials and unrelated traffic, and does not require or authorize client modification, request replay or gameplay automation.
 
@@ -87,12 +87,9 @@ Until the client-visible location payload is identified, a player can submit a m
 | Subject     | Pokémon/species, variant or NPC name exactly as shown in-game                  |
 | Coordinate  | `x`, `y`, `z` copied from the in-game coordinate search or map UI              |
 | Type        | `spawn_area`, `hunt_entrance`, `npc`, `quest_point`, `travel_point` or `other` |
-| Scope       | world/server, client version if known, and access condition                    |
-| Evidence    | screenshot, guide link or reproducible in-game steps                           |
-| Captured at | ISO timestamp; keep the original instant and derive display time with Temporal |
-| Claim state | `pending_review` until manually checked                                        |
+| Scope       | world/server and access condition                                              |
 
-An area-only claim such as “Hoenn” or a screenshot link can be stored as a useful lead, but it must remain an area/URL claim and cannot populate a point marker automatically. For a Pokémon with several variants or hunts, each coordinate claim is a separate record with explicit conditions rather than an overwrite.
+An area-only contribution such as “Hoenn” stays an area and cannot populate a point marker automatically. For a Pokémon with several variants or hunts, each coordinate is a separate record with explicit conditions rather than an overwrite.
 
 ## Map-specific unknowns
 

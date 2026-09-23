@@ -1,0 +1,213 @@
+{
+  "$schema": "../../../content/schemas/pokemon.schema.json",
+  "pokemon": [
+    {
+      "id": "charizard",
+      "nombre": "Charizard",
+      "numero": 6,
+      "generacion": 1,
+      "variante": "normal",
+      "nivel": 80,
+      "tier": 3,
+      "funcion": "PVE",
+      "elementos": ["fire", "flying"],
+      "imagen": "/pokemon/006.png",
+      "drops": [
+        {
+          "item": "fire-stone",
+          "cantidad": null
+        }
+      ],
+      "elementoMoveset": "fire"
+    },
+    {
+      "id": "shiny-charizard",
+      "nombre": "Shiny Charizard",
+      "numero": 6,
+      "generacion": 1,
+      "variante": "shiny",
+      "nivel": 120,
+      "tier": 1,
+      "funcion": "PVE",
+      "elementos": ["fire", "flying"],
+      "imagen": "/pokemon/006.1.png",
+      "drops": [
+        {
+          "item": "fire-stone",
+          "cantidad": null
+        }
+      ],
+      "elementoMoveset": "fire",
+      "hp": 1700,
+      "experiencia": 54000,
+      "habilidades": ["Fly", "Light", "Strength", "Headbutt"],
+      "donde": {
+        "hunts": [
+          {
+            "texto": "Mapa normal"
+          },
+          {
+            "texto": "Wildscape"
+          }
+        ],
+        "linkedTasks": [
+          {
+            "texto": "Inferno Sovereign"
+          },
+          {
+            "texto": "Wildscape Hunter: Charizard"
+          }
+        ],
+        "equiposNpc": [
+          {
+            "texto": "Gym de Cinnabar"
+          },
+          {
+            "texto": "Officer Blaze"
+          },
+          {
+            "texto": "Rocket Mirage"
+          }
+        ]
+      }
+    },
+    {
+      "id": "pikachu",
+      "nombre": "Pikachu",
+      "numero": 25,
+      "generacion": 1,
+      "variante": "normal",
+      "nivel": 40,
+      "tier": 5,
+      "funcion": "PVE",
+      "elementos": ["electric"],
+      "imagen": "/pokemon/025.png",
+      "drops": [
+        {
+          "item": "thunder-stone",
+          "cantidad": null
+        }
+      ]
+    },
+    {
+      "id": "gengar",
+      "nombre": "Gengar",
+      "numero": 94,
+      "generacion": 1,
+      "variante": "normal",
+      "nivel": 100,
+      "tier": 2,
+      "funcion": "PVE",
+      "elementos": ["ghost", "poison"],
+      "imagen": "/pokemon/094.png"
+    },
+    {
+      "id": "shiny-gengar",
+      "nombre": "Shiny Gengar",
+      "numero": 94,
+      "generacion": 1,
+      "variante": "shiny",
+      "nivel": 120,
+      "tier": "Legendary",
+      "funcion": "PVE",
+      "elementos": ["ghost", "poison"],
+      "imagen": "/pokemon/094.1.png"
+    },
+    {
+      "id": "gyarados",
+      "nombre": "Gyarados",
+      "numero": 130,
+      "generacion": 1,
+      "variante": "normal",
+      "nivel": 100,
+      "tier": 2,
+      "funcion": "PVE",
+      "elementos": ["water", "flying"],
+      "imagen": "/pokemon/130.png",
+      "drops": [
+        {
+          "item": "water-stone",
+          "cantidad": null
+        }
+      ]
+    },
+    {
+      "id": "shiny-ditto",
+      "nombre": "Shiny Ditto",
+      "numero": 132,
+      "generacion": 1,
+      "variante": "shiny",
+      "nivel": 1,
+      "tier": 7,
+      "funcion": "PVE",
+      "elementos": ["normal"],
+      "imagen": "/pokemon/132.1.png",
+      "drops": [
+        {
+          "item": "heart-stone",
+          "cantidad": null
+        }
+      ]
+    },
+    {
+      "id": "shiny-dragonite",
+      "nombre": "Shiny Dragonite",
+      "numero": 149,
+      "generacion": 1,
+      "variante": "shiny",
+      "nivel": 120,
+      "tier": "Mythic",
+      "funcion": "PVE",
+      "elementos": ["dragon", "flying"],
+      "imagen": "/pokemon/149.1.png"
+    },
+    {
+      "id": "mewtwo",
+      "nombre": "Mewtwo",
+      "numero": 150,
+      "generacion": 1,
+      "variante": "normal",
+      "nivel": 120,
+      "tier": "ULTIMATE",
+      "funcion": "PVE",
+      "elementos": ["psychic"],
+      "imagen": "/pokemon/150.png"
+    },
+    {
+      "id": "shiny-hitmontop",
+      "nombre": "Shiny Hitmontop",
+      "numero": 237,
+      "generacion": 2,
+      "variante": "shiny",
+      "nivel": 120,
+      "tier": 1,
+      "funcion": "PVE",
+      "elementos": ["fighting"],
+      "imagen": "/pokemon/237.1.png"
+    },
+    {
+      "id": "tyranitar",
+      "nombre": "Tyranitar",
+      "numero": 248,
+      "generacion": 2,
+      "variante": "normal",
+      "nivel": 100,
+      "tier": 2,
+      "funcion": "PVE",
+      "elementos": ["rock", "dark"],
+      "imagen": "/pokemon/248.png"
+    },
+    {
+      "id": "rayquaza",
+      "nombre": "Rayquaza",
+      "numero": 384,
+      "generacion": 3,
+      "variante": "normal",
+      "nivel": 60,
+      "tier": "ULTIMATE",
+      "funcion": "PVP",
+      "elementos": ["dragon", "flying"],
+      "imagen": "/pokemon/384.png"
+    }
+  ]
+}

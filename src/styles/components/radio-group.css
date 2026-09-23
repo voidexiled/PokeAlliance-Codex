@@ -1,0 +1,148 @@
+/* RadioGroup (spec 7.2.8): a site piece without a design system component, composed only from
+   tokens and text styles (R16) on a native `<fieldset>`, `<legend>` and `<input type="radio">`.
+
+   The legend is the one of RangeField (14/22, 8 above); the options stack 8 apart. Each option
+   is a `<label>` row like Checkbox's: the input lies over the whole row, fully transparent, and
+   `span.ac-radio-group__mark` draws the states of spec 5.2 from the input next to it. The mark
+   is round, `radius-full`: spec 5.1 gives that radius to chips and the «+N» button only
+   because the design system draws no radio, and a square mark would read as a checkbox. */
+
+.ac-radio-group {
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.ac-radio-group__legend {
+  margin: 0 0 var(--space-8);
+  padding: 0;
+  color: var(--text-primary);
+  @apply type-body;
+}
+
+.ac-radio-group__options {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-8);
+}
+
+.ac-radio-group__option {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-8);
+  color: var(--text-primary);
+  @apply type-body;
+}
+
+/* The real control: the size of the row, transparent, above the mark and the text. */
+.ac-radio-group__input {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.ac-radio-group__input:disabled {
+  cursor: not-allowed;
+}
+
+/* Rest: `border-primary` like every control (spec 5.1), no fill. The dot of the chosen option
+   is the `::after`, hidden until then. */
+.ac-radio-group__mark {
+  display: flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  width: var(--space-16);
+  height: var(--space-16);
+  border: 1px solid var(--border-primary);
+  border-radius: var(--radius-full);
+  background: transparent;
+  color: var(--text-primary);
+}
+
+.ac-radio-group__mark::after {
+  content: '';
+  width: var(--space-8);
+  height: var(--space-8);
+  border-radius: var(--radius-full);
+  background: currentColor;
+  visibility: hidden;
+}
+
+/* Hover (spec 5.2): `bg-tertiary`, the one hover ink. */
+.ac-radio-group__input:hover:not(:disabled) + .ac-radio-group__mark {
+  background: var(--bg-tertiary);
+}
+
+/* Focus (spec 5.2): the ring of base.css, drawn on the mark because the input is transparent. */
+.ac-radio-group__input:focus-visible + .ac-radio-group__mark {
+  outline: 2px solid var(--ring);
+  outline-offset: 1px;
+}
+
+/* Selection (spec 5.2): 1 px `selected` border plus `ring-selected`, no fill, and the dot. */
+.ac-radio-group__input:checked + .ac-radio-group__mark {
+  border-color: var(--selected);
+  box-shadow: var(--ring-selected);
+}
+
+.ac-radio-group__input:checked + .ac-radio-group__mark::after {
+  visibility: visible;
+}
+
+/* Disabled (spec 5.2): `text-quaternary`, `border-secondary`, not-allowed. A disabled
+   fieldset disables every radio, so the same rules cover it. */
+.ac-radio-group__input:disabled + .ac-radio-group__mark {
+  border-color: var(--border-secondary);
+  box-shadow: none;
+  color: var(--text-quaternary);
+}
+
+.ac-radio-group__input:disabled ~ .ac-radio-group__label {
+  color: var(--text-quaternary);
+}
+
+.ac-radio-group__helper {
+  margin: var(--space-4) 0 0;
+  color: var(--helper);
+  @apply type-ui;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .ac-radio-group__mark {
+    transition: background-color var(--duration-fast) var(--ease-standard);
+  }
+}
+
+/* Touch (spec 13.7, S14): each row, which is the target, is at least `size-touch`. */
+@media (pointer: coarse) {
+  .ac-radio-group__option {
+    min-width: var(--size-touch);
+    min-height: var(--size-touch);
+  }
+}
+
+/* Forced colours (spec 5.2): the selection becomes a 2 px `Highlight` border, the ring keeps
+   its outline on `Highlight`, and the dot, a background the mode would repaint, is drawn in
+   `Highlight` too. */
+@media (forced-colors: active) {
+  .ac-radio-group__input:checked + .ac-radio-group__mark {
+    border: 2px solid Highlight;
+  }
+
+  .ac-radio-group__input:focus-visible + .ac-radio-group__mark {
+    outline-color: Highlight;
+  }
+
+  .ac-radio-group__mark::after {
+    forced-color-adjust: none;
+    background: Highlight;
+  }
+}

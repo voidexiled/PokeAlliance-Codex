@@ -1,0 +1,73 @@
+---
+// MobileMenu (spec 5.8, 7.10.3, DS:MobileMenu): the 288 sheet that holds the
+// navigation below 1280, with the brand row, the language selector and the same
+// `Sidebar` with 44 px rows.
+//
+// One change against the reference (C-R2): where the design system paints a
+// `div` with `role="dialog"` and traps focus with React, the site uses a native
+// `<dialog>` opened with `showModal()`. That gives the modal behaviour for free —
+// focus trapped inside, the rest of the page inert, Escape through the native
+// `cancel` event and focus back on the button that opened it — with no React in
+// the frame (3.8). The veil is the `::backdrop` of that dialog instead of the
+// `.ac-mobile-menu__scrim` element of the reference.
+//
+// `src/scripts/mobile-menu.ts` is what opens and closes it. The id is fixed:
+// `menu-movil` is the `aria-controls` of the menu button of `Header` (C-R4).
+//
+// The language selector is `LanguageMenu` with its own popover of two real links
+// (7.10.1), not the button with `onLanguage` of the design system (DP4). It
+// arrives through the `idioma` slot, so whoever composes the frame passes the
+// same component the header uses; with no slot the row and its rule are not
+// painted, because an empty row would be a control that does nothing (R12).
+import type { Locale } from '@/i18n/config';
+import type { SidebarNav } from '@/lib/nav/groups';
+import type { Messages } from '@/i18n/messages/en';
+import { en } from '@/i18n/messages/en';
+import { es } from '@/i18n/messages/es';
+import { Glyph } from '@/components/icons/Glyph';
+import Sidebar from './Sidebar.astro';
+
+interface Props {
+  /** Page locale: picks the dictionary and the target of the brand. */
+  locale: Locale;
+  /** Links and groups of 8.0.3, the same ones the column gets. */
+  nav: SidebarNav;
+  /** Utilities added by the caller, after the component's own classes (3.8). */
+  class?: string;
+}
+
+const dictionaries: Record<Locale, Messages> = { es, en };
+
+const { locale, nav, class: className } = Astro.props;
+const shell = dictionaries[locale].shell;
+const conIdioma = Astro.slots.has('idioma');
+---
+
+<dialog id="menu-movil" class:list={['ac-mobile-menu', className]} aria-label={shell.menu}>
+  <div class="ac-mobile-menu__body">
+    <div class="ac-mobile-menu__brand">
+      <a class="ac-mobile-menu__brand-link" href={`/${locale}/`}>Alliance Codex</a>
+      <button
+        type="button"
+        class="ac-mobile-menu__close"
+        aria-label={shell.menuClose}
+        data-ac-menu-close
+      >
+        {/* 18, as DS:MobileMenu draws it; the 14 of the glyph list is the Notice close. */}
+        <Glyph name="close" size={18} />
+      </button>
+    </div>
+    <div role="none" class="ac-mobile-menu__sep"></div>
+    {
+      conIdioma && (
+        <Fragment>
+          <div class="ac-mobile-menu__lang-wrap">
+            <slot name="idioma" />
+          </div>
+          <div role="none" class="ac-mobile-menu__sep" />
+        </Fragment>
+      )
+    }
+    <Sidebar locale={locale} nav={nav} touch idPrefix="menu-nav" />
+  </div>
+</dialog>

@@ -1,0 +1,14 @@
+{
+  "$schema": "../schemas/sistemas.schema.json",
+  "id": "medals",
+  "titulo": {
+    "es": "Medal System",
+    "en": "Medal System"
+  },
+  "sprite": null,
+  "orden": 6,
+  "tooltip": [],
+  "intro": [],
+  "secciones": [],
+  "borrador": true
+}

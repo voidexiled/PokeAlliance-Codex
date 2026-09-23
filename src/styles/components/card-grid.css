@@ -1,0 +1,179 @@
+/* CardGrid (spec 7.6.1, 7.6.5; CARD_GRID_SYSTEM §4, §12; DS:CardGrid, DS:guias/30), ported
+   from the `.ac-card-grid` block of the design system's components/bundle.css. global.css
+   imports this file with layer(components).
+
+   One card family per grid, rows stretched, columns from the width of the grid's own container,
+   never the window. The outer `.ac-card-grid` is the size container and the inner
+   `.ac-card-grid__grid` holds the cards: `--ac-cols` equal columns and `--ac-gap` in both axes.
+   Columns = clamp(floor((W + gap) / (min + gap)), min, max), so the step to n columns sits at
+   n × min + (n − 1) × gap. Container queries cannot read custom properties: each step is a px
+   literal and the comment of its family names the token that gives its minimum. The container
+   is named, so a query always measures the grid and never a container inside a card.
+
+   What DS:guias/30 §Responsive gets from it, with the main columns of CARD_GRID_SYSTEM §3:
+
+     width   Comercio             Pokédex                    Loot (detail)
+     1440    944: 3 × 304         944: 3 × 304               896: 3 × 288
+     1280    784: 2 × 384         784: 2 × 384               736: 2 × 360
+     1024    992: 3 × 320         992: 3 × 320               992: 3 × 320
+     768     736: 2 × 360         736: 2 × 360               736: 2 × 360
+     390     358: 1 × 358, gap 12 358: 2 × 175 compact, gap 8 358: 1 × 358, gap 12
+
+   Destacados take 4, 2 or 1 columns, the index panels 3, 2 or 1, the Guild KPIs 4, 2 or 1 and
+   the info cards 2 or 1 at the same widths.
+
+   Never `align-items: start`, `grid-auto-flow: dense`, `order` or explicit placement (7.6.5):
+   the DOM order is the sort order, row-major, and an empty cell at the end of the last row stays
+   empty. The cards themselves are card.css. */
+
+.ac-card-grid {
+  container-name: ac-card-grid;
+  container-type: inline-size;
+  min-width: 0;
+}
+
+/* `align-items: stretch` is the grid default, written because it is the rule that makes the
+   cards of a row one height (DS:guias/30 «Reglas de la rejilla», 2). */
+.ac-card-grid__grid {
+  --ac-cols: 1;
+  --ac-gap: var(--space-16);
+  display: grid;
+  grid-template-columns: repeat(var(--ac-cols), minmax(0, 1fr));
+  align-items: stretch;
+  gap: var(--ac-gap);
+}
+
+/* Comercio listing: min --grid-listing (280), 1 to 4 columns; gap 12 under 480. */
+.ac-card-grid[data-family='listing'] > .ac-card-grid__grid {
+  --ac-gap: var(--space-12);
+}
+
+@container ac-card-grid (width >= 480px) {
+  .ac-card-grid[data-family='listing'] > .ac-card-grid__grid {
+    --ac-gap: var(--space-16);
+  }
+}
+
+@container ac-card-grid (width >= 576px) {
+  .ac-card-grid[data-family='listing'] > .ac-card-grid__grid {
+    --ac-cols: 2;
+  }
+}
+
+@container ac-card-grid (width >= 872px) {
+  .ac-card-grid[data-family='listing'] > .ac-card-grid__grid {
+    --ac-cols: 3;
+  }
+}
+
+@container ac-card-grid (width >= 1168px) {
+  .ac-card-grid[data-family='listing'] > .ac-card-grid__grid {
+    --ac-cols: 4;
+  }
+}
+
+/* Pokédex entry: min --grid-dex (260), 2 to 4 columns; gap 8 under 480. Under 495
+   (--layout-dex-compact) a card is narrower than --grid-compact (240) and takes the compact
+   anatomy of card.css. */
+.ac-card-grid[data-family='pokedex'] > .ac-card-grid__grid {
+  --ac-cols: 2;
+  --ac-gap: var(--space-8);
+}
+
+@container ac-card-grid (width >= 480px) {
+  .ac-card-grid[data-family='pokedex'] > .ac-card-grid__grid {
+    --ac-gap: var(--space-16);
+  }
+}
+
+@container ac-card-grid (width >= 812px) {
+  .ac-card-grid[data-family='pokedex'] > .ac-card-grid__grid {
+    --ac-cols: 3;
+  }
+}
+
+@container ac-card-grid (width >= 1088px) {
+  .ac-card-grid[data-family='pokedex'] > .ac-card-grid__grid {
+    --ac-cols: 4;
+  }
+}
+
+/* Loot / drop: min --grid-loot (240), 1 to 4 columns; gap 12 under 480. */
+.ac-card-grid[data-family='loot'] > .ac-card-grid__grid {
+  --ac-gap: var(--space-12);
+}
+
+@container ac-card-grid (width >= 480px) {
+  .ac-card-grid[data-family='loot'] > .ac-card-grid__grid {
+    --ac-gap: var(--space-16);
+  }
+}
+
+@container ac-card-grid (width >= 496px) {
+  .ac-card-grid[data-family='loot'] > .ac-card-grid__grid {
+    --ac-cols: 2;
+  }
+}
+
+@container ac-card-grid (width >= 752px) {
+  .ac-card-grid[data-family='loot'] > .ac-card-grid__grid {
+    --ac-cols: 3;
+  }
+}
+
+@container ac-card-grid (width >= 1008px) {
+  .ac-card-grid[data-family='loot'] > .ac-card-grid__grid {
+    --ac-cols: 4;
+  }
+}
+
+/* Featured (Destacados): min --grid-featured (200), 4, 2 or 1 columns, gap 8. Three columns
+   never happen: the count divides 4. */
+.ac-card-grid[data-family='featured'] > .ac-card-grid__grid {
+  --ac-gap: var(--space-8);
+}
+
+@container ac-card-grid (width >= 408px) {
+  .ac-card-grid[data-family='featured'] > .ac-card-grid__grid {
+    --ac-cols: 2;
+  }
+}
+
+@container ac-card-grid (width >= 824px) {
+  .ac-card-grid[data-family='featured'] > .ac-card-grid__grid {
+    --ac-cols: 4;
+  }
+}
+
+/* Index panels (bento): min --grid-index (290), 3, 2 or 1 columns. */
+@container ac-card-grid (width >= 596px) {
+  .ac-card-grid[data-family='index'] > .ac-card-grid__grid {
+    --ac-cols: 2;
+  }
+}
+
+@container ac-card-grid (width >= 902px) {
+  .ac-card-grid[data-family='index'] > .ac-card-grid__grid {
+    --ac-cols: 3;
+  }
+}
+
+/* Guild KPI: min --grid-kpi (200), 4, 2 or 1 columns. */
+@container ac-card-grid (width >= 416px) {
+  .ac-card-grid[data-family='kpi'] > .ac-card-grid__grid {
+    --ac-cols: 2;
+  }
+}
+
+@container ac-card-grid (width >= 848px) {
+  .ac-card-grid[data-family='kpi'] > .ac-card-grid__grid {
+    --ac-cols: 4;
+  }
+}
+
+/* Info card: min --grid-info (280), 2 or 1 columns. */
+@container ac-card-grid (width >= 576px) {
+  .ac-card-grid[data-family='info'] > .ac-card-grid__grid {
+    --ac-cols: 2;
+  }
+}

@@ -1,0 +1,195 @@
+/* EvolutionChain (spec 7.2.7, 8.3; CARD_GRID_SYSTEM §6.8; DS:EvolutionChain), ported from the
+   `.ac-evolution-chain` block of the design system's components/bundle.css.
+
+   Per-page stylesheet. Only the Pokémon page draws an evolution line, so this file is not one
+   of the @imports of global.css: src/components/pokemon/EvolutionChain.astro imports it and
+   the build writes it next to the pages that render the component (plan M7, §13.6: the shared
+   sheet keeps its S17 budget and the CSS of a page stays under 30 KB gzip). Two consequences:
+
+   - it carries its own `@layer components` block and repeats the layer order of global.css
+     first, so the order holds whichever of the two sheets the browser reads first (§3.6: a
+     layer that is named first is the weakest one);
+   - `@apply` needs the text styles of theme.css, which `@reference` brings in without
+     writing any of them here again.
+
+   Stage tiles of 168 with the outfit (or the missing mark in its 64 frame), the name and the
+   meta line, joined by connectors that share the rest of the row: the arrow, the requirement
+   and the item chips. One height per row (CARD_GRID_SYSTEM §6.8).
+
+   Differences against the reference:
+
+   - the type pairs are `@apply type-body` and `@apply type-ui` (spec 3.7);
+   - the arrow is the `arrow-right` Glyph (C-R7), in `text-quaternary` as in the reference;
+   - a stage or a connector placed right inside a Section is an `li` of an `ol`, and the
+     zero-specificity «li + li» rhythm of section.css would add 8 px above each one: both
+     reset their margin, as Timeline does;
+   - `DS:EvolutionChain` has no phone layout yet («Necesita unos 800 px de ancho») and 8.3
+     asks the line to scroll inside its container below that: a connector never shrinks
+     under its own content, so a narrow column overflows the `ol`, which scrolls sideways and
+     contains its absolute children. At the 896 of the board the connectors still share the
+     row equally, as in the reference;
+   - the item sprite box keeps its sprite at its natural size (the reference's image is
+     `flex: 0 0 auto`), so a 20 × 21 stone overflows the 16 box centred and every chip stays
+     24 tall. */
+
+@reference '../theme.css';
+
+@layer properties, theme, base, components, utilities;
+
+@layer components {
+  /* `position: relative` makes the scroller the containing block of the hidden «Evoluciona
+     con:» (`sr-only` is absolute): without it that text would escape the clipping and widen
+     the page at 390 (WG1). */
+  .ac-evolution-chain {
+    position: relative;
+    display: flex;
+    align-items: stretch;
+    margin: 0;
+    padding: 0;
+    overflow-x: auto;
+    list-style: none;
+  }
+
+  /* 168 px tile (no token holds it); one height per row, content from the top. */
+  .ac-evolution-chain__stage {
+    display: flex;
+    width: 168px; /* sin token: ancho de la ficha de etapa del DS */
+    flex: none;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-8);
+    margin: 0;
+    padding: var(--space-12) var(--space-8);
+    border-radius: var(--radius-8);
+    background: var(--bg-secondary);
+    text-align: center;
+  }
+
+  .ac-evolution-chain__sprite {
+    display: flex;
+    width: var(--size-art);
+    height: var(--size-art);
+    flex: none;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .ac-evolution-chain__missing {
+    display: flex;
+    width: var(--size-art);
+    height: var(--size-art);
+    flex: none;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid var(--border-secondary);
+    border-radius: var(--radius-8);
+  }
+
+  /* Missing-sprite mark: half the 64 cell. */
+  .ac-evolution-chain__mark {
+    display: block;
+    width: var(--size-cell);
+    height: var(--size-cell);
+    flex: none;
+    border-radius: var(--radius-3);
+    background: var(--tt-track);
+    box-shadow: var(--inset-missing);
+  }
+
+  .ac-evolution-chain__name {
+    @apply type-body;
+  }
+
+  .ac-evolution-chain__name--current {
+    font-weight: 700;
+  }
+
+  .ac-evolution-chain__link {
+    color: var(--link);
+    text-decoration: none;
+  }
+
+  .ac-evolution-chain__link:hover {
+    text-decoration: underline;
+  }
+
+  .ac-evolution-chain__meta {
+    margin: 0;
+    @apply type-ui;
+    color: var(--text-tertiary);
+  }
+
+  /* The connectors share what the tiles leave, and never go under their own content: below
+     that the `ol` scrolls (see the head of this file). */
+  .ac-evolution-chain__step {
+    display: flex;
+    flex: 1;
+    min-width: max-content;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-8);
+    margin: 0;
+    padding: 0 var(--space-8);
+  }
+
+  .ac-evolution-chain__arrow {
+    display: block;
+    flex: none;
+    color: var(--text-quaternary);
+  }
+
+  .ac-evolution-chain__chips {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-4);
+  }
+
+  .ac-evolution-chain__chip-sprite {
+    display: flex;
+    width: var(--size-sprite-nav);
+    height: var(--size-sprite-nav);
+    flex: none;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .ac-evolution-chain__chip-sprite > * {
+    flex: none;
+  }
+
+  /* Touch (S14, spec 13.7): every trigger of the line answers in 44 × 44 at least.
+     - The name of a stage is a 22 px line: its cell grows to a box of 44 × 44 at least,
+       centred in the tile, and the link answers in the whole box, as the name of a Tier
+       list row does (drops.css). The tile grows with it on a coarse pointer only.
+     - An item chip already answers in a 44 tall box centred on it (nested-entity.css); the
+       chips of a connector stack 4 apart, so each box would reach 16 px over its neighbour
+       and the later chip would take the taps meant for the earlier one. On touch they
+       stack 20 apart, which leaves each 24 px chip its own 44. */
+  @media (pointer: coarse) {
+    .ac-evolution-chain__name {
+      position: relative;
+      display: flex;
+      min-width: var(--size-touch);
+      min-height: var(--size-touch);
+      align-items: center;
+      justify-content: center;
+    }
+
+    .ac-evolution-chain__name .ac-nested-entity {
+      position: static;
+    }
+
+    .ac-evolution-chain__name .ac-nested-entity__trigger::after,
+    .ac-evolution-chain__link::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+    }
+
+    .ac-evolution-chain__chips {
+      gap: var(--space-20);
+    }
+  }
+}

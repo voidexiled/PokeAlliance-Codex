@@ -1,0 +1,223 @@
+/* DexCard (spec 7.2.6, 7.5.5, 7.6.4; CARD_GRID_SYSTEM §6.2, §9; DS:DexCard), ported from the
+   `.ac-dex-card` block of the design system's components/bundle.css. global.css imports this
+   file with layer(components).
+
+   The card box, the head and the fact rows come from card.css and fact-list.css; the art and
+   the drop cells are SpriteStage (sprite-stage.css), the chips ElementChip and NestedEntity,
+   the «+N» PlusN. This file has the variant line, the element and drop zones and the drops
+   themselves.
+
+   Differences against the reference:
+
+   - the type is `@apply type-ui` and the hover transition sits inside
+     `@media (prefers-reduced-motion: no-preference)` with the motion tokens (spec 3.7, 6.4);
+   - the compact anatomy (7.6.4) is not a modifier class chosen by a prop but a container
+     query on the grid under 495 (`layout-dex-compact`), the query of card.css, over one DOM:
+     the reference's `.ac-dex-card__center` and `.ac-dex-card__drops--compact` become rules of
+     that query;
+   - because the DOM is one, every drop is drawn once and its `li` says what it is in each
+     anatomy (`data-regular="slot|chip|hidden"`, `data-compact="slot|hidden"`), and so do
+     the two «+N» (`data-variant`). A drop without a sprite is a named chip in the regular
+     anatomy and a slot with the missing mark in the compact one: its trigger holds both the
+     cell and the name, and these rules show one of the two. What an anatomy hides is
+     `display: none`, out of the tab order and of the accessibility tree;
+   - on a coarse pointer the square «+N» grows with the slots it follows, as the 40 square
+     of plus-n.css grows with its `EntitySlot`s (the reference leaves it at 36 among 44s). */
+
+/* Variante: the Shiny mark 6 before «Shiny». */
+.ac-dex-card__variant {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-6);
+}
+
+/* Element chips: one line of 24 px chips, 4 apart. */
+.ac-dex-card__elements {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-4);
+}
+
+/* «Drops», and the dash of an entry without drops 6 under it. */
+.ac-dex-card__label {
+  margin: 0;
+  color: var(--text-tertiary);
+  @apply type-ui;
+}
+
+.ac-dex-card__none {
+  margin: var(--space-6) 0 0;
+  @apply type-ui;
+}
+
+/* The drops: one flow that wraps, 4 apart, 6 under «Drops». */
+.ac-dex-card__drops {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-4);
+  margin: var(--space-6) 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.ac-dex-card__li {
+  display: flex;
+}
+
+/* Drop slot: the 32 game cell at 1x in a 36 frame; hover is the one ink. */
+.ac-dex-card__slot {
+  display: flex;
+  width: var(--size-slot-drop);
+  height: var(--size-slot-drop);
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--border-secondary);
+  border-radius: var(--radius-8);
+  background: var(--bg-primary);
+  text-decoration: none;
+}
+
+.ac-dex-card__slot:is(a, button):hover {
+  background: var(--bg-tertiary);
+}
+
+/* Named chip of a drop without a sprite: the pill is the text chip of nested-entity.css, or
+   the fact chip of chip.css when the drop opens no tooltip (R2). Its cell is the compact
+   anatomy's. */
+.ac-dex-card__chip {
+  white-space: nowrap;
+}
+
+.ac-dex-card__chip > .ac-dex-card__cell {
+  display: none;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .ac-dex-card__slot,
+  .ac-dex-card__chip {
+    transition: background-color var(--duration-fast) var(--ease-standard);
+  }
+}
+
+/* A row of the «+N» list: the hidden drop's 1x cell and its name. */
+.ac-dex-card__more {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-8);
+}
+
+/* Meta: «Nº 6 · Generación 1»; «Nº 6 · Gen. 1» is the compact anatomy's. */
+.ac-dex-card__short {
+  display: none;
+}
+
+/* Regular anatomy: the named drops past the chip cap and the compact «+N» are not drawn. */
+.ac-dex-card__li[data-regular='hidden'],
+.ac-dex-card__li[data-variant='compact'] {
+  display: none;
+}
+
+/* The drop panels line up with the half of the card their trigger sits in (`auto`, 7.5.5);
+   the regular «+N» does the same, which its own attribute cannot say (PlusN writes `start` or
+   `end`). The controller reads this property before the attribute (7.6.4). */
+.ac-dex-card__li[data-variant='regular'] {
+  --ac-tt-align: auto;
+}
+
+@media (pointer: coarse) {
+  .ac-dex-card__slot {
+    width: var(--size-touch);
+    height: var(--size-touch);
+  }
+}
+
+/* Compact anatomy (spec 7.6.4, CARD_GRID_SYSTEM §6.2): a grid under 495, cards under 240. The
+   head and the title are card.css's and the round element chips element-chip.css's. Here: the
+   short meta, the zones centred, and the drops as slots only, 3 to a line, at most 6 — a drop
+   without a sprite drawn as a slot with the missing mark, its name left to the screen reader
+   and to the `aria-label` of its trigger. */
+@container ac-card-grid (width < 495px) {
+  .ac-card-grid[data-family='pokedex'] .ac-dex-card__long {
+    display: none;
+  }
+
+  .ac-card-grid[data-family='pokedex'] .ac-dex-card__short {
+    display: inline;
+  }
+
+  .ac-card-grid[data-family='pokedex'] .ac-dex-card__elements {
+    justify-content: center;
+  }
+
+  .ac-card-grid[data-family='pokedex'] .ac-dex-card__label,
+  .ac-card-grid[data-family='pokedex'] .ac-dex-card__none {
+    text-align: center;
+  }
+
+  .ac-card-grid[data-family='pokedex'] .ac-dex-card__drops {
+    display: grid;
+    grid-template-columns: repeat(3, var(--size-slot-drop));
+    justify-content: center;
+  }
+
+  .ac-card-grid[data-family='pokedex'] .ac-dex-card__li[data-regular='hidden'],
+  .ac-card-grid[data-family='pokedex'] .ac-dex-card__li[data-variant='compact'] {
+    display: flex;
+  }
+
+  .ac-card-grid[data-family='pokedex'] .ac-dex-card__li[data-compact='hidden'],
+  .ac-card-grid[data-family='pokedex'] .ac-dex-card__li[data-variant='regular'] {
+    display: none;
+  }
+
+  /* The chip of a drop without a sprite takes the slot's shape and shows its cell. */
+  .ac-card-grid[data-family='pokedex'] .ac-dex-card__chip {
+    display: flex;
+    width: var(--size-slot-drop);
+    height: var(--size-slot-drop);
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    border: 1px solid var(--border-secondary);
+    border-radius: var(--radius-8);
+    background: var(--bg-primary);
+  }
+
+  .ac-card-grid[data-family='pokedex'] .ac-dex-card__chip:is(a, button):hover {
+    background: var(--bg-tertiary);
+  }
+
+  .ac-card-grid[data-family='pokedex'] .ac-dex-card__chip > .ac-dex-card__cell {
+    display: flex;
+  }
+
+  .ac-card-grid[data-family='pokedex'] .ac-dex-card__name {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    padding: 0;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+}
+
+/* Coarse pointers in the compact anatomy: the 44 touch slots, three to a line, and the square
+   «+N» and the slot-shaped chips with them. */
+@media (pointer: coarse) {
+  @container ac-card-grid (width < 495px) {
+    .ac-card-grid[data-family='pokedex'] .ac-dex-card__drops {
+      grid-template-columns: repeat(3, var(--size-touch));
+    }
+
+    .ac-card-grid[data-family='pokedex'] .ac-dex-card__chip,
+    .ac-card-grid[data-family='pokedex']
+      .ac-dex-card__li[data-variant='compact']
+      .ac-plus-n__button {
+      width: var(--size-touch);
+      height: var(--size-touch);
+    }
+  }
+}

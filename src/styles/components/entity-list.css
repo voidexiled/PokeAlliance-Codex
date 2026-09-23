@@ -1,0 +1,58 @@
+/* EntityList (spec 7.7.1, 7.7.4 V6, 7.7.5 PR4): the frame every list of entities shares.
+   The design system has no block for it: it is composed only of tokens and of pieces of
+   the design system (R16), with the geometry of `Lienzo:Pokedex` and `Lienzo:Comercio`.
+   global.css imports this file with layer(components), after slots-panel.css, the last
+   piece a list view draws.
+
+   - The root is a column 16 apart: the controls of the list (search, type tabs,
+     FilterBar), the results bar, the results and the pagination (V6).
+   - The results bar: Count on the left and the tools on the right, `space-between`, 16
+     apart; SortSelect and ViewToggle 24 apart (9.5.1). A bar that does not fit its column
+     wraps, the tools staying on the right; one that fits wraps nothing, so the 1440 boards
+     draw the same row, and the 358 column of a phone never scrolls sideways (S1).
+   - PR4: while the root carries `data-ac-pending` it keeps the height of the prerendered
+     HTML and paints nothing of it (controls, bar, view and pagination).
+   - H4: after a page change the results take the focus and land 16 px under the header,
+     which `html` reserves with `scroll-padding-top` (3.6). */
+
+.ac-entity-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-16);
+  min-width: 0;
+}
+
+.ac-entity-list[data-ac-pending] {
+  visibility: hidden;
+}
+
+/* PR4 and the page CLS of 13.6: what follows the list in its column — the footer of
+   PageLayout — hides with it. Otherwise the footer paints under the prerendered height and
+   jumps when the state of the URL is applied, which on a phone is a page shift of 0.12. The
+   list is an island, so the element that holds the root is its `astro-island` wrapper, and
+   what follows is that wrapper's siblings. Nothing is hidden without the attribute. */
+:has(> .ac-entity-list[data-ac-pending]) ~ * {
+  visibility: hidden;
+}
+
+.ac-entity-list__bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-16);
+}
+
+.ac-entity-list__tools {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: flex-end;
+  gap: var(--space-24);
+  margin-left: auto;
+}
+
+.ac-entity-list__results {
+  min-width: 0;
+  scroll-margin-top: var(--space-16);
+}

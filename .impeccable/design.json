@@ -1,0 +1,383 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-09-23T00:00:00-06:00",
+  "title": "Design System: Alliance Codex",
+  "extensions": {
+    "colorMeta": {
+      "bg-primary": { "role": "neutral", "displayName": "Fondo primario", "canonical": "#0c0e12" },
+      "bg-secondary": {
+        "role": "neutral",
+        "displayName": "Fondo secundario",
+        "canonical": "#13161b"
+      },
+      "bg-tertiary": {
+        "role": "neutral",
+        "displayName": "Fondo terciario (hover)",
+        "canonical": "#22262f"
+      },
+      "bg-quaternary": {
+        "role": "neutral",
+        "displayName": "Fondo cuaternario",
+        "canonical": "#373a41"
+      },
+      "border-secondary": {
+        "role": "neutral",
+        "displayName": "Borde secundario",
+        "canonical": "#22262f"
+      },
+      "border-primary": {
+        "role": "neutral",
+        "displayName": "Borde primario",
+        "canonical": "#373a41"
+      },
+      "text-primary": {
+        "role": "neutral",
+        "displayName": "Texto primario",
+        "canonical": "#f7f7f7"
+      },
+      "text-secondary": {
+        "role": "neutral",
+        "displayName": "Texto secundario",
+        "canonical": "#cecfd2"
+      },
+      "text-tertiary": {
+        "role": "neutral",
+        "displayName": "Texto terciario",
+        "canonical": "#94979c"
+      },
+      "text-quaternary": {
+        "role": "neutral",
+        "displayName": "Texto cuaternario",
+        "canonical": "#85888e"
+      },
+      "text-quinary": {
+        "role": "neutral",
+        "displayName": "Separador decorativo",
+        "canonical": "#61656c"
+      },
+      "helper": { "role": "neutral", "displayName": "Ayuda", "canonical": "#a1a1aa" },
+      "white": { "role": "neutral", "displayName": "Blanco", "canonical": "#ffffff" },
+      "black": { "role": "neutral", "displayName": "Negro", "canonical": "#000000" },
+      "overlay": { "role": "neutral", "displayName": "Velo", "canonical": "#000000cc" },
+      "link": { "role": "primary", "displayName": "Enlace", "canonical": "#93c5fd" },
+      "link-prose": { "role": "primary", "displayName": "Enlace en prosa", "canonical": "#3b82f6" },
+      "ring": { "role": "primary", "displayName": "Anillo de foco", "canonical": "#444ce7" },
+      "selected": { "role": "secondary", "displayName": "Selección", "canonical": "#d97706" },
+      "amber": { "role": "secondary", "displayName": "Ámbar del gráfico", "canonical": "#f59e0b" },
+      "banner": { "role": "secondary", "displayName": "Banner de datos", "canonical": "#991b1b" },
+      "inactive-row": {
+        "role": "secondary",
+        "displayName": "Fila inactiva",
+        "canonical": "rgba(153, 27, 27, 0.18)"
+      },
+      "tt-panel": {
+        "role": "tertiary",
+        "displayName": "Panel del tooltip",
+        "canonical": "#21252c"
+      },
+      "tt-panel-deep": {
+        "role": "tertiary",
+        "displayName": "Franja del tooltip",
+        "canonical": "#1d232b"
+      },
+      "tt-track": {
+        "role": "tertiary",
+        "displayName": "Pista de entrenamiento del tooltip",
+        "canonical": "#262b32"
+      },
+      "tt-divider": {
+        "role": "tertiary",
+        "displayName": "Divisor del tooltip",
+        "canonical": "#2e343d"
+      },
+      "tt-label": {
+        "role": "tertiary",
+        "displayName": "Etiqueta del tooltip",
+        "canonical": "#e8c66a"
+      },
+      "tt-value": {
+        "role": "tertiary",
+        "displayName": "Valor del tooltip",
+        "canonical": "#ffffff"
+      },
+      "tt-muted": {
+        "role": "tertiary",
+        "displayName": "Progreso del tooltip",
+        "canonical": "#9aa0a8"
+      },
+      "tt-hint": {
+        "role": "tertiary",
+        "displayName": "Texto de fijar del tooltip",
+        "canonical": "#8a91a0"
+      },
+      "tt-shiny": { "role": "tertiary", "displayName": "Marca Shiny", "canonical": "#4a9eff" }
+    },
+    "typographyMeta": {
+      "h1": {
+        "displayName": "h1",
+        "purpose": "Título de página, uno por página, con divisor de 8 px."
+      },
+      "h1-sub": {
+        "displayName": "h1-sub",
+        "purpose": "Subtítulo junto al h1, en la misma línea base."
+      },
+      "h2": { "displayName": "h2", "purpose": "Título de sección con divisor de 4 px." },
+      "h3": {
+        "displayName": "h3",
+        "purpose": "Subtítulo, h1 del inicio y título de tarjeta informativa."
+      },
+      "brand": {
+        "displayName": "Marca",
+        "purpose": "Marca de texto en la cabecera y en la hoja móvil."
+      },
+      "figure": {
+        "displayName": "Cifra",
+        "purpose": "Cifra de tarjeta KPI, con cifras tabulares."
+      },
+      "base": { "displayName": "Base", "purpose": "Base del documento." },
+      "body": {
+        "displayName": "Cuerpo",
+        "purpose": "Párrafos justificados, celdas, listas, botones y etiquetas de campo."
+      },
+      "body-strong": {
+        "displayName": "Cuerpo fuerte",
+        "purpose": "Título de tarjeta, cabecera de grupo y pestaña con sprite."
+      },
+      "note": { "displayName": "Nota", "purpose": "Nota en cursiva sobre bg-secondary." },
+      "field": { "displayName": "Campo", "purpose": "Texto de campos, selects y opciones." },
+      "fact-line": {
+        "displayName": "Línea de dato",
+        "purpose": "Líneas de dato con rótulo en negrita."
+      },
+      "ui": {
+        "displayName": "UI",
+        "purpose": "Menú, hechos de tarjeta, chips, migas, TOC, conteos, banner y pie."
+      },
+      "ui-strong": {
+        "displayName": "UI fuerte",
+        "purpose": "Grupos del menú, cabeceras de tabla y toggles."
+      },
+      "ui-caps": { "displayName": "UI mayúsculas", "purpose": "Solo el rótulo «Destacados»." },
+      "ui-step": {
+        "displayName": "Paso",
+        "purpose": "Rótulo de paso de la línea de tiempo, en cursiva."
+      },
+      "ui-featured": {
+        "displayName": "Destacado",
+        "purpose": "Etiqueta de tarjeta de Destacados, en una línea."
+      },
+      "ui-loose": {
+        "displayName": "UI suelta",
+        "purpose": "Listas de enlaces dentro de una celda densa."
+      },
+      "kbd": { "displayName": "Keycap", "purpose": "Solo el keycap de atajos «Ctrl + K»." },
+      "tt-title": {
+        "displayName": "Título del tooltip",
+        "purpose": "Nombre de la entidad en el tooltip del juego, en mayúsculas."
+      },
+      "tt-row": {
+        "displayName": "Fila del tooltip",
+        "purpose": "Filas «Etiqueta: valor» del tooltip del juego."
+      },
+      "tt-hint": { "displayName": "Franja del tooltip", "purpose": "«Mantén Shift para fijar»." }
+    },
+    "shadows": [
+      {
+        "name": "ring-selected",
+        "value": "0 0 0 1px #d97706",
+        "purpose": "Segundo píxel del estado seleccionado, junto a un borde de 1 px selected."
+      },
+      {
+        "name": "text-shadow-game",
+        "value": "0 1px 1px rgba(0, 0, 0, 0.85)",
+        "purpose": "Sombra de texto del tooltip del juego y de la cifra de pila; nunca box-shadow."
+      },
+      {
+        "name": "inset-missing",
+        "value": "inset 0 0 0 1px #373a41",
+        "purpose": "Contorno interior de la marca de sprite faltante."
+      },
+      {
+        "name": "inset-tt-empty",
+        "value": "inset 0 0 0 1px #2e343d",
+        "purpose": "Contorno interior del hueco vacío dentro del tooltip."
+      }
+    ],
+    "motion": [
+      {
+        "name": "duration-fast",
+        "value": "150ms",
+        "purpose": "Hover, entrada del tooltip y velos."
+      },
+      {
+        "name": "duration-sprite-in",
+        "value": "300ms",
+        "purpose": "Fundido del sprite al terminar de cargar."
+      },
+      { "name": "duration-sheet", "value": "500ms", "purpose": "Entrada de la hoja móvil." },
+      {
+        "name": "duration-pulse",
+        "value": "2s",
+        "purpose": "Pulso del cuadro de carga de un sprite."
+      },
+      {
+        "name": "duration-bounce",
+        "value": "5s",
+        "purpose": "Rebote de sprites en Destacados y en el grupo «Destacados» del menú."
+      },
+      {
+        "name": "ease-standard",
+        "value": "cubic-bezier(0.4, 0, 0.2, 1)",
+        "purpose": "Toda transición y entrada salvo pulso y rebote."
+      },
+      {
+        "name": "ease-pulse",
+        "value": "cubic-bezier(0.4, 0, 0.6, 1)",
+        "purpose": "Pulso de carga."
+      },
+      { "name": "ease-bounce", "value": "ease-in-out", "purpose": "Rebote." }
+    ],
+    "breakpoints": [
+      { "name": "layout-bp-md", "value": "768px" },
+      { "name": "layout-bp-xl", "value": "1280px" }
+    ]
+  },
+  "components": [
+    {
+      "name": "Button",
+      "kind": "button",
+      "refersTo": "button",
+      "description": "Botón de 40 con borde de 1 px border-primary; hover bg-tertiary.",
+      "html": "<button class=\"ac-button\" type=\"button\">Importar</button>",
+      "css": ".ac-button{display:inline-flex;align-items:center;justify-content:center;gap:8px;height:40px;padding:0 16px;border:1px solid #373a41;border-radius:11px;background:transparent;color:#f7f7f7;font:400 14px/22px Verdana,'DejaVu Sans',system-ui,sans-serif;cursor:pointer;transition:background-color 150ms cubic-bezier(0.4,0,0.2,1)}.ac-button:hover{background:#22262f}.ac-button:focus-visible{outline:2px solid #444ce7;outline-offset:1px}"
+    },
+    {
+      "name": "Solid Button",
+      "kind": "button",
+      "refersTo": "button-solid",
+      "description": "Acción principal, una por vista: blanco con texto negro.",
+      "html": "<button class=\"ac-button ac-button--solid\" type=\"button\">Publicar</button>",
+      "css": ".ac-button{display:inline-flex;align-items:center;justify-content:center;height:40px;padding:0 16px;cursor:pointer}.ac-button--solid{border:0;border-radius:10px;background:#ffffff;color:#000000;font:400 12px/16px Verdana,'DejaVu Sans',system-ui,sans-serif}.ac-button--solid:focus-visible{outline:2px solid #444ce7;outline-offset:1px}"
+    },
+    {
+      "name": "View Toggle",
+      "kind": "button",
+      "refersTo": "toggle",
+      "description": "Conmutador Cards, Slots y Lista; el seleccionado lleva borde selected más ring-selected.",
+      "html": "<div class=\"ac-toggle-group\"><button class=\"ac-toggle-group__item\" type=\"button\" aria-pressed=\"true\">Cards</button><button class=\"ac-toggle-group__item\" type=\"button\" aria-pressed=\"false\">Slots</button><button class=\"ac-toggle-group__item\" type=\"button\" aria-pressed=\"false\">Lista</button></div>",
+      "css": ".ac-toggle-group{display:inline-flex;gap:8px}.ac-toggle-group__item{display:inline-flex;align-items:center;height:40px;padding:0 12px;border:1px solid #373a41;border-radius:8px;background:transparent;color:#f7f7f7;font:700 12px/16px Verdana,'DejaVu Sans',system-ui,sans-serif;cursor:pointer;transition:background-color 150ms cubic-bezier(0.4,0,0.2,1)}.ac-toggle-group__item:hover:not([aria-pressed=true]){background:#22262f}.ac-toggle-group__item[aria-pressed=true]{border-color:#d97706;box-shadow:0 0 0 1px #d97706}.ac-toggle-group__item:focus-visible{outline:2px solid #444ce7;outline-offset:1px}"
+    },
+    {
+      "name": "Text Field",
+      "kind": "input",
+      "refersTo": "text-field",
+      "description": "Campo de 40 sobre bg-primary con borde border-secondary.",
+      "html": "<input class=\"ac-text-field__input\" placeholder=\"Charizard o 6\" aria-label=\"Buscar\">",
+      "css": ".ac-text-field__input{box-sizing:border-box;width:280px;height:40px;padding:8px 12px;border:1px solid #22262f;border-radius:11px;background:#0c0e12;color:#f7f7f7;font:400 14px/20px Verdana,'DejaVu Sans',system-ui,sans-serif}.ac-text-field__input::placeholder{color:#85888e}.ac-text-field__input:focus-visible{outline:2px solid #444ce7;outline-offset:1px}"
+    },
+    {
+      "name": "Chip",
+      "kind": "custom",
+      "refersTo": "chip",
+      "description": "Chip de 24 con radio completo sobre bg-tertiary.",
+      "html": "<span class=\"ac-chip\">Legendary</span>",
+      "css": ".ac-chip{display:inline-flex;align-items:center;box-sizing:border-box;height:24px;padding:4px 8px;border-radius:9999px;background:#22262f;color:#f7f7f7;font:400 12px/16px Verdana,'DejaVu Sans',system-ui,sans-serif}"
+    },
+    {
+      "name": "Card",
+      "kind": "card",
+      "refersTo": "card",
+      "description": "Tarjeta de anatomía fija: borde de 1 px, radio 12, padding 16, sin sombra; no abre tooltip.",
+      "html": "<article class=\"ac-card\"><a class=\"ac-card__title-link\" href=\"#\">Shiny Charizard</a><span class=\"ac-card__meta\">Nº 6</span></article>",
+      "css": ".ac-card{display:grid;row-gap:12px;width:260px;padding:16px;border:1px solid #22262f;border-radius:12px;background:#0c0e12;color:#f7f7f7;font:400 14px/22px Verdana,'DejaVu Sans',system-ui,sans-serif}.ac-card__title-link{color:#f7f7f7;font-weight:700;text-decoration:none}.ac-card__title-link:hover{text-decoration:underline}.ac-card__title-link:focus-visible{outline:2px solid #444ce7;outline-offset:1px}.ac-card__meta{color:#94979c;font-size:12px;line-height:16px}"
+    },
+    {
+      "name": "Entity Slot",
+      "kind": "custom",
+      "refersTo": "entity-slot",
+      "description": "Slot de 40 para la vista Slots; aquí con la marca de sprite faltante.",
+      "html": "<a class=\"ac-entity-slot\" href=\"#\" aria-label=\"Fire Stone\"><span class=\"ac-entity-slot__missing\"></span></a>",
+      "css": ".ac-entity-slot{display:flex;align-items:center;justify-content:center;box-sizing:border-box;width:40px;height:40px;border:1px solid #22262f;border-radius:8px;background:#0c0e12;transition:background-color 150ms cubic-bezier(0.4,0,0.2,1)}.ac-entity-slot:hover{background:#22262f}.ac-entity-slot:focus-visible{outline:2px solid #444ce7;outline-offset:1px}.ac-entity-slot__missing{width:16px;height:16px;border-radius:3px;background:#262b32;box-shadow:inset 0 0 0 1px #373a41}"
+    },
+    {
+      "name": "Game Tooltip",
+      "kind": "custom",
+      "refersTo": "game-tooltip",
+      "description": "La única superficie con lenguaje de juego: panel grafito, etiquetas doradas y Poppins.",
+      "html": "<div class=\"ac-game-tooltip\" role=\"tooltip\"><p class=\"ac-game-tooltip__title\">Shiny Ditto</p><p class=\"ac-game-tooltip__row\"><span class=\"ac-game-tooltip__label\">Memory Slots:</span> 6</p><p class=\"ac-game-tooltip__footer\">Mantén Shift para fijar</p></div>",
+      "css": ".ac-game-tooltip{box-sizing:border-box;width:282px;padding:12px 8px 0;border-radius:4px;background:#21252c;color:#ffffff;font:600 12px/21px Poppins,Verdana,sans-serif;letter-spacing:0.03em;text-shadow:0 1px 1px rgba(0,0,0,0.85)}.ac-game-tooltip p{margin:0}.ac-game-tooltip__title{padding-left:0.35em;font-size:15px;line-height:20px;letter-spacing:0.35em;text-align:center;text-transform:uppercase}.ac-game-tooltip__row{margin-top:6px}.ac-game-tooltip__label{color:#e8c66a}.ac-game-tooltip__footer{margin:8px -8px 0;padding:6px 8px 7px;border-radius:0 0 4px 4px;background:#1d232b;color:#8a91a0;font-weight:500;line-height:16px;letter-spacing:0.02em;text-align:center}"
+    },
+    {
+      "name": "Info Banner",
+      "kind": "custom",
+      "refersTo": "info-banner",
+      "description": "Banner de datos: el único bloque de color sólido del marco.",
+      "html": "<div class=\"ac-info-banner\">NPC: Rosemary</div>",
+      "css": ".ac-info-banner{display:flex;align-items:center;justify-content:center;gap:16px;padding:16px;border-radius:8px;background:#991b1b;color:#ffffff;font:400 12px/16px Verdana,'DejaVu Sans',system-ui,sans-serif}"
+    },
+    {
+      "name": "Sidebar Link",
+      "kind": "nav",
+      "refersTo": "sidebar-link",
+      "description": "Enlace del menú lateral; la página actual lleva bg-tertiary y aria-current.",
+      "html": "<a class=\"ac-sidebar__link\" aria-current=\"page\" href=\"#\">Pokédex</a>",
+      "css": ".ac-sidebar__link{display:flex;align-items:center;gap:8px;width:176px;padding:6px 4px 6px 8px;border-radius:8px;color:#f7f7f7;text-decoration:none;font:400 12px/16px Verdana,'DejaVu Sans',system-ui,sans-serif;transition:background-color 150ms cubic-bezier(0.4,0,0.2,1)}.ac-sidebar__link:hover,.ac-sidebar__link[aria-current=page]{background:#22262f}.ac-sidebar__link:focus-visible{outline:2px solid #444ce7;outline-offset:1px}"
+    }
+  ],
+  "narrative": {
+    "northStar": "La respuesta primero, el juego en el tooltip",
+    "overview": "Alliance Codex es la wiki comunitaria bilingüe (es/en) de PokeAlliance con el lenguaje de interfaz de RubinOT: grises planos, Verdana del sistema, texto denso de 12 a 14 px, bordes de 1 px y un solo color de hover. El color lo ponen el contenido y los sprites reales del juego. Cuando la página nombra algo del juego aparece la segunda capa: el tooltip del juego, con su panel grafito, etiquetas doradas y Poppins. Los nombres y valores vienen de src/design/tokens.json.",
+    "keyCharacteristics": [
+      "La respuesta primero: título, banner de datos y tabla, sin héroe ni eslogan.",
+      "Denso y plano: tres grises y bordes de 1 px, sin sombras de elevación, degradados ni brillos.",
+      "Sprites reales del registro a escala entera como iconografía de navegación y entidades.",
+      "Tooltip del juego en cada mención de una entidad; Cards, Slots y Lista en cada lista.",
+      "Pokédólares con su sprite y forma k/kk antes de cada importe del juego.",
+      "Sin relleno, controles falsos, cifras inventadas ni procedencia."
+    ],
+    "rules": [
+      {
+        "name": "The One Hover Rule",
+        "body": "Todo lo interactivo toma bg-tertiary en hover; los enlaces de texto solo se subrayan.",
+        "section": "colors"
+      },
+      {
+        "name": "The Game Layer Rule",
+        "body": "El oro (tt-label) y Poppins no salen del tooltip del juego ni de la ficha del Pokémon.",
+        "section": "colors"
+      },
+      {
+        "name": "The Amber Selection Rule",
+        "body": "selected marca lo elegido, nunca un enlace.",
+        "section": "colors"
+      },
+      {
+        "name": "The Meaningful Color Rule",
+        "body": "Ningún dato depende solo del color.",
+        "section": "colors"
+      },
+      {
+        "name": "The Two Weights Rule",
+        "body": "Verdana va en 400 y 700; Poppins en 500 y 600.",
+        "section": "typography"
+      },
+      {
+        "name": "The Border Before Shadow Rule",
+        "body": "Si un borde o un cambio de gris explica la capa, no hay sombra.",
+        "section": "elevation"
+      }
+    ],
+    "dos": [
+      "Do abrir cada pantalla con el dato: título, banner de datos si aplica y la tabla o la rejilla.",
+      "Do tomar todo color, longitud, radio, duración y curva de src/design/tokens.json.",
+      "Do mostrar navegación y entidades con sprites reales del registro a escala entera.",
+      "Do mostrar «—» para un dato desconocido cuando otras filas lo tienen; nunca 0."
+    ],
+    "donts": [
+      "Don't crear héroes, eslóganes, kickers ni métricas decorativas.",
+      "Don't usar degradados, sombras de elevación, brillos, glassmorphism ni tarjetas que suben al pasar el cursor.",
+      "Don't usar sets de iconos genéricos para navegación o entidades, ni emoji.",
+      "Don't mostrar ni guardar procedencia."
+    ]
+  }
+}

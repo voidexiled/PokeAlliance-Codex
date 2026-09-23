@@ -1,0 +1,27 @@
+/* «Resumen» and «Por semana» of Guild (spec 10.6, 10.8, `Lienzo:Guild`): what
+   src/components/guild/GuildSummary.tsx and GuildWeeks.tsx draw that no design-system
+   component carries. The rest is `Section`, `PeriodFilter`, `CardGrid family="kpi"` with its
+   four `KpiCard`, `EmptyState` and `DataTable`, each with its own sheet.
+
+   Per-page sheet (D-018, 13.6): only the Guild page draws these blocks, so the two components
+   import it and global.css does not. The layer order of global.css is repeated before the
+   block, so `components` keeps its place whichever sheet the browser reads first (3.6).
+
+   The comparison line of «Por semana» is a 14/22 paragraph, justified as the board sets it,
+   with the points of this week in 700. */
+
+@reference '../theme.css';
+
+@layer properties, theme, base, components, utilities;
+
+@layer components {
+  .ac-guild-weeks__comparison {
+    margin: 0;
+    text-align: justify;
+    @apply type-body;
+  }
+
+  .ac-guild-weeks__comparison strong {
+    font-weight: 700;
+  }
+}

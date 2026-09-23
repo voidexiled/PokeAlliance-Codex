@@ -1,0 +1,60 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://alliance-codex.local/schemas/destacados.schema.json",
+  "title": "Destacados",
+  "description": "Las páginas destacadas del sitio, en este orden: la sección «Destacados» del Inicio, de Buscar y de la página 404, y el grupo «Destacados» del menú. Sin este archivo no hay Destacados. Un destacado de relleno lleva \"borrador\": true y OCULTAR_BORRADORES=1 lo oculta.",
+  "type": "object",
+  "required": ["destacados"],
+  "additionalProperties": false,
+  "properties": {
+    "$schema": { "type": "string" },
+    "destacados": {
+      "type": "array",
+      "description": "De 1 a 4 destacados, en el orden en que se muestran. Dos destacados no llevan a la misma página.",
+      "minItems": 1,
+      "maxItems": 4,
+      "items": { "$ref": "#/$defs/destacado" }
+    }
+  },
+  "$defs": {
+    "spriteOpcional": {
+      "type": ["string", "null"],
+      "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*(?:/[a-z0-9]+(?:-[a-z0-9]+)*)*$",
+      "description": "Clave de public/sprites/sprites.json, o null mientras no exista."
+    },
+    "texto": {
+      "type": "object",
+      "description": "Texto en los dos idiomas: { \"es\": \"…\", \"en\": \"…\" }.",
+      "required": ["es", "en"],
+      "additionalProperties": false,
+      "properties": {
+        "es": { "type": "string", "pattern": "\\S" },
+        "en": { "type": "string", "pattern": "\\S" }
+      }
+    },
+    "destacado": {
+      "type": "object",
+      "required": ["etiqueta", "ruta", "sprite"],
+      "additionalProperties": false,
+      "properties": {
+        "etiqueta": {
+          "$ref": "#/$defs/texto",
+          "description": "Nombre de la página en la tarjeta y en el menú: \"Tier list\"."
+        },
+        "ruta": {
+          "type": "string",
+          "pattern": "^/(?:[a-z0-9]+(?:-[a-z0-9]+)*/)*$",
+          "description": "Dirección de la página, sin idioma y con barra final: \"/pokedex/tiers/\". pnpm content:check comprueba que el sitio tiene esa página."
+        },
+        "sprite": {
+          "$ref": "#/$defs/spriteOpcional",
+          "description": "Sprite de la tarjeta y del menú. null mientras no exista."
+        },
+        "borrador": {
+          "const": true,
+          "description": "true en destacados de relleno. Para publicarlo, se borra la clave."
+        }
+      }
+    }
+  }
+}

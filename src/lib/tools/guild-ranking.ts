@@ -1,5 +1,6 @@
 import { Temporal } from '@js-temporal/polyfill';
 
+import { UNKNOWN } from '@/lib/format/unknown';
 import { SERVER_SAVE_ZONE } from '@/lib/time/server-save';
 import {
   DEFAULT_GUILD_DIFFICULTY_TIERS,
@@ -104,6 +105,13 @@ export type GuildMemberBand = 'below' | 'goal' | 'premium' | 'neutral';
 
 export type GuildMemberGoalPacing = Partial<Record<GuildGoalMetric, number>>;
 
+export type GuildGoalEvaluation = {
+  metric: GuildGoalMetric;
+  observed: number;
+  expected: number;
+  meets: boolean;
+};
+
 export type GuildRanking = {
   payload: GuildExportPayload;
   settings: GuildPacingSettings;
@@ -118,18 +126,16 @@ export type GuildRanking = {
   expectedMinimumPoints: number | null;
 };
 
-export type GuildExportLocale = 'es' | 'en';
+/** What goal evaluation reads from a member: the week totals and, optionally, their pacing. */
+export type GuildGoalSubject = Pick<
+  RankedGuildMember,
+  'total' | 'dailiesCompleted' | 'contribution' | 'goalPacing'
+>;
 
-export type GuildDiscordHistorySummary = {
-  observationDate: string;
-  weekStartDate: string;
-  dayIndex: number;
-  dailyDailies: number;
-  dailyContribution: number;
-  dailyPoints: number;
-  levelsGained?: number;
-  membersJoined?: number;
-  membersLeft?: number;
+/** The goals and the elapsed days that a member's week is evaluated against. */
+export type GuildGoalContext = {
+  settings: GuildPacingSettings;
+  week: Pick<GuildWeekContext, 'elapsedDays'>;
 };
 
 export type GuildSortKey =
@@ -252,16 +258,27 @@ export function parseGuildExportText(text: string): GuildParseResult {
   }
 }
 
-function parseSourceDateTime(value: string | null | undefined, timeZone: string): Temporal.Instant {
-  if (!value) return Temporal.Now.instant();
+/**
+ * The instant of an export's `exportedAt`. A value without a zone is read in the
+ * Server Save zone (A12). Null when it is missing or is not a date.
+ */
+export function parseGuildExportedAt(
+  value: string | null | undefined,
+  timeZone = SERVER_SAVE_ZONE,
+): Temporal.Instant | null {
+  if (!value) return null;
 
   try {
     if (/[zZ]|[+-]\d{2}:?\d{2}$/.test(value)) return Temporal.Instant.from(value);
     const normalized = value.replace(' ', 'T');
     return Temporal.PlainDateTime.from(normalized).toZonedDateTime(timeZone).toInstant();
   } catch {
-    return Temporal.Now.instant();
+    return null;
   }
+}
+
+function parseSourceDateTime(value: string | null | undefined, timeZone: string): Temporal.Instant {
+  return parseGuildExportedAt(value, timeZone) ?? Temporal.Now.instant();
 }
 
 export function getGuildWeekContext(
@@ -379,12 +396,12 @@ function hasGoalSet(goals: GuildGoalSet): boolean {
   return Object.values(goals).some(hasGoalTarget);
 }
 
-function memberMeetsGoals(
-  member: RankedGuildMember,
+export function getGuildMemberGoalEvaluations(
+  member: GuildGoalSubject,
   goals: GuildGoalSet,
-  week: GuildWeekContext,
+  week: GuildGoalContext['week'],
   elapsedDaysByMetric?: GuildMemberGoalPacing,
-): boolean {
+): GuildGoalEvaluation[] {
   const observed: Record<GuildGoalMetric, number> = {
     totalPoints: member.total,
     dailies: member.dailiesCompleted,
@@ -392,18 +409,31 @@ function memberMeetsGoals(
   };
   return (Object.entries(goals) as Array<[GuildGoalMetric, GuildGoalTarget]>)
     .filter(([, target]) => hasGoalTarget(target))
-    .every(([metric, target]) => {
+    .flatMap(([metric, target]) => {
       const expected = getGuildGoalElapsedValue(
         target,
         elapsedDaysByMetric?.[metric] ?? week.elapsedDays,
       );
-      return expected === null || observed[metric] >= expected;
+      return expected === null
+        ? []
+        : [{ metric, observed: observed[metric], expected, meets: observed[metric] >= expected }];
     });
+}
+
+function memberMeetsGoals(
+  member: GuildGoalSubject,
+  goals: GuildGoalSet,
+  week: GuildGoalContext['week'],
+  elapsedDaysByMetric?: GuildMemberGoalPacing,
+): boolean {
+  return getGuildMemberGoalEvaluations(member, goals, week, elapsedDaysByMetric).every(
+    ({ meets }) => meets,
+  );
 }
 
 function hasMeasurableGoal(
   goals: GuildGoalSet,
-  week: GuildWeekContext,
+  week: GuildGoalContext['week'],
   elapsedDaysByMetric?: GuildMemberGoalPacing,
 ): boolean {
   return (Object.entries(goals) as Array<[GuildGoalMetric, GuildGoalTarget]>).some(
@@ -518,9 +548,14 @@ export function sortGuildMembers(
   });
 }
 
+/**
+ * The goal band of a member's week. Pass the member's pacing (eligible days per
+ * metric) so a member who joined mid-week is judged on the days they could play;
+ * the Guild interface, its member dialog and the PNG all read it this way.
+ */
 export function getGuildMemberBand(
-  member: RankedGuildMember,
-  ranking: Pick<GuildRanking, 'settings' | 'week'>,
+  member: GuildGoalSubject,
+  ranking: GuildGoalContext,
   elapsedDaysByMetric?: GuildMemberGoalPacing,
 ): GuildMemberBand {
   const goalPacing = elapsedDaysByMetric ?? member.goalPacing;
@@ -542,378 +577,20 @@ export function getGuildMemberBand(
   return 'neutral';
 }
 
-export function formatGuildNumber(value: number, locale = 'pt-BR'): string {
-  return value.toLocaleString(locale, { maximumFractionDigits: 2 });
-}
+/** The ranks the export writes with an article, as the game client shows them. */
+const CLIENT_RANKS: Record<string, string> = {
+  'the Leader': 'Leader',
+  'a Vice-Leader': 'Vice-Leader',
+  'a Member': 'Member',
+};
 
-export function formatGuildExportDate(value: string | null | undefined, locale = 'pt-BR'): string {
-  const match = value?.match(/^(\d{4})[-/](\d{1,2})[-/](\d{1,2})/);
-  if (match) return `${match[3].padStart(2, '0')}/${match[2].padStart(2, '0')}/${match[1]}`;
-  if (!value) return new Intl.DateTimeFormat(locale, { dateStyle: 'short' }).format(new Date());
-  return value;
-}
-
+/**
+ * The rank as the game client names it, without the export's article. The same
+ * words in es and en (E13): never «Líder» nor «Membro». Any other value is shown
+ * as it came; a missing one is the dash.
+ */
 export function formatGuildRank(rank: string | null | undefined): string {
-  const labels: Record<string, string> = {
-    'the Leader': 'Líder',
-    'a Vice-Leader': 'Vice-Líder',
-    'a Member': 'Membro',
-    Leader: 'Líder',
-    'Vice-Leader': 'Vice-Líder',
-    Member: 'Membro',
-  };
-  return labels[rank ?? ''] ?? rank ?? '—';
-}
-
-function formatExportRank(rank: string | null | undefined, locale: GuildExportLocale): string {
-  const formatted = formatGuildRank(rank);
-  if (locale === 'es') {
-    return formatted === 'Membro'
-      ? 'Miembro'
-      : formatted === 'Vice-Líder'
-        ? 'Vice-líder'
-        : formatted;
-  }
-  return formatted === 'Membro' ? 'Member' : formatted === 'Líder' ? 'Leader' : formatted;
-}
-
-function escapeWhatsAppText(value: string): string {
-  return value.replace(/([*_~])/g, '\\$1');
-}
-
-function escapeDiscordMarkdown(value: string): string {
-  return value.replace(/([\\`*_~|>])/g, '\\$1');
-}
-
-function formatExportDate(value: string | null | undefined, locale: GuildExportLocale): string {
-  return formatGuildExportDate(value, locale === 'en' ? 'en-US' : 'es-ES');
-}
-
-function exportLabels(locale: GuildExportLocale) {
-  return locale === 'es'
-    ? {
-        ranking: 'Ranking de guild',
-        exportDate: 'Fecha del export',
-        week: 'Semana',
-        day: 'Día',
-        timeZone: 'Zona horaria',
-        members: 'Miembros',
-        totalPoints: 'Puntos totales',
-        dailyPoints: 'Puntos de dailies',
-        contribution: 'Contribución',
-        totalContribution: 'Contribución total',
-        goals: 'Metas activas',
-        standard: 'Normal',
-        premium: 'Premium',
-        dailyValue: 'Valor de cada daily',
-        difficultyBreakdown: 'Desglose',
-        normal: 'Normal',
-        wildscape: 'Wildscape',
-        primal: 'Primal',
-        estimated: 'estimado',
-        derivedContribution: 'Contribución calculada por nivel',
-        accumulatedGoal: 'Meta acumulada al día',
-        levelCalculated: 'contribución por nivel',
-        rankingWeek: 'Ranking acumulado de la semana',
-        level: 'Nivel',
-        dailies: 'dailies',
-        lastAccess: 'Último acceso',
-        noRecord: 'Sin registro',
-        online: 'En línea',
-        generated: 'Generado por Alliance Codex · Ranking de guild',
-        dailyRecord: 'Registro diario cargado',
-        monthlyRecord: 'Resumen mensual con snapshots cargados',
-        monthlyPending:
-          'El ranking mensual aparecerá cuando existan snapshots diarios suficientes.',
-        snapshots: 'snapshots',
-        levelsGained: 'niveles ganados',
-        membersJoined: 'altas/reingresos',
-        membersLeft: 'bajas',
-        block: 'Bloque',
-      }
-    : {
-        ranking: 'Guild ranking',
-        exportDate: 'Export date',
-        week: 'Week',
-        day: 'Day',
-        timeZone: 'Time zone',
-        members: 'Members',
-        totalPoints: 'Total points',
-        dailyPoints: 'Daily points',
-        contribution: 'Contribution',
-        totalContribution: 'Total contribution',
-        goals: 'Active goals',
-        standard: 'Standard',
-        premium: 'Premium',
-        dailyValue: 'Daily value',
-        difficultyBreakdown: 'Breakdown',
-        normal: 'Normal',
-        wildscape: 'Wildscape',
-        primal: 'Primal',
-        estimated: 'estimated',
-        derivedContribution: 'Contribution calculated by level',
-        accumulatedGoal: 'Accumulated goal on day',
-        levelCalculated: 'contribution by level',
-        rankingWeek: 'Weekly accumulated ranking',
-        level: 'Level',
-        dailies: 'dailies',
-        lastAccess: 'Last access',
-        noRecord: 'No record',
-        online: 'Online',
-        generated: 'Generated by Alliance Codex · Guild ranking',
-        dailyRecord: 'Loaded daily record',
-        monthlyRecord: 'Monthly summary from loaded snapshots',
-        monthlyPending: 'The monthly ranking will appear after enough daily snapshots exist.',
-        snapshots: 'snapshots',
-        levelsGained: 'levels gained',
-        membersJoined: 'joins/returns',
-        membersLeft: 'departures',
-        block: 'Block',
-      };
-}
-
-function formatExportGoalSet(goals: GuildGoalSet, locale: GuildExportLocale): string {
-  return formatGuildGoalSet(goals, locale);
-}
-
-function formatExportTierSummary(
-  locale: GuildExportLocale,
-  tiers: readonly GuildDifficultyTier[] = GUILD_DAILY_VALUE_TIERS,
-): string {
-  const numberLocale = locale === 'en' ? 'en-US' : 'es-ES';
-  const suffix = locale === 'en' ? 'level' : 'nivel';
-  return tiers
-    .map((tier) => {
-      const range = `${tier.minimumLevel}${tier.maximumLevel === null ? '+' : `-${tier.maximumLevel}`}`;
-      return `${suffix} ${range}: ${formatGuildNumber(tier.points, numberLocale)} pts`;
-    })
-    .join(' · ');
-}
-
-function formatExportDerivedContributionSummary(
-  settings: GuildPacingSettings,
-  locale: GuildExportLocale,
-  tiers: readonly GuildDifficultyTier[] = GUILD_DAILY_VALUE_TIERS,
-): string {
-  const numberLocale = locale === 'en' ? 'en-US' : 'es-ES';
-  const suffix = locale === 'en' ? '/day' : '/día';
-  return tiers
-    .map((tier) => {
-      const derived = getGuildDerivedContributionPerDay(tier.minimumLevel, settings, tiers);
-      const range = `${tier.minimumLevel}${tier.maximumLevel === null ? '+' : `-${tier.maximumLevel}`}`;
-      return `${range}: ${derived === null ? '—' : `${formatGuildNumber(derived, numberLocale)}${suffix}`}`;
-    })
-    .join(' · ');
-}
-
-function formatExportDifficultyBreakdown(
-  member: RankedGuildMember,
-  locale: GuildExportLocale,
-): string {
-  const labels = exportLabels(locale);
-  const numberLocale = locale === 'en' ? 'en-US' : 'es-ES';
-  const parts = (['normal', 'wildscape', 'primal'] as const)
-    .filter((difficulty) => member.difficultyAllocation[difficulty] > 0)
-    .map(
-      (difficulty) =>
-        `${labels[difficulty]} ${formatGuildNumber(member.difficultyAllocation[difficulty], numberLocale)}`,
-    );
-  if (member.difficultyConfidence === 'estimated') parts.push(`(${labels.estimated})`);
-  return parts.join(' · ') || '—';
-}
-
-function memberBandIcon(member: RankedGuildMember, ranking: GuildRanking): string {
-  const band = getGuildMemberBand(member, ranking);
-  return band === 'below' ? '🔴' : band === 'premium' ? '🔵' : '🟢';
-}
-
-export function buildGuildWhatsAppText(
-  ranking: GuildRanking,
-  locale: GuildExportLocale = 'es',
-  difficultyTiers: readonly GuildDifficultyTier[] = GUILD_DAILY_VALUE_TIERS,
-): string {
-  const { payload, members, settings, week } = ranking;
-  const labels = exportLabels(locale);
-  const numberLocale = locale === 'en' ? 'en-US' : 'es-ES';
-  const number = (value: number) => formatGuildNumber(value, numberLocale);
-  const standardGoals = formatExportGoalSet(settings.standard, locale);
-  const premiumGoals = formatExportGoalSet(settings.premium, locale);
-  const weekStart = formatExportDate(week.weekStartDate, locale);
-  const weekEnd = formatExportDate(week.weekEndDate, locale);
-  const accumulatedContribution =
-    ranking.expectedContribution === null
-      ? labels.levelCalculated
-      : `${number(ranking.expectedContribution)} ${labels.contribution.toLowerCase()}`;
-  const lines = [
-    `🏆 *${labels.ranking}: ${escapeWhatsAppText(payload.guild || 'Guild')}*`,
-    `📅 *${labels.exportDate}:* ${formatExportDate(payload.exportedAt, locale)}`,
-    `📆 *${labels.week}:* ${weekStart} → ${weekEnd} · *${labels.day}:* ${week.dayIndex}/${GUILD_WEEK_DAYS}`,
-    `👥 *${labels.members}:* ${members.length} · *${labels.totalPoints}:* ${number(ranking.totalPoints)}`,
-    `🎯 *${labels.dailyPoints}:* ${number(ranking.totalDailyPoints)} · 💰 *${labels.totalContribution}:* ${number(ranking.totalContribution)}`,
-    '',
-    `🎯 *${labels.goals}*`,
-    `• 🟢 *${labels.standard}:* ${standardGoals || '—'}`,
-    `• 🔵 *${labels.premium}:* ${premiumGoals || '—'}`,
-    `• 🧮 *${labels.dailyValue}:* ${formatExportTierSummary(locale, difficultyTiers)}`,
-    `• 💰 *${labels.derivedContribution}:* ${formatExportDerivedContributionSummary(settings, locale, difficultyTiers)}`,
-    `• 📈 *${labels.accumulatedGoal} ${week.dayIndex}:* ${ranking.expectedMinimumPoints === null ? '—' : `${number(ranking.expectedMinimumPoints)} pts`} · ${ranking.expectedDailies === null ? '—' : `${number(ranking.expectedDailies)} ${labels.dailies}`} · ${accumulatedContribution}`,
-    '',
-    `📊 *${labels.rankingWeek}*`,
-  ];
-
-  for (const member of members) {
-    const lastAccess =
-      member.status === 'online' ? labels.online : member.lastLogin || labels.noRecord;
-    const dailyValue =
-      member.pointsPerDaily === null ? '—' : `${number(member.pointsPerDaily)} pts`;
-    lines.push(
-      `${memberBandIcon(member, ranking)} *#${member.position} · ${escapeWhatsAppText(member.name)}* — *${number(member.total)} pts*`,
-      `   ${labels.level} ${member.level ?? '—'} · ${member.dailiesCompleted} ${labels.dailies} × ${dailyValue} · ${number(member.contribution)} ${labels.contribution.toLowerCase()}`,
-      ...(member.levelsGained === undefined
-        ? []
-        : [`   +${number(member.levelsGained)} ${labels.levelsGained}`]),
-      `   ${labels.difficultyBreakdown}: ${formatExportDifficultyBreakdown(member, locale)}`,
-      `   ${formatExportRank(member.rank, locale)} · ${labels.lastAccess}: ${escapeWhatsAppText(lastAccess)}`,
-    );
-  }
-
-  lines.push('', `_${labels.generated}_`);
-  return lines.join('\n');
-}
-
-export function buildGuildDiscordText(
-  ranking: GuildRanking,
-  history: GuildDiscordHistorySummary[] = [],
-  locale: GuildExportLocale = 'es',
-  difficultyTiers: readonly GuildDifficultyTier[] = GUILD_DAILY_VALUE_TIERS,
-): string {
-  const { payload, members, settings, week } = ranking;
-  const labels = exportLabels(locale);
-  const numberLocale = locale === 'en' ? 'en-US' : 'es-ES';
-  const number = (value: number) => formatGuildNumber(value, numberLocale);
-  const weekStart = formatExportDate(week.weekStartDate, locale);
-  const weekEnd = formatExportDate(week.weekEndDate, locale);
-  const orderedHistory = [...history].sort((a, b) =>
-    a.observationDate.localeCompare(b.observationDate),
-  );
-  const currentWeekHistory = orderedHistory.filter(
-    (summary) => summary.weekStartDate === week.weekStartDate,
-  );
-  const latest = currentWeekHistory.at(-1);
-  const monthKey = latest?.observationDate.slice(0, 7);
-  const monthHistory = monthKey
-    ? orderedHistory.filter((summary) => summary.observationDate.startsWith(monthKey))
-    : [];
-  const monthlyDailies = monthHistory.reduce((total, summary) => total + summary.dailyDailies, 0);
-  const monthlyContribution = monthHistory.reduce(
-    (total, summary) => total + summary.dailyContribution,
-    0,
-  );
-  const monthlyPoints = monthHistory.reduce((total, summary) => total + summary.dailyPoints, 0);
-  const lines = [
-    `# 🏆 ${escapeDiscordMarkdown(payload.guild || 'Guild')} · ${labels.ranking}`,
-    `> **${labels.week}:** ${weekStart} → ${weekEnd} · **${labels.day}:** ${week.dayIndex}/${GUILD_WEEK_DAYS}`,
-    `> **${labels.exportDate}:** ${formatExportDate(payload.exportedAt, locale)} · **${labels.timeZone}:** ${week.sourceTimeZone}`,
-    '',
-    `## ${labels.ranking}`,
-    `- **${labels.members}:** ${members.length} · **${labels.totalPoints}:** ${number(ranking.totalPoints)}`,
-    `- **${labels.dailyPoints}:** ${number(ranking.totalDailyPoints)} · **${labels.totalContribution}:** ${number(ranking.totalContribution)}`,
-    `- **${labels.accumulatedGoal} ${week.dayIndex}:** ${ranking.expectedMinimumPoints === null ? '—' : `${number(ranking.expectedMinimumPoints)} pts`} · ${ranking.expectedDailies === null ? '—' : `${number(ranking.expectedDailies)} ${labels.dailies}`} · ${ranking.expectedContribution === null ? labels.levelCalculated : `${number(ranking.expectedContribution)} ${labels.contribution.toLowerCase()}`}`,
-    '',
-    `## ${labels.goals}`,
-    `- **${labels.standard}:** ${formatExportGoalSet(settings.standard, locale) || '—'}`,
-    `- **${labels.premium}:** ${formatExportGoalSet(settings.premium, locale) || '—'}`,
-    `- **${labels.dailyValue}:** ${formatExportTierSummary(locale, difficultyTiers)}`,
-    `- **${labels.derivedContribution}:** ${formatExportDerivedContributionSummary(settings, locale, difficultyTiers)}`,
-  ];
-
-  if (latest) {
-    lines.push('', `## ${labels.dailyRecord}`);
-    for (const summary of currentWeekHistory.slice(-7)) {
-      lines.push(
-        `- **${formatExportDate(summary.observationDate, locale)} · ${labels.day} ${summary.dayIndex}:** ${summary.dailyDailies} ${labels.dailies} · ${number(summary.dailyContribution)} ${labels.contribution.toLowerCase()} · ${number(summary.dailyPoints)} pts · +${number(summary.levelsGained ?? 0)} ${labels.levelsGained} · ${summary.membersJoined ?? 0} ${labels.membersJoined} · ${summary.membersLeft ?? 0} ${labels.membersLeft}`,
-      );
-    }
-    lines.push(
-      '',
-      `## ${labels.monthlyRecord}`,
-      `- **${monthKey}:** ${monthHistory.length} ${labels.snapshots} · ${monthlyDailies} ${labels.dailies} · ${number(monthlyContribution)} ${labels.contribution.toLowerCase()} · ${number(monthlyPoints)} pts`,
-    );
-  } else {
-    lines.push('', `> ${labels.monthlyPending}`);
-  }
-
-  lines.push('', `## ${labels.rankingWeek}`);
-  for (const member of members) {
-    const rank = formatExportRank(member.rank, locale);
-    lines.push(
-      `- ${memberBandIcon(member, ranking)} **#${member.position} · ${escapeDiscordMarkdown(member.name)}** — **${number(member.total)} pts** · ${member.dailiesCompleted} ${labels.dailies} · ${number(member.contribution)} ${labels.contribution.toLowerCase()} · +${number(member.levelsGained ?? 0)} ${labels.levelsGained} · ${labels.difficultyBreakdown}: ${formatExportDifficultyBreakdown(member, locale)} · ${labels.level} ${member.level ?? '—'} · ${escapeDiscordMarkdown(rank)}`,
-    );
-  }
-
-  const chunks = splitDiscordLines(lines, 1800);
-  const guildName = escapeDiscordMarkdown(payload.guild || 'Guild');
-  return chunks
-    .map((chunk, index) => {
-      if (chunks.length === 1) return chunk;
-      return `*${labels.block} ${index + 1}/${chunks.length} · ${guildName}*\n${chunk}`;
-    })
-    .join('\n\n---\n\n');
-}
-
-function splitDiscordLines(lines: string[], maxLength: number): string[] {
-  const chunks: string[] = [];
-  let current = '';
-  for (const line of lines) {
-    const candidate = current ? `${current}\n${line}` : line;
-    if (current && candidate.length > maxLength) {
-      chunks.push(current);
-      current = line;
-    } else {
-      current = candidate;
-    }
-  }
-  if (current) chunks.push(current);
-  return chunks;
-}
-
-export function formatGuildGoalSet(
-  goals: GuildGoalSet,
-  locale: GuildExportLocale | 'pt-BR' = 'pt-BR',
-): string {
-  const labels: Record<GuildGoalMetric, string> =
-    locale === 'es'
-      ? {
-          totalPoints: 'puntos totales',
-          dailies: 'dailies',
-          contribution: 'contribución',
-        }
-      : locale === 'en'
-        ? {
-            totalPoints: 'total points',
-            dailies: 'dailies',
-            contribution: 'contribution',
-          }
-        : {
-            totalPoints: 'pontos totais',
-            dailies: 'dailies',
-            contribution: 'contribuição',
-          };
-  const numberLocale = locale === 'en' ? 'en-US' : locale === 'es' ? 'es-ES' : 'pt-BR';
-  const dailySuffix = locale === 'en' ? '/day' : locale === 'es' ? '/día' : '/dia';
-  const weeklySuffixLocalized = locale === 'en' ? '/week' : '/semana';
-  return (Object.entries(goals) as Array<[GuildGoalMetric, GuildGoalTarget]>)
-    .filter(([, target]) => target.daily !== null || target.weekly !== null)
-    .map(([metric, target]) => {
-      const values = [
-        target.daily === null
-          ? null
-          : `${formatGuildNumber(target.daily, numberLocale)}${dailySuffix}`,
-        target.weekly === null
-          ? null
-          : `${formatGuildNumber(target.weekly, numberLocale)}${weeklySuffixLocalized}`,
-      ].filter((value): value is string => value !== null);
-      return `${labels[metric]}: ${values.join(' + ')}`;
-    })
-    .join(' · ');
+  const value = rank?.trim();
+  if (!value) return UNKNOWN;
+  return CLIENT_RANKS[value] ?? value;
 }

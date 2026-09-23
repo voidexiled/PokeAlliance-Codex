@@ -1,0 +1,199 @@
+/* Select (spec 7.2.2, C-R2; DS:Select), ported from the `.ac-select` block of the design
+   system's components/bundle.css. global.css imports this file with layer(components).
+
+   A 40 px trigger of radius 11 with a 16 px chevron at half opacity, and a list on
+   `bg-tertiary` of radius 8 whose active option is `bg-quaternary` of radius 2 and whose
+   chosen option carries a 16 px check 8 from the right edge.
+
+   Differences against the reference, all in the list, all because of the exception of
+   C-R2 (the list is a `popover="manual"` always in the DOM):
+
+   - It is placed by `src/scripts/listbox.ts` with @floating-ui/dom instead of hanging
+     from the control with `position: absolute`. The width of the trigger and the height
+     left under it arrive as `--ac-listbox-width` and `--ac-listbox-room`; a list that
+     does not fit scrolls inside itself, since a list in the top layer cannot make the
+     page taller.
+   - The declarations that undo the user agent styles of `[popover]` are added: `inset`,
+     `margin`, `border`, `overflow`. `display` is never set on an open popover — an author
+     `display` beats the `display: none` of a closed one, whatever the layer.
+   - The check is always in the DOM once (Select.tsx), so it is shown only inside an
+     option with `aria-selected="true"`.
+
+   `--ac-select-width` is the `width` prop (C-R2): of the whole field, or of the control
+   when the label is inline. */
+
+.ac-select {
+  position: relative;
+  width: var(--ac-select-width, auto);
+  min-width: 0;
+}
+
+.ac-select__label {
+  margin: 0 0 var(--space-8);
+  color: var(--text-primary);
+  @apply type-body;
+}
+
+.ac-select__control {
+  position: relative;
+  min-width: 0;
+}
+
+.ac-select__trigger {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-8);
+  width: 100%;
+  min-width: 0;
+  height: var(--size-control);
+  margin: 0;
+  padding: var(--space-8) var(--space-12);
+  border: 1px solid var(--border-secondary);
+  border-radius: var(--radius-11);
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  font-family: var(--font-sans);
+  @apply type-field;
+  text-align: left;
+  cursor: pointer;
+}
+
+.ac-select__trigger:hover:not(:disabled),
+.ac-select__trigger[aria-expanded='true'] {
+  background: var(--bg-tertiary);
+}
+
+.ac-select__trigger:disabled {
+  color: var(--text-quaternary);
+  cursor: not-allowed;
+}
+
+.ac-select__value {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.ac-select__value--placeholder {
+  color: var(--text-quaternary);
+}
+
+.ac-select__chevron {
+  display: block;
+  flex: none;
+  opacity: var(--opacity-chevron);
+}
+
+.ac-select__listbox {
+  position: fixed;
+  inset: auto;
+  z-index: var(--z-listbox);
+  width: var(--ac-listbox-width, auto);
+  max-height: var(--ac-listbox-room, none);
+  margin: 0;
+  padding: var(--space-4);
+  overflow-x: hidden;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  border: 0;
+  border-radius: var(--radius-8);
+  background: var(--bg-tertiary);
+  color: var(--text-primary);
+  list-style: none;
+  @apply type-field;
+}
+
+/* Where `popover` is not supported (spec 6.5) the attribute is ignored and the list would
+   stay on screen. It is hidden here, before anything paints, and shown with the same
+   `data-open` the controller writes before `showPopover()`. */
+@supports not selector(:popover-open) {
+  .ac-select__listbox {
+    display: none;
+  }
+
+  .ac-select__listbox[data-open] {
+    display: block;
+  }
+}
+
+.ac-select__option {
+  position: relative;
+  /* Right 36: the 8 inset of the check, the 16 glyph and a 12 gap. */
+  padding: var(--space-10) calc(var(--space-8) + var(--space-16) + var(--space-12)) var(--space-10)
+    var(--space-8);
+  border-radius: var(--radius-2);
+  cursor: pointer;
+}
+
+/* Hover and keyboard highlight are one state: the pointer moves the active option. */
+.ac-select__option[data-active='true'] {
+  background: var(--bg-quaternary);
+}
+
+.ac-select__check {
+  position: absolute;
+  right: var(--space-8);
+  top: var(--space-12);
+  display: block;
+}
+
+.ac-select__option:not([aria-selected='true']) .ac-select__check {
+  display: none;
+}
+
+/* Inline (SortSelect): the label sits left of the control in 12/16 text-tertiary. */
+.ac-select--inline {
+  display: flex;
+  align-items: center;
+  gap: var(--space-8);
+  width: auto;
+}
+
+.ac-select--inline .ac-select__label {
+  margin: 0;
+  color: var(--text-tertiary);
+  @apply type-ui;
+  white-space: nowrap;
+}
+
+.ac-select--inline .ac-select__control {
+  flex: none;
+  width: var(--ac-select-width, auto);
+}
+
+/* Compact trigger (SortSelect): 12/16 text, padding 6 12, same 40 px height. The listbox
+   keeps 14/20. */
+.ac-select--compact .ac-select__trigger {
+  padding: var(--space-6) var(--space-12);
+  @apply type-ui;
+}
+
+@media (pointer: coarse) {
+  .ac-select__trigger {
+    height: var(--size-touch);
+  }
+
+  .ac-select__option {
+    padding-top: var(--space-12);
+    padding-bottom: var(--space-12);
+  }
+
+  .ac-select__check {
+    top: calc(var(--space-12) + 2px);
+  }
+}
+
+/* Movement of spec 6.2: the trigger changes colour over duration-fast and the list enters
+   with `ac-tt-in`, replayed on every open because the browser takes it out of
+   `display: none`. Nothing moves with `prefers-reduced-motion: reduce` (S15). */
+@media (prefers-reduced-motion: no-preference) {
+  .ac-select__trigger {
+    transition: background-color var(--duration-fast) var(--ease-standard);
+  }
+
+  .ac-select__listbox {
+    animation: ac-tt-in var(--duration-fast) var(--ease-standard);
+  }
+}

@@ -1,0 +1,271 @@
+---
+// Parity route of the frame (spec 14.5, 5.5-5.9) and of the game layer (7.4, 7.5). It
+// lives in src/routes/, outside src/pages/, so the production build never publishes it:
+// astro.config.mjs injects it as `/[locale]/_paridad/<name>/` with `VISUAL=1` and on the
+// development server, and `seo:check` fails if a `/_paridad/` page reaches the deployed
+// output.
+//
+// Two routes, one file, because 5.5 gives a different main column to a page with rail
+// (896 at 1440) and to one without (944), and V5-1 measures both:
+//
+//   /{l}/_paridad/marco/           inner page: rail with its `Toc`, header with the
+//                                  centred trigger, breadcrumb, 48 rhythm;
+//   /{l}/_paridad/marco-sin-rail/  the frame of `Lienzo:Main`: spacer instead of rail
+//                                  and the Inicio header with no centred trigger, which
+//                                  is what the `marco` case of tests/visual/manifest.json
+//                                  crops against that board.
+//
+// What it paints. This page tests a frame and the tooltip, not a design of its own, so it
+// invents no content:
+//
+//  - the first section holds game entities, each one an `EntitySlot` that opens its
+//    `GameTooltip` (tests/e2e/tooltip.spec.ts and the `tooltip-*` cases of the visual
+//    manifest). The two Pokémon are the Charizard and the Shiny Charizard of the boards —
+//    the pair §14.4 samples for the same reason — and each links to its sheet, so the two
+//    triggers of 7.5.7 are both here: `<a href>` for them, `<button>` for the items,
+//    which have no page yet. The items are the first one of each Market category, which
+//    puts every tooltip width of 7.5.3 on the page (240 for balls and Diamonds, 300 for
+//    held items, 282 for the rest). Every row comes from the registry through the tip
+//    constructors of src/lib/game/tips.ts, and a row with no value is not drawn (X13).
+//    The line of items ends in a square `PlusN` of the size of the slots it follows
+//    (7.2.5, 7.5.8): the names of every other item of the registry, the ones past the one
+//    slot each category gets. It is the one «+N» of the milestone, and it shares TT9 with
+//    the panels;
+//  - every other section is one category of `content/items/` and lists the names of its
+//    items.
+//
+// Everything is read with the registry functions of 3.12 (`VISUAL=1` swaps them for the
+// board fixtures of tests/visual/content/ through the `@content` alias). No count and no
+// price: the registry has none yet, and a number written here would be a number nobody
+// measured (R7, X4, S10). The Elementos row of a Pokémon waits for a reader of
+// `content/elementos.json` in src/lib/content/registry.ts; until then the Pokémon passes
+// no element records and the row is omitted, as any unknown row is.
+//
+// Why the slots are laid out differently on each side of `layout-bp-md`. A slot opens its
+// panel at its side, and below 768 under it (7.5.5), and tests/e2e/tooltip.spec.ts pins
+// the panel of the first trigger while it hovers the next two (TT9) and scrolls 200 px
+// under a still pointer (TT13). So the first three triggers never sit where the first
+// panel opens: from 768 up the two Pokémon run down one column with the items in a row
+// under them, and below 768, where panels open downwards, all of them share one wrapping
+// row. The same arrangement leaves no other trigger 200 px under the first one.
+//
+// Text. What the components and the tooltip builders show comes from `messages.ui` of the
+// page's locale, as on every page (DP1, 13.2): the strip, the «o» of price options, the
+// name of the Shiny mark and the row labels of 7.5.3. The page's own strings (its title,
+// description, section heading and the name of the «+N») stay in this file on purpose:
+// 13.2 lists the namespaces of the site and a route that never ships is not one of them,
+// which is also why `pnpm i18n:check` reads `src/routes/` for keys but does not police it.
+import { getAlternatePath, getLocale, locales, type Locale } from '@/i18n/config';
+import type { Messages } from '@/i18n/messages/en';
+import { en } from '@/i18n/messages/en';
+import { es } from '@/i18n/messages/es';
+import { fill, plural, type PluralMessage } from '@/i18n/messages/types';
+import { getCategorias, getItems, getSpriteRegistry } from '@/lib/content/registry';
+import { resolvePokemonImage } from '@/lib/content/pokemon-media';
+import { getPokemonById, getRecordHref } from '@/lib/content/repository';
+import { formatInteger } from '@/lib/format/numbers';
+import { itemTip, pokemonTip } from '@/lib/game/tips';
+import { buildNav } from '@/lib/nav/groups';
+import { spriteOrNull } from '@/lib/sprites/resolve';
+import { EntitySlot } from '@/components/game/EntitySlot';
+import { PlusN } from '@/components/money/PlusN';
+import { Section } from '@/components/layout/Section';
+import { PageTitle } from '@/components/layout/PageTitle';
+import PageLayout from '@/layouts/PageLayout.astro';
+
+// No `export const prerender`: a file outside src/pages/ may not carry one, and
+// `injectRoute` already declares this route prerendered in astro.config.mjs.
+export function getStaticPaths() {
+  return locales.map((locale) => ({ params: { locale } }));
+}
+
+type Copy = {
+  title: string;
+  description: string;
+  /** Heading of the section of game entities. */
+  entities: string;
+  /** Name of the «+N» button: `{n}` and `{names}`. */
+  more: PluralMessage;
+};
+
+const COPY: Record<Locale, Copy> = {
+  es: {
+    title: 'Marco',
+    description:
+      'Ruta de paridad del marco: cabecera, barra lateral, columna principal, rail y pie sobre el registro de ítems.',
+    entities: 'Entidades',
+    more: {
+      one: '{n} ítem más: {names}',
+      other: '{n} ítems más: {names}',
+    },
+  },
+  en: {
+    title: 'Frame',
+    description:
+      'Frame parity route: header, sidebar, main column, rail and footer over the item registry.',
+    entities: 'Entities',
+    more: {
+      one: '{n} more item: {names}',
+      other: '{n} more items: {names}',
+    },
+  },
+};
+
+/** The two Pokémon of the boards, which §14.4 samples as well; both have a sheet. */
+const PARITY_POKEMON = ['charizard', 'shiny-charizard'] as const;
+
+/** `variante` of a shiny record in `content/pokemon.json` (§3.13). */
+const SHINY = 'shiny';
+
+const dictionaries: Record<Locale, Messages> = { es, en };
+
+const locale = getLocale(Astro.params.locale);
+const copy = COPY[locale];
+const ui = dictionaries[locale].ui;
+
+const path = Astro.url.pathname;
+// The two routes differ in one thing, and the name of the route is what says which.
+const withRail = !path.includes('marco-sin-rail');
+
+const alternates = Object.fromEntries(
+  locales.map((option) => [option, getAlternatePath(path, option)]),
+) as Record<Locale, string>;
+
+// The virtual «Todo» is every other category at once and would repeat every item.
+const categories = getCategorias().filter((category) => !category.virtual);
+const spriteRegistry = getSpriteRegistry();
+
+// 72 slots with the art of 7.4.2; a Pokémon with no `imagen` gets the missing mark.
+const pokemonSlots = PARITY_POKEMON.flatMap((id) => {
+  const pokemon = getPokemonById(id);
+  if (pokemon === undefined) return [];
+  const art = resolvePokemonImage(pokemon.imagen);
+  return [
+    {
+      name: pokemon.nombre,
+      href: getRecordHref('pokemon', pokemon.id, locale),
+      shiny: pokemon.variante === SHINY,
+      sprite: art === null ? null : { src: art, smooth: true },
+      tip: pokemonTip({ ...pokemon, elementos: [] }, locale, ui.tooltip),
+    },
+  ];
+});
+
+// 40 slots, one per category, with the item's own sprite at 1x (7.4.4).
+const itemSlots = categories.flatMap((category) => {
+  const [item] = getItems(category.id);
+  if (item === undefined) return [];
+  const sprite = spriteOrNull(spriteRegistry, item.sprite);
+  return [
+    {
+      name: item.nombre,
+      sprite,
+      tip: itemTip(
+        {
+          id: item.id,
+          nombre: item.nombre,
+          categoria: item.categoria,
+          sprite,
+          precioNpc: item.precioNpc,
+          nombreCategoria: category.nombre,
+        },
+        locale,
+        ui.tooltip,
+      ),
+    },
+  ];
+});
+
+// The «+N» that closes the line: every item past the first of its category, in the order
+// of the categories and of each registry. With none, `PlusN` draws nothing.
+const moreItems = categories.flatMap((category) =>
+  getItems(category.id)
+    .slice(1)
+    .map((item) => item.nombre),
+);
+const moreLabel = fill(plural(locale, moreItems.length, copy.more), {
+  n: formatInteger(moreItems.length, locale),
+  names: moreItems.join(', '),
+});
+
+const entities = { id: 'entidades', title: copy.entities };
+
+// One section per real category, in the order of `content/items/categorias.json`.
+const sections = categories
+  .map((category) => ({
+    id: `categoria-${category.id}`,
+    title: category.nombre[locale],
+    items: getItems(category.id),
+  }))
+  .filter((section) => section.items.length > 0);
+
+const toc = [entities, ...sections].map((section) => ({ id: section.id, label: section.title }));
+
+// The trail of 8.0.4, with the one link the menu has in every build (8.0.3): «Inicio».
+const [home] = buildNav(locale, path).top;
+const breadcrumb = home
+  ? [{ label: home.label, href: home.href }, { label: copy.title }]
+  : [{ label: copy.title }];
+---
+
+<PageLayout
+  locale={locale}
+  title={copy.title}
+  description={copy.description}
+  alternates={alternates}
+  breadcrumb={withRail ? breadcrumb : undefined}
+  toc={withRail ? toc : undefined}
+  rhythm={withRail ? 'page' : 'home'}
+  noindex
+>
+  <PageTitle title={copy.title} />
+  <Section id={entities.id} title={entities.title}>
+    <div class="flex flex-wrap items-start gap-8 md:flex-col">
+      <div class="contents md:flex md:flex-col md:gap-8">
+        {
+          pokemonSlots.map((slot) => (
+            <EntitySlot
+              name={slot.name}
+              sprite={slot.sprite}
+              tip={slot.tip}
+              locale={locale}
+              size={72}
+              shiny={slot.shiny}
+              href={slot.href}
+              hint={ui.pinHint}
+              shinyLabel={ui.shiny}
+              orLabel={ui.or}
+            />
+          ))
+        }
+      </div>
+      <div class="contents md:flex md:flex-wrap md:gap-8">
+        {
+          itemSlots.map((slot) => (
+            <EntitySlot
+              name={slot.name}
+              sprite={slot.sprite}
+              tip={slot.tip}
+              locale={locale}
+              hint={ui.pinHint}
+              shinyLabel={ui.shiny}
+              orLabel={ui.or}
+            />
+          ))
+        }
+        <PlusN items={moreItems} label={moreLabel} size={40} />
+      </div>
+    </div>
+  </Section>
+  {
+    sections.map((section) => (
+      <Section id={section.id} title={section.title}>
+        <ul>
+          {section.items.map((item) => (
+            <li>{item.nombre}</li>
+          ))}
+        </ul>
+      </Section>
+    ))
+  }
+</PageLayout>

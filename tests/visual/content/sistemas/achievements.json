@@ -1,0 +1,14 @@
+{
+  "$schema": "../../../../content/schemas/sistemas.schema.json",
+  "id": "achievements",
+  "titulo": {
+    "es": "Achievements",
+    "en": "Achievements"
+  },
+  "sprite": null,
+  "orden": 8,
+  "tooltip": [],
+  "intro": [],
+  "secciones": [],
+  "borrador": true
+}

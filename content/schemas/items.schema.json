@@ -1,0 +1,168 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://alliance-codex.local/schemas/items.schema.json",
+  "title": "Items de una categoría del Market",
+  "description": "Un archivo por categoría: content/items/<categoria>.json.",
+  "type": "object",
+  "required": ["items"],
+  "additionalProperties": false,
+  "properties": {
+    "$schema": { "type": "string" },
+    "moneda": {
+      "$ref": "#/$defs/moneda",
+      "description": "Solo en content/items/diamantes.json: dónde se compran los Diamonds y en qué se usan, para su tooltip y los anuncios de Diamonds de Comercio. Lo rellena el propietario."
+    },
+    "items": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/item" }
+    }
+  },
+  "$defs": {
+    "listaTexto": {
+      "type": "object",
+      "description": "La misma lista en los dos idiomas y en el mismo orden: { \"es\": [\"…\"], \"en\": [\"…\"] }. Sin importes del juego. Una lista vacía no genera fila.",
+      "required": ["es", "en"],
+      "additionalProperties": false,
+      "properties": {
+        "es": { "type": "array", "items": { "type": "string", "pattern": "\\S" } },
+        "en": { "type": "array", "items": { "type": "string", "pattern": "\\S" } }
+      }
+    },
+    "moneda": {
+      "type": "object",
+      "required": ["seCompranEn", "seUsanEn"],
+      "additionalProperties": false,
+      "properties": {
+        "seCompranEn": {
+          "type": ["object", "null"],
+          "description": "«Se compran en»: dónde se consiguen. null si no se conoce.",
+          "if": { "type": "object" },
+          "then": { "$ref": "#/$defs/listaTexto" }
+        },
+        "seUsanEn": {
+          "type": ["object", "null"],
+          "description": "«Se usan en»: en qué se gastan. null si no se conoce.",
+          "if": { "type": "object" },
+          "then": { "$ref": "#/$defs/listaTexto" }
+        }
+      }
+    },
+    "slug": {
+      "type": "string",
+      "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$",
+      "description": "Minúsculas, números y guiones (kebab-case)."
+    },
+    "spriteKey": {
+      "type": "string",
+      "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*(?:/[a-z0-9]+(?:-[a-z0-9]+)*)*$",
+      "description": "Clave de public/sprites/sprites.json, por ejemplo \"items/stones/fire-stone\"."
+    },
+    "precio": {
+      "type": ["integer", "null"],
+      "minimum": 0,
+      "description": "Precio en el NPC, en Pokédólares. null si no se conoce (la web muestra «—»)."
+    },
+    "elemento": {
+      "description": "id de un elemento de content/elementos.json, en su orden. pnpm content:check comprueba que esta lista sea la de elementos.schema.json.",
+      "enum": [
+        "normal",
+        "fire",
+        "water",
+        "grass",
+        "electric",
+        "ice",
+        "fighting",
+        "poison",
+        "ground",
+        "flying",
+        "psychic",
+        "bug",
+        "rock",
+        "ghost",
+        "dragon",
+        "fairy",
+        "dark",
+        "steel"
+      ]
+    },
+    "texto": {
+      "type": "object",
+      "description": "El mismo texto en los dos idiomas del sitio: { \"es\": \"…\", \"en\": \"…\" }.",
+      "required": ["es", "en"],
+      "additionalProperties": false,
+      "properties": {
+        "es": { "type": "string", "pattern": "\\S" },
+        "en": { "type": "string", "pattern": "\\S" }
+      }
+    },
+    "item": {
+      "type": "object",
+      "required": ["id", "nombre", "clientId", "categoria", "sprite", "apilable", "precioNpc"],
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/slug",
+          "description": "Identificador único entre todos los items."
+        },
+        "nombre": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Nombre canónico del juego, en inglés."
+        },
+        "clientId": {
+          "type": ["integer", "null"],
+          "minimum": 1,
+          "description": "ID del item en el .dat del cliente. null si no se conoce."
+        },
+        "categoria": {
+          "description": "Debe coincidir con el nombre del archivo. Son las categorías de categorias.schema.json sin \"todo\"; pnpm content:check comprueba que las dos listas coincidan.",
+          "enum": [
+            "diamantes",
+            "pokemon",
+            "poke-balls",
+            "stones",
+            "helds",
+            "orbs",
+            "creature-items",
+            "general-items",
+            "utilities",
+            "addons",
+            "consumable",
+            "foods",
+            "furnitures"
+          ]
+        },
+        "sprite": { "$ref": "#/$defs/spriteKey" },
+        "apilable": {
+          "type": ["boolean", "null"],
+          "description": "true si se agrupa en pilas. null si no se conoce."
+        },
+        "precioNpc": {
+          "type": "object",
+          "required": ["vende", "compra"],
+          "additionalProperties": false,
+          "properties": {
+            "vende": { "$ref": "#/$defs/precio" },
+            "compra": { "$ref": "#/$defs/precio" }
+          }
+        },
+        "elemento": {
+          "type": ["string", "null"],
+          "description": "Opcional. id del elemento del item, de content/elementos.json («Elemento» de su tarjeta, su fila y su tooltip). null si no se conoce.",
+          "if": { "type": "string" },
+          "then": { "$ref": "#/$defs/elemento" }
+        },
+        "uso": {
+          "type": ["object", "null"],
+          "description": "Opcional. Para qué sirve el item, en los dos idiomas («Uso» de su tarjeta, su fila y su tooltip). Sin importes: los precios van en precioNpc. null si no se conoce.",
+          "if": { "type": "object" },
+          "then": { "$ref": "#/$defs/texto" }
+        },
+        "borrador": {
+          "type": "boolean",
+          "description": "true en registros de relleno. Se pueden ocultar en producción con OCULTAR_BORRADORES=1."
+        }
+      }
+    }
+  }
+}

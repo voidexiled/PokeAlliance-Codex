@@ -1,0 +1,21 @@
+/* Footer (spec 5.9, 7.2.1), ported from the design system's components/bundle.css.
+   global.css imports this file with layer(components).
+
+   A 1 px rule on top, 16 above and below, one line of 12/16 in `text-tertiary`.
+   The space between the last block of the column and the footer belongs to
+   `ac-page-layout__foot` in page-layout.css. */
+
+.ac-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--space-16) 0;
+  border-top: 1px solid var(--border-secondary);
+  color: var(--text-tertiary);
+  font-family: var(--font-sans);
+  @apply type-ui;
+}
+
+.ac-footer__text {
+  margin: 0;
+}

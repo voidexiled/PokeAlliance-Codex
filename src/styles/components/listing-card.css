@@ -1,0 +1,39 @@
+/* ListingCard (spec 7.2.6, 9.5.8; CARD_GRID_SYSTEM §6.1; DS:ListingCard), ported from the
+   `.ac-listing-card` block of the design system's components/bundle.css. global.css imports
+   this file with layer(components).
+
+   The card box, the head and the fact rows come from card.css and fact-list.css, the money,
+   Held Items, training and contact pieces from money.css: this file only has the pieces of
+   the listing itself. Two additions against the reference: `__entity`, the Ball of a fact
+   whose panel has nothing to show (R2, spec 8.0.5), which keeps the sprite and the name of
+   the entity link without being one; and the wider gap between element links on a coarse
+   pointer (spec 13.7, S14). */
+
+/* Elementos and Elemento: the element links of a fact, 8 apart. */
+.ac-listing-card__els {
+  display: inline-flex;
+  gap: var(--space-8);
+}
+
+/* Coarse pointers: the links of a fact row are the one target spec 13.7 lets stay under
+   44 px, with 8 px between them (WCAG 2.5.8). Each entity link reaches 2 px past its text on
+   either side (nested-entity.css), so the gap between two of them grows by those 4 px. */
+@media (pointer: coarse) {
+  .ac-listing-card__els {
+    gap: var(--space-12);
+  }
+}
+
+/* A plain entity with its sprite: the geometry of the entity link (nested-entity.css). */
+.ac-listing-card__entity {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-4);
+  white-space: nowrap;
+}
+
+/* Dinero real: `body-strong`, tabular. */
+.ac-listing-card__fiat {
+  font-variant-numeric: tabular-nums;
+  @apply type-body-strong;
+}

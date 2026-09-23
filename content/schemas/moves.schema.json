@@ -1,0 +1,77 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://alliance-codex.local/schemas/moves.schema.json",
+  "title": "Movimientos",
+  "description": "content/moves.json. Si un valor no se conoce, va null.",
+  "type": "object",
+  "required": ["movimientos"],
+  "additionalProperties": false,
+  "properties": {
+    "$schema": { "type": "string" },
+    "movimientos": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/movimiento" }
+    }
+  },
+  "$defs": {
+    "slug": {
+      "type": "string",
+      "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$",
+      "description": "Minúsculas, números y guiones (kebab-case)."
+    },
+    "texto": { "type": ["string", "null"], "minLength": 1 },
+    "elemento": {
+      "description": "id de un elemento de content/elementos.json, en su orden. pnpm content:check comprueba que esta lista sea la de elementos.schema.json.",
+      "enum": [
+        "normal",
+        "fire",
+        "water",
+        "grass",
+        "electric",
+        "ice",
+        "fighting",
+        "poison",
+        "ground",
+        "flying",
+        "psychic",
+        "bug",
+        "rock",
+        "ghost",
+        "dragon",
+        "fairy",
+        "dark",
+        "steel"
+      ]
+    },
+    "movimiento": {
+      "type": "object",
+      "required": ["id", "nombre", "elemento", "slot", "cooldownSegundos", "modo", "pokemon"],
+      "additionalProperties": false,
+      "properties": {
+        "id": { "$ref": "#/$defs/slug" },
+        "nombre": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Nombre canónico del juego, en inglés."
+        },
+        "elemento": {
+          "type": ["string", "null"],
+          "description": "id del elemento en content/elementos.json (\"normal\", \"fire\"…), no su nombre. null si no se conoce.",
+          "if": { "type": "string" },
+          "then": { "$ref": "#/$defs/elemento" }
+        },
+        "slot": {
+          "$ref": "#/$defs/texto",
+          "description": "Tecla del movimiento, por ejemplo \"M1\"."
+        },
+        "cooldownSegundos": { "type": ["number", "null"], "minimum": 0 },
+        "modo": { "$ref": "#/$defs/texto", "description": "PVE o PVP." },
+        "pokemon": {
+          "type": "array",
+          "description": "ids de content/pokemon.json que usan el movimiento.",
+          "items": { "$ref": "#/$defs/slug" }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,145 @@
+/* Guild page (spec 10.5, `Lienzo:Guild`; template H of 8.0.2): the blocks that
+   src/components/guild/GuildRoot.tsx draws around the sections — the title row, the island
+   region, the data row with «Importar export» and «Metas», the loading line and the empty
+   page. Every control inside is a design-system component with its own sheet in global.css
+   (Breadcrumb, PageTitle, FactLines, Button, Select, Notice, EmptyState, TextLink).
+
+   Per-page sheet (D-018, 13.6): only this page draws these blocks, so GuildRoot.tsx imports it
+   and global.css does not. The layer order of global.css is repeated before the block, so
+   `components` keeps its place whichever sheet the browser reads first (3.6).
+
+   Rhythm, as the board draws it: the crumbs and this block are 48 apart (the main column of
+   PageLayout); the title and the data row are 16 apart; the data row and each `Section` are
+   48 apart. The region starts where the data row does, so a loading line, a notice or the
+   empty page sits 16 under the title too. Notices stack 16 apart above the data row.
+
+   Data row (10.5 step 3): the `FactLines` of 14/32 on the left; on the right, stacked and
+   right-aligned, the two buttons 8 apart and, 4 under them, the Ctrl+J line in 12/16 `helper`.
+   On a phone the right block wraps under the facts and aligns left. */
+
+@reference '../theme.css';
+
+@layer properties, theme, base, components, utilities;
+
+@layer components {
+  .ac-guild {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-16);
+    min-width: 0;
+  }
+
+  /* The «Guild» Select of an account with several guilds sits right of the title (10.4). */
+  .ac-guild__heading {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    gap: var(--space-16);
+  }
+
+  .ac-guild__heading > .ac-page-title {
+    flex: 1 1 0;
+    min-width: 0;
+  }
+
+  .ac-guild__region {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-48);
+    min-width: 0;
+  }
+
+  /* The page CLS of 13.6, as PR4 does for the lists (entity-list.css): what follows the island
+     in the main column — the footer of PageLayout — waits hidden while the region has nothing
+     final to show, that is while it is busy (the prerendered HTML, until the island knows the
+     mode) or holds only the loading line of account mode. Otherwise the footer paints right under
+     the empty region and jumps below the fold when the sections arrive: 0.036 at 1440 and 0.071
+     at 390 with an imported export. The island is the `astro-island` wrapper of the crumbs and
+     `.ac-guild`, so what follows is that wrapper's siblings. Nothing is hidden otherwise. */
+  :has(> .ac-guild > .ac-guild__region[aria-busy='true']) ~ *,
+  :has(> .ac-guild > .ac-guild__region > .ac-guild__loading) ~ * {
+    visibility: hidden;
+  }
+
+  .ac-guild__top {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-16);
+    min-width: 0;
+  }
+
+  .ac-guild__loading {
+    margin: 0;
+    color: var(--text-tertiary);
+    @apply type-body;
+  }
+
+  /* One line of a notice that lists several (the upload result). */
+  .ac-guild__line {
+    display: block;
+  }
+
+  .ac-guild__empty {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-8);
+  }
+
+  .ac-guild__hint {
+    margin: 0;
+    color: var(--helper);
+    @apply type-ui;
+  }
+
+  .ac-guild__account {
+    margin: 0;
+    @apply type-ui;
+  }
+
+  .ac-guild-head {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-16);
+  }
+
+  .ac-guild-head__facts {
+    display: flex;
+    min-width: 0;
+    flex-direction: column;
+  }
+
+  .ac-guild-head__actions {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--space-4);
+  }
+
+  .ac-guild-head__buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-8);
+  }
+
+  @media (width >= 48rem) {
+    .ac-guild-head {
+      flex-direction: row;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: var(--space-24);
+    }
+
+    .ac-guild-head__facts {
+      flex: 1 1 0;
+    }
+
+    .ac-guild-head__actions {
+      flex: none;
+      align-items: flex-end;
+    }
+
+    .ac-guild-head__buttons {
+      justify-content: flex-end;
+    }
+  }
+}

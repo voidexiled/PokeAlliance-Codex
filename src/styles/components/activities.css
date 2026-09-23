@@ -1,0 +1,30 @@
+/* The activity page (spec 8.9.2, template C of 8.0.2): what
+   src/pages/[locale]/actividades/[id].astro draws that no design-system component carries,
+   the lead column under the title. Every other piece of the page — Breadcrumb, PageTitle,
+   InfoBanner, Section with its plain lists, Toc and Footer — is a design-system component whose
+   rules global.css already carries: the lists of a Section keep the plain-content rules of
+   section.css (markers inside, 8 apart). The index of 8.9.1 is PageTitle and IndexLinks, which
+   brings its own sheet, so it needs none of this.
+
+   A per-page sheet of this page family alone (13.6, D-018): the activity page imports it, so it
+   travels with that page and never reaches the shared sheet. The layer order of global.css is
+   repeated before the block, so `components` keeps its place whichever of the two sheets the
+   browser reads first (3.6). */
+
+@layer properties, theme, base, components, utilities;
+
+@layer components {
+  /* 8.9.2 step 3: `resumen`, then `instrucciones`, 16 apart as the blocks of a Section, while
+     the main column keeps its 48 around the group (DS:PageLayout). Justified, in the 16/24 of
+     the page column, as the lead of a system page (system-block.css). */
+  .ac-activity-intro {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-16);
+  }
+
+  .ac-activity-intro > p {
+    margin: 0;
+    text-align: justify;
+  }
+}

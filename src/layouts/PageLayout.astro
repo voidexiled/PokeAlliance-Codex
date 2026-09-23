@@ -1,0 +1,309 @@
+---
+// PageLayout (spec 5.5-5.9, 7.2.1, 7.10, 13.5, DS:PageLayout): the frame of every page of
+// the site — skip link, header, sidebar, main column with its footer, rail or spacer, and
+// the phone sheet — plus the `<head>` of 13.5 and the script block of 7.3.
+//
+// It is the only file that imports a stylesheet (3.6, design:check rule 8) and the only
+// place the frame components are composed: a page passes data, never frame markup.
+//
+// What it renders and what the caller gives it:
+//
+//   <html lang>
+//     <head>  title, description, canonical, hreflang, Open Graph, theme colour (13.5)
+//             SpriteStyles                -> the sprite @keyframes of the build (3.12)
+//     <body>
+//       SkipLink                       -> #contenido
+//       Header                         -> brand, centred trigger, language, menu button
+//       .ac-page-layout__row
+//         .ac-page-layout__sidebar     -> Sidebar, from 1280 (5.7)
+//         main#contenido               -> Breadcrumb?, the page, Footer
+//         .ac-page-layout__rail        -> Toc, with two or more entries
+//         .ac-page-layout__spacer      -> the empty 208 column, without one
+//       MobileMenu                     -> the 288 sheet, below 1280
+//
+// `<main id="contenido">` and `Footer` are fixed (7.2.1): no page moves them and no page
+// adds a second one. The default slot is the main column.
+//
+// The DS props that stand for pieces — `header`, `sidebar`, `rail`, `menu`, `footer`,
+// `mainId`, `skipLabel`, `skipLink` — are not props here: on the site those pieces are
+// always the same components with the same data, and letting a page swap one would be how
+// two pages end up with different frames.
+import { color } from '@/lib/design/tokens';
+import { getAlternatePath, locales, type Locale } from '@/i18n/config';
+import type { Messages } from '@/i18n/messages/en';
+import { en } from '@/i18n/messages/en';
+import { es } from '@/i18n/messages/es';
+import { buildNav } from '@/lib/nav/groups';
+
+import SpriteStyles from '@/components/game/SpriteStyles.astro';
+import { Breadcrumb, type BreadcrumbItem } from '@/components/layout/Breadcrumb';
+import Footer from '@/components/layout/Footer.astro';
+import Header from '@/components/layout/Header.astro';
+import LanguageMenu from '@/components/layout/LanguageMenu.astro';
+import MobileMenu from '@/components/layout/MobileMenu.astro';
+import Sidebar from '@/components/layout/Sidebar.astro';
+import SkipLink from '@/components/layout/SkipLink.astro';
+import Toc, { type TocItem } from '@/components/layout/Toc.astro';
+import { Glyph } from '@/components/icons/Glyph';
+import { SearchPalette, type SearchPaletteMessages } from '@/components/search/SearchPalette';
+
+// The self-hosted Poppins of 3.9. Vite gives the `?url` import the same hashed URL as the
+// `url()` of fonts.css, which is what makes the preload count (V3-6).
+import poppins500 from '@/assets/fonts/poppins-latin-500-normal.woff2?url';
+import poppins600 from '@/assets/fonts/poppins-latin-600-normal.woff2?url';
+
+import '@/styles/global.css';
+
+interface Props {
+  /** Page locale: the `lang` of the document and the dictionary every piece reads. */
+  locale: Locale;
+  /** The h1 of the page. The document title is «{title} · Alliance Codex» (13.5). */
+  title: string;
+  /** `<meta name="description">`, 50 to 160 characters, unique per route and locale (13.5). */
+  description: string;
+  /** The same route in each locale (13.1), from `getAlternatePath`. */
+  alternates: Record<Locale, string>;
+  /**
+   * The whole `<title>`, for the one page whose title is not «{h1} · Alliance Codex»:
+   * Inicio (S-01). Every other page leaves it out.
+   */
+  documentTitle?: string;
+  /** The trail of 8.0.4, painted above the page. Without it there are no crumbs. */
+  breadcrumb?: BreadcrumbItem[];
+  /** The rail index (7.11). With two or more entries the rail is a `Toc`; otherwise a spacer. */
+  toc?: TocItem[];
+  /** Space between blocks: 48 on an inner page, 24 on Inicio (5.8, 5.9). */
+  rhythm?: 'page' | 'home';
+  /** 3.9: only the pages that paint Poppins on load preload it (the sheet, the listing). */
+  preloadGameFont?: boolean;
+  /** 13.5: the 404, the placeholders and the parity routes of 14.5. */
+  noindex?: boolean;
+  /**
+   * The 404 (8.12): the requested path is no page of the menu, so no entry is marked and no
+   * group opens, not even under the path of a section, where the path alone would mark that
+   * section as a child route (S1, WA3, 7.10.2).
+   */
+  unlisted?: boolean;
+}
+
+const {
+  locale,
+  title,
+  description,
+  alternates,
+  documentTitle,
+  breadcrumb,
+  toc,
+  rhythm = 'page',
+  preloadGameFont = false,
+  noindex = false,
+  unlisted = false,
+} = Astro.props;
+
+const dictionaries: Record<Locale, Messages> = { es, en };
+const { shell, search } = dictionaries[locale];
+
+// 7.9.3: the field of the palette is a `TextField variant="search"` and shows the same
+// placeholder as the header trigger, so it reads `shell.searchHeader` instead of a second
+// key with the same string. Everything else is the palette's part of the `search`
+// namespace (8.6), key by key: the island's props travel in the HTML of every page, and
+// the texts of the results page (`title`, `description`, `count`, M10) are not the palette's.
+const searchMessages: SearchPaletteMessages = {
+  label: search.label,
+  placeholder: shell.searchHeader,
+  results: search.results,
+  groups: search.groups,
+  empty: search.empty,
+  error: search.error,
+  seeAll: search.seeAll,
+};
+
+// A proper noun, the same in both locales (13.4), so it is not a dictionary key. `Header`
+// writes the same one on its wordmark.
+const BRAND = 'Alliance Codex';
+
+// 13.5: `og:locale` is a language tag, not copy, so it lives here and not in a dictionary.
+const OG_LOCALE: Record<Locale, string> = { es: 'es_ES', en: 'en_US' };
+
+// 13.5: the canonical URL is the page's own route, absolute, with a trailing slash and no
+// query. `Astro.site` is the `site` of astro.config.mjs.
+const path = Astro.url.pathname;
+const absolute = (route: string): string => new URL(route, Astro.site).href;
+const canonical = absolute(path);
+
+// 13.1: a caller always passes `alternates`, but a route it does not know falls back to the
+// same path under the other locale, which is what `getAlternatePath` computes.
+const alternateFor = (option: Locale): string =>
+  absolute(alternates[option] ?? getAlternatePath(path, option));
+const [DEFAULT_LOCALE] = locales;
+
+const documentHead = documentTitle ?? `${title} · ${BRAND}`;
+
+// 7.11: the rail is a `Toc` only with two or more sections; with fewer, the page has no
+// index and the right column is the empty 208 spacer of 5.7.
+const tocItems = toc ?? [];
+const hasRail = tocItems.length >= 2;
+
+// 5.6, A3: Inicio carries no centred search trigger — its search is in the body — and it is
+// the one page with the 24 rhythm, so one prop answers both instead of two that can disagree.
+const isHome = rhythm === 'home';
+
+// WG5 (8.0.3): the menu is built from the routes that exist in the build, and the column and
+// the sheet get the same one, so the two never disagree. An unlisted page passes the empty
+// path, which matches no entry and no section (E10).
+const nav = buildNav(locale, unlisted ? '' : path);
+---
+
+<!doctype html>
+<!-- Single theme «Oscuro» (decision T1, 3.4): `class="dark"` and `color-scheme: dark`
+     (base.css). There is no theme button and nothing toggles this class (X2). -->
+<html lang={locale} class="dark">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>{documentHead}</title>
+    <meta name="description" content={description} />
+    {noindex && <meta name="robots" content="noindex" />}
+
+    <link rel="canonical" href={canonical} />
+    {
+      locales.map((option) => (
+        <link rel="alternate" hreflang={option} href={alternateFor(option)} />
+      ))
+    }
+    <link rel="alternate" hreflang="x-default" href={alternateFor(DEFAULT_LOCALE)} />
+
+    <meta property="og:site_name" content={BRAND} />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={documentHead} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:locale" content={OG_LOCALE[locale]} />
+    {
+      locales
+        .filter((option) => option !== locale)
+        .map((option) => <meta property="og:locale:alternate" content={OG_LOCALE[option]} />)
+    }
+    <meta name="twitter:card" content="summary" />
+
+    <meta name="theme-color" content={color.bgPrimary} />
+    <meta name="color-scheme" content="dark" />
+
+    {
+      preloadGameFont && (
+        <>
+          <link rel="preload" href={poppins600} as="font" type="font/woff2" crossorigin />
+          <link rel="preload" href={poppins500} as="font" type="font/woff2" crossorigin />
+        </>
+      )
+    }
+
+    {
+      /* 3.12: the `@keyframes` of every animated sheet of the registry, once per page. They
+    are written in the build — `ensureKeyframes` of the reference injects them from the
+    client and the prerendered HTML would go out without them (E9) — and each block sits
+    inside `@media (prefers-reduced-motion: no-preference)`, so reduced motion leaves every
+    sprite on frame 0 (6.4, S15). It goes in the `<head>`, before the first sprite of the
+    body, so no animated sprite is ever painted unanimated first. */
+    }
+    <SpriteStyles />
+  </head>
+
+  <body>
+    <div class:list={['ac-page-layout', isHome && 'ac-page-layout--home']}>
+      <SkipLink locale={locale} />
+      <Header locale={locale} alternates={alternates} home={isHome} />
+
+      <div class:list={['ac-page-layout__row', hasRail && 'ac-page-layout__row--rail']}>
+        <div class="ac-page-layout__sidebar">
+          <Sidebar locale={locale} nav={nav} />
+        </div>
+
+        <main id="contenido" class="ac-page-layout__main">
+          {
+            breadcrumb && breadcrumb.length > 0 && (
+              <Breadcrumb items={breadcrumb} ariaLabel={shell.breadcrumb} />
+            )
+          }
+          <slot />
+          <div class="ac-page-layout__foot">
+            <Footer locale={locale} />
+          </div>
+        </main>
+
+        {
+          hasRail ? (
+            <div class="ac-page-layout__rail">
+              <Toc items={tocItems} locale={locale} />
+            </div>
+          ) : (
+            <div class="ac-page-layout__spacer" aria-hidden="true" />
+          )
+        }
+      </div>
+
+      <MobileMenu locale={locale} nav={nav}>
+        <LanguageMenu slot="idioma" locale={locale} alternates={alternates} touch />
+      </MobileMenu>
+    </div>
+
+    {
+      /* 7.3, 7.9.1: one `SearchPalette` island per page, the other half of
+    `SearchTrigger` — without it the trigger would be a control that does nothing (S11,
+    R12). It goes on every page because Ctrl + K opens it on every page, including the
+    ones whose header shows no trigger (A3). It carries no `role="search"`: the search
+    region of the spec belongs to `/{l}/buscar/` (8.6) and M10 lands it there. Its magnifier
+    is rendered here and passed as a slot, so the island does not bundle `Glyph` (13.6). */
+    }
+    <SearchPalette client:idle locale={locale} messages={searchMessages}>
+      <Glyph slot="glyph" name="search" size={16} className="ac-search-palette__glyph" />
+    </SearchPalette>
+
+    {
+      /* 7.3: the behaviour that needs no React, one deduplicated module bundle per page.
+
+    `game-tooltip.ts` and `art-loading.ts` are «todas las páginas» in that table, and both
+    are unconditional for the same reason: they work by delegation over markup the server
+    already printed, so a page with no entity and no illustration pays a handful of
+    document listeners and no work. Neither adds a dependency to the bundle either:
+    the @floating-ui/dom the tooltip places its panel with is loaded on the first
+    open, by `src/scripts/floating.ts`, and not by this bundle (13.6).
+
+    `toc-spy.ts` is asked for «solo con `toc`», and the script block of an .astro file is
+    hoisted at compile time, so the condition cannot be around the tag: it is a dynamic
+    import behind the rail itself, which keeps the module out of the pages with no index
+    (13.6). Two conditions, not one: page-layout.css hides the rail below layout-bp-xl
+    while the element stays in the DOM, so a page with an index still ships nothing to a
+    phone that can never see it. The `80rem` here is the same literal that stylesheet
+    writes — a media query cannot read a custom property. A window that grows past the
+    breakpoint gets the module then. The other six run on every page.
+
+    `select.ts` is the delegated controller of every `Select` and `SortSelect` (7.2.2,
+    C-R2): the component prints its trigger and its whole listbox, and without this module
+    the trigger would be a control that opens nothing (S11, G8). It is unconditional for the
+    reason the tooltip is: it listens on `document`, so a Select an island paints is served
+    the same way, and its one dependency is the @floating-ui/dom that `floating.ts` loads
+    on the first open. */
+    }
+    <script>
+      import '@/scripts/game-tooltip.ts';
+      import '@/scripts/art-loading.ts';
+      import '@/scripts/search-shortcut.ts';
+      import '@/scripts/mobile-menu.ts';
+      import '@/scripts/popover-anchor.ts';
+      import '@/scripts/select.ts';
+
+      if (document.querySelector('[data-ac-toc]')) {
+        const rail = window.matchMedia('(min-width: 80rem)');
+        const load = () => {
+          if (!rail.matches) return;
+          rail.removeEventListener('change', load);
+          void import('@/scripts/toc-spy.ts');
+        };
+        rail.addEventListener('change', load);
+        load();
+      }
+    </script>
+  </body>
+</html>

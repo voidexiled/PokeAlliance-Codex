@@ -1,14 +1,40 @@
 ---
-import AppLayout from '../../../layouts/AppLayout.astro';
-import DataStatus from '../../../components/wiki/DataStatus.astro';
-import EvidenceTrail from '../../../components/wiki/EvidenceTrail.astro';
-import {
-  formatFactValue,
-  getFact,
-  getRecordEvidence,
-  getRecords,
-} from '../../../lib/content/repository';
-import { getLocale, locales, type Locale } from '../../../i18n/config';
+// Systems index (spec 8.4.1): template D of 8.0.2 on PageLayout, prerendered. The single
+// crumb «Sistemas» / «Systems» (8.0.4, T15), the `PageTitle` with the same text, and the
+// `IndexLinks` grid across the main column with one link per system page of
+// `content/sistemas/`, in the order of the registry: its sprite at 1x in the 32 cell and, when
+// the record has tooltip rows, its panel above the link, anchored to its left edge
+// (`systemTip`, DS:IndexPanel). No description, state or count under a link. With no system
+// published the grid gives way to the one line of `EmptyState`; there is no loading state.
+// PageLayout adds the footer, the 208 spacer and the frame.
+//
+// Data (8.0.5, R7, X4). Every entry comes from `content/sistemas/<id>.json` through
+// `getSistemas`, which already orders the records by `orden` and leaves out the drafts under
+// OCULTAR_BORRADORES=1 (SI4); the page never marks one as a draft. `titulo` is a `Texto` with
+// both locales (§3.13), so the name of a link is the page's own. Sprites go through the adapter
+// (DP2): a key the registry does not have fails the build, `null` leaves the cell empty. The
+// record holds only the tooltip rows it knows (`[]` while it has none); `systemTip` still drops
+// a value that reads as empty (X13), and the panel exists only when a row is left (R2).
+//
+// Text (DP1, 13.2). The h1, the crumb, the description of 13.5 and the empty line are
+// `messages.systems`; the strip of the panels is `ui.pinHint`. What the index showed before
+// this template — the label above the title, the intro, the system items and the moves — is
+// gone (Y-01 to Y-11): the items live on the page of their system and the moves in «Ataques»
+// of the Pokémon page.
+//
+// Styles. `IndexLinks` brings its own per-page sheet (index-links.css); the page adds none.
+import { getAlternatePath, getLocale, locales, type Locale } from '@/i18n/config';
+import type { Messages } from '@/i18n/messages/en';
+import { en } from '@/i18n/messages/en';
+import { es } from '@/i18n/messages/es';
+import { getSistemas, getSpriteRegistry } from '@/lib/content/registry';
+import { systemTip } from '@/lib/game/tips';
+import { spriteOrNull } from '@/lib/sprites/resolve';
+
+import { EmptyState } from '@/components/content/EmptyState';
+import { IndexLinks, type IndexLinkEntry } from '@/components/home/IndexLinks';
+import { PageTitle } from '@/components/layout/PageTitle';
+import PageLayout from '@/layouts/PageLayout.astro';
 
 export const prerender = true;
 
@@ -16,144 +42,47 @@ export function getStaticPaths() {
   return locales.map((locale) => ({ params: { locale } }));
 }
 
-const locale = getLocale(Astro.params.locale) as Locale;
-const items = getRecords('items');
-const moves = getRecords('moves');
-const copy =
-  locale === 'es'
-    ? {
-        title: 'Sistemas',
-        description: 'Objetos y movimientos que ayudan a entender los sistemas de PokeAlliance.',
-        eyebrow: 'Wiki Core / Sistemas',
-        intro: 'Cada ficha conserva el estado del dato y el enlace a la evidencia que lo respalda.',
-        items: 'Objetos de sistema',
-        moves: 'Movimientos',
-        descriptionLabel: 'Descripción',
-        element: 'Elemento',
-        slot: 'Slot',
-        cooldown: 'Cooldown',
-        evidence: 'evidencias',
-      }
-    : {
-        title: 'Systems',
-        description: 'Items and moves that explain the systems of PokeAlliance.',
-        eyebrow: 'Wiki Core / Systems',
-        intro: 'Every entry keeps its data status and the evidence link behind it.',
-        items: 'System items',
-        moves: 'Moves',
-        descriptionLabel: 'Description',
-        element: 'Element',
-        slot: 'Slot',
-        cooldown: 'Cooldown',
-        evidence: 'evidence items',
-      };
-const itemViews = items.map((item) => ({
-  item,
-  description: getFact<string>(item, 'description')?.value,
-  evidence: getRecordEvidence(item),
-}));
-const moveViews = moves.map((move) => ({
-  move,
-  combatMode: getFact<string>(move, 'combatMode')?.value,
-  element: getFact<string>(move, 'element')?.value,
-  slot: getFact<string>(move, 'slot')?.value,
-  cooldown: getFact<unknown>(move, 'cooldown')?.value,
-  evidence: getRecordEvidence(move),
-}));
+const dictionaries: Record<Locale, Messages> = { es, en };
+
+const locale = getLocale(Astro.params.locale);
+const path = Astro.url.pathname;
+const alternates = Object.fromEntries(
+  locales.map((option) => [option, getAlternatePath(path, option)]),
+) as Record<Locale, string>;
+
+const messages = dictionaries[locale];
+const title = messages.systems.title;
+const registry = getSpriteRegistry();
+
+const links: IndexLinkEntry[] = getSistemas().map((system) => {
+  const sprite = spriteOrNull(registry, system.sprite);
+  const tip = systemTip(
+    { id: system.id, titulo: system.titulo, sprite, tooltip: system.tooltip },
+    locale,
+  );
+  return {
+    id: system.id,
+    label: system.titulo[locale],
+    href: `/${locale}/sistemas/${system.id}/`,
+    sprite,
+    ...(tip.rows.length > 0 ? { tip } : {}),
+  };
+});
 ---
 
-<AppLayout locale={locale} title={copy.title} description={copy.description}>
-  <div>
-    <nav
-      class="wiki-breadcrumbs"
-      aria-label={locale === 'es' ? 'Ruta de navegación' : 'Breadcrumb'}
-    >
-      <a href={`/${locale}/`}>{locale === 'es' ? 'Inicio' : 'Home'}</a>
-      <span class="wiki-breadcrumb-separator">/</span>
-      <span>{copy.title}</span>
-    </nav>
-    <header class="wiki-page-header">
-      <p class="eyebrow">{copy.eyebrow}</p>
-      <h1 class="display-title">{copy.title}</h1>
-      <p class="muted-copy">{copy.intro}</p>
-    </header>
-
-    <section class="wiki-section" aria-labelledby="items-title">
-      <div class="flex items-end justify-between gap-4">
-        <h2 id="items-title" class="section-title">{copy.items}</h2>
-        <span class="font-mono text-xs text-muted-foreground">{items.length}</span>
-      </div>
-      <div class="mt-4 grid gap-4 md:grid-cols-2">
-        {
-          itemViews.map(({ item, description, evidence }) => (
-            <article id={item.canonicalSlug} class="wiki-panel wiki-article-panel p-5">
-              <div class="flex items-start justify-between gap-4">
-                <div>
-                  <p class="eyebrow">{item.itemKind ?? 'item'}</p>
-                  <h3 class="mt-2 text-xl font-semibold tracking-tight">{item.canonicalName}</h3>
-                </div>
-                <DataStatus
-                  status={Object.values(item.facts)[0]?.status ?? 'unknown'}
-                  locale={locale}
-                />
-              </div>
-              {description && <p class="muted-copy mt-4">{description}</p>}
-              <p class="mt-5 font-mono text-[0.65rem] uppercase tracking-[0.13em] text-muted-foreground">
-                {evidence.length} {copy.evidence}
-              </p>
-              <EvidenceTrail records={evidence} locale={locale} />
-            </article>
-          ))
-        }
-      </div>
-    </section>
-
-    <section class="wiki-section" aria-labelledby="moves-title">
-      <div class="flex items-end justify-between gap-4">
-        <h2 id="moves-title" class="section-title">{copy.moves}</h2>
-        <span class="font-mono text-xs text-muted-foreground">{moves.length}</span>
-      </div>
-      <div class="mt-4 grid gap-4 md:grid-cols-2">
-        {
-          moveViews.map(({ move, combatMode, element, slot, cooldown, evidence }) => (
-            <article id={move.canonicalSlug} class="wiki-panel wiki-article-panel p-5">
-              <div class="flex items-start justify-between gap-4">
-                <div>
-                  <p class="eyebrow">{combatMode ?? 'move'}</p>
-                  <h3 class="mt-2 text-xl font-semibold tracking-tight">{move.canonicalName}</h3>
-                </div>
-                <DataStatus
-                  status={Object.values(move.facts)[0]?.status ?? 'unknown'}
-                  locale={locale}
-                />
-              </div>
-              <dl class="mt-5 grid grid-cols-3 gap-3 text-sm">
-                <div>
-                  <>
-                    <dt class="eyebrow">{copy.element}</dt>
-                    <dd class="mt-2 font-semibold">{element ?? '—'}</dd>
-                  </>
-                </div>
-                <div>
-                  <>
-                    <dt class="eyebrow">{copy.slot}</dt>
-                    <dd class="mt-2 font-semibold">{slot ?? '—'}</dd>
-                  </>
-                </div>
-                <div>
-                  <>
-                    <dt class="eyebrow">{copy.cooldown}</dt>
-                    <dd class="mt-2 font-semibold">{formatFactValue(cooldown)}</dd>
-                  </>
-                </div>
-              </dl>
-              <p class="mt-5 font-mono text-[0.65rem] uppercase tracking-[0.13em] text-muted-foreground">
-                {evidence.length} {copy.evidence}
-              </p>
-            </article>
-          ))
-        }
-      </div>
-    </section>
-  </div>
-</AppLayout>
+<PageLayout
+  locale={locale}
+  title={title}
+  description={messages.systems.description}
+  alternates={alternates}
+  breadcrumb={[{ label: title }]}
+>
+  <PageTitle title={title} />
+  {
+    links.length > 0 ? (
+      <IndexLinks links={links} locale={locale} hint={messages.ui.pinHint} />
+    ) : (
+      <EmptyState>{messages.systems.empty}</EmptyState>
+    )
+  }
+</PageLayout>

@@ -1,0 +1,53 @@
+/* InfoBanner (spec 7.2.3, 5.4, DS:InfoBanner), ported from the `.ac-info-banner` block
+   of the design system's components/bundle.css. global.css imports this file with
+   layer(components).
+
+   A centred row on the `banner` red, 16 apart, 16 of padding, radius 8, `white` text of
+   12/16 (`ui`): the 64 × 32 sprite box and the facts with their «|» separators. */
+
+.ac-info-banner {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-16);
+  padding: var(--space-16);
+  border-radius: var(--radius-8);
+  background: var(--banner);
+  /* The token read `color: var(--white)` is a named-colour false positive of design:check
+     rule 2; the utility resolves to the same --white. */
+  @apply type-ui text-white;
+}
+
+/* 64 × 32 box (two game cells wide): a 32 px sprite, or a 64 × 32 one, sits centred in it. */
+.ac-info-banner__sprite {
+  display: flex;
+  width: calc(var(--size-cell) * 2);
+  height: var(--size-cell);
+  flex: none;
+  align-items: center;
+  justify-content: center;
+}
+
+.ac-info-banner__facts {
+  display: flex;
+  align-items: center;
+  gap: var(--space-16);
+}
+
+.ac-info-banner__fact {
+  margin: 0;
+}
+
+/* Below 1024 (spec 5.4, the one breakpoint with no layout token, allowed only here) the
+   facts stack 8 apart and the «|» separators hide. The sprite stays on the left. */
+@media (width < 64rem) {
+  .ac-info-banner__facts {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--space-8);
+  }
+
+  .ac-info-banner__sep {
+    display: none;
+  }
+}

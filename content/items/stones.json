@@ -1,0 +1,70 @@
+{
+  "$schema": "../schemas/items.schema.json",
+  "items": [
+    {
+      "id": "fire-stone",
+      "nombre": "Fire Stone",
+      "clientId": null,
+      "categoria": "stones",
+      "sprite": "items/stones/fire-stone",
+      "apilable": true,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      },
+      "borrador": true
+    },
+    {
+      "id": "heart-stone",
+      "nombre": "Heart Stone",
+      "clientId": null,
+      "categoria": "stones",
+      "sprite": "items/stones/heart-stone",
+      "apilable": true,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      },
+      "borrador": true
+    },
+    {
+      "id": "leaf-stone",
+      "nombre": "Leaf Stone",
+      "clientId": null,
+      "categoria": "stones",
+      "sprite": "items/stones/leaf-stone",
+      "apilable": true,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      },
+      "borrador": true
+    },
+    {
+      "id": "thunder-stone",
+      "nombre": "Thunder Stone",
+      "clientId": null,
+      "categoria": "stones",
+      "sprite": "items/stones/thunder-stone",
+      "apilable": true,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      },
+      "borrador": true
+    },
+    {
+      "id": "water-stone",
+      "nombre": "Water Stone",
+      "clientId": null,
+      "categoria": "stones",
+      "sprite": "items/stones/water-stone",
+      "apilable": true,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      },
+      "borrador": true
+    }
+  ]
+}

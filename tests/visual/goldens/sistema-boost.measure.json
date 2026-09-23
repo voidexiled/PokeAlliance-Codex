@@ -1,0 +1,166 @@
+{
+ "declaredHeight": 3647,
+ "renderedHeight": 3647,
+ "width": 1440,
+ "contentHeight": 3622,
+ "overflow": false,
+ "emptyTail": 25,
+ "lowest": {
+  "path": "#dc-root > div:nth-child(1) > div:nth-child(1) > div:nth-child(3) > main:nth-child(2) > footer:nth-child(6)",
+  "kind": "box"
+ },
+ "rawHoles": [],
+ "brokenImages": [],
+ "webFontsLoaded": [],
+ "grids": [
+  {
+   "kind": "grid",
+   "path": "#dc-root > div:nth-child(1) > div:nth-child(1) > div:nth-child(3) > main:nth-child(2) > div:nth-child(5) > section:nth-child(3) > div:nth-child(2)",
+   "rect": {
+    "x": 248,
+    "y": 1650,
+    "w": 896,
+    "h": 146
+   },
+   "columns": 2,
+   "children": 2,
+   "painted": 2,
+   "cards": true,
+   "inTooltip": false,
+   "alignItems": "normal",
+   "label": "Si acierta El Pokémon gana +1 de Boost y el bono",
+   "maxSpread": 0,
+   "rows": [
+    {
+     "y": 1650,
+     "children": [
+      0,
+      1
+     ],
+     "heights": [
+      146,
+      146
+     ],
+     "heightSpread": 0,
+     "hollowBottom": [
+      41,
+      19
+     ],
+     "padBottom": [
+      16,
+      16
+     ]
+    }
+   ]
+  }
+ ],
+ "flexWraps": [
+  {
+   "kind": "flex-wrap",
+   "path": "#dc-root > div:nth-child(1) > div:nth-child(1) > div:nth-child(3) > main:nth-child(2) > nav:nth-child(1) > ol:nth-child(1)",
+   "rect": {
+    "x": 248,
+    "y": 96,
+    "w": 896,
+    "h": 16
+   },
+   "columns": 3,
+   "children": 3,
+   "painted": 0,
+   "cards": false,
+   "inTooltip": false,
+   "alignItems": "center",
+   "label": "Sistemas",
+   "maxSpread": 9,
+   "rows": [
+    {
+     "y": 96,
+     "children": [
+      0,
+      1,
+      2
+     ],
+     "heights": [
+      16,
+      7,
+      16
+     ],
+     "heightSpread": 9,
+     "hollowBottom": [
+      1,
+      7,
+      1
+     ],
+     "padBottom": [
+      0,
+      0,
+      0
+     ],
+     "itemHeights": [
+      16,
+      14,
+      16
+     ]
+    }
+   ]
+  },
+  {
+   "kind": "flex-wrap",
+   "path": "#dc-root > div:nth-child(1) > div:nth-child(1) > div:nth-child(3) > main:nth-child(2) > div:nth-child(5) > section:nth-child(3) > div:nth-child(3) > ol:nth-child(2)",
+   "rect": {
+    "x": 248,
+    "y": 1836,
+    "w": 896,
+    "h": 24
+   },
+   "columns": 4,
+   "children": 4,
+   "painted": 4,
+   "cards": false,
+   "inTooltip": false,
+   "alignItems": "normal",
+   "label": "1.er intento: 20%",
+   "maxSpread": 0,
+   "rows": [
+    {
+     "y": 1836,
+     "children": [
+      0,
+      1,
+      2,
+      3
+     ],
+     "heights": [
+      24,
+      24,
+      24,
+      24
+     ],
+     "heightSpread": 0,
+     "hollowBottom": [
+      5,
+      5,
+      5,
+      5
+     ],
+     "padBottom": [
+      4,
+      4,
+      4,
+      4
+     ]
+    }
+   ]
+  }
+ ],
+ "board": "Sistema-Boost.dc.html",
+ "state": {
+  "tip": null
+ },
+ "viewport": {
+  "width": 1440,
+  "height": 3647
+ },
+ "missingBlobs": [],
+ "consoleErrors": []
+}

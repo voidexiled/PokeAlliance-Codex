@@ -1,0 +1,138 @@
+/* Dialog (spec 7.2.8, 3.8). The design system has no dialog, so this panel is composed only
+   with its tokens and text styles (R16), and its close button takes the shape of the close
+   buttons the design system's containers already have (DS:Notice, DS:MobileMenu).
+   global.css imports this file with layer(components).
+
+   The panel is the `<dialog class="ac-dialog">` itself, opened with `showModal()`: the user
+   agent centres it in the window (`position: fixed`, `inset: 0`, `margin: auto`) and this
+   block resets the rest of what the user-agent sheet gives a modal dialog — `padding`,
+   `border`, `background`, `color`, `max-width` and `max-height`. It never sets `display`:
+   an author `display` would beat the `dialog:not([open]) { display: none }` of the user
+   agent and leave the closed panel on the page.
+
+   `bg-primary`, 1 px `border-secondary`, `radius-12`, as spec 7.2.8 asks. It is 448 wide,
+   `layout-search`, the width of the other centred modal of the site, the search palette
+   (7.9.3); the design system names no dialog width. A single instance that needs another
+   width adjusts it with a utility in `className` (3.8). On a phone it leaves 16 on each
+   side; a panel taller than the window scrolls inside itself, head included, so the close
+   button scrolls with the content like the one of the phone sheet.
+
+   Nothing here moves: spec 6.2 is all the movement of the site and gives the veil fade
+   only to the phone sheet and the search palette. The close button changes its background
+   on hover, which is the first row of that table. */
+
+.ac-dialog {
+  width: var(--layout-search);
+  max-width: calc(100% - 2 * var(--space-16));
+  max-height: calc(100% - 2 * var(--space-16));
+  margin: auto;
+  padding: 0;
+  border: 1px solid var(--border-secondary);
+  border-radius: var(--radius-12);
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  font-family: var(--font-sans);
+  @apply type-body;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+
+/* Veil at 80 % with a 4 px blur, the third of the three places rule 10 allows it (3.11),
+   like the phone sheet and the search palette. `var(--overlay)` here needs ::backdrop to
+   inherit the custom properties of the document, which V5-4 measures on the sheet in
+   Chromium and WebKit. */
+.ac-dialog::backdrop {
+  background: var(--overlay);
+  -webkit-backdrop-filter: blur(4px); /* sin token: desenfoque del velo (spec 5.8) */
+  backdrop-filter: blur(4px); /* sin token: desenfoque del velo (spec 5.8) */
+}
+
+/* Head: the h2 at 24 from the left edge, the 40 px close button at 16 from the top and
+   right edges. The title starts at the top of the button, 6 down, so its 28 px line sits
+   in the middle of the 40 (8 with the 44 of a coarse pointer); a long title wraps under
+   itself and the button stays at the top. */
+.ac-dialog__head {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-8);
+  padding: var(--space-16) var(--space-16) 0 var(--space-24);
+}
+
+.ac-dialog__title {
+  min-width: 0;
+  flex: 1;
+  margin: 0;
+  padding-top: var(--space-6);
+  @apply type-h2;
+  overflow-wrap: anywhere;
+}
+
+/* 40 x 40, no border, radius 11, the 14 px close glyph; hover `bg-tertiary`. */
+.ac-dialog__close {
+  display: flex;
+  width: var(--size-control);
+  height: var(--size-control);
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  border-radius: var(--radius-11);
+  background: transparent;
+  color: var(--text-primary);
+  cursor: pointer;
+}
+
+.ac-dialog__close:hover {
+  background: var(--bg-tertiary);
+}
+
+/* Body: 16 under the head, 24 at the sides and at the bottom, blocks at the 16 rhythm of a
+   Section (5.3). */
+.ac-dialog__body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-16);
+  padding: var(--space-16) var(--space-24) var(--space-24);
+}
+
+/* A paragraph placed directly in the body has no margin of its own, as in a Section.
+   Zero specificity, so a component dropped into the body keeps its own rules. */
+:where(.ac-dialog__body) > :where(p) {
+  margin: 0;
+}
+
+/* Actions: right-aligned in reading order, 8 apart, 24 from the bottom edge. They wrap
+   onto a second row on a narrow phone. */
+.ac-dialog__actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: var(--space-8);
+  padding: 0 var(--space-24) var(--space-24);
+}
+
+/* A dialog with no body: the actions sit 16 under the head. */
+.ac-dialog__head + .ac-dialog__actions {
+  padding-top: var(--space-16);
+}
+
+/* Coarse pointer: 44 x 44 (S14), and the title comes 2 further down to stay centred on it. */
+@media (pointer: coarse) {
+  .ac-dialog__close {
+    width: var(--size-touch);
+    height: var(--size-touch);
+  }
+
+  .ac-dialog__title {
+    padding-top: var(--space-8);
+  }
+}
+
+/* Hover ink: background-color only, the first row of 6.2. */
+@media (prefers-reduced-motion: no-preference) {
+  .ac-dialog__close {
+    transition: background-color var(--duration-fast) var(--ease-standard);
+  }
+}

@@ -1,0 +1,213 @@
+---
+// EvolutionChain (spec 7.2.7, 8.3; CARD_GRID_SYSTEM §6.8; DS:EvolutionChain): the evolution
+// line of a Pokémon in the «Evolución» section of its page. Stage tiles of 168 with the
+// outfit of the game, the name and a meta line («Nivel 40 · T5»), joined by connectors that
+// carry the arrow, the requirement and the items of the registry. The Pokémon of the page is
+// the current stage: its name is bold text with `aria-current="page"`, with no link and no
+// tooltip. Every other Pokémon and every item opens its game tooltip centred above it
+// (`above-center`, 7.5.5); Shift pins it and Escape closes it (7.5.4).
+//
+// Markup of the reference (`bundle.js` EvolutionChain): `ol.ac-evolution-chain`, one
+// `li.ac-evolution-chain__stage` per stage and one `li.ac-evolution-chain__step` between two
+// of them, with the hidden «Evoluciona con:» first so a screen reader hears the connector as
+// what it is; a connector with no requirement and no item has nothing to introduce, so it
+// carries the arrow alone. The arrow is the `arrow-right` Glyph (C-R7).
+//
+// Astro, with no JavaScript of its own: the tooltips are `NestedEntity` panels printed in the
+// HTML, which the delegated controller of 7.5.4 opens (7.3).
+//
+// Data, not nodes (C-R1, DP1-DP3). Whoever composes the page reads the registries and passes:
+//   - `stages[].sprite`: the `SpriteProps` of the outfit, idle frame `sur` (R18, X11), as the
+//     adapter resolves it; `null` is a Pokémon with no outfit in the registry and draws the
+//     missing mark in its 64 frame, never an empty frame (CARD_GRID_SYSTEM §6.8). The outfit
+//     fills the 64 game cell at integer scale: a 2 × 2 tile outfit at 1x, a one-tile one at
+//     2x (DS:guias/20 «Escala entera»);
+//   - `stages[].meta`: the line under the name, already written in the page's language. The
+//     composer keeps the parts of the line the same across stages and writes «—» where one
+//     stage lacks what the others have (DS:EvolutionChain «No hacer»);
+//   - `stages[].tip` and `steps[].items[].tip`: `TipData` of the constructors of 7.5.3. A tip
+//     with no row to show is not a tooltip (R2): the stage name is a plain link to its page
+//     and the item a chip without a trigger;
+//   - `steps[].requirement`: the requirement chip («Nivel 40 del Pokémon»), or nothing;
+//   - `steps[].items`: the items of the registry, each with its sprite at 1x in the 16 box
+//     of the chip. An item has no page yet (§15), so its trigger is a button (7.5.7).
+// Visible text comes from the dictionary of the page (DP1): `labels.evolvesWith`, `hint`
+// (`ui.pinHint`) and `shinyLabel` (`ui.shiny`). Nothing is drawn with fewer than two stages.
+//
+// Stylesheet: evolution-chain.css is per-page CSS (plan M7, §13.6), so this component
+// imports it and only the pages that draw it carry it.
+import '@/styles/components/evolution-chain.css';
+
+import { NestedEntity } from '@/components/game/NestedEntity';
+import { Sprite, type SpriteProps } from '@/components/game/Sprite';
+import { Glyph } from '@/components/icons/Glyph';
+import type { Locale } from '@/i18n/config';
+import type { TipData } from '@/lib/game/tips';
+
+export interface EvolutionStage {
+  /** Name of the Pokémon, as the registry writes it (§13.4: names do not translate). */
+  name: string;
+  /** Its page. The current stage has none. */
+  href?: string;
+  /** Outfit of the game at 1x, idle `sur`; `null` draws the missing mark (§6.8). */
+  sprite: SpriteProps | null;
+  /** Line under the name, e.g. the requirement and the tier. */
+  meta?: string | null;
+  /** The Pokémon of the page: bold, `aria-current="page"`, no link and no tooltip. */
+  current?: boolean;
+  /** `pokemonTip` of 7.5.3. */
+  tip?: TipData | null;
+}
+
+export interface EvolutionItem {
+  /** Name of the item, as the registry writes it (§13.4). */
+  name: string;
+  /** Sprite of the item at 1x in the 16 box; `null` leaves the chip with its name only. */
+  sprite: SpriteProps | null;
+  /** `itemTip` of 7.5.3. */
+  tip?: TipData | null;
+  /** Page of the item, once items have one (§15). Without it the trigger is a button. */
+  href?: string;
+}
+
+export interface EvolutionStep {
+  /** Requirement chip, already written in the page's language. */
+  requirement?: string | null;
+  items: EvolutionItem[];
+}
+
+interface Props {
+  /** Stages in the order of evolution. */
+  stages: EvolutionStage[];
+  /** `steps[i]` joins `stages[i]` and `stages[i + 1]`. */
+  steps: EvolutionStep[];
+  /** Hidden text of every connector: «Evoluciona con:» / «Evolves with:». */
+  labels: { evolvesWith: string };
+  /** Picks the format of the amounts inside the panels; it never picks a text (C-R3). */
+  locale: Locale;
+  /** Strip of every panel, `ui.pinHint`. */
+  hint: string;
+  /** Accessible name of the Shiny mark in the panel heads, `ui.shiny` (§13.4). */
+  shinyLabel?: string;
+  /** The word between two price options of a panel, `ui.or` (§13.3). */
+  orLabel?: string;
+  /** Utilities added by the caller, after the component's own classes (3.8). */
+  class?: string;
+}
+
+const { stages, steps, labels, locale, hint, shinyLabel, orLabel, class: className } = Astro.props;
+
+/** R2: a panel with nothing to show below its title is not a tooltip. */
+function hasContent(tip: TipData | null | undefined): tip is TipData {
+  if (!tip) return false;
+  return tip.rows.length > 0 || Boolean(tip.sections?.length) || Boolean(tip.market?.length);
+}
+
+/**
+ * The integer scale that fills the 64 game cell of a stage (DS:guias/20 «Escala entera»):
+ * a frame of one tile (32) at 2x, a frame of 2 × 2 tiles (64) at 1x. A pixel sprite is
+ * never scaled down nor smoothed.
+ */
+function stageScale(sprite: SpriteProps): number {
+  const [width, height] = sprite.size ?? [32, 32];
+  return Math.max(width, height) <= 32 ? 2 : 1;
+}
+
+const tipText = { locale, hint, shinyLabel, orLabel };
+---
+
+{
+  stages.length > 1 && (
+    <ol class:list={['ac-evolution-chain', className]}>
+      {stages.map((stage, index) => {
+        const step = steps[index];
+        const items = step?.items ?? [];
+        return (
+          <>
+            <li class="ac-evolution-chain__stage">
+              {stage.sprite ? (
+                <span class="ac-evolution-chain__sprite" aria-hidden="true">
+                  <Sprite {...stage.sprite} scale={stageScale(stage.sprite)} cell alt="" />
+                </span>
+              ) : (
+                <span class="ac-evolution-chain__missing" aria-hidden="true">
+                  <span class="ac-evolution-chain__mark" />
+                </span>
+              )}
+              {stage.current ? (
+                <div
+                  class="ac-evolution-chain__name ac-evolution-chain__name--current"
+                  aria-current="page"
+                >
+                  {stage.name}
+                </div>
+              ) : (
+                <div class="ac-evolution-chain__name">
+                  {hasContent(stage.tip) ? (
+                    <NestedEntity
+                      tip={stage.tip}
+                      href={stage.href}
+                      variant="link"
+                      placement="above-center"
+                      {...tipText}
+                    >
+                      {stage.name}
+                    </NestedEntity>
+                  ) : stage.href ? (
+                    <a class="ac-evolution-chain__link" href={stage.href}>
+                      {stage.name}
+                    </a>
+                  ) : (
+                    stage.name
+                  )}
+                </div>
+              )}
+              {stage.meta && <p class="ac-evolution-chain__meta">{stage.meta}</p>}
+            </li>
+            {index < stages.length - 1 && (
+              <li class="ac-evolution-chain__step">
+                {(step?.requirement || items.length > 0) && (
+                  <span class="sr-only">{labels.evolvesWith}</span>
+                )}
+                <Glyph name="arrow-right" size={16} className="ac-evolution-chain__arrow" />
+                {(step?.requirement || items.length > 0) && (
+                  <div class="ac-evolution-chain__chips">
+                    {step?.requirement && <span class="ac-chip">{step.requirement}</span>}
+                    {items.map((item) => {
+                      const sprite = item.sprite ? (
+                        <span class="ac-evolution-chain__chip-sprite" aria-hidden="true">
+                          <Sprite {...item.sprite} scale={1} alt="" />
+                        </span>
+                      ) : null;
+                      if (hasContent(item.tip)) {
+                        return (
+                          <NestedEntity
+                            tip={item.tip}
+                            href={item.href}
+                            variant={sprite ? 'chip' : 'chip-text'}
+                            placement="above-center"
+                            {...tipText}
+                          >
+                            {sprite}
+                            {item.name}
+                          </NestedEntity>
+                        );
+                      }
+                      // R2: an item with nothing to show is a chip without a trigger.
+                      return (
+                        <span class:list={['ac-chip', sprite && 'ac-chip--sprite']}>
+                          {sprite}
+                          {item.name}
+                        </span>
+                      );
+                    })}
+                  </div>
+                )}
+              </li>
+            )}
+          </>
+        );
+      })}
+    </ol>
+  )
+}

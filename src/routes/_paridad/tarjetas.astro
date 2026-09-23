@@ -1,0 +1,650 @@
+---
+// Parity route of the cards, the grids, the three views and the money components (spec 7.6,
+// 7.7, 7.8, 14.5; plan M6): the `Tarjetas` board drawn with the real components. It lives in
+// src/routes/, outside src/pages/, so the production build never publishes it: astro.config.mjs
+// injects it as `/[locale]/_paridad/tarjetas/` with `VISUAL=1` and on the development server,
+// and `seo:check` fails if a `/_paridad/` page reaches the deployed output.
+//
+// What it paints, in the order of the board:
+//
+//  - «Comercio · Todos»: one `CardGroup` per asset type (h3, cards h4) with its `CardGrid` of
+//    `ListingCard`, each grid laid out by `listingLayout` of its own listings (7.6.3). The
+//    listings put every money component on the page: `PokedolaresAmount`, `DiamondsAmount`,
+//    `PriceOptions`, `Rating`, `ChipRow` with its `ContactChip` and «+N», `HeldStrip` and
+//    `TrainingMeter`;
+//  - «Pokédex»: the twelve `DexCard` of the board (titles h3) with `dexLayout`, their element
+//    chips and their drops, so the three named chips and the «+N» of the regular anatomy are
+//    here (C7-09);
+//  - «Drops · Cards, Slots y Lista»: the `drops` list of 8.0.6 as the island of
+//    ./TarjetasIslands.tsx, the `EntityList` with its three views that S4 asks of F1, 896 wide
+//    at 1440 as on the board (the column of a page with rail, `layout-main-rail`);
+//  - «Guild · cifras»: the four `KpiCard` of the board;
+//  - «Móvil · 390»: the phone widths inside the desktop page, each column 358 wide as the main
+//    column of a phone (CARD_GRID_SYSTEM §3): one listing of each type but Diamonds, the
+//    compact anatomy of four `DexCard` (7.6.4, by container query and never by the window),
+//    and three `LootCard` in one column. C7-09 measures the compact card here.
+//
+// What it leaves out of the board, and why:
+//
+//  - the captions over each example («3 columnas de 304 px · separación 16») and the
+//    specimens of «Pokédólares y Diamonds» (the k / kk table, the sprite sizes): they describe
+//    the design, they are not components (R12), as on `/_paridad/componentes/`;
+//  - «Tooltip del juego»: the three panels open from their triggers on this page and on
+//    `/_paridad/marco/`, whose `tooltip-*` cases of tests/visual/manifest.json crop them;
+//  - «Inicio» (`FeaturedCard`, `IndexPanel`, `WorldsTable`) and the info cards: they are
+//    pieces of M5 and M10, not of this milestone;
+//  - «Antes y ahora»: its first half is a counter-example that no grid of the site may draw.
+//
+// Where the data comes from. The components never write a text of their own (DP1): the row
+// labels of the panels, the strip, the «o», the views and the pagination come from
+// `messages.ui` of the page's locale. Everything else is a sample of the board (X4) and lives
+// in the parity fixture tests/visual/fixtures/tarjetas.json, one copy per locale, never under
+// src/ or content/ (8.0, R7): the listings, the element names with their Stone and Fragment,
+// the Guild figures and the listing labels that the `trade` namespace takes over in M12. The
+// Pokémon of the Pokédex, their art and the art of the Pokémon listings are read from the
+// registry (3.12), which `VISUAL=1` swaps for the board fixtures; their drops are the ones of
+// tests/visual/fixtures/pokedex.json. Every sprite is the one `public/sprites/sprites.json`
+// has for the entity: a drop, a ball or a held item it does not carry is `null` and draws the
+// missing mark of 7.4.1, never a picture of the board; no element has an icon in the registry
+// yet, so the element chips keep their text.
+//
+// Every control does something (S11, C-R5): the Pokémon titles link to their sheets, a seller
+// links to Comercio (the profile of 9.8 arrives with M12), every nested entity opens its panel,
+// every «+N» opens its list and the island switches its views. No listing title is a link: the
+// detail of 9.6 does not exist yet.
+import { getAlternatePath, getLocale, locales, type Locale } from '@/i18n/config';
+import type { Messages } from '@/i18n/messages/en';
+import { en } from '@/i18n/messages/en';
+import { es } from '@/i18n/messages/es';
+import { fill, type PluralMessage } from '@/i18n/messages/types';
+import { dexLayout, listingLayout, lootKeys } from '@/lib/cards/layout';
+import type { ListingKey, ListingType, LootKey } from '@/lib/cards/layout';
+import { formatTier } from '@/lib/content/format';
+import { resolvePokemonImage } from '@/lib/content/pokemon-media';
+import { getSpriteRegistry } from '@/lib/content/registry';
+import { getPokemon, getPokemonById, getRecordHref } from '@/lib/content/repository';
+import { formatInteger, formatPokedolares, formatPokedolaresLabel } from '@/lib/format/numbers';
+import { elementTip, itemTip, pokemonTip, type TipData, type TipRow } from '@/lib/game/tips';
+import { buildNav } from '@/lib/nav/groups';
+import { spriteData } from '@/lib/sprites/resolve';
+import type { SpriteProps } from '@/components/game/Sprite';
+import type { ElementChipEntry } from '@/components/game/ElementChip';
+import { CardGrid } from '@/components/cards/CardGrid';
+import { CardGroup } from '@/components/cards/CardGroup';
+import { DexCard, type DexCardDrop, type DexCardEntry } from '@/components/cards/DexCard';
+import { KpiCard } from '@/components/cards/KpiCard';
+import {
+  ListingCard,
+  type ListingCardEntity,
+  type ListingCardLabels,
+  type ListingCardListing,
+  type ListingFactValue,
+} from '@/components/cards/ListingCard';
+import { LootCard, type LootCardDrop } from '@/components/cards/LootCard';
+import { PageTitle } from '@/components/layout/PageTitle';
+import { Section } from '@/components/layout/Section';
+import PageLayout from '@/layouts/PageLayout.astro';
+
+import samples from '../../../tests/visual/fixtures/tarjetas.json';
+import boardDrops from '../../../tests/visual/fixtures/pokedex.json';
+
+import { DropsList, type ParityDrop } from './TarjetasIslands';
+
+// No `export const prerender`: a file outside src/pages/ may not carry one, and
+// `injectRoute` already declares this route prerendered in astro.config.mjs.
+export function getStaticPaths() {
+  return locales.map((locale) => ({ params: { locale } }));
+}
+
+/** A row of a sample panel: label and value already in the page's language. */
+interface SampleRow {
+  label: string;
+  value: string;
+}
+
+/** A listing of the board, in the fixture's words (the card model is built below). */
+interface Sample {
+  type: ListingType;
+  /** Pokémon and items; Diamonds and Pokédólares compose theirs from the amount (9.4). */
+  title?: string;
+  /** Pokémon listings: the id of the Pokémon, whose art the registry gives. */
+  pokemon?: string;
+  /** Sprite key of the stage for the other types. */
+  sprite?: string | null;
+  qty?: number | null;
+  shiny?: boolean;
+  world: string;
+  posted: { datetime: string; text: string };
+  facts: Partial<Record<ListingKey, unknown>>;
+  helds?: { name: string; tier: string; rows: SampleRow[] }[];
+  train?: { stat: string; level: number; percent: number } | null;
+  fiat: string | null;
+  game: { kind: 'pd' | 'dia'; amount: number }[] | null;
+  seller: { name: string; score: number; reviews: number };
+  channels: string[];
+}
+
+interface Copy {
+  title: string;
+  description: string;
+  sections: Record<'comercio' | 'pokedex' | 'drops' | 'kpi' | 'movil', string>;
+  listing: Omit<ListingCardLabels, 'shiny' | 'money'>;
+  drops: {
+    quantity: string;
+    count: PluralMessage;
+    view: string;
+    caption: string;
+    item: string;
+    sprite: string;
+  };
+  groups: { type: ListingType; label: string; sprite: string; listings: Sample[] }[];
+  kpi: { label: string; value: string; of: string | null; comparison: string }[];
+}
+
+interface TarjetasFixture {
+  es: Copy;
+  en: Copy;
+  /** Elements of the board: name in both locales, Stone and Fragment (7.5.3). */
+  elements: Record<string, { nombre: Record<Locale, string>; stone: string; fragment: string }>;
+  pokedex: string[];
+  pokedexCompact: string[];
+  drops: string[];
+  dropsCompact: string[];
+  /** The listing of each type in the phone column, by its place in its group. */
+  movil: Partial<Record<ListingType, number>>;
+}
+
+const fixture = samples as unknown as TarjetasFixture;
+const dictionaries: Record<Locale, Messages> = { es, en };
+
+const locale = getLocale(Astro.params.locale);
+const copy = fixture[locale];
+const ui = dictionaries[locale].ui;
+const path = Astro.url.pathname;
+
+const alternates = Object.fromEntries(
+  locales.map((option) => [option, getAlternatePath(path, option)]),
+) as Record<Locale, string>;
+
+const registry = getSpriteRegistry();
+const nav = buildNav(locale, path);
+
+/** The Comercio section the menu lists, where a seller's listings live until 9.8 (WG5). */
+const comercioHref = nav.groups
+  .flatMap((group) => group.items)
+  .find((item) => item.id === 'comercio')?.href;
+
+/** The sprite the registry has under `key`, or `null`: the missing mark (7.4.1). */
+function registrySprite(key: string | null, cantidad?: number): SpriteProps | null {
+  if (key === null || !Object.hasOwn(registry, key)) return null;
+  return spriteData(registry, key, cantidad === undefined ? {} : { cantidad });
+}
+
+/** The registry sprite of an item id (`items/<categoria>/<id>`), or `null`. */
+function itemSprite(id: string): SpriteProps | null {
+  const key = Object.keys(registry).find(
+    (entry) => entry.startsWith('items/') && entry.endsWith(`/${id}`),
+  );
+  return registrySprite(key ?? null);
+}
+
+// ------------------------------------------------------------------------------ elements
+
+function isElementId(id: string): boolean {
+  return Object.hasOwn(fixture.elements, id);
+}
+
+/** An element as `ElementChip` takes it: name and panel of the fixture, no icon (see above). */
+function element(id: string): ElementChipEntry | null {
+  if (!isElementId(id)) return null;
+  const record = fixture.elements[id];
+  const tip = elementTip(
+    { id, nombre: record.nombre, icono: null, stone: record.stone, fragment: record.fragment },
+    locale,
+    ui.tooltip,
+  );
+  return { id, name: record.nombre[locale], icon: null, tip };
+}
+
+function elementsOf(ids: readonly string[]): ElementChipEntry[] {
+  return ids.map(element).filter((entry): entry is ElementChipEntry => entry !== null);
+}
+
+// ------------------------------------------------------------------------------ Pokémon
+
+type PokemonRecord = NonNullable<ReturnType<typeof getPokemonById>>;
+
+function pokemonPanel(record: PokemonRecord): TipData {
+  const elements = record.elementos
+    .filter(isElementId)
+    .map((id) => ({ nombre: fixture.elements[id].nombre }));
+  return pokemonTip({ ...record, elementos: elements }, locale, ui.tooltip);
+}
+
+const pokemonByName = new Map(getPokemon().map((record) => [record.nombre, record]));
+
+// ------------------------------------------------------------------------------ items
+
+type BoardItem = (typeof boardDrops.items)[number];
+const itemsById = new Map<string, BoardItem>(boardDrops.items.map((item) => [item.id, item]));
+
+/** «Uso» of the board is Spanish only: on the `en` page it keeps its language (8.0.5, T22). */
+const useLang = locale === 'es' ? undefined : 'es';
+
+/**
+ * The panel of an item: `itemTip` over the facts of the board fixture, when it has them.
+ * Its «Uso» row carries `useLang` too, as the cards and the list do (WA4).
+ */
+function itemPanel(id: string, name: string, sprite: SpriteProps | null): TipData {
+  const item = itemsById.get(id);
+  const elemento = item?.elemento && isElementId(item.elemento) ? item.elemento : null;
+  const tip = itemTip(
+    {
+      id,
+      nombre: name,
+      categoria: 'general-items',
+      sprite,
+      precioNpc: { vende: null, compra: null },
+      dropDe: item?.dropDe ? [item.dropDe] : [],
+      nombreElemento: elemento === null ? null : fixture.elements[elemento].nombre,
+      uso: item?.uso ? { es: item.uso, en: item.uso } : null,
+    },
+    locale,
+    ui.tooltip,
+  );
+  if (useLang === undefined) return tip;
+  return {
+    ...tip,
+    rows: tip.rows.map((row) => (row.label === ui.tooltip.use ? { ...row, lang: useLang } : row)),
+  };
+}
+
+/** A drop of the board as `LootCard` reads it. */
+function lootDrop(id: string): LootCardDrop | null {
+  const item = itemsById.get(id);
+  if (item === undefined) return null;
+  const sprite = itemSprite(id);
+  const pokemon = item.dropDe === null ? undefined : pokemonByName.get(item.dropDe);
+  return {
+    name: item.nombre,
+    sprite,
+    dropDe:
+      pokemon === undefined
+        ? item.dropDe
+        : {
+            name: pokemon.nombre,
+            href: getRecordHref('pokemon', pokemon.id, locale),
+            tip: pokemonPanel(pokemon),
+          },
+    element: item.elemento === null ? null : element(item.elemento),
+    use: item.uso,
+    useLang: item.uso === null ? undefined : useLang,
+  };
+}
+
+function lootRows(ids: readonly string[]): LootCardDrop[] {
+  return ids.map(lootDrop).filter((drop): drop is LootCardDrop => drop !== null);
+}
+
+const lootLabels: Record<LootKey, string> = {
+  droppedBy: ui.tooltip.droppedBy,
+  element: ui.tooltip.element,
+  use: ui.tooltip.use,
+  quantity: copy.drops.quantity,
+  npcPrice: ui.tooltip.npcPrice,
+  shopPrice: ui.tooltip.shopPrice,
+};
+
+// ------------------------------------------------------------------------------ Pokédex
+
+const dropsByPokemon = new Map(boardDrops.drops.map((entry) => [entry.pokemon, entry.drops]));
+
+function dexEntry(id: string): DexCardEntry | null {
+  const record = getPokemonById(id);
+  if (record === undefined) return null;
+  const drops: DexCardDrop[] = (dropsByPokemon.get(id) ?? []).map((drop) => {
+    const sprite = itemSprite(drop.item);
+    return { name: drop.nombre, sprite, tip: itemPanel(drop.item, drop.nombre, sprite) };
+  });
+  return {
+    name: record.nombre,
+    href: getRecordHref('pokemon', record.id, locale),
+    number: record.numero,
+    generation: record.generacion,
+    art: resolvePokemonImage(record.imagen),
+    level: record.nivel,
+    tier: record.tier === null ? null : formatTier(record.tier),
+    role: record.funcion,
+    variant: record.variante === 'shiny' || record.variante === 'normal' ? record.variante : null,
+    elements: elementsOf(record.elementos),
+    drops,
+  };
+}
+
+function dexEntries(ids: readonly string[]): DexCardEntry[] {
+  return ids.map(dexEntry).filter((entry): entry is DexCardEntry => entry !== null);
+}
+
+const dexLabels = {
+  ...ui.cards,
+  requirement: ui.tooltip.requirement,
+  level: ui.tooltip.level,
+  tier: ui.tooltip.tier,
+  role: ui.tooltip.role,
+  shiny: ui.shiny,
+};
+
+const dex = dexEntries(fixture.pokedex);
+const dexGrid = dexLayout(dex);
+const dexCompact = dexEntries(fixture.pokedexCompact);
+const dexCompactGrid = dexLayout(dexCompact);
+
+// ------------------------------------------------------------------------------ listings
+
+/** A panel of the fixture's rows (a ball, a held item): the sprite the registry has none of. */
+function samplePanel(
+  kind: string,
+  name: string,
+  width: 240 | 300,
+  rows: readonly SampleRow[],
+): TipData {
+  const tipRows: TipRow[] = rows.map((row) => ({ label: row.label, value: row.value }));
+  return {
+    key: `${kind}:${name.toLowerCase().replace(/\s+/g, '-')}`,
+    title: name,
+    width,
+    head: { type: 'sprite', sprite: null },
+    rows: tipRows,
+  };
+}
+
+function fact(key: ListingKey, value: unknown): ListingFactValue {
+  if (value === null || value === undefined) return null;
+  if (key === 'requirement' && typeof value === 'number') {
+    return fill(ui.tooltip.level, { n: formatInteger(value, locale) });
+  }
+  if (key === 'elements' && Array.isArray(value)) return elementsOf(value as string[]);
+  if (key === 'element' && typeof value === 'string') return element(value);
+  if (key === 'ball' && typeof value === 'object') {
+    const ball = value as { name: string; rows: SampleRow[] };
+    const entity: ListingCardEntity = {
+      name: ball.name,
+      tip: samplePanel('item', ball.name, 240, ball.rows),
+      sprite: null,
+    };
+    return entity;
+  }
+  if (typeof value === 'number' || typeof value === 'string') return value;
+  return null;
+}
+
+function listing(sample: Sample): ListingCardListing {
+  const type = sample.type;
+  const facts: Partial<Record<ListingKey, ListingFactValue>> = {};
+  for (const [key, value] of Object.entries(sample.facts)) {
+    facts[key as ListingKey] = fact(key as ListingKey, value);
+  }
+  const quantity = typeof sample.facts.quantity === 'number' ? sample.facts.quantity : null;
+  const record = sample.pokemon === undefined ? undefined : getPokemonById(sample.pokemon);
+  let title = sample.title ?? '';
+  let titleAccessible: string | undefined;
+  if (type === 'diamonds' && quantity !== null) {
+    title = `${formatInteger(quantity, locale)} ${ui.tooltip.diamonds}`;
+  }
+  if (type === 'pokedolares' && quantity !== null) {
+    title = `${formatPokedolares(quantity, locale)} ${ui.tooltip.pokedolares}`;
+    titleAccessible = formatPokedolaresLabel(quantity, locale);
+  }
+  const art = record === undefined ? null : resolvePokemonImage(record.imagen);
+  const spriteKey = sample.sprite ?? null;
+  return {
+    type,
+    title,
+    titleAccessible,
+    sprite:
+      art === null
+        ? registrySprite(spriteKey, type === 'items' && quantity !== null ? quantity : undefined)
+        : { src: art, smooth: true },
+    qty: sample.qty ?? null,
+    shiny: sample.shiny ?? false,
+    world: sample.world,
+    posted: sample.posted,
+    facts,
+    helds:
+      sample.helds === undefined
+        ? null
+        : sample.helds.map((held) => ({
+            name: held.name,
+            tier: held.tier,
+            sprite: null,
+            tip: samplePanel('item', held.name, 300, held.rows),
+          })),
+    train: sample.train ?? null,
+    fiat: sample.fiat,
+    game: sample.game,
+    seller:
+      comercioHref === undefined
+        ? null
+        : {
+            name: sample.seller.name,
+            href: comercioHref,
+            score: sample.seller.score,
+            reviews: sample.seller.reviews,
+          },
+    channels: sample.channels,
+  };
+}
+
+const listingLabels: ListingCardLabels = {
+  keys: copy.listing.keys,
+  shiny: ui.shiny,
+  fiat: copy.listing.fiat,
+  game: copy.listing.game,
+  seller: copy.listing.seller,
+  contact: copy.listing.contact,
+  negotiable: copy.listing.negotiable,
+  reserved: copy.listing.reserved,
+  money: ui.money,
+};
+
+const groups = copy.groups.map((group) => {
+  const cards = group.listings.map(listing);
+  return {
+    type: group.type,
+    label: group.label,
+    sprite: registrySprite(group.sprite),
+    cards,
+    layout: listingLayout(cards),
+  };
+});
+
+// One listing of each type the phone column of the board shows, by its place in the group.
+const phoneGroups = groups.flatMap((group) => {
+  const index = fixture.movil[group.type];
+  const card = index === undefined ? undefined : group.cards[index];
+  return card === undefined ? [] : [{ ...group, cards: [card], layout: listingLayout([card]) }];
+});
+
+// ------------------------------------------------------------------------------ drops
+
+const drops: ParityDrop[] = fixture.drops.flatMap((id) => {
+  const drop = lootDrop(id);
+  return drop === null ? [] : [{ id, drop, tip: itemPanel(id, drop.name, drop.sprite) }];
+});
+const dropsCompact = lootRows(fixture.dropsCompact);
+const dropsCompactKeys = lootKeys(dropsCompact);
+
+const ids = {
+  comercio: 'comercio',
+  pokedex: 'pokedex',
+  drops: 'drops',
+  kpi: 'guild-cifras',
+  movil: 'movil',
+} as const;
+---
+
+<PageLayout
+  locale={locale}
+  title={copy.title}
+  description={copy.description}
+  alternates={alternates}
+  noindex
+>
+  <PageTitle title={copy.title} />
+  <div class="flex flex-col gap-48">
+    <Section id={ids.comercio} title={copy.sections.comercio}>
+      <div>
+        {
+          groups.map((group) => (
+            <CardGroup
+              label={group.label}
+              count={group.cards.length}
+              sprite={group.sprite}
+              level={3}
+              locale={locale}
+            >
+              <CardGrid family="listing">
+                {group.cards.map((card) => (
+                  <ListingCard
+                    listing={card}
+                    layout={group.layout}
+                    labels={listingLabels}
+                    locale={locale}
+                    hint={ui.pinHint}
+                    orLabel={ui.or}
+                    headingLevel={4}
+                  />
+                ))}
+              </CardGrid>
+            </CardGroup>
+          ))
+        }
+      </div>
+    </Section>
+
+    <Section id={ids.pokedex} title={copy.sections.pokedex}>
+      <CardGrid family="pokedex">
+        {
+          dex.map((entry, index) => (
+            <DexCard
+              entry={entry}
+              layout={dexGrid}
+              labels={dexLabels}
+              locale={locale}
+              hint={ui.pinHint}
+              headingLevel={3}
+              loading={index >= 4 ? 'lazy' : undefined}
+            />
+          ))
+        }
+      </CardGrid>
+    </Section>
+
+    <Section id={ids.drops} title={copy.sections.drops}>
+      <div class="xl:max-w-(--layout-main-rail)">
+        <DropsList
+          client:load
+          locale={locale}
+          path={path}
+          rows={drops}
+          labels={{
+            list: {
+              views: ui.views,
+              pagination: ui.pagination,
+              prev: ui.prev,
+              next: ui.next,
+              page: ui.page,
+              dataError: ui.dataError,
+            },
+            loot: lootLabels,
+            count: copy.drops.count,
+            view: copy.drops.view,
+            caption: copy.drops.caption,
+            sprite: copy.drops.sprite,
+            item: copy.drops.item,
+          }}
+          hint={ui.pinHint}
+        />
+      </div>
+    </Section>
+
+    <Section id={ids.kpi} title={copy.sections.kpi}>
+      <CardGrid family="kpi">
+        {
+          copy.kpi.map((figure) => (
+            <KpiCard
+              label={figure.label}
+              value={figure.value}
+              of={figure.of}
+              comparison={figure.comparison}
+            />
+          ))
+        }
+      </CardGrid>
+    </Section>
+
+    <Section id={ids.movil} title={copy.sections.movil}>
+      <div class="flex flex-wrap items-start gap-16">
+        <div class="flex w-full max-w-358 flex-col gap-16">
+          <div>
+            {
+              phoneGroups.map((group) => (
+                <CardGroup
+                  label={group.label}
+                  count={group.cards.length}
+                  sprite={group.sprite}
+                  level={3}
+                  locale={locale}
+                >
+                  <CardGrid family="listing">
+                    {group.cards.map((card) => (
+                      <ListingCard
+                        listing={card}
+                        layout={group.layout}
+                        labels={listingLabels}
+                        locale={locale}
+                        hint={ui.pinHint}
+                        orLabel={ui.or}
+                        headingLevel={4}
+                      />
+                    ))}
+                  </CardGrid>
+                </CardGroup>
+              ))
+            }
+          </div>
+        </div>
+        <div class="flex w-full max-w-358 flex-col gap-16">
+          <CardGrid family="pokedex">
+            {
+              dexCompact.map((entry) => (
+                <DexCard
+                  entry={entry}
+                  layout={dexCompactGrid}
+                  labels={dexLabels}
+                  locale={locale}
+                  hint={ui.pinHint}
+                  headingLevel={3}
+                />
+              ))
+            }
+          </CardGrid>
+          <CardGrid family="loot">
+            {
+              dropsCompact.map((drop) => (
+                <LootCard
+                  drop={drop}
+                  keys={dropsCompactKeys}
+                  labels={lootLabels}
+                  locale={locale}
+                  hint={ui.pinHint}
+                  headingLevel={3}
+                />
+              ))
+            }
+          </CardGrid>
+        </div>
+      </div>
+    </Section>
+  </div>
+</PageLayout>

@@ -1,0 +1,427 @@
+{
+  "$schema": "../../content/schemas/sprites.schema.json",
+  "sprites": {
+    "ui/diamond": {
+      "archivo": "ui/diamond.png",
+      "frame": [32, 32],
+      "frames": 7,
+      "modo": "animacion",
+      "duracionMs": [110, 110, 110, 110, 110, 110, 110]
+    },
+    "ui/balls/alliance-ball": {
+      "archivo": "ui/balls/alliance-ball.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "ui/balls/premier-ball": {
+      "archivo": "ui/balls/premier-ball.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "ui/balls/ultra-ball": {
+      "archivo": "ui/balls/ultra-ball.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "ui/pokedolares": {
+      "archivo": "ui/pokedolares.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "ui/comercio/item": {
+      "archivo": "ui/comercio/item.png",
+      "frame": [64, 64],
+      "frames": 1,
+      "modo": "estatico",
+      "borrador": true
+    },
+    "ui/categorias/todo": {
+      "archivo": "ui/balls/ultra-ball.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico",
+      "borrador": true
+    },
+    "ui/categorias/diamantes": {
+      "archivo": "ui/diamond.png",
+      "frame": [32, 32],
+      "frames": 7,
+      "modo": "variante",
+      "borrador": true
+    },
+    "ui/categorias/pokemon": {
+      "archivo": "ui/balls/alliance-ball.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico",
+      "borrador": true
+    },
+    "ui/categorias/poke-balls": {
+      "archivo": "ui/categorias/poke-balls.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico",
+      "borrador": true
+    },
+    "ui/categorias/stones": {
+      "archivo": "items/stones/fire-stone.png",
+      "frame": [32, 32],
+      "frames": 8,
+      "modo": "variante",
+      "borrador": true
+    },
+    "ui/categorias/helds": {
+      "archivo": "ui/balls/premier-ball.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico",
+      "borrador": true
+    },
+    "ui/categorias/orbs": {
+      "archivo": "ui/balls/premier-ball.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico",
+      "borrador": true
+    },
+    "ui/categorias/creature-items": {
+      "archivo": "ui/balls/premier-ball.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico",
+      "borrador": true
+    },
+    "ui/categorias/general-items": {
+      "archivo": "ui/balls/premier-ball.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico",
+      "borrador": true
+    },
+    "ui/categorias/utilities": {
+      "archivo": "ui/balls/premier-ball.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico",
+      "borrador": true
+    },
+    "ui/categorias/addons": {
+      "archivo": "ui/balls/premier-ball.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico",
+      "borrador": true
+    },
+    "ui/categorias/consumable": {
+      "archivo": "ui/balls/premier-ball.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico",
+      "borrador": true
+    },
+    "ui/categorias/foods": {
+      "archivo": "ui/balls/premier-ball.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico",
+      "borrador": true
+    },
+    "ui/categorias/furnitures": {
+      "archivo": "ui/balls/premier-ball.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico",
+      "borrador": true
+    },
+    "items/poke-balls/alliance-ball": {
+      "archivo": "items/poke-balls/alliance-ball.png",
+      "frame": [32, 32],
+      "frames": 8,
+      "modo": "cantidad",
+      "umbrales": [1, 2, 3, 4, 5, 10, 25, 100]
+    },
+    "items/poke-balls/premier-ball": {
+      "archivo": "items/poke-balls/premier-ball.png",
+      "frame": [32, 32],
+      "frames": 5,
+      "modo": "variante"
+    },
+    "items/poke-balls/ultra-ball": {
+      "archivo": "items/poke-balls/ultra-ball.png",
+      "frame": [32, 32],
+      "frames": 5,
+      "modo": "variante"
+    },
+    "items/stones/fire-stone": {
+      "archivo": "items/stones/fire-stone.png",
+      "frame": [32, 32],
+      "frames": 8,
+      "modo": "cantidad",
+      "umbrales": [1, 2, 3, 4, 5, 10, 25, 100]
+    },
+    "items/stones/heart-stone": {
+      "archivo": "items/stones/heart-stone.png",
+      "frame": [32, 32],
+      "frames": 8,
+      "modo": "cantidad",
+      "umbrales": [1, 2, 3, 4, 5, 10, 25, 100]
+    },
+    "items/stones/leaf-stone": {
+      "archivo": "items/stones/leaf-stone.png",
+      "frame": [32, 32],
+      "frames": 8,
+      "modo": "cantidad",
+      "umbrales": [1, 2, 3, 4, 5, 10, 25, 100]
+    },
+    "items/stones/thunder-stone": {
+      "archivo": "items/stones/thunder-stone.png",
+      "frame": [32, 32],
+      "frames": 8,
+      "modo": "cantidad",
+      "umbrales": [1, 2, 3, 4, 5, 10, 25, 100]
+    },
+    "items/stones/water-stone": {
+      "archivo": "items/stones/water-stone.png",
+      "frame": [32, 32],
+      "frames": 8,
+      "modo": "cantidad",
+      "umbrales": [1, 2, 3, 4, 5, 10, 25, 100]
+    },
+    "items/diamantes/diamantes-ejemplo-1": {
+      "archivo": "ui/balls/premier-ball.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico",
+      "borrador": true
+    },
+    "items/pokemon/pokemon-ejemplo-1": {
+      "archivo": "ui/balls/ultra-ball.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico",
+      "borrador": true
+    },
+    "items/pokemon/pokemon-ejemplo-2": {
+      "archivo": "ui/balls/ultra-ball.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico",
+      "borrador": true
+    },
+    "items/helds/helds-ejemplo-1": {
+      "archivo": "ui/balls/premier-ball.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico",
+      "borrador": true
+    },
+    "items/helds/helds-ejemplo-2": {
+      "archivo": "ui/balls/premier-ball.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico",
+      "borrador": true
+    },
+    "items/orbs/orbs-ejemplo-1": {
+      "archivo": "ui/balls/alliance-ball.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico",
+      "borrador": true
+    },
+    "items/orbs/orbs-ejemplo-2": {
+      "archivo": "ui/balls/alliance-ball.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico",
+      "borrador": true
+    },
+    "items/creature-items/creature-items-ejemplo-1": {
+      "archivo": "ui/balls/ultra-ball.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico",
+      "borrador": true
+    },
+    "items/creature-items/creature-items-ejemplo-2": {
+      "archivo": "ui/balls/ultra-ball.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico",
+      "borrador": true
+    },
+    "items/general-items/general-items-ejemplo-1": {
+      "archivo": "ui/balls/premier-ball.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico",
+      "borrador": true
+    },
+    "items/general-items/general-items-ejemplo-2": {
+      "archivo": "ui/balls/premier-ball.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico",
+      "borrador": true
+    },
+    "items/utilities/utilities-ejemplo-1": {
+      "archivo": "ui/balls/premier-ball.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico",
+      "borrador": true
+    },
+    "items/utilities/utilities-ejemplo-2": {
+      "archivo": "ui/balls/premier-ball.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico",
+      "borrador": true
+    },
+    "items/addons/addons-ejemplo-1": {
+      "archivo": "ui/balls/alliance-ball.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico",
+      "borrador": true
+    },
+    "items/addons/addons-ejemplo-2": {
+      "archivo": "ui/balls/alliance-ball.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico",
+      "borrador": true
+    },
+    "items/consumable/consumable-ejemplo-1": {
+      "archivo": "ui/balls/ultra-ball.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico",
+      "borrador": true
+    },
+    "items/consumable/consumable-ejemplo-2": {
+      "archivo": "ui/balls/ultra-ball.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico",
+      "borrador": true
+    },
+    "items/foods/foods-ejemplo-1": {
+      "archivo": "ui/balls/premier-ball.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico",
+      "borrador": true
+    },
+    "items/foods/foods-ejemplo-2": {
+      "archivo": "ui/balls/premier-ball.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico",
+      "borrador": true
+    },
+    "items/furnitures/furnitures-ejemplo-1": {
+      "archivo": "ui/balls/alliance-ball.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico",
+      "borrador": true
+    },
+    "items/furnitures/furnitures-ejemplo-2": {
+      "archivo": "ui/balls/alliance-ball.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico",
+      "borrador": true
+    },
+    "outfits/2": {
+      "archivo": "outfits/2/sur.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico",
+      "direcciones": {
+        "norte": "outfits/2/norte.png",
+        "este": "outfits/2/este.png",
+        "sur": "outfits/2/sur.png",
+        "oeste": "outfits/2/oeste.png"
+      }
+    },
+    "outfits/5": {
+      "archivo": "outfits/5/sur.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico",
+      "direcciones": {
+        "norte": "outfits/5/norte.png",
+        "este": "outfits/5/este.png",
+        "sur": "outfits/5/sur.png",
+        "oeste": "outfits/5/oeste.png"
+      }
+    },
+    "outfits/7": {
+      "archivo": "outfits/7/sur.png",
+      "frame": [64, 64],
+      "frames": 1,
+      "modo": "estatico",
+      "direcciones": {
+        "norte": "outfits/7/norte.png",
+        "este": "outfits/7/este.png",
+        "sur": "outfits/7/sur.png",
+        "oeste": "outfits/7/oeste.png"
+      }
+    },
+    "outfits/8": {
+      "archivo": "outfits/8/sur.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico",
+      "direcciones": {
+        "norte": "outfits/8/norte.png",
+        "este": "outfits/8/este.png",
+        "sur": "outfits/8/sur.png",
+        "oeste": "outfits/8/oeste.png"
+      }
+    },
+    "outfits/509": {
+      "archivo": "outfits/509/sur.png",
+      "frame": [64, 64],
+      "frames": 1,
+      "modo": "estatico",
+      "direcciones": {
+        "norte": "outfits/509/norte.png",
+        "este": "outfits/509/este.png",
+        "sur": "outfits/509/sur.png",
+        "oeste": "outfits/509/oeste.png"
+      }
+    },
+    "outfits/1005": {
+      "archivo": "outfits/2/sur.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico",
+      "direcciones": {
+        "norte": "outfits/2/norte.png",
+        "este": "outfits/2/este.png",
+        "sur": "outfits/2/sur.png",
+        "oeste": "outfits/2/oeste.png"
+      },
+      "borrador": true
+    },
+    "outfits/125": {
+      "archivo": "outfits/125/sur.png",
+      "frame": [64, 64],
+      "frames": 1,
+      "modo": "estatico",
+      "direcciones": {
+        "norte": "outfits/125/norte.png",
+        "este": "outfits/125/este.png",
+        "sur": "outfits/125/sur.png",
+        "oeste": "outfits/125/oeste.png"
+      }
+    }
+  }
+}

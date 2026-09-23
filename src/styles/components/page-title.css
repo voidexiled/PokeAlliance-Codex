@@ -1,0 +1,42 @@
+/* PageTitle (spec 5.9, DS:PageTitle), ported from the `.ac-page-title` block of the
+   design system's components/bundle.css.
+
+   h1 of 30/36 with an optional 18/28 subtitle beside it and a 1 px `border-secondary`
+   divider 8 below. The subtitle is nudged down so it shares the baseline of the h1. */
+
+.ac-page-title {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-8);
+  color: var(--text-primary);
+  font-family: var(--font-sans);
+}
+
+.ac-page-title__row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-10);
+}
+
+.ac-page-title__h1 {
+  margin: 0;
+  @apply type-h1;
+}
+
+.ac-page-title__sub {
+  margin: 0;
+  transform: translateY(3px); /* sin token: ajuste óptico para compartir la línea base del h1 */
+  @apply type-h1-sub;
+}
+
+.ac-page-title__rule {
+  height: 1px;
+  background: var(--border-secondary);
+}
+
+/* Below 460 (spec 5.4): the subtitle is hidden and the h1 keeps the row on its own. */
+@media (width < 28.75rem) {
+  .ac-page-title__sub {
+    display: none;
+  }
+}

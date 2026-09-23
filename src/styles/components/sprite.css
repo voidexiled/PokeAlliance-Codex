@@ -1,0 +1,47 @@
+/* Sprite (spec 7.4, DS:Sprite), ported from the `.ac-sprite` block of the design
+   system's components/bundle.css.
+
+   Two rules differ from the reference, both because of the markup of E9: the site
+   draws a sheet as one <img> with `object-position` instead of a `span` window with
+   the strip inside, so `.ac-sprite` needs `object-fit: cover` (the frame is a window
+   over the strip) and the illustration needs `contain` (the whole image, scaled to
+   the box). The `--sheet` and `__sheet` rules of the reference have no markup here
+   and are not ported. */
+
+.ac-sprite {
+  display: block;
+  flex: none;
+  max-width: none;
+  object-fit: cover;
+  image-rendering: pixelated;
+}
+
+/* Illustrations — Pokémon art of 140 px, element icons of 100 — scale smoothly. */
+.ac-sprite--smooth {
+  object-fit: contain;
+  image-rendering: auto;
+}
+
+/* Game cell: 32 px per scale step, 64 for a 2 × 2 tile sprite. `Sprite` writes the
+   side of the cell and the position of the sprite inline, both whole pixels
+   calculated from the frame (spec 7.4.3, C-R2). */
+.ac-sprite-cell {
+  position: relative;
+  display: block;
+  flex: none;
+}
+
+.ac-sprite-cell__at {
+  position: absolute;
+  display: block;
+}
+
+/* The bounce of the pinned sprites of the menu and of Destacados (spec 6.2). The
+   keyframes live in motion.css; the animation of an animated sheet is not here but in
+   the block SpriteStyles.astro writes from the registry (7.4.2). */
+@media (prefers-reduced-motion: no-preference) {
+  .ac-sprite.ac-bounce,
+  .ac-sprite-cell.ac-bounce {
+    animation: ac-bounce var(--duration-bounce) var(--ease-bounce) infinite;
+  }
+}

@@ -1,0 +1,253 @@
+/* ListingForm (spec 9.7, template G of 8.0.2): what src/components/trade/ListingForm.tsx draws
+   that no design-system component carries — the two columns of the page, the grid of the asset
+   fields, the fieldsets of «Precio», «Held Items» and each training skill, the folding
+   «Entrenamiento», the error line under a field and the live exact figure of a Pokédólares
+   amount. Every control inside is a design-system component with its own sheet in global.css:
+   ToggleGroup, TextField, NumberField, Select, Combobox, Checkbox, Button, Notice and Textarea.
+   The preview card has its own sheet, listing-preview.css.
+
+   A per-page sheet (13.6, D-018): only the publish page draws this block, so ListingForm.tsx
+   imports it and global.css does not. The layer order of global.css is repeated before the
+   block, so `components` keeps its place whichever of the two sheets the browser reads first
+   (3.6), and `@reference` brings the text styles of theme.css to `@apply`.
+
+   Template G (8.0.2, 9.7.1): the form, and from 768 the preview of 304 to its right, 24 away,
+   sticky 16 under the fixed header; below 768 the preview goes after the form. The preview
+   column is reserved even while the preview is empty, so the fields never change width when
+   the card appears.
+
+   The DS has no error look: an error is text under its field, joined with `aria-describedby`
+   (9.7.5, A16), in `text-primary` 700 so it reads apart from the `helper` line above it. No
+   state colour marks a field (DS:Notice «No hacer», DS:TextField «bordes de color»). */
+
+@reference '../theme.css';
+
+@layer properties, theme, base, components, utilities;
+
+@layer components {
+  .ac-listing-form {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    align-items: start;
+    gap: var(--space-24);
+  }
+
+  @media (width >= 48rem) {
+    .ac-listing-form {
+      grid-template-columns: minmax(0, 1fr) 304px; /* sin token: la vista previa de la plantilla G (8.0.2, 9.7.1) */
+    }
+
+    .ac-listing-form__preview {
+      position: sticky;
+      top: calc(var(--layout-header) + var(--space-16));
+    }
+  }
+
+  .ac-listing-form__preview {
+    min-width: 0;
+  }
+
+  /* The form: its parts 24 apart. It is the container the field grids answer to, so they
+     follow the width of the column and not the one of the window (768 leaves the form 408
+     wide next to the preview). */
+  .ac-listing-form__form {
+    display: flex;
+    min-width: 0;
+    flex-direction: column;
+    gap: var(--space-24);
+    container-name: ac-listing-form;
+    container-type: inline-size;
+  }
+
+  /* Fields of the asset, of an items listing and the world: one column, two from a column of
+     480, 16 apart. A wide field takes the whole row. */
+  .ac-listing-form__fields {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    align-items: start;
+    gap: var(--space-16);
+  }
+
+  @container ac-listing-form (width >= 480px) {
+    .ac-listing-form__fields {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  .ac-listing-form__wide {
+    grid-column: 1 / -1;
+  }
+
+  .ac-listing-form__field {
+    min-width: 0;
+  }
+
+  /* The error of a field (9.7.5): under it, 4 away like the helper. */
+  .ac-listing-form__error {
+    margin: var(--space-4) 0 0;
+    color: var(--text-primary);
+    @apply type-ui-strong;
+  }
+
+  /* Fieldsets without the user-agent frame. The legend of a part of the form («Precio»,
+     «Held Items», a training skill) is 14/22 700; the one of a sub-part («Dinero real», «En
+     el juego») is a label, 14/22. The content sits 8 under the legend, as a label sits over
+     its field. */
+  .ac-listing-form__set {
+    min-width: 0;
+    margin: 0;
+    padding: 0;
+    border: 0;
+  }
+
+  .ac-listing-form__legend {
+    margin: 0;
+    padding: 0;
+    color: var(--text-primary);
+    @apply type-body;
+  }
+
+  .ac-listing-form__legend--strong {
+    @apply type-body-strong;
+  }
+
+  .ac-listing-form__group {
+    display: flex;
+    min-width: 0;
+    flex-direction: column;
+    gap: var(--space-16);
+    padding-top: var(--space-8);
+  }
+
+  /* Two fields side by side at any width: the level and the progress of a skill, a held item and
+     its tier (`--tier`: the tier keeps the 160 of two digits and the steppers), and the currency
+     and the amount of a real price (`--money`: the currency keeps the width of the currency of
+     an in-game option, so the two amounts line up). */
+  .ac-listing-form__pair {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    align-items: start;
+    gap: var(--space-16);
+  }
+
+  .ac-listing-form__pair--tier {
+    grid-template-columns: minmax(0, 1fr) calc(var(--size-control) * 4);
+  }
+
+  .ac-listing-form__pair--money {
+    grid-template-columns: calc(var(--size-control) * 4) minmax(0, 1fr);
+  }
+
+  /* An in-game price option: its currency, its amount and «Quitar opción». The button goes to
+     the next line when the column cannot hold the three. The currency and the amount carry
+     hidden labels (the legend «En el juego» names them), so the tops of the three line up. */
+  .ac-listing-form__option {
+    display: flex;
+    min-width: 0;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    gap: var(--space-16);
+  }
+
+  .ac-listing-form__option > .ac-listing-form__field:first-child {
+    flex: none;
+    width: calc(var(--size-control) * 4);
+  }
+
+  .ac-listing-form__option > .ac-listing-form__field:nth-child(2) {
+    flex: 1 1 calc(var(--size-control) * 3);
+  }
+
+  /* NPC Price: the three choices, then the amount of «Importe» under them. */
+  .ac-listing-form__stack {
+    display: flex;
+    min-width: 0;
+    flex-direction: column;
+    align-items: stretch;
+    gap: var(--space-16);
+  }
+
+  /* The exact figure of a Pokédólares amount, live under its field (9.7.3), inside the 12/16
+     helper line: the sprite of 32 at 1x keeps the line 16 tall with the margins of
+     `PokedolaresAmount` (money.css), then «50.000.000 Pokédólares». */
+  .ac-listing-form__exact {
+    display: inline-flex;
+    align-items: center;
+    vertical-align: top;
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* «Entrenamiento» folds (9.7.5: a section that opens when it holds the first error). The
+     summary keeps the geometry of the sidebar toggle: the chevron down while closed and up
+     while open, with no animation (DS:Sidebar). */
+  .ac-listing-form__fold {
+    min-width: 0;
+  }
+
+  .ac-listing-form__fold-summary {
+    display: flex;
+    min-height: var(--size-control);
+    align-items: center;
+    gap: var(--space-8);
+    color: var(--text-primary);
+    @apply type-body-strong;
+    cursor: pointer;
+    list-style: none;
+  }
+
+  .ac-listing-form__fold-summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .ac-listing-form__fold-chevron {
+    display: block;
+    flex: none;
+    opacity: var(--opacity-chevron);
+  }
+
+  .ac-listing-form__fold-chevron--open {
+    display: none;
+  }
+
+  .ac-listing-form__fold[open]
+    > .ac-listing-form__fold-summary
+    .ac-listing-form__fold-chevron--open {
+    display: block;
+  }
+
+  .ac-listing-form__fold[open]
+    > .ac-listing-form__fold-summary
+    .ac-listing-form__fold-chevron--closed {
+    display: none;
+  }
+
+  /* The eight skills, one under another, 16 apart. */
+  .ac-listing-form__fold-body {
+    display: flex;
+    min-width: 0;
+    flex-direction: column;
+    gap: var(--space-16);
+    padding-top: var(--space-8);
+  }
+
+  /* The action and what it answers: the Notice, and the read-only text when the copy fails. */
+  .ac-listing-form__action {
+    display: flex;
+    min-width: 0;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--space-16);
+  }
+
+  .ac-listing-form__action > .ac-notice,
+  .ac-listing-form__action > .ac-textarea {
+    align-self: stretch;
+  }
+
+  /* Touch (13.7, S14): the summary, which is the target, is at least `size-touch`. */
+  @media (pointer: coarse) {
+    .ac-listing-form__fold-summary {
+      min-height: var(--size-touch);
+    }
+  }
+}

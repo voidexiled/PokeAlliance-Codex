@@ -1,67 +1,91 @@
-import type { Locale } from '@/i18n/config';
+// Shapes of the owner-editable JSON under content/. Unknown values are null.
 
-export type ContentFact = {
-  value: unknown;
-  status: string;
-  evidenceIds: string[];
-};
+export type PokemonTier = number | string;
 
-export type ContentRecord = {
+/** `Ref` of §3.13: an entity with its own registry. */
+export type ContentRef = {
+  tipo: 'pokemon' | 'item' | 'sistema' | 'actividad';
   id: string;
-  entityId?: string;
-  canonicalSlug: string;
-  canonicalName: string;
-  pokedexNumber?: number;
-  variant?: string;
-  kind?: string;
-  itemKind?: string;
-  assertionId?: string;
-  facts: Record<string, ContentFact>;
-  aliases?: string[];
-  searchKeywords?: Partial<Record<Locale, string[]>>;
 };
 
-export type NormalizedDataset = {
-  schemaVersion: string;
-  generatedAt: string;
-  status: string;
-  records: ContentRecord[];
+/** `EnlaceDato` of §3.13: a text, and the entity it opens when it has a registry. */
+export type EnlaceDato = {
+  texto: string;
+  ref?: ContentRef;
 };
 
-export type SourceRecord = {
+/** One drop of a Pokémon: an item id of content/items/ and how many it drops. */
+export type PokemonDrop = {
+  item: string;
+  cantidad: { min: number; max: number } | null;
+};
+
+/** One evolution out of a Pokémon: the id it evolves into, its level and its items. */
+export type PokemonEvolution = {
+  a: string;
+  nivel: number | null;
+  items: { item: string; cantidad: number }[];
+};
+
+export type PokemonRecord = {
   id: string;
-  name: string;
-  url: string;
-  sourceType: string;
-  authority: string;
-  scope: string[];
-  language: string[];
-  lastCheckedAt: string;
-  lastSuccessfulAt: string | null;
-  freshness: string;
-  notes: string;
+  nombre: string;
+  numero: number | null;
+  generacion: number | null;
+  variante: string;
+  nivel: number | null;
+  tier: PokemonTier | null;
+  funcion: string | null;
+  elementos: string[];
+  imagen: string | null;
+  // The optional fields of §3.13: while one is missing, its row or section is not drawn.
+  hp?: number | null;
+  experiencia?: number | null;
+  drops?: PokemonDrop[];
+  evolucion?: PokemonEvolution[];
+  habilidades?: string[];
+  donde?: { hunts: EnlaceDato[]; linkedTasks: EnlaceDato[]; equiposNpc: EnlaceDato[] };
+  elementoMoveset?: string | null;
 };
 
-export type EvidenceRecord = {
+export type MoveRecord = {
   id: string;
-  sourceId: string;
-  url: string;
-  retrievedAt: string;
-  locator: string;
-  claims: string[];
-  contentDigest: string | null;
+  nombre: string;
+  elemento: string | null;
+  slot: string | null;
+  cooldownSegundos: number | null;
+  modo: string | null;
+  pokemon: string[];
 };
 
-export type ContentCollection = {
-  key: string;
-  label: string;
-  description: string;
-  href: string;
-  count: number;
+export type SystemItemRecord = {
+  id: string;
+  nombre: string;
+  tipo: string | null;
+  descripcion: string | null;
+  sistema: string | null;
 };
 
-export type SearchResult = {
-  record: ContentRecord;
-  collection: string;
-  href: string;
+export type TravelConnection = {
+  modo: string;
+  comando: string | null;
+};
+
+export type LocationRecord = {
+  id: string;
+  nombre: string;
+  tipo: string | null;
+  region: string | null;
+  acceso: string[];
+  viajes: TravelConnection[];
+};
+
+export type RotationRecord = {
+  id: string;
+  nombre: string;
+  tipo: string | null;
+  disponibilidad: string | null;
+  condicion: string | null;
+  excluye: string[];
+  comparacion: string[];
 };

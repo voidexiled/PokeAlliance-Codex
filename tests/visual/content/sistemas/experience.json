@@ -1,0 +1,14 @@
+{
+  "$schema": "../../../../content/schemas/sistemas.schema.json",
+  "id": "experience",
+  "titulo": {
+    "es": "Experiencia y Level",
+    "en": "Experience and Level"
+  },
+  "sprite": null,
+  "orden": 10,
+  "tooltip": [],
+  "intro": [],
+  "secciones": [],
+  "borrador": true
+}

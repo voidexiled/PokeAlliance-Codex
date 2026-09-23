@@ -1,0 +1,14 @@
+{
+  "$schema": "../schemas/sistemas.schema.json",
+  "id": "gamepass",
+  "titulo": {
+    "es": "GamePass",
+    "en": "GamePass"
+  },
+  "sprite": null,
+  "orden": 7,
+  "tooltip": [],
+  "intro": [],
+  "secciones": [],
+  "borrador": true
+}

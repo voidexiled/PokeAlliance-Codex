@@ -1,0 +1,234 @@
+/* DataTable (spec 7.2.3, 4.5; DS:DataTable), ported from the `.ac-data-table` block of the
+   design system's components/bundle.css. global.css imports this file with
+   layer(components).
+
+   Bordered table, `bg-tertiary` header, 1 px dividers in `border-secondary`, sortable
+   headers, inactive rows, a secondary line under a value and the page's own row.
+
+   Differences from the reference, none of which changes a value:
+   - The type pairs are the text styles of theme.css (spec 3.7): 14/22 `body`, 12/16 `ui`
+     and `ui-strong`, 12/20 `ui-loose`. Each style also sets a weight, so the page's own row
+     comes after the cell text modifiers: at equal specificity its bold has to win over the
+     400 of `ui`, as it does in the reference, where those modifiers set no weight.
+   - A column width arrives as the local property `--ac-col-width` (DataTable.tsx), not as
+     an inline `width`.
+   - With `scroll`, tooltips that leave the table are not clipped: the panels live in the
+     top layer (7.5.4), out of every `overflow`.
+   - Transitions sit inside `prefers-reduced-motion: no-preference` (spec 6.4).
+
+   The borders stay separate with no spacing, as in the reference. The boards draw their
+   Lista views, the Guild, Pokédex and Comercio tables, the Tarjetas drops and the
+   Sistema-Boost craft table that way; only the «Bandas de Boost» tables and one ListRow
+   example are drawn collapsed, which moves their column lines by under a pixel. Collapsing
+   here would match those and move the others instead: rendered both ways with the board
+   harness, the Tarjetas drops change by 0.57 % and the Sistema-Boost craft table by 2.2 %. */
+
+.ac-data-table {
+  border: 1px solid var(--border-secondary);
+  border-radius: var(--radius-8);
+  background: var(--bg-primary);
+}
+
+/* Narrow screens: the table keeps its column widths and scrolls sideways (WG1). */
+.ac-data-table--scroll {
+  overflow-x: auto;
+}
+
+.ac-data-table__table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  @apply type-body;
+}
+
+/* Header row: 32 tall (40 when a column sorts), dividers in the header ink, inner corners
+   one pixel inside the border's radius. */
+.ac-data-table__th {
+  width: var(--ac-col-width, auto);
+  height: var(--space-32);
+  padding: 0 var(--space-16);
+  border-right: 1px solid var(--border-secondary);
+  background: var(--bg-tertiary);
+  @apply type-ui-strong;
+  text-align: center;
+  white-space: nowrap;
+}
+
+.ac-data-table__th:first-child {
+  border-top-left-radius: calc(var(--radius-8) - 1px);
+}
+
+.ac-data-table__th:last-child {
+  border-right: 0;
+  border-top-right-radius: calc(var(--radius-8) - 1px);
+}
+
+.ac-data-table__th--left {
+  text-align: left;
+}
+
+.ac-data-table__th--right {
+  text-align: right;
+}
+
+.ac-data-table--sortable .ac-data-table__th {
+  height: var(--space-40);
+}
+
+.ac-data-table__sort {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-4);
+  height: var(--size-control);
+  padding: 0;
+  border: 0;
+  border-radius: var(--radius-6);
+  background: transparent;
+  color: var(--text-primary);
+  @apply type-ui-strong;
+  cursor: pointer;
+}
+
+.ac-data-table__sort:hover {
+  background: var(--bg-tertiary);
+}
+
+.ac-data-table__sort-idle {
+  color: var(--text-quaternary);
+}
+
+/* Body cells. Structural rules carry no specificity, so rows from other components
+   (ListRow) can refine them. */
+:where(.ac-data-table__table > tbody > tr > td, .ac-data-table__table > tbody > tr > th) {
+  height: var(--space-40);
+  padding: 0 var(--space-16);
+  border-right: 1px solid var(--border-secondary);
+  border-bottom: 1px solid var(--border-secondary);
+  font-weight: 400;
+  text-align: center;
+}
+
+:where(.ac-data-table__table > tbody > tr > :last-child) {
+  border-right: 0;
+}
+
+:where(.ac-data-table__table > tbody > tr:last-child > *) {
+  border-bottom: 0;
+}
+
+:where(.ac-data-table__table > tbody > tr:last-child > :first-child) {
+  border-bottom-left-radius: calc(var(--radius-8) - 1px);
+}
+
+:where(.ac-data-table__table > tbody > tr:last-child > :last-child) {
+  border-bottom-right-radius: calc(var(--radius-8) - 1px);
+}
+
+:where(.ac-data-table--rows-48 > .ac-data-table__table > tbody > tr > *),
+.ac-data-table__row--tall > * {
+  height: var(--space-48);
+}
+
+/* Cells whose content wraps to several lines (Boost: Stones por elemento) keep 8 px above
+   and below it. */
+:where(.ac-data-table--wrap > .ac-data-table__table > tbody > tr > *) {
+  padding: var(--space-8) var(--space-16);
+}
+
+/* Dense: 12 px side padding in headers and cells (the Comercio Lista). */
+.ac-data-table--dense .ac-data-table__th {
+  padding: 0 var(--space-12);
+}
+
+:where(.ac-data-table--dense > .ac-data-table__table > tbody > tr > *) {
+  padding-left: var(--space-12);
+  padding-right: var(--space-12);
+}
+
+.ac-data-table__cell--left {
+  text-align: left;
+}
+
+.ac-data-table__cell--right {
+  text-align: right;
+}
+
+.ac-data-table__cell--num {
+  font-variant-numeric: tabular-nums;
+}
+
+.ac-data-table__cell--ui {
+  @apply type-ui;
+}
+
+.ac-data-table__cell--ui-loose {
+  @apply type-ui-loose;
+}
+
+.ac-data-table__cell--nowrap {
+  white-space: nowrap;
+}
+
+/* The row of the page's own entity is bold and is not a link. After the text modifiers
+   above: see the header of this file. */
+.ac-data-table__row--current > * {
+  font-weight: 700;
+}
+
+/* Secondary line under a value («en curso, día 5 de 7»). Its weight follows the cell, as
+   in the reference. */
+.ac-data-table__sub {
+  display: block;
+  color: var(--text-tertiary);
+  @apply type-ui;
+  font-weight: inherit;
+}
+
+/* Inactive rows (Guild): tinted cells, bold first cell, the inactive chip above the badge
+   column's value. */
+.ac-data-table__row--inactive > * {
+  background: var(--inactive-row);
+}
+
+.ac-data-table__row--inactive > :first-child {
+  font-weight: 700;
+}
+
+.ac-data-table__stack {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-2);
+}
+
+.ac-data-table__badge {
+  display: inline-flex;
+  padding: var(--space-2) var(--space-8);
+  border-radius: var(--radius-full);
+  background: var(--banner);
+  /* The token read `color: var(--white)` is a named-colour false positive of design:check
+     rule 2; the utility resolves to the same --white. */
+  @apply type-ui text-white;
+}
+
+/* Row hover (Lista views): one ink, bg-secondary. */
+.ac-data-table--hover > .ac-data-table__table > tbody > tr:hover > * {
+  background: var(--bg-secondary);
+}
+
+/* Touch: the sort button grows to the 44 touch target (spec 13.7). */
+@media (pointer: coarse) {
+  .ac-data-table__sort {
+    height: var(--size-touch);
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .ac-data-table__sort {
+    transition: background-color var(--duration-fast) var(--ease-standard);
+  }
+
+  :where(.ac-data-table--hover > .ac-data-table__table > tbody > tr > *) {
+    transition: background-color var(--duration-fast) var(--ease-standard);
+  }
+}

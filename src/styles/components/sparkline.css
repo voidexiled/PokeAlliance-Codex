@@ -1,0 +1,59 @@
+/* Sparkline (spec 10.9; DS:Sparkline), ported from the `.ac-sparkline` block of the design
+   system's components/bundle.css: the 14-day trend of the Guild members table.
+
+   Per-page stylesheet (D-018, §13.6): only the Guild page draws it, so global.css does not
+   import it; src/components/guild/Sparkline.tsx does. It repeats the layer order of global.css
+   before its block, so the `components` layer keeps its place whichever sheet the browser reads
+   first (§3.6), and `@reference` brings the text styles of theme.css to `@apply`.
+
+   One addition: in forced colors the bars keep a system colour (5.2), since an svg fill is not
+   adjusted by the mode. */
+
+@reference '../theme.css';
+
+@layer properties, theme, base, components, utilities;
+
+@layer components {
+  /* Block-level flex: a table cell centres it vertically, and space-between keeps every
+     sparkline at one x. */
+  .ac-sparkline {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-10);
+  }
+
+  .ac-sparkline__svg {
+    display: block;
+    flex: none;
+    width: var(--size-spark-w);
+    height: var(--size-spark-h);
+  }
+
+  .ac-sparkline__on {
+    fill: var(--text-quaternary);
+  }
+
+  /* A day without activity keeps a 1 px baseline tick. */
+  .ac-sparkline__off {
+    fill: var(--border-primary);
+  }
+
+  /* 52 px keeps «−100,0%» and «+8,2%» right-aligned in one column (no token holds it). */
+  .ac-sparkline__change {
+    min-width: 52px; /* sin token: columna de la variación («−100,0%») */
+    @apply type-ui;
+    text-align: right;
+    font-variant-numeric: tabular-nums;
+  }
+
+  @media (forced-colors: active) {
+    .ac-sparkline__on {
+      fill: CanvasText;
+    }
+
+    .ac-sparkline__off {
+      fill: GrayText;
+    }
+  }
+}

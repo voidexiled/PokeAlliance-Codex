@@ -1,6 +1,6 @@
 # Alliance Codex
 
-Alliance Codex is a community wiki and tools foundation for PokeAlliance. The project is built on Astro, React islands, Tailwind CSS v4, shadcn/ui, Supabase contracts and Temporal-based time handling.
+Alliance Codex is a community wiki and tools foundation for PokeAlliance. The project is built on Astro, React islands, Tailwind CSS v4, Supabase contracts and Temporal-based time handling.
 
 ## Local development
 
@@ -19,8 +19,6 @@ The local app runs at `http://127.0.0.1:4321/es/`.
 pnpm format:check
 pnpm lint
 pnpm check
-pnpm validate:data
-pnpm validate:phase2
 pnpm test
 pnpm build
 ```
@@ -38,6 +36,7 @@ Copy `.env.example` to `.env` when connecting a Supabase project. Public Supabas
 - `src/i18n/` — explicit locale configuration and copy.
 - `src/lib/domain/` — framework-independent contracts.
 - `src/lib/time/` — Temporal adapters for Server Save and visitor-local display.
-- `data/`, `knowledge/` — researched and provenance-preserving inputs.
-- `supabase/migrations/` — Phase 2 database model, ready for a configured remote Supabase project.
+- `content/` — owner-editable game data (JSON) that the site reads at build time; `pnpm content:roster` refreshes the Pokémon roster.
+- `knowledge/` — game rules text, glossary and open questions.
+- `supabase/migrations/` — database model for accounts, guilds and future features.
 - `docs/` — phase reports and implementation contracts.

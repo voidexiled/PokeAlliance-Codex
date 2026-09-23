@@ -1,0 +1,132 @@
+{
+  "$schema": "../schemas/categorias.schema.json",
+  "categorias": [
+    {
+      "id": "todo",
+      "nombre": {
+        "es": "Todo",
+        "en": "All"
+      },
+      "icono": "ui/categorias/todo",
+      "orden": 0,
+      "virtual": true
+    },
+    {
+      "id": "diamantes",
+      "nombre": {
+        "es": "Diamantes",
+        "en": "Diamonds"
+      },
+      "icono": "ui/categorias/diamantes",
+      "orden": 1
+    },
+    {
+      "id": "pokemon",
+      "nombre": {
+        "es": "Pokémon",
+        "en": "Pokémon"
+      },
+      "icono": "ui/categorias/pokemon",
+      "orden": 2
+    },
+    {
+      "id": "poke-balls",
+      "nombre": {
+        "es": "Poké Balls",
+        "en": "Poké Balls"
+      },
+      "icono": "ui/categorias/poke-balls",
+      "orden": 3
+    },
+    {
+      "id": "stones",
+      "nombre": {
+        "es": "Stones",
+        "en": "Stones"
+      },
+      "icono": "ui/categorias/stones",
+      "orden": 4
+    },
+    {
+      "id": "helds",
+      "nombre": {
+        "es": "Helds",
+        "en": "Helds"
+      },
+      "icono": "ui/categorias/helds",
+      "orden": 5
+    },
+    {
+      "id": "orbs",
+      "nombre": {
+        "es": "Orbs",
+        "en": "Orbs"
+      },
+      "icono": "ui/categorias/orbs",
+      "orden": 6
+    },
+    {
+      "id": "creature-items",
+      "nombre": {
+        "es": "Creature Items",
+        "en": "Creature Items"
+      },
+      "icono": "ui/categorias/creature-items",
+      "orden": 7
+    },
+    {
+      "id": "general-items",
+      "nombre": {
+        "es": "General Items",
+        "en": "General Items"
+      },
+      "icono": "ui/categorias/general-items",
+      "orden": 8
+    },
+    {
+      "id": "utilities",
+      "nombre": {
+        "es": "Utilities",
+        "en": "Utilities"
+      },
+      "icono": "ui/categorias/utilities",
+      "orden": 9
+    },
+    {
+      "id": "addons",
+      "nombre": {
+        "es": "Addons",
+        "en": "Addons"
+      },
+      "icono": "ui/categorias/addons",
+      "orden": 10
+    },
+    {
+      "id": "consumable",
+      "nombre": {
+        "es": "Consumable",
+        "en": "Consumable"
+      },
+      "icono": "ui/categorias/consumable",
+      "orden": 11
+    },
+    {
+      "id": "foods",
+      "nombre": {
+        "es": "Foods",
+        "en": "Foods"
+      },
+      "icono": "ui/categorias/foods",
+      "orden": 12
+    },
+    {
+      "id": "furnitures",
+      "nombre": {
+        "es": "Furnitures",
+        "en": "Furnitures"
+      },
+      "icono": "ui/categorias/furnitures",
+      "orden": 13
+    }
+  ]
+}

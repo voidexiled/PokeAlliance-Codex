@@ -1,0 +1,120 @@
+/* Cuenta (spec 9.9 without Comercio, 10.4; template H of 8.0.2): the island of
+   src/components/account/AccountPanel.tsx on src/pages/[locale]/cuenta/index.astro. There is no
+   board for this page, so the blocks are composed only of design-system components and tokens
+   (R16).
+
+   Per-page stylesheet (D-018, 13.6): only this page draws these blocks, so global.css does not
+   import it; the page imports it. It repeats the layer order of global.css before its block, so
+   the `components` layer keeps its place whichever sheet the browser reads first (3.6).
+
+   - The island is a column of `Section`s 48 apart, the rhythm of the page (5.9). Until the
+     session is known it paints nothing and carries `aria-busy` (9.9).
+   - Forms are a column 16 apart, 360 wide at most: a sign-in form does not span the column.
+   - A guild is a block 16 apart under its h3: its facts, its actions, the invitation link, the
+     table of accounts and «Eliminar guild». Guilds are 32 apart with a rule between them. */
+
+@reference '../theme.css';
+
+@layer properties, theme, base, components, utilities;
+
+@layer components {
+  .ac-account {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-48);
+    min-width: 0;
+  }
+
+  .ac-account-form {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: var(--space-16);
+    max-width: 360px; /* sin token: ancho de un formulario corto de la cuenta */
+  }
+
+  .ac-account-form > .ac-button {
+    align-self: flex-start;
+  }
+
+  .ac-account-row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-16);
+    min-width: 0;
+  }
+
+  /* «Crear guild»: name and world side by side from 768, the button on their baseline. */
+  .ac-account-create {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-16);
+    max-width: 360px; /* sin token: ancho de un formulario corto de la cuenta */
+  }
+
+  @media (width >= 48rem) {
+    .ac-account-create {
+      flex-direction: row;
+      align-items: flex-end;
+      max-width: none;
+    }
+
+    .ac-account-create > .ac-text-field,
+    .ac-account-create > .ac-select {
+      width: 240px; /* sin token: ancho de los campos de «Crear guild» */
+    }
+  }
+
+  .ac-account-guilds {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-32);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .ac-account-guilds > li + li {
+    padding-top: var(--space-32);
+    border-top: 1px solid var(--border-secondary);
+  }
+
+  .ac-account-guild {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-16);
+    min-width: 0;
+  }
+
+  .ac-account-guild__title {
+    margin: 0;
+    color: var(--text-primary);
+    overflow-wrap: anywhere;
+    @apply type-h3;
+  }
+
+  /* The invitation link: a read-only field as wide as a link needs, and its copy button. */
+  .ac-account-link {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    gap: var(--space-8) var(--space-16);
+    min-width: 0;
+  }
+
+  .ac-account-link > .ac-text-field {
+    flex: 1 1 320px; /* sin token: ancho base del enlace de invitación */
+    min-width: 0;
+  }
+
+  .ac-account-link input {
+    font-variant-numeric: tabular-nums;
+  }
+
+  .ac-account-line {
+    margin: 0;
+    color: var(--text-primary);
+    @apply type-body;
+  }
+}

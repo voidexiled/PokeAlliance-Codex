@@ -1,0 +1,110 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://alliance-codex.local/schemas/quests.schema.json",
+  "title": "Misiones",
+  "description": "content/quests.json: las actividades del juego, una página por actividad en /actividades/<id>/. Si un valor no se conoce, va null; si una lista no tiene datos, va vacía. Los textos van por idioma, { \"es\": \"…\", \"en\": \"…\" }: un texto que solo existe en inglés lleva solo \"en\", y la página en español lo muestra en inglés.",
+  "type": "object",
+  "required": ["misiones"],
+  "additionalProperties": false,
+  "properties": {
+    "$schema": { "type": "string" },
+    "misiones": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/mision" }
+    }
+  },
+  "$defs": {
+    "slug": {
+      "type": "string",
+      "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$",
+      "description": "Minúsculas, números y guiones (kebab-case)."
+    },
+    "spriteOpcional": {
+      "type": ["string", "null"],
+      "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*(?:/[a-z0-9]+(?:-[a-z0-9]+)*)*$",
+      "description": "Clave de public/sprites/sprites.json, o null mientras no exista."
+    },
+    "texto": {
+      "type": "object",
+      "description": "Texto por idioma: { \"es\": \"…\", \"en\": \"…\" }. Mientras solo exista en inglés, lleva solo \"en\"; al traducirlo se añade \"es\". Los nombres del juego (NPC, lugares, ítems, Pokémon) se escriben como en el juego en los dos idiomas.",
+      "additionalProperties": false,
+      "properties": {
+        "es": { "type": "string", "pattern": "\\S" },
+        "en": { "type": "string", "pattern": "\\S" }
+      },
+      "if": { "required": ["es"] },
+      "else": { "required": ["en"] }
+    },
+    "textoONulo": {
+      "description": "Un texto por idioma, o null si no hay.",
+      "if": { "type": "null" },
+      "else": { "$ref": "#/$defs/texto" }
+    },
+    "textos": {
+      "type": "array",
+      "description": "Un texto por punto, en orden.",
+      "items": { "$ref": "#/$defs/texto" }
+    },
+    "lista": {
+      "type": "array",
+      "items": { "type": "string", "minLength": 1 }
+    },
+    "mision": {
+      "type": "object",
+      "required": [
+        "id",
+        "nombre",
+        "nivelRequerido",
+        "resumen",
+        "instrucciones",
+        "requisitos",
+        "pasos",
+        "recompensas",
+        "npcs",
+        "lugares",
+        "pokemon",
+        "sistemas",
+        "notas"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/slug",
+          "description": "Identificador estable. También es la dirección de su página: /actividades/<id>/."
+        },
+        "nombre": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Nombre canónico del juego, en inglés."
+        },
+        "nivelRequerido": { "type": ["integer", "null"], "minimum": 1 },
+        "resumen": {
+          "$ref": "#/$defs/textoONulo",
+          "description": "Primer párrafo de la página."
+        },
+        "instrucciones": {
+          "$ref": "#/$defs/textoONulo",
+          "description": "Segundo párrafo de la página."
+        },
+        "requisitos": { "$ref": "#/$defs/textos" },
+        "pasos": {
+          "$ref": "#/$defs/textos",
+          "description": "Un texto por paso, en orden y sin número: la página los numera."
+        },
+        "recompensas": { "$ref": "#/$defs/textos" },
+        "npcs": {
+          "$ref": "#/$defs/lista",
+          "description": "Nombres de los NPC, como en el juego."
+        },
+        "lugares": { "$ref": "#/$defs/lista" },
+        "pokemon": { "$ref": "#/$defs/lista" },
+        "sistemas": { "$ref": "#/$defs/lista" },
+        "notas": { "$ref": "#/$defs/textos" },
+        "sprite": {
+          "$ref": "#/$defs/spriteOpcional",
+          "description": "Opcional. Sprite de la actividad en el índice de Actividades y en el banner de su página. null mientras no exista."
+        }
+      }
+    }
+  }
+}

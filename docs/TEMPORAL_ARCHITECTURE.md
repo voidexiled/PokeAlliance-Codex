@@ -2,13 +2,12 @@
 
 ## Domain rule
 
-The currently reported PokeAlliance Server Save occurs at local midnight in Brazil. Until directly verified from an official channel, represent it as:
+PokeAlliance Server Save occurs at local midnight in Brazil. Represent it as:
 
 ```text
 localTime: 00:00:00
 timeZone: America/Sao_Paulo
 calendar: iso8601
-evidenceStatus: supported_user_provided
 ```
 
 Do not store `21:00` as the Server Save time. That is the current conversion for a visitor in `America/Monterrey` and occurs on the previous local calendar date. Offsets can change independently; named IANA zones preserve the rule.
@@ -38,7 +37,7 @@ Store:
 
 - canonical time-zone identifier (`America/Sao_Paulo`);
 - civil time and recurrence rule;
-- evidence/source and effective dates;
+- effective dates;
 - calculated occurrence instants when events are materialized;
 - user-preferred IANA time zone when explicitly chosen.
 

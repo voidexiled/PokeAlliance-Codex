@@ -1,0 +1,18 @@
+/* Note (spec 7.2.3, DS:Note), ported from the `.ac-note` block of the design system's
+   components/bundle.css. global.css imports this file with layer(components).
+
+   An italic remark of 14/22 (`note`) on `bg-secondary`, 16 of padding, radius 12,
+   justified, with its lead in bold. No border, no icon and never the `banner` red. */
+
+.ac-note {
+  margin: 0;
+  padding: var(--space-16);
+  border-radius: var(--radius-12);
+  background: var(--bg-secondary);
+  @apply type-note;
+  text-align: justify;
+}
+
+.ac-note__lead {
+  font-weight: 700;
+}

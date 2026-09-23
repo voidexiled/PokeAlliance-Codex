@@ -1,0 +1,47 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://alliance-codex.local/schemas/auras.schema.json",
+  "title": "Auras",
+  "description": "Auras que la vista previa de outfits puede dibujar sobre un Pokémon.",
+  "type": "object",
+  "required": ["auras"],
+  "additionalProperties": false,
+  "properties": {
+    "$schema": { "type": "string" },
+    "auras": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/aura" }
+    }
+  },
+  "$defs": {
+    "slug": {
+      "type": "string",
+      "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$",
+      "description": "Minúsculas, números y guiones (kebab-case)."
+    },
+    "spriteKey": {
+      "type": "string",
+      "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*(?:/[a-z0-9]+(?:-[a-z0-9]+)*)*$",
+      "description": "Clave de public/sprites/sprites.json, por ejemplo \"ui/balls/alliance-ball\"."
+    },
+    "aura": {
+      "type": "object",
+      "required": ["id", "nombre", "shader", "icono"],
+      "additionalProperties": false,
+      "properties": {
+        "id": { "$ref": "#/$defs/slug" },
+        "nombre": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Nombre canónico del juego, en inglés."
+        },
+        "shader": {
+          "description": "Shader del cliente que la vista previa reproduce.",
+          "enum": ["outfit_alliance", "outfit_rainbow"]
+        },
+        "icono": { "$ref": "#/$defs/spriteKey" },
+        "borrador": { "type": "boolean" }
+      }
+    }
+  }
+}

@@ -1,0 +1,132 @@
+---
+// ChangeTimeline (spec 8.7 step 4, 7.2.8; DS:Timeline): the changes of one month of
+// content/cambios.json, one step each, drawn with `Timeline`. The page groups the records by
+// month, orders them — `fecha` descending, then `id` — and puts each month in its `Section`;
+// this component turns the entries of one month into the steps of 8.7:
+//
+//   node    the change's own `sprite`, or the fixed key `ui/cambios` (3.13), resolved by the
+//           page (DP2). `null` is the missing mark while the registry has no such key, as the
+//           steps of a system page draw it (7.4.4, Block.astro). A pixel sprite sits at 1x in the
+//           node, as `Timeline` draws every node; an illustration, an element icon, is fitted
+//           smooth to the node of 20 (DS:Timeline «un icono de elemento a 20»);
+//   label   the date of 13.3 (`formatDate`: «18/09/2026» / «Sep 18, 2026») in the label of
+//           the dictionary, which adds its colon (T33): «18/09/2026:». `fecha` is a calendar
+//           day, not an instant, so it is read in UTC and never moves to the day before in the
+//           game's zone;
+//   text    `titulo` in the page's language;
+//   points  `puntos` in the page's language, the `<ul>` under the text (7.2.8);
+//   chips   `entidades`, in the order of the record: an entity with a panel is a
+//           `NestedEntity` chip (7.5.10) that opens its tooltip — a link when it has a page, a
+//           button when it has none (an item, §15) — and one without a panel is a text chip
+//           with no link (R2, 8.0.5). The chips carry no sprite: their name is the entity, as
+//           in the chips of a system page (Block.astro).
+//
+// Data, not lookups (DP1-DP3): the page resolves every sprite, entity and panel; the texts are
+// already in the page's language, and the label of a step and the three strings of the panels
+// come in `labels` (`changes.dateLabel` and `ui`). Nothing here reads a registry or the
+// dictionary, and nothing is drawn without entries (C-R5): the page shows the `EmptyState` of
+// 8.7 instead.
+//
+// Styles: the steps, the points and the chips are `Timeline` and `Chip`, whose rules are in the
+// shared sheet (timeline.css, chip.css, nested-entity.css). This component adds none.
+import Timeline, {
+  type TimelineChip,
+  type TimelineStep,
+} from '@/components/content/Timeline.astro';
+import type { SpriteProps } from '@/components/game/Sprite';
+import type { Locale } from '@/i18n/config';
+import { fill } from '@/i18n/messages/types';
+import { spacing } from '@/lib/design/tokens';
+import { formatDate } from '@/lib/format/dates';
+import type { TipData } from '@/lib/game/tips';
+
+/** An entity a change names (`entidades`, 3.13), resolved by the page. */
+export interface ChangeEntity {
+  /** Its name as the game writes it, the same in both languages (13.4). */
+  text: string;
+  /** Its panel (7.5.3), or `null` for an entity that has none: the chip is text (R2). */
+  tip: TipData | null;
+  /** Its page, when it has one: a Pokémon, a system. Only a chip with a panel links (R2). */
+  href?: string;
+}
+
+/** One record of content/cambios.json, in the page's language. */
+export interface ChangeEntry {
+  /** `id` of the record. */
+  id: string;
+  /** `fecha`, a valid ISO calendar day (`AAAA-MM-DD`). */
+  date: string;
+  /** `titulo` in the page's language. */
+  title: string;
+  /** `puntos` in the page's language; empty without them. */
+  points: string[];
+  /** The node sprite from the adapter; `null` draws the missing mark. */
+  sprite: SpriteProps | null;
+  /** `entidades`, in the order of the record. */
+  entities: ChangeEntity[];
+}
+
+/** The strings of the steps and of their panels (DP1). */
+export interface ChangeTimelineLabels {
+  /** `changes.dateLabel`: the label of a step, `{date}` its date with its colon (T33). */
+  dateLabel: string;
+  /** `ui.pinHint`: the strip of every panel. */
+  pinHint: string;
+  /** `ui.shiny`: the name of the Shiny mark in the head of a panel. */
+  shiny: string;
+  /** `ui.or`: the word between two price options inside a panel. */
+  or: string;
+}
+
+interface Props {
+  /** The changes of one month, in the page's order. */
+  entries: ChangeEntry[];
+  /** The page's language: the format of the dates and of the amounts inside a panel. */
+  locale: Locale;
+  labels: ChangeTimelineLabels;
+}
+
+const { entries, locale, labels } = Astro.props;
+
+/** The side of the node: `space-20` (timeline.css, `.ac-timeline__node`). */
+const NODE = Number.parseInt(spacing.space20, 10);
+
+/** `fecha` is a calendar day: read in UTC, its day never moves (see the head). */
+const DATE_ZONE = 'UTC';
+
+/** An illustration scales smoothly to the node; a pixel sprite keeps its 1x (DS:Timeline). */
+function node(sprite: SpriteProps | null): SpriteProps | null {
+  if (sprite === null || sprite.smooth !== true) return sprite;
+  const [width, height] = sprite.size ?? [NODE, NODE];
+  const side = Math.max(width, height);
+  return {
+    ...sprite,
+    width: Math.round((width * NODE) / side),
+    height: Math.round((height * NODE) / side),
+  };
+}
+
+/** R2: a panel opens from its chip; an entity without one is a text chip without a link. */
+function chip(entity: ChangeEntity): TimelineChip {
+  if (entity.tip === null) return { children: entity.text };
+  return {
+    children: entity.text,
+    tip: entity.tip,
+    ...(entity.href === undefined ? {} : { href: entity.href }),
+    locale,
+    hint: labels.pinHint,
+    shinyLabel: labels.shiny,
+    orLabel: labels.or,
+  };
+}
+
+const steps: TimelineStep[] = entries.map((entry) => ({
+  sprite: node(entry.sprite),
+  label: fill(labels.dateLabel, { date: formatDate(entry.date, locale, DATE_ZONE) }),
+  text: entry.title,
+  points: entry.points,
+  chips: entry.entities.map(chip),
+}));
+---
+
+<Timeline steps={steps} />

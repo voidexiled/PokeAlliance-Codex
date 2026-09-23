@@ -1,0 +1,55 @@
+{
+  "$schema": "../../../../content/schemas/sistemas.schema.json",
+  "id": "helds",
+  "titulo": {
+    "es": "Held Items",
+    "en": "Held Items"
+  },
+  "sprite": null,
+  "orden": 2,
+  "tooltip": [
+    {
+      "etiqueta": {
+        "es": "Tiers:",
+        "en": "Tiers:"
+      },
+      "valor": {
+        "es": "T1 a T7",
+        "en": "T1 to T7"
+      }
+    },
+    {
+      "etiqueta": {
+        "es": "Fusión:",
+        "en": "Fusion:"
+      },
+      "valor": {
+        "es": "3 Helds del mismo tier",
+        "en": "3 Helds of the same tier"
+      }
+    },
+    {
+      "etiqueta": {
+        "es": "Éxito de la fusión:",
+        "en": "Fusion success:"
+      },
+      "valor": {
+        "es": "25%",
+        "en": "25%"
+      }
+    },
+    {
+      "etiqueta": {
+        "es": "Para retirar:",
+        "en": "To remove:"
+      },
+      "valor": {
+        "es": "NPC Rosemary",
+        "en": "NPC Rosemary"
+      }
+    }
+  ],
+  "intro": [],
+  "secciones": [],
+  "borrador": true
+}

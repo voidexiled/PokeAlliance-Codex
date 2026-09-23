@@ -1,0 +1,50 @@
+/* FilterBar (spec 7.2.2, 7.7.4 V6; DS:FilterBar), ported from the `.ac-filter-bar` block
+   of the design system's components/bundle.css. global.css imports this file with
+   layer(components).
+
+   It draws nothing of its own (no card, background or border around the row): it only
+   places the filters, each with its visible label. */
+
+/* Grid (Comercio): N equal columns, 16 apart, controls aligned on their bottom edge so
+   labels of any height line up. `--ac-filter-cols` is the `columns` prop (C-R2). */
+.ac-filter-bar {
+  display: grid;
+  grid-template-columns: repeat(var(--ac-filter-cols, 4), minmax(0, 1fr));
+  gap: var(--space-16);
+  align-items: end;
+  min-width: 0;
+}
+
+/* Fill (Pokédex): selects share the width the toggle groups leave; a toggle group keeps
+   its natural width. */
+.ac-filter-bar--fill {
+  display: flex;
+  align-items: flex-end;
+}
+
+.ac-filter-bar--fill > * {
+  flex: 1 1 0;
+  min-width: 0;
+}
+
+.ac-filter-bar--fill > .ac-toggle-group {
+  flex: none;
+}
+
+/* Below `layout-bp-md` (768, spec 5.4) every filter takes the full width, one under
+   another. */
+@media (width < 48rem) {
+  .ac-filter-bar {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .ac-filter-bar--fill {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .ac-filter-bar--fill > *,
+  .ac-filter-bar--fill > .ac-toggle-group {
+    flex: none;
+  }
+}

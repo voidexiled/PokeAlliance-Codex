@@ -1,0 +1,572 @@
+{
+  "guild": "Kanto Vanguard",
+  "mundo": "sun",
+  "exportadoEl": "2026-09-18T17:32:00Z",
+  "miembros": 25,
+  "metaSemanal": 2950,
+  "inactivos": ["Morvek", "Quasar", "Umbra", "Xamã"],
+  "periodos": {
+    "hoy": {
+      "etiqueta": "Hoy, 18/09 hasta las 14:32",
+      "etiquetaAnterior": "Ayer",
+      "desde": "2026-09-18",
+      "hasta": "2026-09-18",
+      "anteriorDesde": "2026-09-17",
+      "anteriorHasta": "2026-09-17",
+      "metaDailies": 25,
+      "actual": {
+        "dailies": 13,
+        "contrib": 1180,
+        "points": 6130,
+        "active": 16
+      },
+      "anterior": {
+        "dailies": 16,
+        "contrib": 1870,
+        "points": 7720,
+        "active": 19
+      }
+    },
+    "7d": {
+      "etiqueta": "12/09 a 18/09",
+      "etiquetaAnterior": "7 días anteriores",
+      "desde": "2026-09-12",
+      "hasta": "2026-09-18",
+      "anteriorDesde": "2026-09-05",
+      "anteriorHasta": "2026-09-11",
+      "metaDailies": 175,
+      "actual": {
+        "dailies": 120,
+        "contrib": 13860,
+        "points": 57960,
+        "active": 23
+      },
+      "anterior": {
+        "dailies": 131,
+        "contrib": 14460,
+        "points": 62610,
+        "active": 25
+      }
+    },
+    "30d": {
+      "etiqueta": "20/08 a 18/09",
+      "etiquetaAnterior": "30 días anteriores",
+      "desde": "2026-08-20",
+      "hasta": "2026-09-18",
+      "anteriorDesde": "2026-07-21",
+      "anteriorHasta": "2026-08-19",
+      "metaDailies": 750,
+      "actual": {
+        "dailies": 553,
+        "contrib": 64570,
+        "points": 266620,
+        "active": 25
+      },
+      "anterior": {
+        "dailies": 606,
+        "contrib": 65000,
+        "points": 277100,
+        "active": 25
+      }
+    },
+    "rango": {
+      "etiqueta": "01/09 a 18/09, 18 días",
+      "etiquetaAnterior": "18 días anteriores",
+      "desde": "2026-09-01",
+      "hasta": "2026-09-18",
+      "anteriorDesde": "2026-08-14",
+      "anteriorHasta": "2026-08-31",
+      "metaDailies": 450,
+      "actual": {
+        "dailies": 319,
+        "contrib": 36900,
+        "points": 154500,
+        "active": 25
+      },
+      "anterior": {
+        "dailies": 351,
+        "contrib": 40130,
+        "points": 166130,
+        "active": 25
+      }
+    }
+  },
+  "porDia": [
+    {
+      "fecha": "2026-09-05",
+      "diaSemana": "Sábado",
+      "enCurso": false,
+      "puntos": 10070,
+      "dailies": 20,
+      "contribucion": 2870,
+      "conActividad": 23
+    },
+    {
+      "fecha": "2026-09-06",
+      "diaSemana": "Domingo",
+      "enCurso": false,
+      "puntos": 8860,
+      "dailies": 19,
+      "contribucion": 2110,
+      "conActividad": 22
+    },
+    {
+      "fecha": "2026-09-07",
+      "diaSemana": "Lunes",
+      "enCurso": false,
+      "puntos": 8840,
+      "dailies": 18,
+      "contribucion": 1790,
+      "conActividad": 21
+    },
+    {
+      "fecha": "2026-09-08",
+      "diaSemana": "Martes",
+      "enCurso": false,
+      "puntos": 7420,
+      "dailies": 17,
+      "contribucion": 1270,
+      "conActividad": 21
+    },
+    {
+      "fecha": "2026-09-09",
+      "diaSemana": "Miércoles",
+      "enCurso": false,
+      "puntos": 9330,
+      "dailies": 20,
+      "contribucion": 2430,
+      "conActividad": 23
+    },
+    {
+      "fecha": "2026-09-10",
+      "diaSemana": "Jueves",
+      "enCurso": false,
+      "puntos": 9190,
+      "dailies": 20,
+      "contribucion": 1840,
+      "conActividad": 22
+    },
+    {
+      "fecha": "2026-09-11",
+      "diaSemana": "Viernes",
+      "enCurso": false,
+      "puntos": 8900,
+      "dailies": 17,
+      "contribucion": 2150,
+      "conActividad": 19
+    },
+    {
+      "fecha": "2026-09-12",
+      "diaSemana": "Sábado",
+      "enCurso": false,
+      "puntos": 9050,
+      "dailies": 20,
+      "contribucion": 2300,
+      "conActividad": 22
+    },
+    {
+      "fecha": "2026-09-13",
+      "diaSemana": "Domingo",
+      "enCurso": false,
+      "puntos": 9840,
+      "dailies": 20,
+      "contribucion": 2490,
+      "conActividad": 22
+    },
+    {
+      "fecha": "2026-09-14",
+      "diaSemana": "Lunes",
+      "enCurso": false,
+      "puntos": 7890,
+      "dailies": 17,
+      "contribucion": 2040,
+      "conActividad": 20
+    },
+    {
+      "fecha": "2026-09-15",
+      "diaSemana": "Martes",
+      "enCurso": false,
+      "puntos": 8610,
+      "dailies": 17,
+      "contribucion": 2010,
+      "conActividad": 18
+    },
+    {
+      "fecha": "2026-09-16",
+      "diaSemana": "Miércoles",
+      "enCurso": false,
+      "puntos": 8720,
+      "dailies": 17,
+      "contribucion": 1970,
+      "conActividad": 20
+    },
+    {
+      "fecha": "2026-09-17",
+      "diaSemana": "Jueves",
+      "enCurso": false,
+      "puntos": 7720,
+      "dailies": 16,
+      "contribucion": 1870,
+      "conActividad": 19
+    },
+    {
+      "fecha": "2026-09-18",
+      "diaSemana": "Viernes",
+      "enCurso": true,
+      "puntos": 6130,
+      "dailies": 13,
+      "contribucion": 1180,
+      "conActividad": 16
+    }
+  ],
+  "porSemana": [
+    {
+      "desde": "2026-08-17",
+      "hasta": "2026-08-23",
+      "enCurso": false,
+      "puntos": 64150,
+      "dailies": 139,
+      "contribucion": 14800,
+      "conActividad": 25,
+      "nivelesGanados": 16,
+      "metaCumplida": 8
+    },
+    {
+      "desde": "2026-08-24",
+      "hasta": "2026-08-30",
+      "enCurso": false,
+      "puntos": 66340,
+      "dailies": 135,
+      "contribucion": 16990,
+      "conActividad": 25,
+      "nivelesGanados": 15,
+      "metaCumplida": 6
+    },
+    {
+      "desde": "2026-08-31",
+      "hasta": "2026-09-06",
+      "enCurso": false,
+      "puntos": 62290,
+      "dailies": 127,
+      "contribucion": 15490,
+      "conActividad": 25,
+      "nivelesGanados": 10,
+      "metaCumplida": 7
+    },
+    {
+      "desde": "2026-09-07",
+      "hasta": "2026-09-13",
+      "enCurso": false,
+      "puntos": 62570,
+      "dailies": 132,
+      "contribucion": 14270,
+      "conActividad": 24,
+      "nivelesGanados": 12,
+      "metaCumplida": 7
+    },
+    {
+      "desde": "2026-09-14",
+      "hasta": "2026-09-18",
+      "enCurso": true,
+      "puntos": 39070,
+      "dailies": 80,
+      "contribucion": 9070,
+      "conActividad": 22,
+      "nivelesGanados": 3,
+      "diaDeLaSemana": 5,
+      "enRitmo": 7
+    }
+  ],
+  "comparacionSemanal": {
+    "dias": 4,
+    "actual": {
+      "dailies": 67,
+      "contrib": 7890,
+      "points": 32940,
+      "active": 22
+    },
+    "anterior": {
+      "dailies": 75,
+      "contrib": 7330,
+      "points": 34780,
+      "active": 24
+    }
+  },
+  "porMiembro": [
+    {
+      "nombre": "Arkanjo",
+      "rango": "Leader",
+      "nivel": 512,
+      "hoy": 880,
+      "dias7": 5460,
+      "dias7Anteriores": 6300,
+      "dias30": 24440,
+      "serie14": [1300, 1020, 670, 810, 1020, 740, 740, 1020, 600, 600, 880, 810, 670, 880],
+      "ultimaActividadHaceDias": 0
+    },
+    {
+      "nombre": "Bruma",
+      "rango": "Vice-Leader",
+      "nivel": 468,
+      "hoy": 0,
+      "dias7": 4690,
+      "dias7Anteriores": 4790,
+      "dias30": 20120,
+      "serie14": [600, 600, 710, 650, 760, 650, 820, 820, 650, 710, 930, 650, 930, 0],
+      "ultimaActividadHaceDias": 1
+    },
+    {
+      "nombre": "Caeli",
+      "rango": "Vice-Leader",
+      "nivel": 431,
+      "hoy": 120,
+      "dias7": 3960,
+      "dias7Anteriores": 3660,
+      "dias30": 18600,
+      "serie14": [600, 120, 720, 120, 600, 780, 720, 240, 720, 780, 660, 1200, 240, 120],
+      "ultimaActividadHaceDias": 0
+    },
+    {
+      "nombre": "Dravek",
+      "rango": "Vice-Leader",
+      "nivel": 377,
+      "hoy": 640,
+      "dias7": 3820,
+      "dias7Anteriores": 4870,
+      "dias30": 17180,
+      "serie14": [600, 600, 730, 600, 690, 600, 1050, 600, 600, 90, 600, 600, 690, 640],
+      "ultimaActividadHaceDias": 0
+    },
+    {
+      "nombre": "Elowen",
+      "rango": "Member",
+      "nivel": 402,
+      "hoy": 600,
+      "dias7": 5300,
+      "dias7Anteriores": 5400,
+      "dias30": 22350,
+      "serie14": [1100, 600, 700, 600, 900, 800, 700, 900, 900, 750, 750, 600, 800, 600],
+      "ultimaActividadHaceDias": 0
+    },
+    {
+      "nombre": "Fenrir",
+      "rango": "Member",
+      "nivel": 356,
+      "hoy": 740,
+      "dias7": 3760,
+      "dias7Anteriores": 3910,
+      "dias30": 16220,
+      "serie14": [700, 670, 600, 600, 70, 600, 670, 100, 950, 0, 670, 700, 600, 740],
+      "ultimaActividadHaceDias": 0
+    },
+    {
+      "nombre": "Gael Stone",
+      "rango": "Member",
+      "nivel": 344,
+      "hoy": 0,
+      "dias7": 1800,
+      "dias7Anteriores": 1220,
+      "dias30": 8500,
+      "serie14": [300, 0, 0, 540, 0, 0, 380, 540, 80, 160, 420, 300, 300, 0],
+      "ultimaActividadHaceDias": 1
+    },
+    {
+      "nombre": "Hikari",
+      "rango": "Member",
+      "nivel": 318,
+      "hoy": 300,
+      "dias7": 2400,
+      "dias7Anteriores": 2150,
+      "dias30": 10700,
+      "serie14": [50, 400, 300, 300, 350, 300, 450, 300, 400, 300, 400, 350, 350, 300],
+      "ultimaActividadHaceDias": 0
+    },
+    {
+      "nombre": "Ivory",
+      "rango": "Member",
+      "nivel": 297,
+      "hoy": 50,
+      "dias7": 1440,
+      "dias7Anteriores": 1850,
+      "dias30": 8690,
+      "serie14": [450, 300, 350, 100, 350, 300, 0, 300, 400, 320, 300, 50, 20, 50],
+      "ultimaActividadHaceDias": 0
+    },
+    {
+      "nombre": "Jubileu",
+      "rango": "Member",
+      "nivel": 289,
+      "hoy": 340,
+      "dias7": 3580,
+      "dias7Anteriores": 2680,
+      "dias30": 11720,
+      "serie14": [390, 300, 340, 480, 390, 390, 390, 570, 480, 570, 300, 750, 570, 340],
+      "ultimaActividadHaceDias": 0
+    },
+    {
+      "nombre": "Kairos",
+      "rango": "Member",
+      "nivel": 266,
+      "hoy": 300,
+      "dias7": 1920,
+      "dias7Anteriores": 2100,
+      "dias30": 8220,
+      "serie14": [60, 390, 390, 0, 360, 300, 600, 300, 480, 480, 0, 360, 0, 300],
+      "ultimaActividadHaceDias": 0
+    },
+    {
+      "nombre": "Lunna",
+      "rango": "Member",
+      "nivel": 251,
+      "hoy": 300,
+      "dias7": 2020,
+      "dias7Anteriores": 3470,
+      "dias30": 12230,
+      "serie14": [520, 850, 410, 350, 630, 300, 410, 300, 520, 300, 300, 300, 0, 300],
+      "ultimaActividadHaceDias": 0
+    },
+    {
+      "nombre": "Morvek",
+      "rango": "Member",
+      "nivel": 238,
+      "hoy": 0,
+      "dias7": 760,
+      "dias7Anteriores": 860,
+      "dias30": 5760,
+      "serie14": [40, 80, 300, 40, 40, 60, 300, 320, 60, 380, 0, 0, 0, 0],
+      "ultimaActividadHaceDias": 4
+    },
+    {
+      "nombre": "Nereida",
+      "rango": "Member",
+      "nivel": 224,
+      "hoy": 420,
+      "dias7": 1940,
+      "dias7Anteriores": 2280,
+      "dias30": 9820,
+      "serie14": [0, 540, 420, 300, 300, 420, 300, 300, 460, 380, 0, 80, 300, 420],
+      "ultimaActividadHaceDias": 0
+    },
+    {
+      "nombre": "Orion",
+      "rango": "Member",
+      "nivel": 212,
+      "hoy": 510,
+      "dias7": 2420,
+      "dias7Anteriores": 2500,
+      "dias30": 10290,
+      "serie14": [440, 440, 510, 440, 300, 370, 0, 400, 370, 0, 400, 370, 370, 510],
+      "ultimaActividadHaceDias": 0
+    },
+    {
+      "nombre": "Pietra",
+      "rango": "Member",
+      "nivel": 199,
+      "hoy": 0,
+      "dias7": 2130,
+      "dias7Anteriores": 3450,
+      "dias30": 11830,
+      "serie14": [750, 390, 480, 300, 570, 570, 390, 0, 480, 480, 480, 390, 300, 0],
+      "ultimaActividadHaceDias": 1
+    },
+    {
+      "nombre": "Quasar",
+      "rango": "Member",
+      "nivel": 187,
+      "hoy": 0,
+      "dias7": 390,
+      "dias7Anteriores": 1040,
+      "dias30": 4710,
+      "serie14": [300, 390, 0, 0, 10, 10, 330, 390, 0, 0, 0, 0, 0, 0],
+      "ultimaActividadHaceDias": 6
+    },
+    {
+      "nombre": "Ravena",
+      "rango": "Member",
+      "nivel": 176,
+      "hoy": 360,
+      "dias7": 2430,
+      "dias7Anteriores": 2520,
+      "dias30": 9960,
+      "serie14": [330, 300, 600, 300, 330, 600, 60, 390, 420, 360, 300, 300, 300, 360],
+      "ultimaActividadHaceDias": 0
+    },
+    {
+      "nombre": "Solano",
+      "rango": "Member",
+      "nivel": 163,
+      "hoy": 70,
+      "dias7": 2160,
+      "dias7Anteriores": 1740,
+      "dias30": 7850,
+      "serie14": [300, 300, 300, 0, 330, 370, 140, 440, 370, 100, 440, 370, 370, 70],
+      "ultimaActividadHaceDias": 0
+    },
+    {
+      "nombre": "Tupã",
+      "rango": "Member",
+      "nivel": 151,
+      "hoy": 350,
+      "dias7": 1800,
+      "dias7Anteriores": 2250,
+      "dias30": 8450,
+      "serie14": [550, 0, 50, 350, 550, 450, 300, 300, 300, 300, 0, 300, 250, 350],
+      "ultimaActividadHaceDias": 0
+    },
+    {
+      "nombre": "Umbra",
+      "rango": "Member",
+      "nivel": 142,
+      "hoy": 0,
+      "dias7": 0,
+      "dias7Anteriores": 320,
+      "dias30": 1610,
+      "serie14": [0, 150, 10, 10, 150, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+      "ultimaActividadHaceDias": 9
+    },
+    {
+      "nombre": "Vesper",
+      "rango": "Member",
+      "nivel": 131,
+      "hoy": 150,
+      "dias7": 1620,
+      "dias7Anteriores": 750,
+      "dias30": 6090,
+      "serie14": [150, 30, 30, 180, 180, 180, 0, 150, 210, 240, 450, 180, 240, 150],
+      "ultimaActividadHaceDias": 0
+    },
+    {
+      "nombre": "Wanda",
+      "rango": "Member",
+      "nivel": 118,
+      "hoy": 0,
+      "dias7": 1170,
+      "dias7Anteriores": 1330,
+      "dias30": 5730,
+      "serie14": [220, 220, 220, 200, 300, 170, 0, 220, 200, 400, 100, 0, 250, 0],
+      "ultimaActividadHaceDias": 1
+    },
+    {
+      "nombre": "Xamã",
+      "rango": "Member",
+      "nivel": 104,
+      "hoy": 0,
+      "dias7": 0,
+      "dias7Anteriores": 170,
+      "dias30": 1590,
+      "serie14": [170, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+      "ultimaActividadHaceDias": 13
+    },
+    {
+      "nombre": "Yoru",
+      "rango": "Member",
+      "nivel": 96,
+      "hoy": 0,
+      "dias7": 990,
+      "dias7Anteriores": 1000,
+      "dias30": 3960,
+      "serie14": [150, 170, 0, 150, 150, 230, 150, 150, 190, 190, 230, 60, 170, 0],
+      "ultimaActividadHaceDias": 1
+    }
+  ]
+}

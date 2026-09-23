@@ -1,12 +1,24 @@
 ---
-import AppLayout from '../../../layouts/AppLayout.astro';
-import { MapExplorer } from '../../../components/map/MapExplorer';
-import { getLocale, locales, type Locale } from '../../../i18n/config';
-import {
-  clientMapPreview,
-  clientMinimapFlags,
-  clientMinimapSource,
-} from '../../../lib/map/client-map';
+// Mapa (spec 8.11, R9, A11): the placeholder of the map until its own cut, on template E of
+// 8.0.2 with PageLayout, prerendered and `noindex` (13.5). The crumbs «Herramientas › Mapa» —
+// the group crumb links to its index, /{l}/herramientas/ (8.0.4) —, the `PageTitle` and the one
+// line of `EmptyState`; PageLayout adds the footer. Nothing else: no canvas, image, button or
+// island (MP1), and no promise of an interactive map (§12.15).
+//
+// The explorer is no longer rendered here (R9): `MapExplorer`, content/map/* and src/lib/map/*
+// stay in the repository, unused, for the map cut (§15). /{l}/mapa/aportar/ redirects to this
+// page (A1).
+//
+// Text (13.2): the h1, the empty line and the description are `messages.map`, and the group
+// crumb is the h1 of that index, `messages.tools.title`.
+import { getAlternatePath, getLocale, locales, type Locale } from '@/i18n/config';
+import type { Messages } from '@/i18n/messages/en';
+import { en } from '@/i18n/messages/en';
+import { es } from '@/i18n/messages/es';
+
+import { EmptyState } from '@/components/content/EmptyState';
+import { PageTitle } from '@/components/layout/PageTitle';
+import PageLayout from '@/layouts/PageLayout.astro';
 
 export const prerender = true;
 
@@ -14,66 +26,25 @@ export function getStaticPaths() {
   return locales.map((locale) => ({ params: { locale } }));
 }
 
-const locale = getLocale(Astro.params.locale) as Locale;
-const copy =
-  locale === 'es'
-    ? {
-        title: 'Mapa del cliente',
-        description:
-          'Preview interactivo de coordenadas y marcadores observados en el cliente de PokeAlliance.',
-        eyebrow: 'Herramientas / Mapa',
-        intro:
-          'Explora los marcadores disponibles por piso y consulta sus coordenadas. Esta primera vista representa la capa observada del cliente; todavía no es un mapa semántico completo del mundo.',
-        source:
-          '119 marcadores extraídos de Minimap.flags. Las etiquetas y coordenadas conservan la procedencia de la configuración local revisada.',
-        contribute: 'Aportar al mapa',
-        contributeDescription: 'Formato para enviar observaciones sin publicarlas automáticamente.',
-      }
-    : {
-        title: 'Client map',
-        description:
-          'Interactive preview of coordinates and markers observed in the PokeAlliance client.',
-        eyebrow: 'Tools / Map',
-        intro:
-          'Explore available markers by floor and inspect their coordinates. This first view represents the client-observed layer; it is not yet a complete semantic world map.',
-        source:
-          '119 markers extracted from Minimap.flags. Labels and coordinates retain the provenance of the reviewed local configuration.',
-        contribute: 'Contribute to the map',
-        contributeDescription:
-          'Format for sending observations without publishing them automatically.',
-      };
+const dictionaries: Record<Locale, Messages> = { es, en };
+
+const locale = getLocale(Astro.params.locale);
+const path = Astro.url.pathname;
+const alternates = Object.fromEntries(
+  locales.map((option) => [option, getAlternatePath(path, option)]),
+) as Record<Locale, string>;
+
+const { map, tools } = dictionaries[locale];
 ---
 
-<AppLayout locale={locale} title="Mapa" description={copy.description}>
-  <div>
-    <nav
-      class="wiki-breadcrumbs"
-      aria-label={locale === 'es' ? 'Ruta de navegación' : 'Breadcrumb'}
-    >
-      <a href={`/${locale}/`}>{locale === 'es' ? 'Inicio' : 'Home'}</a>
-      <span class="wiki-breadcrumb-separator">/</span>
-      <a href={`/${locale}/herramientas/`}>{locale === 'es' ? 'Herramientas' : 'Tools'}</a>
-      <span class="wiki-breadcrumb-separator">/</span>
-      <span>{copy.title}</span>
-    </nav>
-    <header class="wiki-page-header">
-      <p class="eyebrow">{copy.eyebrow}</p>
-      <h1 class="display-title">{copy.title}</h1>
-      <p class="muted-copy">{copy.intro}</p>
-      <p class="mt-4 text-xs text-muted-foreground">{copy.source}</p>
-      <a
-        class="mt-5 inline-block text-sm text-accent underline-offset-4 hover:underline"
-        href={`/${locale}/mapa/aportar/`}>{copy.contribute} · {copy.contributeDescription} →</a
-      >
-    </header>
-    <section class="wiki-section" aria-label={copy.title}>
-      <MapExplorer
-        flags={clientMinimapFlags}
-        mapPreview={clientMapPreview}
-        locale={locale}
-        sourceSnapshot={clientMinimapSource.sourceSnapshot}
-        client:load
-      />
-    </section>
-  </div>
-</AppLayout>
+<PageLayout
+  locale={locale}
+  title={map.title}
+  description={map.description}
+  alternates={alternates}
+  breadcrumb={[{ label: tools.title, href: `/${locale}/herramientas/` }, { label: map.title }]}
+  noindex
+>
+  <PageTitle title={map.title} />
+  <EmptyState>{map.empty}</EmptyState>
+</PageLayout>

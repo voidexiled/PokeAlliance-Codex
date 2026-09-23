@@ -1,0 +1,81 @@
+/* PeriodFilter (spec 10.6; DS:PeriodFilter), ported from the `.ac-period-filter` block of the
+   design system's components/bundle.css: the period toggles of the Guild «Resumen», the
+   «Desde» / «Hasta» fields of «Rango» and the period written out on the right.
+
+   Per-page stylesheet (D-018, §13.6): only the Guild page draws it, so global.css does not
+   import it; src/components/guild/PeriodFilter.tsx does. It repeats the layer order of
+   global.css before its block (§3.6), and `@reference` brings the text styles of theme.css.
+
+   One addition: a field the island rejected (`aria-invalid`, 10.6) takes the `banner` red on
+   its border, doubled by a 1 px ring like the selected state, so the mark does not depend on
+   a hue alone; forced colors draw it 2 px in `Highlight`. */
+
+@reference '../theme.css';
+
+@layer properties, theme, base, components, utilities;
+
+@layer components {
+  .ac-period-filter {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-16);
+  }
+
+  .ac-period-filter__controls {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-16);
+  }
+
+  .ac-period-filter__range {
+    display: flex;
+    align-items: center;
+    gap: var(--space-8);
+  }
+
+  .ac-period-filter__label {
+    @apply type-ui;
+    color: var(--text-tertiary);
+  }
+
+  /* 120 px date field (no token holds it). */
+  .ac-period-filter__input {
+    display: block;
+    width: 120px; /* sin token: campo de fecha dd/mm/aaaa */
+    height: var(--size-control);
+    padding: var(--space-6) var(--space-12);
+    border: 1px solid var(--border-secondary);
+    border-radius: var(--radius-11);
+    background: var(--bg-primary);
+    color: var(--text-primary);
+    @apply type-ui;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .ac-period-filter__input[aria-invalid='true'] {
+    border-color: var(--banner);
+    box-shadow: 0 0 0 1px var(--banner);
+  }
+
+  .ac-period-filter__summary {
+    margin: 0;
+    @apply type-ui;
+    color: var(--text-tertiary);
+    font-variant-numeric: tabular-nums;
+  }
+
+  @media (pointer: coarse) {
+    .ac-period-filter__input {
+      height: var(--size-touch);
+    }
+  }
+
+  @media (forced-colors: active) {
+    .ac-period-filter__input[aria-invalid='true'] {
+      border: 2px solid Highlight;
+    }
+  }
+}

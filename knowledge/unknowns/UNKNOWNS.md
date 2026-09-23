@@ -1,70 +1,43 @@
-# Unknown Dataset
+# Open Questions
 
-## UK-001 — Official structured export/API
+Game facts that are still unknown. The matching values stay `null` in `content/` until the owner decides them.
 
-- Domain: sources/imports
-- Status: `partially_supported`
-- Known: the administrator-maintained wiki currently exposes public `/api/pokemon`, `/api/page/:path` and `/api/search` resources. The roster resource is suitable for identity/variant staging and currently returns 910 rows.
-- Missing: a documented versioned contract, change policy, complete field coverage and structured endpoints for locations, coordinates and all game systems.
-- Leads: page payloads, route manifests, public endpoint refresh profiles or administrator-provided exports.
+## UK-001 — Structured export from the official wiki
+
+The administrator-maintained wiki exposes `/api/pokemon`, `/api/page/:path` and `/api/search`. `/api/pokemon` returns the 910-row roster used by `pnpm content:roster`. There is no documented, versioned export for locations, coordinates or the game systems.
 
 ## UK-002 — Variant identity rules
 
-- Domain: Pokémon
-- Status: `unknown`
-- Need: determine whether Shiny, Mega and other forms have independent game IDs, inherited fields or separate availability/tier rules.
+Whether Shiny, Mega and other forms have their own game ids, inherit fields, or follow separate availability and tier rules.
 
-## UK-003 — Tier semantics and ownership
+## UK-003 — Tier semantics
 
-- Domain: tiers
-- Status: `unknown`
-- Need: exact current tier labels, whether they are official or community analysis, and how variant/tactical context affects them.
+The exact current tier labels, whether they come from the game or from community analysis, and how variant or tactical context changes them.
 
-## UK-004 — Move/AoE mechanics
+## UK-004 — Move and AoE mechanics
 
-- Domain: moves
-- Status: `unknown`
-- Need: exact move identity, shape, range, cooldown, target and effect semantics.
+Exact move identity, shape, range, cooldown, target and effect semantics.
 
-## UK-005 — Current trade rules
+## UK-005 — Trade rules
 
-- Domain: marketplace/economy
-- Status: `unknown`
-- Known lead: main site advertises “RMT Enabled”.
-- Missing: current permitted assets, channels, prohibited conduct, dispute/moderation rules and whether a third-party listing directory is allowed.
+Which assets and channels are allowed, what is prohibited, dispute and moderation rules, and whether a third-party listing directory is allowed. See U-006 in `docs/RISKS_AND_UNKNOWNS.md` and D-009.
 
-## UK-006 — Reuse licenses
+## UK-006 — Reuse rights
 
-- Domain: legal/assets/data
-- Status: `partially_supported_user_provided`
-- Known: supplied Discord rule 6 permits use of the client and wiki information to build community wikis and tools, and encourages contributions to community knowledge.
-- Need: direct Discord message metadata and clarification of redistribution rights for complete client files, logos, music, sprites, maps and other third-party assets.
+Discord rule 6 allows using client and wiki information to build community wikis and tools (`knowledge/rules/discord-rules.md`). Redistribution rights for complete client files, logos, music, sprites, maps and other third-party assets are not established.
 
-## UK-007 — Canonical localization inventory
+## UK-007 — Localized game names
 
-- Domain: localization
-- Status: `unknown`
-- Need: identify any entity names that PokeAlliance itself localizes and the context/version in which each name is used.
+Which entity names PokeAlliance itself localizes, and in which context.
 
-## UK-008 — Discord changelog authorization and identity
+## UK-008 — Discord changelog access
 
-- Domain: sources/imports
-- Status: `deferred_optional`
-- Current decision: changelog ingestion is manual because bot access to the official Discord is not available.
-- Future need only if automation is revisited: guild ID, changelog channel ID/type, message-history scope and administrator authorization.
-- Active path: moderated manual import with message link/ID and timestamps when available.
+Changelog entries are entered by hand because bot access to the official Discord is not available. Automation would need the guild and channel ids, message-history scope and administrator authorization.
 
-## UK-009 — Server Save rule verification
+## UK-009 — Server Save rule
 
-- Domain: temporal/game operations
-- Status: `supported_user_provided`
-- Candidate rule: `00:00` in `America/Sao_Paulo`; currently `21:00` on the previous date in `America/Monterrey`.
-- Need: direct official Discord/site evidence, effective date and notice of future changes.
+The site uses `00:00` in `America/Sao_Paulo` (currently `21:00` of the previous day in `America/Monterrey`). A change announced by the game must be applied in `src/lib/time/server-save.ts`.
 
 ## UK-010 — Pokémon location payload behind “Buscar localização”
 
-- Domain: map/Pokédex/imports
-- Status: `unknown`
-- Supported boundary: the local client exposes separate Pokédex, Hunt Finder, Item Locator and Minimap surfaces, and the public wiki exposes a roster API plus a semantic teleport/destination guide. A second read-only sweep across the installed resources, client-binary strings and owner-authorized `config.otml` still yielded no inspectable Pokémon `(x, y, z)` payload; public roster records, sampled detail payloads and pinned community location datasets also lack it. The teleport guide supplies aliases and travel semantics, not coordinates.
-- Need: a permitted client-visible capture/export, a public endpoint/resource discovered during an ordinary lookup, or a reviewed player contribution containing coordinates and floor.
-- Do not infer: an area label, screenshot link or colored OTMM tile is not automatically a coordinate-level spawn claim.
+The client has separate Pokédex, Hunt Finder, Item Locator and Minimap surfaces. Read-only sweeps of the installed resources, client-binary strings and `config.otml` found no readable Pokémon `(x, y, z)` payload, and neither the public roster, sampled detail pages nor community location datasets contain one. The teleport guide gives names and travel rules, not coordinates. An area label, screenshot link or colored OTMM tile is not a coordinate-level spawn.

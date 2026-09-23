@@ -1,0 +1,69 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://alliance-codex.local/schemas/outfits.schema.json",
+  "title": "Outfits de Pokémon y sus addons",
+  "description": "Outfit del cliente de cada Pokémon. Los addons también son outfits.",
+  "type": "object",
+  "required": ["outfits"],
+  "additionalProperties": false,
+  "properties": {
+    "$schema": { "type": "string" },
+    "outfits": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/outfit" }
+    }
+  },
+  "$defs": {
+    "slug": {
+      "type": "string",
+      "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$",
+      "description": "Minúsculas, números y guiones (kebab-case)."
+    },
+    "spriteKey": {
+      "type": "string",
+      "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*(?:/[a-z0-9]+(?:-[a-z0-9]+)*)*$",
+      "description": "Clave de public/sprites/sprites.json, por ejemplo \"outfits/1005\"."
+    },
+    "outfitId": {
+      "type": "integer",
+      "minimum": 1,
+      "description": "ID del outfit en el .dat del cliente."
+    },
+    "outfit": {
+      "type": "object",
+      "required": ["pokemon", "outfitId", "addons"],
+      "additionalProperties": false,
+      "properties": {
+        "pokemon": {
+          "$ref": "#/$defs/slug",
+          "description": "ID del Pokémon en content/pokemon.json. Su sprite es \"outfits/<outfitId>\"."
+        },
+        "outfitId": { "$ref": "#/$defs/outfitId" },
+        "addons": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/addon" }
+        },
+        "borrador": { "type": "boolean" }
+      }
+    },
+    "addon": {
+      "type": "object",
+      "required": ["id", "nombre", "outfitId", "sprite"],
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/slug",
+          "description": "Identificador único entre todos los addons."
+        },
+        "nombre": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Nombre canónico del juego, en inglés."
+        },
+        "outfitId": { "$ref": "#/$defs/outfitId" },
+        "sprite": { "$ref": "#/$defs/spriteKey" },
+        "borrador": { "type": "boolean" }
+      }
+    }
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "$schema": "../../../content/schemas/auras.schema.json",
+  "auras": [
+    {
+      "id": "alliance",
+      "nombre": "Alliance",
+      "shader": "outfit_alliance",
+      "icono": "ui/balls/alliance-ball"
+    },
+    {
+      "id": "premier",
+      "nombre": "Premier",
+      "shader": "outfit_rainbow",
+      "icono": "ui/balls/premier-ball"
+    }
+  ]
+}

@@ -1,99 +1,70 @@
 # Data Strategy
 
-Status: Phase 2 foundation. For the definitive relational model, canonical record contract and migration mapping, see [DATA_MODEL.md](DATA_MODEL.md). This file remains the pipeline and provenance rationale behind that model.
+Status: rewritten on 2026-09-18 for D-011 (owner-editable registries) and D-012 (no provenance). The relational model is in [DATA_MODEL.md](DATA_MODEL.md).
 
-## Pipeline
+## Where game data lives
+
+Game data is JSON under `content/`, edited by hand by the owner or updated by small importers. The site reads it at build time through typed readers in `src/lib/content/` and `src/lib/map/`. There is no raw, staging or normalized layer in between.
 
 ```text
-Public evidence
-  → raw research records
-  → source-specific staging records
-  → canonical normalized datasets
-  → application database and static build inputs
+content/*.json  →  src/lib/content, src/lib/map  →  prerendered pages
 ```
 
-Each boundary is explicit. Raw records preserve what a source said; staging reflects a parser; normalized records express Alliance Codex conclusions; the application database serves product access patterns. A correction in one layer must remain traceable backward.
+Current files:
+
+| File | Contents |
+| --- | --- |
+| `content/pokemon.json` | 910 Pokémon variants: `id`, `nombre`, `numero`, `generacion`, `variante`, `nivel`, `tier`, `funcion`, `elementos`, `imagen` |
+| `content/moves.json` | Moves: element, slot, cooldown in seconds, mode and the Pokémon that learn them |
+| `content/system-items.json` | Items tied to a game system |
+| `content/quests.json` | Quests: required level, steps, rewards, NPCs, places |
+| `content/locations.json` | Places and travel connections |
+| `content/rotations.json` | Availability of Pokémon categories by area |
+| `content/map/markers.json` | Minimap markers (`x`, `y`, `z`, icon, description) |
+| `content/map/floors.json` | Map base floors: image, size and coordinate bounds |
+| `content/items/categorias.json` | The 14 Market categories in client order; `todo` is virtual |
+| `content/items/<categoria>.json` | Items of one Market category: `id`, `nombre`, `clientId`, `categoria`, `sprite`, `apilable`, `precioNpc` |
+| `content/outfits.json` | Outfit id of each Pokémon and its addons (addons are outfits) |
+| `content/auras.json` | Auras of the outfit preview and the client shader each one uses |
+| `public/sprites/sprites.json` | Sprite registry: image, frame size, frame count and mode per key |
+
+Every file in the table carries `"$schema"` pointing at `content/schemas/*.schema.json` (JSON Schema 2020-12, no unknown fields) so VS Code autocompletes it. `pnpm content:check` validates all of them: schemas, unique ids, the 14 Market categories and their order, category, sprite and Pokémon references, image files and PNG sizes (sprites and map floors); it prints record and draft counts per file. The build parses every file again with the Zod mirrors, so a malformed file stops it. The owner's guide is [REGISTROS.md](REGISTROS.md).
+
+## Record rules
+
+- Keys are in Spanish. Canonical game names stay in English, exactly as the game shows them.
+- `id` is a stable lowercase kebab-case slug. It does not depend on locale and does not change after publication; a corrected name becomes an alias.
+- Unknown values are `null`; the UI shows `—`. Never store `0`, an empty string or a guess for an unknown value. An empty array means "none" only when that is known.
+- Placeholder records carry `"borrador": true`. They are shown by default; a build flag can hide them in production.
+- No provenance (D-012): no source, evidence, claim, status, confidence, retrieval/verification timestamps or source hashes in any record.
+- Game data and Alliance Codex analysis stay apart: recommendations and tactical opinions go into editorial content, not into game fields.
 
 ## Identity
 
-Domain entities use opaque or namespaced stable IDs plus stable canonical slugs. Names are attributes, never primary keys. Variants/forms are modeled explicitly after research determines their identity rules; they are not flattened into arbitrary display strings.
-
-Conceptual entity name fields:
-
-```ts
-type EntityName = {
-  canonicalName: string;
-  aliases: string[];
-  searchKeywords: Partial<Record<'es' | 'en', string[]>>;
-  localizedNames?: Partial<Record<'es' | 'en', {
-    value: string;
-    sourceEvidenceId: string;
-  }>>;
-};
-```
-
-`localizedNames` is optional and evidence-backed. It is not a license to translate game terms automatically.
-
-## Facts, provenance and uncertainty
-
-A material normalized fact needs:
-
-- subject/entity and field or relationship;
-- normalized value;
-- evidence references;
-- verification status (`confirmed`, `supported`, `inferred`, `unknown`, `conflicted`, `deprecated`);
-- confidence rationale, not only a number;
-- observed/verified timestamps;
-- optional effective version/range;
-- normalizer version.
-
-Missing values remain `null` with an associated unknown record where meaningful. `null`, absent and “not applicable” are distinct. Inference is permitted only when labeled, reasoned and never rendered as confirmed.
+Entities use stable slugs. Names are attributes, never keys. Variants and forms are explicit records (`normal`, `shiny`, later `mega` and others); they are not flattened into display strings. Two entities of different types may share a name; the non-Pokémon one then gets a type qualifier in its slug (`kecleon-shop`).
 
 ## Localization architecture
 
 The system separates `contentLocale` from `gameTerminologyMode`. Initial locales are `es` and `en`; canonical terminology is the only initial terminology mode. Configuration owns `defaultLocale`, `supportedLocales` and `fallbackLocale`.
 
-One entity is shared by all locales. Editorial resources use translations keyed by locale and can track `original`, `translated`, `reviewed`, `needs_review` or `outdated`. Fallback returns existing authored content and can disclose the mismatch; it never synthesizes a translation silently.
+One entity is shared by all locales. Editorial resources use translations keyed by locale and can track `original`, `translated`, `reviewed`, `needs_review` or `outdated`. Fallback returns existing authored content and can disclose the mismatch; it never synthesizes a translation silently. A localized game name is used only when the game itself uses it.
 
-Entity slugs remain canonical across `/es/` and `/en/`. Editorial slugs may be localized if Phase 2 confirms a clean redirect/canonical strategy. HTML language, localized metadata, canonical links, hreflang, Open Graph and sitemap alternates are generated centrally.
+Entity slugs remain canonical across `/es/` and `/en/`. HTML language, localized metadata, canonical links, hreflang, Open Graph and sitemap alternates are generated centrally.
 
 ## Structured editorial references
 
-Editorial content should reference game entities by stable ID when it adds navigational or correctness value, for example `item:oran-berry` or an equivalent AST node. The authoring format is deferred until Phase 2; plain text remains acceptable where structure adds no value. Broken reference validation is mandatory once the format is selected.
+Editorial content references game entities by stable id when it adds navigational or correctness value, for example `item:oran-berry`. Plain text remains acceptable where structure adds no value. Broken references fail validation once the authoring format is selected.
 
-## Proposed dataset envelopes
+## Imports
 
-Every dataset includes schema version, generated timestamp, generator/importer version and source snapshot IDs. Records sort deterministically. JSON Schema (or a generated equivalent) validates interchange data; Zod will validate runtime boundaries once the application exists.
-
-Candidate normalized families—not final database tables—are:
-
-- entities: Pokémon, forms/variants, moves, items, held items, locations, NPCs, quests, hunts;
-- mechanics: elements, effects, boosts, stars, utilities, acquisition/drop rules;
-- analysis: tactical roles, rotation eligibility and tier assertions with methodology;
-- editorial: guides and localized content units;
-- governance: sources, evidence, claims, conflicts, unknowns and terminology.
-
-## Database consolidation rules
-
-PostgreSQL design waits for representative Phase 1 samples. Phase 2 will choose table boundaries from actual cardinality, query and correction patterns. JSONB is acceptable for source payloads and genuinely irregular evidence, not as a substitute for understood relational structure. No locale-specific duplicate entity tables are allowed.
-
-## Imports and manual correction
-
-Importers are idempotent and never write directly to curated normalized files or production tables. Manual curation uses explicit override records with author, reason, timestamp and superseded evidence. Import diffs must not erase curated decisions silently.
+Importers are small Node scripts that write to `content/` directly. They are idempotent, never remove records and keep values edited by hand unless the owner asks to overwrite them. `scripts/content/import-roster.mjs` (`pnpm content:roster`) follows this rule for the Pokémon roster; `--overwrite` replaces imported fields and `--dry-run` only prints the counts.
 
 ## Fixtures
 
-Synthetic fixtures are stored outside research/normalized data, visibly marked `fixture`, and use invented neutral values that cannot be mistaken for PokeAlliance facts. UI builds never promote them into source-backed content.
+Synthetic test fixtures live under `tests/fixtures/`, are visibly labeled and use invented values. They never enter `content/`.
 
-## Validation and release controls
+## Validation
 
-- Syntax/schema validation.
-- Stable ID and unique slug checks.
-- Referential integrity and allowed enum checks.
-- Every publishable material claim has provenance.
-- Locale and canonical-name policy checks.
-- Conflict/unknown counts and coverage deltas.
-- Large-change thresholds requiring review.
-- Deterministic regeneration check.
-
-No dataset becomes application-ready merely because it parses.
+- `pnpm check`, `pnpm lint` and `pnpm test` (the content readers have unit tests).
+- `pnpm build` prerenders every page from `content/`.
+- `pnpm content:check` validates every file in `content/` and the sprite registry against its JSON Schema, plus unique ids and cross-file references. It is the first step of `pnpm ci`.

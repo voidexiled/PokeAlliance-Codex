@@ -1,0 +1,146 @@
+/* Pagination (spec 7.2.2, 7.7.3 H6; DS:Pagination), ported from the `.ac-pagination`
+   block of the design system's components/bundle.css. global.css imports this file with
+   layer(components).
+
+   «Anterior», the numbers and «Siguiente» in a row 4 apart, 12/16. A number is 40 × 40,
+   radius 11, no border; the current page is filled `bg-tertiary` at 700. The steps are
+   40 tall with a 1 px `border-primary`; at either end the step is a disabled button with
+   a `border-secondary` border and `text-quaternary` text. On the site every number and
+   every enabled step is a link (P-28), so the reference's `button` reset only reaches
+   the disabled step.
+
+   One addition to the reference, for S1 and the 320 px reflow of spec 13.7: the row and
+   the list wrap. On a phone every number and step is 44 wide (S14), so the first of nine
+   pages needs about 380 px and a middle one about 460, more than the 358 px column at
+   390; the reference keeps one line and pushes the page sideways. A row that fits wraps
+   nothing, so the 1440 boards draw the same row. */
+
+.ac-pagination {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-16);
+  min-width: 0;
+}
+
+/* With a summary («1 a 10 de 25 miembros») the summary sits left and the pages right. */
+.ac-pagination--summary {
+  justify-content: space-between;
+}
+
+/* Centred under a result list (Pokédex). */
+.ac-pagination--center {
+  justify-content: center;
+}
+
+.ac-pagination__summary {
+  margin: 0;
+  color: var(--text-tertiary);
+  @apply type-ui;
+  font-variant-numeric: tabular-nums;
+}
+
+/* A wrapped list keeps the 4 px between its rows, and a centred one centres each row. */
+.ac-pagination__list {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-4);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  @apply type-ui;
+}
+
+.ac-pagination--center .ac-pagination__list {
+  justify-content: center;
+}
+
+.ac-pagination__list > li {
+  display: flex;
+}
+
+/* Page number: 40 × 40, radius 11, no border; hover ink `bg-tertiary`. */
+.ac-pagination__page {
+  display: flex;
+  width: var(--size-control);
+  height: var(--size-control);
+  align-items: center;
+  justify-content: center;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  border-radius: var(--radius-11);
+  background: transparent;
+  color: var(--text-primary);
+  font-family: var(--font-sans);
+  @apply type-ui;
+  font-variant-numeric: tabular-nums;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.ac-pagination__page:hover {
+  background: var(--bg-tertiary);
+}
+
+/* Current page: filled `bg-tertiary`, 700. */
+.ac-pagination__page[aria-current='page'] {
+  background: var(--bg-tertiary);
+  font-weight: 700;
+}
+
+/* Anterior / Siguiente: 40 tall, padding 0 12, 1 px `border-primary`, radius 11. */
+.ac-pagination__step {
+  display: flex;
+  height: var(--size-control);
+  align-items: center;
+  margin: 0;
+  padding: 0 var(--space-12);
+  border: 1px solid var(--border-primary);
+  border-radius: var(--radius-11);
+  background: transparent;
+  color: var(--text-primary);
+  font-family: var(--font-sans);
+  @apply type-ui;
+  white-space: nowrap;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.ac-pagination__step:hover:not(:disabled) {
+  background: var(--bg-tertiary);
+}
+
+.ac-pagination__step:disabled {
+  border-color: var(--border-secondary);
+  color: var(--text-quaternary);
+  cursor: not-allowed;
+}
+
+/* Ellipsis between page runs: 24 wide, `text-quaternary`, hidden from assistive tech. */
+.ac-pagination__list > .ac-pagination__gap {
+  width: var(--space-24);
+  justify-content: center;
+  color: var(--text-quaternary);
+}
+
+/* Coarse pointer (13.7, S14): every target measures 44. */
+@media (pointer: coarse) {
+  .ac-pagination__page {
+    width: var(--size-touch);
+    height: var(--size-touch);
+  }
+
+  .ac-pagination__step {
+    height: var(--size-touch);
+  }
+}
+
+/* Hover of a number or a step: background-color only, the first row of 6.2. */
+@media (prefers-reduced-motion: no-preference) {
+  .ac-pagination__page,
+  .ac-pagination__step {
+    transition: background-color var(--duration-fast) var(--ease-standard);
+  }
+}

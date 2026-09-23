@@ -1,0 +1,382 @@
+/* GameTooltip (spec 7.5, DS:GameTooltip, DS:guias/10), ported from the `.ac-game-tooltip`
+   block of the design system's components/bundle.css. global.css imports this file with
+   layer(components).
+
+   The in-game panel of the PokeAlliance client, and the only surface of the site with
+   Poppins, the `tt-label` colour and the game text shadow: panel `tt-panel` (#21252C), footer
+   strip `tt-panel-deep` (#1D232B), labels `tt-label` (#E8C66A), values `tt-value` (white),
+   12/21 at weight 600 and the name at 15/20 with 0.35em. No border and no box shadow.
+
+   Four differences against the reference, all of them because the site does not hydrate
+   React for the frame or for static HTML (spec 3.8):
+
+   - a collapsible section is `<details open>` with a `<summary class="ac-game-tooltip__
+     toggle">` (C-R2, 7.5.2), so `[hidden]` on the bodies is not ported: `<details>` hides
+     them itself. The summary drops its marker and keeps the geometry of the reference
+     button;
+   - the chevron is two `Glyph`s, the two directions of the reference, and this file shows
+     the one the `[open]` state asks for, with no animation (6.2);
+   - the panel is the popover itself (`popover="manual"`, C-R2): the reference positions a
+     `.ac-nested-entity__pop` holder with CSS, and here `src/scripts/game-tooltip.ts` writes
+     `left` / `top` / `max-height` with @floating-ui/dom and the final side in `data-side`.
+     The placement modifiers of the reference (`--up-left`, `--row-right`…) are therefore not
+     ported; what stays is the transparent bridge over the gap (7.5.6), keyed on `data-side`;
+   - the 200 wide compact day tooltip of the Guild chart is this panel with `head: 'none'`
+     (7.5.2), so the `.ac-bar-chart__tip` rules of the reference are ported here as the
+     `--w200` modifier instead of living in the chart.
+
+   The static sheet of a detail page (7.5.9) is the same panel with no `popover`: it sits in
+   the flow, has no footer strip and never animates. */
+
+.ac-game-tooltip {
+  display: block;
+  width: var(--size-tt);
+  padding: var(--space-12) var(--space-8) 0;
+  border-radius: var(--radius-4);
+  background: var(--tt-panel);
+  color: var(--tt-value);
+  @apply type-tt-row;
+  /* The panel resets the text it inherits: it opens inside spaced or uppercase contexts
+     (a card title, a table cell) and its own spacing belongs to the rows. */
+  font-style: normal;
+  letter-spacing: normal;
+  text-transform: none;
+  text-shadow: var(--text-shadow-game);
+  text-align: left;
+  white-space: normal;
+}
+
+.ac-game-tooltip--w240 {
+  width: var(--size-tt-narrow);
+}
+
+.ac-game-tooltip--w300 {
+  width: var(--size-tt-wide);
+}
+
+/* Static sheet (no footer strip): 12 px at the bottom. */
+.ac-game-tooltip--static {
+  padding-bottom: var(--space-12);
+}
+
+/* Head: image over the name, centred, 6 px apart. */
+.ac-game-tooltip__head {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-6);
+}
+
+.ac-game-tooltip__head--shiny {
+  position: relative;
+}
+
+/* Pokémon art: 70 px, smooth, in a 72 box (left 1, top 2). */
+.ac-game-tooltip__art {
+  position: relative;
+  display: block;
+  flex: none;
+  width: var(--size-stage);
+  height: var(--size-stage);
+}
+
+.ac-game-tooltip__art-img {
+  position: absolute;
+  left: 1px;
+  top: var(--space-2);
+  display: block;
+  width: var(--size-tt-head);
+  height: var(--size-tt-head);
+  max-width: none;
+}
+
+/* Aura ball: 32 px at left 56, top -6 of the 72 art box. */
+.ac-game-tooltip__aura {
+  position: absolute;
+  left: calc(var(--size-stage) - var(--space-16));
+  top: calc(var(--space-6) * -1);
+  display: block;
+  width: var(--size-cell);
+  height: var(--size-cell);
+}
+
+.ac-game-tooltip__title {
+  display: block;
+  margin: 0;
+  /* The tracking of the name hangs after its last letter; the same amount in front of the
+     first one puts the name back in the middle of the panel. */
+  padding-left: 0.35em; /* sin token: el tracking de type-tt-title, para centrar el nombre */
+  @apply type-tt-title;
+  text-align: center;
+}
+
+/* Rows: `tt-label` label, white value, 12 px apart. */
+.ac-game-tooltip__rows {
+  display: block;
+  margin: var(--space-8) 0 0;
+  @apply type-tt-row;
+}
+
+.ac-game-tooltip__row {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--space-12);
+}
+
+.ac-game-tooltip__label {
+  display: block;
+  color: var(--tt-label);
+  white-space: nowrap;
+}
+
+.ac-game-tooltip__value {
+  display: block;
+  margin: 0;
+  color: var(--tt-value);
+  text-align: right;
+}
+
+/* Listing rows and market block: a two-column grid. */
+.ac-game-tooltip__rows--grid {
+  display: grid;
+  grid-template-columns: auto auto;
+  justify-content: space-between;
+  column-gap: var(--space-12);
+}
+
+/* A value never breaks inside itself; a comma list breaks only between its entries. */
+.ac-game-tooltip__nw {
+  white-space: nowrap;
+}
+
+/* Collapsible sections ("Held Items: 2", "Entrenamiento: 1"). */
+.ac-game-tooltip__section {
+  display: block;
+}
+
+.ac-game-tooltip__section--first {
+  margin-top: var(--space-6);
+}
+
+.ac-game-tooltip__toggle {
+  position: relative;
+  z-index: 1;
+  display: block;
+  width: 100%;
+  margin: calc(var(--space-6) * -1) 0;
+  padding: var(--space-10) 0;
+  border: 0;
+  background: transparent;
+  color: var(--tt-value);
+  @apply type-tt-row;
+  text-align: center;
+  text-shadow: var(--text-shadow-game);
+  cursor: pointer;
+  list-style: none;
+}
+
+/* The `<summary>` marker of the reference section button does not exist. */
+.ac-game-tooltip__toggle::-webkit-details-marker {
+  display: none;
+}
+
+.ac-game-tooltip__chevron {
+  position: absolute;
+  right: var(--space-4);
+  top: calc(var(--space-10) + var(--space-4));
+  display: flex;
+  color: var(--tt-hint);
+}
+
+/* Down when the section is open, right when it is closed: two `Glyph`s, one shown. */
+.ac-game-tooltip__chevron-open {
+  display: none;
+}
+
+.ac-game-tooltip__section[open] > .ac-game-tooltip__toggle .ac-game-tooltip__chevron-open {
+  display: block;
+}
+
+.ac-game-tooltip__section[open] > .ac-game-tooltip__toggle .ac-game-tooltip__chevron-closed {
+  display: none;
+}
+
+/* Held Items body: 32 cells with the held name, wrapping 16 x 6. */
+.ac-game-tooltip__held {
+  display: flex;
+  flex-wrap: wrap;
+  column-gap: var(--space-16);
+  row-gap: var(--space-6);
+  padding: var(--space-4) 0 var(--space-6);
+}
+
+.ac-game-tooltip__held-item {
+  display: flex;
+  align-items: center;
+  gap: var(--space-8);
+  @apply type-tt-row;
+}
+
+/* Free section body (the Entrenamiento meter). */
+.ac-game-tooltip__section-body {
+  display: block;
+  padding: var(--space-2) 0 var(--space-8);
+}
+
+/* Market block of a listing: 1 px line, then the grid rows. */
+.ac-game-tooltip__divider {
+  display: block;
+  height: 1px;
+  margin: var(--space-8) 0 0;
+  background: var(--tt-divider);
+}
+
+/* Footer strip: "Mantén Shift para fijar" / "Hold Shift to pin". */
+.ac-game-tooltip__footer {
+  display: block;
+  margin: var(--space-8) calc(var(--space-8) * -1) 0;
+  padding: var(--space-6) var(--space-8) calc(var(--space-6) + 1px);
+  border-radius: 0 0 var(--radius-4) var(--radius-4);
+  background: var(--tt-panel-deep);
+  color: var(--tt-hint);
+  @apply type-tt-hint;
+  text-align: center;
+}
+
+/* 4 px above the strip right after a collapsible section, 8 px everywhere else. */
+.ac-game-tooltip__footer--tight {
+  margin-top: var(--space-4);
+}
+
+/* Compact day tooltip of the Guild chart (spec 7.5.2, DS:guias/10 "Variantes"), ported from
+   `.ac-bar-chart__tip*` of the reference: 200 wide, padding 8 10, no head and no strip. */
+.ac-game-tooltip--w200 {
+  width: var(--size-tt-chart);
+  padding: var(--space-8) var(--space-10);
+}
+
+.ac-game-tooltip__day {
+  display: block;
+  margin: 0;
+}
+
+.ac-game-tooltip--w200 .ac-game-tooltip__rows {
+  margin-top: var(--space-4);
+}
+
+.ac-game-tooltip--w200 .ac-game-tooltip__value {
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+
+/* The panel as a popover (spec 7.5.4). The top layer takes it out of every `overflow` and
+   every stacking context, and the controller writes the position the middleware computed.
+   The user agent styles of `[popover]` are what these declarations undo; the panel keeps
+   the background, the width and the padding of the rules above. */
+.ac-game-tooltip[popover] {
+  position: fixed;
+  inset: auto;
+  z-index: var(--z-tooltip);
+  margin: 0;
+  border: 0;
+  overflow: visible;
+  /* Gap between the panel and its trigger, which the bridge below has to cover. It is the
+     one of the placement, and the placement is on the wrapper (spec 7.5.5): 6 px above and
+     below, 8 px beside a slot, 12 px right of the name cell of a Lista row. */
+  --ac-tt-gap: var(--space-6);
+}
+
+[data-ac-tt-placement='side'] .ac-game-tooltip[popover] {
+  --ac-tt-gap: var(--space-8);
+}
+
+[data-ac-tt-placement='row'] .ac-game-tooltip[popover] {
+  --ac-tt-gap: var(--space-12);
+}
+
+/* A closed panel is not drawn. The `display: block` of `.ac-game-tooltip` is an author rule,
+   and an author rule beats the user agent's `[popover]:not(:popover-open) { display: none }`
+   whatever its layer: without this every closed panel of the page would sit in the flow,
+   over the triggers next to it. */
+@supports selector(:popover-open) {
+  .ac-game-tooltip[popover]:not(:popover-open) {
+    display: none;
+  }
+}
+
+/* Where `popover` is not supported (spec 6.5) the attribute is ignored and every panel of
+   the page would stay on screen. It is hidden here, before anything paints, and the
+   controller shows it with the `data-open` it already writes. */
+@supports not selector(:popover-open) {
+  .ac-game-tooltip[popover] {
+    display: none;
+  }
+
+  .ac-game-tooltip[popover][data-open] {
+    display: block;
+  }
+}
+
+/* Safe bridge (spec 7.5.6): a transparent strip of the panel, on the side that faces the
+   trigger, as wide as the panel and as deep as the gap plus 2 px. The panel is a descendant
+   of `.ac-nested-entity`, so a pointer crossing the gap never leaves the wrapper and the
+   100 ms close of TT2 is never scheduled. */
+.ac-game-tooltip[popover][data-side]::before {
+  content: '';
+  position: absolute;
+}
+
+.ac-game-tooltip[popover][data-side='top']::before {
+  top: 100%;
+  left: 0;
+  right: 0;
+  height: calc(var(--ac-tt-gap) + 2px);
+}
+
+.ac-game-tooltip[popover][data-side='bottom']::before {
+  bottom: 100%;
+  left: 0;
+  right: 0;
+  height: calc(var(--ac-tt-gap) + 2px);
+}
+
+.ac-game-tooltip[popover][data-side='right']::before {
+  right: 100%;
+  top: 0;
+  bottom: 0;
+  width: calc(var(--ac-tt-gap) + 2px);
+}
+
+.ac-game-tooltip[popover][data-side='left']::before {
+  left: 100%;
+  top: 0;
+  bottom: 0;
+  width: calc(var(--ac-tt-gap) + 2px);
+}
+
+/* A panel taller than the window — a listing with two held items, training and market on a
+   phone, any panel in a short desktop window — scrolls inside itself, with the strip at the
+   end of the scrollable content and the `<summary>` of each section reachable with Tab
+   (spec 7.5.5, S3). The controller writes the `max-height` that `size()` computed and marks
+   the panel whose content does not fit it with `data-ac-tt-scroll`; this is the `overflow`
+   that turns that one into a scroll, on every device. It drops the bridge: a scroll
+   container clips a pseudo-element that hangs outside it. The pointer then crosses the 6 to
+   12 px gap inside the 100 ms of TT2, and entering the panel cancels the close. */
+.ac-game-tooltip[popover][data-ac-tt-scroll] {
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+
+.ac-game-tooltip[popover][data-ac-tt-scroll]::before {
+  content: none;
+}
+
+/* Entry of 150 ms: 4 px lower, 0.95 and transparent (spec 6.2, motion.css). The panel
+   replays it on every `showPopover()`, because the browser takes it out of `display: none`.
+   There is no exit animation and the static sheet of a detail page never carries the
+   modifier (7.5.9). */
+@media (prefers-reduced-motion: no-preference) {
+  .ac-game-tooltip--animate {
+    animation: ac-tt-in var(--duration-fast) var(--ease-standard);
+  }
+}

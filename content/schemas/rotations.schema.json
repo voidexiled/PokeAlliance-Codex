@@ -1,0 +1,42 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://alliance-codex.local/schemas/rotations.schema.json",
+  "title": "Rotaciones y tiers",
+  "description": "content/rotations.json. Si un valor no se conoce, va null.",
+  "type": "object",
+  "required": ["rotaciones"],
+  "additionalProperties": false,
+  "properties": {
+    "$schema": { "type": "string" },
+    "rotaciones": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/rotacion" }
+    }
+  },
+  "$defs": {
+    "slug": {
+      "type": "string",
+      "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$",
+      "description": "Minúsculas, números y guiones (kebab-case)."
+    },
+    "texto": { "type": ["string", "null"], "minLength": 1 },
+    "lista": {
+      "type": "array",
+      "items": { "type": "string", "minLength": 1 }
+    },
+    "rotacion": {
+      "type": "object",
+      "required": ["id", "nombre", "tipo", "disponibilidad", "condicion", "excluye", "comparacion"],
+      "additionalProperties": false,
+      "properties": {
+        "id": { "$ref": "#/$defs/slug" },
+        "nombre": { "type": "string", "minLength": 1 },
+        "tipo": { "$ref": "#/$defs/texto" },
+        "disponibilidad": { "$ref": "#/$defs/texto" },
+        "condicion": { "$ref": "#/$defs/texto" },
+        "excluye": { "$ref": "#/$defs/lista" },
+        "comparacion": { "$ref": "#/$defs/lista" }
+      }
+    }
+  }
+}

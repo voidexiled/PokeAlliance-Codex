@@ -1,0 +1,164 @@
+---
+// Tier list (spec 8.8): the variants of `content/pokemon.json` with a tier, grouped by
+// tier, in the `tiers` list, and after the list one `Section` per record of the rotations
+// registry. Template B (8.0.2), without `Toc`: the groups depend on the page of the list.
+// No board of its own: the bar and the three views are the ones of `Lienzo:Pokedex`. It
+// takes over the retired rotations page (E1, R15), whose route redirects here with the 302
+// of `astro.config.mjs` (8.0.1).
+// Prerendered with the island of 7.7, which loads on `client:load` (7.3). A static route,
+// so it wins over `[slug].astro`, and `pnpm content:check` refuses a Pokémon `id` equal to
+// `tiers` (8.0.1, 3.13).
+//
+// Data (PR5). The list reads the rows of the Pokédex (`/{l}/pokedex/datos.json`, 8.0.6):
+// `buildPokedexData` of ./datos.json.ts writes them in the order of 8.0.5, and `tiersRows`
+// keeps the ones with a tier, in tier order. This page prints the first page of that order
+// and gives the island only those rows, the length of the list, the values its filters
+// accept — read from the rows with a tier — the icons of the elements of that page and its
+// drops, panels included. The «Drop de» of an item is the inverse of the drops of every
+// Pokémon, the ones without a tier too, as on the Pokédex. The element panels are not in
+// the props: 48 rows name most of the 18 elements and the island would go over its 20 KB
+// (13.6), so it builds them when `datos.json` arrives (PR5, see TiersRoot «Elements»). A
+// prerendered page never reads its query (PR2): the state of the URL is the island's.
+//
+// Rotations (8.8 step 7). One `Section` per record of `getRotations()`, titled with its
+// `nombre`: its `disponibilidad` is the paragraph, and «Condición» and «No aparece en» are
+// data lines, each one only with a value; `tipo` and `comparacion` are not shown (T-04). Two
+// lines stack in `FactLines layout="column"` (a `dl`), and a single one is a `FactLine`
+// paragraph (DS:FactLine «`FactLines` como contenedor cuando hay más de una línea»). The
+// registry writes those texts in English only, so on the `es` page they carry `lang="en"`
+// (8.0.5, T22, T-03); the labels are the page's language.
+//
+// Text. The h1 and the breadcrumb are the labels of the menu entry and of its group, which
+// src/lib/nav/groups.ts owns (8.0.3); the h1 is also the caption of the Lista. Every text of
+// the list is the Pokédex's (8.8 steps 3 to 5): the island receives `messages.ui` and
+// `messages.pokedex`. The description (13.5) and the two rotation labels are
+// `messages.tiers`.
+import { createElement } from 'react';
+
+import { getAlternatePath, getLocale, locales, type Locale } from '@/i18n/config';
+import type { Messages } from '@/i18n/messages/en';
+import { en } from '@/i18n/messages/en';
+import { es } from '@/i18n/messages/es';
+import { fill } from '@/i18n/messages/types';
+import { getRotations } from '@/lib/content/repository';
+import { formatInteger } from '@/lib/format/numbers';
+import { buildNav } from '@/lib/nav/groups';
+import { FactLine, FactLines, type FactLineData } from '@/components/content/FactLine';
+import { PageTitle } from '@/components/layout/PageTitle';
+import { Section } from '@/components/layout/Section';
+import { POKEDEX_FIELDS, decodePokedex } from '@/components/pokedex/config';
+import { TIERS_PAGE_SIZE, tierIcons, tiersRows } from '@/components/tiers/config';
+import { TiersRoot } from '@/components/tiers/TiersRoot';
+import PageLayout from '@/layouts/PageLayout.astro';
+
+import { buildPokedexData, pokedexDrops, pokedexIds } from './datos.json.ts';
+
+export const prerender = true;
+
+export function getStaticPaths() {
+  return locales.map((locale) => ({ params: { locale } }));
+}
+
+const dictionaries: Record<Locale, Messages> = { es, en };
+
+/** The language of the texts of content/rotations.json, which has no translation (8.8). */
+const ROTATIONS_LANG: Locale = 'en';
+
+const locale = getLocale(Astro.params.locale);
+const path = Astro.url.pathname;
+const alternates = Object.fromEntries(
+  locales.map((option) => [option, getAlternatePath(path, option)]),
+) as Record<Locale, string>;
+
+// 8.0.4: «Pokémon › Tier list». The group has no index page, so its crumb is text.
+const group = buildNav(locale, path).groups.find((entry) => entry.id === 'pokemon');
+const entry = group?.items.find((item) => item.id === 'tiers');
+if (group === undefined || entry === undefined) {
+  throw new Error('src/lib/nav/groups.ts: no «tiers» entry in the «pokemon» group (8.0.3).');
+}
+const title = entry.label;
+
+const messages = dictionaries[locale];
+const data = buildPokedexData(locale);
+const records = decodePokedex(data);
+const rows = tiersRows(records);
+const firstRows = rows.slice(0, TIERS_PAGE_SIZE);
+// The values of the filters are the ones of the rows of this list, the variants with a
+// tier: a generation or a variant that only rows without a tier have is not an option (U4).
+// The tiers themselves are not a filter here (8.8 step 3), so `TiersIds` leaves them out.
+const { generations, elements, variants } = pokedexIds(rows, data.refs.elementos);
+const ids = { generations, elements, variants };
+const first = {
+  v: data.v,
+  campos: data.campos,
+  filas: firstRows.map((row) => POKEDEX_FIELDS.map((field) => row[field])),
+};
+const description = fill(messages.tiers.description, {
+  n: formatInteger(rows.length, locale),
+});
+
+// 8.8 step 7: the texts of the rotations registry exist in English only (T22), so they
+// carry `lang` on a page of any other language. `excluye` is joined with «, » (13.3).
+const foreign = locale === ROTATIONS_LANG ? undefined : ROTATIONS_LANG;
+const inLanguage = (text: string) =>
+  foreign === undefined ? text : createElement('span', { lang: foreign }, text);
+const rotations = getRotations().map((record) => {
+  const lines: FactLineData[] = [];
+  if (record.condicion !== null) {
+    lines.push({
+      key: 'condicion',
+      label: messages.tiers.condition,
+      values: [inLanguage(record.condicion)],
+    });
+  }
+  if (record.excluye.length > 0) {
+    lines.push({
+      key: 'excluye',
+      label: messages.tiers.notFoundIn,
+      values: [inLanguage(record.excluye.join(', '))],
+    });
+  }
+  return {
+    id: record.id,
+    title: inLanguage(record.nombre),
+    text: record.disponibilidad,
+    lines,
+  };
+});
+---
+
+<PageLayout
+  locale={locale}
+  title={title}
+  description={description}
+  alternates={alternates}
+  breadcrumb={[{ label: group.label }, { label: title }]}
+>
+  <PageTitle title={title} />
+  <TiersRoot
+    client:load
+    locale={locale}
+    path={path}
+    dataUrl={`/${locale}/pokedex/datos.json`}
+    data={first}
+    total={rows.length}
+    ids={ids}
+    icons={tierIcons(firstRows, data.refs.elementos)}
+    drops={pokedexDrops(firstRows, records, data.refs.items, locale, messages.ui.tooltip)}
+    title={title}
+    ui={messages.ui}
+    pokedex={messages.pokedex}
+  />
+  {
+    rotations.map((rotation) => (
+      <Section id={rotation.id} title={rotation.title}>
+        {rotation.text === null ? null : <p lang={foreign}>{rotation.text}</p>}
+        {rotation.lines.length > 1 ? (
+          <FactLines layout="column" lines={rotation.lines} />
+        ) : (
+          rotation.lines.map((line) => <FactLine label={line.label} values={line.values} />)
+        )}
+      </Section>
+    ))
+  }
+</PageLayout>

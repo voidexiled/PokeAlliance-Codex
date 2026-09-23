@@ -1,0 +1,79 @@
+/* Breadcrumb (spec 8.0.4, DS:Breadcrumb), ported from the `.ac-breadcrumb` block of the
+   design system's components/bundle.css.
+
+   12/16 trail in `text-quaternary` separated by 14 px chevrons; the last crumb is the
+   current page, in `text-primary` and without a link. A group crumb that has no index
+   page is a plain span with no class of its own, so it inherits the trail colour and
+   never underlines (spec 8.0.4). */
+
+.ac-breadcrumb {
+  font-family: var(--font-sans);
+}
+
+.ac-breadcrumb__list {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-10);
+  margin: 0;
+  padding: 0;
+  color: var(--text-quaternary);
+  list-style: none;
+  @apply type-ui;
+}
+
+.ac-breadcrumb__item {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-6);
+}
+
+.ac-breadcrumb__sep {
+  display: inline-flex;
+}
+
+.ac-breadcrumb__sep svg {
+  display: block;
+}
+
+.ac-breadcrumb__link {
+  color: var(--text-quaternary);
+  text-decoration: none;
+}
+
+.ac-breadcrumb__link:hover {
+  text-decoration: underline;
+}
+
+.ac-breadcrumb__current {
+  color: var(--text-primary);
+}
+
+/* Touch (spec 13.7, S14): a crumb is a link, and the exception list of 13.7 holds only
+   links inside a paragraph and links of fact rows, so with a coarse pointer the crumb
+   gets its whole `size-touch` box — 44 wide as well as 44 tall, which is what S14
+   measures. Both are needed: «Inicio» is 33 px of text at 12/16, so height alone leaves
+   a 33 × 44 target.
+
+   The type stays 12/16 (DS:Breadcrumb): only the box grows, `justify-content` centres
+   the word in it and `align-items: center` on the list keeps the trail on one baseline.
+   The design system writes the same kind of rule for every control it grows on touch
+   (`bundle.css`: Button, TextField, Select, Pagination); it has none of its own for the
+   trail, which is drawn for a mouse. Fine pointers are untouched, so no board crop and
+   no golden sees this. */
+@media (pointer: coarse) {
+  .ac-breadcrumb__link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: var(--size-touch);
+    min-height: var(--size-touch);
+  }
+}
+
+/* Narrow phones (below 576, spec 5.4): the trail tightens to 6 between crumbs. */
+@media (width < 36rem) {
+  .ac-breadcrumb__list {
+    gap: var(--space-6);
+  }
+}

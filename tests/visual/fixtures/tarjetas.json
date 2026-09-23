@@ -1,0 +1,1466 @@
+{
+  "es": {
+    "title": "Tarjetas y rejillas",
+    "sections": {
+      "comercio": "Comercio · Todos",
+      "pokedex": "Pokédex",
+      "drops": "Drops · Cards, Slots y Lista",
+      "kpi": "Guild · cifras",
+      "movil": "Móvil · 390"
+    },
+    "listing": {
+      "keys": {
+        "requirement": "Requisito",
+        "tier": "Tier",
+        "elements": "Elementos",
+        "ball": "Ball",
+        "aura": "Aura",
+        "boost": "Boost",
+        "nickname": "Nickname",
+        "memorySlots": "Memory Slots",
+        "starLevel": "Star Level",
+        "npcPrice": "NPC Price",
+        "quantity": "Cantidad",
+        "category": "Categoría",
+        "element": "Elemento",
+        "use": "Uso",
+        "droppedBy": "Drop de",
+        "boughtAt": "Se compran en",
+        "usedFor": "Se usan en"
+      },
+      "fiat": "Dinero real",
+      "game": "En el juego",
+      "seller": "Vendedor",
+      "contact": "Contacto verificado",
+      "negotiable": "A convenir",
+      "reserved": "Reservado"
+    },
+    "drops": {
+      "quantity": "Cantidad",
+      "count": {
+        "one": "{n} drop",
+        "other": "{n} drops"
+      },
+      "view": "Vista de drops",
+      "caption": "Drops",
+      "item": "Ítem",
+      "sprite": "Sprite"
+    },
+    "groups": [
+      {
+        "type": "pokemon",
+        "label": "Pokémon",
+        "sprite": "outfits/5",
+        "listings": [
+          {
+            "type": "pokemon",
+            "title": "Shiny Ditto",
+            "pokemon": "shiny-ditto",
+            "shiny": true,
+            "world": "Sun",
+            "posted": {
+              "datetime": "2026-09-18T17:20:00Z",
+              "text": "hace 12 min"
+            },
+            "facts": {
+              "requirement": 1,
+              "tier": "T7",
+              "elements": null,
+              "ball": {
+                "name": "Premier Ball",
+                "rows": [
+                  {
+                    "label": "Categoría",
+                    "value": "Poké Ball"
+                  },
+                  {
+                    "label": "Se obtiene en",
+                    "value": "Online Shop"
+                  }
+                ]
+              },
+              "aura": "premier",
+              "boost": "+20",
+              "nickname": "S U S A N O O",
+              "memorySlots": 6,
+              "starLevel": 0,
+              "npcPrice": "Unsellable"
+            },
+            "helds": [
+              {
+                "name": "X-Attack",
+                "tier": "T5",
+                "rows": [
+                  {
+                    "label": "Tier",
+                    "value": "T5"
+                  },
+                  {
+                    "label": "Se equipa en",
+                    "value": "Poké Ball"
+                  },
+                  {
+                    "label": "Fusión",
+                    "value": "3 Helds T5"
+                  },
+                  {
+                    "label": "Éxito de la fusión",
+                    "value": "25%"
+                  },
+                  {
+                    "label": "Para retirar",
+                    "value": "NPC Rosemary"
+                  }
+                ]
+              },
+              {
+                "name": "X-Lucky",
+                "tier": "T3",
+                "rows": [
+                  {
+                    "label": "Tier",
+                    "value": "T3"
+                  },
+                  {
+                    "label": "Se equipa en",
+                    "value": "Poké Ball"
+                  },
+                  {
+                    "label": "En Lucky Amulet",
+                    "value": "mitad de efectividad"
+                  },
+                  {
+                    "label": "Para retirar",
+                    "value": "NPC Rosemary"
+                  }
+                ]
+              }
+            ],
+            "train": {
+              "stat": "Attack",
+              "level": 16,
+              "percent": 53
+            },
+            "fiat": "R$ 90",
+            "game": [
+              {
+                "kind": "pd",
+                "amount": 150000000
+              },
+              {
+                "kind": "dia",
+                "amount": 400
+              }
+            ],
+            "seller": {
+              "name": "Kaiser",
+              "score": 4.6,
+              "reviews": 23
+            },
+            "channels": [
+              "Discord",
+              "Correo",
+              "Teléfono +55"
+            ]
+          },
+          {
+            "type": "pokemon",
+            "title": "Shiny Charizard",
+            "pokemon": "shiny-charizard",
+            "shiny": true,
+            "world": "Titan 3",
+            "posted": {
+              "datetime": "2026-09-18T17:07:00Z",
+              "text": "hace 25 min"
+            },
+            "facts": {
+              "requirement": 120,
+              "tier": "T1",
+              "elements": [
+                "fire",
+                "flying"
+              ],
+              "ball": {
+                "name": "Ultra Ball",
+                "rows": [
+                  {
+                    "label": "Categoría",
+                    "value": "Poké Ball"
+                  },
+                  {
+                    "label": "Uso",
+                    "value": "Captura"
+                  }
+                ]
+              },
+              "aura": "alliance",
+              "boost": "+50",
+              "nickname": "A M A T E R A S U  O M I K A M I",
+              "memorySlots": 6,
+              "starLevel": 2,
+              "npcPrice": null
+            },
+            "helds": [
+              {
+                "name": "X-Attack",
+                "tier": "T5",
+                "rows": [
+                  {
+                    "label": "Tier",
+                    "value": "T5"
+                  },
+                  {
+                    "label": "Se equipa en",
+                    "value": "Poké Ball"
+                  },
+                  {
+                    "label": "Fusión",
+                    "value": "3 Helds T5"
+                  },
+                  {
+                    "label": "Éxito de la fusión",
+                    "value": "25%"
+                  },
+                  {
+                    "label": "Para retirar",
+                    "value": "NPC Rosemary"
+                  }
+                ]
+              },
+              {
+                "name": "X-Lucky",
+                "tier": "T4",
+                "rows": [
+                  {
+                    "label": "Tier",
+                    "value": "T4"
+                  },
+                  {
+                    "label": "Se equipa en",
+                    "value": "Poké Ball"
+                  },
+                  {
+                    "label": "En Lucky Amulet",
+                    "value": "mitad de efectividad"
+                  },
+                  {
+                    "label": "Para retirar",
+                    "value": "NPC Rosemary"
+                  }
+                ]
+              },
+              {
+                "name": "X-Boost",
+                "tier": "T3",
+                "rows": [
+                  {
+                    "label": "Tier",
+                    "value": "T3"
+                  }
+                ]
+              }
+            ],
+            "train": {
+              "stat": "Critical Damage",
+              "level": 12,
+              "percent": 40
+            },
+            "fiat": "US$ 120",
+            "game": [
+              {
+                "kind": "pd",
+                "amount": 900000000
+              },
+              {
+                "kind": "dia",
+                "amount": 2400
+              }
+            ],
+            "seller": {
+              "name": "Hikari",
+              "score": 4.8,
+              "reviews": 57
+            },
+            "channels": [
+              "Discord",
+              "Twitch",
+              "Correo",
+              "Teléfono +55",
+              "Teléfono +1"
+            ]
+          },
+          {
+            "type": "pokemon",
+            "title": "Shiny Hitmontop",
+            "pokemon": "shiny-hitmontop",
+            "shiny": true,
+            "world": "Moon",
+            "posted": {
+              "datetime": "2026-09-18T16:52:00Z",
+              "text": "hace 40 min"
+            },
+            "facts": {
+              "requirement": 120,
+              "tier": "T1",
+              "elements": [
+                "fighting"
+              ],
+              "ball": {
+                "name": "Ultra Ball",
+                "rows": [
+                  {
+                    "label": "Categoría",
+                    "value": "Poké Ball"
+                  },
+                  {
+                    "label": "Uso",
+                    "value": "Captura"
+                  }
+                ]
+              },
+              "aura": null,
+              "boost": "+35",
+              "nickname": null,
+              "memorySlots": null,
+              "starLevel": 2,
+              "npcPrice": null
+            },
+            "helds": [
+              {
+                "name": "X-Attack",
+                "tier": "T4",
+                "rows": [
+                  {
+                    "label": "Tier",
+                    "value": "T4"
+                  },
+                  {
+                    "label": "Se equipa en",
+                    "value": "Poké Ball"
+                  },
+                  {
+                    "label": "Fusión",
+                    "value": "3 Helds T4"
+                  },
+                  {
+                    "label": "Éxito de la fusión",
+                    "value": "25%"
+                  },
+                  {
+                    "label": "Para retirar",
+                    "value": "NPC Rosemary"
+                  }
+                ]
+              }
+            ],
+            "train": null,
+            "fiat": "US$ 35",
+            "game": [
+              {
+                "kind": "pd",
+                "amount": 220000000
+              }
+            ],
+            "seller": {
+              "name": "Tsubame",
+              "score": 4.9,
+              "reviews": 41
+            },
+            "channels": [
+              "Discord",
+              "Twitch"
+            ]
+          },
+          {
+            "type": "pokemon",
+            "title": "Pikachu",
+            "pokemon": "pikachu",
+            "shiny": false,
+            "world": "Moon",
+            "posted": {
+              "datetime": "2026-09-18T12:32:00Z",
+              "text": "hace 5 h"
+            },
+            "facts": {
+              "requirement": 40,
+              "tier": "T5",
+              "elements": [
+                "electric"
+              ],
+              "ball": {
+                "name": "Ultra Ball",
+                "rows": [
+                  {
+                    "label": "Categoría",
+                    "value": "Poké Ball"
+                  },
+                  {
+                    "label": "Uso",
+                    "value": "Captura"
+                  }
+                ]
+              },
+              "aura": null,
+              "boost": null,
+              "nickname": null,
+              "memorySlots": null,
+              "starLevel": null,
+              "npcPrice": null
+            },
+            "helds": [],
+            "train": null,
+            "fiat": "R$ 15",
+            "game": [],
+            "seller": {
+              "name": "Leafar",
+              "score": 4.2,
+              "reviews": 9
+            },
+            "channels": [
+              "Discord"
+            ]
+          }
+        ]
+      },
+      {
+        "type": "items",
+        "label": "Items",
+        "sprite": "items/stones/fire-stone",
+        "listings": [
+          {
+            "type": "items",
+            "title": "Enhanced Normal Stone",
+            "sprite": null,
+            "qty": 12,
+            "world": "Titan 2",
+            "posted": {
+              "datetime": "2026-09-18T17:02:00Z",
+              "text": "hace 30 min"
+            },
+            "facts": {
+              "quantity": 12,
+              "category": null,
+              "element": "normal",
+              "use": "Boost, banda +15 a +20",
+              "droppedBy": null
+            },
+            "fiat": "US$ 6",
+            "game": [
+              {
+                "kind": "pd",
+                "amount": 18000000
+              }
+            ],
+            "seller": {
+              "name": "Bruma",
+              "score": 4.7,
+              "reviews": 18
+            },
+            "channels": [
+              "Discord",
+              "Correo",
+              "Twitch",
+              "Teléfono +57"
+            ]
+          },
+          {
+            "type": "items",
+            "title": "Fire Stone",
+            "sprite": "items/stones/fire-stone",
+            "qty": 25,
+            "world": "Sun",
+            "posted": {
+              "datetime": "2026-09-18T16:32:00Z",
+              "text": "hace 1 h"
+            },
+            "facts": {
+              "quantity": 25,
+              "category": null,
+              "element": "fire",
+              "use": "Evolución y craft",
+              "droppedBy": "50 Pokémon"
+            },
+            "fiat": null,
+            "game": [
+              {
+                "kind": "pd",
+                "amount": 3000000
+              }
+            ],
+            "seller": {
+              "name": "Leafar",
+              "score": 4.2,
+              "reviews": 9
+            },
+            "channels": [
+              "Discord"
+            ]
+          },
+          {
+            "type": "items",
+            "title": "Alliance Ball",
+            "sprite": "items/poke-balls/alliance-ball",
+            "qty": 100,
+            "world": "Moon",
+            "posted": {
+              "datetime": "2026-09-18T09:32:00Z",
+              "text": "hace 8 h"
+            },
+            "facts": {
+              "quantity": 100,
+              "category": "Poké Ball",
+              "element": null,
+              "use": "Captura",
+              "droppedBy": null
+            },
+            "fiat": null,
+            "game": [
+              {
+                "kind": "pd",
+                "amount": 4000000
+              },
+              {
+                "kind": "dia",
+                "amount": 10
+              }
+            ],
+            "seller": {
+              "name": "Kaiser",
+              "score": 4.6,
+              "reviews": 23
+            },
+            "channels": [
+              "Discord",
+              "Correo",
+              "Teléfono +55"
+            ]
+          }
+        ]
+      },
+      {
+        "type": "diamonds",
+        "label": "Diamonds",
+        "sprite": "ui/diamond",
+        "listings": [
+          {
+            "type": "diamonds",
+            "sprite": "ui/diamond",
+            "qty": 300,
+            "world": "Titan 1",
+            "posted": {
+              "datetime": "2026-09-18T15:32:00Z",
+              "text": "hace 2 h"
+            },
+            "facts": {
+              "quantity": 300,
+              "boughtAt": "Store",
+              "usedFor": "VIP Account, Star Machine"
+            },
+            "fiat": "R$ 60",
+            "game": [],
+            "seller": {
+              "name": "Mariana",
+              "score": 5,
+              "reviews": 12
+            },
+            "channels": [
+              "Correo",
+              "Teléfono +55",
+              "Discord"
+            ]
+          },
+          {
+            "type": "diamonds",
+            "sprite": "ui/diamond",
+            "qty": 1000,
+            "world": "Moon",
+            "posted": {
+              "datetime": "2026-09-17T17:32:00Z",
+              "text": "hace 1 día"
+            },
+            "facts": {
+              "quantity": 1000,
+              "boughtAt": "Store",
+              "usedFor": "VIP Account, Star Machine"
+            },
+            "fiat": null,
+            "game": [
+              {
+                "kind": "pd",
+                "amount": 380000000
+              }
+            ],
+            "seller": {
+              "name": "Tsubame",
+              "score": 4.9,
+              "reviews": 41
+            },
+            "channels": [
+              "Discord",
+              "Twitch"
+            ]
+          }
+        ]
+      },
+      {
+        "type": "pokedolares",
+        "label": "Pokédólares",
+        "sprite": "ui/pokedolares",
+        "listings": [
+          {
+            "type": "pokedolares",
+            "sprite": "ui/pokedolares",
+            "world": "Sun",
+            "posted": {
+              "datetime": "2026-09-18T14:32:00Z",
+              "text": "hace 3 h"
+            },
+            "facts": {
+              "quantity": 500000000
+            },
+            "fiat": "MX$ 1.800",
+            "game": null,
+            "seller": {
+              "name": "Renzo",
+              "score": 4.4,
+              "reviews": 31
+            },
+            "channels": [
+              "Discord",
+              "Teléfono +52"
+            ]
+          }
+        ]
+      }
+    ],
+    "kpi": [
+      {
+        "label": "Miembros con actividad",
+        "value": "23",
+        "of": "de 25",
+        "comparison": "4 sin actividad desde hace 3 días o más"
+      },
+      {
+        "label": "Dailies",
+        "value": "120",
+        "of": "de 175",
+        "comparison": "7 días anteriores: 131 (−8,4%)"
+      },
+      {
+        "label": "Contribución",
+        "value": "13.860",
+        "of": null,
+        "comparison": "7 días anteriores: 14.460 (−4,1%)"
+      },
+      {
+        "label": "Puntos",
+        "value": "57.960",
+        "of": null,
+        "comparison": "7 días anteriores: 62.610 (−7,4%)"
+      }
+    ],
+    "description": "Ruta de paridad de las tarjetas: rejillas de anatomía fija, anuncios, Pokédex, drops en tres vistas y cifras de Guild con los componentes reales."
+  },
+  "en": {
+    "title": "Cards and grids",
+    "sections": {
+      "comercio": "Trade · All",
+      "pokedex": "Pokédex",
+      "drops": "Drops · Cards, Slots and List",
+      "kpi": "Guild · figures",
+      "movil": "Phone · 390"
+    },
+    "listing": {
+      "keys": {
+        "requirement": "Requirement",
+        "tier": "Tier",
+        "elements": "Elements",
+        "ball": "Ball",
+        "aura": "Aura",
+        "boost": "Boost",
+        "nickname": "Nickname",
+        "memorySlots": "Memory Slots",
+        "starLevel": "Star Level",
+        "npcPrice": "NPC Price",
+        "quantity": "Quantity",
+        "category": "Category",
+        "element": "Element",
+        "use": "Use",
+        "droppedBy": "Dropped by",
+        "boughtAt": "Bought at",
+        "usedFor": "Used for"
+      },
+      "fiat": "Real money",
+      "game": "In game",
+      "seller": "Seller",
+      "contact": "Verified contact",
+      "negotiable": "Negotiable",
+      "reserved": "Reserved"
+    },
+    "drops": {
+      "quantity": "Quantity",
+      "count": {
+        "one": "{n} drop",
+        "other": "{n} drops"
+      },
+      "view": "Drop view",
+      "caption": "Drops",
+      "item": "Item",
+      "sprite": "Sprite"
+    },
+    "groups": [
+      {
+        "type": "pokemon",
+        "label": "Pokémon",
+        "sprite": "outfits/5",
+        "listings": [
+          {
+            "type": "pokemon",
+            "title": "Shiny Ditto",
+            "pokemon": "shiny-ditto",
+            "shiny": true,
+            "world": "Sun",
+            "posted": {
+              "datetime": "2026-09-18T17:20:00Z",
+              "text": "12 min ago"
+            },
+            "facts": {
+              "requirement": 1,
+              "tier": "T7",
+              "elements": null,
+              "ball": {
+                "name": "Premier Ball",
+                "rows": [
+                  {
+                    "label": "Category",
+                    "value": "Poké Ball"
+                  },
+                  {
+                    "label": "Obtained at",
+                    "value": "Online Shop"
+                  }
+                ]
+              },
+              "aura": "premier",
+              "boost": "+20",
+              "nickname": "S U S A N O O",
+              "memorySlots": 6,
+              "starLevel": 0,
+              "npcPrice": "Unsellable"
+            },
+            "helds": [
+              {
+                "name": "X-Attack",
+                "tier": "T5",
+                "rows": [
+                  {
+                    "label": "Tier",
+                    "value": "T5"
+                  },
+                  {
+                    "label": "Equips on",
+                    "value": "Poké Ball"
+                  },
+                  {
+                    "label": "Fusion",
+                    "value": "3 Helds T5"
+                  },
+                  {
+                    "label": "Fusion success",
+                    "value": "25%"
+                  },
+                  {
+                    "label": "To remove",
+                    "value": "NPC Rosemary"
+                  }
+                ]
+              },
+              {
+                "name": "X-Lucky",
+                "tier": "T3",
+                "rows": [
+                  {
+                    "label": "Tier",
+                    "value": "T3"
+                  },
+                  {
+                    "label": "Equips on",
+                    "value": "Poké Ball"
+                  },
+                  {
+                    "label": "In Lucky Amulet",
+                    "value": "half effect"
+                  },
+                  {
+                    "label": "To remove",
+                    "value": "NPC Rosemary"
+                  }
+                ]
+              }
+            ],
+            "train": {
+              "stat": "Attack",
+              "level": 16,
+              "percent": 53
+            },
+            "fiat": "R$ 90",
+            "game": [
+              {
+                "kind": "pd",
+                "amount": 150000000
+              },
+              {
+                "kind": "dia",
+                "amount": 400
+              }
+            ],
+            "seller": {
+              "name": "Kaiser",
+              "score": 4.6,
+              "reviews": 23
+            },
+            "channels": [
+              "Discord",
+              "Email",
+              "Phone +55"
+            ]
+          },
+          {
+            "type": "pokemon",
+            "title": "Shiny Charizard",
+            "pokemon": "shiny-charizard",
+            "shiny": true,
+            "world": "Titan 3",
+            "posted": {
+              "datetime": "2026-09-18T17:07:00Z",
+              "text": "25 min ago"
+            },
+            "facts": {
+              "requirement": 120,
+              "tier": "T1",
+              "elements": [
+                "fire",
+                "flying"
+              ],
+              "ball": {
+                "name": "Ultra Ball",
+                "rows": [
+                  {
+                    "label": "Category",
+                    "value": "Poké Ball"
+                  },
+                  {
+                    "label": "Use",
+                    "value": "Capture"
+                  }
+                ]
+              },
+              "aura": "alliance",
+              "boost": "+50",
+              "nickname": "A M A T E R A S U  O M I K A M I",
+              "memorySlots": 6,
+              "starLevel": 2,
+              "npcPrice": null
+            },
+            "helds": [
+              {
+                "name": "X-Attack",
+                "tier": "T5",
+                "rows": [
+                  {
+                    "label": "Tier",
+                    "value": "T5"
+                  },
+                  {
+                    "label": "Equips on",
+                    "value": "Poké Ball"
+                  },
+                  {
+                    "label": "Fusion",
+                    "value": "3 Helds T5"
+                  },
+                  {
+                    "label": "Fusion success",
+                    "value": "25%"
+                  },
+                  {
+                    "label": "To remove",
+                    "value": "NPC Rosemary"
+                  }
+                ]
+              },
+              {
+                "name": "X-Lucky",
+                "tier": "T4",
+                "rows": [
+                  {
+                    "label": "Tier",
+                    "value": "T4"
+                  },
+                  {
+                    "label": "Equips on",
+                    "value": "Poké Ball"
+                  },
+                  {
+                    "label": "In Lucky Amulet",
+                    "value": "half effect"
+                  },
+                  {
+                    "label": "To remove",
+                    "value": "NPC Rosemary"
+                  }
+                ]
+              },
+              {
+                "name": "X-Boost",
+                "tier": "T3",
+                "rows": [
+                  {
+                    "label": "Tier",
+                    "value": "T3"
+                  }
+                ]
+              }
+            ],
+            "train": {
+              "stat": "Critical Damage",
+              "level": 12,
+              "percent": 40
+            },
+            "fiat": "US$ 120",
+            "game": [
+              {
+                "kind": "pd",
+                "amount": 900000000
+              },
+              {
+                "kind": "dia",
+                "amount": 2400
+              }
+            ],
+            "seller": {
+              "name": "Hikari",
+              "score": 4.8,
+              "reviews": 57
+            },
+            "channels": [
+              "Discord",
+              "Twitch",
+              "Email",
+              "Phone +55",
+              "Phone +1"
+            ]
+          },
+          {
+            "type": "pokemon",
+            "title": "Shiny Hitmontop",
+            "pokemon": "shiny-hitmontop",
+            "shiny": true,
+            "world": "Moon",
+            "posted": {
+              "datetime": "2026-09-18T16:52:00Z",
+              "text": "40 min ago"
+            },
+            "facts": {
+              "requirement": 120,
+              "tier": "T1",
+              "elements": [
+                "fighting"
+              ],
+              "ball": {
+                "name": "Ultra Ball",
+                "rows": [
+                  {
+                    "label": "Category",
+                    "value": "Poké Ball"
+                  },
+                  {
+                    "label": "Use",
+                    "value": "Capture"
+                  }
+                ]
+              },
+              "aura": null,
+              "boost": "+35",
+              "nickname": null,
+              "memorySlots": null,
+              "starLevel": 2,
+              "npcPrice": null
+            },
+            "helds": [
+              {
+                "name": "X-Attack",
+                "tier": "T4",
+                "rows": [
+                  {
+                    "label": "Tier",
+                    "value": "T4"
+                  },
+                  {
+                    "label": "Equips on",
+                    "value": "Poké Ball"
+                  },
+                  {
+                    "label": "Fusion",
+                    "value": "3 Helds T4"
+                  },
+                  {
+                    "label": "Fusion success",
+                    "value": "25%"
+                  },
+                  {
+                    "label": "To remove",
+                    "value": "NPC Rosemary"
+                  }
+                ]
+              }
+            ],
+            "train": null,
+            "fiat": "US$ 35",
+            "game": [
+              {
+                "kind": "pd",
+                "amount": 220000000
+              }
+            ],
+            "seller": {
+              "name": "Tsubame",
+              "score": 4.9,
+              "reviews": 41
+            },
+            "channels": [
+              "Discord",
+              "Twitch"
+            ]
+          },
+          {
+            "type": "pokemon",
+            "title": "Pikachu",
+            "pokemon": "pikachu",
+            "shiny": false,
+            "world": "Moon",
+            "posted": {
+              "datetime": "2026-09-18T12:32:00Z",
+              "text": "5 h ago"
+            },
+            "facts": {
+              "requirement": 40,
+              "tier": "T5",
+              "elements": [
+                "electric"
+              ],
+              "ball": {
+                "name": "Ultra Ball",
+                "rows": [
+                  {
+                    "label": "Category",
+                    "value": "Poké Ball"
+                  },
+                  {
+                    "label": "Use",
+                    "value": "Capture"
+                  }
+                ]
+              },
+              "aura": null,
+              "boost": null,
+              "nickname": null,
+              "memorySlots": null,
+              "starLevel": null,
+              "npcPrice": null
+            },
+            "helds": [],
+            "train": null,
+            "fiat": "R$ 15",
+            "game": [],
+            "seller": {
+              "name": "Leafar",
+              "score": 4.2,
+              "reviews": 9
+            },
+            "channels": [
+              "Discord"
+            ]
+          }
+        ]
+      },
+      {
+        "type": "items",
+        "label": "Items",
+        "sprite": "items/stones/fire-stone",
+        "listings": [
+          {
+            "type": "items",
+            "title": "Enhanced Normal Stone",
+            "sprite": null,
+            "qty": 12,
+            "world": "Titan 2",
+            "posted": {
+              "datetime": "2026-09-18T17:02:00Z",
+              "text": "30 min ago"
+            },
+            "facts": {
+              "quantity": 12,
+              "category": null,
+              "element": "normal",
+              "use": "Boost, band +15 to +20",
+              "droppedBy": null
+            },
+            "fiat": "US$ 6",
+            "game": [
+              {
+                "kind": "pd",
+                "amount": 18000000
+              }
+            ],
+            "seller": {
+              "name": "Bruma",
+              "score": 4.7,
+              "reviews": 18
+            },
+            "channels": [
+              "Discord",
+              "Email",
+              "Twitch",
+              "Phone +57"
+            ]
+          },
+          {
+            "type": "items",
+            "title": "Fire Stone",
+            "sprite": "items/stones/fire-stone",
+            "qty": 25,
+            "world": "Sun",
+            "posted": {
+              "datetime": "2026-09-18T16:32:00Z",
+              "text": "1 h ago"
+            },
+            "facts": {
+              "quantity": 25,
+              "category": null,
+              "element": "fire",
+              "use": "Evolution and craft",
+              "droppedBy": "50 Pokémon"
+            },
+            "fiat": null,
+            "game": [
+              {
+                "kind": "pd",
+                "amount": 3000000
+              }
+            ],
+            "seller": {
+              "name": "Leafar",
+              "score": 4.2,
+              "reviews": 9
+            },
+            "channels": [
+              "Discord"
+            ]
+          },
+          {
+            "type": "items",
+            "title": "Alliance Ball",
+            "sprite": "items/poke-balls/alliance-ball",
+            "qty": 100,
+            "world": "Moon",
+            "posted": {
+              "datetime": "2026-09-18T09:32:00Z",
+              "text": "8 h ago"
+            },
+            "facts": {
+              "quantity": 100,
+              "category": "Poké Ball",
+              "element": null,
+              "use": "Capture",
+              "droppedBy": null
+            },
+            "fiat": null,
+            "game": [
+              {
+                "kind": "pd",
+                "amount": 4000000
+              },
+              {
+                "kind": "dia",
+                "amount": 10
+              }
+            ],
+            "seller": {
+              "name": "Kaiser",
+              "score": 4.6,
+              "reviews": 23
+            },
+            "channels": [
+              "Discord",
+              "Email",
+              "Phone +55"
+            ]
+          }
+        ]
+      },
+      {
+        "type": "diamonds",
+        "label": "Diamonds",
+        "sprite": "ui/diamond",
+        "listings": [
+          {
+            "type": "diamonds",
+            "sprite": "ui/diamond",
+            "qty": 300,
+            "world": "Titan 1",
+            "posted": {
+              "datetime": "2026-09-18T15:32:00Z",
+              "text": "2 h ago"
+            },
+            "facts": {
+              "quantity": 300,
+              "boughtAt": "Store",
+              "usedFor": "VIP Account, Star Machine"
+            },
+            "fiat": "R$ 60",
+            "game": [],
+            "seller": {
+              "name": "Mariana",
+              "score": 5,
+              "reviews": 12
+            },
+            "channels": [
+              "Email",
+              "Phone +55",
+              "Discord"
+            ]
+          },
+          {
+            "type": "diamonds",
+            "sprite": "ui/diamond",
+            "qty": 1000,
+            "world": "Moon",
+            "posted": {
+              "datetime": "2026-09-17T17:32:00Z",
+              "text": "1 day ago"
+            },
+            "facts": {
+              "quantity": 1000,
+              "boughtAt": "Store",
+              "usedFor": "VIP Account, Star Machine"
+            },
+            "fiat": null,
+            "game": [
+              {
+                "kind": "pd",
+                "amount": 380000000
+              }
+            ],
+            "seller": {
+              "name": "Tsubame",
+              "score": 4.9,
+              "reviews": 41
+            },
+            "channels": [
+              "Discord",
+              "Twitch"
+            ]
+          }
+        ]
+      },
+      {
+        "type": "pokedolares",
+        "label": "Pokédollars",
+        "sprite": "ui/pokedolares",
+        "listings": [
+          {
+            "type": "pokedolares",
+            "sprite": "ui/pokedolares",
+            "world": "Sun",
+            "posted": {
+              "datetime": "2026-09-18T14:32:00Z",
+              "text": "3 h ago"
+            },
+            "facts": {
+              "quantity": 500000000
+            },
+            "fiat": "MX$ 1.800",
+            "game": null,
+            "seller": {
+              "name": "Renzo",
+              "score": 4.4,
+              "reviews": 31
+            },
+            "channels": [
+              "Discord",
+              "Phone +52"
+            ]
+          }
+        ]
+      }
+    ],
+    "kpi": [
+      {
+        "label": "Active members",
+        "value": "23",
+        "of": "of 25",
+        "comparison": "4 inactive for 3 days or more"
+      },
+      {
+        "label": "Dailies",
+        "value": "120",
+        "of": "of 175",
+        "comparison": "Previous 7 days: 131 (−8.4%)"
+      },
+      {
+        "label": "Contribution",
+        "value": "13,860",
+        "of": null,
+        "comparison": "Previous 7 days: 14,460 (−4.1%)"
+      },
+      {
+        "label": "Points",
+        "value": "57,960",
+        "of": null,
+        "comparison": "Previous 7 days: 62,610 (−7.4%)"
+      }
+    ],
+    "description": "Card parity route: fixed-anatomy grids, listings, Pokédex, drops in three views and Guild figures with the real components."
+  },
+  "elements": {
+    "normal": {
+      "nombre": {
+        "es": "Normal",
+        "en": "Normal"
+      },
+      "stone": "Heart Stone",
+      "fragment": "Normal Fragment"
+    },
+    "fire": {
+      "nombre": {
+        "es": "Fuego",
+        "en": "Fire"
+      },
+      "stone": "Fire Stone",
+      "fragment": "Fire Fragment"
+    },
+    "water": {
+      "nombre": {
+        "es": "Agua",
+        "en": "Water"
+      },
+      "stone": "Water Stone",
+      "fragment": "Water Fragment"
+    },
+    "electric": {
+      "nombre": {
+        "es": "Eléctrico",
+        "en": "Electric"
+      },
+      "stone": "Thunder Stone",
+      "fragment": "Electric Fragment"
+    },
+    "fighting": {
+      "nombre": {
+        "es": "Lucha",
+        "en": "Fighting"
+      },
+      "stone": "Punch Stone",
+      "fragment": "Fighting Fragment"
+    },
+    "poison": {
+      "nombre": {
+        "es": "Veneno",
+        "en": "Poison"
+      },
+      "stone": "Venom Stone",
+      "fragment": "Poison Fragment"
+    },
+    "flying": {
+      "nombre": {
+        "es": "Volador",
+        "en": "Flying"
+      },
+      "stone": "Feather Stone",
+      "fragment": "Flying Fragment"
+    },
+    "psychic": {
+      "nombre": {
+        "es": "Psíquico",
+        "en": "Psychic"
+      },
+      "stone": "Enigma Stone",
+      "fragment": "Psychic Fragment"
+    },
+    "rock": {
+      "nombre": {
+        "es": "Roca",
+        "en": "Rock"
+      },
+      "stone": "Rock Stone",
+      "fragment": "Rock Fragment"
+    },
+    "ghost": {
+      "nombre": {
+        "es": "Fantasma",
+        "en": "Ghost"
+      },
+      "stone": "Ghost Stone",
+      "fragment": "Ghost Fragment"
+    },
+    "dragon": {
+      "nombre": {
+        "es": "Dragón",
+        "en": "Dragon"
+      },
+      "stone": "Crystal Stone",
+      "fragment": "Dragon Fragment"
+    },
+    "dark": {
+      "nombre": {
+        "es": "Siniestro",
+        "en": "Dark"
+      },
+      "stone": "Darkness Stone",
+      "fragment": "Dark Fragment"
+    }
+  },
+  "pokedex": [
+    "charizard",
+    "shiny-charizard",
+    "pikachu",
+    "gengar",
+    "shiny-gengar",
+    "gyarados",
+    "shiny-ditto",
+    "shiny-dragonite",
+    "mewtwo",
+    "shiny-hitmontop",
+    "tyranitar",
+    "rayquaza"
+  ],
+  "pokedexCompact": [
+    "shiny-charizard",
+    "mewtwo",
+    "tyranitar",
+    "shiny-gengar"
+  ],
+  "drops": [
+    "essence-of-fire",
+    "straw",
+    "dark-wing",
+    "fire-stone",
+    "feather-stone",
+    "mythic-fire-orb",
+    "crystal-stone",
+    "dragon-scale",
+    "metal-coat",
+    "enhanced-normal-stone"
+  ],
+  "dropsCompact": [
+    "dark-wing",
+    "fire-stone",
+    "enhanced-normal-stone"
+  ],
+  "movil": {
+    "pokemon": 1,
+    "items": 1,
+    "pokedolares": 0
+  }
+}

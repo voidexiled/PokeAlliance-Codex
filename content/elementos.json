@@ -1,0 +1,185 @@
+{
+  "$schema": "./schemas/elementos.schema.json",
+  "elementos": [
+    {
+      "id": "normal",
+      "nombre": {
+        "es": "Normal",
+        "en": "Normal"
+      },
+      "icono": null,
+      "stone": null,
+      "fragment": null
+    },
+    {
+      "id": "fire",
+      "nombre": {
+        "es": "Fuego",
+        "en": "Fire"
+      },
+      "icono": null,
+      "stone": null,
+      "fragment": null
+    },
+    {
+      "id": "water",
+      "nombre": {
+        "es": "Agua",
+        "en": "Water"
+      },
+      "icono": null,
+      "stone": null,
+      "fragment": null
+    },
+    {
+      "id": "grass",
+      "nombre": {
+        "es": "Planta",
+        "en": "Grass"
+      },
+      "icono": null,
+      "stone": null,
+      "fragment": null
+    },
+    {
+      "id": "electric",
+      "nombre": {
+        "es": "Eléctrico",
+        "en": "Electric"
+      },
+      "icono": null,
+      "stone": null,
+      "fragment": null
+    },
+    {
+      "id": "ice",
+      "nombre": {
+        "es": "Hielo",
+        "en": "Ice"
+      },
+      "icono": null,
+      "stone": null,
+      "fragment": null
+    },
+    {
+      "id": "fighting",
+      "nombre": {
+        "es": "Lucha",
+        "en": "Fighting"
+      },
+      "icono": null,
+      "stone": null,
+      "fragment": null
+    },
+    {
+      "id": "poison",
+      "nombre": {
+        "es": "Veneno",
+        "en": "Poison"
+      },
+      "icono": null,
+      "stone": null,
+      "fragment": null
+    },
+    {
+      "id": "ground",
+      "nombre": {
+        "es": "Tierra",
+        "en": "Ground"
+      },
+      "icono": null,
+      "stone": null,
+      "fragment": null
+    },
+    {
+      "id": "flying",
+      "nombre": {
+        "es": "Volador",
+        "en": "Flying"
+      },
+      "icono": null,
+      "stone": null,
+      "fragment": null
+    },
+    {
+      "id": "psychic",
+      "nombre": {
+        "es": "Psíquico",
+        "en": "Psychic"
+      },
+      "icono": null,
+      "stone": null,
+      "fragment": null
+    },
+    {
+      "id": "bug",
+      "nombre": {
+        "es": "Bicho",
+        "en": "Bug"
+      },
+      "icono": null,
+      "stone": null,
+      "fragment": null
+    },
+    {
+      "id": "rock",
+      "nombre": {
+        "es": "Roca",
+        "en": "Rock"
+      },
+      "icono": null,
+      "stone": null,
+      "fragment": null
+    },
+    {
+      "id": "ghost",
+      "nombre": {
+        "es": "Fantasma",
+        "en": "Ghost"
+      },
+      "icono": null,
+      "stone": null,
+      "fragment": null
+    },
+    {
+      "id": "dragon",
+      "nombre": {
+        "es": "Dragón",
+        "en": "Dragon"
+      },
+      "icono": null,
+      "stone": null,
+      "fragment": null
+    },
+    {
+      "id": "fairy",
+      "nombre": {
+        "es": "Hada",
+        "en": "Fairy"
+      },
+      "icono": null,
+      "stone": null,
+      "fragment": null
+    },
+    {
+      "id": "dark",
+      "nombre": {
+        "es": "Siniestro",
+        "en": "Dark"
+      },
+      "icono": null,
+      "stone": null,
+      "fragment": null
+    },
+    {
+      "id": "steel",
+      "nombre": {
+        "es": "Acero",
+        "en": "Steel"
+      },
+      "icono": null,
+      "stone": null,
+      "fragment": null
+    }
+  ]
+}

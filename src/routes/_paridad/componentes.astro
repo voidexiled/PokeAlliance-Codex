@@ -1,0 +1,423 @@
+---
+// Parity route of the controls and content of the design system (spec 7.2.2, 7.2.3, 7.2.8,
+// 14.5): the `Componentes` board drawn with the real components. It lives in src/routes/,
+// outside src/pages/, so the production build never publishes it: astro.config.mjs injects
+// it as `/[locale]/_paridad/componentes/` with `VISUAL=1` and on the development server,
+// and `seo:check` fails if a `/_paridad/` page reaches the deployed output.
+//
+// What it paints, in the order of the board:
+//
+//  - the sections of the board whose components this milestone builds — Botones, Campos,
+//    Select, Pestañas, Chips, the body of a Section with its Note, Banner de
+//    datos, Tarjetas informativas, Línea de tiempo, Tabla and Paginación, aviso y vacío —
+//    each one a `Section` whose content column is as wide as the board's (416, or 872 for
+//    the two-column blocks, 822 for the body of the Section specimen), so a crop of the
+//    visual case compares boxes of the same size (tests/visual/manifest.json);
+//  - three sections the board does not draw, for the components that no page composes yet
+//    and that the e2e gates of 14.3 must still reach: `FilterBar` with `RangeField`,
+//    `SortSelect`, `ViewToggle` and `Count`; `Combobox`, `Checkbox`, `RadioGroup`,
+//    `Textarea` and `Dialog`; and `FactLine`.
+//
+// What it leaves out of the board, and why:
+//
+//  - the Tokens and Tipografía specimens, the captions over each example («Botón · 40 px,
+//    borde #373A41…») and the frozen «Hover» and «Foco» copies: they describe the design,
+//    they are not components (R12), and a hover or a focus is a state the browser gives;
+//  - the theme button (X2, PZ-01) and the header search trigger, which is the header's
+//    own (5.6);
+//  - the breadcrumb and the page title of the «Migas, título y sección» specimen: they are
+//    frame pieces of M3, the page already has both, and a second `h1` or a second
+//    «Migas de pan» landmark would be a defect of this page;
+//  - the Pokédólares, Panel de índice, GameTooltip, Sprite and Vistas de entidades
+//    sections, which belong to M4 and M6 (`/_paridad/marco/`, `/_paridad/tarjetas/`);
+//  - the first row of Chips, the chips that open a tooltip or a page: on a phone they
+//    keep their 24 px pill, and until M6 teaches tests/e2e/contract.spec.ts to measure
+//    the 44 × 44 zone around it (S14), the contract gate reads them as small targets. The
+//    link chip has that zone (chip.css); the entity chip, a NestedEntity trigger, has none
+//    yet (nested-entity.css). The game tooltips are already exercised on
+//    `/_paridad/marco/`.
+//
+// Where the text comes from. The components never write a text of their own (DP1): what
+// they need from the dictionary — the names of the steppers, the close buttons, the views,
+// the pagination, the note lead, the pin hint — comes from `messages.ui` of the page's
+// locale. Everything else is a sample of the board (X4) and lives in the parity fixture
+// tests/visual/fixtures/componentes.json, one copy per locale, never under src/ or content/
+// (8.0, R7). The Pokémon of the entity link, the Pokémon of the Combobox, the count of the
+// results bar and the aura options are read from the registries (3.12), which `VISUAL=1`
+// swaps for the board fixtures: no figure on this page is invented (R12). A sprite the
+// sprite registry does not have is `null` and draws the missing mark (7.4.1), never an
+// invented picture.
+//
+// Every control does something (S11, C-R5): the links go to real routes or to an anchor of
+// this page, the pagination links lead to `?page=N` of this page and mark that page, the
+// Select is served by src/scripts/select.ts, and the controls that keep state are the
+// islands of ./ParityIslands.tsx or components hydrated here with `client:load`.
+//
+// Layout. The board is a sheet of 416 px columns, 40 apart, so the grid below keeps its two
+// columns at 872 and the body of the Section specimen at 822: a crop then measures the
+// same box on both sides. Below 1280 the grid is one column that may shrink to the phone
+// width (S1), and the table scrolls inside its border (DS:DataTable, 13.7).
+import { getAlternatePath, getLocale, locales, type Locale } from '@/i18n/config';
+import type { Messages } from '@/i18n/messages/en';
+import { en } from '@/i18n/messages/en';
+import { es } from '@/i18n/messages/es';
+import { fill, plural } from '@/i18n/messages/types';
+import { getAuras, getSpriteRegistry } from '@/lib/content/registry';
+import { getPokemon, getPokemonById, getRecordHref } from '@/lib/content/repository';
+import { formatInteger } from '@/lib/format/numbers';
+import { buildNav } from '@/lib/nav/groups';
+import { spriteData } from '@/lib/sprites/resolve';
+import { Button } from '@/components/controls/Button';
+import { Checkbox } from '@/components/controls/Checkbox';
+import { FilterBar } from '@/components/controls/FilterBar';
+import { NumberField } from '@/components/controls/NumberField';
+import { RadioGroup } from '@/components/controls/RadioGroup';
+import { RangeField } from '@/components/controls/RangeField';
+import { Select } from '@/components/controls/Select';
+import { SortSelect } from '@/components/controls/SortSelect';
+import { TextField } from '@/components/controls/TextField';
+import { TextLink } from '@/components/controls/TextLink';
+import { ToggleGroup } from '@/components/controls/ToggleGroup';
+import { ViewToggle } from '@/components/controls/ViewToggle';
+import { Chip } from '@/components/content/Chip';
+import { Count } from '@/components/content/Count';
+import { DataTable } from '@/components/content/DataTable';
+import { EmptyState } from '@/components/content/EmptyState';
+import { FactLines } from '@/components/content/FactLine';
+import InfoBanner from '@/components/content/InfoBanner.astro';
+import InfoCard from '@/components/content/InfoCard.astro';
+import Note from '@/components/content/Note.astro';
+import Timeline, { type TimelineStep } from '@/components/content/Timeline.astro';
+import { PageTitle } from '@/components/layout/PageTitle';
+import { Section } from '@/components/layout/Section';
+import PageLayout from '@/layouts/PageLayout.astro';
+
+import { createElement } from 'react';
+
+import samples from '../../../tests/visual/fixtures/componentes.json';
+
+import {
+  CopyCoordinates,
+  CopyNotice,
+  DiscardExport,
+  PagedPagination,
+  PeriodToggle,
+  PokemonCombobox,
+} from './ParityIslands';
+
+// No `export const prerender`: a file outside src/pages/ may not carry one, and
+// `injectRoute` already declares this route prerendered in astro.config.mjs.
+export function getStaticPaths() {
+  return locales.map((locale) => ({ params: { locale } }));
+}
+
+const dictionaries: Record<Locale, Messages> = { es, en };
+
+const locale = getLocale(Astro.params.locale);
+const copy = samples[locale];
+const ui = dictionaries[locale].ui;
+const path = Astro.url.pathname;
+
+const alternates = Object.fromEntries(
+  locales.map((option) => [option, getAlternatePath(path, option)]),
+) as Record<Locale, string>;
+
+const registry = getSpriteRegistry();
+const nav = buildNav(locale, path);
+
+// The Guild tool is where an export is imported, so the «Importar» of the board goes there.
+// The menu only lists a route the build carries (WG5); without it the button is not drawn.
+const guildHref = nav.groups
+  .flatMap((group) => group.items)
+  .find((item) => item.id === 'guild')?.href;
+
+// The entity link of DS:TextLink: the Shiny Charizard of the boards, with its sheet.
+const shinyCharizard = getPokemonById('shiny-charizard');
+
+// The anchors of this page; the prose link of the board («ver bandas abajo») points at the
+// table of Boost bands.
+const ids = {
+  buttons: 'botones',
+  fields: 'campos',
+  select: 'select',
+  tabs: 'pestanas',
+  chips: 'chips',
+  section: 'seccion',
+  body: 'bonus-por-tier',
+  banner: 'banner',
+  infoCards: 'tarjetas-informativas',
+  timeline: 'linea-de-tiempo',
+  table: 'tabla',
+  feedback: 'paginacion',
+  filters: 'filtros',
+  forms: 'formularios',
+  facts: 'hechos',
+} as const;
+
+// «Aura» of DS:ToggleGroup: the auras of the registry with their ball icon (8.2, 3.13).
+const auraOptions = getAuras().map((aura) => ({
+  value: aura.id,
+  label: aura.nombre,
+  sprite: spriteData(registry, aura.icono),
+}));
+// The board draws Premier chosen; with no Premier in the registry the first one is.
+const auraValue = auraOptions.some((option) => option.value === 'premier')
+  ? 'premier'
+  : auraOptions[0]?.value;
+
+const boost = copy.fields.boost;
+const stepperLabels = {
+  decrementLabel: fill(ui.decrease, { label: boost.label }),
+  incrementLabel: fill(ui.increase, { label: boost.label }),
+};
+
+// The board's samples have sprites the registry does not carry: `null` draws the mark
+// of 7.4.1 in the same box.
+const timelineSteps: TimelineStep[] = copy.timeline.map((step) => {
+  const chips: string[] = ('chips' in step ? step.chips : undefined) ?? [];
+  return {
+    sprite: null,
+    label: step.label,
+    text: 'text' in step ? step.text : undefined,
+    chips: chips.map((chip) => ({ children: chip })),
+  };
+});
+
+const tableColumns = copy.table.columns.map((label, index) => ({ key: `c${index}`, label }));
+const tableRows = copy.table.rows.map((row, index) => ({
+  key: index,
+  cells: Object.fromEntries(row.map((cell, column) => [`c${column}`, cell])),
+}));
+
+// The Pokémon registry: the Combobox searches it by name or number, and the count of the
+// results bar is its number of variants (8.2), a figure of the registry and not of the board.
+const pokemon = getPokemon();
+const pokemonEntries = pokemon.map((record) => ({
+  id: record.id,
+  name: record.nombre,
+  number: record.numero,
+}));
+const variantCount = fill(plural(locale, pokemon.length, copy.filters.count), {
+  n: formatInteger(pokemon.length, locale),
+});
+
+const viewOptions = [
+  { value: 'cards', label: ui.views.cards },
+  { value: 'slots', label: ui.views.slots },
+  { value: 'list', label: ui.views.list },
+];
+
+// The action of the second EmptyState. A prop of a React component takes a React element,
+// and JSX written in this template is an Astro one, so the button is created here.
+const importAction =
+  guildHref === undefined
+    ? undefined
+    : createElement(Button, { href: guildHref, children: copy.buttons.import });
+
+const factLines = copy.facts.map((fact) => ({ label: fact.label, values: [fact.value] }));
+---
+
+<PageLayout
+  locale={locale}
+  title={copy.title}
+  description={copy.description}
+  alternates={alternates}
+  noindex
+>
+  <PageTitle title={copy.title} />
+  <div class="grid max-w-872 grid-cols-1 gap-x-40 gap-y-48 xl:grid-cols-2">
+    <Section id={ids.buttons} title={copy.sections.buttons}>
+      <div class="flex flex-col gap-24">
+        {
+          guildHref && (
+            <div class="flex flex-wrap gap-8">
+              <Button href={guildHref}>{copy.buttons.import}</Button>
+              <Button disabled>{copy.buttons.import}</Button>
+            </div>
+          )
+        }
+        <PeriodToggle client:load labels={[copy.buttons.weekly, copy.buttons.daily]} />
+        <div>
+          <CopyCoordinates client:load label={copy.buttons.copy} text={copy.buttons.coordinates} />
+        </div>
+        {
+          shinyCharizard && (
+            <p>
+              <TextLink href={getRecordHref('pokemon', shinyCharizard.id, locale)}>
+                {shinyCharizard.nombre}
+              </TextLink>
+              <span aria-hidden="true"> · </span>
+              <TextLink href={`#${ids.table}`} variant="prose">
+                {copy.buttons.proseLink}
+              </TextLink>
+            </p>
+          )
+        }
+      </div>
+    </Section>
+
+    <Section id={ids.fields} title={copy.sections.fields}>
+      <div class="flex flex-col gap-20">
+        <TextField label={copy.fields.name.label} placeholder={copy.fields.name.placeholder} />
+        <TextField
+          label={copy.fields.level.label}
+          defaultValue={copy.fields.level.value}
+          inputMode="numeric"
+        />
+        <NumberField
+          client:load
+          label={boost.label}
+          defaultValue={boost.value}
+          min={boost.min}
+          max={boost.max}
+          helper={boost.helper}
+          {...stepperLabels}
+        />
+      </div>
+    </Section>
+
+    <Section id={ids.select} title={copy.sections.select}>
+      <div class="flex flex-col gap-20">
+        <Select
+          id="tier"
+          label={copy.selects.tier.label}
+          options={copy.selects.tier.options}
+          defaultValue={copy.selects.tier.value}
+        />
+        <Select
+          id="generacion"
+          label={copy.selects.generation.label}
+          options={copy.selects.generation.options}
+          defaultValue={copy.selects.generation.value}
+        />
+      </div>
+    </Section>
+
+    <Section id={ids.tabs} title={copy.sections.tabs}>
+      <div class="flex flex-col gap-24">
+        {
+          auraOptions.length > 0 && (
+            <ToggleGroup
+              client:load
+              label={copy.tabs.aura}
+              variant="sprite"
+              options={auraOptions}
+              defaultValue={auraValue}
+            />
+          )
+        }
+        <ToggleGroup client:load label={copy.tabs.goals.label} options={copy.tabs.goals.options} />
+      </div>
+    </Section>
+
+    <Section id={ids.chips} title={copy.sections.chips}>
+      <div class="flex flex-col gap-20">
+        <div class="flex flex-wrap gap-4">
+          {copy.chips.text.map((text) => <Chip>{text}</Chip>)}
+        </div>
+        <div class="flex flex-wrap gap-4">
+          <Chip shiny>{ui.shiny}</Chip>
+          {copy.chips.variant.map((text) => <Chip>{text}</Chip>)}
+          <Chip>{fill(ui.tooltip.level, { n: formatInteger(copy.chips.level, locale) })}</Chip>
+        </div>
+      </div>
+    </Section>
+
+    <Section id={ids.section} title={copy.sections.section} className="xl:col-span-2">
+      <div class="max-w-822">
+        <Section id={ids.body} title={copy.section.title} level={3}>
+          <p>{copy.section.text}</p>
+          <h4>{copy.section.listTitle}</h4>
+          <ul>
+            {copy.section.list.map((item) => <li>{item}</li>)}
+          </ul>
+          <Note lead={ui.noteLead}>{copy.section.note}</Note>
+        </Section>
+      </div>
+    </Section>
+
+    <Section id={ids.banner} title={copy.sections.banner} className="xl:col-span-2">
+      <InfoBanner sprite={null} facts={copy.banner} />
+    </Section>
+
+    <Section id={ids.infoCards} title={copy.sections.infoCards} className="xl:col-span-2">
+      <div class="grid gap-16 md:grid-cols-2">
+        {
+          copy.infoCards.map((card) => (
+            <InfoCard title={card.title} sprite={null}>
+              {card.text}
+            </InfoCard>
+          ))
+        }
+      </div>
+    </Section>
+
+    <Section id={ids.timeline} title={copy.sections.timeline}>
+      <Timeline steps={timelineSteps} />
+    </Section>
+
+    <Section id={ids.table} title={copy.sections.table} className="xl:col-span-2">
+      <DataTable caption={copy.table.caption} columns={tableColumns} rows={tableRows} scroll />
+    </Section>
+
+    <Section id={ids.feedback} title={copy.sections.feedback}>
+      <div class="flex flex-col gap-24">
+        <PagedPagination
+          client:load
+          pageCount={copy.pagination.pageCount}
+          labels={{ prev: ui.prev, next: ui.next, page: ui.page }}
+          ariaLabel={ui.pagination}
+          path={path}
+        />
+        <CopyNotice client:load message={copy.notice} closeLabel={ui.dismiss} />
+        <EmptyState>{copy.empty}</EmptyState>
+        {importAction && <EmptyState action={importAction}>{copy.emptyAction}</EmptyState>}
+      </div>
+    </Section>
+
+    <Section id={ids.filters} title={copy.sections.filters}>
+      <div class="flex flex-col gap-24">
+        <FilterBar columns={1}>
+          <RangeField
+            legend={copy.filters.price.legend}
+            placeholders={[copy.filters.price.placeholders[0], copy.filters.price.placeholders[1]]}
+            labels={[copy.filters.price.labels[0], copy.filters.price.labels[1]]}
+            inputMode="text"
+          />
+          <SortSelect label={copy.filters.sort.label} options={copy.filters.sort.options} />
+        </FilterBar>
+        <div class="flex flex-wrap items-center justify-between gap-16">
+          <Count>{variantCount}</Count>
+          <ViewToggle client:load labels={ui.views} ariaLabel={ui.views.label} />
+        </div>
+      </div>
+    </Section>
+
+    <Section id={ids.forms} title={copy.sections.forms}>
+      <div class="flex flex-col gap-24">
+        <PokemonCombobox
+          client:load
+          label={copy.forms.pokemon.label}
+          placeholder={copy.forms.pokemon.placeholder}
+          pokemon={pokemonEntries}
+        />
+        <Checkbox label={copy.forms.shinyOnly} />
+        <RadioGroup legend={ui.views.label} options={viewOptions} defaultValue="cards" />
+        <DiscardExport
+          client:load
+          label={copy.forms.export.label}
+          trigger={copy.forms.discard.trigger}
+          title={copy.forms.discard.title}
+          text={copy.forms.discard.text}
+          cancel={copy.forms.discard.cancel}
+          confirm={copy.forms.discard.confirm}
+          closeLabel={ui.close}
+        />
+      </div>
+    </Section>
+
+    <Section id={ids.facts} title={copy.sections.facts} className="xl:col-span-2">
+      <FactLines lines={factLines} />
+    </Section>
+  </div>
+</PageLayout>

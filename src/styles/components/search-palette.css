@@ -1,0 +1,206 @@
+/* SearchPalette (spec 7.9.3): the Ctrl + K panel. It has no board of the design
+   system, so it is composed only with its pieces and its tokens (R16, E11).
+
+   The panel is the `<dialog id="buscar-dialogo">` itself, opened with
+   `showModal()`: a click on the veil reaches the dialog with coordinates outside
+   its box, which is how SearchPalette.tsx tells the two apart, like the mobile
+   sheet does (spec 7.10.3).
+
+   Placement comes from the island as three --ac-* properties (spec 3.7): the
+   panel is anchored to the trigger that opened it, or centred under the header,
+   or full width on a phone. */
+
+.ac-search-palette {
+  /* The list scrolls inside the panel when it does not fit down to 16 px from
+     the bottom edge of the window. */
+  --ac-palette-vh: 100dvh; /* sin token: alto de la ventana */
+
+  position: fixed;
+  left: var(--ac-palette-left, 0);
+  top: var(--ac-palette-top, 0);
+  right: auto;
+  bottom: auto;
+  width: var(--ac-palette-width, var(--layout-search));
+  max-width: none;
+  max-height: calc(var(--ac-palette-vh) - var(--ac-palette-top, 0) - var(--space-16));
+  flex-direction: column;
+  gap: var(--space-8);
+  margin: 0;
+  padding: var(--space-8);
+  border: 1px solid var(--border-secondary);
+  border-radius: var(--radius-12);
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  font-family: var(--font-sans);
+  overflow: hidden;
+}
+
+/* `display` only while the palette is open, like the sheet of 7.10.3: an author
+   `display` beats the `dialog:not([open]) { display: none }` of the user agent,
+   and the closed panel would sit on every page of the site. */
+.ac-search-palette[open] {
+  display: flex;
+}
+
+/* Veil of spec 7.9.3, the same as the mobile sheet: `overlay` with a 4 px blur.
+   `var(--overlay)` here needs ::backdrop to inherit the custom properties of the
+   document, which V5-4 measures in Chromium and WebKit. */
+.ac-search-palette::backdrop {
+  background: var(--overlay);
+  -webkit-backdrop-filter: blur(4px); /* sin token: desenfoque del velo (spec 5.8) */
+  backdrop-filter: blur(4px); /* sin token: desenfoque del velo (spec 5.8) */
+}
+
+/* Field: the look of TextField variant="search" — 40 tall, 44 with a coarse
+   pointer, 16 magnifier 12 px from the left edge. M5 brings the real TextField;
+   until then the palette draws its own field with the same tokens. */
+.ac-search-palette__field {
+  display: flex;
+  height: var(--size-control);
+  flex: none;
+  align-items: center;
+  gap: var(--space-8);
+  padding: 0 var(--space-12);
+  border: 1px solid var(--border-secondary);
+  border-radius: var(--radius-12);
+  background: var(--bg-primary);
+}
+
+/* The ring goes around the whole field, not around the input inside it. */
+.ac-search-palette__field:focus-within {
+  outline: 2px solid var(--ring);
+  outline-offset: 1px;
+}
+
+.ac-search-palette__glyph {
+  display: block;
+  flex: none;
+  color: var(--text-tertiary);
+}
+
+.ac-search-palette__input {
+  @apply type-field;
+
+  min-width: 0;
+  flex: 1;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--text-primary);
+  font-family: var(--font-sans);
+}
+
+.ac-search-palette__input:focus-visible {
+  outline: none;
+}
+
+/* Results 8 px under the field (the gap of the panel). */
+.ac-search-palette__results {
+  min-height: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+
+.ac-search-palette__group-label {
+  @apply type-ui-strong;
+
+  margin: 0;
+  padding: var(--space-8) var(--space-8) var(--space-4);
+  color: var(--text-tertiary);
+}
+
+/* One option is a 40 px row like an IndexPanel link. Hover and keyboard are one
+   state: the pointer moves the active option, which carries aria-selected. */
+.ac-search-palette__option {
+  display: flex;
+  width: 100%;
+  min-width: 0;
+  height: var(--size-control);
+  align-items: center;
+  gap: var(--space-6);
+  padding: var(--space-4) var(--space-8) var(--space-4) var(--space-4);
+  border-radius: var(--radius-6);
+  color: var(--text-secondary);
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.ac-search-palette__option[aria-selected='true'] {
+  background: var(--bg-tertiary);
+  color: var(--text-primary);
+}
+
+/* The last option, «Ver todos los resultados», has no icon cell of its own. */
+.ac-search-palette__option--all {
+  padding-left: var(--space-8);
+}
+
+/* The 32 px icon cell is always there, so every name starts at one x. */
+.ac-search-palette__cell {
+  display: flex;
+  width: var(--size-cell);
+  height: var(--size-cell);
+  flex: none;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Illustration (Pokémon art) at 24, smooth: it is not a pixel sprite. */
+.ac-search-palette__art {
+  width: var(--size-sprite-panel);
+  height: var(--size-sprite-panel);
+  object-fit: contain;
+}
+
+.ac-search-palette__name {
+  @apply type-body;
+
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.ac-search-palette__meta {
+  @apply type-ui;
+
+  flex: none;
+  margin-left: auto;
+  padding-left: var(--space-8);
+  color: var(--text-tertiary);
+}
+
+/* Empty line of spec 7.9.3 (DS:EmptyState): one line, no card and no icon. */
+.ac-search-palette__empty {
+  @apply type-body;
+
+  margin: 0;
+  padding: var(--space-8);
+  color: var(--text-secondary);
+}
+
+/* Phones and coarse pointers: 44 px field and rows (S14). */
+@media (pointer: coarse) {
+  .ac-search-palette__field {
+    height: var(--size-touch);
+  }
+
+  .ac-search-palette__option {
+    height: var(--size-touch);
+  }
+}
+
+/* Movement of spec 6.2: the veil fades in and a row changes colour. Nothing
+   animates with `prefers-reduced-motion: reduce` (S15). */
+@media (prefers-reduced-motion: no-preference) {
+  .ac-search-palette::backdrop {
+    animation: ac-fade var(--duration-fast) var(--ease-standard);
+  }
+
+  .ac-search-palette__option {
+    transition:
+      background-color var(--duration-fast) var(--ease-standard),
+      color var(--duration-fast) var(--ease-standard);
+  }
+}

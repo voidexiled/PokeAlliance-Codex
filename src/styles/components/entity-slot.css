@@ -1,0 +1,69 @@
+/* EntitySlot (spec 7.2.6, 7.4.4, 7.5.5; DS:EntitySlot), ported from the `.ac-entity-slot`
+   block of the design system's components/bundle.css. global.css imports this file with
+   layer(components).
+
+   The square of the Slots view: a 1 px `border-secondary` frame over `bg-primary`, radius
+   8, and one single ink on hover. The slot is the trigger of a `NestedEntity`, so this
+   file only draws the frame and the stack count; the focus ring is the one of base.css and
+   the panel belongs to `game-tooltip.css`.
+
+   It carries the `position: relative` the corner Shiny mark anchors to (7.4.3). */
+
+.ac-entity-slot {
+  position: relative;
+  display: flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  width: var(--size-slot);
+  height: var(--size-slot);
+  border: 1px solid var(--border-secondary);
+  border-radius: var(--radius-8);
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  text-decoration: none;
+}
+
+.ac-entity-slot:hover {
+  background: var(--bg-tertiary);
+}
+
+/* 72: the Pokédex and Comercio slot, a 64 cell at 2x or the art at 64. */
+.ac-entity-slot--72 {
+  width: var(--size-stage);
+  height: var(--size-stage);
+}
+
+/* 44: the touch target asked for on every pointer, not only the coarse one. */
+.ac-entity-slot--44 {
+  width: var(--size-touch);
+  height: var(--size-touch);
+}
+
+/* Stack count, bottom right: 12/16 at 700 in white over the game text shadow, so it reads
+   on top of any sprite. The figure is in the accessible name of the slot, not here. */
+.ac-entity-slot__qty {
+  position: absolute;
+  right: var(--space-4);
+  bottom: 1px;
+  /* The token read `color: var(--white)` is a named-colour false positive of design:check
+     rule 2; the utility resolves to the same --white. */
+  @apply type-ui-strong text-white;
+  font-variant-numeric: tabular-nums;
+  text-shadow: var(--text-shadow-game);
+}
+
+/* Coarse pointer: the 40 slot grows to the 44 touch target and the sprite stays at 1x
+   (spec 5.8, S3). */
+@media (pointer: coarse) {
+  .ac-entity-slot--40 {
+    width: var(--size-touch);
+    height: var(--size-touch);
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .ac-entity-slot {
+    transition: background-color var(--duration-fast) var(--ease-standard);
+  }
+}

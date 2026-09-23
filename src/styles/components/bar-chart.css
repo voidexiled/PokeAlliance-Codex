@@ -1,0 +1,246 @@
+/* BarChart (spec 10.7; DS:BarChart), ported from the `.ac-bar-chart` block of the design
+   system's components/bundle.css, and the «Por día» section of the Guild page around it
+   (src/components/guild/GuildDays.tsx): the scroll box of the chart and the formula line.
+
+   Per-page stylesheet (D-018, §13.6): only the Guild page draws it, so global.css does not
+   import it; BarChart.tsx does. It repeats the layer order of global.css before its block
+   (§3.6), and `@reference` brings the text styles of theme.css to `@apply`.
+
+   Differences from the reference:
+   - The compact tooltip is the in-game panel (`.ac-game-tooltip--w200`, game-tooltip.css),
+     placed by the delegated controller, so `.ac-bar-chart__tip*` is not ported. Each bar's
+     trigger sits in a `NestedEntity` wrapper that fills its column (`.ac-bar-chart__tt`).
+   - Lengths are local properties set by the component (spec 3.7): `--ac-bar-cols`, `--ac-y`
+     and `--ac-bar-h`.
+   - The bar is at most 70 % of its column, so bars never touch when the columns narrow; at the
+     944 column it is the 24 of `size-bar`, as in the reference.
+   - Below 624 px the chart keeps 40 px per day and scrolls sideways inside `__chart` (§13.7,
+     reflow of a chart), instead of overlapping the dates under the bars.
+   - The colour transition sits inside `prefers-reduced-motion: no-preference` (spec 6.4), and
+     forced colors keep the bars and the grid in system colours (5.2): the mode would paint a
+     background-drawn bar with the canvas colour. */
+
+@reference '../theme.css';
+
+@layer properties, theme, base, components, utilities;
+
+@layer components {
+  /* 64 px on the left for the y tick labels (no token holds it). */
+  .ac-bar-chart {
+    padding-left: 64px; /* sin token: columna de las etiquetas del eje y */
+  }
+
+  /* Legend row: one ui line (16), kept when the metric has no goal so the plot does not move. */
+  .ac-bar-chart__legend-row {
+    display: flex;
+    justify-content: flex-end;
+    height: 16px; /* sin token: una línea ui de la leyenda */
+  }
+
+  .ac-bar-chart__legend {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-6);
+    @apply type-ui;
+    color: var(--text-secondary);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .ac-bar-chart__swatch {
+    display: block;
+    width: 16px; /* sin token: muestra de la línea de meta */
+    height: 0;
+    border-top: 1px dashed var(--text-quaternary);
+  }
+
+  .ac-bar-chart__band,
+  .ac-bar-chart__cols,
+  .ac-bar-chart__x {
+    grid-template-columns: repeat(var(--ac-bar-cols), minmax(0, 1fr));
+  }
+
+  /* Week band: «Semana del dd/mm» over the Monday column, one ui line (16). */
+  .ac-bar-chart__band {
+    display: grid;
+    height: 16px; /* sin token: una línea ui de la banda de semana */
+    margin-top: var(--space-8);
+  }
+
+  .ac-bar-chart__band-cell {
+    padding-left: var(--space-6);
+    @apply type-ui;
+    color: var(--text-tertiary);
+    white-space: nowrap;
+  }
+
+  .ac-bar-chart__plot {
+    position: relative;
+    height: var(--size-plot);
+    margin-top: var(--space-8);
+  }
+
+  .ac-bar-chart__line {
+    position: absolute;
+    bottom: var(--ac-y);
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: var(--border-secondary);
+  }
+
+  .ac-bar-chart__line--zero {
+    background: var(--border-primary);
+  }
+
+  /* Tick label: 56 px wide, right-aligned 8 px left of the plot, centred on its line. */
+  .ac-bar-chart__tick {
+    position: absolute;
+    bottom: calc(var(--ac-y) - 8px); /* sin token: media línea ui, centra la etiqueta */
+    left: -64px; /* sin token: la columna de las etiquetas del eje y */
+    width: 56px; /* sin token: etiqueta del eje, 8 px antes del gráfico */
+    @apply type-ui;
+    color: var(--text-tertiary);
+    text-align: right;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .ac-bar-chart__goal {
+    position: absolute;
+    bottom: var(--ac-y);
+    left: 0;
+    right: 0;
+    height: 0;
+    border-top: 1px dashed var(--text-quaternary);
+  }
+
+  .ac-bar-chart__cols {
+    position: absolute;
+    inset: 0;
+    display: grid;
+  }
+
+  .ac-bar-chart__col {
+    position: relative;
+    height: 100%;
+  }
+
+  /* Week separator: from the band (24 px above the plot) down to the zero line. */
+  .ac-bar-chart__week {
+    position: absolute;
+    left: 0;
+    top: calc(-1 * var(--space-24));
+    bottom: 0;
+    width: 1px;
+    background: var(--border-primary);
+  }
+
+  /* The NestedEntity wrapper of a bar fills its column, so the whole column is the trigger. */
+  .ac-bar-chart__col > .ac-bar-chart__tt {
+    position: absolute;
+    inset: 0;
+    display: flex;
+  }
+
+  .ac-bar-chart__hit {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    padding: 0;
+    border: 0;
+    border-radius: var(--radius-4);
+    background: transparent;
+    cursor: default;
+  }
+
+  .ac-bar-chart__bar {
+    display: block;
+    width: min(var(--size-bar), 70%);
+    height: max(1px, var(--ac-bar-h));
+    border-radius: var(--radius-4) var(--radius-4) 0 0;
+    background: var(--selected);
+  }
+
+  .ac-bar-chart__bar--partial {
+    opacity: var(--opacity-partial);
+  }
+
+  .ac-bar-chart__hit:hover .ac-bar-chart__bar,
+  .ac-bar-chart__hit:focus-visible .ac-bar-chart__bar {
+    background: var(--amber);
+  }
+
+  .ac-bar-chart__x {
+    display: grid;
+    margin-top: var(--space-8);
+  }
+
+  .ac-bar-chart__x-cell {
+    text-align: center;
+    @apply type-ui;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .ac-bar-chart__weekday {
+    display: block;
+    color: var(--text-tertiary);
+  }
+
+  .ac-bar-chart__date {
+    display: block;
+    color: var(--text-secondary);
+  }
+
+  .ac-bar-chart__date--current {
+    color: var(--text-primary);
+  }
+
+  /* «Por día» (GuildDays.tsx): the chart scrolls sideways below 40 px per day. */
+  .ac-guild-days__chart {
+    overflow-x: auto;
+  }
+
+  .ac-guild-days__chart > .ac-bar-chart {
+    min-width: 624px; /* sin token: ancho mínimo de los 14 días antes de desplazarse */
+  }
+
+  /* Formula line: 12/16 in `helper`, as `Lienzo:Guild` draws it (10.7). */
+  .ac-guild-days__formula {
+    margin: 0;
+    @apply type-ui;
+    color: var(--helper);
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .ac-bar-chart__bar {
+      transition: background-color var(--duration-fast) var(--ease-standard);
+    }
+  }
+
+  @media (forced-colors: active) {
+    .ac-bar-chart__bar,
+    .ac-bar-chart__line,
+    .ac-bar-chart__week {
+      forced-color-adjust: none;
+    }
+
+    .ac-bar-chart__bar {
+      background: CanvasText;
+    }
+
+    .ac-bar-chart__hit:hover .ac-bar-chart__bar,
+    .ac-bar-chart__hit:focus-visible .ac-bar-chart__bar {
+      background: Highlight;
+    }
+
+    .ac-bar-chart__line {
+      background: GrayText;
+    }
+
+    .ac-bar-chart__line--zero,
+    .ac-bar-chart__week {
+      background: CanvasText;
+    }
+  }
+}

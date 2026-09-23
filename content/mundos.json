@@ -1,0 +1,25 @@
+{
+  "$schema": "./schemas/mundos.schema.json",
+  "mundos": [
+    {
+      "id": "moon",
+      "nombre": "Moon"
+    },
+    {
+      "id": "sun",
+      "nombre": "Sun"
+    },
+    {
+      "id": "titan-1",
+      "nombre": "Titan 1"
+    },
+    {
+      "id": "titan-2",
+      "nombre": "Titan 2"
+    },
+    {
+      "id": "titan-3",
+      "nombre": "Titan 3"
+    }
+  ]
+}

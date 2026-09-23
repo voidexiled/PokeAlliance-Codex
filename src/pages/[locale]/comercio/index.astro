@@ -1,0 +1,156 @@
+---
+// Comercio (spec 9.5, `Lienzo:Comercio`): the listings of phase A in template B of 8.0.2 —
+// breadcrumb «Comunidad › Comercio», PageTitle, the red InfoBanner and the list island (search
+// row with «Crear anuncio», type tabs, FilterBar, results bar, the active view and the
+// pagination), then the footer PageLayout adds.
+//
+// Render (9.3). The page exports no `prerender`: src/integrations/comercio-fases.ts sets it by
+// phase (prerendered in phase A, rendered on demand in phase B) and fails the build if a Comercio
+// page exports one, so the hook never wins in silence.
+//
+// Data (9.2, D-007, R12). The listings are the sample registry of content/comercio/, which
+// src/lib/trade/registry.ts reads only with COMERCIO_DEMO=1: a production build has none, and
+// then the page is the empty state of 9.5.10 alone — «Aún no hay anuncios.» and «Crear anuncio» —
+// with no search, tab, filter, banner or results bar (CA-9.1, S11). With listings, the public
+// ones (9.4: `publicado` or `reservado`, not yet expired when the build runs) are sorted by
+// «Recientes» and the island receives the first page of that default state with what it names
+// (`tradeData`, as one JSON text), and the length of the list; a list longer than one page asks
+// for `/{l}/comercio/datos.json` when it hydrates (PR5). A prerendered page never reads its
+// query (PR2): the state of the URL is the island's.
+//
+// Text (DP1, 13.2). The h1 and the crumbs are the menu entry and its group
+// (src/lib/nav/groups.ts); everything else is `messages.trade` — the island gets the part of
+// `ui` it reads (`tradeUi`) and the labels `tradeLabels` composes — and the names come from the
+// registries.
+import { createElement } from 'react';
+
+import { getAlternatePath, getLocale, locales, type Locale } from '@/i18n/config';
+import type { Messages } from '@/i18n/messages/en';
+import { en } from '@/i18n/messages/en';
+import { es } from '@/i18n/messages/es';
+import {
+  getAuras,
+  getCategorias,
+  getElementos,
+  getItems,
+  getMonedaDiamantes,
+  getMundos,
+  getOutfits,
+  getSpriteRegistry,
+} from '@/lib/content/registry';
+import { getPokemon } from '@/lib/content/repository';
+import { buildNav } from '@/lib/nav/groups';
+import { spriteOrNull } from '@/lib/sprites/resolve';
+import { comercioPublico, getAnuncios, getVendedores } from '@/lib/trade/registry';
+import { sortListings } from '@/lib/trade/sort';
+import { isListed } from '@/lib/trade/types';
+import { EmptyState } from '@/components/content/EmptyState';
+import InfoBanner from '@/components/content/InfoBanner.astro';
+import { Button } from '@/components/controls/Button';
+import { PageTitle } from '@/components/layout/PageTitle';
+import {
+  TRADE_PAGE_SIZE,
+  TradeListRoot,
+  publishHref,
+  tradeData,
+  tradeDiamonds,
+  tradeLabels,
+  tradeSprites,
+  tradeUi,
+  type TradeCatalog,
+} from '@/components/trade/TradeListRoot';
+import PageLayout from '@/layouts/PageLayout.astro';
+
+export function getStaticPaths() {
+  return locales.map((locale) => ({ params: { locale } }));
+}
+
+const dictionaries: Record<Locale, Messages> = { es, en };
+
+const locale = getLocale(Astro.params.locale);
+const path = Astro.url.pathname;
+const alternates = Object.fromEntries(
+  locales.map((option) => [option, getAlternatePath(path, option)]),
+) as Record<Locale, string>;
+const messages = dictionaries[locale];
+const { ui, trade } = messages;
+
+// 8.0.4: «Comunidad › Comercio». The group has no index page, so its crumb is text.
+const group = buildNav(locale, path).groups.find((entry) => entry.id === 'comunidad');
+const entry = group?.items.find((item) => item.id === 'comercio');
+if (group === undefined || entry === undefined) {
+  throw new Error('src/lib/nav/groups.ts: no «comercio» entry in the «comunidad» group (8.0.3).');
+}
+const title = entry.label;
+
+// 9.4: what is public when the build runs, in the default order (9.5.5).
+const builtAt = new Date();
+const listed = sortListings(
+  getAnuncios().filter((anuncio) => isListed(anuncio, builtAt)),
+  'recientes',
+);
+
+const registry = getSpriteRegistry();
+const catalog: TradeCatalog = {
+  pokemon: getPokemon(),
+  items: getItems(),
+  categorias: getCategorias(),
+  elementos: getElementos(),
+  auras: getAuras(),
+  outfits: getOutfits(),
+  mundos: getMundos(locale),
+  vendedores: getVendedores(),
+  sprites: registry,
+  channels: trade.channels,
+};
+const firstPage = JSON.stringify(tradeData(listed.slice(0, TRADE_PAGE_SIZE), catalog, locale));
+const worlds = catalog.mundos.map((world) => [world.id, world.nombre] as const);
+
+// 9.5.1 step 3: the banner speaks of verification and reviews, which only exist with phase B
+// or with listings to contact; the empty list of production has neither (R12).
+const banner = comercioPublico() || listed.length > 0;
+const diamond = spriteOrNull(registry, 'ui/diamond', { animado: true });
+
+// 9.5.10: the one action of the empty list, a link to the publish page.
+const create = createElement(Button, { href: publishHref(locale), children: trade.create });
+---
+
+<PageLayout
+  locale={locale}
+  title={title}
+  description={trade.description}
+  alternates={alternates}
+  breadcrumb={[{ label: group.label }, { label: title }]}
+>
+  <PageTitle title={title} />
+  {
+    banner && (
+      <InfoBanner
+        sprite={diamond}
+        facts={[trade.banner.payments, trade.banner.contact, trade.banner.reviews]}
+      />
+    )
+  }
+  {
+    listed.length > 0 ? (
+      <TradeListRoot
+        client:load
+        variant="market"
+        locale={locale}
+        path={path}
+        data={firstPage}
+        total={listed.length}
+        dataUrl={listed.length > TRADE_PAGE_SIZE ? `/${locale}/comercio/datos.json` : undefined}
+        builtAt={builtAt.toISOString()}
+        sprites={tradeSprites(registry)}
+        worlds={worlds}
+        diamonds={tradeDiamonds(getMonedaDiamantes(), locale)}
+        caption={trade.list.caption}
+        ui={tradeUi(ui)}
+        labels={tradeLabels(messages)}
+      />
+    ) : (
+      <EmptyState action={create}>{trade.list.empty}</EmptyState>
+    )
+  }
+</PageLayout>

@@ -1,0 +1,767 @@
+{
+ "declaredHeight": 2360,
+ "renderedHeight": 2360,
+ "width": 1440,
+ "contentHeight": 2336,
+ "overflow": false,
+ "emptyTail": 24,
+ "lowest": {
+  "path": "#dc-root > div:nth-child(1) > div:nth-child(1) > div:nth-child(3) > main:nth-child(2) > footer:nth-child(7)",
+  "kind": "box"
+ },
+ "rawHoles": [],
+ "brokenImages": [],
+ "webFontsLoaded": [],
+ "grids": [
+  {
+   "kind": "grid",
+   "path": "#dc-root > div:nth-child(1) > div:nth-child(1) > div:nth-child(3) > main:nth-child(2) > section:nth-child(3) > div:nth-child(3) > div:nth-child(1)",
+   "rect": {
+    "x": 248,
+    "y": 450,
+    "w": 944,
+    "h": 134
+   },
+   "columns": 4,
+   "children": 4,
+   "painted": 4,
+   "cards": true,
+   "inTooltip": false,
+   "alignItems": "normal",
+   "label": "Miembros con actividad 23 de 25 4 sin actividad ",
+   "maxSpread": 0,
+   "rows": [
+    {
+     "y": 450,
+     "children": [
+      0,
+      1,
+      2,
+      3
+     ],
+     "heights": [
+      134,
+      134,
+      134,
+      134
+     ],
+     "heightSpread": 0,
+     "hollowBottom": [
+      18,
+      18,
+      18,
+      18
+     ],
+     "padBottom": [
+      17,
+      17,
+      17,
+      17
+     ]
+    }
+   ]
+  },
+  {
+   "kind": "grid",
+   "path": "#dc-root > div:nth-child(1) > div:nth-child(1) > div:nth-child(3) > main:nth-child(2) > section:nth-child(3) > div:nth-child(3) > div:nth-child(1) > div:nth-child(1)",
+   "rect": {
+    "x": 248,
+    "y": 450,
+    "w": 224,
+    "h": 134
+   },
+   "columns": 1,
+   "children": 3,
+   "painted": 0,
+   "cards": false,
+   "inTooltip": false,
+   "alignItems": "normal",
+   "label": "Miembros con actividad",
+   "maxSpread": 0,
+   "rows": [
+    {
+     "y": 467,
+     "children": [
+      0
+     ],
+     "heights": [
+      22
+     ],
+     "heightSpread": 0,
+     "hollowBottom": [
+      3
+     ],
+     "padBottom": [
+      0
+     ]
+    },
+    {
+     "y": 497,
+     "children": [
+      1
+     ],
+     "heights": [
+      17
+     ],
+     "heightSpread": 0,
+     "hollowBottom": [
+      0
+     ],
+     "padBottom": [
+      0
+     ],
+     "itemHeights": [
+      30
+     ]
+    },
+    {
+     "y": 535,
+     "children": [
+      2
+     ],
+     "heights": [
+      32
+     ],
+     "heightSpread": 0,
+     "hollowBottom": [
+      1
+     ],
+     "padBottom": [
+      0
+     ]
+    }
+   ]
+  },
+  {
+   "kind": "grid",
+   "path": "#dc-root > div:nth-child(1) > div:nth-child(1) > div:nth-child(3) > main:nth-child(2) > section:nth-child(3) > div:nth-child(3) > div:nth-child(1) > div:nth-child(2)",
+   "rect": {
+    "x": 488,
+    "y": 450,
+    "w": 224,
+    "h": 134
+   },
+   "columns": 1,
+   "children": 3,
+   "painted": 0,
+   "cards": false,
+   "inTooltip": false,
+   "alignItems": "normal",
+   "label": "Dailies",
+   "maxSpread": 0,
+   "rows": [
+    {
+     "y": 467,
+     "children": [
+      0
+     ],
+     "heights": [
+      22
+     ],
+     "heightSpread": 0,
+     "hollowBottom": [
+      3
+     ],
+     "padBottom": [
+      0
+     ]
+    },
+    {
+     "y": 497,
+     "children": [
+      1
+     ],
+     "heights": [
+      17
+     ],
+     "heightSpread": 0,
+     "hollowBottom": [
+      0
+     ],
+     "padBottom": [
+      0
+     ],
+     "itemHeights": [
+      30
+     ]
+    },
+    {
+     "y": 535,
+     "children": [
+      2
+     ],
+     "heights": [
+      32
+     ],
+     "heightSpread": 0,
+     "hollowBottom": [
+      1
+     ],
+     "padBottom": [
+      0
+     ]
+    }
+   ]
+  },
+  {
+   "kind": "grid",
+   "path": "#dc-root > div:nth-child(1) > div:nth-child(1) > div:nth-child(3) > main:nth-child(2) > section:nth-child(3) > div:nth-child(3) > div:nth-child(1) > div:nth-child(3)",
+   "rect": {
+    "x": 728,
+    "y": 450,
+    "w": 224,
+    "h": 134
+   },
+   "columns": 1,
+   "children": 3,
+   "painted": 0,
+   "cards": false,
+   "inTooltip": false,
+   "alignItems": "normal",
+   "label": "Contribución",
+   "maxSpread": 0,
+   "rows": [
+    {
+     "y": 467,
+     "children": [
+      0
+     ],
+     "heights": [
+      22
+     ],
+     "heightSpread": 0,
+     "hollowBottom": [
+      3
+     ],
+     "padBottom": [
+      0
+     ]
+    },
+    {
+     "y": 497,
+     "children": [
+      1
+     ],
+     "heights": [
+      30
+     ],
+     "heightSpread": 0,
+     "hollowBottom": [
+      5
+     ],
+     "padBottom": [
+      0
+     ]
+    },
+    {
+     "y": 535,
+     "children": [
+      2
+     ],
+     "heights": [
+      32
+     ],
+     "heightSpread": 0,
+     "hollowBottom": [
+      1
+     ],
+     "padBottom": [
+      0
+     ]
+    }
+   ]
+  },
+  {
+   "kind": "grid",
+   "path": "#dc-root > div:nth-child(1) > div:nth-child(1) > div:nth-child(3) > main:nth-child(2) > section:nth-child(3) > div:nth-child(3) > div:nth-child(1) > div:nth-child(4)",
+   "rect": {
+    "x": 968,
+    "y": 450,
+    "w": 224,
+    "h": 134
+   },
+   "columns": 1,
+   "children": 3,
+   "painted": 0,
+   "cards": false,
+   "inTooltip": false,
+   "alignItems": "normal",
+   "label": "Puntos",
+   "maxSpread": 0,
+   "rows": [
+    {
+     "y": 467,
+     "children": [
+      0
+     ],
+     "heights": [
+      22
+     ],
+     "heightSpread": 0,
+     "hollowBottom": [
+      3
+     ],
+     "padBottom": [
+      0
+     ]
+    },
+    {
+     "y": 497,
+     "children": [
+      1
+     ],
+     "heights": [
+      30
+     ],
+     "heightSpread": 0,
+     "hollowBottom": [
+      5
+     ],
+     "padBottom": [
+      0
+     ]
+    },
+    {
+     "y": 535,
+     "children": [
+      2
+     ],
+     "heights": [
+      32
+     ],
+     "heightSpread": 0,
+     "hollowBottom": [
+      1
+     ],
+     "padBottom": [
+      0
+     ]
+    }
+   ]
+  },
+  {
+   "kind": "grid",
+   "path": "#dc-root > div:nth-child(1) > div:nth-child(1) > div:nth-child(3) > main:nth-child(2) > section:nth-child(4) > div:nth-child(3) > div:nth-child(1) > div:nth-child(2)",
+   "rect": {
+    "x": 312,
+    "y": 761,
+    "w": 880,
+    "h": 16
+   },
+   "columns": 14,
+   "children": 14,
+   "painted": 0,
+   "cards": false,
+   "inTooltip": false,
+   "alignItems": "normal",
+   "label": "",
+   "maxSpread": 0,
+   "rows": [
+    {
+     "y": 761,
+     "children": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13
+     ],
+     "heights": [
+      16,
+      16,
+      16,
+      16,
+      16,
+      16,
+      16,
+      16,
+      16,
+      16,
+      16,
+      16,
+      16,
+      16
+     ],
+     "heightSpread": 0,
+     "hollowBottom": [
+      16,
+      16,
+      1,
+      16,
+      16,
+      16,
+      16,
+      16,
+      16,
+      1,
+      16,
+      16,
+      16,
+      16
+     ],
+     "padBottom": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+     ]
+    }
+   ]
+  },
+  {
+   "kind": "grid",
+   "path": "#dc-root > div:nth-child(1) > div:nth-child(1) > div:nth-child(3) > main:nth-child(2) > section:nth-child(4) > div:nth-child(3) > div:nth-child(1) > div:nth-child(3) > div:nth-child(12)",
+   "rect": {
+    "x": 312,
+    "y": 785,
+    "w": 880,
+    "h": 220
+   },
+   "columns": 14,
+   "children": 14,
+   "painted": 12,
+   "cards": false,
+   "inTooltip": false,
+   "alignItems": "normal",
+   "label": "",
+   "maxSpread": 107.6,
+   "rows": [
+    {
+     "y": 785,
+     "children": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13
+     ],
+     "heights": [
+      184.6,
+      162.4,
+      220,
+      136,
+      171.1,
+      168.5,
+      163.2,
+      165.9,
+      180.4,
+      220,
+      157.8,
+      159.9,
+      141.5,
+      112.4
+     ],
+     "heightSpread": 107.6,
+     "hollowBottom": [
+      184.6,
+      162.4,
+      0,
+      136,
+      171.1,
+      168.5,
+      163.2,
+      165.9,
+      180.4,
+      0,
+      157.8,
+      159.9,
+      141.5,
+      112.4
+     ],
+     "padBottom": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+     ],
+     "itemHeights": [
+      220,
+      220,
+      220,
+      220,
+      220,
+      220,
+      220,
+      220,
+      220,
+      220,
+      220,
+      220,
+      220,
+      220
+     ]
+    }
+   ]
+  },
+  {
+   "kind": "grid",
+   "path": "#dc-root > div:nth-child(1) > div:nth-child(1) > div:nth-child(3) > main:nth-child(2) > section:nth-child(4) > div:nth-child(3) > div:nth-child(1) > div:nth-child(4)",
+   "rect": {
+    "x": 312,
+    "y": 1013,
+    "w": 880,
+    "h": 48
+   },
+   "columns": 14,
+   "children": 14,
+   "painted": 0,
+   "cards": false,
+   "inTooltip": false,
+   "alignItems": "normal",
+   "label": "sá 05/09",
+   "maxSpread": 0,
+   "rows": [
+    {
+     "y": 1013,
+     "children": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13
+     ],
+     "heights": [
+      48,
+      48,
+      48,
+      48,
+      48,
+      48,
+      48,
+      48,
+      48,
+      48,
+      48,
+      48,
+      48,
+      48
+     ],
+     "heightSpread": 0,
+     "hollowBottom": [
+      17,
+      17,
+      17,
+      17,
+      17,
+      17,
+      17,
+      17,
+      17,
+      17,
+      17,
+      17,
+      17,
+      1
+     ],
+     "padBottom": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+     ]
+    }
+   ]
+  }
+ ],
+ "flexWraps": [
+  {
+   "kind": "flex-wrap",
+   "path": "#dc-root > div:nth-child(1) > div:nth-child(1) > div:nth-child(3) > main:nth-child(2) > nav:nth-child(1) > ol:nth-child(1)",
+   "rect": {
+    "x": 248,
+    "y": 96,
+    "w": 944,
+    "h": 16
+   },
+   "columns": 5,
+   "children": 5,
+   "painted": 0,
+   "cards": false,
+   "inTooltip": false,
+   "alignItems": "center",
+   "label": "Herramientas",
+   "maxSpread": 9,
+   "rows": [
+    {
+     "y": 96,
+     "children": [
+      0,
+      1,
+      2,
+      3,
+      4
+     ],
+     "heights": [
+      16,
+      7,
+      16,
+      7,
+      16
+     ],
+     "heightSpread": 9,
+     "hollowBottom": [
+      1,
+      7,
+      1,
+      7,
+      1
+     ],
+     "padBottom": [
+      0,
+      0,
+      0,
+      0,
+      0
+     ],
+     "itemHeights": [
+      16,
+      14,
+      16,
+      14,
+      16
+     ]
+    }
+   ]
+  },
+  {
+   "kind": "flex-wrap",
+   "path": "#dc-root > div:nth-child(1) > div:nth-child(1) > div:nth-child(3) > main:nth-child(2) > div:nth-child(2) > div:nth-child(2) > div:nth-child(1)",
+   "rect": {
+    "x": 248,
+    "y": 221,
+    "w": 717.7,
+    "h": 64
+   },
+   "columns": 3,
+   "children": 5,
+   "painted": 0,
+   "cards": false,
+   "inTooltip": false,
+   "alignItems": "normal",
+   "label": "Mundo: Sun",
+   "maxSpread": 0,
+   "rows": [
+    {
+     "y": 221,
+     "children": [
+      0,
+      1,
+      2
+     ],
+     "heights": [
+      17,
+      17,
+      17
+     ],
+     "heightSpread": 0,
+     "hollowBottom": [
+      0,
+      0,
+      0
+     ],
+     "padBottom": [
+      0,
+      0,
+      0
+     ],
+     "itemHeights": [
+      32,
+      32,
+      32
+     ]
+    },
+    {
+     "y": 253,
+     "children": [
+      3,
+      4
+     ],
+     "heights": [
+      17,
+      17
+     ],
+     "heightSpread": 0,
+     "hollowBottom": [
+      0,
+      0
+     ],
+     "padBottom": [
+      0,
+      0
+     ],
+     "itemHeights": [
+      32,
+      32
+     ]
+    }
+   ]
+  }
+ ],
+ "board": "Guild.dc.html",
+ "state": {
+  "tip": null
+ },
+ "viewport": {
+  "width": 1440,
+  "height": 2360
+ },
+ "missingBlobs": [],
+ "consoleErrors": []
+}

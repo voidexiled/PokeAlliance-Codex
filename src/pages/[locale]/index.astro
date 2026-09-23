@@ -1,23 +1,89 @@
 ---
-import AppLayout from '../../layouts/AppLayout.astro';
-import { ServerSaveStatus } from '../../components/phase3/ServerSaveStatus';
-import { getLocale, locales, type Locale } from '../../i18n/config';
-import { SERVER_SAVE_ZONE } from '../../lib/time/server-save';
-import { getCatalogMetrics, getCollections, getRecords } from '../../lib/content/repository';
-import { Temporal } from '@js-temporal/polyfill';
-import { WikiSearch } from '../../components/wiki/WikiSearch';
-import { WikiPortalPanel } from '../../components/wiki/WikiPortalPanel';
+// Inicio (spec 8.1): template A of 8.0.2 on PageLayout, prerendered, with the 24 rhythm of
+// `rhythm="home"` (16 below `layout-bp-xl`, 48 over the footer) and no crumbs (E4). Lienzo:Main
+// at 1440 and Lienzo:Inicio-movil at 390. In the order of the DOM, which is the reading and Tab
+// order at every width (S13):
+//
+//   HomeIntro        the h1 and one line of figures from the registries (step 1)
+//   SearchTrigger    `home` (40, with its keycap) from `layout-bp-md` and `mobile` (44, no
+//                    keycap) below it (step 2). The header of Inicio has no trigger (A3), so this
+//                    is the search of the page; both open the palette of PageLayout, and Ctrl + K
+//                    answers the one that shows (home-bento.css)
+//   FeaturedSection  «Destacados», one card per entry of content/destacados.json (step 3)
+//   bento            the four IndexPanel and the WorldsTable, placed by grid-template-areas in 3,
+//                    2 or 1 columns (step 4, E17)
+//
+// PageLayout adds the footer, the 208 spacer and the frame. No island of its own: HomeIntro and
+// IndexPanel are Astro, FeaturedSection and WorldsTable render here on the server with no client
+// directive, and the only JavaScript is the frame's (7.3, C7-01). What the page showed before —
+// the kicker, the slogan, the call to action, the three starters, «Explorar la wiki» with its four
+// cards and ServerSaveStatus — is gone (H-01 to H-11, A17, Q7).
+//
+// Data (8.0.5, R7, X4): every figure and every label of a record comes from `content/` through
+// the readers of 3.12, in the page's locale; no text or figure of a board is written here.
+//
+//   - step 1: `{n}` is `getPokemon().length`; the list names, in this order, «ítems» when
+//     `getItems()` keeps one item, «sistemas» when `getSistemas()` keeps one page and
+//     «actividades» when an activity has its page in the build — the same test as its panel —
+//     joined with «, » and the dictionary's «y» / «and» before the last (X12). With none of them
+//     the line is `introBare`. The sprite is `ui/inicio` (3.13); HomeIntro fits it to its box.
+//   - step 3: `buildFeatured(locale)`, the entries of the pinned «Destacados» group of the menu
+//     (src/lib/nav/groups.ts): the records of content/destacados.json in the order of the file
+//     (drafts follow OCULTAR_BORRADORES), through the same WG5 test as the menu, so the page
+//     and the menu never show different ones — `pnpm content:check` already fails on a route
+//     the build does not write. Each one has its label in this locale, its route with the locale
+//     segment and its sprite as the adapter returns it, animated when its sheet is an animation
+//     (the Diamond turns in Destacados, DS:guias/40, 6.3). FeaturedCard picks the scale.
+//   - step 4, one panel per menu group of 8.0.3 with the same entries: Sistemas, one link per
+//     system page of `getSistemas()` with its sprite and, when the record has rows, its panel
+//     (`systemTip`); Ítems, «Todo» and the 13 Market categories of `getCategorias()` with their
+//     `icono`; Actividades, one link per activity whose page the build writes
+//     (scripts/lib/rutas-migradas.mjs, WG5, since M11) with its `sprite` — the cell stays empty
+//     while the record has none — and without a panel, or no panel and no area with no activity;
+//     Pokédex, the 18 elements of `getElementos()` in the order of 8.0.5, each
+//     to `/{l}/pokedex/?elemento={id}` with its icon (IndexPanel draws an illustration at 24). A
+//     panel counts its own links (WD1). The worlds are `getMundos(locale)`, already in the
+//     numeric order of 3.13, names only (X3).
+//
+// The bento (E17): home-bento.css holds the grid and its container queries; the templates of
+// areas are written here, from the panels that render, as `--ac-areas-3` and `--ac-areas-2` on
+// the bento. A missing panel leaves its area as an empty cell and the others keep theirs; a row
+// that no panel keeps is dropped (8.1 step 4). With no panel at all there is no bento.
+//
+// Text (DP1, 13.2): `messages.home` for the document title of S-01, the description of 13.5, the
+// h1, the line, the section and panel titles, the counted words and the worlds; `ui.pinHint` for
+// the strip of the system panels. The triggers read `shell` themselves (7.2.1).
+//
+// Styles: home-bento.css, per-page CSS imported here (D-018); each component brings its own.
+import '@/styles/components/home-bento.css';
+
+import { esRutaDelSitio } from '../../../scripts/lib/rutas-migradas.mjs';
+
+import { getAlternatePath, getLocale, locales, type Locale } from '@/i18n/config';
+import type { Messages } from '@/i18n/messages/en';
+import { en } from '@/i18n/messages/en';
+import { es } from '@/i18n/messages/es';
+import { fill } from '@/i18n/messages/types';
 import {
-  BookOpenIcon,
-  BoxesIcon,
-  FileClockIcon,
-  MapIcon,
-  SearchIcon,
-  ShieldIcon,
-  SparklesIcon,
-  SwordsIcon,
-  UsersIcon,
-} from 'lucide-react';
+  getCategorias,
+  getElementos,
+  getItems,
+  getMundos,
+  getSistemas,
+  getSpriteRegistry,
+} from '@/lib/content/registry';
+import { getPokemon, getQuests } from '@/lib/content/repository';
+import { formatInteger } from '@/lib/format/numbers';
+import { systemTip } from '@/lib/game/tips';
+import { buildFeatured } from '@/lib/nav/groups';
+import { spriteOrNull } from '@/lib/sprites/resolve';
+
+import { FeaturedSection } from '@/components/home/FeaturedSection';
+import HomeIntro from '@/components/home/HomeIntro.astro';
+import IndexPanel, { type IndexPanelLink } from '@/components/home/IndexPanel.astro';
+import { WorldsTable } from '@/components/home/WorldsTable';
+import SearchTrigger from '@/components/layout/SearchTrigger.astro';
+import PageLayout from '@/layouts/PageLayout.astro';
 
 export const prerender = true;
 
@@ -25,288 +91,203 @@ export function getStaticPaths() {
   return locales.map((locale) => ({ params: { locale } }));
 }
 
-const locale = getLocale(Astro.params.locale) as Locale;
-const canonicalDate = Temporal.Now.zonedDateTimeISO(SERVER_SAVE_ZONE).toPlainDate().toString();
-const catalog = getCatalogMetrics();
-const collections = getCollections(locale);
-const featuredPokemon = getRecords('pokemon')[0];
-const copy =
-  locale === 'es'
-    ? {
-        title: 'Inicio',
-        description: 'Wiki comunitaria de PokeAlliance con fichas, guías y herramientas.',
-        eyebrow: 'Alliance Codex',
-        welcome: 'Bienvenido a la wiki de PokeAlliance',
-        intro:
-          'Consulta la información del juego, revisa de dónde sale cada dato y encuentra las herramientas que iremos construyendo con la comunidad.',
-        featured: 'Accesos rápidos',
-        pokedex: 'Pokédex',
-        pokedexDescription: 'Especies, variantes y hechos revisados.',
-        guides: 'Guías',
-        guidesDescription: 'Misiones, ubicaciones y rutas documentadas.',
-        tools: 'Herramientas',
-        toolsDescription: 'Mapa, búsqueda y utilidades del Codex.',
-        changes: 'Cambios',
-        changesDescription: 'Registro de actualizaciones y revisiones.',
-        catalog: 'Contenido disponible',
-        records: 'registros',
-        dataStatus: 'Estado de los datos',
-        dataStatusIntro:
-          'Esta muestra está conectada al repositorio normalizado. La cobertura completa se incorporará por etapas.',
-        type: 'Tipo',
-        count: 'Cantidad',
-        temporal: 'Hora del servidor',
-        temporalDescription:
-          'Server Save se guarda a las 00:00 en Brasil y se convierte a la zona local de cada visitante.',
-        featuredEntry: 'Ficha de ejemplo',
-        collections: 'Colecciones',
-        wikiTools: 'Herramientas de la wiki',
-        community: 'Comunidad y revisión',
-      }
-    : {
-        title: 'Home',
-        description: 'Community wiki for PokeAlliance with records, guides and tools.',
-        eyebrow: 'Alliance Codex',
-        welcome: 'Welcome to the PokeAlliance wiki',
-        intro:
-          'Browse game information, see where each fact comes from and find the tools we will build with the community.',
-        featured: 'Quick access',
-        pokedex: 'Pokédex',
-        pokedexDescription: 'Species, variants and reviewed facts.',
-        guides: 'Guides',
-        guidesDescription: 'Documented quests, locations and routes.',
-        tools: 'Tools',
-        toolsDescription: 'Map, search and Codex utilities.',
-        changes: 'Changes',
-        changesDescription: 'Updates and review history.',
-        catalog: 'Available content',
-        records: 'records',
-        dataStatus: 'Data status',
-        dataStatusIntro:
-          'This sample is connected to the normalized repository. Full coverage will be added in stages.',
-        type: 'Type',
-        count: 'Count',
-        temporal: 'Server time',
-        temporalDescription:
-          'Server Save is stored at 00:00 in Brazil and converted to each visitor’s local zone.',
-        featuredEntry: 'Example entry',
-        collections: 'Collections',
-        wikiTools: 'Wiki tools',
-        community: 'Community & review',
-      };
-const quickLinks = [
-  {
-    title: copy.pokedex,
-    description: copy.pokedexDescription,
-    href: `/${locale}/pokedex/`,
-    icon: BookOpenIcon,
-  },
-  {
-    title: copy.guides,
-    description: copy.guidesDescription,
-    href: `/${locale}/guias/`,
-    icon: SparklesIcon,
-  },
-  {
-    title: copy.tools,
-    description: copy.toolsDescription,
-    href: `/${locale}/herramientas/`,
-    icon: SwordsIcon,
-  },
-  {
-    title: copy.changes,
-    description: copy.changesDescription,
-    href: `/${locale}/cambios/`,
-    icon: FileClockIcon,
-  },
-];
-const collectionLinks = collections.map((collection) => ({
-  title: collection.label,
-  description: collection.description,
-  href: collection.href,
-  meta: collection.count,
-  icon: BoxesIcon,
+const dictionaries: Record<Locale, Messages> = { es, en };
+
+const locale = getLocale(Astro.params.locale);
+const path = Astro.url.pathname;
+const alternates = Object.fromEntries(
+  locales.map((option) => [option, getAlternatePath(path, option)]),
+) as Record<Locale, string>;
+
+const messages = dictionaries[locale];
+const home = messages.home;
+const registry = getSpriteRegistry();
+
+// ------------------------------------------------------------------ step 4: the panels
+
+const systemLinks: IndexPanelLink[] = getSistemas().map((system) => {
+  const icon = spriteOrNull(registry, system.sprite);
+  const tip = systemTip(
+    { id: system.id, titulo: system.titulo, sprite: icon, tooltip: system.tooltip },
+    locale,
+  );
+  return {
+    id: system.id,
+    label: system.titulo[locale],
+    href: `/${locale}/sistemas/${system.id}/`,
+    icon,
+    ...(tip.rows.length > 0 ? { tip } : {}),
+  };
+});
+
+// «Todo», the virtual category, is `/{l}/items/`; the other 13 have a page each (8.5).
+const itemLinks: IndexPanelLink[] = getCategorias().map((category) => ({
+  id: category.id,
+  label: category.nombre[locale],
+  href: category.virtual === true ? `/${locale}/items/` : `/${locale}/items/c/${category.id}/`,
+  icon: spriteOrNull(registry, category.icono),
 }));
-const toolLinks = [
-  {
-    title: locale === 'es' ? 'Comparar Pokémon' : 'Compare Pokémon',
-    href: `/${locale}/herramientas/pokemon/`,
-    icon: SwordsIcon,
-  },
-  {
-    title: locale === 'es' ? 'Ranking de guild' : 'Guild ranking',
-    href: `/${locale}/herramientas/guild/`,
-    icon: UsersIcon,
-  },
-  {
-    title: locale === 'es' ? 'Mapa del cliente' : 'Client map',
-    href: `/${locale}/mapa/`,
-    icon: MapIcon,
-  },
-  { title: locale === 'es' ? 'Buscar' : 'Search', href: `/${locale}/buscar/`, icon: SearchIcon },
+
+// An activity is published when the build writes its page (8.9.2), which the list of migrated
+// routes knows (WG5). Its icon is the optional `sprite` of 3.13, as on the activities index
+// (8.9.1): the cell stays empty while the record has none. An activity has no panel (8.9). A
+// quest name is a proper name of the game and reads the same in both locales (T23).
+const activityLinks: IndexPanelLink[] = getQuests()
+  .map((quest) => ({
+    id: quest.id,
+    label: quest.nombre,
+    href: `/${locale}/actividades/${quest.id}/`,
+    icon: spriteOrNull(registry, quest.sprite),
+  }))
+  .filter((link) => esRutaDelSitio(link.href));
+
+const elementLinks: IndexPanelLink[] = getElementos().map((element) => ({
+  id: element.id,
+  label: element.nombre[locale],
+  href: `/${locale}/pokedex/?elemento=${element.id}`,
+  icon: spriteOrNull(registry, element.icono),
+}));
+
+const worlds = getMundos(locale).map((world) => ({ id: world.id, name: world.nombre }));
+
+// ------------------------------------------------------------------ step 4: the areas
+
+type Area = 'sistemas' | 'items' | 'actividades' | 'pokedex' | 'mundos';
+
+/** The templates of 8.1 step 4 with every panel present, one string of areas per row. */
+const TEMPLATE_3: Area[][] = [
+  ['sistemas', 'items', 'mundos'],
+  ['actividades', 'pokedex', 'pokedex'],
 ];
-const communityLinks = [
-  {
-    title: locale === 'es' ? 'Fuentes y procedencia' : 'Sources & provenance',
-    href: `/${locale}/fuentes/`,
-    icon: ShieldIcon,
-  },
-  { title: copy.changes, href: `/${locale}/cambios/`, icon: FileClockIcon },
-  {
-    title: locale === 'es' ? 'Aportar al mapa' : 'Contribute to the map',
-    href: `/${locale}/mapa/aportar/`,
-    icon: MapIcon,
-  },
+const TEMPLATE_2: Area[][] = [
+  ['sistemas', 'items'],
+  ['actividades', 'mundos'],
+  ['pokedex', 'pokedex'],
 ];
+
+const present = new Set<Area>(
+  (
+    [
+      ['sistemas', systemLinks],
+      ['items', itemLinks],
+      ['actividades', activityLinks],
+      ['pokedex', elementLinks],
+      ['mundos', worlds],
+    ] as const
+  ).flatMap(([area, entries]) => (entries.length > 0 ? [area] : [])),
+);
+
+/**
+ * `grid-template-areas` for the panels present: an absent one leaves `.` (an empty cell, so no
+ * other panel moves), and a row that keeps no panel is left out.
+ */
+function areas(template: Area[][]): string {
+  return template
+    .map((row) => row.map((area) => (present.has(area) ? area : '.')))
+    .filter((row) => row.some((cell) => cell !== '.'))
+    .map((row) => `'${row.join(' ')}'`)
+    .join(' ');
+}
+
+const bentoStyle = `--ac-areas-3: ${areas(TEMPLATE_3)}; --ac-areas-2: ${areas(TEMPLATE_2)}`;
+
+// ------------------------------------------------------------------ step 1: HomeIntro
+
+// The collections the line names, in the order of 8.1, each one only with a published record.
+const collections = [
+  getItems().length > 0 ? home.collections.items : null,
+  getSistemas().length > 0 ? home.collections.systems : null,
+  activityLinks.length > 0 ? home.collections.activities : null,
+].filter((word): word is string => word !== null);
+
+/** «ítems», «ítems y sistemas», «ítems, sistemas y actividades» (and the same with «and»). */
+function joinList(words: string[]): string {
+  const last = words.at(-1) ?? '';
+  return words.length < 2 ? last : `${words.slice(0, -1).join(', ')} ${home.and} ${last}`;
+}
+
+const variants = formatInteger(getPokemon().length, locale);
+const intro =
+  collections.length > 0
+    ? fill(home.intro, { n: variants, list: joinList(collections) })
+    : fill(home.introBare, { n: variants });
+
+// ------------------------------------------------------------------ step 3: Destacados
+
+const featured = buildFeatured(locale);
 ---
 
-<AppLayout locale={locale} title={copy.title} description={copy.description}>
-  <div>
-    <header class="wiki-page-header wiki-home-page-header">
-      <div class="wiki-home-brandline">
-        <span class="wiki-home-brandmark" aria-hidden="true">
-          <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path
-              d="M12 3.5 19 7.3v8.4L12 19.5l-7-3.8V7.3l7-3.8Z"
-              stroke="currentColor"
-              stroke-width="1.7"></path>
-            <path
-              d="m8.5 12 2.2 2.2 4.8-5"
-              stroke="currentColor"
-              stroke-width="1.7"
-              stroke-linecap="round"
-              stroke-linejoin="round"></path>
-          </svg>
-        </span>
-        <div>
-          <p class="eyebrow">{copy.eyebrow}</p>
-          <h1 class="display-title">{copy.welcome}</h1>
-          <p class="muted-copy">{copy.intro}</p>
-        </div>
-      </div>
-      <div class="wiki-home-search">
-        <WikiSearch
-          action={`/${locale}/buscar/`}
-          label={locale === 'es' ? 'Buscar en la wiki' : 'Search the wiki'}
-          placeholder={locale === 'es'
-            ? 'Buscar por páginas, Pokémon, objetos…'
-            : 'Search pages, Pokémon, items…'}
-          prominent
-        />
-      </div>
-    </header>
+<PageLayout
+  locale={locale}
+  title={home.title}
+  documentTitle={home.documentTitle}
+  description={home.description}
+  alternates={alternates}
+  rhythm="home"
+>
+  <HomeIntro title={home.title} description={intro} sprite={spriteOrNull(registry, 'ui/inicio')} />
 
-    <section class="wiki-section wiki-home-featured-section" aria-labelledby="quick-access-title">
-      <div class="wiki-section-heading">
-        <h2 id="quick-access-title" class="section-title">{copy.featured}</h2>
-        <span class="wiki-section-count">{quickLinks.length}</span>
-      </div>
-      <div class="wiki-featured-list">
-        {
-          quickLinks.map((link) => (
-            <a class="wiki-featured-link" href={link.href}>
-              <span class="wiki-featured-mark" aria-hidden="true">
-                <link.icon />
-              </span>
-              <span>
-                <strong>{link.title}</strong>
-                <span class="block text-xs text-muted-foreground">{link.description}</span>
-              </span>
-            </a>
-          ))
-        }
-      </div>
-    </section>
-
-    <section class="wiki-section wiki-home-catalog-section" aria-labelledby="catalog-title">
-      <div class="wiki-section-heading">
-        <h2 id="catalog-title" class="section-title">{copy.catalog}</h2>
-        <span class="wiki-section-count">{catalog.records} {copy.records}</span>
-      </div>
-      <div class="wiki-home-index-grid mt-4">
-        <WikiPortalPanel
-          title={copy.collections}
-          icon={BookOpenIcon}
-          links={collectionLinks}
-          count={catalog.records}
-        />
-        <WikiPortalPanel
-          title={copy.wikiTools}
-          icon={SwordsIcon}
-          links={toolLinks}
-          count={toolLinks.length}
-        />
-        <WikiPortalPanel
-          title={copy.community}
-          icon={UsersIcon}
-          links={communityLinks}
-          count={communityLinks.length}
-        />
-      </div>
-    </section>
-
-    <section
-      class="wiki-section grid gap-5 lg:grid-cols-[minmax(0,1fr)_330px]"
-      aria-labelledby="status-title"
-    >
-      <div class="wiki-panel">
-        <div class="wiki-panel-header">
-          <div>
-            <h2 id="status-title">{copy.dataStatus}</h2>
-            <p class="mt-1 text-xs text-muted-foreground">{copy.dataStatusIntro}</p>
-          </div>
-        </div>
-        <table class="wiki-status-table">
-          <thead>
-            <tr><th>{copy.type}</th><th>{copy.count}</th></tr>
-          </thead>
-          <tbody>
-            <tr
-              ><td>{locale === 'es' ? 'Registros normalizados' : 'Normalized records'}</td><td
-                >{catalog.records}</td
-              ></tr
-            >
-            <tr
-              ><td>{locale === 'es' ? 'Fuentes registradas' : 'Registered sources'}</td><td
-                >{catalog.sources}</td
-              ></tr
-            >
-            <tr
-              ><td>{locale === 'es' ? 'Evidencias enlazadas' : 'Linked evidence'}</td><td
-                >{catalog.evidence}</td
-              ></tr
-            >
-          </tbody>
-        </table>
-      </div>
-      <div>
-        <div class="mb-3">
-          <p class="eyebrow">{copy.temporal}</p>
-          <p class="mt-2 text-sm text-muted-foreground">{copy.temporalDescription}</p>
-        </div>
-        <ServerSaveStatus locale={locale} canonicalDate={canonicalDate} client:load />
-      </div>
-    </section>
-
-    {
-      featuredPokemon && (
-        <section class="wiki-section" aria-labelledby="featured-entry-title">
-          <div class="wiki-section-heading">
-            <h2 id="featured-entry-title" class="section-title">
-              {copy.featuredEntry}
-            </h2>
-          </div>
-          <a
-            class="wiki-panel mt-4 block px-4 py-3 text-sm text-foreground no-underline hover:border-accent"
-            href={`/${locale}/pokedex/${featuredPokemon.canonicalSlug}/`}
-          >
-            {featuredPokemon.canonicalName}
-            <span class="ml-3 font-mono text-xs text-muted-foreground">
-              #{featuredPokemon.pokedexNumber ?? '—'}
-            </span>
-          </a>
-        </section>
-      )
-    }
+  <div class="ac-home-search ac-home-search--wide">
+    <SearchTrigger variant="home" locale={locale} />
   </div>
-</AppLayout>
+  <div class="ac-home-search ac-home-search--narrow">
+    <SearchTrigger variant="mobile" locale={locale} />
+  </div>
+
+  <FeaturedSection id="inicio-destacados" title={home.featured} items={featured} />
+
+  {
+    present.size > 0 && (
+      <div class="ac-home-bento" style={bentoStyle}>
+        <div class="ac-home-bento__grid">
+          <IndexPanel
+            id="inicio-sistemas"
+            area="sistemas"
+            title={home.panels.systems}
+            sprite={spriteOrNull(registry, 'ui/indice/sistemas')}
+            links={systemLinks}
+            countLabel={home.pageCount}
+            locale={locale}
+            hint={messages.ui.pinHint}
+          />
+          <IndexPanel
+            id="inicio-items"
+            area="items"
+            title={home.panels.items}
+            sprite={spriteOrNull(registry, 'ui/indice/items')}
+            links={itemLinks}
+            countLabel={home.pageCount}
+            locale={locale}
+          />
+          <IndexPanel
+            id="inicio-actividades"
+            area="actividades"
+            title={home.panels.activities}
+            sprite={spriteOrNull(registry, 'ui/indice/actividades')}
+            links={activityLinks}
+            countLabel={home.pageCount}
+            locale={locale}
+          />
+          <IndexPanel
+            id="inicio-pokedex"
+            area="pokedex"
+            span={2}
+            title={home.panels.pokedex}
+            sprite={spriteOrNull(registry, 'ui/indice/pokedex')}
+            links={elementLinks}
+            countLabel={home.elementCount}
+            locale={locale}
+          />
+          <WorldsTable
+            id="inicio-mundos"
+            area="mundos"
+            worlds={worlds}
+            title={home.worlds}
+            labels={{ world: home.world }}
+            locale={locale}
+          />
+        </div>
+      </div>
+    )
+  }
+</PageLayout>

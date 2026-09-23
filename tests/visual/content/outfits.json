@@ -1,0 +1,15 @@
+{
+  "$schema": "../../../content/schemas/outfits.schema.json",
+  "outfits": [
+    {
+      "pokemon": "charizard",
+      "outfitId": 7,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-charizard",
+      "outfitId": 509,
+      "addons": []
+    }
+  ]
+}

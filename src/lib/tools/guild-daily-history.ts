@@ -174,8 +174,12 @@ function eligibleDaysInWeek(
   weekStartDate: string,
   observationDate: string,
   eligibleDate: string | null,
+  firstObservedDate: string,
 ): number {
-  const start = Temporal.PlainDate.from(eligibleDate ?? weekStartDate);
+  // A baseline member is assumed to have access, but pacing starts on the first
+  // day for which this workspace actually has evidence. This avoids demanding
+  // Monday/Tuesday activity when tracking only began on Wednesday.
+  const start = Temporal.PlainDate.from(eligibleDate ?? firstObservedDate);
   const weekStart = Temporal.PlainDate.from(weekStartDate);
   const effectiveStart = Temporal.PlainDate.compare(start, weekStart) < 0 ? weekStart : start;
   const observed = Temporal.PlainDate.from(observationDate);
@@ -322,11 +326,13 @@ function calculateMemberDelta(
       weekStartDate,
       currentObservationDate,
       membership.dailyEligibleDate,
+      membership.firstObservedDate,
     ),
     eligibleContributionDays: eligibleDaysInWeek(
       weekStartDate,
       currentObservationDate,
       membership.contributionEligibleDate,
+      membership.firstObservedDate,
     ),
   };
 }

@@ -1,0 +1,14 @@
+/* ViewToggle (spec 7.2.2, DS:ViewToggle), ported from the `.ac-view-toggle` block of
+   the design system's components/bundle.css. global.css imports this file with
+   layer(components), after toggle-group.css.
+
+   The look is ToggleGroup's text variant (toggle-group.css). The three toggles stay on
+   one line and the group never shrinks in the results bar. */
+
+.ac-view-toggle {
+  flex: none;
+}
+
+.ac-view-toggle .ac-toggle-group__items {
+  flex-wrap: nowrap;
+}

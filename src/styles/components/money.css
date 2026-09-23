@@ -1,0 +1,428 @@
+/* Money and trade components (spec 7.2.5, 7.8, DS:guias/40), ported from the
+   `.ac-pokedolares-amount`, `.ac-diamonds-amount`, `.ac-price-options`, `.ac-rating`,
+   `.ac-contact-chip`, `.ac-chip-row`, `.ac-held-strip` and `.ac-training-meter` blocks of
+   the design system's components/bundle.css, in that order. global.css imports this file
+   with layer(components). `PlusN`, which bundle.css puts between ChipRow and HeldStrip,
+   keeps its own plus-n.css; no rule of either file touches the other's elements.
+
+   Differences against the reference, all from the rules of spec 3.7 and 6.4:
+
+   - the literal 12/16 and 12/21 pairs are `@apply type-ui` and `@apply type-tt-row`;
+   - the hover transition of the held link sits inside
+     `@media (prefers-reduced-motion: no-preference)`, with the motion tokens;
+   - the Diamond's 2x head and its `__nw` rows are not ported: the Diamonds panel is a
+     `GameTooltip` like any other, with its head and its rows from `diamondsTip` (7.5.3);
+   - the column count of HeldStrip and the fill of TrainingMeter arrive as local `--ac-*`
+     properties instead of inline declarations (C-R2);
+   - the 44 px touch areas under `pointer: coarse` are at least as wide as they are tall,
+     as in chip.css and plus-n.css (S14, spec 13.7), where the reference only sets the
+     height; the held link grows its area only when it is a link or a button. */
+
+/* PokedolaresAmount: the sprite right before the k / kk amount. The row stays 16 tall: the
+   32 px sprite has -8 px vertical margins, and its transparent edges (3 px left, 2 px right)
+   are pulled in so it sits 4 px from the number. vertical-align: top keeps a block line box
+   (tooltip rows, table cells, prose) from growing around it. */
+.ac-pokedolares-amount {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  vertical-align: top;
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+
+.ac-pokedolares-amount--strong {
+  font-weight: 700;
+}
+
+.ac-pokedolares-amount__sprite {
+  display: block;
+  flex: none;
+  margin: calc(var(--space-8) * -1) var(--space-2) calc(var(--space-8) * -1) -3px; /* sin token: el borde transparente izquierdo del sprite, 3 px */
+}
+
+.ac-pokedolares-amount__img {
+  display: block;
+  flex: none;
+  width: var(--size-cell);
+  height: var(--size-cell);
+  image-rendering: pixelated;
+}
+
+/* DiamondsAmount: frame 0 of the Diamond sheet at 32 right before the number, -8 px vertical
+   margins so the row stays 16 tall; 3 px right and -1 px left trim the sheet's transparent
+   edges. */
+.ac-diamonds-amount {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  vertical-align: top;
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+
+.ac-diamonds-amount--strong {
+  font-weight: 700;
+}
+
+/* The price link: link colour, no gap, 2 px padding pulled back by the margin. It is the
+   `plain` trigger of a NestedEntity, whose zero-specificity reset this rule overrides. */
+.ac-diamonds-amount--link {
+  padding: 0 var(--space-2);
+  margin: 0 calc(var(--space-2) * -1);
+  border-radius: var(--radius-4);
+  color: var(--link);
+  text-decoration: none;
+}
+
+.ac-diamonds-amount--link:hover {
+  text-decoration: underline;
+}
+
+.ac-diamonds-amount__sprite {
+  display: block;
+  flex: none;
+  margin: calc(var(--space-8) * -1) 3px calc(var(--space-8) * -1) -1px; /* sin token: los bordes transparentes de la hoja del Diamond, 3 px a la derecha */
+}
+
+/* The still Diamond: a window one frame wide over the whole strip, which shows frame 0. */
+.ac-diamonds-amount__frame {
+  display: block;
+  flex: none;
+  width: var(--size-cell);
+  height: var(--size-cell);
+  overflow: hidden;
+}
+
+.ac-diamonds-amount__sheet {
+  display: block;
+  max-width: none;
+  margin-left: 0;
+  image-rendering: pixelated;
+}
+
+/* Touch: the 16 px price link keeps its size and gets a 44 × 44 hit area at least. */
+@media (pointer: coarse) {
+  .ac-diamonds-amount--link {
+    position: relative;
+  }
+
+  .ac-diamonds-amount--link::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: max(100%, var(--size-touch));
+    height: var(--size-touch);
+    transform: translate(-50%, -50%);
+  }
+}
+
+/* PriceOptions: options wrap as whole units, right-aligned; a wrapped alternative starts its
+   own line with its «o». The Lista centres them. */
+.ac-price-options {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: flex-end;
+  column-gap: var(--space-6);
+  row-gap: var(--space-8);
+  min-width: 0;
+}
+
+.ac-price-options--center {
+  justify-content: center;
+  row-gap: 0;
+}
+
+.ac-price-options--tooltip {
+  align-items: stretch;
+  row-gap: 0;
+}
+
+.ac-price-options__option {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  gap: var(--space-6);
+}
+
+.ac-price-options__or {
+  flex: none;
+  color: var(--text-tertiary);
+}
+
+/* Inside the game tooltip the «o» is a plain value (white). */
+.ac-price-options--tooltip .ac-price-options__or {
+  color: inherit;
+}
+
+/* Rating: inherits the row's type (12/16 in a card footer, 14/22 in the Lista). */
+.ac-rating {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-6);
+  white-space: nowrap;
+}
+
+.ac-rating__seller {
+  border-radius: var(--radius-4);
+  color: var(--link);
+  text-decoration: none;
+}
+
+.ac-rating__seller:hover {
+  text-decoration: underline;
+}
+
+.ac-rating__score {
+  font-variant-numeric: tabular-nums;
+}
+
+.ac-rating__reviews {
+  color: var(--text-tertiary);
+}
+
+/* Touch: the seller link keeps its size and gets a 44 × 44 hit area at least. */
+@media (pointer: coarse) {
+  .ac-rating__seller {
+    position: relative;
+  }
+
+  .ac-rating__seller::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: max(100%, var(--size-touch));
+    height: var(--size-touch);
+    transform: translate(-50%, -50%);
+  }
+}
+
+/* ContactChip: a verified contact channel as a chip with its check. */
+.ac-contact-chip {
+  display: inline-flex;
+  flex: 0 1 auto;
+  min-width: 0;
+  align-items: center;
+  gap: var(--space-4);
+  padding: var(--space-4) var(--space-8);
+  border-radius: var(--radius-full);
+  background: var(--bg-tertiary);
+  color: var(--text-primary);
+  @apply type-ui;
+}
+
+.ac-contact-chip__label {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.ac-contact-chip__check {
+  display: block;
+  flex: none;
+  color: var(--text-tertiary);
+}
+
+/* ChipRow: one line that never wraps; chips shrink with an ellipsis before the line
+   overflows. */
+.ac-chip-row {
+  display: flex;
+  flex-wrap: nowrap;
+  gap: var(--space-4);
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  @apply type-ui;
+}
+
+.ac-chip-row__item {
+  display: flex;
+  flex: 0 1 auto;
+  min-width: 0;
+}
+
+.ac-chip-row__item--more {
+  flex: none;
+}
+
+/* The verified check next to a channel inside the «+N» list. */
+.ac-chip-row__check {
+  display: block;
+  flex: none;
+  color: var(--text-tertiary);
+}
+
+/* HeldStrip: the Held Items zone and its item links. */
+.ac-held-strip {
+  min-width: 0;
+  @apply type-ui;
+}
+
+.ac-held-strip__label {
+  margin: 0;
+  color: var(--text-tertiary);
+}
+
+/* Two columns unless the call asks for another count (`--ac-held-strip-columns`). */
+.ac-held-strip__list {
+  display: grid;
+  grid-template-columns: repeat(var(--ac-held-strip-columns, 2), minmax(0, 1fr));
+  gap: var(--space-4) var(--space-8);
+  margin: var(--space-2) 0 0 calc(var(--space-4) * -1);
+  padding: 0;
+  list-style: none;
+}
+
+.ac-held-strip__item {
+  display: flex;
+  min-width: 0;
+}
+
+/* The trigger's wrapper (NestedEntity) shrinks with its column so long names ellipsize. */
+.ac-held-strip__item > * {
+  min-width: 0;
+}
+
+.ac-held-strip__link {
+  display: flex;
+  min-width: 0;
+  align-items: center;
+  gap: var(--space-8);
+  padding: var(--space-4) var(--space-8) var(--space-4) var(--space-4);
+  border-radius: var(--radius-8);
+  color: var(--text-primary);
+  text-decoration: none;
+}
+
+/* Only a link or a button takes the hover ink: a held item with no panel and no page is
+   text, and must not look like a control (S11). */
+.ac-held-strip__link:is(a, button):hover {
+  background: var(--bg-tertiary);
+}
+
+.ac-held-strip__slot {
+  display: flex;
+  width: var(--size-slot-held);
+  height: var(--size-slot-held);
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--border-secondary);
+  border-radius: var(--radius-6);
+  background: var(--bg-secondary);
+}
+
+/* A held item the registry knows without a sprite: the dark missing mark, half the cell. */
+.ac-held-strip__missing {
+  display: block;
+  width: var(--size-missing);
+  height: var(--size-missing);
+  flex: none;
+  border-radius: var(--radius-3);
+  background: var(--tt-track);
+  box-shadow: var(--inset-missing);
+}
+
+.ac-held-strip__name {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.ac-held-strip__tier {
+  color: var(--text-tertiary);
+}
+
+/* Hover of the held link: `background-color` over duration-fast (spec 6.2). */
+@media (prefers-reduced-motion: no-preference) {
+  .ac-held-strip__link {
+    transition: background-color var(--duration-fast) var(--ease-standard);
+  }
+}
+
+/* Touch: the 40 px held link gets a 44 px tall hit area without changing the strip. */
+@media (pointer: coarse) {
+  .ac-held-strip__link:is(a, button) {
+    position: relative;
+  }
+
+  .ac-held-strip__link:is(a, button)::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: max(100%, var(--size-touch));
+    height: var(--size-touch);
+    transform: translate(-50%, -50%);
+  }
+}
+
+/* TrainingMeter. Card: a 12/16 row, and a 4 px meter 6 px below on bg-tertiary with a
+   `selected` fill. Tooltip: Poppins 12/21, `tt-label` stat, muted value, square meter; the
+   GameTooltip section body around it supplies the 2 px / 8 px padding. */
+.ac-training-meter {
+  min-width: 0;
+}
+
+.ac-training-meter__row {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--space-8);
+  @apply type-ui;
+}
+
+.ac-training-meter__label {
+  color: var(--text-tertiary);
+}
+
+.ac-training-meter__value {
+  font-variant-numeric: tabular-nums;
+}
+
+.ac-training-meter__track {
+  height: var(--size-meter);
+  margin-top: var(--space-6);
+  border-radius: var(--radius-full);
+  background: var(--bg-tertiary);
+}
+
+/* The fill is as wide as the percent, which TrainingMeter writes on the element. */
+.ac-training-meter__fill {
+  width: var(--ac-training-meter-percent);
+  height: 100%;
+  border-radius: var(--radius-full);
+  background: var(--selected);
+}
+
+.ac-training-meter--tooltip {
+  font-family: var(--font-game);
+}
+
+.ac-training-meter--tooltip .ac-training-meter__row {
+  gap: 0;
+  @apply type-tt-row;
+}
+
+.ac-training-meter--tooltip .ac-training-meter__label {
+  color: var(--tt-label);
+}
+
+.ac-training-meter--tooltip .ac-training-meter__value {
+  color: var(--tt-muted);
+}
+
+.ac-training-meter--tooltip .ac-training-meter__track {
+  border-radius: 0;
+  background: var(--tt-track);
+}
+
+.ac-training-meter--tooltip .ac-training-meter__fill {
+  border-radius: 0;
+  background: var(--tt-label);
+}

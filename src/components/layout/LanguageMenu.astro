@@ -1,0 +1,84 @@
+---
+// LanguageMenu (spec 7.10.1, 13.1): the language selector of the frame, in the
+// header from 1280 up and inside the menu sheet below it.
+//
+// The design system draws a button with `aria-haspopup="listbox"` and no list of
+// its own (`bundle.js:115-119`); the site needs real links and no React, so the
+// button points at a `popover="auto"` list of two `<a>` (exception table of
+// C-R2). The trigger keeps the classes of the reference — `ac-header__lang` in
+// the header, `ac-mobile-menu__lang` in the sheet — and the list is the site's
+// own block.
+//
+// `src/scripts/popover-anchor.ts` places the list with @floating-ui/dom on the
+// `beforetoggle` event, keeps `aria-expanded` in step, and adds the current
+// `location.search` and `location.hash` to the link that is clicked (U3). The
+// prerendered `href` is the bare route, so the menu works without JavaScript.
+import type { Locale } from '@/i18n/config';
+import { locales } from '@/i18n/config';
+import type { Messages } from '@/i18n/messages/en';
+import { en } from '@/i18n/messages/en';
+import { es } from '@/i18n/messages/es';
+import { Glyph } from '@/components/icons/Glyph';
+
+interface Props {
+  /** Page locale: the one the trigger shows and the one marked in the list. */
+  locale: Locale;
+  /** The same route in each locale (13.1), from `getAlternatePath`. */
+  alternates: Record<Locale, string>;
+  /** True inside the menu sheet: 44 tall trigger and a full-width list. */
+  touch?: boolean;
+  /** Utilities added by the caller, after the component's own classes (3.8). */
+  class?: string;
+}
+
+const { locale, alternates, touch = false, class: className } = Astro.props;
+
+const dictionaries: Record<Locale, Messages> = { es, en };
+const shell = dictionaries[locale].shell;
+// Each option reads its name from its own dictionary (13.1): «Español» and «English» on
+// every page.
+const languageName = (option: Locale): string => dictionaries[option].shell.languageName;
+
+// Two on a page at most — the header one and the sheet one — and each needs an
+// id of its own for `popovertarget` (C-R4).
+const listId = touch ? 'idioma-hoja' : 'idioma-cabecera';
+const block = touch ? 'ac-mobile-menu' : 'ac-header';
+---
+
+<button
+  type="button"
+  class:list={[`${block}__lang`, className]}
+  popovertarget={listId}
+  aria-controls={listId}
+  aria-expanded="false"
+  aria-label={`${shell.languageLabel}: ${shell.languageName}`}
+>
+  <Glyph name="globe" size={16} className={`${block}__glyph`} />
+  <span class={`${block}__lang-text`}>{shell.languageName}</span>
+  <Glyph name="chevron-down" size={16} className={`${block}__glyph`} />
+</button>
+
+<ul
+  class:list={['ac-language-menu', touch && 'ac-language-menu--touch']}
+  id={listId}
+  popover="auto"
+>
+  {
+    locales.map((option) => (
+      <li>
+        <a
+          class="ac-language-menu__option"
+          href={alternates[option]}
+          hreflang={option}
+          lang={option}
+          aria-current={option === locale ? 'true' : undefined}
+        >
+          {languageName(option)}
+          {option === locale && (
+            <Glyph name="check" size={16} className="ac-language-menu__check" />
+          )}
+        </a>
+      </li>
+    ))
+  }
+</ul>

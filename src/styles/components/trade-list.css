@@ -1,0 +1,76 @@
+/* The Comercio lists (spec 9.5, 9.8; `Lienzo:Comercio`): the root of the `comercio` and
+   `comercio-vendedor` lists, src/components/trade/TradeListRoot.tsx. Every other piece of the
+   list — the tabs, the FilterBar, the results bar, the card grids and groups, the slots panel,
+   the table and its rows — is a design-system component whose rules global.css already
+   carries; this sheet only holds what the board draws around them.
+
+   Per-page stylesheet (plan M12, D-018, §13.6): only the Comercio pages draw these lists, so
+   global.css does not import it. The island imports it and the build writes it next to the
+   pages that render the island. It repeats the layer order of global.css before its block, so
+   the `components` layer keeps its place whichever of the two sheets the browser reads first
+   (§3.6), and `@reference` brings the text styles of theme.css to `@apply`.
+
+   - The search row of `Lienzo:Comercio` at 1440: the `TextField variant="search"` takes the
+     width the button leaves, 8 apart, both 40 tall and centred on one line.
+   - «Dinero real» in the Lista is the amount in 700 (9.5.8), tabular like every price.
+   - The Lista keeps the column widths of 9.5.8 whatever the listings hold (CA-9.7): the widths
+     the board settles at 944 (TradeListRoot.tsx, `LIST_WIDTHS`) with a fixed table layout, so
+     no text of a page can widen a column, and the table never narrower than those columns
+     plus the 156.9 «Anuncio» has at 944, so it scrolls sideways below that (CGS §11). A title
+     longer than «Anuncio», a seller whose name and score do not fit their 152, a date of `en`
+     and an amount with cents that does not fit its 100 (the island lets it break between the
+     symbol and the figure) take a second line in their cell. The board's samples fit on one
+     line; the registry's, and the longer words of `en` («Real money», «or»), may not.
+   - The scroll box of the Lista is the containing block of what is placed absolutely inside it
+     (the hidden exact figures of the amounts, the stack counts): without it they belong to the
+     page, and one past the right edge of the box widened the page at 390 (§13.7, reflow). */
+
+@reference '../theme.css';
+
+@layer properties, theme, base, components, utilities;
+
+@layer components {
+  .ac-trade-list__search {
+    display: flex;
+    align-items: center;
+    gap: var(--space-8);
+    min-width: 0;
+  }
+
+  .ac-trade-list__search > .ac-text-field {
+    flex: 1;
+  }
+
+  .ac-trade-list__fiat {
+    font-variant-numeric: tabular-nums;
+    @apply type-body-strong;
+  }
+
+  :is([data-ac-list='comercio'], [data-ac-list='comercio-vendedor']) [data-list] .ac-data-table {
+    position: relative;
+  }
+
+  :is([data-ac-list='comercio'], [data-ac-list='comercio-vendedor'])
+    [data-list]
+    .ac-data-table__table {
+    min-width: calc(var(--layout-main) - 2px);
+    table-layout: fixed;
+  }
+
+  :is([data-ac-list='comercio'], [data-ac-list='comercio-vendedor'])
+    .ac-list-row__name
+    .ac-nested-entity__trigger {
+    white-space: normal;
+  }
+
+  :is([data-ac-list='comercio'], [data-ac-list='comercio-vendedor']) .ac-list-row .ac-rating {
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  /* «Entrenamiento: N» of a listing panel (9.5.9) stacks every skill declared, 8 apart, as the
+     sheet of a detail does (trade-detail.css). */
+  .ac-game-tooltip__section-body > .ac-training-meter + .ac-training-meter {
+    margin-top: var(--space-8);
+  }
+}

@@ -1,0 +1,26 @@
+/* EmptyState (spec 7.2.3; DS:EmptyState), ported from the `.ac-empty-state` block of the
+   design system's components/bundle.css. global.css imports this file with
+   layer(components).
+
+   One line in 14/22 text-secondary, no card; an optional action on the same row, both
+   centred on it. */
+
+.ac-empty-state,
+.ac-empty-state__text {
+  margin: 0;
+  color: var(--text-secondary);
+  @apply type-body;
+}
+
+.ac-empty-state--action {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-12);
+}
+
+.ac-empty-state__action {
+  display: flex;
+  flex: none;
+  color: var(--text-primary);
+}

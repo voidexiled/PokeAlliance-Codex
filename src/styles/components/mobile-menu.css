@@ -1,0 +1,130 @@
+/* MobileMenu (spec 5.8, 7.10.3), ported from the `.ac-mobile-menu` block of the design
+   system's components/bundle.css. global.css imports this file with layer(components).
+
+   A 288 sheet against the right edge, full window height, `bg-primary` with a 1 px left
+   rule, over the `overlay` veil with a 4 px blur. Below it, the page does not scroll.
+
+   Differences against the reference, all from the native `<dialog>` of C-R2:
+
+   - the `.ac-mobile-menu__scrim` element of the reference does not exist: the veil is the
+     `::backdrop` of the dialog, which is also where the blur of rule 10 is allowed;
+   - the block resets what the user-agent sheet gives a modal dialog — `margin`, `padding`,
+     `border`, `inset-inline-start`, `max-width` and `max-height` — and only paints
+     `display: flex` while the sheet is open, because an author `display` would beat the
+     `dialog:not([open]) { display: none }` of the user agent and leave the sheet on screen;
+   - `.ac-mobile-menu__lang`, `__lang-text` and `__glyph` are not ported: the language row
+     of the site is the real `LanguageMenu` with its two links (7.10.1, DP4) and it carries
+     its own classes. What stays here is `__lang-wrap`, which is the 16 of side margin the
+     sheet gives that row.
+
+   Focus, Escape, the veil click and the return of focus are `src/scripts/mobile-menu.ts`;
+   the sheet is inert markup without it. */
+
+.ac-mobile-menu {
+  position: fixed;
+  top: 0;
+  right: 0;
+  left: auto;
+  z-index: var(--z-sheet);
+  width: var(--layout-sheet);
+  max-width: 100%;
+  height: 100dvh; /* sin token: 100dvh es el alto de la ventana */
+  max-height: 100%;
+  flex-direction: column;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  border-left: 1px solid var(--border-secondary);
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  font-family: var(--font-sans);
+  @apply type-base;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+
+.ac-mobile-menu[open] {
+  display: flex;
+}
+
+/* Veil at 80 % with a 4 px blur, the only three places rule 10 allows it (3.11). */
+.ac-mobile-menu::backdrop {
+  background: var(--overlay);
+  -webkit-backdrop-filter: blur(4px); /* sin token: desenfoque del velo (5.8) */
+  backdrop-filter: blur(4px); /* sin token: desenfoque del velo (5.8) */
+}
+
+/* With the sheet open the page behind it does not scroll (5.8). Without `:has()` the page
+   scrolls behind the veil and the sheet is still modal (6.5). */
+html:has(#menu-movil[open]) {
+  overflow: hidden;
+}
+
+.ac-mobile-menu__body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-16);
+  padding: var(--space-16) 0;
+}
+
+/* Brand row: 56 tall (the 44 close button with 6 above and below), brand centred, close
+   button at right 8, top 6. */
+.ac-mobile-menu__brand {
+  position: relative;
+  display: flex;
+  height: calc(var(--size-touch) + 2 * var(--space-6));
+  align-items: center;
+  justify-content: center;
+}
+
+.ac-mobile-menu__brand-link {
+  color: var(--text-primary);
+  @apply type-brand;
+  text-decoration: none;
+}
+
+.ac-mobile-menu__close {
+  position: absolute;
+  right: var(--space-8);
+  top: var(--space-6);
+  display: flex;
+  width: var(--size-touch);
+  height: var(--size-touch);
+  align-items: center;
+  justify-content: center;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  border-radius: var(--radius-11);
+  background: transparent;
+  color: var(--text-primary);
+  cursor: pointer;
+}
+
+.ac-mobile-menu__close:hover {
+  background: var(--bg-tertiary);
+}
+
+.ac-mobile-menu__sep {
+  height: 1px;
+  margin: 0 var(--space-24);
+  background: var(--border-secondary);
+}
+
+.ac-mobile-menu__lang-wrap {
+  margin: 0 var(--space-16);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .ac-mobile-menu[open] {
+    animation: ac-sheet-in var(--duration-sheet) var(--ease-standard);
+  }
+
+  .ac-mobile-menu[open]::backdrop {
+    animation: ac-fade var(--duration-fast) var(--ease-standard);
+  }
+
+  .ac-mobile-menu__close {
+    transition: background-color var(--duration-fast) var(--ease-standard);
+  }
+}

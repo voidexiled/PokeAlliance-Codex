@@ -1,0 +1,80 @@
+---
+// Activities index (spec 8.9.1): template D of 8.0.2 on PageLayout, prerendered. The single
+// crumb «Actividades» / «Activities» (8.0.4, T15), the `PageTitle` with the same text, and the
+// `IndexLinks` grid across the main column with one link per activity of content/quests.json,
+// in the order of the registry, to its page `/{l}/actividades/{id}/` (8.9.2): its sprite at 1x
+// in the 32 cell — empty while the record has none — and its name, and no panel (8.9.1, «sin
+// tooltip»). No description, level or count under a link. With no activity in the registry the
+// grid gives way to the one line of `EmptyState`; there is no loading state. PageLayout adds the
+// footer, the 208 spacer and the frame. `/{l}/guias/` redirects here (8.0.1, E2).
+//
+// Data (8.0.5, R7, X4). Every entry comes from content/quests.json through `getQuests`, which
+// parses it with the Zod mirror of its schema (3.12). `nombre` is the name of the game, the same
+// in both locales, so it carries no `lang` (13.4, T23). The sprite goes through the adapter
+// (DP2): a key the sprite registry does not have fails the build, and a missing or `null` one
+// leaves the cell empty.
+//
+// Text (DP1, 13.2). The h1, the crumb, the description of 13.5 and the empty line are
+// `messages.activities`. What the retired Guías page showed — its intro, its counts, the
+// «Quest» kicker and the locations with their travel routes (Q-01 to Q-03, Q-09 to Q-13) — is
+// gone, and «Misiones» and «Ubicaciones y viaje» with it (A7, R9).
+//
+// Styles. `IndexLinks` brings its own per-page sheet (index-links.css); the page adds none.
+import { getAlternatePath, getLocale, locales, type Locale } from '@/i18n/config';
+import type { Messages } from '@/i18n/messages/en';
+import { en } from '@/i18n/messages/en';
+import { es } from '@/i18n/messages/es';
+import type { Quest } from '@/lib/content/content-schema';
+import { getSpriteRegistry } from '@/lib/content/registry';
+import { getQuests } from '@/lib/content/repository';
+import { spriteOrNull } from '@/lib/sprites/resolve';
+
+import { EmptyState } from '@/components/content/EmptyState';
+import { IndexLinks, type IndexLinkEntry } from '@/components/home/IndexLinks';
+import { PageTitle } from '@/components/layout/PageTitle';
+import PageLayout from '@/layouts/PageLayout.astro';
+
+export const prerender = true;
+
+export function getStaticPaths() {
+  return locales.map((locale) => ({ params: { locale } }));
+}
+
+const dictionaries: Record<Locale, Messages> = { es, en };
+
+const locale = getLocale(Astro.params.locale);
+const path = Astro.url.pathname;
+const alternates = Object.fromEntries(
+  locales.map((option) => [option, getAlternatePath(path, option)]),
+) as Record<Locale, string>;
+
+const copy = dictionaries[locale].activities;
+const title = copy.title;
+const registry = getSpriteRegistry();
+
+// What an entry reads of an activity (3.13).
+const activities: readonly Pick<Quest, 'id' | 'nombre' | 'sprite'>[] = getQuests();
+const links: IndexLinkEntry[] = activities.map((activity) => ({
+  id: activity.id,
+  label: activity.nombre,
+  href: `/${locale}/actividades/${activity.id}/`,
+  sprite: spriteOrNull(registry, activity.sprite),
+}));
+---
+
+<PageLayout
+  locale={locale}
+  title={title}
+  description={copy.description}
+  alternates={alternates}
+  breadcrumb={[{ label: title }]}
+>
+  <PageTitle title={title} />
+  {
+    links.length > 0 ? (
+      <IndexLinks links={links} locale={locale} />
+    ) : (
+      <EmptyState>{copy.empty}</EmptyState>
+    )
+  }
+</PageLayout>

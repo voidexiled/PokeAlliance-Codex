@@ -1,0 +1,220 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://alliance-codex.local/schemas/elementos.schema.json",
+  "title": "Elementos",
+  "description": "Los 18 elementos del juego, en el orden del panel Pokédex del Inicio. El orden y los ids son fijos: el esquema los comprueba posición por posición. Lo que no se conoce va null.",
+  "type": "object",
+  "required": ["elementos"],
+  "additionalProperties": false,
+  "properties": {
+    "$schema": {
+      "type": "string"
+    },
+    "elementos": {
+      "type": "array",
+      "description": "Exactamente estos 18 elementos, en este orden: normal, fire, water, grass, electric, ice, fighting, poison, ground, flying, psychic, bug, rock, ghost, dragon, fairy, dark, steel.",
+      "minItems": 18,
+      "maxItems": 18,
+      "prefixItems": [
+        {
+          "$ref": "#/$defs/elemento",
+          "properties": {
+            "id": {
+              "const": "normal"
+            }
+          }
+        },
+        {
+          "$ref": "#/$defs/elemento",
+          "properties": {
+            "id": {
+              "const": "fire"
+            }
+          }
+        },
+        {
+          "$ref": "#/$defs/elemento",
+          "properties": {
+            "id": {
+              "const": "water"
+            }
+          }
+        },
+        {
+          "$ref": "#/$defs/elemento",
+          "properties": {
+            "id": {
+              "const": "grass"
+            }
+          }
+        },
+        {
+          "$ref": "#/$defs/elemento",
+          "properties": {
+            "id": {
+              "const": "electric"
+            }
+          }
+        },
+        {
+          "$ref": "#/$defs/elemento",
+          "properties": {
+            "id": {
+              "const": "ice"
+            }
+          }
+        },
+        {
+          "$ref": "#/$defs/elemento",
+          "properties": {
+            "id": {
+              "const": "fighting"
+            }
+          }
+        },
+        {
+          "$ref": "#/$defs/elemento",
+          "properties": {
+            "id": {
+              "const": "poison"
+            }
+          }
+        },
+        {
+          "$ref": "#/$defs/elemento",
+          "properties": {
+            "id": {
+              "const": "ground"
+            }
+          }
+        },
+        {
+          "$ref": "#/$defs/elemento",
+          "properties": {
+            "id": {
+              "const": "flying"
+            }
+          }
+        },
+        {
+          "$ref": "#/$defs/elemento",
+          "properties": {
+            "id": {
+              "const": "psychic"
+            }
+          }
+        },
+        {
+          "$ref": "#/$defs/elemento",
+          "properties": {
+            "id": {
+              "const": "bug"
+            }
+          }
+        },
+        {
+          "$ref": "#/$defs/elemento",
+          "properties": {
+            "id": {
+              "const": "rock"
+            }
+          }
+        },
+        {
+          "$ref": "#/$defs/elemento",
+          "properties": {
+            "id": {
+              "const": "ghost"
+            }
+          }
+        },
+        {
+          "$ref": "#/$defs/elemento",
+          "properties": {
+            "id": {
+              "const": "dragon"
+            }
+          }
+        },
+        {
+          "$ref": "#/$defs/elemento",
+          "properties": {
+            "id": {
+              "const": "fairy"
+            }
+          }
+        },
+        {
+          "$ref": "#/$defs/elemento",
+          "properties": {
+            "id": {
+              "const": "dark"
+            }
+          }
+        },
+        {
+          "$ref": "#/$defs/elemento",
+          "properties": {
+            "id": {
+              "const": "steel"
+            }
+          }
+        }
+      ]
+    }
+  },
+  "$defs": {
+    "slug": {
+      "type": "string",
+      "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$",
+      "description": "Minúsculas, números y guiones (kebab-case)."
+    },
+    "texto": {
+      "type": "object",
+      "required": ["es", "en"],
+      "additionalProperties": false,
+      "description": "El mismo texto en los dos idiomas del sitio.",
+      "properties": {
+        "es": {
+          "type": "string",
+          "minLength": 1
+        },
+        "en": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "itemId": {
+      "type": ["string", "null"],
+      "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$",
+      "description": "id de un item de content/items/. null si no se conoce."
+    },
+    "elemento": {
+      "type": "object",
+      "required": ["id", "nombre", "icono", "stone", "fragment"],
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/slug"
+        },
+        "nombre": {
+          "$ref": "#/$defs/texto"
+        },
+        "icono": {
+          "type": ["string", "null"],
+          "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*(?:/[a-z0-9]+(?:-[a-z0-9]+)*)*$",
+          "description": "Clave de public/sprites/sprites.json del icono del elemento. null mientras el registro de sprites no lo tenga: el chip se pinta solo con el nombre."
+        },
+        "stone": {
+          "$ref": "#/$defs/itemId",
+          "description": "Stone del elemento, fila del tooltip."
+        },
+        "fragment": {
+          "$ref": "#/$defs/itemId",
+          "description": "Fragment del elemento, fila del tooltip."
+        }
+      }
+    }
+  }
+}

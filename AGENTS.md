@@ -10,7 +10,7 @@ For a new chat or resumed session, read in this order:
 2. `docs/CURRENT_STATUS.md`
 3. the active phase plan and exit criteria
 4. `docs/RISKS_AND_UNKNOWNS.md`
-5. relevant knowledge/data files
+5. the relevant files under `content/`
 
 The complete original requirements are preserved verbatim under `docs/requirements/`. Consult them before scope, phase-transition, architecture, data, localization, security, deployment or Definition-of-Done decisions. Update `docs/CURRENT_STATUS.md` before handing work to another chat.
 
@@ -33,11 +33,11 @@ Do not implement a later phase because its future existence is known. Check `doc
 
 ## Proposed stack
 
-Astro, strict TypeScript, selective React, Tailwind CSS, customized shadcn/ui, Zod, Supabase, Vercel and pnpm. Quality tooling will use ESLint, Prettier, Vitest and Playwright. This stack is provisional until research/data consolidation completes. Do not add an ORM, state framework, alternate backend/auth/storage, search service, monorepo or microservice without a demonstrated need and documented decision.
+Astro, strict TypeScript, selective React, Tailwind CSS, Zod, Supabase, Vercel and pnpm. Quality tooling will use ESLint, Prettier, Vitest and Playwright. This stack is provisional until research/data consolidation completes. Do not add an ORM, state framework, alternate backend/auth/storage, search service, monorepo or microservice without a demonstrated need and documented decision.
 
 ## Architecture rules
 
-- Keep raw evidence, staging records, normalized knowledge and serving/database representations separate.
+- Game data lives in owner-editable JSON under `content/`; the site reads it at build time. There is no staging or normalized layer.
 - Keep domain logic framework-independent.
 - Astro owns mostly static pages; React is reserved for genuine client state and complex tools.
 - UI components never become the source of game facts.
@@ -45,13 +45,18 @@ Astro, strict TypeScript, selective React, Tailwind CSS, customized shadcn/ui, Z
 - External data is untrusted and validated at boundaries.
 - Synthetic fixtures are isolated and unmistakably labeled.
 
-## Source priority and evidence
+## Data rules
 
-Evaluate authority per claim. Prefer current direct PokeAlliance official evidence, then current corroborated PokeAlliance community evidence. Treat `tanjirokamadoserver/PokeMonster` and similar repositories as historical hypothesis sources unless current evidence confirms a claim. General Pokémon knowledge is never proof of PokeAlliance behavior.
+- No provenance (D-012). Do not add sources, evidence, claims, verification status, confidence, retrieval/verification timestamps or source hashes to data, UI, schemas, scripts or the database.
+- Unknown values are `null` and the UI shows `—`. Never store `0` for an unknown value, and never fill a gap with general Pokémon knowledge: it is not PokeAlliance behavior.
+- Placeholder records carry `"borrador": true`.
+- Canonical game names stay in English, exactly as the game shows them.
+- Market items, outfits/addons, auras and sprites are the D-011 registries (`content/items/`, `content/outfits.json`, `content/auras.json`, `public/sprites/sprites.json`). Owner guide: `docs/REGISTROS.md`.
+- Every JSON file under `content/` and `public/sprites/sprites.json` starts with `"$schema"` pointing at its JSON Schema in `content/schemas/` (`additionalProperties: false`). The Zod mirrors are `src/lib/content/registry-schema.ts` and `src/lib/content/content-schema.ts`; change a schema and its mirror together (tests check they agree). Value lists (Market categories, tiers, variants, elements) live only in the JSON Schemas; the Zod mirrors read them from there. `pnpm content:check` validates everything and the build parses every file with Zod.
+- Zod stays on the server. React islands receive content as props or read it through a client-safe module (`src/lib/sprites/registry.ts`, `src/lib/tools/pokemon-roster.ts`, `src/lib/content/format.ts`); never import `repository.ts`, `registry.ts`, `content-schema.ts` or `src/lib/map/map-data.ts` from an island.
+- Show game images through the sprite registry and the `Sprite` components, not hard-coded image paths. Pokémon portraits are the exception: they come from `imagen` in `content/pokemon.json` through `resolvePokemonImage`.
 
-Every normalized material fact needs provenance, retrieval/verification time and status. Preserve contradictions. Unknown facts remain `null`/`unknown`; never infer silently.
-
-Targeted read-only research of the project owner's local PokeAlliance client is authorized. Before searching outside the repository, read `docs/LOCAL_CLIENT_RESEARCH.md`. Limit discovery to likely game paths, protect credentials and unrelated personal data, record client version/path/hash provenance, and never modify or automate the game client.
+Targeted read-only research of the project owner's local PokeAlliance client is authorized. Before searching outside the repository, read `docs/LOCAL_CLIENT_RESEARCH.md`. Limit discovery to likely game paths, protect credentials and unrelated personal data, and never modify or automate the game client.
 
 ## Localization rules
 
@@ -71,19 +76,16 @@ Incorrect without PokeAlliance evidence: `Necesitas 50 Bayas Aranja.`
 
 ## Domain caution
 
-“Rotation,” tier, tactical role, variant/form, AoE, Held, Lucky, Boost, Stars, utilities, hunts, drops, quests, economy and CACs are PokeAlliance-specific concepts. Do not impose mainline Pokémon semantics. Document whether classifications are game facts, sourced community consensus or Alliance Codex analysis.
+“Rotation,” tier, tactical role, variant/form, AoE, Held, Lucky, Boost, Stars, utilities, hunts, drops, quests, economy and CACs are PokeAlliance-specific concepts. Do not impose mainline Pokémon semantics. Keep Alliance Codex analysis (recommendations, tactical roles) in editorial content, not in game data fields.
 
 ## Adding knowledge
 
-1. Register/check the source and its authority/freshness.
-2. Capture raw evidence or a compliant evidence pointer.
-3. Extract into source-specific staging.
-4. Reconcile canonical identity and terminology.
-5. Add normalized records with evidence references and status.
-6. Run schema, uniqueness, reference, provenance and localization checks.
-7. Update coverage, conflict/unknown registries and research log.
+1. Edit or add the record in the matching `content/` file; keep its `id` stable.
+2. Leave unknown fields as `null`; mark placeholders with `"borrador": true`.
+3. Reconcile canonical names and aliases before adding a new entity.
+4. Run `pnpm content:check`, `pnpm check`, `pnpm test` and `pnpm build`.
 
-Never edit generated normalized output without an explicit curated override workflow.
+Importers (for example `pnpm content:roster`) write to `content/` directly, never delete records and keep hand-edited values unless told to overwrite them.
 
 ## Migrations and security
 

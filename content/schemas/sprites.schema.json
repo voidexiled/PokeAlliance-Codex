@@ -1,0 +1,114 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://alliance-codex.local/schemas/sprites.schema.json",
+  "title": "Registro de sprites",
+  "description": "public/sprites/sprites.json: cada clave apunta a una imagen de public/sprites/. Las hojas son tiras horizontales de frames del mismo tamaño.",
+  "type": "object",
+  "required": ["sprites"],
+  "additionalProperties": false,
+  "properties": {
+    "$schema": { "type": "string" },
+    "sprites": {
+      "type": "object",
+      "propertyNames": {
+        "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*(?:/[a-z0-9]+(?:-[a-z0-9]+)*)*$"
+      },
+      "additionalProperties": { "$ref": "#/$defs/sprite" }
+    }
+  },
+  "$defs": {
+    "archivo": {
+      "type": "string",
+      "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*(?:/[a-z0-9]+(?:-[a-z0-9]+)*)*\\.png$",
+      "description": "Ruta dentro de public/sprites/, por ejemplo \"items/stones/fire-stone.png\"."
+    },
+    "entero": { "type": "integer", "minimum": 1 },
+    "sprite": {
+      "type": "object",
+      "required": ["archivo", "frame", "frames", "modo"],
+      "additionalProperties": false,
+      "properties": {
+        "archivo": { "$ref": "#/$defs/archivo" },
+        "frame": {
+          "type": "array",
+          "description": "Tamaño de un frame en píxeles: [ancho, alto].",
+          "prefixItems": [{ "$ref": "#/$defs/entero" }, { "$ref": "#/$defs/entero" }],
+          "items": false,
+          "minItems": 2,
+          "maxItems": 2
+        },
+        "frames": {
+          "type": "integer",
+          "minimum": 1,
+          "description": "Número de frames de la tira. El ancho de la imagen es ancho × frames."
+        },
+        "modo": {
+          "description": "estatico: un frame. variante: se elige el frame. cantidad: el frame depende de la cantidad (umbrales). animacion: los frames se reproducen (duracionMs).",
+          "enum": ["estatico", "variante", "cantidad", "animacion"]
+        },
+        "umbrales": {
+          "type": "array",
+          "description": "Solo modo cantidad: cantidad mínima de cada frame, ascendente. Tantos valores como frames.",
+          "minItems": 1,
+          "items": { "$ref": "#/$defs/entero" }
+        },
+        "duracionMs": {
+          "type": "array",
+          "description": "Solo modo animacion: duración de cada frame en milisegundos. Tantos valores como frames.",
+          "minItems": 1,
+          "items": { "$ref": "#/$defs/entero" }
+        },
+        "loop": {
+          "type": "boolean",
+          "description": "Solo modo animacion: false para reproducirla una vez. Por defecto true."
+        },
+        "direcciones": {
+          "type": "object",
+          "description": "Outfits: una imagen de un frame por dirección.",
+          "required": ["norte", "este", "sur", "oeste"],
+          "additionalProperties": false,
+          "properties": {
+            "norte": { "$ref": "#/$defs/archivo" },
+            "este": { "$ref": "#/$defs/archivo" },
+            "sur": { "$ref": "#/$defs/archivo" },
+            "oeste": { "$ref": "#/$defs/archivo" }
+          }
+        },
+        "borrador": {
+          "type": "boolean",
+          "description": "true si la imagen es de relleno hasta tener la real."
+        }
+      },
+      "allOf": [
+        {
+          "if": { "properties": { "modo": { "const": "estatico" } }, "required": ["modo"] },
+          "then": { "properties": { "frames": { "const": 1 } } }
+        },
+        {
+          "if": { "properties": { "modo": { "const": "cantidad" } }, "required": ["modo"] },
+          "then": { "required": ["umbrales"] }
+        },
+        {
+          "if": { "properties": { "modo": { "const": "animacion" } }, "required": ["modo"] },
+          "then": { "required": ["duracionMs"] }
+        },
+        {
+          "if": { "required": ["umbrales"] },
+          "then": { "properties": { "modo": { "const": "cantidad" } } }
+        },
+        {
+          "if": { "required": ["duracionMs"] },
+          "then": { "properties": { "modo": { "const": "animacion" } } }
+        },
+        {
+          "if": { "required": ["loop"] },
+          "then": { "properties": { "modo": { "const": "animacion" } } }
+        },
+        {
+          "if": { "required": ["direcciones"] },
+          "then": { "properties": { "frames": { "const": 1 } } }
+        }
+      ]
+    }
+  }
+}

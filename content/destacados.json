@@ -1,0 +1,41 @@
+{
+  "$schema": "./schemas/destacados.schema.json",
+  "destacados": [
+    {
+      "etiqueta": {
+        "es": "Pokédex",
+        "en": "Pokédex"
+      },
+      "ruta": "/pokedex/",
+      "sprite": "ui/balls/alliance-ball",
+      "borrador": true
+    },
+    {
+      "etiqueta": {
+        "es": "Tier list",
+        "en": "Tier list"
+      },
+      "ruta": "/pokedex/tiers/",
+      "sprite": "ui/balls/ultra-ball",
+      "borrador": true
+    },
+    {
+      "etiqueta": {
+        "es": "Linked Tasks",
+        "en": "Linked Tasks"
+      },
+      "ruta": "/sistemas/linked-tasks/",
+      "sprite": null,
+      "borrador": true
+    },
+    {
+      "etiqueta": {
+        "es": "Comercio",
+        "en": "Trade"
+      },
+      "ruta": "/comercio/",
+      "sprite": "ui/diamond",
+      "borrador": true
+    }
+  ]
+}
