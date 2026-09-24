@@ -1,43 +1,161 @@
-/* The classic tier list of the Tier list page (spec 16.4.3): one row per tier, the label cell in
-   the colour of its TierBadge, the Pokemon slots flowing right. Per-component sheet (13.6):
-   TiersRoot.tsx imports it. */
+/* The classic tier list of the Tier list page (spec 16.4.3, plan board `Tier-list`): one row
+   per visible tier, best first, in one panel of radius 12. The label cell, 112 wide, is tinted
+   in the row colour of its tier (the `tier-row-<id>` tokens of the board) and holds the tier name — 14/22 700 with a dotted underline, the trigger of the tier
+   tooltip at its right — over the count. The Pokémon slots flow right of it, 4 apart.
+   Per-component sheet (13.6): TiersRoot.tsx imports it. */
 
 @layer properties, theme, base, components, utilities;
 
+@reference '../theme.css';
+
 @layer components {
   .ac-tier-rows {
-    display: flex;
-    flex-direction: column;
-    gap: var(--space-2);
-    overflow: hidden;
-    border-radius: var(--radius-8);
-    background: var(--tt-panel-deep);
+    margin: 0;
+    padding: 0;
+    border: 1px solid var(--border-secondary);
+    border-radius: var(--radius-12);
+    background: var(--bg-secondary);
+    list-style: none;
   }
 
   .ac-tier-rows__row {
     display: flex;
     align-items: stretch;
-    gap: var(--space-8);
-    background: var(--tt-panel);
+    min-width: 0;
+  }
+
+  .ac-tier-rows__row + .ac-tier-rows__row {
+    border-top: 1px solid var(--border-secondary);
   }
 
   .ac-tier-rows__label {
     display: flex;
     flex: none;
+    width: 112px; /* sin token: columna de etiquetas de la Tier list del plan */
+    margin: 0;
+    background: var(--tier-row, var(--tt-panel-deep));
+  }
+
+  .ac-tier-rows__row:first-child > .ac-tier-rows__label {
+    border-top-left-radius: var(--radius-11);
+  }
+
+  .ac-tier-rows__row:last-child > .ac-tier-rows__label {
+    border-bottom-left-radius: var(--radius-11);
+  }
+
+  .ac-tier-rows__trigger {
+    position: relative;
+    display: flex;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
-    width: var(--size-stage);
-    border-left: var(--space-4) solid var(--tier-c, var(--text-tertiary));
-    background: var(--tt-panel-deep);
+    gap: var(--space-2);
+    width: 100%;
+    padding: var(--space-8);
+    border: 0;
+    border-radius: inherit;
+    background: transparent;
+    color: var(--text-primary);
+    font-family: var(--font-sans);
+    text-align: center;
+    cursor: help;
+  }
+
+  .ac-tier-rows__name {
+    @apply type-body-strong;
+    white-space: nowrap;
+    text-decoration: underline dotted var(--text-tertiary);
+    text-underline-offset: 4px; /* sin token: subrayado punteado del plan */
+  }
+
+  .ac-tier-rows__trigger:hover .ac-tier-rows__name {
+    text-decoration-style: solid;
+  }
+
+  .ac-tier-rows__count {
+    color: var(--text-secondary);
+    @apply type-ui;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .ac-tier-rows__trigger:hover > .ac-tier-tip,
+  .ac-tier-rows__trigger:focus-visible > .ac-tier-tip {
+    display: block;
   }
 
   .ac-tier-rows__slots {
     display: flex;
     flex: 1;
     flex-wrap: wrap;
-    gap: var(--space-2);
+    align-content: flex-start;
+    gap: var(--space-4);
+    min-width: 0;
     margin: 0;
-    padding: var(--space-4) var(--space-4) var(--space-4) 0;
+    padding: var(--space-8);
     list-style: none;
+  }
+
+  /* The row colour of each tier (plan: a dark step of the classic red-to-violet ramp). */
+  .ac-tier-rows__label--mythic {
+    --tier-row: var(--tier-row-mythic);
+  }
+
+  .ac-tier-rows__label--legendary {
+    --tier-row: var(--tier-row-legendary);
+  }
+
+  .ac-tier-rows__label--ultra-rare {
+    --tier-row: var(--tier-row-ultra-rare);
+  }
+
+  .ac-tier-rows__label--super-rare {
+    --tier-row: var(--tier-row-super-rare);
+  }
+
+  .ac-tier-rows__label--t1 {
+    --tier-row: var(--tier-row-t1);
+  }
+
+  .ac-tier-rows__label--t2 {
+    --tier-row: var(--tier-row-t2);
+  }
+
+  .ac-tier-rows__label--t3 {
+    --tier-row: var(--tier-row-t3);
+  }
+
+  .ac-tier-rows__label--t4 {
+    --tier-row: var(--tier-row-t4);
+  }
+
+  .ac-tier-rows__label--t5 {
+    --tier-row: var(--tier-row-t5);
+  }
+
+  .ac-tier-rows__label--t6 {
+    --tier-row: var(--tier-row-t6);
+  }
+
+  .ac-tier-rows__label--t7 {
+    --tier-row: var(--tier-row-t7);
+  }
+
+  /* Phone: the label narrows to 72 and the slots keep flowing; the name drops to 12/16 and
+     «Ultra Rare», «Super Rare» take two lines, so no name spills out of its cell. */
+  @media (width < 48rem) {
+    .ac-tier-rows__label {
+      width: var(--size-stage);
+    }
+
+    .ac-tier-rows__trigger {
+      padding: var(--space-8) var(--space-4);
+    }
+
+    .ac-tier-rows__name {
+      @apply type-ui-strong;
+      white-space: normal;
+      text-align: center;
+    }
   }
 }

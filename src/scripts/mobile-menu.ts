@@ -8,7 +8,7 @@
 //
 // It runs on import, from the script block of `PageLayout.astro`, and does
 // nothing on a page with no sheet.
-import { layout } from '@/lib/design/tokens';
+import { layout } from '@/lib/design/shell-tokens';
 
 /** Fixed id of the sheet: it is the `aria-controls` of the menu button (C-R4). */
 const ID_HOJA = 'menu-movil';

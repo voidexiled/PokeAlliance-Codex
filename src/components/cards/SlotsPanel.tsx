@@ -16,6 +16,12 @@ import type { HTMLAttributes, Key, ReactNode } from 'react';
 // is the slot's accessible name and the title of its panel). No empty slot is added to
 // fill a line.
 //
+// Inventory (plan «Slots»): with `inventory` the slots are a grid that ends flush, as the
+// inventory of the game — 12 columns of 72 on a desktop (board Main), 8 and then 6 as the
+// panel narrows, and 6 of 52 on a phone (board Pokedex-movil), every count a divisor of the
+// 48 / 96 / 144 per page, so a full page is always full rows. The panel is the container the
+// columns are measured against, so the single list gets a `div` around its `ul` there.
+//
 // Site addition (7.7.3 H7): a slot that has to carry the anchor of its entity goes inside
 // `SlotsPanelItem`, which is the `li` itself with its `id`; any other child gets an `li` of
 // its own. The list controller then finds `#item-{id}` and focuses the slot inside it.
@@ -35,6 +41,11 @@ export interface SlotsPanelProps extends Omit<HTMLAttributes<HTMLElement>, 'chil
   groups?: SlotsGroup[];
   /** `side` (Comercio, the default) or `stacked` (Pokédex). */
   layout?: 'side' | 'stacked';
+  /**
+   * The inventory grid of the Pokédex Slots view (plan «Slots»): 12 / 8 / 6 columns that end
+   * flush, for slots of 72. Without it the slots wrap as before.
+   */
+  inventory?: boolean;
   /** The slots of the single list. */
   children?: ReactNode;
 }
@@ -72,12 +83,25 @@ export function SlotsPanel({
   label,
   groups,
   layout = 'side',
+  inventory = false,
   children,
   className,
   ...rest
 }: SlotsPanelProps) {
   // C-R4: the ids that tie each group label to its list.
   const baseId = useId();
+
+  if (inventory && (!groups || groups.length === 0)) {
+    const classes = ['ac-slots-panel', 'ac-slots-panel--inventory'];
+    if (className) classes.push(className);
+    return (
+      <div {...rest} className={classes.join(' ')}>
+        <ul aria-label={label} className="ac-slots-panel__slots">
+          {items(children)}
+        </ul>
+      </div>
+    );
+  }
 
   if (!groups || groups.length === 0) {
     const classes = ['ac-slots-panel', 'ac-slots-panel__list'];
@@ -93,6 +117,7 @@ export function SlotsPanel({
     'ac-slots-panel',
     layout === 'stacked' ? 'ac-slots-panel--stacked' : 'ac-slots-panel--side',
   ];
+  if (inventory) classes.push('ac-slots-panel--inventory');
   if (className) classes.push(className);
 
   return (

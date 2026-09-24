@@ -1,27 +1,30 @@
 import '@/styles/components/picker.css';
 
-import { useId, useLayoutEffect, useRef, useState } from 'react';
+import { useId, useRef, useState } from 'react';
 import type { KeyboardEvent } from 'react';
 
-import { EntitySlotFace, entitySlotClasses } from '@/components/game/EntitySlot';
-import { GameTooltip } from '@/components/game/GameTooltip';
+import { EntitySlotFace } from '@/components/game/EntitySlot';
 import type { Locale } from '@/i18n/config';
 import { gridMove, isGridKey, toggleValue } from '@/lib/pickers/model';
 import type { PickerOption } from '@/lib/pickers/model';
 
-// Inline slot grid (spec 16.3.3): the pickers with few options (auras, addons) draw their 56 px
-// slots under the label, without a popover, like the «Auras» panel of the game. The first slot,
-// «none», empties the choice; the chosen ones carry the accent frame and the check. The docked
-// detail under the grid shows the game tooltip of the slot under the pointer or the focus.
+// Inline ring grid (spec 16.3.3, `Lienzo:Crear-anuncio`): the pickers with few options (auras,
+// addons) draw one well of cells of 40 next to their label, without a popover: «Ninguna» as a
+// text cell first, which empties the choice, then each option at 1x. A chosen cell carries the
+// accent frame and the check; the name of the cell under the pointer or the keyboard shows in a
+// small tooltip over it. There is no detail card.
 
 export interface InlineSlotPickerProps {
   label: string;
+  /** Keeps the label for assistive technology only (a form row draws its own). */
+  labelHidden?: boolean;
   options: readonly PickerOption[];
   value: readonly string[];
   onChange: (ids: string[]) => void;
-  /** «Ninguna» / «None»: the first slot. */
+  /** «Ninguna» / «None»: the first cell. */
   noneLabel: string;
   locale: Locale;
+  /** Kept for the callers; the ring grid has no detail card. */
   hint?: string;
   shinyLabel?: string;
   orLabel?: string;
@@ -30,39 +33,22 @@ export interface InlineSlotPickerProps {
   className?: string;
 }
 
-const SLOT = 56;
-const GAP = 6;
-
 export function InlineSlotPicker({
   label,
+  labelHidden = false,
   options,
   value,
   onChange,
   noneLabel,
   locale,
-  hint,
-  shinyLabel,
-  orLabel,
   name,
   className,
 }: InlineSlotPickerProps) {
   const [cursor, setCursor] = useState(-1);
-  const [hover, setHover] = useState<number | null>(null);
-  const [cols, setCols] = useState(6);
   const listRef = useRef<HTMLDivElement>(null);
   const labelId = useId();
   const baseId = useId();
   const count = options.length + 1;
-
-  useLayoutEffect(() => {
-    const list = listRef.current;
-    if (!list) return;
-    const measure = () => setCols(Math.max(1, Math.floor((list.clientWidth + GAP) / (SLOT + GAP))));
-    measure();
-    const observer = new ResizeObserver(measure);
-    observer.observe(list);
-    return () => observer.disconnect();
-  }, []);
 
   const choose = (index: number) => {
     if (index === 0) onChange([]);
@@ -72,22 +58,20 @@ export function InlineSlotPicker({
     }
   };
 
+  // One row: the arrows move along it (the well wraps only when the column is narrow).
   const onKey = (event: KeyboardEvent<HTMLDivElement>) => {
     if (isGridKey(event.key)) {
       event.preventDefault();
-      setCursor((was) => gridMove(was, event.key as never, count, cols));
+      setCursor((was) => gridMove(was, event.key as never, count, count));
     } else if ((event.key === 'Enter' || event.key === ' ') && cursor >= 0) {
       event.preventDefault();
       choose(cursor);
     }
   };
 
-  const shown = hover ?? cursor;
-  const detail = shown > 0 ? options[shown - 1] : null;
-
   return (
-    <div className={['ac-picker', className].filter(Boolean).join(' ')}>
-      <span id={labelId} className="ac-picker__label">
+    <div className={['ac-picker', 'ac-picker--inline', className].filter(Boolean).join(' ')}>
+      <span id={labelId} className={labelHidden ? 'sr-only' : 'ac-picker__label'}>
         {label}
       </span>
       <div
@@ -113,47 +97,32 @@ export function InlineSlotPicker({
               aria-selected={selected}
               aria-disabled={option?.unavailable || undefined}
               aria-label={option?.name ?? noneLabel}
-              className="ac-picker__option"
+              className={
+                option === null ? 'ac-slot-grid__cell ac-slot-grid__none' : 'ac-slot-grid__cell'
+              }
               data-active={index === cursor || undefined}
-              onPointerEnter={() => setHover(index)}
-              onPointerLeave={() => setHover(null)}
+              data-tip={option?.name}
               onClick={() => {
                 setCursor(index);
                 choose(index);
               }}
             >
-              <span
-                className={entitySlotClasses(56, {
-                  selected,
-                  unavailable: option?.unavailable,
-                  none: option === null,
-                })}
-              >
-                <EntitySlotFace
-                  sprite={option?.sprite ?? null}
-                  locale={locale}
-                  size={56}
-                  none={option === null}
-                  shiny={option?.shiny}
-                  check={option !== null && selected}
-                />
-              </span>
+              {option === null ? (
+                noneLabel
+              ) : (
+                <>
+                  <EntitySlotFace
+                    sprite={option.sprite}
+                    locale={locale}
+                    size={40}
+                    shiny={option.shiny}
+                  />
+                  {selected ? <span className="ac-slot-grid__check" aria-hidden="true" /> : null}
+                </>
+              )}
             </div>
           );
         })}
-      </div>
-      <div className="ac-slot-grid__detail">
-        {detail ? (
-          <GameTooltip
-            tip={detail.tip}
-            variant="sheet"
-            locale={locale}
-            hint={hint}
-            ariaLabel={detail.name}
-            shinyLabel={shinyLabel}
-            orLabel={orLabel}
-          />
-        ) : null}
       </div>
       {name ? <input type="hidden" name={name} value={value.join(',')} /> : null}
     </div>

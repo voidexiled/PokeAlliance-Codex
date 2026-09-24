@@ -153,10 +153,11 @@ describe('filter ids (8.0.6, U3)', () => {
     ].sort((a, b) => a - b);
     expect(ids.generations).toEqual(generations.map(String));
     const tierIds = ids.tiers.map(([id]) => id);
+    // The Tier ladder of plan «Dirección C», best first: the named tiers, then T1 … T7.
     const numbered = tierIds.filter((id) => /^t\d+$/.test(id));
-    expect(tierIds.slice(0, numbered.length)).toEqual(numbered);
-    const special = tierIds.slice(numbered.length);
-    const order = ['super-rare', 'ultra-rare', 'legendary', 'mythic', 'ultimate'];
+    expect(tierIds.slice(tierIds.length - numbered.length)).toEqual(numbered);
+    const special = tierIds.slice(0, tierIds.length - numbered.length);
+    const order = ['ultimate', 'mythic', 'legendary', 'ultra-rare', 'super-rare'];
     expect(special).toEqual(order.filter((id) => special.includes(id)));
     for (const record of records) {
       const tier = tierId(record.tier);

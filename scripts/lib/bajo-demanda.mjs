@@ -36,7 +36,7 @@ const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..', '..');
 const OUTPUT_DIR = resolve(ROOT, '.vercel', 'output');
 
 /** §13.5: `site` of astro.config.mjs, the origin the deployment answers on. */
-const SITIO = 'https://pokealliance-codex.vercel.app';
+const SITIO = 'https://pokealliancewiki.com';
 
 /**
  * @typedef {{ plantilla: string, ruta: string, estado: number }} Sonda

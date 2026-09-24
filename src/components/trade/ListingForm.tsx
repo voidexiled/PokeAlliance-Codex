@@ -1,14 +1,21 @@
 import '@/styles/components/listing-form.css';
 
-import { Suspense, lazy, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
+import {
+  Suspense,
+  lazy,
+  useEffect,
+  useId,
+  useLayoutEffect,
+  useMemo,
+  useRef,
+  useState,
+} from 'react';
 import type { ReactNode, SubmitEvent } from 'react';
 import { flushSync } from 'react-dom';
 
 import { Notice } from '@/components/content/Notice';
 import { Button } from '@/components/controls/Button';
 import { Checkbox } from '@/components/controls/Checkbox';
-import { ChipChoice } from '@/components/controls/ChipChoice';
-import { ChoiceTiles } from '@/components/controls/ChoiceTiles';
 import { Select, type SelectOption } from '@/components/controls/Select';
 import { StarLevel } from '@/components/controls/StarLevel';
 import { Stepper } from '@/components/controls/Stepper';
@@ -325,7 +332,24 @@ export interface ListingFormLabels {
   copyText: string;
   /** The name of the preview region, «Vista previa». */
   preview: string;
+  /** The hints under the row names of the trays (`Lienzo:Crear-anuncio`); a row without one
+   * draws its name alone. */
+  hints?: ListingFormHints;
   errors: ListingFormErrors;
+}
+
+/** The hint lines of the label column. */
+export interface ListingFormHints {
+  /** «Opcional»: Ball. */
+  optional?: string;
+  /** «Varias»: Auras. */
+  auras?: string;
+  /** «Varios»: Addons. */
+  addons?: string;
+  /** «Opcionales»: Held Items. */
+  held?: string;
+  /** «Nivel y progreso»: Entrenamiento. */
+  training?: string;
 }
 
 /**
@@ -985,15 +1009,24 @@ function markInvalid(form: HTMLFormElement, errors: Errors): void {
 interface FieldProps {
   id: string;
   error?: string;
-  wide?: boolean;
+  /** The width of a slot trigger (312): a picker or a text of one line. */
+  slot?: boolean;
+  /** The width of a short figure (152): a percentage, a quantity. */
+  narrow?: boolean;
   children: ReactNode;
 }
 
 /** A field and the error line under it (9.7.5). */
-function Field({ id, error, wide = false, children }: FieldProps) {
+function Field({ id, error, slot = false, narrow = false, children }: FieldProps) {
   return (
     <div
-      className={wide ? 'ac-listing-form__field ac-listing-form__wide' : 'ac-listing-form__field'}
+      className={[
+        'ac-listing-form__field',
+        slot ? 'ac-listing-form__field--slot' : null,
+        narrow ? 'ac-listing-form__field--narrow' : null,
+      ]
+        .filter(Boolean)
+        .join(' ')}
     >
       {children}
       {error === undefined || error === '' ? null : (
@@ -1005,33 +1038,44 @@ function Field({ id, error, wide = false, children }: FieldProps) {
   );
 }
 
-/** The fieldset of a part of the form, with its legend and its content 8 under it. */
-function Group({
-  legend,
-  strong = false,
-  wide = false,
-  children,
-}: {
-  legend: string;
-  strong?: boolean;
-  wide?: boolean;
+interface RowProps {
+  /** The name in the label column; the control keeps its own accessible name. */
+  label: string;
+  /** The line under the name: «Opcional», «De +0 a +50.». */
+  hint?: string;
+  /** The row groups several controls: it becomes a `group` named by its label. */
+  group?: boolean;
+  /** Aligns the label with the first line of a tall control (the training table). */
+  top?: boolean;
   children: ReactNode;
-}) {
+}
+
+/**
+ * A row of a tray of `Lienzo:Crear-anuncio`: the label column of 128 (the name, 12/16 700,
+ * over its hint) and the controls, every row of a tray one line apart.
+ */
+function Row({ label, hint, group = false, top = false, children }: RowProps) {
+  const nameId = useId();
   return (
-    <fieldset
-      className={wide ? 'ac-listing-form__set ac-listing-form__wide' : 'ac-listing-form__set'}
+    <div
+      className={top ? 'ac-listing-form__row ac-listing-form__row--top' : 'ac-listing-form__row'}
+      role={group ? 'group' : undefined}
+      aria-labelledby={group ? nameId : undefined}
     >
-      <legend
-        className={
-          strong
-            ? 'ac-listing-form__legend ac-listing-form__legend--strong'
-            : 'ac-listing-form__legend'
-        }
-      >
-        {legend}
-      </legend>
-      <div className="ac-listing-form__group">{children}</div>
-    </fieldset>
+      <div className="ac-listing-form__row-label">
+        {label === '' ? null : (
+          <span
+            id={nameId}
+            className="ac-listing-form__row-name"
+            aria-hidden={group ? undefined : true}
+          >
+            {label}
+          </span>
+        )}
+        {hint ? <span className="ac-listing-form__row-hint">{hint}</span> : null}
+      </div>
+      <div className="ac-listing-form__row-control">{children}</div>
+    </div>
   );
 }
 
@@ -1589,6 +1633,7 @@ export function ListingForm(props: ListingFormProps) {
       placeholder={pickers.choosePokemon}
       options={pokemonChoices}
       value={one(value)}
+      labelHidden={id === ID.pokemon}
       optional={id !== ID.pokemon}
       disabled={rosterData === null}
       elements={elementChoices}
@@ -1604,151 +1649,192 @@ export function ListingForm(props: ListingFormProps) {
     { value: 'amount', label: labels.amount },
   ];
 
+  const hints = labels.hints ?? {};
+
   const pokemonFields = (
-    <div className="ac-listing-form__fields">
-      <Field id={ID.pokemon} error={shown[ID.pokemon]} wide>
-        {pokemonPicker(ID.pokemon, labels.pokemon, unit.pokemon, choosePokemon)}
-        {roster.state === 'error' ? <p className="ac-listing-form__line">{ui.dataError}</p> : null}
-      </Field>
-      <Field id={ID.ball}>
-        <ItemPicker
-          {...pickerBase}
-          name={ID.ball}
-          label={labels.ball}
-          placeholder={pickers.chooseBall}
-          options={ballChoices}
-          value={one(unit.ball)}
-          optional
-          disabled={itemsData === null}
-          categoryLabel={pickers.category}
-          categoryNames={props.categories}
-          onChange={(ids) => setUnit((current) => ({ ...current, ball: ids[0] ?? null }))}
-        />
-      </Field>
-      <div className="ac-listing-form__wide">
-        <AuraPicker
-          locale={locale}
-          name="lf-auras"
-          label={pickers.auras}
-          noneLabel={labels.auraNone}
-          options={auraSlots}
-          value={unit.auras}
-          hint={ui.pinHint}
-          onChange={(ids) => setUnit((current) => ({ ...current, auras: ids }))}
-        />
-      </div>
-      <div className="ac-listing-form__wide">
-        <AddonPicker
-          locale={locale}
-          name="lf-addons"
-          label={pickers.addons}
-          noneLabel={labels.addonNone}
-          pokemonId={unit.pokemon}
-          options={slotRecords(
-            ownAddons.map((addon) => ({ ...addon, icono: addon.icono ?? null })),
-          )}
-          value={unit.addons}
-          hint={ui.pinHint}
-          onChange={(ids) => setUnit((current) => ({ ...current, addons: ids }))}
-        />
-      </div>
-      {(['x', 'y'] as const).map((ranura) => {
-        const key = ranura === 'x' ? 'heldX' : 'heldY';
-        return (
-          <Field key={ranura} id={`lf-held-${ranura}`}>
-            <HeldPicker
-              {...pickerBase}
-              name={`lf-held-${ranura}`}
-              label={ranura === 'x' ? pickers.heldX : pickers.heldY}
-              placeholder={pickers.chooseHeld}
-              options={itemChoices}
-              ranura={ranura}
-              tierLabel={labels.tier}
-              value={one(unit[key])}
-              optional
-              disabled={itemsData === null}
-              onChange={(ids) => setUnit((current) => ({ ...current, [key]: ids[0] ?? null }))}
+    <>
+      <Row label={labels.pokemon}>
+        <Field id={ID.pokemon} error={shown[ID.pokemon]} slot>
+          {pokemonPicker(ID.pokemon, labels.pokemon, unit.pokemon, choosePokemon)}
+          {roster.state === 'error' ? (
+            <p className="ac-listing-form__line">{ui.dataError}</p>
+          ) : null}
+        </Field>
+      </Row>
+      <Row label={labels.ball} hint={hints.optional}>
+        <Field id={ID.ball} slot>
+          <ItemPicker
+            {...pickerBase}
+            name={ID.ball}
+            label={labels.ball}
+            labelHidden
+            placeholder={pickers.chooseBall}
+            options={ballChoices}
+            value={one(unit.ball)}
+            optional
+            disabled={itemsData === null}
+            categoryLabel={pickers.category}
+            categoryNames={props.categories}
+            onChange={(ids) => setUnit((current) => ({ ...current, ball: ids[0] ?? null }))}
+          />
+        </Field>
+      </Row>
+      {auraSlots.length > 0 ? (
+        <Row label={pickers.auras} hint={hints.auras}>
+          <AuraPicker
+            locale={locale}
+            name="lf-auras"
+            label={pickers.auras}
+            labelHidden
+            noneLabel={labels.auraNone}
+            options={auraSlots}
+            value={unit.auras}
+            onChange={(ids) => setUnit((current) => ({ ...current, auras: ids }))}
+          />
+        </Row>
+      ) : null}
+      {unit.pokemon !== null && ownAddons.length > 0 ? (
+        <Row label={pickers.addons} hint={hints.addons}>
+          <AddonPicker
+            locale={locale}
+            name="lf-addons"
+            label={pickers.addons}
+            labelHidden
+            noneLabel={labels.addonNone}
+            pokemonId={unit.pokemon}
+            options={slotRecords(
+              ownAddons.map((addon) => ({ ...addon, icono: addon.icono ?? null })),
+            )}
+            value={unit.addons}
+            onChange={(ids) => setUnit((current) => ({ ...current, addons: ids }))}
+          />
+        </Row>
+      ) : null}
+      {/* Held X, Held Y and Mega Stone: three slot triggers of one width, each named on its
+          second line. */}
+      <Row label={labels.heldItems} hint={hints.held} group>
+        <div className="ac-listing-form__held">
+          {(['x', 'y'] as const).map((ranura) => {
+            const key = ranura === 'x' ? 'heldX' : 'heldY';
+            const name = ranura === 'x' ? pickers.heldX : pickers.heldY;
+            return (
+              <Field key={ranura} id={`lf-held-${ranura}`}>
+                <HeldPicker
+                  {...pickerBase}
+                  name={`lf-held-${ranura}`}
+                  label={name}
+                  labelHidden
+                  meta={name}
+                  placeholder={pickers.chooseHeld}
+                  options={itemChoices}
+                  ranura={ranura}
+                  tierLabel={labels.tier}
+                  value={one(unit[key])}
+                  optional
+                  disabled={itemsData === null}
+                  onChange={(ids) => setUnit((current) => ({ ...current, [key]: ids[0] ?? null }))}
+                />
+              </Field>
+            );
+          })}
+          <MegaPicker
+            {...pickerBase}
+            name="lf-mega"
+            label={pickers.mega}
+            labelHidden
+            meta={pickers.mega}
+            placeholder={pickers.chooseMega}
+            options={itemChoices}
+            pokemonId={unit.pokemon}
+            value={one(unit.mega)}
+            optional
+            onChange={(ids) => setUnit((current) => ({ ...current, mega: ids[0] ?? null }))}
+          />
+        </div>
+      </Row>
+      {/* Boost, then Star Level on the same row with its own inline label. */}
+      <Row label={labels.boost} hint={labels.boostHelp}>
+        <div className="ac-listing-form__inline">
+          <Field id={ID.boost} error={shown[ID.boost]}>
+            {stepper(
+              ID.boost,
+              labels.boost,
+              unit.boost,
+              LIMITS.boost,
+              (boost) => setUnit((current) => ({ ...current, boost })),
+              true,
+            )}
+          </Field>
+          <Field id={ID.starLevel} error={shown[ID.starLevel]}>
+            <StarLevel
+              name={ID.starLevel}
+              label={labels.starLevel}
+              value={unit.starLevel ?? 0}
+              max={LIMITS.starLevel[1]}
+              starLabel={pickers.star}
+              onChange={(starLevel) =>
+                setUnit((current) => ({
+                  ...current,
+                  starLevel: starLevel === 0 ? null : starLevel,
+                }))
+              }
             />
           </Field>
+        </div>
+      </Row>
+      <Row label={labels.nickname}>
+        <Field id={ID.nickname} error={shown[ID.nickname]} slot>
+          {textField(
+            ID.nickname,
+            labels.nickname,
+            unit.nickname,
+            (nickname) => setUnit((current) => ({ ...current, nickname })),
+            { max: NOMBRE_MAX, labelHidden: true },
+          )}
+        </Field>
+      </Row>
+      <Row label={labels.nextBoostChance}>
+        <Field id={ID.nextBoostChance} error={shown[ID.nextBoostChance]} narrow>
+          {textField(
+            ID.nextBoostChance,
+            labels.nextBoostChance,
+            unit.nextBoostChance,
+            (nextBoostChance) => setUnit((current) => ({ ...current, nextBoostChance })),
+            { inputMode: 'decimal', labelHidden: true },
+          )}
+        </Field>
+      </Row>
+      {reading.ditto ? (
+        <Row label={labels.memorySlots}>
+          <Field id={ID.memorySlots} error={shown[ID.memorySlots]}>
+            {stepper(
+              ID.memorySlots,
+              labels.memorySlots,
+              unit.memorySlots,
+              LIMITS.memorySlots,
+              (memorySlots) => setUnit((current) => ({ ...current, memorySlots })),
+            )}
+          </Field>
+        </Row>
+      ) : null}
+      {unit.memories.slice(0, slots).map((memory, index) => {
+        const name = fill(labels.memory, { n: formatInteger(index + 1, locale) });
+        return (
+          // The Memory Slots are a fixed sequence of the Ditto: the position is the identity.
+          <Row key={index} label={name}>
+            <Field id={ID.memory(index)} error={shown[ID.memory(index)]} slot>
+              {pokemonPicker(ID.memory(index), name, memory, (next) => setMemory(index, next))}
+            </Field>
+          </Row>
         );
       })}
-      <Field id="lf-mega">
-        <MegaPicker
-          {...pickerBase}
-          name="lf-mega"
-          label={pickers.mega}
-          placeholder={pickers.chooseMega}
-          options={itemChoices}
-          pokemonId={unit.pokemon}
-          value={one(unit.mega)}
-          optional
-          onChange={(ids) => setUnit((current) => ({ ...current, mega: ids[0] ?? null }))}
-        />
-      </Field>
-      <Field id={ID.boost} error={shown[ID.boost]}>
-        {stepper(
-          ID.boost,
-          labels.boost,
-          unit.boost,
-          LIMITS.boost,
-          (boost) => setUnit((current) => ({ ...current, boost })),
-          true,
-        )}
-      </Field>
-      <Field id={ID.starLevel} error={shown[ID.starLevel]}>
-        <StarLevel
-          name={ID.starLevel}
-          label={labels.starLevel}
-          value={unit.starLevel ?? 0}
-          max={LIMITS.starLevel[1]}
-          starLabel={pickers.star}
-          onChange={(starLevel) =>
-            setUnit((current) => ({ ...current, starLevel: starLevel === 0 ? null : starLevel }))
-          }
-        />
-      </Field>
-      <Field id={ID.nickname} error={shown[ID.nickname]}>
-        {textField(
-          ID.nickname,
-          labels.nickname,
-          unit.nickname,
-          (nickname) => setUnit((current) => ({ ...current, nickname })),
-          { max: NOMBRE_MAX },
-        )}
-      </Field>
-      <Field id={ID.nextBoostChance} error={shown[ID.nextBoostChance]}>
-        {textField(
-          ID.nextBoostChance,
-          labels.nextBoostChance,
-          unit.nextBoostChance,
-          (nextBoostChance) => setUnit((current) => ({ ...current, nextBoostChance })),
-          { inputMode: 'decimal' },
-        )}
-      </Field>
-      {reading.ditto ? (
-        <Field id={ID.memorySlots} error={shown[ID.memorySlots]}>
-          {stepper(
-            ID.memorySlots,
-            labels.memorySlots,
-            unit.memorySlots,
-            LIMITS.memorySlots,
-            (memorySlots) => setUnit((current) => ({ ...current, memorySlots })),
-          )}
-        </Field>
-      ) : null}
-      {unit.memories.slice(0, slots).map((memory, index) => (
-        // The Memory Slots are a fixed sequence of the Ditto: the position is the identity.
-        <Field key={index} id={ID.memory(index)} error={shown[ID.memory(index)]}>
-          {pokemonPicker(
-            ID.memory(index),
-            fill(labels.memory, { n: formatInteger(index + 1, locale) }),
-            memory,
-            (next) => setMemory(index, next),
-          )}
-        </Field>
-      ))}
-      <fieldset className="ac-listing-form__training ac-listing-form__wide">
-        <legend className="ac-listing-form__legend">{labels.training}</legend>
+    </>
+  );
+
+  // The training tray: the eight skills, each a level, a progress and its meter.
+  const trainingFields = (
+    <section className="ac-listing-form__tray" aria-label={labels.training}>
+      <Row label={labels.training} hint={hints.training} top>
         <table className="ac-listing-form__train-table">
           <thead>
             <tr>
@@ -1807,30 +1893,39 @@ export function ListingForm(props: ListingFormProps) {
             })}
           </tbody>
         </table>
-      </fieldset>
-      <div className="ac-listing-form__stack ac-listing-form__wide">
-        <ToggleGroup
-          id="lf-npc"
-          label={labels.npcPrice}
-          labelHidden={false}
-          options={npcOptions}
-          value={unit.npc}
-          onChange={(npc) =>
-            setUnit((current) => ({ ...current, npc: looseOneOf(npc, NPC_CHOICES, 'none') }))
-          }
-        />
-        {unit.npc === 'amount' ? (
-          <div className="ac-listing-form__fields">
-            <Field id={ID.npcAmount} error={shown[ID.npcAmount]}>
-              {textField(ID.npcAmount, labels.amount, unit.npcAmount, (npcAmount) =>
-                setUnit((current) => ({ ...current, npcAmount })),
+      </Row>
+    </section>
+  );
+
+  // NPC Price opens the price tray of a Pokémon: the three choices, then the amount.
+  const npcRow =
+    draft.tipo === 'pokemon' ? (
+      <Row label={labels.npcPrice}>
+        <div className="ac-listing-form__inline">
+          <ToggleGroup
+            id="lf-npc"
+            className="ac-listing-form__segmented"
+            label={labels.npcPrice}
+            options={npcOptions}
+            value={unit.npc}
+            onChange={(npc) =>
+              setUnit((current) => ({ ...current, npc: looseOneOf(npc, NPC_CHOICES, 'none') }))
+            }
+          />
+          {unit.npc === 'amount' ? (
+            <Field id={ID.npcAmount} error={shown[ID.npcAmount]} narrow>
+              {textField(
+                ID.npcAmount,
+                labels.amount,
+                unit.npcAmount,
+                (npcAmount) => setUnit((current) => ({ ...current, npcAmount })),
+                { labelHidden: true },
               )}
             </Field>
-          </div>
-        ) : null}
-      </div>
-    </div>
-  );
+          ) : null}
+        </div>
+      </Row>
+    ) : null;
 
   // ------------------------------------------------------------- items and currencies
 
@@ -1838,50 +1933,67 @@ export function ListingForm(props: ListingFormProps) {
     draft.tipo === 'pokemon' ? (
       pokemonFields
     ) : draft.tipo === 'items' ? (
-      <div className="ac-listing-form__fields">
-        <Field id={ID.item} error={shown[ID.item]} wide>
-          <ItemPicker
-            {...pickerBase}
-            name={ID.item}
-            label={labels.item}
-            placeholder={pickers.chooseItem}
-            options={itemChoices}
-            value={one(draft.item.id)}
-            disabled={itemsData === null}
-            categoryLabel={pickers.category}
-            categoryNames={props.categories}
-            onChange={(ids) => {
-              touch(ID.item);
-              update((current) => ({ ...current, item: { ...current.item, id: ids[0] ?? null } }));
-            }}
-          />
-        </Field>
-        <Field id={ID.itemQuantity} error={shown[ID.itemQuantity]}>
-          {textField(ID.itemQuantity, labels.quantity, draft.item.quantity, (quantity) =>
-            update((current) => ({ ...current, item: { ...current.item, quantity } })),
-          )}
-        </Field>
-      </div>
+      <>
+        <Row label={labels.item}>
+          <Field id={ID.item} error={shown[ID.item]} slot>
+            <ItemPicker
+              {...pickerBase}
+              name={ID.item}
+              label={labels.item}
+              labelHidden
+              placeholder={pickers.chooseItem}
+              options={itemChoices}
+              value={one(draft.item.id)}
+              disabled={itemsData === null}
+              categoryLabel={pickers.category}
+              categoryNames={props.categories}
+              onChange={(ids) => {
+                touch(ID.item);
+                update((current) => ({
+                  ...current,
+                  item: { ...current.item, id: ids[0] ?? null },
+                }));
+              }}
+            />
+          </Field>
+        </Row>
+        <Row label={labels.quantity}>
+          <Field id={ID.itemQuantity} error={shown[ID.itemQuantity]} narrow>
+            {textField(
+              ID.itemQuantity,
+              labels.quantity,
+              draft.item.quantity,
+              (quantity) =>
+                update((current) => ({ ...current, item: { ...current.item, quantity } })),
+              { labelHidden: true },
+            )}
+          </Field>
+        </Row>
+      </>
     ) : draft.tipo === 'diamonds' ? (
-      <div className="ac-listing-form__fields">
-        <Field id={ID.diamonds} error={shown[ID.diamonds]}>
-          {textField(ID.diamonds, labels.quantity, draft.diamonds, (diamonds) =>
-            update((current) => ({ ...current, diamonds })),
+      <Row label={labels.quantity}>
+        <Field id={ID.diamonds} error={shown[ID.diamonds]} narrow>
+          {textField(
+            ID.diamonds,
+            labels.quantity,
+            draft.diamonds,
+            (diamonds) => update((current) => ({ ...current, diamonds })),
+            { labelHidden: true },
           )}
         </Field>
-      </div>
+      </Row>
     ) : (
-      <div className="ac-listing-form__fields">
-        <Field id={ID.pokedolares} error={shown[ID.pokedolares]}>
+      <Row label={labels.quantity}>
+        <Field id={ID.pokedolares} error={shown[ID.pokedolares]} slot>
           {textField(
             ID.pokedolares,
             labels.quantity,
             draft.pokedolares,
             (pokedolares) => update((current) => ({ ...current, pokedolares })),
-            { helper: exactFigure(draft.pokedolares) },
+            { helper: exactFigure(draft.pokedolares), labelHidden: true },
           )}
         </Field>
-      </div>
+      </Row>
     );
 
   // --------------------------------------------------------------------------- price
@@ -1904,8 +2016,9 @@ export function ListingForm(props: ListingFormProps) {
     }));
 
   const priceFields = (
-    <Group legend={labels.price} strong>
-      <Group legend={labels.fiat}>
+    <>
+      {npcRow}
+      <Row label={labels.fiat} group>
         <div className="ac-listing-form__pair ac-listing-form__pair--money">
           <Field id={ID.currency}>
             <Select
@@ -1937,60 +2050,64 @@ export function ListingForm(props: ListingFormProps) {
             )}
           </Field>
         </div>
-      </Group>
-      <Group legend={labels.game}>
-        {price.game.map((row, index) => (
-          // The options are the seller's sequence: the position is the identity.
-          <div key={index} className="ac-listing-form__option">
-            <Field id={ID.gameKind(index)} error={shown[ID.gameKind(index)]}>
-              <Select
-                id={ID.gameKind(index)}
-                label={labels.currency}
-                labelHidden
-                options={kindOptions}
-                value={row.kind}
-                disabled={price.negotiable}
-                onChange={(kind) => {
-                  touch(ID.gameKind(index));
-                  setRow(index, { kind: looseOneOf(kind, MONEDAS_JUEGO, row.kind) });
-                }}
-              />
-            </Field>
-            <Field id={ID.gameAmount(index)} error={shown[ID.gameAmount(index)]}>
-              {textField(
-                ID.gameAmount(index),
-                labels.amount,
-                row.amount,
-                (amount) => setRow(index, { amount }),
-                {
-                  labelHidden: true,
-                  disabled: price.negotiable,
-                },
-              )}
-            </Field>
-            {/* An option exists once it has an amount, and only then can it be removed; with two,
+      </Row>
+      <Row label={labels.game} group top>
+        <div className="ac-listing-form__options">
+          {price.game.map((row, index) => (
+            // The options are the seller's sequence: the position is the identity.
+            <div key={index} className="ac-listing-form__option">
+              <Field id={ID.gameKind(index)} error={shown[ID.gameKind(index)]}>
+                <Select
+                  id={ID.gameKind(index)}
+                  label={labels.currency}
+                  labelHidden
+                  options={kindOptions}
+                  value={row.kind}
+                  disabled={price.negotiable}
+                  onChange={(kind) => {
+                    touch(ID.gameKind(index));
+                    setRow(index, { kind: looseOneOf(kind, MONEDAS_JUEGO, row.kind) });
+                  }}
+                />
+              </Field>
+              <Field id={ID.gameAmount(index)} error={shown[ID.gameAmount(index)]}>
+                {textField(
+                  ID.gameAmount(index),
+                  labels.amount,
+                  row.amount,
+                  (amount) => setRow(index, { amount }),
+                  {
+                    labelHidden: true,
+                    disabled: price.negotiable,
+                  },
+                )}
+              </Field>
+              {/* An option exists once it has an amount, and only then can it be removed; with two,
                 either can. */}
-            {!price.negotiable && (price.game.length > 1 || row.amount.trim() !== '') ? (
-              <Button onClick={() => removeOption(index)}>{labels.removeOption}</Button>
-            ) : null}
-          </div>
-        ))}
-        {/* 9.7.4: «Añadir otra opción» only while there is one option. */}
-        {!price.negotiable && price.game.length === 1 && optionsTyped === 1 ? (
-          <div>
-            <Button id={ID.addOption} onClick={addOption}>
-              {labels.addOption}
-            </Button>
-          </div>
-        ) : null}
-      </Group>
-      <Checkbox
-        id={ID.negotiable}
-        label={labels.negotiable}
-        checked={price.negotiable}
-        onChange={(checked) => setNegotiable(checked)}
-      />
-    </Group>
+              {!price.negotiable && (price.game.length > 1 || row.amount.trim() !== '') ? (
+                <Button onClick={() => removeOption(index)}>{labels.removeOption}</Button>
+              ) : null}
+            </div>
+          ))}
+          {/* 9.7.4: «Añadir otra opción» only while there is one option. */}
+          {!price.negotiable && price.game.length === 1 && optionsTyped === 1 ? (
+            <div>
+              <Button id={ID.addOption} onClick={addOption}>
+                {labels.addOption}
+              </Button>
+            </div>
+          ) : null}
+        </div>
+      </Row>
+      <Row label="">
+        <Checkbox
+          id={ID.negotiable}
+          label={labels.negotiable}
+          checked={price.negotiable}
+          onChange={(checked) => setNegotiable(checked)}
+        />
+      </Row>
+    </>
   );
 
   // ------------------------------------------------------------------------- preview
@@ -2005,40 +2122,49 @@ export function ListingForm(props: ListingFormProps) {
         ? items.state !== 'loading'
         : true;
 
-  const typeTiles = TIPOS_ACTIVO.map((tipo) => ({
+  // Plan «Crear anuncio»: ¿Qué vendes?, NPC Price and Mundo are one segmented box each.
+  const typeOptions: ToggleGroupOption[] = TIPOS_ACTIVO.map((tipo) => ({
     value: tipo,
     label: labels.types[tipo],
-    sprite: sprites.tabs[tipo],
   }));
 
   return (
     <div className="ac-listing-form">
       <form ref={formRef} className="ac-listing-form__form" noValidate onSubmit={submit}>
-        <ChoiceTiles
-          name="lf-type"
-          label={pickers.assetQuestion}
-          tiles={typeTiles}
-          value={draft.tipo}
-          onChange={(tipo) => chooseType(looseOneOf(tipo, TIPOS_ACTIVO, draft.tipo))}
-        />
-        {assetFields}
-        {priceFields}
-        {worlds.length > 1 ? (
-          <div className="ac-listing-form__fields">
-            <Field id={ID.world} error={shown[ID.world]} wide>
-              <ChipChoice
-                label={labels.world}
-                multiple={false}
-                options={worlds.map((world) => ({ value: world.id, label: world.nombre }))}
-                value={draft.world === '' ? [] : [draft.world]}
-                onChange={(ids) => {
-                  touch(ID.world);
-                  update((current) => ({ ...current, world: ids[0] ?? '' }));
-                }}
-              />
-            </Field>
-          </div>
-        ) : null}
+        <section className="ac-listing-form__tray" aria-label={pickers.assetQuestion}>
+          <Row label={pickers.assetQuestion}>
+            <ToggleGroup
+              id="lf-type"
+              className="ac-listing-form__segmented ac-listing-form__segmented--fill"
+              label={pickers.assetQuestion}
+              options={typeOptions}
+              value={draft.tipo}
+              onChange={(tipo) => chooseType(looseOneOf(tipo, TIPOS_ACTIVO, draft.tipo))}
+            />
+          </Row>
+          {assetFields}
+        </section>
+        {draft.tipo === 'pokemon' ? trainingFields : null}
+        <section className="ac-listing-form__tray" aria-label={labels.price}>
+          {priceFields}
+          {worlds.length > 1 ? (
+            <Row label={labels.world}>
+              <Field id={ID.world} error={shown[ID.world]}>
+                <ToggleGroup
+                  id={ID.world}
+                  className="ac-listing-form__segmented"
+                  label={labels.world}
+                  options={worlds.map((world) => ({ value: world.id, label: world.nombre }))}
+                  value={draft.world}
+                  onChange={(world) => {
+                    touch(ID.world);
+                    update((current) => ({ ...current, world }));
+                  }}
+                />
+              </Field>
+            </Row>
+          ) : null}
+        </section>
         <div className="ac-listing-form__action">
           {props.publish ? (
             <Button id={ID.publish} type="submit" variant="solid" disabled={publishing}>

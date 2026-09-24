@@ -22,6 +22,7 @@ import type { Locale } from '@/i18n/config';
 import { fill } from '@/i18n/messages/types';
 import { formatTier } from '@/lib/content/format';
 import { resolvePokemonImage } from '@/lib/content/pokemon-media';
+import { tierInfo } from '@/lib/content/tiers';
 import type { PokemonRecord, SystemItemRecord } from '@/lib/content/types';
 import { formatInteger } from '@/lib/format/numbers';
 import { present } from '@/lib/format/unknown';
@@ -269,7 +270,8 @@ export function pokemonTip(pokemon: PokemonTipRecord, locale: Locale, labels: Ti
     ...(pokemon.variante === SHINY ? { shiny: true } : {}),
     rows: tipRows([
       [labels.requirement, levelRequirement(pokemon.nivel, locale, labels)],
-      [labels.tier, formatTier(pokemon.tier)],
+      // A tier content/tiers.json hides (ULTIMATE for now) reads as an unknown one: «—».
+      [labels.tier, formatTier(tierInfo(pokemon.tier)?.visible === false ? null : pokemon.tier)],
       [labels.elements, elements.join(ELEMENT_JOINER)],
       [labels.generation, present(pokemon.generacion) ? String(pokemon.generacion) : null],
       [labels.role, pokemon.funcion],

@@ -2,16 +2,11 @@ import { useCallback, useMemo } from 'react';
 
 import { EntityPicker } from '@/components/pickers/EntityPicker';
 import type { EntityPickerProps, PickerFilter } from '@/components/pickers/EntityPicker';
-import {
-  elementChips,
-  generationChips,
-  heldTierChips,
-  tierChips,
-  variantChips,
-} from '@/components/pickers/filters';
+import { elementChips, heldTierChips, variantChips } from '@/components/pickers/filters';
 import type { NamedElement } from '@/components/pickers/filters';
 import { InlineSlotPicker } from '@/components/pickers/InlineSlotPicker';
 import type { InlineSlotPickerProps } from '@/components/pickers/InlineSlotPicker';
+import { visibleTiers } from '@/lib/content/tiers';
 import { facetValues } from '@/lib/pickers/model';
 import type { PickerOption } from '@/lib/pickers/model';
 import { megaOptions } from '@/lib/pickers/options';
@@ -35,8 +30,18 @@ export interface PokemonFilterLabels {
   variante: string;
   /** «Normal» */
   normal: string;
-  /** «Generación» / «Generation» */
+  /** «Generación» / «Generation» (not a filter of the picker since Direction C). */
   generacion: string;
+  /** «Hasta {max}; debe tener ambos.» / «Up to {max}; it must have both.» */
+  tipoRule?: string;
+  /** «Ataques en área; basta con uno.» / «Area attacks; one is enough.» */
+  movesetRule?: string;
+  /** «De mejor a peor.» / «Best to worst.» */
+  tierRule?: string;
+  /** «Max brokes»: the row of the tier tooltip, «Max brokes: —» until the data exists. */
+  maxBrokes?: string;
+  /** «Todas» / «All»: the leading slot of the Variante menu. */
+  all?: string;
 }
 
 export interface PokemonPickerProps extends BaseProps {
@@ -45,43 +50,59 @@ export interface PokemonPickerProps extends BaseProps {
   filterLabels: PokemonFilterLabels;
 }
 
-/** Filters: Tier, Tipo, Tipo de moveset (hidden without data), Variante, Generación. */
+/**
+ * Filters of `Lienzo:Selector-Pokemon` (Direction C): Tipo (AND, at most 2), Tipo de moveset
+ * (OR; hidden without data), Tier (content/tiers.json best first: a hidden tier such as
+ * ULTIMATE is not offered, each with its «Max brokes» tooltip) and Variante. The grid is of 72:
+ * the art at 64.
+ */
 export function PokemonPicker({ elements, filterLabels, ...props }: PokemonPickerProps) {
   const filters = useCallback(
-    (options: readonly PickerOption[]): PickerFilter[] => [
-      {
-        id: 'tier',
-        label: filterLabels.tier,
-        options: tierChips(options.map((o) => o.tier ?? null)),
-      },
-      {
-        id: 'tipo',
-        label: filterLabels.tipo,
-        options: elementChips(elements, facetValues(options, 'tipo')),
-      },
-      {
-        id: 'moveset',
-        label: filterLabels.moveset,
-        options: elementChips(elements, facetValues(options, 'moveset')),
-      },
-      {
-        id: 'variante',
-        label: filterLabels.variante,
-        options: variantChips(filterLabels.normal).filter((chip) =>
-          facetValues(options, 'variante').includes(chip.value),
-        ),
-      },
-      {
-        id: 'generacion',
-        label: filterLabels.generacion,
-        options: generationChips(facetValues(options, 'generacion').map(Number)),
-      },
-    ],
+    (options: readonly PickerOption[]): PickerFilter[] => {
+      const present = facetValues(options, 'tier');
+      const tiers = visibleTiers.filter((tier) => present.includes(tier.id));
+      const tips: Record<string, string> = {};
+      if (filterLabels.maxBrokes) {
+        for (const tier of tiers) {
+          tips[tier.id] = `${filterLabels.maxBrokes}: ${tier.maxBrokes ?? '—'}`;
+        }
+      }
+      return [
+        {
+          id: 'tipo',
+          label: filterLabels.tipo,
+          options: elementChips(elements, facetValues(options, 'tipo')),
+          match: 'all',
+          max: 2,
+          rule: filterLabels.tipoRule,
+        },
+        {
+          id: 'moveset',
+          label: filterLabels.moveset,
+          options: elementChips(elements, facetValues(options, 'moveset')),
+          rule: filterLabels.movesetRule,
+        },
+        {
+          id: 'tier',
+          label: filterLabels.tier,
+          options: tiers.map((tier) => ({ value: tier.id, label: tier.nombre })),
+          rule: filterLabels.tierRule,
+          tips,
+        },
+        {
+          id: 'variante',
+          label: filterLabels.variante,
+          options: variantChips(filterLabels.normal).filter((chip) =>
+            facetValues(options, 'variante').includes(chip.value),
+          ),
+          all: filterLabels.all,
+        },
+      ];
+    },
     [elements, filterLabels],
   );
-  return <EntityPicker {...props} filters={filters} />;
+  return <EntityPicker slotSize={72} {...props} filters={filters} />;
 }
-
 export interface ItemPickerProps extends BaseProps {
   /** «Categoría» / «Category» */
   categoryLabel: string;

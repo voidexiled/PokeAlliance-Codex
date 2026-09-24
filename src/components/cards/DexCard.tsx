@@ -6,16 +6,19 @@ import { FactList } from '@/components/cards/FactList';
 import type { FactRow } from '@/components/cards/FactList';
 import { ElementChip } from '@/components/game/ElementChip';
 import type { ElementChipEntry } from '@/components/game/ElementChip';
+import { ElementIcon } from '@/components/game/ElementIcon';
 import { NestedEntity } from '@/components/game/NestedEntity';
-import { ShinyMark } from '@/components/game/ShinyMark';
+import { PokemonArt } from '@/components/game/ShinyMark';
 import type { SpriteProps } from '@/components/game/Sprite';
 import { SpriteStage } from '@/components/game/SpriteStage';
+import { TierValue } from '@/components/game/TierBadge';
 import { PlusN } from '@/components/money/PlusN';
 import type { Locale } from '@/i18n/config';
 import type { MessageLeaf } from '@/i18n/messages/types';
 import { fill, isPluralMessage, plural } from '@/i18n/messages/types';
 import { trackCount } from '@/lib/cards/layout';
 import type { DexKey, DexLayout } from '@/lib/cards/layout';
+import type { PokemonTier } from '@/lib/content/types';
 import { formatInteger } from '@/lib/format/numbers';
 import { UNKNOWN } from '@/lib/format/unknown';
 import type { TipData } from '@/lib/game/tips';
@@ -62,9 +65,19 @@ import type { TipData } from '@/lib/game/tips';
 //   - The meta line writes each part only when the registry has it (8.2), «Nº {n}» and the
 //     generation, and it is written twice, «Nº 6 · Generación 1» and «Nº 6 · Gen. 1», of
 //     which the container query shows one.
-//   - `entry.art` is the URL of the Pokémon art (`resolvePokemonImage`) or `null`, the
-//     missing mark; the art is an illustration drawn smooth at 64 (7.4.2). `loading` is the
+//   - `entry.art` is the URL of the Pokémon art (`resolvePokemonImage`) or `null`; the art
+//     is an illustration drawn smooth at 64 (7.4.2), with the golden glow when the entry is
+//     shiny (plan «Shiny»: no mark over it, «Shiny» stays as the Variante text), and the
+//     client Pokédex «?» at 48 without art or when it fails (plan «?»). `loading` is the
 //     `lazy` of 7.4.2 for a card from the fifth of its list on (index 4 and up).
+//   - The facts of the board Pokedex-Cards (plan «Cards»): Requisito, Tier, Rol, Variante,
+//     Tipo, Moveset. Tier is `TierValue` — the tier as text with a dotted underline that
+//     opens its tooltip («Max brokes: —») — when the entry brings `tierValue`, and «—» for a
+//     hidden tier (ULTIMATE). With `labels.type`, the elements are the «Tipo» fact and the
+//     moveset (`movesetElements`) the «Moveset» fact, both as `ElementIcon`s — the icon
+//     alone at 24, its name in a small game tooltip — one row track each, so the card keeps
+//     the tracks of `trackCount` (the «elements» zone becomes the «Tipo» row). Without
+//     `labels.type`, the chip zone under the facts is drawn as before.
 //   - `headingLevel` (7.6.2): the level of the title, when the card is rendered where it
 //     cannot see the one of its grid (each card of an `.astro` page is its own React root).
 //
@@ -101,12 +114,22 @@ export interface DexCardEntry {
   /** `nivel`, the value of Requisito: «Nivel 80». */
   level?: number | null;
   /**
-   * `formatTier(tier)`: «T3», «Legendary»; or the caller's node, such as the `TierBadge`
-   * markup of the Pokédex (§16.4.2).
+   * `formatTier(tier)`: «T3», «Legendary»; or the caller's node. Ignored when `tierValue`
+   * is given.
    */
   tier?: ReactNode;
+  /**
+   * The registry `tier` (plan «Tier tooltip»): the Tier fact becomes `TierValue`, the dotted
+   * text that opens the tier tooltip, and «—» for a tier the site hides (ULTIMATE).
+   */
+  tierValue?: PokemonTier | null;
   /** The «Moveset» fact (§16.4.2): the chip of `elementoMoveset`, built by the caller. */
   moveset?: ReactNode;
+  /**
+   * The elements of the moveset (plan «Cards»): the «Moveset» fact as `ElementIcon`s, like
+   * «Tipo». With it `moveset` is ignored.
+   */
+  movesetElements?: readonly ElementChipEntry[];
   /** `funcion`: «PVE». */
   role?: string | null;
   /** `variante`. */
@@ -137,11 +160,18 @@ export interface DexCardLabels {
   role: string;
   /** «Moveset», a game term (13.4). */
   moveset?: string;
+  /**
+   * «Tipo» / «Type»: the label of the elements fact (plan «Cards»). With it the elements are
+   * the «Tipo» fact as icons; without it, the chip zone under the facts.
+   */
+  type?: string;
+  /** «Max brokes», a game term (13.4): the row of the tier tooltip (`ui.filterBar.maxBrokes`). */
+  maxBrokes?: string;
   /** «Variante» / «Variant». */
   variant: string;
   /** «Normal». */
   normal: string;
-  /** «Shiny», a game term (13.4): the word after the Shiny mark. */
+  /** «Shiny», a game term (13.4): the Variante value of a shiny entry. */
   shiny: string;
   /** «Drops»: the label of the zone and the name of its list. */
   drops: string;
@@ -260,10 +290,8 @@ export function DexCard({
   };
 
   // ---------------------------------------------------------------------------------- head
-  // Art of 64 (the missing mark without it), the name on one line (two in the compact
-  // anatomy, card.css) and the meta line with the parts the registry has.
-  const art: SpriteProps | null =
-    entry.art === null || entry.art === '' ? null : { src: entry.art, smooth: true, loading };
+  // Art of 64 with the Shiny glow (the «?» without it), the name on one line (two in the
+  // compact anatomy, card.css) and the meta line with the parts the registry has.
   const number = known(entry.number) ? fill(labels.number, { n: String(entry.number) }) : null;
   const line = (generation: string | null) =>
     [number, generation].filter((part): part is string => part !== null).join(' · ');
@@ -281,7 +309,16 @@ export function DexCard({
   }
   const head = (
     <Head
-      stage={<SpriteStage sprite={art} size={ART} framed={false} />}
+      stage={
+        <span className="ac-sprite-stage ac-sprite-stage--64 ac-dex-card__art" aria-hidden="true">
+          <PokemonArt
+            src={entry.art === '' ? null : entry.art}
+            size={ART}
+            shiny={entry.variant === 'shiny'}
+            loading={loading}
+          />
+        </span>
+      }
       title={
         <Title href={entry.href} clamp={1} current={entry.current}>
           {entry.name}
@@ -303,6 +340,20 @@ export function DexCard({
             : null,
         };
       case 'tier':
+        if (entry.tierValue !== undefined) {
+          return {
+            key,
+            label: labels.tier,
+            mode: 'node',
+            value: (
+              <TierValue
+                tier={entry.tierValue}
+                maxBrokesLabel={labels.maxBrokes ?? 'Max brokes'}
+                locale={locale}
+              />
+            ),
+          };
+        }
         return {
           key,
           label: labels.tier,
@@ -310,7 +361,12 @@ export function DexCard({
           value: entry.tier,
         };
       case 'moveset':
-        return { key, label: labels.moveset ?? 'Moveset', mode: 'node', value: entry.moveset };
+        return {
+          key,
+          label: labels.moveset ?? 'Moveset',
+          mode: 'node',
+          value: entry.movesetElements ? icons(entry.movesetElements) : entry.moveset,
+        };
       case 'role':
         return { key, label: labels.role, value: entry.role };
       case 'variant':
@@ -319,36 +375,54 @@ export function DexCard({
           label: labels.variant,
           mode: 'node',
           value:
-            entry.variant === 'shiny' ? (
-              // The word names the mark, so the mark is decorative (ShinyMark).
-              <span className="ac-dex-card__variant">
-                <ShinyMark />
-                {labels.shiny}
-              </span>
-            ) : entry.variant === 'normal' ? (
-              labels.normal
-            ) : null,
+            entry.variant === 'shiny'
+              ? labels.shiny
+              : entry.variant === 'normal'
+                ? labels.normal
+                : null,
         };
     }
   };
-  const rows = layout.keys.map(fact);
+  // Tipo and Moveset (plan «Cards»): the icons of the elements, 4 apart; none is «—».
+  function icons(list: readonly ElementChipEntry[]): ReactNode {
+    if (list.length === 0) return null;
+    return (
+      <span className="ac-dex-card__icons">
+        {list.map((element) => (
+          <ElementIcon key={element.id} element={element} />
+        ))}
+      </span>
+    );
+  }
+  const typeRow = labels.type !== undefined && layout.zones.includes('elements');
+  const rows: FactRow[] = layout.keys.filter((key) => key !== 'moveset').map(fact);
+  if (typeRow) {
+    rows.push({
+      key: 'type',
+      label: labels.type ?? '',
+      mode: 'node',
+      value: icons(entry.elements ?? []),
+    });
+  }
+  if (layout.keys.includes('moveset')) rows.push(fact('moveset'));
 
   // ------------------------------------------------------------------------------ elements
-  const elements = layout.zones.includes('elements') ? (
-    <Zone name="elements" className="ac-dex-card__elements">
-      {(entry.elements ?? []).map((element) => (
-        <ElementChip
-          key={element.id}
-          element={element}
-          variant="chip"
-          placement="down"
-          align="auto"
-          locale={locale}
-          hint={hint}
-        />
-      ))}
-    </Zone>
-  ) : null;
+  const elements =
+    layout.zones.includes('elements') && !typeRow ? (
+      <Zone name="elements" className="ac-dex-card__elements">
+        {(entry.elements ?? []).map((element) => (
+          <ElementChip
+            key={element.id}
+            element={element}
+            variant="chip"
+            placement="down"
+            align="auto"
+            locale={locale}
+            hint={hint}
+          />
+        ))}
+      </Zone>
+    ) : null;
 
   // --------------------------------------------------------------------------------- drops
   let drops: ReactNode = null;

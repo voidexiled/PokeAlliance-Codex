@@ -45,6 +45,10 @@ import {
 import { checkContent, formatReport } from '../../scripts/content/lib/check-content.mjs';
 import { validateSchema } from '../../scripts/content/lib/json-schema.mjs';
 
+// Several cases copy and parse the whole content tree; inside a full `pnpm run ci` on a busy
+// machine one of them passes the default 5 s now and then, while alone they take under 1 s.
+vi.setConfig({ testTimeout: 20_000 });
+
 const repoRoot = fileURLToPath(new URL('../../', import.meta.url));
 const readJson = (file: string) => JSON.parse(readFileSync(path.join(repoRoot, file), 'utf8'));
 const jsonSchema = (name: string) => readJson(`content/schemas/${name}.schema.json`);

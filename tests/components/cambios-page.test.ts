@@ -36,7 +36,7 @@ vi.mock('@/lib/content/registry', async (importOriginal) => {
 type AstroComponent = Parameters<AstroContainer['renderToString']>[0];
 
 const MESSAGES: Record<Locale, Messages> = { es, en };
-const SITE = 'https://pokealliance-codex.vercel.app';
+const SITE = 'https://pokealliancewiki.com';
 
 let container: AstroContainer;
 let Cambios: AstroComponent;
@@ -210,7 +210,7 @@ describe('Cambios (8.7)', () => {
       'Cambios',
     ]);
     expect(crumbs).not.toContain('<a ');
-    expect(html).toContain('<title>Cambios · Alliance Codex</title>');
+    expect(html).toContain('<title>Cambios · PokeAlliance Wiki</title>');
     expect(html).toContain(`<meta name="description" content="${es.changes.description}">`);
   });
 

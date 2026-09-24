@@ -1288,7 +1288,7 @@ test.describe('WL1: sin relleno (§12.4, §12.22)', () => {
       // H-01, H-02: the title and the description are those of S-01 and §13.5.
       await expect(page).toHaveTitle(home.documentTitle);
       expect
-        .soft(await page.title(), 'H-01: not «Inicio · Alliance Codex»')
+        .soft(await page.title(), 'H-01: not «Inicio · PokeAlliance Wiki»')
         .not.toMatch(/^(Inicio|Home) · /);
 
       expect
@@ -1297,9 +1297,9 @@ test.describe('WL1: sin relleno (§12.4, §12.22)', () => {
           'WL1: no text of §12.4 comes back',
         )
         .toEqual([]);
-      // H-03: no kicker «Alliance Codex» inside the page (the brand of the header stays).
+      // H-03: no kicker «PokeAlliance Wiki» inside the page (the brand of the header stays).
       expect
-        .soft(hits(await harvest(page, 'main'), 'Alliance Codex'), 'H-03: no kicker')
+        .soft(hits(await harvest(page, 'main'), 'PokeAlliance Wiki'), 'H-03: no kicker')
         .toEqual([]);
       expect
         .soft(

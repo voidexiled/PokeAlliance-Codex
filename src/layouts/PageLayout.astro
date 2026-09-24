@@ -57,14 +57,14 @@ import '@/styles/global.css';
 interface Props {
   /** Page locale: the `lang` of the document and the dictionary every piece reads. */
   locale: Locale;
-  /** The h1 of the page. The document title is «{title} · Alliance Codex» (13.5). */
+  /** The h1 of the page. The document title is «{title} · PokeAlliance Wiki» (13.5). */
   title: string;
   /** `<meta name="description">`, 50 to 160 characters, unique per route and locale (13.5). */
   description: string;
   /** The same route in each locale (13.1), from `getAlternatePath`. */
   alternates: Record<Locale, string>;
   /**
-   * The whole `<title>`, for the one page whose title is not «{h1} · Alliance Codex»:
+   * The whole `<title>`, for the one page whose title is not «{h1} · PokeAlliance Wiki»:
    * Inicio (S-01). Every other page leaves it out.
    */
   documentTitle?: string;
@@ -120,7 +120,7 @@ const searchMessages: SearchPaletteMessages = {
 
 // A proper noun, the same in both locales (13.4), so it is not a dictionary key. `Header`
 // writes the same one on its wordmark.
-const BRAND = 'Alliance Codex';
+const BRAND = 'PokeAlliance Wiki';
 
 // 13.5: `og:locale` is a language tag, not copy, so it lives here and not in a dictionary.
 const OG_LOCALE: Record<Locale, string> = { es: 'es_ES', en: 'en_US' };

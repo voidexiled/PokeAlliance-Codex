@@ -1,0 +1,99 @@
+/* Per-component sheet (§13.6): imported by EntityList.tsx, so only the pages with a list load
+   it, not the shared stylesheet of PageLayout (S17).
+
+   The results bar of plan «Dirección C»: the order and per-page selects as boxes with their
+   label inside, and the two rows of a phone. */
+
+@layer properties, theme, base, components, utilities;
+
+@reference '../theme.css';
+
+@layer components {
+  /* Plan «Dirección C» (boards Main, Pokedex-Cards, Pokedex-movil): the order and per-page
+     selects of the bar are one 40 px box each, «Orden Nº ▾» — the label muted inside the box,
+     the value strong — like the filter buttons. The trigger's `::before` covers the whole box,
+     so the label is part of the target, and the ring of a keyboard focus goes on the box. */
+  .ac-entity-list__tools .ac-select--inline {
+    gap: var(--space-6);
+    height: var(--size-control);
+    padding-left: var(--space-12);
+    border: 1px solid var(--border-secondary);
+    border-radius: var(--radius-11);
+    background: var(--bg-primary);
+  }
+
+  .ac-entity-list__tools .ac-select--inline:hover,
+  .ac-entity-list__tools .ac-select--inline:has([aria-expanded='true']) {
+    background: var(--bg-tertiary);
+  }
+
+  .ac-entity-list__tools .ac-select--inline:has(.ac-select__trigger:focus-visible) {
+    outline: 2px solid var(--ring);
+    outline-offset: 2px;
+  }
+
+  .ac-entity-list__tools .ac-select--inline .ac-select__label {
+    pointer-events: none;
+  }
+
+  .ac-entity-list__tools .ac-select--inline .ac-select__control {
+    position: static;
+    width: auto;
+    height: 100%;
+  }
+
+  .ac-entity-list__tools .ac-select--inline .ac-select__trigger {
+    height: 100%;
+    padding: 0 var(--space-10) 0 0;
+    border: 0;
+    background: transparent;
+    @apply type-ui-strong;
+  }
+
+  .ac-entity-list__tools .ac-select--inline .ac-select__trigger::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+  }
+
+  .ac-entity-list__tools .ac-select--inline .ac-select__trigger:focus-visible {
+    outline: none;
+  }
+
+  .ac-entity-list__tools .ac-select__listbox {
+    min-width: 8rem; /* sin token: la lista no se estrecha al valor corto del botón */
+  }
+
+  @media (width < 48rem) {
+    .ac-entity-list__tools .ac-select--inline {
+      height: var(--size-touch);
+    }
+  }
+
+  /* Phone (board Pokedex-movil): the count and the order share the first row, the view toggle
+     and the per-page select the second, each pair spread to both edges. The count grows, so a
+     bar that fits one row still reads count · order · view · per page. */
+  @media (width < 48rem) {
+    .ac-entity-list__bar:has(.ac-sort-select) {
+      gap: var(--space-8);
+    }
+
+    .ac-entity-list__bar:has(.ac-sort-select) > .ac-count {
+      flex: 1 1 auto;
+    }
+
+    .ac-entity-list__tools:has(.ac-sort-select) {
+      display: contents;
+    }
+
+    .ac-entity-list__tools:has(.ac-sort-select) > .ac-view-toggle {
+      order: 1;
+    }
+
+    .ac-entity-list__tools:has(.ac-sort-select) > .ac-per-page {
+      order: 2;
+      margin-left: auto;
+    }
+  }
+}

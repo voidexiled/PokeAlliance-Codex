@@ -13,10 +13,8 @@ import { ElementChip } from '@/components/game/ElementChip';
 import type { ElementChipEntry } from '@/components/game/ElementChip';
 import { EntitySlot } from '@/components/game/EntitySlot';
 import { NestedEntity } from '@/components/game/NestedEntity';
-import { ShinyMark } from '@/components/game/ShinyMark';
-import { Sprite } from '@/components/game/Sprite';
+import { PokemonArt } from '@/components/game/ShinyMark';
 import type { SpriteProps } from '@/components/game/Sprite';
-import { SpriteStage } from '@/components/game/SpriteStage';
 import { EntityList } from '@/components/lists/EntityList';
 import type { EntityListLabels } from '@/components/lists/EntityList';
 import { useListState } from '@/components/lists/useListState';
@@ -24,7 +22,6 @@ import type { Locale } from '@/i18n/config';
 import type { MessageLeaf } from '@/i18n/messages/types';
 import { fill, isPluralMessage, plural } from '@/i18n/messages/types';
 import { dexLayout } from '@/lib/cards/layout';
-import { formatTier } from '@/lib/content/format';
 import { resolvePokemonImage } from '@/lib/content/pokemon-media';
 import type { PokemonRecord } from '@/lib/content/types';
 import { formatInteger } from '@/lib/format/numbers';
@@ -214,7 +211,7 @@ function dexEntry(
     generation: entry.generacion,
     art: resolvePokemonImage(entry.imagen),
     level: entry.nivel,
-    tier: entry.tier === null ? null : formatTier(entry.tier),
+    tierValue: entry.tier,
     role: entry.funcion,
     variant: entry.variante === 'shiny' || entry.variante === 'normal' ? entry.variante : null,
     elements: pick(elements, entry.elementos),
@@ -230,13 +227,8 @@ function dexEntry(
 function SelfSlot({ entry, art }: { entry: FamilyEntry; art: SpriteProps | null }) {
   return (
     <span className="ac-entity-slot ac-entity-slot--72 ac-drops__static" aria-current="page">
-      {art === null ? (
-        // The missing mark of 32 in the bare 64 cell, as `EntitySlot` draws it (7.4.4).
-        <SpriteStage sprite={null} size={64} framed={false} />
-      ) : (
-        <Sprite {...art} width={SLOT_ART} height={SLOT_ART} alt="" />
-      )}
-      {entry.variante === 'shiny' ? <ShinyMark corner="slot" /> : null}
+      {/* The art at 64 with the Shiny glow, or the client Pokédex «?» (plan «Shiny», «?»). */}
+      <PokemonArt src={art?.src ?? null} size={SLOT_ART} shiny={entry.variante === 'shiny'} />
       <span className="sr-only">{entry.nombre}</span>
     </span>
   );
@@ -325,7 +317,7 @@ export function FamilyList({
           key: entry.id,
           cells: {
             pokemon: name,
-            tier: entry.tier === null ? null : formatTier(entry.tier),
+            tierValue: entry.tier,
             moveset:
               moveset === undefined ? null : (
                 <ElementChip

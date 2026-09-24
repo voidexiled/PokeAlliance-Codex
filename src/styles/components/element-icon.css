@@ -1,0 +1,45 @@
+/* ElementIcon (plan «Cards», boards Pokedex-Cards and Direccion-C): an element as its icon
+   alone, 24 smooth, with its name in a small game tooltip. Per-component sheet (§13.6):
+   ElementIcon.tsx imports it. The name panel is a `.ac-game-tooltip` popover, so
+   game-tooltip.css owns its reset, font and text shadow; this file only makes it the small
+   name panel: as wide as the name, padding 4 8, 12/16 (`type-tt-hint`) centred, no strip. */
+
+@layer properties, theme, base, components, utilities;
+
+@reference '../theme.css';
+
+@layer components {
+  .ac-element-icon {
+    display: flex;
+    flex: none;
+    align-items: center;
+    justify-content: center;
+    border-radius: var(--radius-4);
+  }
+
+  /* The one hover tint of the boards, only on a trigger. */
+  .ac-nested-entity__trigger.ac-element-icon:hover {
+    background: var(--bg-tertiary);
+  }
+
+  .ac-element-icon__img {
+    display: block;
+    flex: none;
+    max-width: none;
+  }
+
+  /* An element with no icon in the registry: its name as text. */
+  .ac-element-icon--text {
+    color: var(--text-primary);
+    white-space: nowrap;
+  }
+
+  .ac-game-tooltip.ac-game-tooltip--name {
+    width: max-content;
+    max-width: var(--size-tt-narrow);
+    padding: var(--space-4) var(--space-8);
+    @apply type-tt-hint;
+    text-align: center;
+    white-space: nowrap;
+  }
+}

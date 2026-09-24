@@ -1,5 +1,9 @@
-/* TierBadge (spec 16.3.6). Per-component sheet (§13.6): TierBadge.tsx imports it. The --tier-*
-   colours come from src/design/tokens.json. Every colour is the text of the pill over its own tint of --bg-secondary and passes AA (4.5:1). */
+/* TierBadge (spec 16.3.6), the tier tooltip and the Tier value (plan «Tier tooltip»).
+   Per-component sheet (§13.6): TierBadge.tsx imports it. The --tier-* colours come from
+   src/design/tokens.json. Every colour is the text of the pill over its own tint of
+   --bg-secondary and passes AA (4.5:1). The tooltip is a `.ac-game-tooltip` popover
+   (game-tooltip.css owns the popover reset, the font and the text shadow); this file only
+   narrows it to 184 with its own padding and no strip. */
 
 @layer properties, theme, base, components, utilities;
 
@@ -64,5 +68,30 @@
     padding: 0 3px; /* sin token: pixel-exact game slot geometry */
     border-radius: var(--radius-2);
     background: var(--bg-primary);
+  }
+
+  /* The tier tooltip: 184 wide, padding 10 10 6, the name over one «Max brokes:» row 6 below. */
+  .ac-game-tooltip.ac-game-tooltip--tier {
+    width: var(--size-tt-tier);
+    padding: var(--space-10) var(--space-10) var(--space-6);
+    white-space: nowrap;
+  }
+  .ac-game-tooltip--tier > .ac-game-tooltip__rows {
+    margin-top: var(--space-6);
+  }
+  .ac-game-tooltip--tier .ac-game-tooltip__value {
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* The Tier value of a card, a Lista row or a Tier list label: its text with a dotted
+     underline in text-quaternary; the underline turns solid on hover. */
+  .ac-tier-value {
+    color: var(--text-primary);
+    text-decoration: underline dotted var(--text-quaternary);
+    text-underline-offset: 3px; /* sin token: subrayado punteado de los tableros */
+    cursor: help;
+  }
+  .ac-tier-value:hover {
+    text-decoration-style: solid;
   }
 }

@@ -39,8 +39,8 @@ const TOKEN_GROUPS = [
   'motion',
 ] as const;
 
-/** 110 tokens of the design system plus the 10 of §3.3. */
-const TOKEN_COUNT = 132;
+/** 110 tokens of the design system, the 10 of §3.3 and the plan's additions (shiny glow, tier tooltip, tier-list rows). */
+const TOKEN_COUNT = 146;
 
 type Token = { name: string; value: string; usage: string };
 type TokensJson = Record<(typeof TOKEN_GROUPS)[number], { tokens: Token[] }> & {
@@ -551,7 +551,7 @@ const DECORATIVE: (Pair & { ratio: number; reason: string })[] = [
 describe('S12: contraste de los tokens de color', () => {
   it('lee los 31 colores desde tokens.css', () => {
     const colors = tokensJson.color.tokens;
-    expect(colors).toHaveLength(43);
+    expect(colors).toHaveLength(55);
     for (const token of colors) {
       expect(tokenValue(token.name), `--${token.name} difiere de tokens.json`).toBe(token.value);
       expect(() => colorOf(token.name), `--${token.name} no se pudo leer`).not.toThrow();

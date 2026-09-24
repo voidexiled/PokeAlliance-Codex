@@ -333,15 +333,47 @@ function buildTokensTs(tokensJson) {
   return lines.join('\n');
 }
 
+// ----------------------------------------------------------------------- shell-tokens.ts
+
+/**
+ * The two groups the shell scripts of every page read (the search palette and the mobile
+ * menu), apart from tokens.ts: a chunk carries every export any of its importers uses, and the
+ * Guild PNG reads most of tokens.ts, so the shell importing tokens.ts put every group in the
+ * first load of every page (spec 13.6).
+ */
+function buildShellTokensTs(tokensJson) {
+  const lines = [HEADER_TS, ''];
+  lines.push(
+    '// Los grupos `layout` y `spacing` de src/lib/design/tokens.ts, para los scripts del',
+  );
+  lines.push('// marco de toda página (la paleta de búsqueda y el menú móvil).');
+  lines.push('');
+  const record = (exportName, comment, tokens) => {
+    lines.push(`/** ${comment} */`);
+    lines.push(`export const ${exportName} = {`);
+    for (const token of tokens) lines.push(`  ${camel(token.name)}: ${quote(token.value)},`);
+    lines.push('} as const;');
+    lines.push('');
+  };
+  record(
+    'spacing',
+    'Escala de espaciado; el número del nombre es el valor en px.',
+    tokensJson.spacing.tokens,
+  );
+  record('layout', 'Medidas del marco.', tokensJson.layout.tokens);
+  return lines.join('\n');
+}
+
 // --------------------------------------------------------------------------------- main
 
-/** The three artifacts, as `{ [path]: contents }`. */
+/** The four artifacts, as `{ [path]: contents }`. */
 export function generate(tokensJson) {
   assertShape(tokensJson);
   return {
     'src/styles/tokens.css': buildTokensCss(tokensJson),
     'src/styles/theme.css': buildThemeCss(tokensJson),
     'src/lib/design/tokens.ts': buildTokensTs(tokensJson),
+    'src/lib/design/shell-tokens.ts': buildShellTokensTs(tokensJson),
   };
 }
 

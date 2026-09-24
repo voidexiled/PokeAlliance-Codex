@@ -21,7 +21,7 @@ const isVisualBuild = process.env.VISUAL === '1';
 
 // Spec 13.5: the origin of every canonical URL, of the hreflang links and of the sitemap.
 // scripts/seo/check-dist.mjs carries the same string and compares both.
-const SITE = 'https://pokealliance-codex.vercel.app';
+const SITE = 'https://pokealliancewiki.com';
 
 // The registries the site reads are resolved through the `@content` alias so a
 // build can point them somewhere else without touching a single import. The
@@ -140,43 +140,51 @@ function visualNoindexModule() {
 }
 
 const MONEY_SPRITES_MODULE_ID = 'virtual:ac-money-sprites';
-const MONEY_SPRITES_RESOLVED_ID = '\0' + MONEY_SPRITES_MODULE_ID;
+const UI_SPRITES_MODULE_ID = 'virtual:ac-ui-sprites';
 
-/** The fixed keys the money components draw before every amount (7.8, S8). */
-const MONEY_SPRITE_KEYS = ['ui/pokedolares', 'ui/diamond'];
+/**
+ * The cuts of the sprite registry the islands read, by module: the fixed keys the money
+ * components draw before every amount (7.8, S8), and the ones the game layer draws on every
+ * list — the Shiny mark, the client Pokédex «?» of a Pokémon without art (plan «?») and the
+ * no-choice icon of a picker slot.
+ */
+const SPRITE_CUTS = {
+  [MONEY_SPRITES_MODULE_ID]: ['ui/pokedolares', 'ui/diamond'],
+  [UI_SPRITES_MODULE_ID]: ['ui/shiny', 'ui/pokemon-desconocido', 'ui/none'],
+};
 
 const spriteRegistryFile = fileURLToPath(new URL('./public/sprites/sprites.json', import.meta.url));
 
 /**
- * `PokedolaresAmount` and `DiamondsAmount` resolve their sprite on their own (DP2), and
- * they render inside islands: the game tooltip of every card reaches them. Importing
- * src/lib/sprites/registry.ts there would put the whole registry in the first load of
- * every list (D-015, 13.6). This module is the registry cut down in the build to the two
- * entries they read, with the same shape, so `spriteOrNull` treats it as the registry: a
- * key the owner has not added yet is simply absent and answers `null`. The file is
- * watched, so an edit of the registry reaches the development server.
+ * `PokedolaresAmount`, `DiamondsAmount`, `ShinyMark`, `PokemonArt` and `EntitySlot` resolve
+ * their sprites on their own (DP2), and they render inside islands: the game tooltip of every
+ * card reaches them. Importing src/lib/sprites/registry.ts there would put the whole registry
+ * in the first load of every list (D-015, 13.6). Each module of `SPRITE_CUTS` is the registry
+ * cut down in the build to the entries it names, with the same shape, so `spriteOrNull` treats
+ * it as the registry: a key the owner has not added yet is simply absent and answers `null`.
+ * The file is watched, so an edit of the registry reaches the development server.
  */
 function moneySpritesModule() {
   return {
     name: 'alliance-codex:money-sprites',
     /** @param {string} id */
     resolveId(id) {
-      return id === MONEY_SPRITES_MODULE_ID ? MONEY_SPRITES_RESOLVED_ID : null;
+      return Object.hasOwn(SPRITE_CUTS, id) ? '\0' + id : null;
     },
     /**
      * @this {{ addWatchFile: (file: string) => void }}
      * @param {string} id
      */
     load(id) {
-      if (id !== MONEY_SPRITES_RESOLVED_ID) return null;
+      if (!id.startsWith('\0') || !Object.hasOwn(SPRITE_CUTS, id.slice(1))) return null;
       this.addWatchFile(spriteRegistryFile);
       const { sprites } = JSON.parse(
         readFileSync(spriteRegistryFile, 'utf8').replace(/^\uFEFF/, ''),
       );
-      const entries = MONEY_SPRITE_KEYS.filter((key) => Object.hasOwn(sprites, key)).map((key) => [
-        key,
-        sprites[key],
-      ]);
+      const keys = SPRITE_CUTS[/** @type {keyof typeof SPRITE_CUTS} */ (id.slice(1))];
+      const entries = keys
+        .filter((key) => Object.hasOwn(sprites, key))
+        .map((key) => [key, sprites[key]]);
       return `export default ${JSON.stringify(Object.fromEntries(entries))};`;
     },
   };
@@ -194,7 +202,7 @@ function moneySpritesModule() {
  * 3.9 KB gzip (Buscar at 111.0 KB of 110). The two groups of `CLIENT_CHUNKS` put them back:
  *
  * - `list-kit`: the modules below and what only they import (the lucide icon behind `Glyph`, the
- *   money sprites of `virtual:ac-money-sprites`), in one chunk that an entry reaching any of them
+ *   sprite cuts of `virtual:ac-money-sprites` and `virtual:ac-ui-sprites`), in one chunk that an entry reaching any of them
  *   loads whole. The list pages need all of it. The publish form of Comercio loads it whole too,
  *   within its 140 KB, and its preview finds it loaded.
  * - `shared`: what the kit shares with the islands of every page — React and its JSX runtime, the
@@ -228,6 +236,8 @@ const LIST_KIT_MODULES = [
   'src/components/game/GameTooltip.tsx',
   'src/components/game/NestedEntity.tsx',
   'src/lib/sprites/resolve.ts',
+  'src/lib/sprites/ui-sprites.ts',
+  'src/lib/content/pokemon-media.ts',
   'src/components/money/PokedolaresAmount.tsx',
   'src/components/money/DiamondsAmount.tsx',
   'src/components/money/PriceOptions.tsx',
@@ -268,6 +278,7 @@ function inListKit(id) {
   const path = posixId(id);
   return (
     path.includes(MONEY_SPRITES_MODULE_ID) ||
+    path.includes(UI_SPRITES_MODULE_ID) ||
     LIST_KIT_MODULES.some((module) => path.endsWith(`/${module}`))
   );
 }

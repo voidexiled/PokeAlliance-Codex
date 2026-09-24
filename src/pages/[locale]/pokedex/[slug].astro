@@ -47,6 +47,7 @@ import { en } from '@/i18n/messages/en';
 import { es } from '@/i18n/messages/es';
 import { fill } from '@/i18n/messages/types';
 import { formatTier } from '@/lib/content/format';
+import { tierInfo } from '@/lib/content/tiers';
 import { resolvePokemonImage } from '@/lib/content/pokemon-media';
 import {
   getAuras,
@@ -58,7 +59,7 @@ import {
 } from '@/lib/content/registry';
 import type { Item } from '@/lib/content/registry-schema';
 import { getMoves, getPokemon } from '@/lib/content/repository';
-import type { EnlaceDato, PokemonRecord } from '@/lib/content/types';
+import type { EnlaceDato, PokemonRecord, PokemonTier } from '@/lib/content/types';
 import { formatDecimal, formatInteger } from '@/lib/format/numbers';
 import { present, UNKNOWN } from '@/lib/format/unknown';
 import {
@@ -109,7 +110,10 @@ export function getStaticPaths() {
 type PokemonSheet = PokemonRecord;
 
 /** A proper noun, the same in both locales (13.4); PageLayout and Header write the same one. */
-const BRAND = 'Alliance Codex';
+const BRAND = 'PokeAlliance Wiki';
+/** A tier content/tiers.json hides (ULTIMATE for now) reads as none: «—» (spec 16.2.1). */
+const shownTier = (tier: PokemonTier | null): PokemonTier | null =>
+  tierInfo(tier)?.visible === false ? null : tier;
 
 /** 8.0.5: the `variante` of a shiny record. */
 const SHINY = 'shiny';
@@ -258,7 +262,7 @@ const known = (id: string) => byId.get(id) ?? null;
 
 // ------------------------------------------------------------------------------ head row
 
-const art = resolvePokemonImage(record.imagen);
+const art = resolvePokemonImage(record.imagen, 140);
 const numberText =
   record.numero === null ? null : fill(ui.cards.number, { n: String(record.numero) });
 
@@ -409,7 +413,7 @@ const familyEntries: FamilyEntry[] = family.map((entry) => {
     generacion: entry.generacion,
     variante: entry.variante,
     nivel: entry.nivel,
-    tier: entry.tier,
+    tier: shownTier(entry.tier),
     funcion: entry.funcion,
     imagen: entry.imagen,
     elementos: entry.elementos.filter((id) => familyElements[id] !== undefined),
@@ -428,6 +432,7 @@ const dexLabels: DexCardLabels = {
   tier: labels.tier,
   role: labels.role,
   shiny: ui.shiny,
+  maxBrokes: ui.filterBar.maxBrokes,
 };
 
 // «Evolución»: one `EvolutionChain` per line from a first stage to a last one that goes
@@ -465,11 +470,11 @@ const chains = lines.map((line) => {
   // DS:EvolutionChain «No hacer»: the meta of a tile keeps the parts the other tiles have,
   // with «—» where this one misses one. Its level is the stage's own Requisito (13.3).
   const withLevel = line.some((entry) => entry.nivel !== null);
-  const withTier = line.some((entry) => entry.tier !== null);
+  const withTier = line.some((entry) => shownTier(entry.tier) !== null);
   const stages: EvolutionStage[] = line.map((entry) => {
     const parts = [
       withLevel ? (levelText(labels.level, entry.nivel) ?? UNKNOWN) : null,
-      withTier ? (entry.tier === null ? UNKNOWN : formatTier(entry.tier)) : null,
+      withTier ? (shownTier(entry.tier) === null ? UNKNOWN : formatTier(entry.tier)) : null,
     ].filter((part): part is string => part !== null);
     const current = entry.id === record.id;
     return {
@@ -616,7 +621,7 @@ const toc: TocItem[] = [
   show.where && { id: 'donde', label: copy.sections.where },
 ].filter((item): item is TocItem => item !== false);
 
-// 13.5: «{nombre} · Pokédex · Alliance Codex», and the description with the parts that have
+// 13.5: «{nombre} · Pokédex · PokeAlliance Wiki», and the description with the parts that have
 // data, joined by «, »: «Nº», the elements — read as one value, as the Elementos row of the
 // sheet writes them («Fuego / Volador», 8.0.5) —, the level, the tier and the role.
 const elementsRow = tipRow(labels.elements)?.value;
@@ -626,7 +631,9 @@ const facts = [
   record.nivel === null
     ? null
     : fill(copy.descriptionLevel, { level: formatInteger(record.nivel, locale) }),
-  record.tier === null ? null : fill(copy.descriptionTier, { tier: formatTier(record.tier) }),
+  shownTier(record.tier) === null
+    ? null
+    : fill(copy.descriptionTier, { tier: formatTier(record.tier) }),
   record.funcion === null ? null : fill(copy.descriptionRole, { role: record.funcion }),
 ].filter((part): part is string => part !== null && present(part));
 const description =

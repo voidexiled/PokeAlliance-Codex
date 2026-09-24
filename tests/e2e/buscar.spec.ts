@@ -613,7 +613,7 @@ test.describe('Buscar (8.6)', () => {
 
       // 1. The h1 «Buscar» names the page and the field (`buscar-t`), and the title of §13.5.
       await expect(page.locator('h1#buscar-t')).toHaveText(search.title);
-      await expect(page).toHaveTitle(`${search.title} · Alliance Codex`);
+      await expect(page).toHaveTitle(`${search.title} · PokeAlliance Wiki`);
       await expect(page.locator('meta[name="description"]')).toHaveAttribute(
         'content',
         search.description,

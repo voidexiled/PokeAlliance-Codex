@@ -144,6 +144,12 @@
       "frames": 1,
       "modo": "estatico"
     },
+    "ui/pokemon-desconocido": {
+      "archivo": "ui/pokemon-desconocido.png",
+      "frame": [140, 140],
+      "frames": 1,
+      "modo": "estatico"
+    },
     "ui/categorias/todo": {
       "archivo": "ui/categorias/todo.png",
       "frame": [18, 18],

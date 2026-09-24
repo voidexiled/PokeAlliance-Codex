@@ -1,7 +1,7 @@
 import { Fragment } from 'react';
 import type { ReactNode } from 'react';
 
-import { ShinyMark } from '@/components/game/ShinyMark';
+import { PokemonArt } from '@/components/game/ShinyMark';
 import { Sprite } from '@/components/game/Sprite';
 import { MissingSprite, SpriteStage } from '@/components/game/SpriteStage';
 import { Glyph } from '@/components/icons/Glyph';
@@ -290,30 +290,25 @@ function Head({
     // no sprite in its registry, and the box draws the 32 missing mark (DP2).
     image = <SpriteStage sprite={head.sprite} size={64} framed={false} />;
   } else if (head.type === 'art') {
-    // A Pokémon with no art is a known entity with no image: the 32 missing mark in the
-    // 64 cell, as an item with no sprite (DS:guias/10 "Anatomía"), not an empty 72 box.
-    image =
-      head.src === null ? (
-        <SpriteStage sprite={null} size={64} framed={false} />
-      ) : (
-        <span className="ac-game-tooltip__art">
-          {/* Pokémon art: 70 px smooth in a 72 box. It goes through `Sprite` so
-              `art-loading.ts` can pulse the box while the remote image loads (7.4.2). */}
-          <Sprite
-            className="ac-game-tooltip__art-img"
-            src={head.src}
-            smooth
-            width={70}
-            height={70}
-            alt=""
-          />
-          {head.aura ? (
-            <span className="ac-game-tooltip__aura" role="img" aria-label={head.aura.label}>
-              <Sprite {...head.aura.sprite} alt="" />
-            </span>
-          ) : null}
-        </span>
-      );
+    // Pokémon art: 70 px smooth in a 72 box, with the golden glow when shiny (plan «Shiny»).
+    // It goes through `Sprite` so `art-loading.ts` can pulse the box while the remote image
+    // loads (7.4.2). A Pokémon with no art, or whose art fails, shows the client Pokédex «?»
+    // in the same box (plan «?»), never an empty box.
+    image = (
+      <span className="ac-game-tooltip__art">
+        <PokemonArt
+          className={head.src === null ? undefined : 'ac-game-tooltip__art-img'}
+          src={head.src}
+          size={70}
+          shiny={shiny}
+        />
+        {head.aura ? (
+          <span className="ac-game-tooltip__aura" role="img" aria-label={head.aura.label}>
+            <Sprite {...head.aura.sprite} alt="" />
+          </span>
+        ) : null}
+      </span>
+    );
   } else if (head.type === 'icon') {
     // Element icon: the 100 px illustration of the registry, drawn smooth at 32.
     image =
@@ -326,8 +321,9 @@ function Head({
 
   return (
     <Box className={className}>
-      {shiny ? <ShinyMark corner="tooltip" label={shinyLabel} /> : null}
       {image}
+      {/* The glow is not a mark: the state keeps its name for screen readers (13.4). */}
+      {shiny ? <span className="sr-only">{shinyLabel}</span> : null}
       {title ? <Title className="ac-game-tooltip__title">{title}</Title> : null}
     </Box>
   );

@@ -68,7 +68,9 @@
   padding: var(--space-4) var(--space-12);
 }
 
+/* `position: relative` holds the «?» that waits behind a Pokémon art (entity-slot-marks.css). */
 .ac-list-row__sprite-in {
+  position: relative;
   display: flex;
   justify-content: center;
 }

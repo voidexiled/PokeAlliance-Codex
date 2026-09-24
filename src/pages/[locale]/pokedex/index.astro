@@ -23,6 +23,7 @@ import { en } from '@/i18n/messages/en';
 import { es } from '@/i18n/messages/es';
 import { fill } from '@/i18n/messages/types';
 import { formatInteger } from '@/lib/format/numbers';
+import { tierInfo } from '@/lib/content/tiers';
 import { buildNav } from '@/lib/nav/groups';
 import { PageTitle } from '@/components/layout/PageTitle';
 import { POKEDEX_PAGE_SIZE, decodePokedex } from '@/components/pokedex/config';
@@ -78,7 +79,7 @@ const description = fill(messages.pokedex.description, {
     dataUrl={`/${locale}/pokedex/datos.json`}
     data={first}
     total={records.length}
-    ids={pokedexIds(records, data.refs.elementos)}
+    ids={pokedexIds(records, data.refs.elementos, tierInfo)}
     elements={pokedexElements(firstRows, locale, messages.ui.tooltip)}
     drops={pokedexDrops(firstRows, records, data.refs.items, locale, messages.ui.tooltip)}
     title={title}

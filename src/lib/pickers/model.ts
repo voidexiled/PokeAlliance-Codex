@@ -46,12 +46,29 @@ export function matchesSearch(option: PickerOption, query: string): boolean {
   return (option.aliases ?? []).some((alias) => normalizeSearch(alias).includes(q));
 }
 
-/** Any of the chosen values within a filter (OR); every filter with a choice (AND). */
-export function matchesFilters(option: PickerOption, active: ActiveFilters): boolean {
+/**
+ * How the chosen values of one filter combine: `any` (OR, the default) keeps an option with one
+ * of them, `all` (AND) one with every one of them (the «Tipo» of a Pokémon: Flying and Psychic).
+ */
+export type FilterMatch = 'any' | 'all';
+
+/** Per filter id, how its values combine; a filter left out is `any`. */
+export type FilterModes = Readonly<Record<string, FilterMatch>>;
+
+/** Every filter with a choice must match (AND); within a filter, its {@link FilterMatch}. */
+export function matchesFilters(
+  option: PickerOption,
+  active: ActiveFilters,
+  modes: FilterModes = {},
+): boolean {
   for (const [facet, chosen] of Object.entries(active)) {
     if (chosen.length === 0) continue;
     const values = option.facets?.[facet] ?? [];
-    if (!chosen.some((value) => values.includes(value))) return false;
+    const matches =
+      modes[facet] === 'all'
+        ? chosen.every((value) => values.includes(value))
+        : chosen.some((value) => values.includes(value));
+    if (!matches) return false;
   }
   return true;
 }
@@ -60,8 +77,11 @@ export function filterOptions(
   options: readonly PickerOption[],
   query: string,
   active: ActiveFilters,
+  modes: FilterModes = {},
 ): PickerOption[] {
-  return options.filter((option) => matchesFilters(option, active) && matchesSearch(option, query));
+  return options.filter(
+    (option) => matchesFilters(option, active, modes) && matchesSearch(option, query),
+  );
 }
 
 /** Distinct values a facet takes across the options, in first-seen order. */
@@ -77,6 +97,16 @@ export function hasActiveFilters(active: ActiveFilters): boolean {
 
 export function toggleValue(values: readonly string[], value: string): string[] {
   return values.includes(value) ? values.filter((v) => v !== value) : [...values, value];
+}
+
+/** A value that cannot be added: `max` values are already chosen and it is not one of them. */
+export function isCapped(values: readonly string[], value: string, max?: number): boolean {
+  return max !== undefined && values.length >= max && !values.includes(value);
+}
+
+/** {@link toggleValue} that never goes past `max` chosen values. */
+export function toggleLimited(values: readonly string[], value: string, max?: number): string[] {
+  return isCapped(values, value, max) ? [...values] : toggleValue(values, value);
 }
 
 export type GridKey =

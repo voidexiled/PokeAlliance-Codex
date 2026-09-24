@@ -58,14 +58,14 @@ const pages = new Map<Locale, string>();
 beforeAll(async () => {
   container = await AstroContainer.create({
     renderers: await loadRenderers([getContainerRenderer()]),
-    astroConfig: { site: 'https://pokealliance-codex.vercel.app' },
+    astroConfig: { site: 'https://pokealliancewiki.com' },
   });
   for (const locale of LOCALES) {
     pages.set(
       locale,
       await container.renderToString(HomePage as unknown as AstroComponent, {
         params: { locale },
-        request: new Request(`https://pokealliance-codex.vercel.app/${locale}/`),
+        request: new Request(`https://pokealliancewiki.com/${locale}/`),
       }),
     );
   }

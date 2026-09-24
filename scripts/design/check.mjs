@@ -30,6 +30,7 @@ const TOKENS_JSON = 'src/design/tokens.json';
 const TOKENS_CSS = 'src/styles/tokens.css';
 const THEME_CSS = 'src/styles/theme.css';
 const TOKENS_TS = 'src/lib/design/tokens.ts';
+const SHELL_TOKENS_TS = 'src/lib/design/shell-tokens.ts';
 const FONTS_CSS = 'src/styles/fonts.css';
 const PAGE_LAYOUT = 'src/layouts/PageLayout.astro';
 const GLOBAL_CSS = 'src/styles/global.css';
@@ -37,8 +38,8 @@ const GLYPH = 'src/components/icons/Glyph.tsx';
 const SPRITE_RESOLVE = 'src/lib/sprites/resolve.ts';
 const COMPONENTS_DIR = 'src/styles/components/';
 
-/** src/design/tokens.json and the three files scripts/design/tokens.mjs writes (§3.2). */
-const GENERATED = [TOKENS_CSS, THEME_CSS, TOKENS_TS];
+/** src/design/tokens.json and the four files scripts/design/tokens.mjs writes (§3.2). */
+const GENERATED = [TOKENS_CSS, THEME_CSS, TOKENS_TS, SHELL_TOKENS_TS];
 const TOKEN_FILES = new Set([TOKENS_JSON, ...GENERATED]);
 
 // -------------------------------------------------------------------- allowed values

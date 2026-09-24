@@ -215,7 +215,7 @@ describe('the forbidden list itself', () => {
       ['Hold Shift to pin', 'en', 'ui'],
       ['Ctrl + K', 'es', 'shell'],
       [
-        'Alliance Codex es un proyecto comunitario independiente, no afiliado a PokeAlliance.',
+        'PokeAlliance Wiki es un proyecto comunitario independiente, no afiliado a PokeAlliance.',
         'es',
         'shell',
       ],

@@ -1,6 +1,16 @@
-/* EntityPicker and the inline slot pickers (spec 16.3.2, 16.3.3). Per-component sheet (§13.6):
-   EntityPicker.tsx and InlineSlotPicker.tsx import it. The panel is a game window: the
-   tooltip's deep panel colour, a 1 px frame and a hard shadow; below 768 it is a bottom sheet. */
+/* EntityPicker and the inline ring grid (spec 16.3.2, 16.3.3, `Lienzo:Selector-Pokemon`,
+   `Lienzo:Crear-anuncio`). Per-component sheet (§13.6): EntityPicker.tsx and
+   InlineSlotPicker.tsx import it.
+   - The trigger is a slot trigger of 48: a dark well of radius 11 with the sprite in a box of
+     40 (radius 7, concentric with the 3 px padding) and the name over an optional second line.
+   - The popover is a panel of radius 12: left, the search, the compact filter rows (a label
+     column of 80, then wells of radius 11 with flat grey cells, no inset shadows), the results
+     bar and the slot grid; right, from 1280, the docked detail pane of the game tooltip with
+     «Elegir» and the keyboard strip. Below 768 it is a bottom sheet.
+   - The inline ring grid is one well of cells of 40: «Ninguna» as text, then each option; a
+     chosen cell has the selected frame and a check, the name shows in a small game tooltip. */
+
+@reference '../theme.css';
 
 @layer properties, theme, base, components, utilities;
 
@@ -15,9 +25,10 @@
 
   .ac-picker__label {
     color: var(--text-secondary);
-    font: 600 13px/16px var(--font-sans); /* sin token: pixel-exact game slot geometry */
+    @apply type-ui-strong;
   }
 
+  /* ------------------------------------------------------------------ trigger */
   .ac-picker__field {
     position: relative;
     display: flex;
@@ -30,42 +41,83 @@
     align-items: center;
     gap: var(--space-8);
     min-width: 0;
-    min-height: 48px; /* sin token: pixel-exact game slot geometry */
-    padding: var(--space-4) 64px var(--space-4) var(--space-4); /* sin token: pixel-exact game slot geometry */
-    border: 1px solid var(--border-primary);
-    border-radius: var(--radius-8);
-    background: var(--bg-secondary);
+    min-height: 48px; /* sin token: the slot trigger of Lienzo:Crear-anuncio */
+    padding: 3px var(--space-10) 3px 3px; /* sin token: concentric with the box of 40 */
+    border: 1px solid var(--border-secondary);
+    border-radius: var(--radius-11);
+    background: var(--bg-primary);
     color: var(--text-primary);
     text-align: left;
     cursor: pointer;
   }
 
+  .ac-picker__field--clearable .ac-picker__trigger {
+    padding-right: var(--space-40);
+  }
+
   .ac-picker__trigger:hover {
-    border-color: var(--text-quinary);
+    background: var(--bg-tertiary);
   }
+
   .ac-picker__trigger[aria-expanded='true'] {
-    border-color: var(--selected);
+    border-color: var(--border-primary);
+    background: var(--bg-tertiary);
   }
+
+  .ac-picker__trigger:focus-visible {
+    outline: 2px solid var(--ring);
+    outline-offset: 1px;
+  }
+
   .ac-picker__trigger:disabled {
     opacity: 0.5;
     cursor: not-allowed;
   }
 
-  .ac-picker__slot-empty {
-    border: 1px dashed var(--border-primary);
-    background: transparent;
+  /* The box of 40: the chosen sprite, or empty. */
+  .ac-picker__icon,
+  .ac-picker__trigger .ac-picker__icon {
+    display: flex;
+    flex: none;
+    align-items: center;
+    justify-content: center;
+    width: var(--size-slot);
+    height: var(--size-slot);
+    border: 0;
+    border-radius: calc(
+      var(--radius-11) - 4px
+    ); /* sin token: concentric with the well of radius 11 */
+    background: var(--bg-secondary);
+    box-shadow: none;
+  }
+
+  .ac-picker__text {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    min-width: 0;
+  }
+
+  .ac-picker__placeholder,
+  .ac-picker__value,
+  .ac-picker__meta {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    @apply type-ui;
   }
 
   .ac-picker__placeholder {
-    color: var(--text-tertiary);
-    font: 500 14px/20px var(--font-sans); /* sin token: pixel-exact game slot geometry */
+    color: var(--text-quaternary);
   }
+
   .ac-picker__value {
-    overflow: hidden;
-    color: var(--text-secondary);
-    font: 500 14px/20px var(--font-sans); /* sin token: pixel-exact game slot geometry */
-    text-overflow: ellipsis;
-    white-space: nowrap;
+    color: var(--text-primary);
+    font-weight: 700;
+  }
+
+  .ac-picker__meta {
+    color: var(--text-tertiary);
   }
 
   .ac-picker__row {
@@ -75,22 +127,11 @@
     min-width: 0;
     overflow: hidden;
   }
+
   .ac-picker__more {
     padding: 0 var(--space-4);
     color: var(--text-tertiary);
-    font: 600 13px/1 var(--font-sans); /* sin token: pixel-exact game slot geometry */
-  }
-
-  .ac-picker__chevron {
-    position: absolute;
-    right: 16px; /* sin token: pixel-exact game slot geometry */
-    top: 50%;
-    width: 7px; /* sin token: pixel-exact game slot geometry */
-    height: 7px; /* sin token: pixel-exact game slot geometry */
-    border: solid var(--text-tertiary);
-    border-width: 0 2px 2px 0;
-    transform: translateY(-70%) rotate(45deg);
-    pointer-events: none;
+    @apply type-ui-strong;
   }
 
   .ac-picker__clear,
@@ -99,31 +140,40 @@
     display: grid;
     flex: none;
     place-items: center;
-    width: 32px; /* sin token: pixel-exact game slot geometry */
-    height: 32px; /* sin token: pixel-exact game slot geometry */
+    width: var(--size-control);
+    height: var(--size-control);
     border: 0;
-    border-radius: var(--radius-6);
+    border-radius: var(--radius-11);
     background: transparent;
-    color: var(--text-tertiary);
+    color: var(--text-secondary);
     cursor: pointer;
   }
+
   .ac-picker__clear {
     position: absolute;
-    right: 32px; /* sin token: pixel-exact game slot geometry */
     top: 50%;
+    right: var(--space-4);
+    width: var(--space-32);
+    height: var(--space-32);
+    border-radius: calc(
+      var(--radius-11) - 4px
+    ); /* sin token: concentric with the well of radius 11 */
     transform: translateY(-50%);
   }
+
   .ac-picker__clear:hover,
   .ac-picker__close:hover {
     background: var(--bg-tertiary);
     color: var(--text-primary);
   }
+
   .ac-picker__clear > span,
   .ac-picker__close > span {
     position: relative;
-    width: 12px; /* sin token: pixel-exact game slot geometry */
-    height: 12px; /* sin token: pixel-exact game slot geometry */
+    width: 12px; /* sin token: the glyph of 14 of the board, drawn with two bars */
+    height: 12px; /* sin token: the glyph of 14 of the board, drawn with two bars */
   }
+
   .ac-picker__clear > span::before,
   .ac-picker__clear > span::after,
   .ac-picker__close > span::before,
@@ -131,22 +181,23 @@
   .ac-picker__tray-x::before,
   .ac-picker__tray-x::after {
     position: absolute;
-    top: 5px; /* sin token: pixel-exact game slot geometry */
+    top: 5px; /* sin token: centres the bar of 2 in the glyph of 12 */
     left: 0;
-    width: 12px; /* sin token: pixel-exact game slot geometry */
+    width: 12px; /* sin token: the glyph of 12 */
     height: 2px;
     border-radius: 1px;
     background: currentColor;
     transform: rotate(45deg);
     content: '';
   }
+
   .ac-picker__clear > span::after,
   .ac-picker__close > span::after,
   .ac-picker__tray-x::after {
     transform: rotate(-45deg);
   }
 
-  /* Panel */
+  /* -------------------------------------------------------------------- panel */
   .ac-picker__scrim {
     display: none;
   }
@@ -155,22 +206,24 @@
     position: fixed;
     z-index: var(--z-listbox);
     display: flex;
-    flex-direction: column;
-    width: min(720px, calc(100vw - 16px)); /* sin token: pixel-exact game slot geometry */
-    min-width: min(640px, calc(100vw - 16px)); /* sin token: pixel-exact game slot geometry */
-    height: 480px; /* sin token: pixel-exact game slot geometry */
-    max-height: 480px; /* sin token: pixel-exact game slot geometry */
+    width: min(680px, calc(100vw - 16px)); /* sin token: Lienzo:Selector-Pokemon */
+    height: 560px; /* sin token: the popover of Lienzo:Selector-Pokemon */
+    max-height: 560px; /* sin token: the popover of Lienzo:Selector-Pokemon */
     overflow: hidden;
-    border: 1px solid var(--tt-divider);
-    border-radius: var(--radius-8);
-    background: var(--tt-panel-deep);
-    box-shadow:
-      0 0 0 1px var(--black),
-      0 16px 40px var(--black);
+    border: 1px solid var(--border-primary);
+    border-radius: var(--radius-12);
+    background: var(--bg-secondary);
+    box-shadow: 0 16px 40px var(--black); /* sin token: the popover shadow of Lienzo:Selector-Pokemon */
   }
 
-  .ac-picker__panel--loading {
-    background: linear-gradient(var(--tt-panel), var(--tt-panel-deep));
+  .ac-picker__main {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    gap: var(--space-12);
+    min-width: 0;
+    min-height: 0;
+    padding: var(--space-16);
   }
 
   .ac-picker__head {
@@ -178,173 +231,549 @@
     flex: none;
     align-items: center;
     gap: var(--space-8);
-    padding: var(--space-8);
-    border-bottom: 1px solid var(--tt-divider);
-    background: var(--tt-panel);
+  }
+
+  .ac-picker__search-box {
+    display: flex;
+    flex: 1;
+    align-items: center;
+    gap: var(--space-8);
+    min-width: 0;
+    height: var(--size-control);
+    padding: 0 var(--space-12);
+    border: 1px solid var(--border-secondary);
+    border-radius: var(--radius-11);
+    background: var(--bg-primary);
+    color: var(--text-quaternary);
+  }
+
+  .ac-picker__search-box:focus-within {
+    outline: 2px solid var(--ring);
+    outline-offset: 1px;
+  }
+
+  /* A magnifier of 16: a ring and its handle. */
+  .ac-picker__search-icon {
+    position: relative;
+    flex: none;
+    width: var(--size-missing);
+    height: var(--size-missing);
+  }
+
+  .ac-picker__search-icon::before {
+    position: absolute;
+    top: 1px;
+    left: 1px;
+    width: 11px; /* sin token: the lens of the glyph of 16 */
+    height: 11px; /* sin token: the lens of the glyph of 16 */
+    border: 2px solid currentColor;
+    border-radius: var(--radius-full);
+    content: '';
+  }
+
+  .ac-picker__search-icon::after {
+    position: absolute;
+    right: 1px;
+    bottom: 2px;
+    width: 5px; /* sin token: the handle of the glyph of 16 */
+    height: 2px;
+    border-radius: 1px;
+    background: currentColor;
+    transform: rotate(45deg);
+    content: '';
   }
 
   .ac-picker__search {
     flex: 1;
     min-width: 0;
-    height: 36px; /* sin token: pixel-exact game slot geometry */
-    padding: 0 var(--space-10);
-    border: 1px solid var(--border-primary);
-    border-radius: var(--radius-6);
-    background: var(--bg-primary);
+    height: 100%;
+    padding: 0;
+    border: 0;
+    background: transparent;
     color: var(--text-primary);
-    font: 500 14px/20px var(--font-sans); /* sin token: pixel-exact game slot geometry */
-  }
-  .ac-picker__search:focus {
-    border-color: var(--selected);
     outline: none;
+    @apply type-field;
   }
 
-  .ac-picker__count {
-    flex: none;
-    color: var(--tt-muted);
-    font: 500 12px/1 var(--font-sans); /* sin token: pixel-exact game slot geometry */
-    font-variant-numeric: tabular-nums;
+  .ac-picker__search::placeholder {
+    color: var(--text-quaternary);
+    opacity: 1;
   }
 
-  .ac-picker__filters {
+  /* ------------------------------------------------------------- filter bar */
+  /* Direction C (`Lienzo:Direccion-C`): menu buttons of 40 that show only a count, the result
+     count at the end of the row; the open menu is placed under its button by PickerFilterBar. */
+  .ac-picker__filterbar {
+    position: relative;
     display: flex;
     flex: none;
     flex-wrap: wrap;
-    align-items: flex-end;
-    gap: var(--space-8) var(--space-16);
-    max-height: 132px; /* sin token: pixel-exact game slot geometry */
-    overflow-y: auto;
-    padding: var(--space-8);
-    border-bottom: 1px solid var(--tt-divider);
+    align-items: center;
+    gap: var(--space-8);
+  }
+
+  .ac-picker__filter-button {
+    display: inline-flex;
+    flex: none;
+    align-items: center;
+    gap: var(--space-8);
+    height: var(--size-control);
+    padding: 0 10px 0 var(--space-12); /* sin token: the chevron side of the menu button */
+    border: 1px solid var(--border-secondary);
+    border-radius: var(--radius-11);
+    background: var(--bg-primary);
+    color: var(--text-primary);
+    white-space: nowrap;
+    cursor: pointer;
+    @apply type-ui-strong;
+  }
+
+  .ac-picker__filter-button:hover {
+    background: var(--bg-tertiary);
+  }
+
+  .ac-picker__filter-button[data-active] {
+    border-color: var(--border-primary);
+  }
+
+  .ac-picker__filter-button[aria-expanded='true'] {
+    border-color: var(--border-primary);
+    background: var(--bg-tertiary);
+  }
+
+  .ac-picker__filter-button:focus-visible {
+    outline: 2px solid var(--ring);
+    outline-offset: 1px;
+  }
+
+  .ac-picker__filter-n {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 20px; /* sin token: the count pill of the menu button */
+    height: 20px; /* sin token: the count pill of the menu button */
+    padding: 0 var(--space-6);
+    border-radius: var(--radius-full);
+    background: var(--bg-tertiary);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .ac-picker__filter-button[aria-expanded='true'] .ac-picker__filter-n {
+    background: var(--bg-quaternary);
+  }
+
+  /* A chevron of 12, up while the menu is open. */
+  .ac-picker__filter-chevron {
+    flex: none;
+    width: 7px; /* sin token: the chevron glyph of 12 */
+    height: 7px; /* sin token: the chevron glyph of 12 */
+    margin: 0 2px 3px; /* sin token: optical centre of the chevron */
+    border-right: 2px solid currentColor;
+    border-bottom: 2px solid currentColor;
+    opacity: 0.5;
+    transform: rotate(45deg);
+  }
+
+  .ac-picker__filter-button[aria-expanded='true'] .ac-picker__filter-chevron {
+    margin: 3px 2px 0; /* sin token: optical centre of the chevron */
+    transform: rotate(225deg);
+  }
+
+  .ac-picker__count {
+    margin-left: auto;
+    color: var(--text-tertiary);
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+    @apply type-ui;
   }
 
   .ac-picker__link {
-    padding: var(--space-4) 0;
+    padding: 0;
     border: 0;
     background: none;
-    color: var(--link);
-    font: 500 13px/16px var(--font-sans); /* sin token: pixel-exact game slot geometry */
+    color: var(--text-secondary);
     cursor: pointer;
+    @apply type-ui;
   }
+
   .ac-picker__link:hover {
     text-decoration: underline;
   }
 
+  /* The menu: a dark panel of 40 px slots, «Limpiar» top-right. */
+  .ac-picker__menu {
+    position: absolute;
+    z-index: var(--z-tooltip);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+    width: max-content;
+    max-width: 100%;
+    padding: var(--space-12);
+    border: 1px solid var(--border-primary);
+    border-radius: var(--radius-12);
+    background: var(--bg-secondary);
+    color: var(--text-primary);
+  }
+
+  .ac-picker__menu-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-8);
+    min-height: 16px; /* sin token: the head line of the menu */
+  }
+
+  .ac-picker__menu-title {
+    margin: 0;
+    @apply type-ui-strong;
+  }
+
+  .ac-picker__menu-count {
+    margin-left: var(--space-8);
+    color: var(--text-tertiary);
+    font-weight: 400;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .ac-picker__menu-rule {
+    margin: 0;
+    color: var(--text-tertiary);
+    @apply type-ui;
+  }
+
+  .ac-picker__menu-grid {
+    display: grid;
+    grid-template-columns: repeat(6, var(--size-slot));
+    gap: var(--space-4);
+    margin-top: var(--space-8);
+  }
+
+  /* Text slots of one width per row: the named tiers, then T1…T7 under them. */
+  .ac-picker__menu-row {
+    display: grid;
+    grid-auto-columns: minmax(var(--size-slot), 1fr);
+    grid-auto-flow: column;
+    gap: var(--space-4);
+    margin-top: var(--space-8);
+  }
+
+  .ac-picker__menu-row--ladder,
+  .ac-picker__menu-row + .ac-picker__menu-row {
+    margin-top: 0;
+  }
+
+  .ac-picker__menu-cell {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: var(--size-slot);
+    height: var(--size-slot);
+    padding: 0;
+    border: 1px solid var(--border-secondary);
+    border-radius: var(--radius-8);
+    background: var(--bg-primary);
+    color: var(--text-secondary);
+    cursor: pointer;
+  }
+
+  .ac-picker__menu-cell--text {
+    width: auto;
+    padding: 0 var(--space-12);
+    white-space: nowrap;
+    @apply type-ui-strong;
+  }
+
+  .ac-picker__menu-cell img {
+    display: block;
+    flex: none;
+    width: var(--size-sprite-panel);
+    height: var(--size-sprite-panel);
+  }
+
+  .ac-picker__menu-cell:hover {
+    background: var(--bg-tertiary);
+    color: var(--text-primary);
+  }
+
+  .ac-picker__menu-cell[aria-pressed='true'] {
+    border-color: var(--selected);
+    box-shadow: var(--ring-selected);
+    color: var(--text-primary);
+  }
+
+  .ac-picker__menu-cell[aria-disabled='true'] {
+    cursor: not-allowed;
+  }
+
+  .ac-picker__menu-cell[aria-disabled='true'] > * {
+    opacity: 0.4;
+  }
+
+  .ac-picker__menu-cell[aria-disabled='true']:hover {
+    background: var(--bg-primary);
+  }
+
+  .ac-picker__menu-cell:focus-visible {
+    outline: 2px solid var(--ring);
+    outline-offset: 1px;
+  }
+
+  /* The name of an icon-only slot, a dimmed slot's limit or a tier's «Max brokes»: a small game
+     tooltip under the slot (over it would cover the menu head). */
+  .ac-picker__menu-cell[data-tip]:is(:hover, :focus-visible)::after,
+  .ac-slot-grid__cell[data-tip]:hover::after,
+  .ac-slot-grid:focus-visible .ac-slot-grid__cell[data-active][data-tip]::after {
+    position: absolute;
+    bottom: calc(100% + 7px); /* sin token: the gap of the name tooltip */
+    left: 50%;
+    z-index: var(--z-tooltip);
+    padding: var(--space-4) var(--space-8);
+    border-radius: var(--radius-4);
+    background: var(--tt-panel);
+    color: var(--tt-value);
+    text-shadow: var(--text-shadow-game);
+    white-space: nowrap;
+    transform: translateX(-50%);
+    pointer-events: none;
+    content: attr(data-tip);
+    @apply type-tt-hint;
+    font-weight: 600;
+  }
+
+  .ac-picker__menu-cell[data-tip]:is(:hover, :focus-visible)::after {
+    top: calc(100% + 6px); /* sin token: the gap of the name tooltip */
+    bottom: auto;
+  }
+
+  /* The active filters as removable tokens: «Tipo [A] y [B] ×». */
+  .ac-picker__tokens {
+    display: flex;
+    flex: none;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-8);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .ac-picker__token {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-8);
+    height: 32px; /* sin token: the filter token of Lienzo:Direccion-C */
+    padding: 0 var(--space-4) 0 var(--space-12);
+    border-radius: var(--radius-full);
+    background: var(--bg-tertiary);
+    color: var(--text-secondary);
+    white-space: nowrap;
+    @apply type-ui;
+  }
+
+  .ac-picker__token-values {
+    display: flex;
+    align-items: center;
+    gap: var(--space-4);
+  }
+
+  .ac-picker__token-join {
+    color: var(--text-tertiary);
+  }
+
+  .ac-picker__token-value {
+    color: var(--text-primary);
+    font-weight: 700;
+  }
+
+  .ac-picker__token-icon {
+    display: flex;
+  }
+
+  .ac-picker__token-icon img {
+    display: block;
+    width: var(--size-sprite-panel);
+    height: var(--size-sprite-panel);
+  }
+
+  .ac-picker__token-x {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: var(--size-chip);
+    height: var(--size-chip);
+    padding: 0;
+    border: 0;
+    border-radius: var(--radius-full);
+    background: transparent;
+    color: var(--text-tertiary);
+    cursor: pointer;
+  }
+
+  .ac-picker__token-x:hover {
+    background: var(--bg-quaternary);
+    color: var(--text-primary);
+  }
+
+  .ac-picker__token-x:focus-visible {
+    outline: 2px solid var(--ring);
+    outline-offset: 1px;
+  }
+
+  /* An × of 12. */
+  .ac-picker__token-x > span::before,
+  .ac-picker__token-x > span::after {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 10px; /* sin token: the × glyph of 12 */
+    height: 2px;
+    border-radius: 1px;
+    background: currentColor;
+    content: '';
+  }
+
+  .ac-picker__token-x > span::before {
+    transform: translate(-50%, -50%) rotate(45deg);
+  }
+
+  .ac-picker__token-x > span::after {
+    transform: translate(-50%, -50%) rotate(-45deg);
+  }
+
+  /* --------------------------------------------------------- tray (multiple) */
   .ac-picker__tray {
     display: flex;
     flex: none;
     align-items: center;
     gap: var(--space-8);
-    padding: var(--space-6) var(--space-8);
-    border-bottom: 1px solid var(--tt-divider);
-    background: var(--tt-panel-deep);
+    padding: 3px 3px 3px var(--space-12); /* sin token: concentric with the well */
+    border: 1px solid var(--border-secondary);
+    border-radius: var(--radius-11);
+    background: var(--bg-primary);
   }
+
   .ac-picker__tray-count {
     flex: none;
-    color: var(--tt-label);
-    font: 600 12px/1 var(--font-sans); /* sin token: pixel-exact game slot geometry */
+    color: var(--text-secondary);
+    @apply type-ui-strong;
   }
+
   .ac-picker__tray-slots {
     display: flex;
     flex: 1;
     gap: var(--space-4);
     min-width: 0;
-    min-height: 40px; /* sin token: pixel-exact game slot geometry */
+    min-height: var(--size-slot);
     margin: 0;
     padding: 0;
     overflow-x: auto;
     list-style: none;
   }
+
   .ac-picker__tray-slot {
     cursor: pointer;
   }
+
   .ac-picker__tray-x {
     position: absolute;
     top: 2px;
     right: 2px;
-    width: 12px; /* sin token: pixel-exact game slot geometry */
-    height: 12px; /* sin token: pixel-exact game slot geometry */
+    width: 12px; /* sin token: the glyph of 12 */
+    height: 12px; /* sin token: the glyph of 12 */
     color: var(--text-secondary);
     opacity: 0;
   }
+
   .ac-picker__tray-slot:hover .ac-picker__tray-x,
   .ac-picker__tray-slot:focus-visible .ac-picker__tray-x {
     opacity: 1;
   }
 
-  .ac-picker__done {
+  .ac-picker__done,
+  .ac-picker__choose {
     flex: none;
-    height: 32px; /* sin token: pixel-exact game slot geometry */
-    padding: 0 var(--space-12);
-    border: 1px solid var(--selected);
-    border-radius: var(--radius-6);
-    background: var(--selected);
+    height: var(--size-control);
+    padding: 0 var(--space-16);
+    border: 0;
+    border-radius: var(--radius-11);
+    background: var(--white);
     color: var(--black);
-    font: 700 13px/1 var(--font-sans); /* sin token: pixel-exact game slot geometry */
+    white-space: nowrap;
     cursor: pointer;
+    @apply type-body-strong;
   }
 
-  .ac-picker__body {
-    display: flex;
-    flex: 1;
-    min-height: 0;
+  .ac-picker__done:focus-visible,
+  .ac-picker__choose:focus-visible {
+    outline: 2px solid var(--ring);
+    outline-offset: 1px;
   }
 
+  /* --------------------------------------------------------------- slot grid */
   .ac-picker__scroll {
     flex: 1;
     min-width: 0;
+    min-height: 0;
     overflow-y: auto;
-    padding: var(--space-8);
+    padding: 2px; /* sin token: room for the focus outline of the edge slots */
     overscroll-behavior: contain;
+    scrollbar-color: var(--border-primary) var(--bg-primary);
+    scrollbar-width: thin;
   }
 
   .ac-picker__grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, 48px); /* sin token: pixel-exact game slot geometry */
-    gap: 4px; /* sin token: pixel-exact game slot geometry */
+    gap: var(--space-4);
     outline: none;
   }
 
   .ac-picker__matrix {
     display: grid;
     align-items: center;
-    gap: 4px; /* sin token: pixel-exact game slot geometry */
+    gap: var(--space-4);
     width: max-content;
     outline: none;
   }
+
   .ac-picker__matrix-head {
-    color: var(--tt-muted);
-    font: 700 11px/1 var(--font-sans); /* sin token: pixel-exact game slot geometry */
+    color: var(--text-tertiary);
     text-align: center;
+    @apply type-ui-strong;
   }
+
   .ac-picker__matrix-row {
     padding-right: var(--space-8);
-    color: var(--tt-value);
-    font: 600 13px/16px var(--font-sans); /* sin token: pixel-exact game slot geometry */
+    color: var(--text-secondary);
     white-space: nowrap;
+    @apply type-ui-strong;
   }
+
   .ac-picker__hole {
-    width: 48px; /* sin token: pixel-exact game slot geometry */
-    height: 48px; /* sin token: pixel-exact game slot geometry */
-    border-radius: var(--radius-4);
-    box-shadow: var(--inset-tt-empty);
-    opacity: 0.4;
+    width: 48px; /* sin token: a hole of the held matrix, as its slots */
+    height: 48px; /* sin token: a hole of the held matrix, as its slots */
+    border: 1px dashed var(--border-secondary);
+    border-radius: var(--radius-8);
   }
 
   .ac-picker__option {
     display: flex;
-    border-radius: var(--radius-4);
+    border-radius: var(--radius-8);
     cursor: pointer;
   }
+
   .ac-picker__option[aria-disabled='true'] {
     cursor: not-allowed;
   }
+
   .ac-picker__option:hover .ac-entity-slot {
-    border-color: var(--text-quinary);
+    background: var(--bg-tertiary);
   }
+
   .ac-picker__grid:focus-visible .ac-picker__option[data-active],
-  .ac-picker__matrix:focus-visible .ac-picker__option[data-active],
-  .ac-slot-grid:focus-visible .ac-picker__option[data-active] {
+  .ac-picker__matrix:focus-visible .ac-picker__option[data-active] {
     outline: 2px solid var(--ring);
     outline-offset: 1px;
   }
@@ -355,13 +784,9 @@
 
   .ac-picker__skeleton {
     height: 100%;
-    min-height: 200px; /* sin token: pixel-exact game slot geometry */
-    border-radius: var(--radius-4);
-    background: repeating-linear-gradient(
-      90deg,
-      var(--bg-primary) 0 48px,
-      transparent 48px 52px
-    ); /* sin token: pixel-exact game slot geometry */
+    min-height: 200px; /* sin token: the grid while the entity's datos.json loads */
+    border-radius: var(--radius-8);
+    background: var(--bg-primary);
     opacity: 0.5;
   }
 
@@ -371,28 +796,77 @@
     align-items: center;
     gap: var(--space-8);
     padding: var(--space-32) var(--space-16);
-    color: var(--tt-muted);
-    font: 500 14px/20px var(--font-sans); /* sin token: pixel-exact game slot geometry */
+    color: var(--text-tertiary);
+    @apply type-body;
   }
+
   .ac-picker__empty p {
     margin: 0;
   }
 
+  /* ------------------------------------------------------------ detail pane */
   .ac-picker__detail {
     display: none;
     flex: none;
+    flex-direction: column;
     width: var(--size-tt);
-    overflow-y: auto;
-    border-left: 1px solid var(--tt-divider);
+    min-height: 0;
+    border-left: 1px solid var(--border-secondary);
     background: var(--tt-panel);
+  }
+
+  .ac-picker__detail-tip {
+    flex: 1;
+    min-height: 0;
+    overflow-y: auto;
+  }
+
+  .ac-picker__detail-action {
+    flex: none;
+    padding: var(--space-12);
+  }
+
+  .ac-picker__choose {
+    width: 100%;
+  }
+
+  .ac-picker__keys {
+    flex: none;
+    margin: auto 0 0;
+    padding: var(--space-6) var(--space-8) 7px; /* sin token: the key strip of the game tooltip */
+    background: var(--tt-panel-deep);
+    color: var(--tt-hint);
+    text-align: center;
+    @apply type-tt-hint;
   }
 
   @media (width >= 80rem) {
     .ac-picker__panel {
-      width: min(960px, calc(100vw - 16px)); /* sin token: pixel-exact game slot geometry */
+      width: min(944px, calc(100vw - 16px)); /* sin token: the popover of Lienzo:Selector-Pokemon */
     }
+
     .ac-picker__detail {
-      display: block;
+      display: flex;
+    }
+  }
+
+  /* Below 1280 the pane goes under the grid, only while it shows an option; the keys strip is
+     for the docked pane. */
+  @media (width < 80rem) {
+    .ac-picker__panel {
+      flex-direction: column;
+    }
+
+    .ac-picker__detail:has(.ac-picker__detail-tip) {
+      display: flex;
+      width: auto;
+      max-height: 38%;
+      border-top: 1px solid var(--border-secondary);
+      border-left: 0;
+    }
+
+    .ac-picker__keys {
+      display: none;
     }
   }
 
@@ -405,55 +879,148 @@
       display: block;
       background: var(--overlay);
     }
+
     .ac-picker__panel {
       inset: auto 0 0 0;
       z-index: var(--z-sheet);
       width: 100%;
-      min-width: 0;
-      height: 92dvh; /* sin token: pixel-exact game slot geometry */
-      max-height: 92dvh; /* sin token: pixel-exact game slot geometry */
+      height: 92dvh; /* sin token: the bottom sheet leaves the page visible above */
+      max-height: 92dvh; /* sin token: the bottom sheet leaves the page visible above */
       border-radius: var(--radius-12) var(--radius-12) 0 0;
     }
-    .ac-picker__body {
-      flex-direction: column;
+
+    .ac-picker__search-box,
+    .ac-picker__close {
+      height: var(--size-touch);
     }
-    .ac-picker__detail:not(:empty) {
-      display: block;
+
+    .ac-picker__filter-button {
+      height: var(--size-touch);
+    }
+
+    .ac-picker__menu {
+      right: 0;
+      left: 0; /* the whole width of the sheet: PickerFilterBar leaves the offset to the CSS */
       width: auto;
-      max-height: 34%;
-      border-top: 1px solid var(--tt-divider);
-      border-left: 0;
     }
-    .ac-picker__search {
+
+    .ac-picker__menu-grid {
+      grid-template-columns: repeat(6, minmax(0, 1fr));
+    }
+
+    .ac-picker__menu-grid .ac-picker__menu-cell {
+      width: 100%;
+    }
+
+    /* «Super Rare» may take two lines on a narrow sheet. */
+    .ac-picker__menu-cell--text {
+      padding: 0 var(--space-4);
+      white-space: normal;
+      text-align: center;
+    }
+  }
+
+  /* ------------------------------------------------------ inline ring grid */
+  .ac-slot-grid {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-4);
+    width: fit-content;
+    max-width: 100%;
+    padding: 3px; /* sin token: concentric wells, radius 11 over cells of radius 7 */
+    border: 1px solid var(--border-secondary);
+    border-radius: var(--radius-11);
+    background: var(--bg-primary);
+    outline: none;
+  }
+
+  .ac-slot-grid:focus-visible {
+    outline: 2px solid var(--ring);
+    outline-offset: 1px;
+  }
+
+  .ac-slot-grid__cell {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: var(--size-slot);
+    height: var(--size-slot);
+    border: 1px solid transparent;
+    border-radius: calc(
+      var(--radius-11) - 4px
+    ); /* sin token: concentric with the well of radius 11 */
+    cursor: pointer;
+  }
+
+  .ac-slot-grid__cell:hover {
+    background: var(--bg-tertiary);
+  }
+
+  .ac-slot-grid__cell[aria-selected='true'] {
+    border-color: var(--selected);
+    box-shadow: var(--ring-selected);
+  }
+
+  .ac-slot-grid__cell[aria-disabled='true'] {
+    opacity: 0.4;
+    cursor: not-allowed;
+  }
+
+  .ac-slot-grid:focus-visible .ac-slot-grid__cell[data-active] {
+    outline: 2px solid var(--ring);
+    outline-offset: 1px;
+  }
+
+  .ac-slot-grid__none {
+    width: auto;
+    padding: 0 var(--space-12);
+    color: var(--text-secondary);
+    white-space: nowrap;
+    @apply type-ui-strong;
+  }
+
+  .ac-slot-grid__none[aria-selected='true'] {
+    color: var(--text-primary);
+  }
+
+  /* The check of a chosen cell: a tab of 14 in the corner. */
+  .ac-slot-grid__check {
+    position: absolute;
+    right: 1px;
+    bottom: 1px;
+    width: 14px; /* sin token: the check of the ring grid */
+    height: 14px; /* sin token: the check of the ring grid */
+    border-radius: var(--radius-4);
+    background: var(--selected);
+  }
+
+  .ac-slot-grid__check::before {
+    position: absolute;
+    top: 2px;
+    left: 5px; /* sin token: the check tab of the ring cell */
+    width: 4px; /* sin token: the stroke of the check glyph */
+    height: 7px; /* sin token: the stroke of the check glyph */
+    border: solid var(--bg-primary);
+    border-width: 0 2px 2px 0;
+    transform: rotate(45deg);
+    content: '';
+  }
+
+  @media (pointer: coarse) {
+    .ac-slot-grid__cell {
+      min-width: var(--size-touch);
       height: var(--size-touch);
     }
   }
 
-  @media (48rem <= width < 80rem) {
-    .ac-picker__body {
-      flex-direction: column;
+  @media (prefers-reduced-motion: no-preference) {
+    .ac-picker__trigger,
+    .ac-picker__filter-button,
+    .ac-picker__menu-cell,
+    .ac-slot-grid__cell {
+      transition: background-color var(--duration-fast) var(--ease-standard);
     }
-    .ac-picker__detail:not(:empty) {
-      display: block;
-      width: auto;
-      max-height: 38%;
-      border-top: 1px solid var(--tt-divider);
-      border-left: 0;
-    }
-  }
-
-  /* Inline slot grid (AuraPicker, AddonPicker), like the «Auras» panel of the game. */
-  .ac-slot-grid {
-    display: flex;
-    flex-wrap: wrap;
-    gap: var(--space-6);
-    outline: none;
-  }
-  .ac-slot-grid__detail:not(:empty) {
-    max-width: var(--size-tt);
-    overflow: hidden;
-    border: 1px solid var(--tt-divider);
-    border-radius: var(--radius-8);
-    background: var(--tt-panel);
   }
 }

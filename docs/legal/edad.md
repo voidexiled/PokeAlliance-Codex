@@ -1,4 +1,4 @@
-# Edad mínima en Alliance Codex
+# Edad mínima en PokeAlliance Wiki
 
 > **BORRADOR** para que el propietario lo revise (D-B7, §9.13). No se publica hasta que el propietario lo apruebe. Está escrito a partir de las decisiones de §9.15 de la especificación y no es asesoría legal. Lo que va entre corchetes lo decide o lo completa el propietario.
 

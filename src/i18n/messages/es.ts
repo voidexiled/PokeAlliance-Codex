@@ -70,6 +70,52 @@ export const es = {
       slots: 'Slots',
       list: 'Lista',
     },
+    // FilterToolbar and its menus (`src/components/filters/`, Corte 0's Direction C — the
+    // owner's chosen direction, spec 16.2.1/16.4.2): one calm row of 40 px buttons
+    // (`FilterMenuButton`, whose own name is `pokedex.filters.*`; this namespace only the text
+    // every menu shares), each opening a dark `FilterMenuPanel` of slots (`ElementGridMenu` for
+    // Tipo/Tipo de moveset, `TierLadderMenu` for Tier, `SegmentMenu` for Variante/Generación);
+    // under the toolbar `ActiveFilterTokens` shows the chosen values as removable tokens, and
+    // at 768 px and under `MobileFilterSheet` opens a button's own panel as a bottom sheet.
+    filterBar: {
+      label: 'Filtros',
+      // `FilterMenuPanel`: «Limpiar», top-right, drawn only while its own group has a value.
+      clear: 'Limpiar',
+      // `SegmentMenu` (Variante, Generación): the leading option that clears the group.
+      all: 'Todas',
+      // `TierLadderMenu`, and the Tier value's own tooltip in Cards and Lista (dotted
+      // underline): the label before the value, «Max brokes: —» until content/tiers.json's
+      // `maxBrokes` has a number for that tier (the dash is `UNKNOWN`, not part of this key).
+      maxBrokes: 'Max brokes',
+      // `ElementGridMenu` (Tipo, Tipo de moveset): the counter drawn over the grid, «2 de 2».
+      countOfMax: '{count} de {max}',
+      // `ElementGridMenu` (Tipo — AND, capped at 2): the rule line under its counter.
+      typeRuleHint: 'Hasta {max}; debe tener ambos.',
+      // `ElementGridMenu` (Tipo de moveset — OR, no cap): the rule line under its counter.
+      movesetRuleHint: 'Ataques en área; basta con uno.',
+      // A slot of `ElementGridMenu` dimmed by Tipo's cap (`aria-disabled`): its own tooltip line.
+      maxHint: 'Máx. {max}: quita uno.',
+      // `ActiveFilterTokens`: the joining word inside one token's sentence («Tipo Volador y
+      // Psíquico» for an AND group, «Tipo de moveset Psíquico o Agua» for an OR one) and the
+      // accessible name of the token's own remove button.
+      and: 'y',
+      or: 'o',
+      removeToken: 'Quitar filtro: {label}',
+      // `PerPageSelect`'s inline label; its options are plain numbers with no text of their own
+      // (Slots 48/96/144, Cards 12/24/48, Lista 25/50/100, per view, `src/lib/lists/state.ts`).
+      perPage: 'Por página',
+      // `MobileFilterSheet`: the close control of the bottom sheet a filter button opens.
+      closeLabel: 'Cerrar filtros',
+      // `TierLadderMenu`: the rule line of the Tier menu.
+      tierRuleHint: 'De mejor a peor.',
+      // `MobileFilterSheet`: the footer button of the phone sheet, with the list's own count.
+      show: 'Ver {count}',
+      // `ActiveFilterTokens`: the name of the token row and its last control.
+      active: 'Filtros activos',
+      clearAll: 'Limpiar filtros',
+      // `FilterMenuButton`: the accessible text of a button's count.
+      chosen: '{n} elegidos',
+    },
     // `Pagination`: the name of its `nav`, the two ends and the prefix of the
     // accessible name of each page number («Página 2»).
     pagination: 'Paginación',
@@ -147,7 +193,8 @@ export const es = {
     breadcrumb: 'Migas de pan',
     toc: 'Resumen',
     tocLabel: 'En esta página',
-    footer: 'Alliance Codex es un proyecto comunitario independiente, no afiliado a PokeAlliance.',
+    footer:
+      'PokeAlliance Wiki es un proyecto comunitario independiente, no afiliado a PokeAlliance.',
     // The account entry of the header (§9.16.1) and its menu (§9.16.2), only in a build with the
     // public Supabase settings. Without a session: `signIn` to `/{l}/cuenta/` (below 768 an icon
     // button with the trainer sprite and the same label). With one: the chip, named `label`
@@ -191,10 +238,10 @@ export const es = {
   // system titles, the `nombre` of the Market categories, the activities, the
   // element names (§8.0.5) and the worlds of `content/mundos.json`.
   home: {
-    documentTitle: 'Alliance Codex · Wiki de PokeAlliance',
+    documentTitle: 'PokeAlliance Wiki · Pokédex, tier list e ítems',
     description:
       'Wiki comunitaria de PokeAlliance: Pokédex, sistemas, ítems, actividades, comercio y herramientas de guild.',
-    title: 'Bienvenido a Alliance Codex',
+    title: 'Bienvenido a PokeAlliance Wiki',
     intro: '{n} variantes de Pokémon, {list} de PokeAlliance.',
     introBare: '{n} variantes de Pokémon de PokeAlliance.',
     collections: {
@@ -261,6 +308,9 @@ export const es = {
     search: 'Buscar',
     resultsCount: { one: '{n} resultado', other: '{n} resultados' },
     noMatches: 'No hay coincidencias.',
+    // `EntityPickerPanel`: the choose button of the docked detail pane and the keyboard line.
+    pick: 'Elegir',
+    keysHint: 'Enter elige · Esc cierra',
     clearFilters: 'Limpiar filtros',
     filters: {
       tier: 'Tier',
@@ -299,16 +349,23 @@ export const es = {
     columnName: 'Nombre',
     // `FilterBar` of step 3 (§8.2, P-10, P-11): the visible label of each filter
     // and its first option, which clears it. The Spanish option agrees with its
-    // label: «Todas» for Generación and Variante, «Todos» for Tier and Elemento.
+    // label: «Todas» for Generación and Variante, «Todos» for Tier and Tipo.
     // «Moveset» fact of the card (§16.4.2), a game term (13.4).
     moveset: 'Moveset',
     filters: {
       generation: 'Generación',
       tier: 'Tier',
-      element: 'Elemento',
+      // Direction C's filter toolbar (`FilterMenuButton`): the elements button is «Tipo», not
+      // «Elemento» (`ui.tooltip.element`/`elements` keep «Elemento» for the fact rows,
+      // unrelated). Its rule (AND, capped at 2) and Tier's own order (best to worst) are said
+      // inside their own menu panel, not next to this name (`ui.filterBar.typeRuleHint`).
+      element: 'Tipo',
       variant: 'Variante',
       // Tipo de moveset (§16.2.2, §16.4.2): oculto sin datos (C-R5, D-R5).
       movesetType: 'Tipo de moveset',
+      // `FilterToolbar`: the name of the search field and its example.
+      search: 'Buscar en la Pokédex',
+      searchPlaceholder: 'Nombre o Nº',
     },
     // `SortSelect` (§16.4.2): «Número» es el orden de hoy y no lleva texto propio.
     sort: {
@@ -742,7 +799,7 @@ export const es = {
       premiumGoal: 'Meta premium',
       week: 'Semana: {range}, día {k} de 7',
       lastExport: 'Último export: {date}',
-      footer: 'Alliance Codex · Guild',
+      footer: 'PokeAlliance Wiki · Guild',
     },
   },
   // Cuenta (`/{l}/cuenta/`, §9.9 and §10.4, with the owner decisions of §9.15 and §9.16 over §9.9
@@ -806,7 +863,7 @@ export const es = {
       resent: 'Te enviamos un código nuevo.',
       otherEmail: 'Usar otro correo',
       identityText:
-        'Vincula Discord o Google. Cada cuenta de Discord o de Google solo puede estar vinculada a una cuenta de Alliance Codex.',
+        'Vincula Discord o Google. Cada cuenta de Discord o de Google solo puede estar vinculada a una cuenta de PokeAlliance Wiki.',
       linkDiscord: 'Vincular Discord',
       linkGoogle: 'Vincular Google',
       username: 'Nombre de usuario',
@@ -820,7 +877,7 @@ export const es = {
       termsLink: 'Términos',
       privacyLink: 'Política de privacidad',
       nonAffiliation:
-        'Alliance Codex es un proyecto independiente. PokeAlliance, su servidor oficial, sus administradores y sus creadores no moderan ni garantizan este comercio. Las operaciones son entre jugadores.',
+        'PokeAlliance Wiki es un proyecto independiente. PokeAlliance, su servidor oficial, sus administradores y sus creadores no moderan ni garantizan este comercio. Las operaciones son entre jugadores.',
       finish: 'Completar registro',
       done: 'Registro completo.',
       errors: {
@@ -852,7 +909,7 @@ export const es = {
       linked: 'Vinculada: {name}',
       unlink: 'Desvincular',
       anchorRequired: 'Tu cuenta necesita Discord o Google vinculado.',
-      taken: 'Esa cuenta de {provider} ya está vinculada a otra cuenta de Alliance Codex.',
+      taken: 'Esa cuenta de {provider} ya está vinculada a otra cuenta de PokeAlliance Wiki.',
       discordTooNew: 'Tu cuenta de Discord tiene menos de {days} días: Comercio aún no la acepta.',
     },
     // «Verificación» (§9.9): one `FactLine` per row, «Correo: verificado» with «Reenviar correo»
@@ -1080,7 +1137,7 @@ export const es = {
     // phase B or with listings in the set, never on the empty list of production (R12). Reviews
     // go both ways, from 1 to 5 stars (9.15.4).
     banner: {
-      payments: 'Alliance Codex no procesa pagos',
+      payments: 'PokeAlliance Wiki no procesa pagos',
       contact: 'El comprador contacta al vendedor por sus canales verificados',
       reviews:
         'Reseñas de 1 a 5 en los dos sentidos, solo de operaciones confirmadas por ambas partes',
@@ -1214,6 +1271,14 @@ export const es = {
     // for an items listing without its item (9.7.3), and every invalid field carries its own
     // message (§12.16): `errors.item` is that line.
     form: {
+      // `ListingForm`: the hints under the row names of the trays (board Crear-anuncio).
+      hints: {
+        optional: 'Opcional',
+        auras: 'Varias',
+        addons: 'Varios',
+        held: 'Opcionales',
+        training: 'Nivel y progreso',
+      },
       auraNone: 'Ninguna',
       addonNone: 'Ninguno',
       boostHelp: 'De +0 a +50.',
@@ -1277,7 +1342,7 @@ export const es = {
     // The non-affiliation line (9.15.2), one discreet line on the list. Registration step 3 reads
     // the same sentence from `account.register.nonAffiliation`.
     nonAffiliation:
-      'Alliance Codex es un proyecto independiente. PokeAlliance, su servidor oficial, sus administradores y sus creadores no moderan ni garantizan este comercio. Las operaciones son entre jugadores.',
+      'PokeAlliance Wiki es un proyecto independiente. PokeAlliance, su servidor oficial, sus administradores y sus creadores no moderan ni garantizan este comercio. Las operaciones son entre jugadores.',
     // Adults only (9.15.2): the title of the `Dialog` a visitor without a session gets on the first
     // Comercio route, with its two buttons (the second leads to `/{l}/`), and the `Notice` of an
     // account under 18.
@@ -1291,10 +1356,10 @@ export const es = {
     // point, «Entiendo y acepto» and `cancel` (initial focus). `{days}` is EVIDENCIA_DIAS (9.15.3).
     // The tag «Dinero real» is `listing.fiat`.
     realMoney: {
-      note: 'Alliance Codex no procesa el pago ni lo devuelve. Antes de pagar, confirma en el juego el personaje del vendedor.',
+      note: 'PokeAlliance Wiki no procesa el pago ni lo devuelve. Antes de pagar, confirma en el juego el personaje del vendedor.',
       title: 'Operaciones con dinero real',
       payments:
-        'Alliance Codex no procesa pagos ni garantiza operaciones: cada operación es entre las dos partes.',
+        'PokeAlliance Wiki no procesa pagos ni garantiza operaciones: cada operación es entre las dos partes.',
       risk: 'Hay riesgo de estafa. Confirma en el juego el personaje de la otra parte antes de pagar y nunca compartas contraseñas ni códigos de tus cuentas.',
       data: 'Si hay un reporte, la moderación revisa la IP y el identificador del navegador de tus acciones de Comercio. Se guardan {days} días, o mientras siga abierto un reporte o una alerta sobre ellas.',
       sanctions: 'Las sanciones solo afectan a Comercio: la wiki y Guild siguen disponibles.',

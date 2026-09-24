@@ -150,7 +150,7 @@ function robotsTag(html: string): string | null {
 }
 
 /** §13.5: `site` of astro.config.mjs, the origin of every URL of the sitemap. */
-const SITE = 'https://pokealliance-codex.vercel.app';
+const SITE = 'https://pokealliancewiki.com';
 
 let sitemap: Promise<string[]> | null = null;
 
@@ -399,10 +399,10 @@ test.describe('§8.12: la 404', () => {
       await expect(page.locator('header.ac-header')).toBeVisible();
       await expect(page.locator('main#contenido h1')).toHaveText(MESSAGES[locale].errors.notFound);
       await expect(page.locator('h1')).toHaveCount(1);
-      // §13.5: «Página no encontrada · Alliance Codex» / «Page not found · Alliance Codex».
+      // §13.5: «Página no encontrada · PokeAlliance Wiki» / «Page not found · PokeAlliance Wiki».
       // `seo:check` reads the static output only, so the title of this page is measured here.
       await expect(page, '§13.5: the title of the 404').toHaveTitle(
-        `${MESSAGES[locale].errors.notFound} · Alliance Codex`,
+        `${MESSAGES[locale].errors.notFound} · PokeAlliance Wiki`,
       );
       // The menu of 8.0.3: at 1440 the sidebar, with the links of every group (7.10.2).
       const menu = page.locator('.ac-page-layout__sidebar');

@@ -43,7 +43,7 @@ const alternates: Record<Locale, string> = {
  * Spanish default and no other check would notice.
  */
 const SPANISH_DEFAULTS = [
-  'Alliance Codex es un proyecto comunitario independiente',
+  'PokeAlliance Wiki es un proyecto comunitario independiente',
   'Buscar...',
   'Busca Pokémon, ítems, sistemas…',
   'Idioma',
@@ -309,11 +309,11 @@ describe('ItemsRoot: the inventory of an item (8.5, 16.4.1)', () => {
     );
   };
 
-  it('Ranuras (16.4.1): the item is a slot of 48 in the inventory, with no card around it', () => {
+  it('Ranuras (16.4.1): the item is a slot of 40 in the inventory, with no card around it', () => {
     for (const locale of ['es', 'en'] as const) {
       const html = render(locale);
       expect(html, locale).toContain('ac-inventory');
-      expect(html, locale).toContain('ac-entity-slot--48');
+      expect(html, locale).toContain('ac-entity-slot--40');
       expect(html, locale).toContain('id="item-it3-synthetic-item"');
       expect(html, locale).not.toContain('ac-loot-card');
     }

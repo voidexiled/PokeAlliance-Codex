@@ -197,7 +197,7 @@ describe('pokemonTip', () => {
     expect(tip.shiny).toBe(true);
     expect(tip.head).toEqual({
       type: 'art',
-      src: 'https://wiki.pokealliance.com/pokemon/006-shiny.png',
+      src: '/pokemon/128/006-shiny.webp',
     });
   });
 
@@ -215,7 +215,7 @@ describe('pokemonTip', () => {
     const aura = { sprite: { src: '/sprites/auras/gold.png' }, label: 'Gold' };
     expect(pokemonTip({ ...CHARIZARD, aura }, 'es', LABELS.es).head).toEqual({
       type: 'art',
-      src: 'https://wiki.pokealliance.com/pokemon/006-shiny.png',
+      src: '/pokemon/128/006-shiny.webp',
       aura,
     });
   });

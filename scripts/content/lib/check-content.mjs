@@ -51,6 +51,24 @@ const isPositiveInteger = (value) => Number.isInteger(value) && value >= 1;
 const plural = (count, one, many) => `${count} ${count === 1 ? one : many}`;
 
 /**
+ * The id in content/tiers.json a Pokémon's `tier` maps to (spec 16.2.1): `t1`…`t7` for a numeric
+ * tier, the kebab-case of a special tier's name otherwise (`ULTIMATE` -> `ultimate`, `Super Rare`
+ * -> `super-rare`). Mirrors tierKey() of src/lib/content/tier-rank.ts, which this plain script
+ * cannot import; tests/content/tiers.test.ts checks both give the same answer for every case
+ * content/pokemon.json actually uses.
+ * @param {unknown} tier
+ */
+function tierRecordId(tier) {
+  if (typeof tier === 'number') return Number.isInteger(tier) && tier >= 1 ? `t${tier}` : null;
+  if (typeof tier !== 'string') return null;
+  const trimmed = tier.trim();
+  if (!trimmed) return null;
+  const numeric = /^t?(\d+)$/i.exec(trimmed);
+  if (numeric) return `t${Number(numeric[1])}`;
+  return trimmed.toLowerCase().replace(/\s+/g, '-');
+}
+
+/**
  * Keys that would bring provenance into the wiki. The site never shows where a
  * number comes from, so no schema declares one of these as a field and no
  * record carries one.
@@ -131,6 +149,13 @@ const CONTENT_FILES = [
     key: 'elementos',
     id: 'id',
     label: ['elemento', 'elementos'],
+  },
+  {
+    file: 'tiers.json',
+    schema: 'tiers',
+    key: 'tiers',
+    id: 'id',
+    label: ['tier', 'tiers'],
   },
   {
     file: 'pokemon.json',
@@ -748,6 +773,28 @@ export function checkContent(root) {
           : `el elemento "${id}" no existe en content/elementos.json`,
         at,
       );
+    }
+  }
+
+  // Every Pokémon's "tier" (a number 1…7 or a special name, spec 16.2.1) maps to a record of
+  // content/tiers.json, reported once per tier and not once per Pokémon. A hidden tier
+  // (ULTIMATE, `visible: false`) still needs its record: its data stays even while it is not
+  // shown in the Tier list or the Tier filter.
+  const tierRecords = contentRecords.tiers;
+  const tierRecordIds = tierRecords
+    ? new Set(tierRecords.filter(isObject).map((record) => record.id))
+    : null;
+  if (tierRecordIds && contentRecords.pokemon) {
+    /** @type {Map<string, string>} id de content/tiers.json -> dónde aparece primero. */
+    const usedTiers = new Map();
+    contentRecords.pokemon.forEach((pokemon, index) => {
+      if (!isObject(pokemon) || pokemon.tier === null || pokemon.tier === undefined) return;
+      const id = tierRecordId(pokemon.tier);
+      if (id && !usedTiers.has(id)) usedTiers.set(id, `pokemon[${index}].tier`);
+    });
+    for (const [id, at] of usedTiers) {
+      if (!tierRecordIds.has(id))
+        error(pokemonFile, `el tier "${id}" no existe en content/tiers.json`, at);
     }
   }
 

@@ -3,7 +3,7 @@ import '@/styles/components/entity-slot-marks.css';
 import type { ReactNode } from 'react';
 
 import { NestedEntity } from '@/components/game/NestedEntity';
-import { ShinyMark } from '@/components/game/ShinyMark';
+import { PokemonArt } from '@/components/game/ShinyMark';
 import { Sprite } from '@/components/game/Sprite';
 import type { SpriteProps } from '@/components/game/Sprite';
 import { SpriteStage } from '@/components/game/SpriteStage';
@@ -12,7 +12,7 @@ import type { Locale } from '@/i18n/config';
 import type { PokemonTier } from '@/lib/content/types';
 import { formatInteger } from '@/lib/format/numbers';
 import type { TipData } from '@/lib/game/tips';
-import { uiSprite } from '@/lib/pickers/sprites';
+import { uiSpriteProps } from '@/lib/sprites/ui-sprites';
 
 // EntitySlot (spec 7.2.6, 7.4.4, 7.5.5, 7.5.10, 16.3.1; DS:EntitySlot): the game slot. A dark
 // square with a 1 px frame and the sprite centred at an integer scale; it opens the entity's
@@ -27,10 +27,17 @@ import { uiSprite } from '@/lib/pickers/sprites';
 // The name is never written inside the slot: it is the accessible name of the trigger and the
 // title of the panel (DS:EntitySlot §No hacer).
 //
-// States (16.3.1): rest, hover (lighter frame), focus ring (base.css), `selected` (accent frame
-// and inner glow, as the chosen slot of the game), `unavailable` (dimmed, with a padlock).
-// Corner marks, each optional: check top right (chosen in a multiple choice), ShinyMark top
-// right when there is no check, mini TierBadge top left, stack count bottom right.
+// States (16.3.1, plan Direction C): rest, hover (the one bg-tertiary tint), focus ring
+// (base.css), `selected` (the flat amber ring), `unavailable` (dimmed, with a padlock).
+// Corner marks, each optional: check top right (chosen in a multiple choice), mini TierBadge
+// top left (a held item only: a grid or picker slot never carries a tier), stack count
+// bottom right.
+//
+// Pokémon art (plan «Shiny» and «?»): a Pokémon slot draws `PokemonArt` — the art 8 px
+// smaller than the slot, with the golden glow when it is shiny and no mark over it, and the
+// client Pokédex «?» when it has no art or its art fails. A slot is a Pokémon's when its
+// sprite is `smooth` art, when its panel has an `art` head, or when the caller says `art`.
+// The word «Shiny» stays in the slot's accessible name (the entry's name carries it).
 
 export type EntitySlotSize = 32 | 40 | 44 | 48 | 56 | 64 | 72;
 
@@ -46,10 +53,16 @@ export interface EntitySlotFaceProps {
   /** Stack count, bottom right. A count of zero and an empty text draw nothing. */
   qty?: number | string;
   known?: boolean;
+  /** A shiny Pokémon: the golden glow on its art. */
   shiny?: boolean;
+  /**
+   * A Pokémon slot: `sprite === null` draws the client Pokédex «?» instead of the missing
+   * mark. `EntitySlot` sets it on its own for a panel with an `art` head.
+   */
+  art?: boolean;
   /** Check mark, top right: chosen in a multiple choice. It hides the Shiny mark. */
   check?: boolean;
-  /** Mini tier badge, top left. */
+  /** Mini tier badge, top left: a held item's tier. Never on a grid or picker slot. */
   tier?: PokemonTier | null;
   /** The «none» slot of a picker: the no-choice icon instead of a sprite. */
   none?: boolean;
@@ -103,18 +116,28 @@ export function EntitySlotFace({
   check = false,
   tier,
   none = false,
+  art = false,
 }: EntitySlotFaceProps) {
   let cell: ReactNode;
   if (none) {
-    const icon = uiSprite('ui/none');
+    const icon = uiSpriteProps('ui/none');
     cell = icon ? (
       <Sprite {...icon} cell />
     ) : (
       <span className="ac-entity-slot__none" aria-hidden="true" />
     );
-  } else if (sprite !== null && sprite.smooth === true) {
-    // Pokémon art is an illustration: 8 px less than the slot, smooth and unframed.
-    cell = <Sprite {...sprite} width={size - 8} height={size - 8} alt="" />;
+  } else if ((sprite !== null && sprite.smooth === true) || (sprite === null && art)) {
+    // Pokémon art is an illustration: 8 px less than the slot, smooth and unframed, glowing
+    // when shiny; the «?» without it or when it fails.
+    cell = (
+      <PokemonArt
+        src={sprite?.src ?? null}
+        size={size - 8}
+        shiny={shiny}
+        loading={sprite?.loading}
+        className={sprite?.className}
+      />
+    );
   } else {
     // A bare game cell inside the slot's own frame: 1x, or 2x in the 72.
     cell = <SpriteStage sprite={sprite} size={size >= 72 ? 64 : 32} framed={false} known={known} />;
@@ -138,8 +161,6 @@ export function EntitySlotFace({
         </span>
       )}
       {check ? <span className="ac-entity-slot__check" aria-hidden="true" /> : null}
-      {/* The mark needs no name here: the word «Shiny» is already in the name of the slot. */}
-      {shiny && !check ? <ShinyMark corner="slot" /> : null}
       <span className="ac-entity-slot__lock" aria-hidden="true" />
     </>
   );
@@ -160,7 +181,8 @@ export function EntitySlot({
   ...face
 }: EntitySlotProps) {
   const classes = entitySlotClasses(size, { selected, unavailable, none: face.none, className });
-  const content = <EntitySlotFace {...face} size={size} />;
+  const art = face.art ?? tip?.head.type === 'art';
+  const content = <EntitySlotFace {...face} art={art} size={size} />;
 
   if (tip === undefined) {
     return (

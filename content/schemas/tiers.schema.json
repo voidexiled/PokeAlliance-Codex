@@ -1,0 +1,78 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://alliance-codex.local/schemas/tiers.schema.json",
+  "title": "Tiers",
+  "description": "content/tiers.json: la jerarquía de tiers de PokeAlliance (spec 16.2.1), del mejor al peor: ULTIMATE, Mythic, Legendary, Ultra Rare, Super Rare, T1…T7. El orden y los ids son fijos: el esquema los comprueba posición por posición, igual que elementos.schema.json. \"nombre\" es el nombre canónico del juego (no cambia por idioma). \"maxBrokes\" lo rellena el propietario a mano; null mientras no se conoce, nunca 0. \"visible\" oculta ULTIMATE de la Tier list y del filtro de Tier sin borrar sus datos (los Pokémon de ese tier siguen existiendo y siguen apuntando a este registro).",
+  "type": "object",
+  "required": ["tiers"],
+  "additionalProperties": false,
+  "properties": {
+    "$schema": { "type": "string" },
+    "tiers": {
+      "type": "array",
+      "description": "Exactamente estos 12 tiers, en este orden (mejor a peor): ultimate, mythic, legendary, ultra-rare, super-rare, t1, t2, t3, t4, t5, t6, t7.",
+      "minItems": 12,
+      "maxItems": 12,
+      "prefixItems": [
+        { "$ref": "#/$defs/tier", "properties": { "id": { "const": "ultimate" } } },
+        { "$ref": "#/$defs/tier", "properties": { "id": { "const": "mythic" } } },
+        { "$ref": "#/$defs/tier", "properties": { "id": { "const": "legendary" } } },
+        { "$ref": "#/$defs/tier", "properties": { "id": { "const": "ultra-rare" } } },
+        { "$ref": "#/$defs/tier", "properties": { "id": { "const": "super-rare" } } },
+        { "$ref": "#/$defs/tier", "properties": { "id": { "const": "t1" } } },
+        { "$ref": "#/$defs/tier", "properties": { "id": { "const": "t2" } } },
+        { "$ref": "#/$defs/tier", "properties": { "id": { "const": "t3" } } },
+        { "$ref": "#/$defs/tier", "properties": { "id": { "const": "t4" } } },
+        { "$ref": "#/$defs/tier", "properties": { "id": { "const": "t5" } } },
+        { "$ref": "#/$defs/tier", "properties": { "id": { "const": "t6" } } },
+        { "$ref": "#/$defs/tier", "properties": { "id": { "const": "t7" } } }
+      ]
+    }
+  },
+  "$defs": {
+    "tierId": {
+      "enum": [
+        "ultimate",
+        "mythic",
+        "legendary",
+        "ultra-rare",
+        "super-rare",
+        "t1",
+        "t2",
+        "t3",
+        "t4",
+        "t5",
+        "t6",
+        "t7"
+      ]
+    },
+    "tier": {
+      "type": "object",
+      "required": ["id", "nombre", "orden", "maxBrokes", "visible"],
+      "additionalProperties": false,
+      "properties": {
+        "id": { "$ref": "#/$defs/tierId" },
+        "nombre": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Nombre canónico del juego, igual en los dos idiomas: «ULTIMATE», «Mythic»… «T1»…"
+        },
+        "orden": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 12,
+          "description": "Posición en la jerarquía, 1 = mejor tier (ULTIMATE)."
+        },
+        "maxBrokes": {
+          "type": ["integer", "null"],
+          "minimum": 0,
+          "description": "Máximo de brokes del tier. null mientras el propietario no lo rellena; nunca 0 como valor de \"no se conoce\" (D-012)."
+        },
+        "visible": {
+          "type": "boolean",
+          "description": "false oculta el tier de la Tier list y del filtro de Tier sin tocar sus datos."
+        }
+      }
+    }
+  }
+}

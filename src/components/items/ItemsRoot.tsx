@@ -9,7 +9,6 @@ import type * as TableModule from '@/components/content/DataTable';
 import type { DataTableColumn } from '@/components/content/DataTable';
 import { EmptyState } from '@/components/content/EmptyState';
 import { TextField } from '@/components/controls/TextField';
-import { ToggleGroup } from '@/components/controls/ToggleGroup';
 import { ElementChip } from '@/components/game/ElementChip';
 import type { ElementChipEntry } from '@/components/game/ElementChip';
 import { EntitySlot } from '@/components/game/EntitySlot';
@@ -51,9 +50,10 @@ import type { EntityView, ListPage } from '@/lib/lists/state';
 //
 // Views (16.4.1): only «Ranuras» (default) and «Lista»; a stored or linked «cards» view falls
 // back to Ranuras (`itemsConfig`).
-//   - Ranuras is the game inventory: a dark panel with packed `EntitySlot` of 48, 2 apart, no
-//     cards; in «Todo» one inventory block per Market category, headed by its icon and name.
-//     Each slot is the sprite only and opens the item's game tooltip (`itemTip`).
+//   - Ranuras is the inventory of `Lienzo:Items`: one panel of `EntitySlot` of 40, 4 apart, on
+//     columns that fill the panel and end flush; in «Todo» one block per Market category,
+//     headed by its name and its count. Each slot is the sprite only (the client «?» when the
+//     item has none) and opens the item's game tooltip (`itemTip`).
 //   - Lista: `DataTable` with Sprite · Ítem · (in «Todo») Categoría · the keys of the union.
 //     Its table and row components are the deferred part of the island (13.6).
 // Every view gives each item the anchor `item-{id}` (H7).
@@ -68,11 +68,13 @@ const LIST_KEYS: readonly LootKey[] = ['droppedBy', 'element', 'use', 'npcPrice'
  * Widths of the Lista columns: the drops table of `Lienzo:Pokedex-Shiny-Charizard`, the Lista
  * of an item (8.5). «Ítem» and the columns that table does not draw take what is left.
  */
-const LIST_WIDTHS: Partial<Record<LootKey | 'sprite', number>> = {
+const LIST_WIDTHS: Partial<Record<LootKey | 'sprite' | 'category', number>> = {
   sprite: 72,
+  category: 180,
   droppedBy: 180,
   element: 130,
-  use: 240,
+  npcPrice: 150,
+  use: 200,
 };
 
 /** Every text of the list besides `ui` (DP1), from the `items` namespace of the page. */
@@ -314,7 +316,7 @@ export function ItemsRoot({
         {rows.map((row) => (
           <li key={row.id} id={anchor(row)}>
             <EntitySlot
-              size={48}
+              size={40}
               name={row.nombre}
               sprite={row.sprite ? { ...row.sprite, loading: lazy() } : null}
               tip={panelOf(row)}
@@ -339,8 +341,10 @@ export function ItemsRoot({
           return (
             <section key={group.key} className="ac-inventory__block">
               <h2 className="ac-inventory__head">
-                {entry?.icono ? <Sprite {...entry.icono} cell alt="" /> : null}
                 {entry?.nombre ?? group.key}
+                <span className="ac-inventory__count">
+                  {formatInteger(group.items.length, locale)}
+                </span>
               </h2>
               {grid(group.items)}
             </section>
@@ -401,7 +405,9 @@ export function ItemsRoot({
     const columns: DataTableColumn[] = [
       { key: 'sprite', label: labels.sprite, srOnly: true, width: LIST_WIDTHS.sprite },
       { key: 'item', label: labels.item },
-      ...(grouped ? [{ key: 'category', label: ui.tooltip.category }] : []),
+      ...(grouped
+        ? [{ key: 'category', label: ui.tooltip.category, width: LIST_WIDTHS.category }]
+        : []),
       ...listKeys.map((key) => ({ key, label: ui.tooltip[key], width: LIST_WIDTHS[key] })),
     ];
     return (
@@ -445,6 +451,7 @@ export function ItemsRoot({
 
   return (
     <EntityList
+      className="ac-items-list"
       controller={list}
       labels={listLabels}
       count={(n) => counted(labels.count, n, locale)}
@@ -479,24 +486,32 @@ export interface ItemsNavigationProps {
 }
 
 /**
- * The category navigation of 8.5 step 3: the link tab of 7.2.8, one link per tab with its
- * icon at 1x and its name, that wraps. Both pages render it on the server: a page with items
- * hands it to `ItemsRoot`, which places it among the controls of the list, and a category
- * without items draws it over its `EmptyState`.
+ * The category navigation of 8.5 step 3, drawn as the tab panel of `Lienzo:Items`: a grid of
+ * seven link tabs, each the icon of its category in a cell of 32 and its name; the tab of the
+ * page has `aria-current="page"` and the selected frame. Both pages render it on the server: a
+ * page with items hands it to `ItemsRoot`, which places it among the controls of the list, and
+ * a category without items draws it over its `EmptyState`.
  */
 export function ItemsNavigation({ tabs, category, label }: ItemsNavigationProps) {
   return (
-    <ToggleGroup
-      variant="tab"
-      label={label}
-      value={category}
-      options={tabs.map((tab) => ({
-        value: tab.id,
-        label: tab.nombre,
-        href: tab.href,
-        ...(tab.icono === null ? {} : { sprite: tab.icono }),
-      }))}
-    />
+    <nav className="ac-inventory-tabs" aria-label={label}>
+      <ul className="ac-inventory-tabs__grid">
+        {tabs.map((tab) => (
+          <li key={tab.id}>
+            <a
+              className="ac-inventory-tabs__tab"
+              href={tab.href}
+              aria-current={tab.id === category ? 'page' : undefined}
+            >
+              <span className="ac-inventory-tabs__icon" aria-hidden="true">
+                {tab.icono === null ? null : <Sprite {...tab.icono} cell alt="" />}
+              </span>
+              <span className="ac-inventory-tabs__name">{tab.nombre}</span>
+            </a>
+          </li>
+        ))}
+      </ul>
+    </nav>
   );
 }
 

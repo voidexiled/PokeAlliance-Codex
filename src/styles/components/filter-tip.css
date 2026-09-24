@@ -1,0 +1,71 @@
+/* Per-component sheet (§13.6): imported by the components that draw it, not by global.css. */
+
+@layer properties, theme, base, components, utilities;
+
+@reference '../theme.css';
+
+@layer components {
+  /* TierTip (plan «Dirección C»): the tier tooltip in the game tooltip style —
+     panel `tt-panel`, Poppins with the game text shadow, the name 15/20 spaced in capitals and
+     «Max brokes:» in `tt-label` — 184 wide, with no «Mantén Shift» strip and no border. It
+     opens over its trigger (the Tier segments), at its right (the Tier list labels) or under
+     it (the Tier value of a card or a row), on hover or keyboard focus of that trigger. */
+
+  .ac-tier-tip {
+    position: absolute;
+    z-index: var(--z-tooltip);
+    display: none;
+    width: var(--size-tt-tier);
+    padding: var(--space-10) var(--space-10) var(--space-6);
+    border-radius: var(--radius-4);
+    background: var(--tt-panel);
+    color: var(--tt-value);
+    font-family: var(--font-game);
+    font-style: normal;
+    text-align: left;
+    text-shadow: var(--text-shadow-game);
+    white-space: nowrap;
+    pointer-events: none;
+  }
+
+  .ac-tier-tip--up {
+    bottom: calc(100% + var(--space-8));
+    left: 50%;
+    transform: translateX(-50%);
+  }
+
+  .ac-tier-tip--right {
+    top: var(--space-8);
+    left: calc(100% + var(--space-8));
+  }
+
+  .ac-tier-tip--down {
+    top: calc(100% + var(--space-6));
+    right: calc(-1 * var(--space-10));
+  }
+
+  .ac-tier-tip__title {
+    display: block;
+    padding-left: 0.35em; /* sin token: compensa el espaciado de la última letra */
+    @apply type-tt-title;
+    text-align: center;
+    text-transform: uppercase;
+  }
+
+  .ac-tier-tip__row {
+    display: flex;
+    justify-content: space-between;
+    gap: var(--space-12);
+    margin-top: var(--space-6);
+    @apply type-tt-row;
+  }
+
+  .ac-tier-tip__label {
+    color: var(--tt-label);
+  }
+
+  .ac-tier-tip__value {
+    color: var(--tt-value);
+    font-variant-numeric: tabular-nums;
+  }
+}

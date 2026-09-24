@@ -21,7 +21,7 @@ import { es } from '@/i18n/messages/es';
 type AstroComponent = Parameters<AstroContainer['renderToString']>[0];
 
 const MESSAGES: Record<Locale, Messages> = { es, en };
-const SITE = 'https://pokealliance-codex.vercel.app';
+const SITE = 'https://pokealliancewiki.com';
 
 let container: AstroContainer;
 let Herramientas: AstroComponent;
@@ -124,7 +124,7 @@ describe('placeholders of template E (8.11, 8.14)', () => {
     expect(html).toMatch(
       /<a class="ac-breadcrumb__link" href="\/es\/herramientas\/">Herramientas<\/a>/,
     );
-    expect(html).toContain('<title>Mapa · Alliance Codex</title>');
+    expect(html).toContain('<title>Mapa · PokeAlliance Wiki</title>');
     expect(html).toMatch(/<a[^>]*href="\/es\/mapa\/"[^>]*aria-current="page"/);
   });
 
@@ -133,7 +133,7 @@ describe('placeholders of template E (8.11, 8.14)', () => {
     const crumbs = crumbsOf(html);
     expect(crumbs.items).toEqual(['Pokémon', en.compare.title]);
     expect(crumbs.markup).not.toContain('<a ');
-    expect(html).toContain(`<title>${en.compare.title} · Alliance Codex</title>`);
+    expect(html).toContain(`<title>${en.compare.title} · PokeAlliance Wiki</title>`);
     expect(html).toMatch(/<a[^>]*href="\/en\/herramientas\/pokemon\/"[^>]*aria-current="page"/);
   });
 });

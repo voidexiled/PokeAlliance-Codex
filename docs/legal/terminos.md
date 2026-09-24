@@ -1,14 +1,14 @@
-# Términos de uso de Alliance Codex
+# Términos de uso de PokeAlliance Wiki
 
 > **BORRADOR** para que el propietario lo revise (D-B7, §9.13). No se publica hasta que el propietario lo apruebe. Está escrito a partir de las decisiones de §9.15 y §9.16 de la especificación y no es asesoría legal. Lo que va entre corchetes lo decide o lo completa el propietario.
 
 Versión: 2026-09-23 (`TERMINOS_VERSION` de `src/lib/trade/limits.ts`).
 
-## 1. Qué es Alliance Codex
+## 1. Qué es PokeAlliance Wiki
 
-Alliance Codex es una wiki comunitaria de PokeAlliance con herramientas para jugadores (Guild) y un tablón de anuncios entre jugadores (Comercio).
+PokeAlliance Wiki es una wiki comunitaria de PokeAlliance con herramientas para jugadores (Guild) y un tablón de anuncios entre jugadores (Comercio).
 
-Alliance Codex es un proyecto independiente. PokeAlliance, su servidor oficial, sus administradores y sus creadores no moderan ni garantizan este comercio. Las operaciones son entre jugadores. Alliance Codex no está afiliado a PokeAlliance ni cuenta con su aprobación; los nombres e imágenes del juego pertenecen a sus titulares.
+PokeAlliance Wiki es un proyecto independiente. PokeAlliance, su servidor oficial, sus administradores y sus creadores no moderan ni garantizan este comercio. Las operaciones son entre jugadores. PokeAlliance Wiki no está afiliado a PokeAlliance ni cuenta con su aprobación; los nombres e imágenes del juego pertenecen a sus titulares.
 
 Responsable del sitio: [nombre o alias del responsable]. Contacto: [correo de contacto].
 
@@ -29,7 +29,7 @@ Crear una cuenta exige aceptar estos términos y la política de privacidad. El 
 ## 4. Comercio
 
 - Comercio es solo para mayores de 18 años. Para publicar, contactar, confirmar, cancelar o disputar una operación, reseñar y reportar hacen falta: la cuenta completa, 18 años o más, una cuenta de Discord vinculada con al menos 60 días de antigüedad, no estar suspendido en Comercio y, si el anuncio tiene precio en dinero real, el consentimiento del punto 5. Publicar exige además al menos un canal de contacto verificado y visible.
-- Alliance Codex no procesa pagos, no guarda dinero ni bienes, no interviene en las operaciones y no garantiza que se cumplan. Cada operación es un acuerdo entre las dos partes, que responden de él.
+- PokeAlliance Wiki no procesa pagos, no guarda dinero ni bienes, no interviene en las operaciones y no garantiza que se cumplan. Cada operación es un acuerdo entre las dos partes, que responden de él.
 - Verificar un canal de contacto solo comprueba que el canal es tuyo: no verifica tu identidad.
 - El valor de tus canales de contacto (correo, número o usuario) solo lo ven la otra parte de una operación que inicies o aceptes y los moderadores. En público se ve solo su etiqueta.
 - Un anuncio publicado vence a los 14 días si no se renueva. Hay límites de anuncios activos, de anuncios nuevos, de operaciones nuevas y de reportes por día, que el sitio indica al llegar a ellos.
@@ -39,7 +39,7 @@ Crear una cuenta exige aceptar estos términos y la política de privacidad. El 
 
 La primera vez que publicas un anuncio con precio en dinero real o contactas a su vendedor, el sitio te pide aceptar este aviso:
 
-- Alliance Codex no procesa pagos ni garantiza operaciones: cada operación es entre las dos partes.
+- PokeAlliance Wiki no procesa pagos ni garantiza operaciones: cada operación es entre las dos partes.
 - Hay riesgo de estafa. Confirma en el juego el personaje de la otra parte antes de pagar y nunca compartas contraseñas ni códigos de tus cuentas.
 - Desde que lo aceptas, cada acción de Comercio registra la IP de la conexión y un identificador aleatorio del navegador. La moderación los revisa si hay un reporte. Se conservan 90 días, o mientras siga abierto un reporte o una alerta ligada a ellos (ver la [política de privacidad](privacidad.md)).
 - Las sanciones solo afectan a Comercio.
@@ -80,7 +80,7 @@ Eres responsable de lo que publicas (anuncios, reseñas, reportes). Al publicarl
 
 ## 10. Responsabilidad
 
-El sitio se ofrece tal como está y puede tener interrupciones o errores. En la medida en que la ley lo permita, Alliance Codex no responde de las operaciones entre jugadores, de sus pagos ni de sus pérdidas.
+El sitio se ofrece tal como está y puede tener interrupciones o errores. En la medida en que la ley lo permita, PokeAlliance Wiki no responde de las operaciones entre jugadores, de sus pagos ni de sus pérdidas.
 
 ## 11. Cambios y ley aplicable
 

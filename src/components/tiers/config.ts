@@ -1,9 +1,12 @@
 import {
+  POKEDEX_PER_PAGE,
   pokedexConfig,
   tierId,
+  visibleTierId,
   type PokedexElementRefs,
   type PokedexIds,
   type PokedexRow,
+  type TierMetas,
 } from '@/components/pokedex/config';
 import type { Locale } from '@/i18n/config';
 import { compareTierRank, tierKey } from '@/lib/content/tier-rank';
@@ -18,13 +21,15 @@ import type { SpriteData } from '@/lib/sprites/resolve';
 // component, so what the island takes from it is only what it runs.
 //
 // State (8.0.6, 8.8):
-//   - «Ranuras» (default, §16.4.3) draws every filtered row as the classic tier list, one
-//     row per tier, with no pages (`unpagedViews`); Cards and Lista keep 48 rows a page.
+//   - Two views, as the plan's board: «Slots» (default, §16.4.3) draws every filtered row as
+//     the classic tier list, one row per tier, with no pages (`unpagedViews`); Lista has the
+//     rows-per-page choice of the Pokédex's Lista (U7).
 //   - The filters of the Pokédex (`gen`, `tipo`, `moveset`, `variante`), the same objects in
 //     the same URL order (U1) with the same registry ids (U3). No `tier`: the rows are the
 //     tiers (8.8 step 3, §16.4.3).
-//   - Only the variants with a tier: a row whose `tier` is `null` is not on this page
-//     (8.8 step 4), so `tiersRows` leaves it out before anything counts it.
+//   - Only the variants with a visible tier: a row whose `tier` is `null`, or hidden by the
+//     tiers registry (ULTIMATE for now), is not on this page (8.8 step 4), so `tiersRows`
+//     leaves it out before anything counts it.
 //   - One order (V6, no `SortSelect`): best tier first, ULTIMATE … T7 (`compareTierRank`,
 //     §16.2.1), and inside a tier the Pokémon order of 8.0.5. `tiersRows` applies it once, to
 //     rows that already come in the order of 8.0.5, with a stable sort; the list keeps it on
@@ -40,7 +45,7 @@ export const TIERS_PAGE_SIZE = 48;
  * Rows the prerendered page and its props carry (13.6: props within 20 KB); the island takes
  * the rest from `datos.json` as it hydrates (PR5).
  */
-export const TIERS_PROPS_ROWS = 32;
+export const TIERS_PROPS_ROWS = 28;
 
 /**
  * The values each filter accepts (U3, U4), read from the rows with a tier. No tiers: the
@@ -66,8 +71,8 @@ export function compareTiers(a: PokedexRow, b: PokedexRow): number {
  * inside a tier in the order they come in — the Pokémon order of 8.0.5 of `datos.json`
  * (`Array.prototype.sort` is stable).
  */
-export function tiersRows(rows: readonly PokedexRow[]): PokedexRow[] {
-  return rows.filter((row) => row.tier !== null).sort(compareTiers);
+export function tiersRows(rows: readonly PokedexRow[], meta: TierMetas = {}): PokedexRow[] {
+  return rows.filter((row) => visibleTierId(row.tier, meta) !== null).sort(compareTiers);
 }
 
 /**
@@ -117,9 +122,11 @@ export function tiersConfig(
     sorts: [{ id: 'tier', label: '', compare: keepOrder }],
     filters: pokedex.filters.filter((filter) => filter.key !== 'tier'),
     groupBy: tierGroup,
-    // §16.4.3: «Ranuras» is the classic tier list, one row per tier with every Pokémon of the
-    // filtered list (no pages); Cards and Lista keep 48 a page.
+    perPage: { list: POKEDEX_PER_PAGE.list },
+    // §16.4.3: «Slots» is the classic tier list, one row per tier with every Pokémon of the
+    // filtered list (no pages); Lista is paged.
     defaultView: 'slots',
+    views: ['slots', 'list'],
     unpagedViews: ['slots'],
     anchorId: (row) => `pokemon-${row.id}`,
     dataUrl,

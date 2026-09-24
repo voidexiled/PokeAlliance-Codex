@@ -19,7 +19,7 @@ import {
 
 import type { Locale } from '@/i18n/config';
 import { fill } from '@/i18n/messages/types';
-import { layout, spacing } from '@/lib/design/tokens';
+import { layout, spacing } from '@/lib/design/shell-tokens';
 import { rankSearch, type SearchEntry, type SearchKind } from '@/lib/search/rank';
 
 /**

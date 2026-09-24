@@ -4,7 +4,7 @@
 //
 // Per page (§13.5, «En cada página»):
 //
-//   1. <title>, and it ends in « · Alliance Codex»; the Inicio, `/{l}/`, carries the
+//   1. <title>, and it ends in « · PokeAlliance Wiki»; the Inicio, `/{l}/`, carries the
 //      whole title of S-01 instead (§12.2, §13.5).
 //   2. <meta name="description">, 50 to 160 characters, without «Alliance
 //      Codex» (the title already says it), unique across indexable routes.
@@ -47,18 +47,18 @@ const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..', '..');
 const OUTPUT_ROOTS = ['.vercel/output/static', 'dist/client'];
 
 /** §13.5: `site` of astro.config.mjs. */
-const SITIO = 'https://pokealliance-codex.vercel.app';
+const SITIO = 'https://pokealliancewiki.com';
 
-const MARCA = 'Alliance Codex';
+const MARCA = 'PokeAlliance Wiki';
 const SUFIJO_TITULO = ` · ${MARCA}`;
 
 /**
  * S-01 (§12.2, §13.5): the Inicio of each locale has its own whole `<title>`, the
- * `documentTitle` of its dictionary, and not «{h1} · Alliance Codex».
+ * `documentTitle` of its dictionary, and not «{h1} · PokeAlliance Wiki».
  */
 const TITULO_INICIO = {
-  es: 'Alliance Codex · Wiki de PokeAlliance',
-  en: 'Alliance Codex · PokeAlliance wiki',
+  es: 'PokeAlliance Wiki · Pokédex, tier list e ítems',
+  en: 'PokeAlliance Wiki · Pokédex, tier list and items',
 };
 
 const DESCRIPCION_MIN = 50;
@@ -427,7 +427,7 @@ async function main(options = {}) {
     }
     // --- 2. one title and one description per indexable route, «única por ruta
     // e idioma»: the two locales of the same route may share a title (the table
-    // of §13.5 gives «Pokédex · Alliance Codex» for es and en), so the
+    // of §13.5 gives «Pokédex · PokeAlliance Wiki» for es and en), so the
     // comparison runs inside each language.
     const idioma = localeDeRuta(route) ?? '';
     for (const [mapa, valor, etiqueta] of [

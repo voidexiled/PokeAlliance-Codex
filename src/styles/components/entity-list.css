@@ -48,8 +48,14 @@
   flex-wrap: wrap;
   align-items: center;
   justify-content: flex-end;
-  gap: var(--space-24);
+  gap: var(--space-8);
   margin-left: auto;
+}
+
+@media (width >= 48rem) {
+  .ac-entity-list__tools > .ac-view-toggle {
+    margin-left: var(--space-16);
+  }
 }
 
 .ac-entity-list__results {

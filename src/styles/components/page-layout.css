@@ -72,6 +72,19 @@
   padding-bottom: var(--space-24);
 }
 
+/* Plan «Dirección C» (boards Main, Tier-list, Items, Crear-anuncio, Pokedex-movil): the island
+   right under a page title — a list, a composer; the island's own `style` and `script` may
+   sit between them — starts 24 under the rule (16 on a phone), not 48. */
+.ac-page-layout__main > .ac-page-title:has(+ :is(style, script, astro-island)) {
+  margin-bottom: calc(var(--space-24) - var(--space-48));
+}
+
+@media (width < 48rem) {
+  .ac-page-layout__main > .ac-page-title:has(+ :is(style, script, astro-island)) {
+    margin-bottom: calc(var(--space-16) - var(--space-48));
+  }
+}
+
 /* Home: 24 between blocks; the footer keeps 48 above it (24 of gap plus this 24). */
 .ac-page-layout--home .ac-page-layout__main {
   gap: var(--space-24);

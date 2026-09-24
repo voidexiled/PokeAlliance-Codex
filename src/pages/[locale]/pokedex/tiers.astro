@@ -41,6 +41,7 @@ import { en } from '@/i18n/messages/en';
 import { es } from '@/i18n/messages/es';
 import { fill } from '@/i18n/messages/types';
 import { getRotations } from '@/lib/content/repository';
+import { tierInfo } from '@/lib/content/tiers';
 import { formatInteger } from '@/lib/format/numbers';
 import { buildNav } from '@/lib/nav/groups';
 import { FactLine, FactLines, type FactLineData } from '@/components/content/FactLine';
@@ -81,13 +82,15 @@ const title = entry.label;
 const messages = dictionaries[locale];
 const data = buildPokedexData(locale);
 const records = decodePokedex(data);
-const rows = tiersRows(records);
+// The tiers registry (`tierInfo`): a hidden tier (ULTIMATE for now) is no row of the list.
+const { tierMeta } = pokedexIds(records, data.refs.elementos, tierInfo);
+const rows = tiersRows(records, tierMeta);
 const firstRows = rows.slice(0, TIERS_PROPS_ROWS);
 // The values of the filters are the ones of the rows of this list, the variants with a
 // tier: a generation or a variant that only rows without a tier have is not an option (U4).
 // The tiers themselves are not a filter here (8.8 step 3), so `TiersIds` leaves them out.
 const { generations, elements, movesets, variants } = pokedexIds(rows, data.refs.elementos);
-const ids = { generations, elements, movesets, variants };
+const ids = { generations, elements, movesets, variants, tierMeta };
 const first = {
   v: data.v,
   campos: data.campos,

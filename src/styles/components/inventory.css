@@ -1,36 +1,152 @@
-/* The items inventory (spec 16.4.1): the game's inventory panel, slots of 48 packed 2 apart.
-   Per-component sheet (§13.6): ItemsRoot.tsx imports it. */
+/* The items page of `Lienzo:Items` (spec 16.4.1): the category tab panel, the toolbar row and
+   the inventory. Per-component sheet (§13.6): ItemsRoot.tsx imports it. */
+
+@reference '../theme.css';
 
 @layer properties, theme, base, components, utilities;
 
 @layer components {
-  .ac-inventory {
+  /* ------------------------------------------------------------ category tabs */
+  .ac-inventory-tabs {
+    padding: var(--space-8);
+    border: 1px solid var(--border-secondary);
+    border-radius: var(--radius-12);
+    background: var(--bg-secondary);
+  }
+
+  .ac-inventory-tabs__grid {
+    display: grid;
+    grid-template-columns: repeat(7, minmax(0, 1fr));
+    gap: var(--space-4);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .ac-inventory-tabs__tab {
     display: flex;
-    flex-direction: column;
-    gap: var(--space-16);
-    padding: var(--space-12);
+    align-items: center;
+    gap: var(--space-8);
+    height: var(--space-40);
+    padding: 0 var(--space-8) 0 var(--space-4);
+    border: 1px solid transparent;
     border-radius: var(--radius-8);
-    background: var(--tt-panel-deep);
-    color: var(--tt-value);
+    color: var(--text-primary);
+    @apply type-ui;
+    text-decoration: none;
+  }
+
+  .ac-inventory-tabs__tab:hover {
+    background: var(--bg-tertiary);
+  }
+
+  .ac-inventory-tabs__tab[aria-current='page'] {
+    border-color: var(--selected);
+    box-shadow: var(--ring-selected);
+    font-weight: 700;
+  }
+
+  .ac-inventory-tabs__icon {
+    display: flex;
+    flex: none;
+    align-items: center;
+    justify-content: center;
+    width: var(--space-32);
+    height: var(--space-32);
+  }
+
+  .ac-inventory-tabs__name {
+    min-width: 0;
+  }
+
+  @media (width < 80rem) {
+    .ac-inventory-tabs__grid {
+      grid-template-columns: repeat(
+        auto-fill,
+        minmax(136px, 1fr)
+      ); /* sin token: the narrowest tab that fits «Creature Items» */
+    }
+  }
+
+  /* --------------------------------------------- toolbar: search · count · view */
+  /* The search field (the last control) and the results bar share one row of 40. */
+  @media (width >= 48rem) {
+    /* Doubled class: this sheet can load before entity-list.css, whose `display: flex` would
+       otherwise win and centre the bar under a full-width search. */
+    .ac-entity-list.ac-items-list {
+      display: grid;
+      grid-template-columns: 320px minmax(0, 1fr); /* sin token: the search field of Lienzo:Items */
+      column-gap: var(--space-16);
+    }
+
+    .ac-items-list > *,
+    .ac-items-list > astro-slot > * {
+      grid-column: 1 / -1;
+    }
+
+    .ac-items-list > .ac-entity-list__bar {
+      grid-column: 2;
+      align-self: center;
+    }
+
+    .ac-items-list > :has(+ .ac-entity-list__bar) {
+      grid-column: 1;
+    }
+  }
+
+  /* -------------------------------------------------------------- inventory */
+  /* Columns of 40 that fill the panel and end flush: the panel centres the grid and every
+     block and slot list is a subgrid of it, so the headings stay on the first column. */
+  .ac-inventory {
+    --inventory-slot: var(--size-slot);
+
+    display: grid;
+    grid-template-columns: repeat(auto-fill, var(--inventory-slot));
+    justify-content: center;
+    gap: var(--space-16) var(--space-4);
+    padding: var(--space-16);
+    border: 1px solid var(--border-secondary);
+    border-radius: var(--radius-12);
+    background: var(--bg-secondary);
+    color: var(--text-primary);
+  }
+
+  .ac-inventory__block {
+    display: grid;
+    grid-column: 1 / -1;
+    grid-template-columns: subgrid;
+    row-gap: var(--space-8);
   }
 
   .ac-inventory__head {
     display: flex;
-    align-items: center;
+    grid-column: 1 / -1;
+    align-items: baseline;
     gap: var(--space-8);
-    margin: 0 0 var(--space-8);
-    font: inherit;
-    font-weight: 600;
-    color: var(--tt-label);
-    text-shadow: var(--text-shadow-game);
+    margin: 0;
+    @apply type-ui-strong;
+  }
+
+  .ac-inventory__count {
+    font-weight: 400;
+    color: var(--text-quaternary);
+    font-variant-numeric: tabular-nums;
   }
 
   .ac-inventory__grid {
-    display: flex;
-    flex-wrap: wrap;
-    gap: var(--space-2);
+    display: grid;
+    grid-column: 1 / -1;
+    grid-template-columns: subgrid;
+    row-gap: var(--space-4);
     margin: 0;
     padding: 0;
     list-style: none;
+  }
+
+  /* Coarse pointer: EntitySlot grows the 40 slot to the 44 touch target. */
+  @media (pointer: coarse) {
+    .ac-inventory {
+      --inventory-slot: var(--size-touch);
+    }
   }
 }

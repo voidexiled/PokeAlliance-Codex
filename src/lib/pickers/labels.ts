@@ -22,6 +22,21 @@ export interface PickerLabels {
   noMatches: string;
   /** «Cerrar» / «Close» */
   close: string;
+  /** «Elegir» / «Choose»: the button of the detail pane. Without it the pane has no button. */
+  choose?: string;
+  /** «Enter elige · Esc cierra» / «Enter chooses · Esc closes»: the strip under the pane. */
+  keysHint?: string;
+  /**
+   * «Máx. {max}: quita uno primero.» / «Max {max}: remove one first.»: the tooltip of a filter
+   * slot dimmed by the filter's maximum (`{n}` works too).
+   */
+  maxHint?: string;
+  /** «Limpiar» / «Clear»: top-right of a filter menu with a value. */
+  menuClear?: string;
+  /** «{n} de {max}» / «{n} of {max}»: next to the name of a filter menu with a maximum. */
+  ofMax?: string;
+  /** «y» / «and»: joins the values of an `all` filter in its token («Tipo [A] y [B]»). */
+  and?: string;
 }
 
 export function fill(template: string, values: Record<string, string | number>): string {

@@ -37,6 +37,7 @@ import {
   type PokedexData,
   type PokedexElementRef,
   type PokedexIds,
+  type TierMeta,
   type PokedexItemRef,
   type PokedexOption,
   type PokedexRow,
@@ -205,33 +206,53 @@ export function pokedexElements(
   });
 }
 
-/** Where a special tier goes among the others: the order of 8.0.6, the unknown ones after. */
+/**
+ * Where a special tier goes on the Tier ladder (plan «Dirección C»): best first — the reverse
+ * of the order of 8.0.6, Mythic, Legendary, Ultra Rare, Super Rare — the unknown ones after.
+ */
 function specialRank(id: string): number {
   const rank = SPECIAL_TIERS.indexOf(id);
-  return rank < 0 ? SPECIAL_TIERS.length : rank;
+  return rank < 0 ? SPECIAL_TIERS.length : SPECIAL_TIERS.length - 1 - rank;
+}
+
+/** The `TierMeta` of a stored tier: the registry's fields, or a visible tier with no data. */
+function tierMetaOf(
+  tier: NonNullable<PokedexRow['tier']>,
+  info?: (tier: PokedexRow['tier']) => TierMeta | null | undefined,
+): TierMeta {
+  const found = info?.(tier);
+  return found
+    ? { nombre: found.nombre, maxBrokes: found.maxBrokes, visible: found.visible }
+    : { nombre: formatTier(tier), maxBrokes: null, visible: true };
 }
 
 /**
  * The values each filter of the list accepts (8.0.6, U3), from every record of the registry:
  * a generation, a tier or a variant no record has is not an option, and U4 drops it from the
- * URL. The elements are the registry's, all of them (8.2).
+ * URL. The elements are the registry's, all of them (8.2). `info` is `tierInfo` of the tiers
+ * registry: a hidden tier is no option of «Tier» (its rows show «—»); without it every tier
+ * is visible, with its `formatTier` name and no «Max brokes».
  */
 export function pokedexIds(
   records: readonly PokedexRow[],
   elements: PokedexData['refs']['elementos'],
+  info?: (tier: PokedexRow['tier']) => TierMeta | null | undefined,
 ): PokedexIds {
   const generations = new Set<number>();
   const numbered = new Map<number, PokedexOption>();
   const special = new Map<string, PokedexOption>();
   const variants = new Set<string>();
   const movesetIds = new Set<string>();
+  const tierMeta: Record<string, TierMeta> = {};
   for (const record of records) {
     if (record.generacion !== null) generations.add(record.generacion);
     const tier = tierId(record.tier);
     if (tier !== null && record.tier !== null) {
+      const meta = (tierMeta[tier] ??= tierMetaOf(record.tier, info));
+      // A hidden tier keeps its data but is no option (ULTIMATE for now).
       const option: PokedexOption = [tier, formatTier(record.tier)];
-      if (typeof record.tier === 'number') numbered.set(record.tier, option);
-      else special.set(tier, option);
+      if (meta.visible && typeof record.tier === 'number') numbered.set(record.tier, option);
+      else if (meta.visible) special.set(tier, option);
     }
     variants.add(record.variante);
     if (record.elementoMoveset != null) movesetIds.add(record.elementoMoveset);
@@ -243,14 +264,16 @@ export function pokedexIds(
   ]);
   return {
     generations: [...generations].sort(ascending).map(String),
+    // The Tier ladder, best to worst: the named tiers, then T1 … T7.
     tiers: [
-      ...[...numbered.entries()].sort(([a], [b]) => a - b).map(([, option]) => option),
       ...[...special.values()].sort(([a], [b]) => specialRank(a) - specialRank(b)),
+      ...[...numbered.entries()].sort(([a], [b]) => a - b).map(([, option]) => option),
     ],
     elements: elementOptions,
     // §16.2.2: only the elements at least one record's moveset names, in element order.
     movesets: elementOptions.filter(([id]) => movesetIds.has(id)),
     variants: VARIANTS.filter((variant) => variants.has(variant)),
+    tierMeta,
   };
 }
 

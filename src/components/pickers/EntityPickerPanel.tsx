@@ -1,7 +1,6 @@
 import { useEffect, useId, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import type { KeyboardEvent, ReactNode, RefObject } from 'react';
 
-import { ChipChoice } from '@/components/controls/ChipChoice';
 import { EntitySlotFace, entitySlotClasses } from '@/components/game/EntitySlot';
 import { GameTooltip } from '@/components/game/GameTooltip';
 import { fill } from '@/lib/pickers/labels';
@@ -13,12 +12,18 @@ import {
   isGridKey,
   toggleValue,
 } from '@/lib/pickers/model';
-import type { ActiveFilters, PickerOption } from '@/lib/pickers/model';
+import type { ActiveFilters, FilterModes, PickerOption } from '@/lib/pickers/model';
 
 import type { EntityPickerProps } from './EntityPicker';
+import { PickerFilterBar } from './PickerFilterBar';
 
-// The panel of EntityPicker (spec 16.3.2), loaded with import() on first open. From 768 it is a
-// popover anchored to the trigger by @floating-ui/dom; below, a full-screen bottom sheet (CSS).
+// The panel of EntityPicker (spec 16.3.2, `Lienzo:Selector-Pokemon`), loaded with import() on
+// first open. From 768 it is a popover anchored to the trigger by @floating-ui/dom; below, a
+// full-screen bottom sheet (CSS). Left: the search and its close, the Direction C filter bar
+// (menu buttons, the result count, the active filter tokens; PickerFilterBar) and the slot grid
+// (no tier badge on a slot). Right, from 1280: the docked detail pane, the
+// game tooltip of the slot under the pointer, the active one or the chosen one, with the
+// «Elegir» button and the keyboard strip.
 // Keyboard: arrows move between slots (row and column), Home/End, PageUp/PageDown, Enter or
 // Space choose, typing goes to the search, Esc closes and returns the focus to the trigger.
 
@@ -30,7 +35,6 @@ interface PanelProps extends Omit<EntityPickerProps, 'options'> {
 }
 
 const BATCH = 120;
-const SLOT = 48;
 const GAP = 4;
 const NONE_ID = '';
 
@@ -44,6 +48,7 @@ export default function EntityPickerPanel({
   filters = [],
   layout = 'grid',
   held,
+  slotSize = 48,
   locale,
   labels,
   hint,
@@ -66,13 +71,21 @@ export default function EntityPickerPanel({
   const baseId = useId();
 
   const all = useMemo(() => options ?? [], [options]);
-  const results = useMemo(() => filterOptions(all, query, active), [all, query, active]);
   const shownFilters = useMemo(
     () =>
       (typeof filters === 'function' ? filters(all) : filters).filter(
         (filter) => filter.options.length >= 2,
       ),
     [filters, all],
+  );
+  const modes = useMemo(() => {
+    const byId: Record<string, 'any' | 'all'> = {};
+    for (const filter of shownFilters) if (filter.match) byId[filter.id] = filter.match;
+    return byId as FilterModes;
+  }, [shownFilters]);
+  const results = useMemo(
+    () => filterOptions(all, query, active, modes),
+    [all, query, active, modes],
   );
 
   // Cells of the listbox, row-major. `null` is a hole of the held matrix; NONE_ID is «none».
@@ -112,7 +125,7 @@ export default function EntityPickerPanel({
               size({
                 padding: 8,
                 apply({ availableHeight }) {
-                  panel.style.maxHeight = `${Math.max(280, Math.min(480, availableHeight))}px`;
+                  panel.style.maxHeight = `${Math.max(280, Math.min(560, availableHeight))}px`;
                 },
               }),
             ],
@@ -143,12 +156,13 @@ export default function EntityPickerPanel({
   useLayoutEffect(() => {
     const list = listRef.current;
     if (!list || matrix) return;
-    const measure = () => setCols(Math.max(1, Math.floor((list.clientWidth + GAP) / (SLOT + GAP))));
+    const measure = () =>
+      setCols(Math.max(1, Math.floor((list.clientWidth + GAP) / (slotSize + GAP))));
     measure();
     const observer = new ResizeObserver(measure);
     observer.observe(list);
     return () => observer.disconnect();
-  }, [matrix]);
+  }, [matrix, slotSize]);
 
   // Paint the rest of the grid in batches as the sentinel scrolls into view.
   useEffect(() => {
@@ -230,12 +244,15 @@ export default function EntityPickerPanel({
     }
   }
 
-  const detail =
-    all.find((option) => option.id === hover) ?? (cursor >= 0 ? cells[cursor] : null) ?? null;
   const chosen = value
     .map((id) => all.find((option) => option.id === id))
     .filter((option): option is PickerOption => option !== undefined);
   const count = results.length;
+  const detail =
+    all.find((option) => option.id === hover) ??
+    (cursor >= 0 ? cells[cursor] : null) ??
+    chosen[0] ??
+    null;
 
   function slot(option: PickerOption, index: number) {
     const selected = option.id === NONE_ID ? value.length === 0 : value.includes(option.id);
@@ -257,7 +274,7 @@ export default function EntityPickerPanel({
         }}
       >
         <span
-          className={entitySlotClasses(48, {
+          className={entitySlotClasses(slotSize, {
             selected,
             unavailable: option.unavailable,
             none: option.id === NONE_ID,
@@ -266,10 +283,10 @@ export default function EntityPickerPanel({
           <EntitySlotFace
             sprite={option.sprite}
             locale={locale}
-            size={48}
+            size={slotSize}
             none={option.id === NONE_ID}
             shiny={option.shiny}
-            tier={option.tier}
+            art={option.tip.head.type === 'art'}
             check={multiple && selected}
           />
         </span>
@@ -288,8 +305,8 @@ export default function EntityPickerPanel({
       className={matrix ? 'ac-picker__matrix' : 'ac-picker__grid'}
       style={
         matrix
-          ? { gridTemplateColumns: `minmax(96px, max-content) repeat(${columns}, ${SLOT}px)` }
-          : undefined
+          ? { gridTemplateColumns: `minmax(96px, max-content) repeat(${columns}, ${slotSize}px)` }
+          : { gridTemplateColumns: `repeat(auto-fill, ${slotSize}px)` }
       }
       onKeyDown={onListKey}
       onFocus={() => {
@@ -325,6 +342,9 @@ export default function EntityPickerPanel({
     </div>
   );
 
+  const setFilter = (id: string, next: string[]) => setActive((was) => ({ ...was, [id]: next }));
+  const filtered = hasActiveFilters(active) || query !== '';
+
   return (
     <>
       <div className="ac-picker__scrim" aria-hidden="true" onClick={onClose} />
@@ -340,100 +360,84 @@ export default function EntityPickerPanel({
           }
         }}
       >
-        <div className="ac-picker__head">
-          <input
-            ref={searchRef}
-            type="search"
-            className="ac-picker__search"
-            placeholder={labels.search}
-            aria-label={labels.search}
-            value={query}
-            onChange={(event) => setQuery(event.target.value)}
-            onKeyDown={onSearchKey}
-          />
-          <span className="ac-picker__count" role="status">
-            {options ? fill(labels.results, { n: count }) : ''}
-          </span>
-          <button
-            type="button"
-            className="ac-picker__close"
-            aria-label={labels.close}
-            onClick={onClose}
-          >
-            <span aria-hidden="true" />
-          </button>
-        </div>
-
-        {shownFilters.length > 0 ? (
-          <div className="ac-picker__filters">
-            {shownFilters.map((filter) => (
-              <ChipChoice
-                key={filter.id}
-                label={filter.label}
-                options={filter.options}
-                value={active[filter.id] ?? []}
-                onChange={(next) => setActive((was) => ({ ...was, [filter.id]: next }))}
+        <div className="ac-picker__main">
+          <div className="ac-picker__head">
+            <label className="ac-picker__search-box">
+              <span className="ac-picker__search-icon" aria-hidden="true" />
+              <input
+                ref={searchRef}
+                type="search"
+                className="ac-picker__search"
+                placeholder={labels.search}
+                aria-label={labels.search}
+                value={query}
+                onChange={(event) => setQuery(event.target.value)}
+                onKeyDown={onSearchKey}
               />
-            ))}
-            {hasActiveFilters(active) ? (
-              <button type="button" className="ac-picker__link" onClick={() => setActive({})}>
-                {labels.clearFilters}
-              </button>
-            ) : null}
-          </div>
-        ) : null}
-
-        {multiple ? (
-          <div className="ac-picker__tray">
-            <span className="ac-picker__tray-count">
-              {fill(labels.selectedCount, { n: chosen.length })}
-            </span>
-            <ul className="ac-picker__tray-slots">
-              {chosen.map((option) => (
-                <li key={option.id}>
-                  <button
-                    type="button"
-                    className={entitySlotClasses(40, { className: 'ac-picker__tray-slot' })}
-                    aria-label={fill(labels.removeItem, { name: option.name })}
-                    title={fill(labels.removeItem, { name: option.name })}
-                    onClick={() => onChange(value.filter((id) => id !== option.id))}
-                  >
-                    <EntitySlotFace
-                      sprite={option.sprite}
-                      locale={locale}
-                      size={40}
-                      shiny={option.shiny}
-                    />
-                    <span className="ac-picker__tray-x" aria-hidden="true" />
-                  </button>
-                </li>
-              ))}
-            </ul>
-            <button type="button" className="ac-picker__done" onClick={onClose}>
-              {labels.done}
+            </label>
+            <button
+              type="button"
+              className="ac-picker__close"
+              aria-label={labels.close}
+              onClick={onClose}
+            >
+              <span aria-hidden="true" />
             </button>
           </div>
-        ) : null}
 
-        <div className="ac-picker__body">
+          <PickerFilterBar
+            filters={shownFilters}
+            active={active}
+            onChange={setFilter}
+            onClearAll={() => {
+              setActive({});
+              setQuery('');
+            }}
+            filtered={filtered}
+            count={options ? fill(labels.results, { n: count }) : ''}
+            labels={labels}
+            orLabel={orLabel}
+          />
+
+          {multiple ? (
+            <div className="ac-picker__tray">
+              <span className="ac-picker__tray-count">
+                {fill(labels.selectedCount, { n: chosen.length })}
+              </span>
+              <ul className="ac-picker__tray-slots">
+                {chosen.map((option) => (
+                  <li key={option.id}>
+                    <button
+                      type="button"
+                      className={entitySlotClasses(40, { className: 'ac-picker__tray-slot' })}
+                      aria-label={fill(labels.removeItem, { name: option.name })}
+                      title={fill(labels.removeItem, { name: option.name })}
+                      onClick={() => onChange(value.filter((id) => id !== option.id))}
+                    >
+                      <EntitySlotFace
+                        sprite={option.sprite}
+                        locale={locale}
+                        size={40}
+                        shiny={option.shiny}
+                        art={option.tip.head.type === 'art'}
+                      />
+                      <span className="ac-picker__tray-x" aria-hidden="true" />
+                    </button>
+                  </li>
+                ))}
+              </ul>
+              <button type="button" className="ac-picker__done" onClick={onClose}>
+                {labels.done}
+              </button>
+            </div>
+          ) : null}
+
           <div className="ac-picker__scroll">
             {options === null ? (
               <div className="ac-picker__skeleton" aria-busy="true" />
             ) : count === 0 ? (
               <div className="ac-picker__empty">
                 <p>{labels.noMatches}</p>
-                {hasActiveFilters(active) || query ? (
-                  <button
-                    type="button"
-                    className="ac-picker__link"
-                    onClick={() => {
-                      setActive({});
-                      setQuery('');
-                    }}
-                  >
-                    {labels.clearFilters}
-                  </button>
-                ) : null}
               </div>
             ) : (
               listbox
@@ -442,20 +446,37 @@ export default function EntityPickerPanel({
               <div ref={sentinelRef} className="ac-picker__sentinel" />
             ) : null}
           </div>
-          <aside className="ac-picker__detail">
-            {detail && detail.id !== NONE_ID ? (
-              <GameTooltip
-                tip={detail.tip}
-                variant="sheet"
-                locale={locale}
-                hint={hint}
-                ariaLabel={detail.name}
-                shinyLabel={shinyLabel}
-                orLabel={orLabel}
-              />
-            ) : null}
-          </aside>
         </div>
+
+        <aside className="ac-picker__detail" aria-live="polite">
+          {detail && detail.id !== NONE_ID ? (
+            <>
+              <div className="ac-picker__detail-tip">
+                <GameTooltip
+                  tip={detail.tip}
+                  variant="sheet"
+                  locale={locale}
+                  hint={labels.keysHint ? undefined : hint}
+                  ariaLabel={detail.name}
+                  shinyLabel={shinyLabel}
+                  orLabel={orLabel}
+                />
+              </div>
+              {labels.choose && !detail.unavailable ? (
+                <div className="ac-picker__detail-action">
+                  <button
+                    type="button"
+                    className="ac-picker__choose"
+                    onClick={() => choose(detail)}
+                  >
+                    {labels.choose}
+                  </button>
+                </div>
+              ) : null}
+            </>
+          ) : null}
+          {labels.keysHint ? <p className="ac-picker__keys">{labels.keysHint}</p> : null}
+        </aside>
       </div>
     </>
   );

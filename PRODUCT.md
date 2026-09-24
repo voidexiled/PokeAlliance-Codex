@@ -10,7 +10,7 @@ Jugadores nuevos, activos y avanzados de PokeAlliance que necesitan resolver una
 
 ## Product Purpose
 
-Alliance Codex convierte información dispersa de PokeAlliance en una base de conocimiento bilingüe, conectada e interactiva. Su prioridad es permitir encontrar una respuesta correcta y accionable con el menor esfuerzo posible, sin inventar mecánicas de Pokémon tradicional y sin obligar al jugador a inspeccionar el proceso editorial que sostiene cada dato.
+PokeAlliance Wiki convierte información dispersa de PokeAlliance en una base de conocimiento bilingüe, conectada e interactiva. Su prioridad es permitir encontrar una respuesta correcta y accionable con el menor esfuerzo posible, sin inventar mecánicas de Pokémon tradicional y sin obligar al jugador a inspeccionar el proceso editorial que sostiene cada dato.
 
 El producto reúne wiki, mapa y herramientas en un solo sistema. El éxito no se mide por el número de páginas, sino por cobertura real, relaciones útiles entre entidades y rapidez de consulta.
 

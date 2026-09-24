@@ -18,6 +18,9 @@ import { normalize } from '@/lib/search/normalize';
 //       last one and a page under 1 becomes 1; the upper bound needs the rows, so
 //       `applyListState` applies it and returns the canonical state.
 //   U6. The view is the URL's; without one, the saved view; without that, `defaultView`.
+//   U7. `porPagina` (after `view`, before `page`) is the rows per page of the view, one of
+//       the options `config.perPage` gives that view; absent or invalid, the view's default.
+//       A list without `perPage` does not own the parameter.
 //
 // PR4 is here as well: `pendingScript` writes, from the same configuration, the inline
 // classic script that hides a list whose URL state differs from the prerendered one
@@ -66,7 +69,24 @@ export interface ListFilter<T> {
    * absent from the URL (`?elemento=` still read as `?tipo=`). Never written back.
    */
   aliasKeys?: readonly string[];
+  /**
+   * How the values of a `multi` filter combine: `any` (the default) keeps a row that matches
+   * one of them (OR), `all` a row that matches every one (AND: «Tipo», a Pokémon with both
+   * chosen types).
+   */
+  match?: 'any' | 'all';
+  /** Most values a `multi` filter keeps; the first ones of the URL win (Tipo: 2). */
+  max?: number;
 }
+
+/** The rows-per-page choice of one view (U7): its options, ascending, and its default. */
+export interface PerPageSpec {
+  options: readonly number[];
+  default: number;
+}
+
+/** The URL key of the rows per page (U7). */
+export const PER_PAGE_KEY = 'porPagina';
 
 /**
  * The configuration of one list (7.7.1). The root of the island declares it in its module,
@@ -77,8 +97,13 @@ export interface ListConfig<T> {
   id: string;
   /** Prefix of the parameters when the page carries another list (U1). */
   prefix?: string;
-  /** Rows per page, fixed by the section of the list; `Infinity` for a list with no pages. */
+  /**
+   * Rows per page, fixed by the section of the list; `Infinity` for a list with no pages. A
+   * view with a `perPage` entry takes its rows from there instead (U7).
+   */
   pageSize: number;
+  /** The rows-per-page choices by view (U7); a view without an entry keeps `pageSize`. */
+  perPage?: Partial<Record<EntityView, PerPageSpec>>;
   /** The orders; `[0]` is the default one. */
   sorts: readonly ListSort<T>[];
   filters: readonly ListFilter<T>[];
@@ -108,6 +133,8 @@ export interface ListState {
   page: number;
   /** Validated filter values by key; a filter without a value is absent. */
   filters: Record<string, string>;
+  /** Rows per page chosen for `view` (U7); absent means the view's default. */
+  perPage?: number;
 }
 
 /** A group of the page, in the order of `groupOrder` (V2, V3). */
@@ -141,9 +168,41 @@ export function paramName<T>(config: ListConfig<T>, key: string): string {
 
 /** Every parameter the list owns, in the order of U1. */
 export function ownParams<T>(config: ListConfig<T>): string[] {
-  return ['q', ...config.filters.map((filter) => filter.key), 'sort', 'view', 'page'].map((key) =>
-    paramName(config, key),
-  );
+  const perPage = config.perPage ? [PER_PAGE_KEY] : [];
+  return [
+    'q',
+    ...config.filters.map((filter) => filter.key),
+    'sort',
+    'view',
+    ...perPage,
+    'page',
+  ].map((key) => paramName(config, key));
+}
+
+/** The rows-per-page spec of a view (U7), or `undefined` when the view has a fixed size. */
+export function perPageSpec<T>(config: ListConfig<T>, view: EntityView): PerPageSpec | undefined {
+  if (config.unpagedViews?.includes(view)) return undefined;
+  return config.perPage?.[view];
+}
+
+/** `value` when it is one of the options of `view` and not its default (U7), else `undefined`. */
+export function perPageValue<T>(
+  config: ListConfig<T>,
+  view: EntityView,
+  value: unknown,
+): number | undefined {
+  const spec = perPageSpec(config, view);
+  const size = typeof value === 'string' && /^\d{1,4}$/.test(value) ? Number(value) : value;
+  if (spec === undefined || typeof size !== 'number') return undefined;
+  return spec.options.includes(size) && size !== spec.default ? size : undefined;
+}
+
+/** The rows a page of `state` shows: `Infinity` in an unpaged view (U7, §16.4.3). */
+export function pageSizeOf<T>(config: ListConfig<T>, state: Pick<ListState, 'view' | 'perPage'>) {
+  if (config.unpagedViews?.includes(state.view)) return Infinity;
+  const spec = config.perPage?.[state.view];
+  if (spec === undefined) return config.pageSize;
+  return perPageValue(config, state.view, state.perPage) ?? spec.default;
 }
 
 /** Whether a value read from the URL or from storage is one of the three views (U3, U6). */
@@ -173,9 +232,10 @@ export function filterValues<T>(filter: ListFilter<T>, raw: string): string | un
     return filterValue(filter.values, raw);
   }
   const seen = new Set<string>();
+  const max = filter.max ?? Infinity;
   for (const part of raw.split(',')) {
     const value = filterValue(filter.values, part);
-    if (value !== undefined) seen.add(value);
+    if (value !== undefined && seen.size < max) seen.add(value);
   }
   return seen.size === 0 ? undefined : [...seen].join(',');
 }
@@ -230,6 +290,11 @@ export function parseListState<T>(
   if (allowed(view)) state.view = view;
   else if (allowed(savedView)) state.view = savedView;
 
+  if (config.perPage) {
+    const perPage = perPageValue(config, state.view, read(PER_PAGE_KEY));
+    if (perPage !== undefined) state.perPage = perPage;
+  }
+
   const page = read('page');
   if (page !== null && /^\d{1,9}$/.test(page)) state.page = Math.max(1, Number(page));
 
@@ -258,6 +323,8 @@ export function serializeListState<T>(config: ListConfig<T>, state: ListState): 
     write('sort', state.sort);
   }
   if (state.view !== defaults.view && isView(state.view)) write('view', state.view);
+  const perPage = perPageValue(config, state.view, state.perPage);
+  if (perPage !== undefined) write(PER_PAGE_KEY, String(perPage));
 
   const page = Math.floor(state.page);
   if (page > 1) write('page', String(page));
@@ -289,7 +356,13 @@ function sameFilters(a: Record<string, string>, b: Record<string, string>): bool
 
 /** Whether two states select the same rows on the same page, whatever their view. */
 export function sameResultSet(a: ListState, b: ListState): boolean {
-  return a.q === b.q && a.sort === b.sort && a.page === b.page && sameFilters(a.filters, b.filters);
+  return (
+    a.q === b.q &&
+    a.sort === b.sort &&
+    a.page === b.page &&
+    a.perPage === b.perPage &&
+    sameFilters(a.filters, b.filters)
+  );
 }
 
 /** Whether two states are the same, view included. */
@@ -329,7 +402,7 @@ function groupItems<T>(config: ListConfig<T>, items: T[]): ListGroup<T>[] {
 }
 
 function cut<T>(config: ListConfig<T>, ordered: readonly T[], total: number, state: ListState) {
-  const pageSize = config.unpagedViews?.includes(state.view) ? Infinity : config.pageSize;
+  const pageSize = pageSizeOf(config, state);
   const pageCount = pageCountOf(pageSize, total);
   const page = Math.min(Math.max(1, Math.floor(state.page) || 1), pageCount);
   const size = Math.floor(pageSize);
@@ -373,7 +446,10 @@ export function applyListState<T>(
     const value = raw === undefined ? undefined : filterValues(filter, raw);
     if (value !== undefined) {
       const wanted = filter.multi ? value.split(',') : [value];
-      result = result.filter((item) => wanted.some((one) => filter.test(item, one)));
+      result =
+        filter.match === 'all'
+          ? result.filter((item) => wanted.every((one) => filter.test(item, one)))
+          : result.filter((item) => wanted.some((one) => filter.test(item, one)));
     }
   }
 
@@ -435,6 +511,12 @@ export function pendingScript<T>(config: ListConfig<T>, pageCount: number): stri
     checks.push(
       `x=g("sort");if(${json(config.sorts.map((option) => option.id))}.indexOf(x)>0)d=1;`,
     );
+  }
+  // U7: another valid size of the default view; any other view is pending by itself.
+  const sizes = perPageSpec(config, config.defaultView ?? 'cards');
+  const other = sizes?.options.filter((size) => size !== sizes.default) ?? [];
+  if (other.length > 0) {
+    checks.push(`if(${json(other.map(String))}.indexOf(g(${json(PER_PAGE_KEY)}))>-1)d=1;`);
   }
   checks.push(
     `x=g("view");if(!w.test(x))try{x=localStorage.getItem(${json(VIEW_STORAGE_PREFIX + config.id)})}catch(e){x=null}` +

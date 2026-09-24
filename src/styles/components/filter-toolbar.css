@@ -1,0 +1,239 @@
+/* Per-component sheet (§13.6): imported by FilterToolbar.tsx and PerPageSelect.tsx.
+
+   The filter toolbar of plan «Dirección C» (boards Main, Pokedex-Cards, Pokedex-movil,
+   Tier-list): one calm row — the search field, then one 40 px button per filter (radius 11, the
+   darkest surface, flat greys, no inset shadow) whose only mark of a value is a small count —
+   and under it, 12 apart, the active filters as 32 px rounded tokens that spell their rule,
+   with «Limpiar filtros» at the end. On a phone the search takes its own row and the buttons,
+   44 tall, wrap. */
+
+@layer properties, theme, base, components, utilities;
+
+@reference '../theme.css';
+
+@layer components {
+  .ac-filter-toolbar {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-12);
+    min-width: 0;
+  }
+
+  .ac-filter-toolbar__row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-8);
+    min-width: 0;
+  }
+
+  /* Search: fills what the buttons leave. */
+  .ac-filter-search {
+    display: flex;
+    flex: 1 1 0;
+    align-items: center;
+    gap: var(--space-8);
+    min-width: 12rem; /* sin token: ancho mínimo del campo antes de pasar a su propia fila */
+    height: var(--size-control);
+    padding: 0 var(--space-12);
+    border: 1px solid var(--border-secondary);
+    border-radius: var(--radius-11);
+    background: var(--bg-primary);
+    color: var(--text-tertiary);
+  }
+
+  .ac-filter-search:focus-within {
+    border-color: var(--border-primary);
+    outline: 2px solid var(--ring);
+    outline-offset: 2px;
+  }
+
+  .ac-filter-search__input {
+    flex: 1;
+    min-width: 0;
+    height: 100%;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    color: var(--text-primary);
+    @apply type-body;
+    outline: none;
+  }
+
+  .ac-filter-search__input::placeholder {
+    color: var(--text-quaternary);
+  }
+
+  .ac-filter-search__input::-webkit-search-cancel-button {
+    appearance: none;
+  }
+
+  /* A filter button and its menu. */
+  .ac-filter-menu-anchor {
+    position: relative;
+    flex: none;
+  }
+
+  .ac-filter-button {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-8);
+    height: var(--size-control);
+    padding: 0 var(--space-10) 0 var(--space-12);
+    border: 1px solid var(--border-secondary);
+    border-radius: var(--radius-11);
+    background: var(--bg-primary);
+    color: var(--text-primary);
+    font-family: var(--font-sans);
+    @apply type-ui-strong;
+    white-space: nowrap;
+    cursor: pointer;
+  }
+
+  .ac-filter-button:hover {
+    background: var(--bg-tertiary);
+  }
+
+  .ac-filter-button[data-active] {
+    border-color: var(--border-primary);
+  }
+
+  .ac-filter-button[aria-expanded='true'] {
+    border-color: var(--border-primary);
+    background: var(--bg-tertiary);
+  }
+
+  .ac-filter-button:focus-visible {
+    outline: 2px solid var(--ring);
+    outline-offset: 2px;
+  }
+
+  .ac-filter-button__count {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: var(--space-20);
+    height: var(--space-20);
+    padding: 0 var(--space-6);
+    border-radius: var(--radius-full);
+    background: var(--bg-tertiary);
+    color: var(--text-primary);
+    @apply type-ui-strong;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .ac-filter-button[aria-expanded='true'] .ac-filter-button__count {
+    background: var(--bg-quaternary);
+  }
+
+  .ac-filter-button__chevron {
+    opacity: var(--opacity-chevron);
+  }
+
+  /* Active filter tokens. */
+  .ac-filter-tokens {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-8);
+  }
+
+  .ac-filter-token {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-8);
+    height: var(--size-cell);
+    padding: 0 var(--space-4) 0 var(--space-12);
+    border-radius: var(--radius-full);
+    background: var(--bg-tertiary);
+    color: var(--text-secondary);
+    @apply type-ui;
+    white-space: nowrap;
+  }
+
+  .ac-filter-token__values {
+    display: flex;
+    align-items: center;
+    gap: var(--space-4);
+  }
+
+  .ac-filter-token__joiner {
+    color: var(--text-tertiary);
+  }
+
+  .ac-filter-token__value {
+    color: var(--text-primary);
+    font-weight: 700;
+  }
+
+  .ac-filter-token__icon {
+    display: block;
+    flex: none;
+    width: 24px; /* sin token: sprite de elemento del token */
+    height: 24px; /* sin token: sprite de elemento del token */
+  }
+
+  .ac-filter-token__remove {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px; /* sin token: botón «×» del token */
+    height: 24px; /* sin token: botón «×» del token */
+    padding: 0;
+    border: 0;
+    border-radius: var(--radius-full);
+    background: transparent;
+    color: var(--text-tertiary);
+    cursor: pointer;
+  }
+
+  .ac-filter-token__remove:hover {
+    background: var(--bg-quaternary);
+    color: var(--text-primary);
+  }
+
+  .ac-filter-tokens__clear {
+    height: var(--size-cell);
+    margin-left: var(--space-4);
+    padding: 0;
+    border: 0;
+    background: transparent;
+    color: var(--text-secondary);
+    @apply type-ui;
+    cursor: pointer;
+  }
+
+  .ac-filter-tokens__clear:hover {
+    text-decoration: underline;
+  }
+
+  .ac-filter-token__remove:focus-visible,
+  .ac-filter-tokens__clear:focus-visible {
+    outline: 2px solid var(--ring);
+    outline-offset: 2px;
+  }
+
+  /* PerPageSelect sits with the order select in the results bar. */
+  .ac-per-page {
+    flex: none;
+  }
+
+  /* Phone: the search on its own row, 44 px buttons that wrap. */
+  @media (width < 48rem) {
+    .ac-filter-search {
+      flex-basis: 100%;
+      height: var(--size-touch);
+    }
+
+    .ac-filter-button {
+      height: var(--size-touch);
+    }
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .ac-filter-button,
+    .ac-filter-token__remove {
+      transition: background-color var(--duration-fast) var(--ease-standard);
+    }
+  }
+}

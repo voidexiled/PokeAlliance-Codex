@@ -1,3 +1,5 @@
+import '@/styles/components/results-bar.css';
+
 import { useLayoutEffect, useMemo, useRef } from 'react';
 import type { MouseEvent, ReactNode } from 'react';
 
@@ -93,6 +95,8 @@ export interface EntityListProps<T> {
    * and `controller.setSort` (V6). Required then; a list with one order has none.
    */
   sort?: ReactNode;
+  /** The `PerPageSelect` of a list with a rows-per-page choice (U7), before the `ViewToggle`. */
+  perPage?: ReactNode;
   /** Name of the view group when the page has another list («Vista de drops»). */
   viewLabel?: string;
   /** Name of the pagination when the page has another one. */
@@ -111,6 +115,7 @@ export function EntityList<T>({
   views,
   controls,
   sort,
+  perPage,
   viewLabel,
   paginationLabel,
   paginationAlign = 'start',
@@ -219,6 +224,7 @@ export function EntityList<T>({
         {failed ? null : <Count>{count(page.total, page.state)}</Count>}
         <div className="ac-entity-list__tools">
           {sorted ? sort : null}
+          {perPage}
           <ViewToggle
             labels={labels.views}
             ariaLabel={viewLabel ?? labels.views.label}

@@ -41,6 +41,18 @@
   --color-tt-muted: var(--tt-muted);
   --color-tt-hint: var(--tt-hint);
   --color-tt-shiny: var(--tt-shiny);
+  --color-tier-row-mythic: var(--tier-row-mythic);
+  --color-tier-row-legendary: var(--tier-row-legendary);
+  --color-tier-row-ultra-rare: var(--tier-row-ultra-rare);
+  --color-tier-row-super-rare: var(--tier-row-super-rare);
+  --color-tier-row-t1: var(--tier-row-t1);
+  --color-tier-row-t2: var(--tier-row-t2);
+  --color-tier-row-t3: var(--tier-row-t3);
+  --color-tier-row-t4: var(--tier-row-t4);
+  --color-tier-row-t5: var(--tier-row-t5);
+  --color-tier-row-t6: var(--tier-row-t6);
+  --color-tier-row-t7: var(--tier-row-t7);
+  --color-shiny-glow: var(--shiny-glow);
   --color-tier-ultimate: var(--tier-ultimate);
   --color-tier-mythic: var(--tier-mythic);
   --color-tier-legendary: var(--tier-legendary);
@@ -56,6 +68,7 @@
 
   /* Sombras */
   --shadow-ring-selected: var(--ring-selected);
+  --shadow-glow-shiny: var(--glow-shiny);
   --shadow-inset-missing: var(--inset-missing);
   --shadow-inset-tt-empty: var(--inset-tt-empty);
 }

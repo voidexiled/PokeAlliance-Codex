@@ -17,6 +17,7 @@ Guía para editar a mano los datos del juego que usa el sitio: categorías e ite
 | `public/sprites/`                | Las imágenes, en carpetas por tipo                                  |
 | `public/sprites/sprites.json`    | El registro de sprites: qué imagen usa cada clave y cómo se recorta |
 | `content/pokemon.json`           | Los 910 Pokémon y variantes de la Pokédex                           |
+| `content/tiers.json`             | Los 12 tiers: nombre, orden, «Max brokes» y si el tier se muestra   |
 | `content/elementos.json`         | Los 18 elementos: nombre en los dos idiomas, icono, Stone, Fragment |
 | `content/moves.json`             | Movimientos                                                         |
 | `content/quests.json`            | Actividades (misiones): una página por actividad                    |
@@ -326,6 +327,16 @@ Estos archivos siguen las mismas reglas comunes; VS Code muestra qué va en cada
 ### Jerarquía de tiers (§16.2.1)
 
 Del mejor al peor: **ULTIMATE, Mythic, Legendary, Ultra Rare, Super Rare, T1, T2, T3, T4, T5, T6, T7.** `$defs.tierEspecial` de `content/schemas/pokemon.schema.json` los guarda de menor a mayor (Super Rare → ULTIMATE); `src/lib/content/tier-rank.ts` (equipo UI) lee esa lista para `tierRank`, `compareTierRank` y el orden de la Tier list, del filtro «Tier» y de `PokemonPicker`. Un tier especial nuevo se añade solo en el `enum` de `tierEspecial`, en su posición en la jerarquía; el código no lo repite en ningún otro archivo.
+
+### Registro de tiers (`content/tiers.json`, §16.2.1)
+
+Un registro por tier, en el mismo orden de la jerarquía de arriba: `ultimate`, `mythic`, `legendary`, `ultra-rare`, `super-rare`, `t1`…`t7`. El esquema (`content/schemas/tiers.schema.json`) exige los 12, en ese orden exacto; no se añaden ni se quitan tiers desde este archivo — un tier nuevo del juego se añade primero en `$defs.tierEspecial` de `pokemon.schema.json` (arriba) y después aquí, en su posición.
+
+- `id`, `nombre` y `orden` no se tocan: son los 12 fijos de la jerarquía. `nombre` es el nombre del juego tal cual (`"ULTIMATE"`, `"Mythic"`… `"T1"`), igual en los dos idiomas.
+- `maxBrokes`: el máximo de brokes del tier, un entero. Se rellena a mano cuando se conoce el dato; mientras no se conoce va `null` (nunca `0`, que significaría «cero brokes»). Lo muestra la tira de filtros y el valor «Tier» de las Cards y de la Lista, en su tooltip («Max brokes: —» hasta que este campo tiene un número).
+- `visible`: `false` saca el tier de la Tier list y de las opciones del filtro «Tier», sin tocar sus datos — los Pokémon de ese tier siguen existiendo y su ficha sigue mostrando su tier. Hoy solo `ultimate` está en `false`, porque ULTIMATE todavía no se usa en la Tier list. Para que ULTIMATE vuelva a aparecer, cambia su `"visible"` a `true`; no hace falta tocar ningún otro archivo.
+- `pnpm content:check` exige que cada `tier` de `content/pokemon.json` tenga su registro aquí (el mismo id que calcula `tierKey` de `tier-rank.ts`); un tier sin registro es un error, no un borrador.
+
 - `content/map/floors.json` lo escribe `node scripts/map/extract-otmm-preview.mjs <archivo .otmm>`. `ancho` y `alto` son el tamaño real de la imagen del piso.
 
 ## Comprobar los cambios
@@ -344,6 +355,7 @@ Revisa todos los archivos y muestra un resumen por archivo con el número de reg
 - que `umbrales` y `duracionMs` tienen un valor por frame y que los umbrales van de menor a mayor;
 - que los Pokémon de `outfits.json` y `moves.json` existen en `content/pokemon.json`;
 - que ningún Pokémon tiene el `id` `tiers` (es la dirección de la Tier list);
+- que están los 12 tiers de `content/tiers.json`, en su orden fijo, y que el `tier` de cada Pokémon tiene su registro ahí;
 - en `pokemon.json`: que cada item de `drops` y de `evolucion` existe y no se repite, que `cantidad.max` no es menor que `cantidad.min`, que cada `evolucion[].a` existe, que ninguna cadena de evolución es circular y que cada `ref` de `donde` existe;
 - que cada elemento usado en `pokemon.json` y `moves.json` tiene nombre en los dos idiomas;
 - en `destacados.json`: que cada `ruta` es una página que el sitio publica y no se repite, y que una entrada publicada no lleva a un sistema en borrador;

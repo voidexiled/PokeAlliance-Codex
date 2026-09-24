@@ -1362,7 +1362,7 @@ test('CA-9.19: el h1 y el <title> del detalle de un anuncio de Pokédólares lle
     await page.goto(`/${locale}/comercio/anuncio/${POKEDOLARES_LISTING.id}/`);
     const exact = formatPokedolaresLabel(POKEDOLARES_LISTING.cantidad ?? null, locale);
     await expect(page.getByRole('heading', { level: 1 })).toHaveAccessibleName(exact);
-    await expect(page).toHaveTitle(`${exact} · Alliance Codex`);
+    await expect(page).toHaveTitle(`${exact} · PokeAlliance Wiki`);
   }
 });
 

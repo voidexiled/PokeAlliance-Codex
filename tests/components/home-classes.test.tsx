@@ -185,12 +185,12 @@ const tip: TipData = {
 const CASES: Record<string, Record<string, Render>> = {
   HomeIntro: {
     sprite: astro(HomeIntro, {
-      title: 'Bienvenido a Alliance Codex',
+      title: 'Bienvenido a PokeAlliance Wiki',
       description: 'Línea',
       sprite: { src: '/sprites/prueba-16.png', size: [16, 16] },
     }),
     'no sprite': astro(HomeIntro, {
-      title: 'Bienvenido a Alliance Codex',
+      title: 'Bienvenido a PokeAlliance Wiki',
       description: 'Línea',
       sprite: null,
     }),

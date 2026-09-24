@@ -1,6 +1,6 @@
-# Alliance Codex
+# PokeAlliance Wiki
 
-Alliance Codex is a community wiki and tools foundation for PokeAlliance. The project is built on Astro, React islands, Tailwind CSS v4, Supabase contracts and Temporal-based time handling.
+PokeAlliance Wiki is a community wiki and tools foundation for PokeAlliance. The project is built on Astro, React islands, Tailwind CSS v4, Supabase contracts and Temporal-based time handling.
 
 ## Local development
 

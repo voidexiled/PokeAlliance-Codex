@@ -9,6 +9,7 @@ import destacadosJsonSchema from '@content/schemas/destacados.schema.json';
 import elementosJsonSchema from '@content/schemas/elementos.schema.json';
 import itemsJsonSchema from '@content/schemas/items.schema.json';
 import sistemasJsonSchema from '@content/schemas/sistemas.schema.json';
+import tiersJsonSchema from '@content/schemas/tiers.schema.json';
 import { z } from 'zod';
 
 import { spriteDirections, spriteModes } from '@/lib/sprites/resolve';
@@ -271,6 +272,50 @@ export const elementosFileSchema = z.strictObject({
           context.addIssue({
             code: 'custom',
             message: `Aquí va el elemento "${expected}".`,
+            path: [index, 'id'],
+          });
+      });
+    }),
+});
+
+/**
+ * The 12 tiers of spec 16.2.1 in their order, best first, read from tiers.schema.json (the only
+ * place that lists them, position by position): ULTIMATE, Mythic, Legendary, Ultra Rare,
+ * Super Rare, T1…T7. src/lib/content/tier-rank.ts sorts a Pokémon's `tier` by this same order.
+ */
+export const tierIds = tiersJsonSchema.properties.tiers.prefixItems.map(
+  (entry) => entry.properties.id.const,
+);
+
+/**
+ * One record of content/tiers.json (§16.2.1): `nombre` is the canonical game name, the same in
+ * both locales (D-012 keeps canonical names in English, never translated); `maxBrokes` is `null`
+ * until the owner fills it, never `0` as a stand-in for "unknown"; `visible` hides ULTIMATE from
+ * the Tier list and the Tier filter without removing its record, so a Pokémon of that tier still
+ * resolves one.
+ */
+export const tierSchema = z.strictObject({
+  id: z.custom<(typeof tierIds)[number]>((value) => tierIds.includes(value as string), {
+    message: `Debe ser uno de: ${tierIds.join(', ')}.`,
+  }),
+  nombre: text,
+  orden: z.number().int().min(1).max(tierIds.length),
+  maxBrokes: z.number().int().min(0).nullable(),
+  visible: z.boolean(),
+});
+
+export const tiersFileSchema = z.strictObject({
+  $schema: schemaRef,
+  tiers: z
+    .array(tierSchema)
+    .length(tierIds.length)
+    .superRefine((tiers, context) => {
+      tiers.forEach((tier, index) => {
+        const expected = tierIds[index];
+        if (expected !== undefined && tier.id !== expected)
+          context.addIssue({
+            code: 'custom',
+            message: `Aquí va el tier "${expected}".`,
             path: [index, 'id'],
           });
       });
@@ -610,6 +655,8 @@ export type OutfitRecord = z.infer<typeof outfitSchema>;
 export type AuraShader = (typeof auraShaders)[number];
 export type Aura = z.infer<typeof auraSchema>;
 export type Elemento = z.infer<typeof elementoSchema>;
+/** One record of content/tiers.json (§16.2.1). */
+export type TierRecord = z.infer<typeof tierSchema>;
 export type SystemItem = z.infer<typeof systemItemSchema>;
 /** `Texto` of §3.13. */
 export type Texto = z.infer<typeof texto>;

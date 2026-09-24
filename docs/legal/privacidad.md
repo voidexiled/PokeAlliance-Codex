@@ -1,4 +1,4 @@
-# Política de privacidad de Alliance Codex
+# Política de privacidad de PokeAlliance Wiki
 
 > **BORRADOR** para que el propietario lo revise (D-B7, §9.13). No se publica hasta que el propietario lo apruebe. Está escrito a partir de las decisiones de §9.15 y §9.16 de la especificación y no es asesoría legal. Lo que va entre corchetes lo decide o lo completa el propietario.
 
@@ -6,7 +6,7 @@ Versión: 2026-09-23.
 
 ## 1. Responsable
 
-[Nombre o alias del responsable], contacto: [correo de contacto]. Alliance Codex es un proyecto independiente, no afiliado a PokeAlliance.
+[Nombre o alias del responsable], contacto: [correo de contacto]. PokeAlliance Wiki es un proyecto independiente, no afiliado a PokeAlliance.
 
 ## 2. Qué datos se tratan y para qué
 

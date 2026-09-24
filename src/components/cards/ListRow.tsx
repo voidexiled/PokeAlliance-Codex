@@ -2,6 +2,7 @@ import { isValidElement } from 'react';
 import type { HTMLAttributes, ReactNode } from 'react';
 
 import { NestedEntity } from '@/components/game/NestedEntity';
+import { PokemonArt } from '@/components/game/ShinyMark';
 import type { Locale } from '@/i18n/config';
 import { formatInteger } from '@/lib/format/numbers';
 import { UNKNOWN, present } from '@/lib/format/unknown';
@@ -32,6 +33,10 @@ import type { TipData } from '@/lib/game/tips';
 //     a table that put the number in `cells` would print it under the «Nombre» header.
 //     Only text goes there: a lead cell never holds another entity (TT10).
 //   - `defaultOpen` is a preview prop and is not implemented (DP5).
+//   - `art` (plan «Shiny» and «?»): the Pokémon art of the sprite cell, drawn by this row at
+//     40 — the golden glow when shiny, the client Pokédex «?» without art or when it fails —
+//     so the Lista draws a Pokémon exactly as its slot and its card do. The Tier and element
+//     cells of the Pokédex Lista are `TierValue` and `ElementIcon`, passed in `cells`.
 //
 // The whole row is never a link and never a trigger (7.5.10): the name is.
 
@@ -51,6 +56,11 @@ interface ListRowBaseProps extends Omit<HTMLAttributes<HTMLTableRowElement>, 'ch
    * (Pokédex), or inside the 48 box of a listing with `frame`.
    */
   sprite?: ReactNode;
+  /**
+   * Pokémon art for the sprite cell, drawn at 40 with `PokemonArt`: the URL
+   * (`resolvePokemonImage`) or `null` for the «?», and the Shiny glow. It replaces `sprite`.
+   */
+  art?: { src: string | null; shiny?: boolean; loading?: 'lazy' | 'eager' };
   /** `framed`: the 48 box of a listing, with its frame and stack count. `box`: the same box unframed. */
   frame?: 'framed' | 'box';
   /** Stack count in the framed box; 0 and an empty text draw nothing. */
@@ -134,8 +144,12 @@ function Cell({ cell }: { cell: ReactNode | ListRowCell }) {
   );
 }
 
+/** Size of the Pokémon art in the sprite cell (the 40 of the row). */
+const ART = 40;
+
 export function ListRow({
   sprite,
+  art: pokemon,
   frame,
   qty,
   name,
@@ -182,7 +196,12 @@ export function ListRow({
   }
 
   // `framed`: the 48 listing box with its stack count; `box`: the same box without a frame.
-  let art: ReactNode = sprite;
+  let art: ReactNode =
+    pokemon === undefined ? (
+      sprite
+    ) : (
+      <PokemonArt src={pokemon.src} size={ART} shiny={pokemon.shiny} loading={pokemon.loading} />
+    );
   if (frame === 'framed' || frame === 'box') {
     const count = typeof qty === 'number' ? formatInteger(qty, locale) : qty;
     const stack = qty === undefined || qty === null || qty === '' || qty === 0 ? null : count;
@@ -191,7 +210,7 @@ export function ListRow({
         className={frame === 'framed' ? 'ac-list-row__frame' : 'ac-list-row__box'}
         aria-hidden="true"
       >
-        {sprite}
+        {art}
         {frame === 'framed' && stack !== null ? (
           <span className="ac-list-row__qty">{stack}</span>
         ) : null}

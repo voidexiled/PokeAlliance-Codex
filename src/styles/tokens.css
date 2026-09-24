@@ -78,6 +78,18 @@
     --tt-muted: #9aa0a8;
     --tt-hint: #8a91a0;
     --tt-shiny: #4a9eff;
+    --tier-row-mythic: #4b252b;
+    --tier-row-legendary: #4b3025;
+    --tier-row-ultra-rare: #4b3c25;
+    --tier-row-super-rare: #4b4625;
+    --tier-row-t1: #3e4b25;
+    --tier-row-t2: #284b25;
+    --tier-row-t3: #254b3b;
+    --tier-row-t4: #25484b;
+    --tier-row-t5: #25384b;
+    --tier-row-t6: #25284b;
+    --tier-row-t7: #32254b;
+    --shiny-glow: #e8c66a;
     --tier-ultimate: #ff6b6b;
     --tier-mythic: #f0abfc;
     --tier-legendary: #fbbf24;
@@ -107,6 +119,7 @@
 
     /* Sombras y anillos */
     --ring-selected: 0 0 0 1px #d97706;
+    --glow-shiny: drop-shadow(0 0 1.5px rgba(232, 198, 106, 0.95)) drop-shadow(0 0 6px rgba(232, 198, 106, 0.55));
     --inset-missing: inset 0 0 0 1px #373a41;
     --inset-tt-empty: inset 0 0 0 1px #2e343d;
 
@@ -148,6 +161,7 @@
     --size-tt-narrow: 240px;
     --size-tt-wide: 300px;
     --size-tt-chart: 200px;
+    --size-tt-tier: 184px;
     --size-bar: 24px;
     --size-plot: 220px;
     --size-spark-w: 68px;

@@ -1,15 +1,17 @@
 import '@/styles/components/tier-badge.css';
 import '@/styles/components/tier-rows.css';
 
-import { Suspense, lazy, useCallback, useEffect, useMemo, useState } from 'react';
-import type { CSSProperties, ReactNode } from 'react';
+import { useCallback, useEffect, useId, useMemo, useState } from 'react';
+import type { ReactNode } from 'react';
 
-import { CardGrid } from '@/components/cards/CardGrid';
-import { CardGroup } from '@/components/cards/CardGroup';
-import { DexCard } from '@/components/cards/DexCard';
-import type { DexCardDrop, DexCardEntry, DexCardLabels } from '@/components/cards/DexCard';
+import type { DexCardDrop, DexCardEntry } from '@/components/cards/DexCard';
 import { EmptyState } from '@/components/content/EmptyState';
 import type { ElementChipEntry } from '@/components/game/ElementChip';
+import { FilterToolbar } from '@/components/filters/FilterToolbar';
+import { PerPageSelect } from '@/components/filters/PerPageSelect';
+import { filterText } from '@/components/filters/text';
+import type { FilterText } from '@/components/filters/text';
+import { TierTip } from '@/components/filters/TierTip';
 import { EntitySlot } from '@/components/game/EntitySlot';
 import { EntityList } from '@/components/lists/EntityList';
 import type { EntityListLabels } from '@/components/lists/EntityList';
@@ -18,7 +20,7 @@ import type { ListController } from '@/components/lists/useListState';
 import {
   decodePokedex,
   decodeRefs,
-  tierId,
+  pokedexFilterDefs,
   type PokedexData,
   type PokedexRow,
   type PokedexRows,
@@ -34,6 +36,7 @@ import type { DexLayout } from '@/lib/cards/layout';
 import { formatTier } from '@/lib/content/format';
 import { resolvePokemonImage } from '@/lib/content/pokemon-media';
 import { formatInteger } from '@/lib/format/numbers';
+import { pageSizeOf, perPageSpec } from '@/lib/lists/state';
 import type { EntityView, ListPage, ListState } from '@/lib/lists/state';
 import type { SpriteData } from '@/lib/sprites/resolve';
 
@@ -60,22 +63,19 @@ import type { SpriteData } from '@/lib/sprites/resolve';
 // whose element has Stone or Fragment becomes its trigger (R2). The static chip and the
 // trigger have the same geometry (element-chip.css), so nothing moves.
 //
-// Filters (§16.4.3): the chips of the Pokédex (../pokedex/PokedexFilters.tsx) without «Tier»:
-// the rows are the tiers. A filter with fewer than two values is not drawn (C-R5).
+// Filters (§16.4.3, plan «Dirección C»): the `FilterToolbar` of the Pokédex without the search
+// and without «Tier»: the rows are the tiers. A filter with fewer than two values is not drawn
+// (C-R5).
 //
-// «Ranuras» (default, §16.4.3) is the classic tier list: one row per tier, best first, and
-// every filtered Pokémon with no pages; Cards and Lista keep 48 a page.
+// «Slots» (default, §16.4.3) is the classic tier list: one row per visible tier, best first,
+// and every filtered Pokémon with no pages; Lista has the rows per page of U7. A hidden tier
+// (ULTIMATE for now) is no row (`tiersRows`).
 //
 // Views (7.7.4, 8.8 step 5). The page is cut first and grouped by tier after (CGS 2.1):
-//   - Cards: one `CardGroup level={2}` per tier of the page, titled with `formatTier` and
-//     the number of its cards on this page, each with its `CardGrid family="pokedex"` of
-//     `DexCard` whose titles are h3 (7.6.2). Each grid takes the union of its own cards
-//     (7.6.3: the keys of a grid are the ones its cards have).
-//   - Slots: `SlotsPanel layout="stacked"` with one group per tier, from the deferred
-//     views of the Pokédex (../pokedex/PokedexViews.tsx), titled with the tier.
+//   - Slots: the classic tier list (`tierRows`), one row per visible tier, best first.
 //   - Lista: one `DataTable` with the caption «Tier list» — the h1 — and the columns of 8.2,
 //     from the same deferred views; its Tier column names the group of each row.
-//   The three views show the same 48 variants and, inside each tier, in the same order
+//   Both views show the same variants and, inside each tier, in the same order
 //   (TL4, S4), because they all read the same page. Every view gives each row the anchor
 //   `pokemon-{id}` (H7).
 
@@ -178,8 +178,37 @@ function groupTitle(rows: readonly PokedexRow[]): string {
   return formatTier(rows[0]?.tier);
 }
 
-/** The filter chips (§16.4.2), a chunk of their own that the server still renders (13.6). */
-const PokedexFilters = lazy(() => import('@/components/pokedex/PokedexFilters'));
+interface TierLabelProps {
+  tierKey: string;
+  name: string;
+  count: string;
+  maxBrokes: number | null;
+  text: FilterText;
+}
+
+/**
+ * The label cell of a tier row (plan board Tier-list): the tier's name with a dotted underline
+ * over the count, on the row colour of its tier; hover or focus shows the tier tooltip at its
+ * right («LEGENDARY · Max brokes: —»).
+ */
+function TierLabel({ tierKey, name, count, maxBrokes, text }: TierLabelProps) {
+  const tipId = useId();
+  return (
+    <h2 className={`ac-tier-rows__label ac-tier-rows__label--${tierKey}`}>
+      <button type="button" className="ac-tier-rows__trigger" aria-describedby={tipId}>
+        <span className="ac-tier-rows__name">{name}</span>
+        <span className="ac-tier-rows__count">{count}</span>
+        <TierTip
+          id={tipId}
+          name={name}
+          maxBrokes={maxBrokes}
+          label={text.maxBrokes}
+          placement="right"
+        />
+      </button>
+    </h2>
+  );
+}
 
 // --------------------------------------------------------------------- the deferred part
 //
@@ -224,13 +253,17 @@ export function TiersRoot({
   // `refs` of `datos.json` and every row of it, taken when they arrive (PR5): the «Drop de»
   // of an item is the inverse of the `drops` of every Pokémon, the ones without a tier too.
   const [refs, setRefs] = useState<(PokedexData['refs'] & { rows: PokedexRow[] }) | null>(null);
-  const decode = useCallback((json: unknown) => {
-    const rows = decodePokedex(json);
-    setRefs({ ...decodeRefs(json), rows });
-    return tiersRows(rows);
-  }, []);
+  // A tier the registry hides (ULTIMATE for now) is no row of this list (`tiersRows`).
+  const decode = useCallback(
+    (json: unknown) => {
+      const rows = decodePokedex(json);
+      setRefs({ ...decodeRefs(json), rows });
+      return tiersRows(rows, ids.tierMeta);
+    },
+    [ids.tierMeta],
+  );
   const config = useMemo(() => tiersConfig(dataUrl, ids, locale), [dataUrl, ids, locale]);
-  const items = useMemo(() => tiersRows(decodePokedex(data)), [data]);
+  const items = useMemo(() => tiersRows(decodePokedex(data), ids.tierMeta), [data, ids.tierMeta]);
   const controller = useListState(config, { items, total, decode, path });
   const page = controller.page;
   const shown = page.items;
@@ -322,41 +355,11 @@ export function TiersRoot({
 
   const anchor = (row: PokedexRow) => config.anchorId?.(row);
 
-  // The union of the cards (7.6.3), a `useMemo` over the page after filtering and paginating:
-  // one per tier group, the keys of each grid being the ones its own cards have, and one for
-  // the whole page, the columns of the Lista.
-  const [pageLayout, groupLayouts] = useMemo(() => {
-    const layoutOf = (rows: readonly PokedexRow[]): DexLayout =>
-      dexLayout(rows.map((row) => dexEntry(row, locale, rowElements(row, byId), byItem)));
-    return [
-      layoutOf(page.items),
-      new Map(page.groups.map((group) => [group.key, layoutOf(group.items)])),
-    ] as const;
-  }, [page, locale, byId, byItem]);
-
-  const dexLabels: DexCardLabels = {
-    ...ui.cards,
-    requirement: ui.tooltip.requirement,
-    level: ui.tooltip.level,
-    tier: ui.tooltip.tier,
-    moveset: pokedex.moveset,
-    role: ui.tooltip.role,
-    shiny: ui.shiny,
-  };
-
-  // ------------------------------------------------------------------------------ filters
-  const text = pokedex.filters;
-  // §16.4.2 and §16.4.3: the chips of the Pokédex, several values each, without «Tier».
-  const controls = (
-    <Suspense fallback={null}>
-      <PokedexFilters
-        ids={ids}
-        filters={filters}
-        onChange={controller.setFilter}
-        text={text}
-        normalLabel={ui.cards.normal}
-      />
-    </Suspense>
+  // The union of the page (7.6.3), a `useMemo` over the page after filtering and paginating:
+  // the columns of the Lista.
+  const pageLayout: DexLayout = useMemo(
+    () => dexLayout(page.items.map((row) => dexEntry(row, locale, rowElements(row, byId), byItem))),
+    [page, locale, byId, byItem],
   );
 
   const lazy = (index: number) => (index >= EAGER_ART ? 'lazy' : undefined);
@@ -370,98 +373,65 @@ export function TiersRoot({
     elementsOf,
     anchor,
     lazy,
-    // Slots: one group per tier, titled with its tier (8.8 step 5).
-    groupLabel: (group) => groupTitle(group.items),
     // Lista: one table whatever the Variante, with the caption «Tier list» (8.8 step 5).
     caption: title,
   };
 
-  // The art is lazy from the fifth card of the page on, whatever its group (7.4.2).
-  const cards = (current: ListPage<PokedexRow>): ReactNode => {
-    const index = new Map(current.items.map((row, position) => [row.id, position]));
-    return current.groups.map((group) => (
-      <CardGroup
-        key={group.key}
-        label={groupTitle(group.items)}
-        count={group.items.length}
-        level={2}
-        locale={locale}
-      >
-        <CardGrid family="pokedex">
-          {group.items.map((row) => (
-            <DexCard
-              key={row.id}
-              id={anchor(row)}
-              entry={dexEntry(row, locale, elementsOf(row), byItem)}
-              layout={groupLayouts.get(group.key) ?? pageLayout}
-              labels={dexLabels}
-              locale={locale}
-              hint={ui.pinHint}
-              loading={lazy(index.get(row.id) ?? 0)}
-            />
-          ))}
-        </CardGrid>
-      </CardGroup>
-    ));
-  };
-
-  // §16.4.3: the classic tier list, one row per tier best first, the label cell in the colour
-  // of its `TierBadge` and the Pokémon slots flowing right. Every filtered row, no pages; the
-  // art from the fifth slot on loads lazily. The Pokémon panel comes with the deferred part.
+  // §16.4.3 and the plan's board Tier-list: the classic tier list, one row per visible tier best
+  // first, the label cell (`TierLabel`) on the row colour of its tier and the Pokémon slots
+  // flowing right. Every filtered row, no pages; the art from the fifth slot on loads lazily.
+  // The Pokémon panel comes with the deferred part.
   const tierRows = (current: ListPage<PokedexRow>): ReactNode => {
     let position = 0;
     return (
       <div className="ac-tier-rows">
-        {current.groups.map((group) => {
-          const tier = group.items[0]?.tier ?? null;
-          const key = tierId(tier) ?? group.key;
-          const cell = { '--tier-c': `var(--tier-${key})` } as CSSProperties;
-          return (
-            <section
-              key={group.key}
-              className="ac-tier-rows__row"
-              aria-label={groupTitle(group.items)}
-            >
-              <div className="ac-tier-rows__label" style={cell}>
-                <span className={`ac-tier-badge ac-tier-badge--${key}`}>
-                  {groupTitle(group.items)}
-                </span>
-              </div>
-              <ul className="ac-tier-rows__slots">
-                {group.items.map((row) => {
-                  const source = resolvePokemonImage(row.imagen);
-                  const index = position;
-                  position += 1;
-                  return (
-                    <li key={row.id} id={anchor(row)}>
-                      <EntitySlot
-                        size={56}
-                        name={row.nombre}
-                        sprite={
-                          source === null
-                            ? null
-                            : { src: source, smooth: true, loading: lazy(index) }
-                        }
-                        tip={later?.tipOf(row, context)}
-                        shiny={row.variante === 'shiny'}
-                        href={`/${locale}/pokedex/${row.id}/`}
-                        locale={locale}
-                        hint={ui.pinHint}
-                        shinyLabel={ui.shiny}
-                      />
-                    </li>
-                  );
-                })}
-              </ul>
-            </section>
-          );
-        })}
+        {current.groups.map((group) => (
+          <section
+            key={group.key}
+            className="ac-tier-rows__row"
+            aria-label={groupTitle(group.items)}
+          >
+            <TierLabel
+              tierKey={group.key}
+              name={groupTitle(group.items)}
+              count={formatInteger(group.items.length, locale)}
+              maxBrokes={ids.tierMeta[group.key]?.maxBrokes ?? null}
+              text={text}
+            />
+            <ul className="ac-tier-rows__slots">
+              {group.items.map((row) => {
+                const source = resolvePokemonImage(row.imagen);
+                const index = position;
+                position += 1;
+                return (
+                  <li key={row.id} id={anchor(row)}>
+                    <EntitySlot
+                      size={72}
+                      name={row.nombre}
+                      sprite={
+                        source === null ? null : { src: source, smooth: true, loading: lazy(index) }
+                      }
+                      art
+                      tip={later?.tipOf(row, context)}
+                      shiny={row.variante === 'shiny'}
+                      href={`/${locale}/pokedex/${row.id}/`}
+                      locale={locale}
+                      hint={ui.pinHint}
+                      shinyLabel={ui.shiny}
+                    />
+                  </li>
+                );
+              })}
+            </ul>
+          </section>
+        ))}
       </div>
     );
   };
 
+  // The Tier list has no Cards view (plan board Tier-list): `views` of its config leave it out.
   const views: Record<EntityView, (current: ListPage<PokedexRow>) => ReactNode> = {
-    cards,
+    cards: () => null,
     slots: tierRows,
     list: (current) => later?.pokedexList(current, context) ?? null,
   };
@@ -482,6 +452,39 @@ export function TiersRoot({
     return counted(template, n, locale);
   };
 
+  // ------------------------------------------------------------------------------ filters
+  // Plan «Dirección C» (board Tier-list): the filter buttons of the Pokédex without the search
+  // and without «Tier» — the rows are the tiers — and the active filter tokens under them.
+  const text = useMemo(() => filterText(ui), [ui]);
+  const filterDefs = useMemo(
+    () =>
+      pokedexFilterDefs(
+        ids,
+        { ...pokedex.filters, normal: ui.cards.normal, shiny: ui.shiny },
+        text,
+      ),
+    [ids, pokedex.filters, ui.cards.normal, ui.shiny, text],
+  );
+  const controls = (
+    <FilterToolbar
+      filters={filterDefs}
+      values={filters}
+      onChange={controller.setFilter}
+      onClearAll={controller.clearFilters}
+      text={text}
+      count={count(page.total, page.state)}
+    />
+  );
+  // U7: only Lista has pages (25/50/100); the tier rows draw every row.
+  const perPage = (
+    <PerPageSelect
+      label={text.perPage}
+      spec={perPageSpec(config, view)}
+      value={pageSizeOf(config, page.state)}
+      onChange={controller.setPerPage}
+    />
+  );
+
   // V7 and 8.8: with no match the bar stays and the one action goes back to the whole list.
   const empty = () =>
     later === undefined ? null : (
@@ -498,6 +501,7 @@ export function TiersRoot({
       empty={empty}
       views={views}
       controls={controls}
+      perPage={perPage}
       paginationAlign="center"
     />
   );

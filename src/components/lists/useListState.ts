@@ -13,11 +13,12 @@ import {
   VIEW_STORAGE_PREFIX,
   applyListState,
   defaultListState,
-  filterValue,
+  filterValues,
   firstListPage,
   isView,
   listSearch,
   pageCountOf,
+  pageSizeOf,
   paramName,
   parseListState,
   sameResultSet,
@@ -195,6 +196,8 @@ export interface ListController<T> {
   setSort: (id: string) => void;
   /** Saves the view (U6) and keeps the page (H3). */
   setView: (view: EntityView) => void;
+  /** The rows per page of the view (U7), `null` for its default; back to page 1. */
+  setPerPage: (size: number | null) => void;
   /** A new history entry (H1). */
   goToPage: (page: number) => void;
   /** Empties `q` and every filter; keeps the sort and the view (9.5.10). */
@@ -259,7 +262,11 @@ export function useListState<T>(
 
   const haveAll = complete || data.status === 'loaded';
   const rows = data.status === 'loaded' ? data.rows : items;
-  const canApply = haveAll || sameResultSet(resultState, defaults);
+  // U7: the prerendered rows are one page of the default size; another size needs them all.
+  const canApply =
+    haveAll ||
+    (sameResultSet(resultState, defaults) &&
+      pageSizeOf(config, resultState) === pageSizeOf(config, defaults));
   // Until the rows arrive, a state that needs them shows the first page in its view.
   const fallback = useMemo(
     () => ({ ...defaults, view: resultState.view }),
@@ -363,7 +370,7 @@ export function useListState<T>(
       const filter = config.filters.find((candidate) => candidate.key === key);
       if (filter === undefined) return;
       const filters = { ...latest.current.filters };
-      const valid = value === null ? undefined : filterValue(filter.values, value);
+      const valid = value === null ? undefined : filterValues(filter, value);
       if (valid === undefined) delete filters[key];
       else filters[key] = valid;
       writeUrl(config, { ...latest.current, filters, page: 1 }, 'replace');
@@ -382,11 +389,23 @@ export function useListState<T>(
   const setView = useCallback(
     (view: EntityView) => {
       saveView(config.id, view);
+      // U7: each view has its own sizes, so the choice starts again at the view's default,
+      // and a page of another size starts again at the first one.
+      const current = latest.current;
+      const next: ListState = { ...current, view, perPage: undefined };
+      if (pageSizeOf(config, next) !== pageSizeOf(config, current)) next.page = 1;
       // Back to the default view the URL may not change, and the saved view is then the
       // only thing that did: the stores still have to read it again.
-      if (!writeUrl(config, { ...latest.current, view }, 'replace')) {
+      if (!writeUrl(config, next, 'replace')) {
         window.dispatchEvent(new Event(URL_EVENT));
       }
+    },
+    [config],
+  );
+
+  const setPerPage = useCallback(
+    (size: number | null) => {
+      writeUrl(config, { ...latest.current, perPage: size ?? undefined, page: 1 }, 'replace');
     },
     [config],
   );
@@ -416,11 +435,12 @@ export function useListState<T>(
     page,
     ready,
     failed,
-    defaultPageCount: pageCountOf(config.pageSize, total),
+    defaultPageCount: pageCountOf(pageSizeOf(config, defaults), total),
     setQuery,
     setFilter,
     setSort,
     setView,
+    setPerPage,
     goToPage,
     clearFilters,
     hrefFor,

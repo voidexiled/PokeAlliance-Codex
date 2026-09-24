@@ -1,24 +1,27 @@
-/* EntitySlot sizes, states and corner marks (spec 16.3.1) and the sprite form of ShinyMark
-   (16.3.5). Per-component sheet (§13.6): EntitySlot.tsx and ShinyMark.tsx import it; the frame
-   itself stays in entity-slot.css of the shared sheet. */
+/* EntitySlot sizes, states and corner marks (spec 16.3.1), the sprite form of ShinyMark
+   (16.3.5) and the art of `PokemonArt`: the Shiny golden glow and the client Pokédex «?».
+   Per-component sheet (§13.6): EntitySlot.tsx and ShinyMark.tsx import it; the frame itself
+   stays in entity-slot.css of the shared sheet.
+
+   States (plan, Direction C): flat greys and no inset shadow. Hover is the one tint of
+   entity-slot.css (bg-tertiary); chosen is the amber ring, a 1 px `selected` border plus
+   `ring-selected` outside it, over the same flat background. */
 
 @layer properties, theme, base, components, utilities;
 
 @layer components {
+  /* Radius 8 on every slot of 40 and up (the boards' slot), 6 on the 32. */
   .ac-entity-slot {
     --slot-accent: var(--selected);
-    border-radius: var(--radius-4);
+    border-radius: var(--radius-8);
     background: var(--bg-primary);
     user-select: none;
-  }
-
-  .ac-entity-slot:hover {
-    border-color: var(--border-primary);
   }
 
   .ac-entity-slot--32 {
     width: var(--size-cell);
     height: var(--size-cell);
+    border-radius: var(--radius-6);
   }
   .ac-entity-slot--48 {
     width: 48px; /* sin token: pixel-exact game slot geometry */
@@ -33,14 +36,11 @@
     height: 64px; /* sin token: pixel-exact game slot geometry */
   }
 
-  /* Chosen: the accent frame and an inner glow, as the chosen slot of the game. */
+  /* Chosen: the amber ring (1 px border + ring-selected), flat, no inner glow. */
   .ac-entity-slot--selected,
   .ac-entity-slot--selected:hover {
     border-color: var(--slot-accent);
-    background: radial-gradient(circle at 50% 60%, var(--bg-tertiary), var(--bg-primary) 72%);
-    box-shadow:
-      inset 0 0 0 1px var(--slot-accent),
-      inset 0 0 10px var(--bg-tertiary);
+    box-shadow: var(--ring-selected);
   }
 
   /* Not available: dimmed sprite and the padlock in the centre. */
@@ -140,9 +140,52 @@
     right: 2px;
   }
 
+  /* Shiny (plan): a golden glow on the art itself, a tight 1.5 px rim at 95 % and a 6 px
+     halo at 55 %. It replaces the corner mark on slots, cards, rows and tooltip heads; the
+     word «Shiny» stays in the facts and in the accessible name. */
+  .ac-shiny-glow {
+    filter: var(--glow-shiny);
+  }
+
+  /* The client Pokédex «?» (ui/pokemon-desconocido): an illustration of 140, drawn smooth at
+     three quarters of the art it stands for (48 in the 72 slot). */
+  .ac-unknown-art {
+    display: block;
+    flex: none;
+    max-width: none;
+    image-rendering: auto;
+  }
+
+  /* The «?» that waits behind a remote art: hidden until art-loading.ts marks the art
+     `error`, then centred in the box, which carries `position: relative`. */
+  .ac-unknown-art--fallback {
+    position: absolute;
+    inset: 0;
+    display: none;
+    margin: auto;
+  }
+  .ac-sprite--smooth[data-state='error'] ~ .ac-unknown-art--fallback {
+    display: block;
+  }
+
+  /* With the «?» in place, the box draws no missing mark of its own (sprite-stage.css). */
+  :is(.ac-sprite-stage, .ac-entity-slot, .ac-game-tooltip__art, .ac-list-row__sprite-in):has(
+      > .ac-sprite--smooth[data-state='error'] ~ .ac-unknown-art--fallback
+    )::before {
+    content: none;
+  }
+
+  /* The tooltip art box is a block with the art placed absolutely: centre the «?» in it. */
+  .ac-game-tooltip__art > .ac-unknown-art {
+    position: absolute;
+    inset: 0;
+    margin: auto;
+  }
+
   @media (prefers-reduced-motion: no-preference) {
     .ac-entity-slot {
       transition:
+        background-color var(--duration-fast) var(--ease-standard),
         border-color var(--duration-fast) var(--ease-standard),
         box-shadow var(--duration-fast) var(--ease-standard);
     }

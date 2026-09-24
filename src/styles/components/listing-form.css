@@ -47,38 +47,122 @@
     min-width: 0;
   }
 
-  /* The form: its parts 24 apart. It is the container the field grids answer to, so they
-     follow the width of the column and not the one of the window (768 leaves the form 408
-     wide next to the preview). */
+  /* The form: its trays 16 apart, then the actions. */
   .ac-listing-form__form {
     display: flex;
     min-width: 0;
     flex-direction: column;
-    gap: var(--space-24);
-    container-name: ac-listing-form;
-    container-type: inline-size;
-  }
-
-  /* Fields of the asset, of an items listing and the world: one column, two from a column of
-     480, 16 apart. A wide field takes the whole row. */
-  .ac-listing-form__fields {
-    display: grid;
-    grid-template-columns: minmax(0, 1fr);
-    align-items: start;
     gap: var(--space-16);
   }
 
-  @container ac-listing-form (width >= 480px) {
-    .ac-listing-form__fields {
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-    }
+  /* A tray of `Lienzo:Crear-anuncio`: rows one line apart in a panel of radius 12. */
+  .ac-listing-form__tray {
+    min-width: 0;
+    padding: 0 var(--space-16);
+    border: 1px solid var(--border-secondary);
+    border-radius: var(--radius-12);
+    background: var(--bg-secondary);
   }
 
-  .ac-listing-form__wide {
-    grid-column: 1 / -1;
+  /* A row: the label column of 128 and the controls, centred on a line of at least 56. */
+  .ac-listing-form__row {
+    display: flex;
+    align-items: center;
+    min-width: 0;
+    min-height: 56px; /* sin token: a row of the tray */
+    padding: var(--space-8) 0;
+  }
+
+  .ac-listing-form__row + .ac-listing-form__row {
+    border-top: 1px solid var(--border-secondary);
+  }
+
+  .ac-listing-form__row--top {
+    align-items: flex-start;
+    padding: var(--space-12) 0;
+  }
+
+  .ac-listing-form__row-label {
+    display: flex;
+    flex: none;
+    flex-direction: column;
+    gap: var(--space-2);
+    width: 128px; /* sin token: the label column of the tray */
+    padding-right: var(--space-12);
+  }
+
+  .ac-listing-form__row-name {
+    color: var(--text-primary);
+    @apply type-ui-strong;
+  }
+
+  .ac-listing-form__row-hint {
+    color: var(--text-tertiary);
+    @apply type-ui;
+  }
+
+  .ac-listing-form__row-control {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    gap: var(--space-4);
+    min-width: 0;
+  }
+
+  /* The row names the control: the labels that the controls draw themselves are kept for
+     assistive technology only (Stepper, ChoiceTiles, ChipChoice). */
+  .ac-listing-form__row-control
+    :is(.ac-stepper__label, .ac-choice-tiles__label, .ac-chip-choice__label) {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+
+  /* Star Level keeps its label, inline after the Boost stepper. */
+  .ac-listing-form__row-control .ac-star-level {
+    flex-direction: row;
+    align-items: center;
+    gap: var(--space-12);
+  }
+
+  .ac-listing-form__row-control .ac-star-level__label {
+    color: var(--text-primary);
+    @apply type-ui-strong;
   }
 
   .ac-listing-form__field {
+    min-width: 0;
+  }
+
+  .ac-listing-form__field--slot {
+    width: min(100%, 312px); /* sin token: the slot trigger of the tray */
+  }
+
+  .ac-listing-form__field--narrow {
+    width: min(100%, 152px); /* sin token: a short figure of the tray */
+  }
+
+  /* Controls side by side on one row: Boost and Star Level, NPC Price and its amount. */
+  .ac-listing-form__inline {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-8) var(--space-32);
+    min-width: 0;
+  }
+
+  /* Held X, Held Y and Mega Stone: three triggers of one width, 8 apart. */
+  .ac-listing-form__held {
+    display: grid;
+    grid-template-columns: repeat(
+      3,
+      minmax(0, 152px)
+    ); /* sin token: the held trigger of the tray */
+    gap: var(--space-8);
     min-width: 0;
   }
 
@@ -89,64 +173,35 @@
     @apply type-ui-strong;
   }
 
-  /* Fieldsets without the user-agent frame. The legend of a part of the form («Precio»,
-     «Held Items», a training skill) is 14/22 700; the one of a sub-part («Dinero real», «En
-     el juego») is a label, 14/22. The content sits 8 under the legend, as a label sits over
-     its field. */
-  .ac-listing-form__set {
-    min-width: 0;
-    margin: 0;
-    padding: 0;
-    border: 0;
-  }
-
-  .ac-listing-form__legend {
-    margin: 0;
-    padding: 0;
-    color: var(--text-primary);
-    @apply type-body;
-  }
-
-  .ac-listing-form__legend--strong {
-    @apply type-body-strong;
-  }
-
-  .ac-listing-form__group {
-    display: flex;
-    min-width: 0;
-    flex-direction: column;
-    gap: var(--space-16);
-    padding-top: var(--space-8);
-  }
-
-  /* Two fields side by side at any width: the level and the progress of a skill, a held item and
-     its tier (`--tier`: the tier keeps the 160 of two digits and the steppers), and the currency
-     and the amount of a real price (`--money`: the currency keeps the width of the currency of
-     an in-game option, so the two amounts line up). */
+  /* The currency and the amount of a real price; the currency keeps the width of the currency
+     of an in-game option, so the two amounts line up. */
   .ac-listing-form__pair {
     display: grid;
     grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
     align-items: start;
-    gap: var(--space-16);
-  }
-
-  .ac-listing-form__pair--tier {
-    grid-template-columns: minmax(0, 1fr) calc(var(--size-control) * 4);
+    gap: var(--space-8);
+    max-width: 320px; /* sin token: the currency and the amount of the tray */
   }
 
   .ac-listing-form__pair--money {
     grid-template-columns: calc(var(--size-control) * 4) minmax(0, 1fr);
   }
 
-  /* An in-game price option: its currency, its amount and «Quitar opción». The button goes to
-     the next line when the column cannot hold the three. The currency and the amount carry
-     hidden labels (the legend «En el juego» names them), so the tops of the three line up. */
+  /* The in-game options: each its currency, its amount and «Quitar opción». */
+  .ac-listing-form__options {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--space-8);
+    min-width: 0;
+  }
+
   .ac-listing-form__option {
     display: flex;
     min-width: 0;
     flex-wrap: wrap;
     align-items: flex-start;
-    gap: var(--space-16);
+    gap: var(--space-8);
   }
 
   .ac-listing-form__option > .ac-listing-form__field:first-child {
@@ -155,16 +210,7 @@
   }
 
   .ac-listing-form__option > .ac-listing-form__field:nth-child(2) {
-    flex: 1 1 calc(var(--size-control) * 3);
-  }
-
-  /* NPC Price: the three choices, then the amount of «Importe» under them. */
-  .ac-listing-form__stack {
-    display: flex;
-    min-width: 0;
-    flex-direction: column;
-    align-items: stretch;
-    gap: var(--space-16);
+    flex: 0 1 152px; /* sin token: a short figure of the tray */
   }
 
   /* The exact figure of a Pokédólares amount, live under its field (9.7.3), inside the 12/16
@@ -177,59 +223,6 @@
     font-variant-numeric: tabular-nums;
   }
 
-  /* «Entrenamiento» folds (9.7.5: a section that opens when it holds the first error). The
-     summary keeps the geometry of the sidebar toggle: the chevron down while closed and up
-     while open, with no animation (DS:Sidebar). */
-  .ac-listing-form__fold {
-    min-width: 0;
-  }
-
-  .ac-listing-form__fold-summary {
-    display: flex;
-    min-height: var(--size-control);
-    align-items: center;
-    gap: var(--space-8);
-    color: var(--text-primary);
-    @apply type-body-strong;
-    cursor: pointer;
-    list-style: none;
-  }
-
-  .ac-listing-form__fold-summary::-webkit-details-marker {
-    display: none;
-  }
-
-  .ac-listing-form__fold-chevron {
-    display: block;
-    flex: none;
-    opacity: var(--opacity-chevron);
-  }
-
-  .ac-listing-form__fold-chevron--open {
-    display: none;
-  }
-
-  .ac-listing-form__fold[open]
-    > .ac-listing-form__fold-summary
-    .ac-listing-form__fold-chevron--open {
-    display: block;
-  }
-
-  .ac-listing-form__fold[open]
-    > .ac-listing-form__fold-summary
-    .ac-listing-form__fold-chevron--closed {
-    display: none;
-  }
-
-  /* The eight skills, one under another, 16 apart. */
-  .ac-listing-form__fold-body {
-    display: flex;
-    min-width: 0;
-    flex-direction: column;
-    gap: var(--space-16);
-    padding-top: var(--space-8);
-  }
-
   /* The action and what it answers: the Notice, and the read-only text when the copy fails. */
   .ac-listing-form__action {
     display: flex;
@@ -237,6 +230,7 @@
     flex-direction: column;
     align-items: flex-start;
     gap: var(--space-16);
+    padding-top: var(--space-8);
   }
 
   .ac-listing-form__action > .ac-notice,
@@ -244,39 +238,57 @@
     align-self: stretch;
   }
 
-  /* Touch (13.7, S14): the summary, which is the target, is at least `size-touch`. */
-  @media (pointer: coarse) {
-    .ac-listing-form__fold-summary {
-      min-height: var(--size-touch);
-    }
-  }
-}
-
-/* 16.4.4: the requirement and publish lines under the actions, and the compact training table
-   (skill, level stepper, progress, meter). */
-@layer components {
   .ac-listing-form__line {
     margin: 0;
     color: var(--text-secondary);
   }
 
-  .ac-listing-form__training {
-    min-width: 0;
-    margin: 0;
-    padding: 0;
-    border: 0;
-  }
-
+  /* The training table: skill, level stepper, progress and meter. */
   .ac-listing-form__train-table {
     width: 100%;
     border-collapse: collapse;
   }
 
+  .ac-listing-form__train-table thead th {
+    color: var(--text-tertiary);
+    font-weight: 400;
+    @apply type-ui;
+  }
+
+  .ac-listing-form__train-table tbody th {
+    color: var(--text-primary);
+    font-weight: 400;
+    @apply type-ui;
+  }
+
   .ac-listing-form__train-table th,
   .ac-listing-form__train-table td {
-    padding: var(--space-4) var(--space-8) var(--space-4) 0;
+    padding: var(--space-2) var(--space-8) var(--space-2) 0;
     text-align: start;
     vertical-align: middle;
+  }
+
+  /* Below 768 the label goes over its controls. */
+  @media (width < 48rem) {
+    .ac-listing-form__row {
+      flex-direction: column;
+      align-items: stretch;
+      gap: var(--space-8);
+    }
+
+    .ac-listing-form__row-label {
+      width: auto;
+      padding-right: 0;
+    }
+
+    .ac-listing-form__held {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .ac-listing-form__field--slot,
+    .ac-listing-form__field--narrow {
+      width: 100%;
+    }
   }
 
   @media (width < 48rem) {
@@ -293,6 +305,44 @@
 
     .ac-listing-form__train-table th[scope='row'] {
       grid-column: 1 / -1;
+    }
+  }
+
+  /* Plan «Crear anuncio»: ¿Qué vendes?, NPC Price and Mundo are one segmented box each — the
+     darkest surface, one border, radius 11, the options inside without borders and the chosen
+     one with the amber ring. ¿Qué vendes? fills its column with four equal options. */
+  .ac-listing-form .ac-listing-form__segmented .ac-toggle-group__items {
+    display: inline-flex;
+    gap: var(--space-4);
+    padding: var(--space-4);
+    border: 1px solid var(--border-secondary);
+    border-radius: var(--radius-11);
+    background: var(--bg-primary);
+  }
+
+  .ac-listing-form .ac-listing-form__segmented--fill .ac-toggle-group__items {
+    display: flex;
+  }
+
+  .ac-listing-form .ac-listing-form__segmented .ac-toggle-group__item {
+    height: calc(var(--size-control) - 2 * var(--space-4) - 2px);
+    border-color: transparent;
+  }
+
+  .ac-listing-form .ac-listing-form__segmented--fill .ac-toggle-group__item {
+    flex: 1 1 0;
+    justify-content: center;
+  }
+
+  .ac-listing-form .ac-listing-form__segmented .ac-toggle-group__item[aria-pressed='true'] {
+    border-color: var(--selected);
+  }
+
+  /* Phone: the four kinds are a 2 × 2 box, so no option spills out of it. */
+  @media (width < 48rem) {
+    .ac-listing-form .ac-listing-form__segmented--fill .ac-toggle-group__items {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
     }
   }
 }

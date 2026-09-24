@@ -78,3 +78,72 @@
   margin-bottom: var(--space-12);
   @apply type-ui-strong;
 }
+
+/* Inventory (plan «Slots», boards Main and Pokedex-movil): the slots end flush, as the game
+   inventory. A 1 px `border-secondary` frame, 4 between slots and the columns the panel has
+   room for, each a divisor of the 48 / 96 / 144 per page so a full page is full rows:
+   12 of 72 (908 = 12 × 72 + 11 × 4), 8 of 72 (604), 6 of 72 (452), 6 of 52 on a phone (332)
+   and 4 of 52 under that. The panel is the query container; the grid is centred in it. */
+.ac-slots-panel--inventory {
+  container: ac-slots-panel / inline-size;
+  border: 1px solid var(--border-secondary);
+}
+
+.ac-slots-panel--inventory:not(.ac-slots-panel--stacked) {
+  padding: var(--space-16);
+}
+
+.ac-slots-panel--inventory .ac-slots-panel__slots {
+  --inventory-slot: var(--size-stage);
+  display: grid;
+  grid-template-columns: repeat(6, var(--inventory-slot));
+  justify-content: center;
+  gap: var(--space-4);
+}
+
+@container ac-slots-panel (width >= 604px) {
+  .ac-slots-panel--inventory .ac-slots-panel__slots {
+    grid-template-columns: repeat(8, var(--inventory-slot));
+  }
+}
+
+@container ac-slots-panel (width >= 908px) {
+  .ac-slots-panel--inventory .ac-slots-panel__slots {
+    grid-template-columns: repeat(12, var(--inventory-slot));
+  }
+}
+
+/* Phone: the 72 slot becomes the 52 of the board, the art 44 and the «?» 34. */
+@container ac-slots-panel (width < 452px) {
+  .ac-slots-panel--inventory .ac-slots-panel__slots {
+    --inventory-slot: 52px; /* sin token: el slot de 52 del tablero Pokedex-movil */
+  }
+
+  .ac-slots-panel--inventory .ac-entity-slot--72 {
+    width: var(--inventory-slot);
+    height: var(--inventory-slot);
+  }
+
+  .ac-slots-panel--inventory .ac-entity-slot--72 > .ac-sprite--smooth {
+    width: var(--size-touch);
+    height: var(--size-touch);
+  }
+
+  .ac-slots-panel--inventory .ac-entity-slot--72 > .ac-unknown-art {
+    width: 34px; /* sin token: el «?» de 34 del tablero Pokedex-movil */
+    height: 34px; /* sin token: el «?» de 34 del tablero Pokedex-movil */
+  }
+}
+
+@container ac-slots-panel (width < 332px) {
+  .ac-slots-panel--inventory .ac-slots-panel__slots {
+    grid-template-columns: repeat(4, var(--inventory-slot));
+  }
+}
+
+/* The phone board's panel: 12 around the slots, so six of 52 fit a 390 screen. */
+@media (width < 48rem) {
+  .ac-slots-panel--inventory:not(.ac-slots-panel--stacked) {
+    padding: var(--space-12);
+  }
+}

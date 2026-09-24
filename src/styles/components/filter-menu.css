@@ -1,0 +1,294 @@
+/* Per-component sheet (§13.6): imported by FilterMenuPanel.tsx, the chunk a filter button loads
+   on its first open.
+
+   The menus of plan «Dirección C» (its «Desplegables abiertos» band): a dark panel 4 under its
+   button — padding 12, radius 12, one border — with the name and counter, «Limpiar» top-right,
+   the grey rule line and a menu of 40 px square slots like the Slots panel: the darkest surface,
+   one hover tint, the amber ring for a chosen slot, dimmed at a cap. The element grid is 6 × 3;
+   the Tier ladder two rows (named tiers, then T1 … T7) sharing the panel width; Variante and
+   Generación one row of text slots. On a phone the same content is a bottom sheet. */
+
+@layer properties, theme, base, components, utilities;
+
+@reference '../theme.css';
+
+@layer components {
+  .ac-filter-panel {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: var(--z-listbox);
+    width: max-content;
+    max-width: calc(100vw - 2 * var(--space-8)); /* sin token: margen del viewport */
+    padding: var(--space-12);
+    border: 1px solid var(--border-primary);
+    border-radius: var(--radius-12);
+    background: var(--bg-secondary);
+    color: var(--text-primary);
+  }
+
+  .ac-filter-panel--tiers {
+    width: 388px; /* sin token: ancho del menú Tier del plan (4 + 7 casillas) */
+  }
+
+  .ac-filter-panel__head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-8);
+    min-height: var(--space-16);
+  }
+
+  .ac-filter-panel__title {
+    margin: 0;
+    @apply type-ui-strong;
+  }
+
+  .ac-filter-panel__counter {
+    margin-left: var(--space-8);
+    color: var(--text-tertiary);
+    font-weight: 400;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .ac-filter-panel__clear {
+    padding: 0;
+    border: 0;
+    background: transparent;
+    color: var(--text-secondary);
+    @apply type-ui;
+    cursor: pointer;
+  }
+
+  .ac-filter-panel__clear:hover {
+    text-decoration: underline;
+  }
+
+  .ac-filter-panel__hint {
+    margin: var(--space-4) 0 0;
+    color: var(--text-tertiary);
+    @apply type-ui;
+  }
+
+  .ac-filter-panel__body {
+    margin-top: var(--space-12);
+  }
+
+  /* Slots. */
+  .ac-filter-grid--elements {
+    display: grid;
+    grid-template-columns: repeat(6, var(--size-control));
+    gap: var(--space-4);
+  }
+
+  .ac-filter-ladder {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+  }
+
+  .ac-filter-ladder__row {
+    display: grid;
+    gap: var(--space-4);
+  }
+
+  .ac-filter-segments {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-4);
+  }
+
+  .ac-filter-slot {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: var(--size-control);
+    height: var(--size-control);
+    border: 1px solid var(--border-secondary);
+    border-radius: var(--radius-8);
+    background: var(--bg-primary);
+    cursor: pointer;
+    user-select: none;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .ac-filter-slot {
+      transition: background-color var(--duration-fast) var(--ease-standard);
+    }
+  }
+
+  .ac-filter-slot--text {
+    padding: 0 var(--space-12);
+    color: var(--text-secondary);
+    @apply type-ui-strong;
+    white-space: nowrap;
+  }
+
+  .ac-filter-ladder .ac-filter-slot--text {
+    padding: 0 var(--space-4);
+  }
+
+  .ac-filter-slot:hover {
+    background: var(--bg-tertiary);
+    color: var(--text-primary);
+  }
+
+  .ac-filter-slot[aria-selected='true'] {
+    border-color: var(--selected);
+    box-shadow: var(--ring-selected);
+    color: var(--text-primary);
+  }
+
+  .ac-filter-slot[aria-disabled='true'] {
+    background: var(--bg-primary);
+    cursor: not-allowed;
+  }
+
+  .ac-filter-slot[aria-disabled='true'] > .ac-filter-slot__icon {
+    opacity: 0.4; /* sin token: casilla atenuada por el tope de «Tipo» */
+  }
+
+  .ac-filter-slot:focus-visible {
+    outline: 2px solid var(--ring);
+    outline-offset: 2px;
+  }
+
+  .ac-filter-slot__text {
+    color: var(--text-secondary);
+    @apply type-ui-strong;
+    text-transform: uppercase;
+  }
+
+  /* The element's name, a small game tooltip over its slot. */
+  .ac-filter-tip {
+    position: absolute;
+    bottom: calc(100% + var(--space-6));
+    left: 50%;
+    z-index: var(--z-tooltip);
+    display: none;
+    padding: var(--space-4) var(--space-8);
+    border-radius: var(--radius-4);
+    background: var(--tt-panel);
+    color: var(--tt-value);
+    @apply type-tt-hint;
+    font-weight: 600;
+    text-align: center;
+    text-shadow: var(--text-shadow-game);
+    white-space: nowrap;
+    transform: translateX(-50%);
+    pointer-events: none;
+  }
+
+  .ac-filter-tip__hint {
+    display: block;
+    margin-top: var(--space-2);
+    color: var(--tt-hint);
+    font-weight: 500;
+  }
+
+  .ac-filter-slot:hover > .ac-filter-tip,
+  .ac-filter-slot:focus-visible > .ac-filter-tip,
+  .ac-filter-slot:hover > .ac-tier-tip,
+  .ac-filter-slot:focus-visible > .ac-tier-tip {
+    display: block;
+  }
+
+  /* The tier tooltip, centred under its slot. */
+  .ac-filter-slot > .ac-tier-tip {
+    top: calc(100% + var(--space-8));
+    right: auto;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+
+  /* Phone: the bottom sheet. */
+  .ac-filter-sheet {
+    position: fixed;
+    inset: auto 0 0;
+    width: 100%;
+    max-width: none;
+    max-height: 85dvh; /* sin token: alto máximo de la hoja inferior */
+    margin: 0;
+    padding: var(--space-16);
+    overflow-y: auto;
+    border: 0;
+    border-top: 1px solid var(--border-primary);
+    border-radius: var(--radius-12) var(--radius-12) 0 0;
+    background: var(--bg-secondary);
+    color: var(--text-primary);
+  }
+
+  .ac-filter-sheet::backdrop {
+    background: var(--overlay);
+  }
+
+  .ac-filter-sheet .ac-filter-panel__title {
+    @apply type-body-strong;
+  }
+
+  .ac-filter-sheet__actions {
+    display: flex;
+    align-items: center;
+    gap: var(--space-16);
+  }
+
+  .ac-filter-sheet__close {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: var(--size-touch);
+    height: var(--size-touch);
+    margin: calc(-1 * var(--space-12)) calc(-1 * var(--space-12)) calc(-1 * var(--space-12)) 0;
+    padding: 0;
+    border: 0;
+    border-radius: var(--radius-8);
+    background: transparent;
+    color: var(--text-primary);
+    cursor: pointer;
+  }
+
+  .ac-filter-sheet .ac-filter-grid--elements {
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+  }
+
+  .ac-filter-sheet .ac-filter-slot {
+    height: var(--size-touch);
+  }
+
+  .ac-filter-sheet__foot {
+    margin: var(--space-16) calc(-1 * var(--space-16)) calc(-1 * var(--space-16));
+    padding: var(--space-16);
+    border-top: 1px solid var(--border-secondary);
+  }
+
+  .ac-filter-sheet__show {
+    width: 100%;
+    height: var(--size-touch);
+    border: 0;
+    border-radius: var(--radius-11);
+    background: var(--text-primary);
+    color: var(--bg-primary);
+    @apply type-body-strong;
+    cursor: pointer;
+  }
+
+  .ac-filter-sheet__show:focus-visible,
+  .ac-filter-sheet__close:focus-visible,
+  .ac-filter-panel__clear:focus-visible {
+    outline: 2px solid var(--ring);
+    outline-offset: 2px;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .ac-filter-sheet[open] {
+      animation: ac-filter-sheet-in var(--duration-fast) var(--ease-standard);
+    }
+  }
+
+  @keyframes ac-filter-sheet-in {
+    from {
+      transform: translateY(100%);
+    }
+  }
+}

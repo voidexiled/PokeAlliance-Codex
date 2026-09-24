@@ -272,7 +272,7 @@ describe('FeaturedCard and FeaturedSection (7.2.7, 8.1 step 3)', () => {
 describe('HomeIntro (7.2.7, 8.1 step 1, DS:HomeIntro)', () => {
   const intro = (image: SpriteProps | null) =>
     container.renderToString(HomeIntro, {
-      props: { title: 'Bienvenido a Alliance Codex', description: 'Línea', sprite: image },
+      props: { title: 'Bienvenido a PokeAlliance Wiki', description: 'Línea', sprite: image },
     });
 
   /** The drawn size of the sprite: its `width` and `height` attributes. */
@@ -295,7 +295,7 @@ describe('HomeIntro (7.2.7, 8.1 step 1, DS:HomeIntro)', () => {
     expect(drawn(await intro(sprite([140, 100], { smooth: true })))).toEqual([48, 34]);
     const html = await intro(null);
     expect(html).toContain('<span class="ac-home-intro__sprite" aria-hidden="true"></span>');
-    expect(html).toContain('<h1 class="ac-home-intro__title">Bienvenido a Alliance Codex</h1>');
+    expect(html).toContain('<h1 class="ac-home-intro__title">Bienvenido a PokeAlliance Wiki</h1>');
   });
 });
 

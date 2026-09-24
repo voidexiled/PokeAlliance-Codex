@@ -24,11 +24,16 @@
    - on a coarse pointer the square «+N» grows with the slots it follows, as the 40 square
      of plus-n.css grows with its `EntitySlot`s (the reference leaves it at 36 among 44s). */
 
-/* Variante: the Shiny mark 6 before «Shiny». */
-.ac-dex-card__variant {
-  display: inline-flex;
+/* Tipo and Moveset facts (plan «Cards», board Pokedex-Cards): the element icons of 24
+   alone, 4 apart, right-aligned in the value column; a name is the icon's small tooltip
+   (element-icon.css). The Shiny state is the glow on the art (entity-slot-marks.css) and
+   the word «Shiny» of Variante, with no mark. */
+.ac-dex-card__icons {
+  display: flex;
+  flex-wrap: nowrap;
   align-items: center;
-  gap: var(--space-6);
+  justify-content: flex-end;
+  gap: var(--space-4);
 }
 
 /* Element chips: one line of 24 px chips, 4 apart. */

@@ -15,19 +15,34 @@ import {
   tiersRows,
 } from '@/components/tiers/config';
 import { getPokemon } from '@/lib/content/repository';
+import { tierInfo } from '@/lib/content/tiers';
 import { tierRank } from '@/lib/content/tier-rank';
-import { applyListState, pageCountOf, parseListState, pendingScript } from '@/lib/lists/state';
+import {
+  applyListState,
+  pageCountOf,
+  pageSizeOf,
+  parseListState,
+  pendingScript,
+} from '@/lib/lists/state';
 import { buildPokedexData, pokedexIds } from '../../src/pages/[locale]/pokedex/datos.json';
 
 const data = buildPokedexData('es');
 const all = decodePokedex(data);
-const rows = tiersRows(all);
+// As tiers.astro: a tier content/tiers.json hides (ULTIMATE for now) is no row of the list.
+const { tierMeta } = pokedexIds(all, data.refs.elementos, tierInfo);
+const rows = tiersRows(all, tierMeta);
 const { generations, elements, movesets, variants } = pokedexIds(rows, data.refs.elementos);
 const config = tiersConfig(
   '/es/pokedex/datos.json',
-  { generations, elements, movesets, variants },
+  { generations, elements, movesets, variants, tierMeta },
   'es',
 );
+
+describe('hidden tiers (plan «Dirección C»)', () => {
+  it('leaves out every row whose tier the registry hides', () => {
+    expect(rows.every((row) => tierMeta[tierGroup(row)]?.visible !== false)).toBe(true);
+  });
+});
 
 /** §16.2.1: best first, ULTIMATE … T7. */
 function rank(row: PokedexRow): number {
@@ -35,8 +50,10 @@ function rank(row: PokedexRow): number {
 }
 
 describe('the rows of the Tier list (8.8 steps 4 and 5)', () => {
-  it('keeps every variant with a tier and no other', () => {
-    expect(rows).toHaveLength(getPokemon().filter((record) => record.tier !== null).length);
+  it('keeps every variant with a visible tier and no other', () => {
+    expect(rows).toHaveLength(
+      getPokemon().filter((record) => tierInfo(record.tier)?.visible === true).length,
+    );
     expect(rows.every((row) => row.tier !== null)).toBe(true);
   });
 
@@ -54,16 +71,17 @@ describe('the rows of the Tier list (8.8 steps 4 and 5)', () => {
     expect([...rows].sort(compareTiers)).toEqual(rows);
   });
 
+  // Plan «Dirección C»: the views are Slots and Lista; Lista is paged by its own «Por página».
   it('TL1: counts every variant with a tier, and page 1 is the first tier while it fills it', () => {
-    const page = applyListState(config, rows, parseListState(config, '?view=cards'));
+    const state = parseListState(config, '?view=list');
+    const size = pageSizeOf(config, state);
+    const page = applyListState(config, rows, state);
     expect(page.total).toBe(rows.length);
-    expect(page.pageCount).toBe(pageCountOf(TIERS_PAGE_SIZE, rows.length));
-    expect(page.items.map((row) => row.id)).toEqual(
-      rows.slice(0, TIERS_PAGE_SIZE).map((row) => row.id),
-    );
+    expect(page.pageCount).toBe(pageCountOf(size, rows.length));
+    expect(page.items.map((row) => row.id)).toEqual(rows.slice(0, size).map((row) => row.id));
     const first = tierGroup(rows[0]);
     const firstTier = rows.filter((row) => tierGroup(row) === first).length;
-    if (firstTier >= TIERS_PAGE_SIZE) {
+    if (firstTier >= size) {
       expect(page.groups.map((group) => group.key)).toEqual([first]);
     }
   });

@@ -1,0 +1,17 @@
+{
+  "$schema": "./schemas/tiers.schema.json",
+  "tiers": [
+    { "id": "ultimate", "nombre": "ULTIMATE", "orden": 1, "maxBrokes": null, "visible": false },
+    { "id": "mythic", "nombre": "Mythic", "orden": 2, "maxBrokes": null, "visible": true },
+    { "id": "legendary", "nombre": "Legendary", "orden": 3, "maxBrokes": null, "visible": true },
+    { "id": "ultra-rare", "nombre": "Ultra Rare", "orden": 4, "maxBrokes": null, "visible": true },
+    { "id": "super-rare", "nombre": "Super Rare", "orden": 5, "maxBrokes": null, "visible": true },
+    { "id": "t1", "nombre": "T1", "orden": 6, "maxBrokes": null, "visible": true },
+    { "id": "t2", "nombre": "T2", "orden": 7, "maxBrokes": null, "visible": true },
+    { "id": "t3", "nombre": "T3", "orden": 8, "maxBrokes": null, "visible": true },
+    { "id": "t4", "nombre": "T4", "orden": 9, "maxBrokes": null, "visible": true },
+    { "id": "t5", "nombre": "T5", "orden": 10, "maxBrokes": null, "visible": true },
+    { "id": "t6", "nombre": "T6", "orden": 11, "maxBrokes": null, "visible": true },
+    { "id": "t7", "nombre": "T7", "orden": 12, "maxBrokes": null, "visible": true }
+  ]
+}

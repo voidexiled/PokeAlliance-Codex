@@ -2,6 +2,8 @@ import { ChipChoice } from '@/components/controls/ChipChoice';
 import type { ChipOption } from '@/components/controls/ChipChoice';
 import { ShinyMark } from '@/components/game/ShinyMark';
 import { TierBadge } from '@/components/game/TierBadge';
+import type { FilterOption } from '@/components/filters/model';
+import { visibleTiers } from '@/lib/content/tiers';
 import type { PokemonTier } from '@/lib/content/types';
 import { sortedTierKeys } from '@/lib/pickers/options';
 import { elementSprite } from '@/lib/pickers/sprites';
@@ -10,6 +12,17 @@ import { elementSprite } from '@/lib/pickers/sprites';
 // so any chosen value matches (OR) and the page combines filters with AND. A filter with fewer
 // than two values present is not drawn (C-R5). The chip builders are shared with the picker
 // panels, which take them as `PickerFilter.options`.
+//
+// Plan «Dirección C»: the lists and the picker move to the filter toolbar of
+// src/components/filters/ (`FilterToolbar` with one `FilterDef` per button). `elementOptions`
+// and `tierOptions` give its options from the same inputs as the chips; a tier the tiers
+// registry hides (ULTIMATE for now) is never an option, here or in `tierChips`.
+
+export { FilterToolbar } from '@/components/filters/FilterToolbar';
+export type { FilterDef, FilterOption } from '@/components/filters/model';
+
+/** The visible tiers of content/tiers.json by id (`t3`, `legendary`). */
+const shownTiers = new Map(visibleTiers.map((tier) => [tier.id, tier]));
 
 export interface NamedElement {
   id: string;
@@ -31,14 +44,37 @@ export function elementChips(
     }));
 }
 
-/** Tier chips best first, each a TierBadge; the value is `tierKey`. */
+/** Tier chips best first, each a TierBadge; the value is `tierKey`. Hidden tiers are left out. */
 export function tierChips(tiers: readonly (PokemonTier | null)[]): ChipOption[] {
-  return sortedTierKeys(tiers).map(({ key, tier }) => ({
-    value: key,
-    label: typeof tier === 'number' ? `T${tier}` : String(tier),
-    badge: <TierBadge tier={tier} />,
-    badgeOnly: true,
-  }));
+  return sortedTierKeys(tiers)
+    .filter(({ key }) => shownTiers.has(key))
+    .map(({ key, tier }) => ({
+      value: key,
+      label: typeof tier === 'number' ? `T${tier}` : String(tier),
+      badge: <TierBadge tier={tier} />,
+      badgeOnly: true,
+    }));
+}
+
+/** The options of an element menu (Tipo, Tipo de moveset) for the ids present, in order. */
+export function elementOptions(
+  elements: readonly NamedElement[],
+  present?: readonly string[],
+): FilterOption[] {
+  return elements
+    .filter((element) => !present || present.includes(element.id))
+    .map((element) => ({ id: element.id, label: element.name }));
+}
+
+/**
+ * The options of the Tier ladder: the visible tiers present, best first (the named tiers,
+ * then T1 … T7), each with its «Max brokes» from content/tiers.json; the id is `tierKey`.
+ */
+export function tierOptions(tiers: readonly (PokemonTier | null)[]): FilterOption[] {
+  return sortedTierKeys(tiers).flatMap(({ key }) => {
+    const shown = shownTiers.get(key);
+    return shown ? [{ id: key, label: shown.nombre, maxBrokes: shown.maxBrokes }] : [];
+  });
 }
 
 /** Normal / Shiny; "Shiny" is a game term in both locales. */

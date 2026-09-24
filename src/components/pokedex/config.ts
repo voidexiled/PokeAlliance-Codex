@@ -3,7 +3,9 @@ import type { SpriteData } from '@/lib/sprites/resolve';
 import type { PokemonRecord } from '@/lib/content/types';
 import { compareTierRank } from '@/lib/content/tier-rank';
 import { UNKNOWN } from '@/lib/format/unknown';
-import type { ListConfig } from '@/lib/lists/state';
+import type { ListConfig, PerPageSpec } from '@/lib/lists/state';
+import type { FilterDef } from '@/components/filters/model';
+import type { FilterText } from '@/components/filters/text';
 
 // The `pokedex` list of spec 8.0.6, shared by the build and the island: its `ListConfig`,
 // the shape of `/{l}/pokedex/datos.json` (PR5) and the reading half of that shape.
@@ -13,17 +15,43 @@ import type { ListConfig } from '@/lib/lists/state';
 // island, reads the rows back and builds the configuration. Nothing here imports the
 // registry, Zod or a component, so what the island takes from it is only what it runs.
 //
-// State (8.0.6, §16.4.2): 12 rows a page; the filters `gen`, `tier`, `tipo` (old name
-// `elemento`), `moveset` and `variante`, in that URL order (U1), each of several values
-// joined with commas (`multi`: OR within a filter, AND between them), whose values are
+// State (8.0.6, §16.4.2): the rows per page of each view (`POKEDEX_PER_PAGE`, U7); the
+// filters `gen`, `tier`, `tipo` (old name `elemento`), `moveset` and `variante`, in that URL
+// order (U1), each of several values joined with commas (`multi`: OR within a filter, AND
+// between them; «Tipo» is AND within too, at most two), whose values are
 // registry ids (U3) the page passes in `PokedexIds`; four orders for `SortSelect` —
 // «Número» (the order of 8.0.5 the build writes the rows in), «Nombre», «Tier (mejor
 // primero)» and «Requisito»; groups by generation, which only the Slots view draws, with a
-// last «—» group for the variants without one (8.2). No `text`: a name is searched with
-// Ctrl + K (E3, A22), so the list has no `q`.
+// last «—» group for the variants without one (8.2). `q` is the search field of the filter
+// toolbar (plan «Dirección C», «Nombre o Nº»): each fragment is part of the name or the number.
 
-/** Rows per page of the Pokédex (8.0.6). */
+/** Rows per page of the Pokédex's default view, Cards (8.0.6): the page the build prints. */
 export const POKEDEX_PAGE_SIZE = 12;
+
+/** The rows-per-page choices of each view (U7): Slots, Cards and Lista of the plan. */
+export const POKEDEX_PER_PAGE = {
+  slots: { options: [48, 96, 144], default: 96 },
+  cards: { options: [12, 24, 48], default: POKEDEX_PAGE_SIZE },
+  list: { options: [25, 50, 100], default: 50 },
+} as const satisfies Record<string, PerPageSpec>;
+
+/** Most types «Tipo» takes at once: a Pokémon has at most two (AND within the filter). */
+export const MAX_TYPES = 2;
+
+/**
+ * A tier of `content/tiers.json` as the lists read it (`tierInfo` of src/lib/content/tiers):
+ * its name, its «Max brokes» (`null` = «—») and whether the site shows it. A hidden tier
+ * (ULTIMATE for now) keeps its data but is no option of «Tier», no row of the Tier list, and
+ * its Pokémon show the tier «—».
+ */
+export interface TierMeta {
+  nombre: string;
+  maxBrokes: number | null;
+  visible: boolean;
+}
+
+/** `TierMeta` by tier id (`t3`, `legendary`), for every tier the rows have. */
+export type TierMetas = Readonly<Record<string, TierMeta>>;
 
 /**
  * The fields of a row of `datos.json`, in the order of `campos` (PR5): the keys of a record
@@ -117,8 +145,9 @@ export interface PokedexIds {
   /** Every generation present, ascending: the options of «Generación» and the Slots groups. */
   generations: readonly string[];
   /**
-   * The tiers present, `t1`…`t7` and then the special ones in the order of 8.0.6, each with
-   * the text `formatTier` writes for it («T3», «Legendary»).
+   * The visible tiers present as the Tier ladder draws them, best first: the special ones
+   * (Mythic … Super Rare) and then `t1`…`t7`, each with the text `formatTier` writes for it
+   * («T3», «Legendary»).
    */
   tiers: readonly PokedexOption[];
   /**
@@ -134,6 +163,8 @@ export interface PokedexIds {
   movesets: readonly PokedexOption[];
   /** The variants present: `normal`, then `shiny`. */
   variants: readonly string[];
+  /** Every tier the rows have, hidden ones included, with its name and «Max brokes». */
+  tierMeta: TierMetas;
 }
 
 /**
@@ -248,6 +279,30 @@ export function tierId(tier: PokedexRow['tier']): string | null {
   return typeof tier === 'number' ? `t${tier}` : tier.toLowerCase().replace(/\s+/g, '-');
 }
 
+/**
+ * The tier id of a row the site shows (`t3`, `legendary`), or `null` for none: a row without
+ * tier, or with a hidden one (`TierMeta.visible`), shows «—».
+ */
+export function visibleTierId(tier: PokedexRow['tier'], meta: TierMetas): string | null {
+  const id = tierId(tier);
+  return id === null || meta[id]?.visible === false ? null : id;
+}
+
+/**
+ * The rows as the site shows them: a row whose tier the registry hides (ULTIMATE for now)
+ * reads as a row with no tier — «—» in every view and tooltip, no option of «Tier», no row of
+ * the Tier list — while content/pokemon.json keeps its tier. The same array when nothing is
+ * hidden.
+ */
+export function withVisibleTiers(rows: PokedexRow[], meta: TierMetas): PokedexRow[] {
+  if (!rows.some((row) => row.tier !== null && visibleTierId(row.tier, meta) === null)) {
+    return rows;
+  }
+  return rows.map((row) =>
+    row.tier !== null && visibleTierId(row.tier, meta) === null ? { ...row, tier: null } : row,
+  );
+}
+
 /** The Slots group of a row (8.2): its generation, or «—» for the variants without one. */
 export function generationGroup(row: PokedexRow): string {
   return row.generacion === null ? UNKNOWN : String(row.generacion);
@@ -307,6 +362,7 @@ export function pokedexConfig(
   return {
     id: 'pokedex',
     pageSize: POKEDEX_PAGE_SIZE,
+    perPage: POKEDEX_PER_PAGE,
     sorts: [
       { id: 'numero', label: sortLabels.numero, compare: keepOrder },
       {
@@ -333,12 +389,15 @@ export function pokedexConfig(
         multi: true,
         test: (row, value) => tierId(row.tier) === value,
       },
-      // A Pokémon matches when the element is one of its own (8.2). `elemento` is the
-      // parameter's old name (§16.4.2): a URL still written with it keeps working.
+      // A Pokémon matches when every chosen element is one of its own (8.2): at most two,
+      // AND within the filter. `elemento` is the parameter's old name (§16.4.2): a URL still
+      // written with it keeps working.
       {
         key: 'tipo',
         values: optionIds(ids.elements),
         multi: true,
+        match: 'all',
+        max: MAX_TYPES,
         aliasKeys: ['elemento'],
         test: (row, value) => row.elementos.includes(value),
       },
@@ -356,9 +415,92 @@ export function pokedexConfig(
         test: (row, value) => row.variante === value,
       },
     ],
+    text: (row) => (row.numero === null ? row.nombre : `${row.nombre} ${row.numero}`),
     groupBy: generationGroup,
     groupOrder: ids.generations,
     anchorId: (row) => `pokemon-${row.id}`,
     dataUrl,
   };
+}
+
+/** The texts `pokedexFilterDefs` needs besides `FilterText`: the filter names and the variants. */
+export interface PokedexFilterNames {
+  /** `pokedex.filters` of the page's language. */
+  element: string;
+  movesetType: string;
+  tier: string;
+  variant: string;
+  generation: string;
+  /** «Normal» (`ui.cards.normal`) and «Shiny» (`ui.shiny`). */
+  normal: string;
+  shiny: string;
+}
+
+/**
+ * The buttons of the filter toolbar of the Pokédex and of the Tier list (plan «Dirección C»),
+ * in its order: «Tipo» (every chosen element, at most two), «Tipo de moveset» (any one),
+ * «Tier» (the ladder of the visible tiers present, best first, with «Max brokes»), «Variante»
+ * and «Generación». Their keys and ids are the filters of `pokedexConfig`; a list without
+ * `ids.tiers` (the Tier list) has no «Tier». `FilterToolbar` draws no button for a filter with
+ * fewer than two options (C-R5).
+ */
+export function pokedexFilterDefs(
+  ids: Omit<PokedexIds, 'tiers'> & { tiers?: PokedexIds['tiers'] },
+  names: PokedexFilterNames,
+  text: FilterText,
+): FilterDef[] {
+  const options = (list: readonly PokedexOption[]) => list.map(([id, label]) => ({ id, label }));
+  const defs: FilterDef[] = [
+    {
+      key: 'tipo',
+      label: names.element,
+      kind: 'elements',
+      options: options(ids.elements),
+      join: 'all',
+      max: MAX_TYPES,
+      hint: text.hints.type(MAX_TYPES),
+    },
+    {
+      key: 'moveset',
+      label: names.movesetType,
+      kind: 'elements',
+      options: options(ids.movesets),
+      join: 'any',
+      hint: text.hints.moveset,
+    },
+  ];
+  if (ids.tiers) {
+    defs.push({
+      key: 'tier',
+      label: names.tier,
+      kind: 'tiers',
+      options: ids.tiers.map(([id, label]) => ({
+        id,
+        label,
+        maxBrokes: ids.tierMeta[id]?.maxBrokes ?? null,
+      })),
+      join: 'any',
+      hint: text.hints.tier || undefined,
+    });
+  }
+  defs.push(
+    {
+      key: 'variante',
+      label: names.variant,
+      kind: 'segment',
+      options: ids.variants.map((id) => ({
+        id,
+        label: id === 'shiny' ? names.shiny : id === 'normal' ? names.normal : id,
+      })),
+      join: 'any',
+    },
+    {
+      key: 'gen',
+      label: names.generation,
+      kind: 'segment',
+      options: ids.generations.map((id) => ({ id, label: id })),
+      join: 'any',
+    },
+  );
+  return defs;
 }

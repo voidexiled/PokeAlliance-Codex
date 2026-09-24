@@ -6,25 +6,21 @@ import { SlotsPanel, SlotsPanelItem } from '@/components/cards/SlotsPanel';
 import { DataTable } from '@/components/content/DataTable';
 import type { DataTableColumn } from '@/components/content/DataTable';
 import { Button } from '@/components/controls/Button';
-import { ElementChip } from '@/components/game/ElementChip';
 import type { ElementChipEntry } from '@/components/game/ElementChip';
+import { ElementIcon } from '@/components/game/ElementIcon';
 import { EntitySlot } from '@/components/game/EntitySlot';
-import { ShinyMark } from '@/components/game/ShinyMark';
-import { Sprite } from '@/components/game/Sprite';
 import type { SpriteProps } from '@/components/game/Sprite';
-import { MissingSprite } from '@/components/game/SpriteStage';
+import { TierValue } from '@/components/game/TierBadge';
 import type { PokedexElementRef, PokedexItemRef, PokedexRow } from '@/components/pokedex/config';
 import type { Locale } from '@/i18n/config';
 import type { Messages } from '@/i18n/messages/en';
 import { fill } from '@/i18n/messages/types';
 import type { DexKey, DexLayout } from '@/lib/cards/layout';
-import { formatTier } from '@/lib/content/format';
 import { resolvePokemonImage } from '@/lib/content/pokemon-media';
 import { formatInteger } from '@/lib/format/numbers';
-import { UNKNOWN } from '@/lib/format/unknown';
 import { elementTip, itemTip, pokemonTip } from '@/lib/game/tips';
 import type { LocalizedText, TipData, TipLabels } from '@/lib/game/tips';
-import type { ListGroup, ListPage } from '@/lib/lists/state';
+import type { ListPage } from '@/lib/lists/state';
 
 // The deferred part of the `pokedex` list (spec 8.2, 7.7.4, 13.6; `Lienzo:Pokedex`): what the
 // island only draws when its state asks for it. Cards is the view the page prerenders and
@@ -36,13 +32,14 @@ import type { ListGroup, ListPage } from '@/lib/lists/state';
 //     the props did not bring, each with its panel (7.5.3, DP3);
 //   - `clearFilters`, the action of the empty state (V7).
 //
-//   - Slots: `SlotsPanel layout="stacked"` by generation, a last «—» group for the variants
-//     without one, and an `EntitySlot` of 72 with the art, the Shiny mark, the link to the
-//     sheet and the panel of `pokemonTip` (Requisito, Tier, Elementos, Generación, Rol).
+//   - Slots: one `SlotsPanel inventory`, the 12-column grid of the board that ends flush (plan
+//     «Slots»), no generation groups; an `EntitySlot` of 72 with the art (the Shiny glow, the
+//     «?» without art), the link to the sheet and the panel of `pokemonTip`.
 //   - Lista: `DataTable` with its caption and the columns Sprite (screen readers only), Nº,
 //     Nombre, then the keys of the union in the order of 8.2 (Elementos, Tier, Requisito,
 //     Rol, Variante); one `ListRow variant="pokedex"` per row with the same panel. The
-//     elements of a row are chips that open nothing (DS:ElementChip, Lista).
+//     elements are `ElementIcon`s, the Tier a `TierValue` (dotted, «Max brokes: —») and the
+//     Variante plain text.
 //   Every view gives each row the anchor `pokemon-{id}` (H7).
 
 /** What both views take from the island: its state, its texts and its helpers. */
@@ -64,11 +61,6 @@ export interface PokedexViewContext {
   anchor: (row: PokedexRow) => string | undefined;
   /** Whether the art at `index` of the page loads lazily (7.4.2). */
   lazy: (index: number) => 'lazy' | undefined;
-  /**
-   * The title of a Slots group. Without it a group is its generation, «Generación {n}»
-   * (8.2); the Tier list groups by tier and names each group with its tier (8.8).
-   */
-  groupLabel?: (group: ListGroup<PokedexRow>) => string;
   /**
    * The caption of the Lista. Without it the caption follows «Variante» (8.2); the Tier
    * list keeps one caption, its h1, whatever the variant (8.8 step 5).
@@ -96,9 +88,6 @@ const LIST_WIDTHS = {
   role: 78.11,
   variant: 114.38,
 };
-
-/** The art of a Lista row, drawn smooth at 40 (DS:ListRow, T29). */
-const LIST_ART = 40;
 
 const href = (row: PokedexRow, locale: Locale) => `/${locale}/pokedex/${row.id}/`;
 
@@ -167,42 +156,33 @@ export function tipOf(row: PokedexRow, context: PokedexViewContext): TipData {
   );
 }
 
-/** The Slots view (8.2 step 5). */
+/** The Slots view (8.2 step 5; plan «Slots»): one inventory grid, the page in its order. */
 export function pokedexSlots(page: ListPage<PokedexRow>, context: PokedexViewContext): ReactNode {
-  const { locale, ui, title, anchor, lazy, groupLabel } = context;
-  let position = 0;
+  const { locale, ui, title, anchor, lazy } = context;
   return (
-    <SlotsPanel
-      label={title}
-      layout="stacked"
-      groups={page.groups.map((group) => ({
-        key: group.key,
-        label:
-          groupLabel?.(group) ??
-          (group.key === UNKNOWN ? UNKNOWN : fill(ui.cards.generation, { n: group.key })),
-        children: group.items.map((row) => {
-          const source = resolvePokemonImage(row.imagen);
-          const sprite: SpriteProps | null =
-            source === null ? null : { src: source, smooth: true, loading: lazy(position) };
-          position += 1;
-          return (
-            <SlotsPanelItem key={row.id} id={anchor(row)}>
-              <EntitySlot
-                size={72}
-                name={row.nombre}
-                sprite={sprite}
-                tip={tipOf(row, context)}
-                shiny={row.variante === 'shiny'}
-                href={href(row, locale)}
-                locale={locale}
-                hint={ui.pinHint}
-                shinyLabel={ui.shiny}
-              />
-            </SlotsPanelItem>
-          );
-        }),
-      }))}
-    />
+    <SlotsPanel label={title} inventory>
+      {page.items.map((row, index) => {
+        const source = resolvePokemonImage(row.imagen);
+        const sprite: SpriteProps | null =
+          source === null ? null : { src: source, smooth: true, loading: lazy(index) };
+        return (
+          <SlotsPanelItem key={row.id} id={anchor(row)}>
+            <EntitySlot
+              size={72}
+              name={row.nombre}
+              sprite={sprite}
+              art
+              tip={tipOf(row, context)}
+              shiny={row.variante === 'shiny'}
+              href={href(row, locale)}
+              locale={locale}
+              hint={ui.pinHint}
+              shinyLabel={ui.shiny}
+            />
+          </SlotsPanelItem>
+        );
+      })}
+    </SlotsPanel>
   );
 }
 
@@ -210,23 +190,17 @@ export function pokedexSlots(page: ListPage<PokedexRow>, context: PokedexViewCon
 export function pokedexList(page: ListPage<PokedexRow>, context: PokedexViewContext): ReactNode {
   const { locale, ui, pokedex, layout, elementsOf, anchor, lazy } = context;
 
-  const variantValue = (row: PokedexRow): ReactNode => {
-    if (row.variante === 'shiny') {
-      // The word names the mark, so the mark is decorative (ShinyMark).
-      return (
-        <span className="inline-flex items-center gap-6">
-          <ShinyMark />
-          {ui.shiny}
-        </span>
-      );
-    }
-    return row.variante === 'normal' ? ui.cards.normal : null;
-  };
+  // Variante as text: «Shiny» names the variant, the glow is on the art (plan «Shiny»).
+  const variantValue = (row: PokedexRow): ReactNode =>
+    row.variante === 'shiny' ? ui.shiny : row.variante === 'normal' ? ui.cards.normal : null;
 
   const listValue = (row: PokedexRow, key: DexKey): ReactNode => {
     switch (key) {
       case 'tier':
-        return row.tier === null ? null : formatTier(row.tier);
+        // A hidden tier (ULTIMATE) draws nothing: the cell writes «—».
+        return (
+          <TierValue tier={row.tier} maxBrokesLabel={ui.filterBar.maxBrokes} locale={locale} />
+        );
       case 'requirement':
         return row.nivel === null
           ? null
@@ -238,20 +212,14 @@ export function pokedexList(page: ListPage<PokedexRow>, context: PokedexViewCont
     }
   };
 
-  // The chips of the Elementos cell, 4 apart; a row without elements shows «—» (ListRow).
+  // The icons of the Elementos cell, 4 apart; a row without elements shows «—» (ListRow).
   const elementCell = (row: PokedexRow): ReactNode => {
     const own = elementsOf(row);
     if (own.length === 0) return null;
     return (
       <span className="inline-flex gap-4">
         {own.map((element) => (
-          <ElementChip
-            key={element.id}
-            element={element}
-            interactive={false}
-            locale={locale}
-            hint={ui.pinHint}
-          />
+          <ElementIcon key={element.id} element={element} />
         ))}
       </span>
     );
@@ -301,19 +269,7 @@ export function pokedexList(page: ListPage<PokedexRow>, context: PokedexViewCont
             id={anchor(row)}
             variant="pokedex"
             nameAlign="center"
-            sprite={
-              source === null ? (
-                <MissingSprite size={LIST_ART} />
-              ) : (
-                <Sprite
-                  src={source}
-                  smooth
-                  width={LIST_ART}
-                  height={LIST_ART}
-                  loading={lazy(index)}
-                />
-              )
-            }
+            art={{ src: source, shiny: row.variante === 'shiny', loading: lazy(index) }}
             name={row.nombre}
             href={href(row, locale)}
             tip={tipOf(row, context)}

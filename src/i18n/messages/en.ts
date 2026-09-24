@@ -42,6 +42,26 @@ export const en: Messages = {
       slots: 'Slots',
       list: 'List',
     },
+    filterBar: {
+      label: 'Filters',
+      clear: 'Clear',
+      all: 'All',
+      maxBrokes: 'Max brokes',
+      countOfMax: '{count} of {max}',
+      typeRuleHint: 'Up to {max}; needs both.',
+      movesetRuleHint: 'Area attacks; either one works.',
+      maxHint: 'Max {max}: remove one.',
+      and: 'and',
+      or: 'or',
+      removeToken: 'Remove filter: {label}',
+      perPage: 'Per page',
+      closeLabel: 'Close filters',
+      tierRuleHint: 'Best to worst.',
+      show: 'Show {count}',
+      active: 'Active filters',
+      clearAll: 'Clear filters',
+      chosen: '{n} selected',
+    },
     pagination: 'Pagination',
     prev: 'Previous',
     next: 'Next',
@@ -89,7 +109,8 @@ export const en: Messages = {
     breadcrumb: 'Breadcrumb',
     toc: 'Summary',
     tocLabel: 'On this page',
-    footer: 'Alliance Codex is an independent community project, not affiliated with PokeAlliance.',
+    footer:
+      'PokeAlliance Wiki is an independent community project, not affiliated with PokeAlliance.',
     account: {
       signIn: 'Sign in',
       label: "{user}'s account",
@@ -106,10 +127,10 @@ export const en: Messages = {
     },
   },
   home: {
-    documentTitle: 'Alliance Codex · PokeAlliance wiki',
+    documentTitle: 'PokeAlliance Wiki · Pokédex, tier list and items',
     description:
       'PokeAlliance community wiki: Pokédex, systems, items, activities, trade and guild tools.',
-    title: 'Welcome to Alliance Codex',
+    title: 'Welcome to PokeAlliance Wiki',
     intro: '{n} Pokémon variants, {list} from PokeAlliance.',
     introBare: '{n} Pokémon variants from PokeAlliance.',
     collections: {
@@ -158,6 +179,8 @@ export const en: Messages = {
     search: 'Search',
     resultsCount: { one: '{n} result', other: '{n} results' },
     noMatches: 'No matches.',
+    pick: 'Choose',
+    keysHint: 'Enter chooses · Esc closes',
     clearFilters: 'Clear filters',
     filters: {
       tier: 'Tier',
@@ -188,9 +211,11 @@ export const en: Messages = {
     filters: {
       generation: 'Generation',
       tier: 'Tier',
-      element: 'Element',
+      element: 'Type',
       variant: 'Variant',
       movesetType: 'Moveset type',
+      search: 'Search the Pokédex',
+      searchPlaceholder: 'Name or No.',
     },
     sort: {
       number: 'Number',
@@ -517,7 +542,7 @@ export const en: Messages = {
       premiumGoal: 'Premium goal',
       week: 'Week: {range}, day {k} of 7',
       lastExport: 'Last export: {date}',
-      footer: 'Alliance Codex · Guild',
+      footer: 'PokeAlliance Wiki · Guild',
     },
   },
   account: {
@@ -561,7 +586,7 @@ export const en: Messages = {
       resent: 'We sent you a new code.',
       otherEmail: 'Use another email',
       identityText:
-        'Link Discord or Google. Each Discord or Google account can be linked to only one Alliance Codex account.',
+        'Link Discord or Google. Each Discord or Google account can be linked to only one PokeAlliance Wiki account.',
       linkDiscord: 'Link Discord',
       linkGoogle: 'Link Google',
       username: 'Username',
@@ -575,7 +600,7 @@ export const en: Messages = {
       termsLink: 'Terms',
       privacyLink: 'Privacy policy',
       nonAffiliation:
-        'Alliance Codex is an independent project. PokeAlliance, its official server, its administrators and its creators do not moderate or guarantee this trade. Deals are between players.',
+        'PokeAlliance Wiki is an independent project. PokeAlliance, its official server, its administrators and its creators do not moderate or guarantee this trade. Deals are between players.',
       finish: 'Complete registration',
       done: 'Registration complete.',
       errors: {
@@ -603,7 +628,7 @@ export const en: Messages = {
       linked: 'Linked: {name}',
       unlink: 'Unlink',
       anchorRequired: 'Your account needs Discord or Google linked.',
-      taken: 'That {provider} account is already linked to another Alliance Codex account.',
+      taken: 'That {provider} account is already linked to another PokeAlliance Wiki account.',
       discordTooNew:
         "Your Discord account is less than {days} days old: Trade doesn't accept it yet.",
     },
@@ -771,7 +796,7 @@ export const en: Messages = {
       google: 'Google',
     },
     banner: {
-      payments: "Alliance Codex doesn't process payments",
+      payments: "PokeAlliance Wiki doesn't process payments",
       contact: 'Buyers contact sellers through their verified channels',
       reviews: 'Reviews from 1 to 5 both ways, only for deals both sides confirmed',
     },
@@ -863,6 +888,13 @@ export const en: Messages = {
       operation: 'Trade: {title}',
     },
     form: {
+      hints: {
+        optional: 'Optional',
+        auras: 'Several',
+        addons: 'Several',
+        held: 'Optional',
+        training: 'Level and progress',
+      },
       auraNone: 'None',
       addonNone: 'None',
       boostHelp: 'From +0 to +50.',
@@ -915,17 +947,17 @@ export const en: Messages = {
     cancel: 'Cancel',
     retry: 'Retry',
     nonAffiliation:
-      'Alliance Codex is an independent project. PokeAlliance, its official server, its administrators and its creators do not moderate or guarantee this trade. Deals are between players.',
+      'PokeAlliance Wiki is an independent project. PokeAlliance, its official server, its administrators and its creators do not moderate or guarantee this trade. Deals are between players.',
     adultsOnly: 'Trade is only for people 18 and older.',
     ageGate: {
       adult: "I'm 18 or older",
       minor: "I'm under 18",
     },
     realMoney: {
-      note: "Alliance Codex doesn't process or refund the payment. Before paying, check the seller's character in the game.",
+      note: "PokeAlliance Wiki doesn't process or refund the payment. Before paying, check the seller's character in the game.",
       title: 'Real-money deals',
       payments:
-        "Alliance Codex doesn't process payments or guarantee deals: each deal is between the two parties.",
+        "PokeAlliance Wiki doesn't process payments or guarantee deals: each deal is between the two parties.",
       risk: "Scams happen. Check the other party's character in the game before paying, and never share passwords or codes of your accounts.",
       data: "If there's a report, moderators review the IP address and browser identifier of your Trade actions. They are kept for {days} days, or while a report or alert about them stays open.",
       sanctions: 'Sanctions only affect Trade: the wiki and Guild stay available.',

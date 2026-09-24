@@ -799,8 +799,8 @@ test.describe('Índice de Sistemas (8.4.1)', () => {
       await expect(crumbs.first().locator('[aria-current="page"]')).toHaveText(copy.title);
       await expect(page.locator('main h1')).toHaveText(copy.title);
 
-      // 13.5: «{h1} · Alliance Codex» and the description of the dictionary.
-      await expect(page).toHaveTitle(`${copy.title} · Alliance Codex`);
+      // 13.5: «{h1} · PokeAlliance Wiki» and the description of the dictionary.
+      await expect(page).toHaveTitle(`${copy.title} · PokeAlliance Wiki`);
       await expect(page.locator('meta[name="description"]')).toHaveAttribute(
         'content',
         copy.description,
@@ -1048,8 +1048,8 @@ test.describe('Página de sistema (8.4.2)', () => {
           await expect.soft(toc, `${path}: no Toc with ${sections.length} sections`).toHaveCount(0);
         }
 
-        // 13.5: «{titulo} · Alliance Codex», a description of 50 to 160 characters, unique.
-        await expect.soft(page).toHaveTitle(`${title} · Alliance Codex`);
+        // 13.5: «{titulo} · PokeAlliance Wiki», a description of 50 to 160 characters, unique.
+        await expect.soft(page).toHaveTitle(`${title} · PokeAlliance Wiki`);
         const description =
           (await page.locator('meta[name="description"]').getAttribute('content')) ?? '';
         expect.soft(description.length, `${path}: description length`).toBeGreaterThanOrEqual(50);
