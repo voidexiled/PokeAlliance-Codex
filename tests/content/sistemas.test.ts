@@ -281,9 +281,9 @@ describe('pnpm content:check on content/sistemas/', () => {
     );
     for (const [index, name] of sistemaFiles.entries())
       expect(records[index].id).toBe(path.basename(name, '.json'));
-    // A draft carries its menu title and nothing else yet (D-011).
+    // A draft carries its menu title and its sprite and nothing else yet (D-011).
     for (const record of records.filter((entry) => entry.borrador === true))
-      expect(record).toMatchObject({ sprite: null, tooltip: [], intro: [], secciones: [] });
+      expect(record).toMatchObject({ tooltip: [], intro: [], secciones: [] });
   });
 
   it('accepts links, entities, amounts, element cells and the item anchors of a system', () => {

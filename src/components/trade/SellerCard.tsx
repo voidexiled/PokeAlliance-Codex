@@ -1,6 +1,8 @@
 import { Fragment, useLayoutEffect, useMemo, useRef } from 'react';
 import type { MouseEvent, ReactNode } from 'react';
 
+import { SellerPresence } from '@/components/cards/ListingCard';
+import type { SellerPresenceData } from '@/components/cards/ListingCard';
 import { DataTable } from '@/components/content/DataTable';
 import type { DataTableRow } from '@/components/content/DataTable';
 import { FactLine } from '@/components/content/FactLine';
@@ -8,29 +10,31 @@ import type { FactLinePart } from '@/components/content/FactLine';
 import { Pagination } from '@/components/controls/Pagination';
 import { TextLink } from '@/components/controls/TextLink';
 import { useListState } from '@/components/lists/useListState';
-import { Rating } from '@/components/money/Rating';
-import type { RatingLabels } from '@/components/money/Rating';
 import type { Locale } from '@/i18n/config';
 import type { Messages } from '@/i18n/messages/en';
-import { fill } from '@/i18n/messages/types';
+import type { MessageLeaf } from '@/i18n/messages/types';
+import { fill, isPluralMessage, plural } from '@/i18n/messages/types';
 import { formatDate } from '@/lib/format/dates';
-import { formatInteger } from '@/lib/format/numbers';
+import { formatInteger, formatRating } from '@/lib/format/numbers';
 import type { TipData } from '@/lib/game/tips';
 import { PENDING_ATTRIBUTE, pendingScript } from '@/lib/lists/state';
 import type { ListConfig } from '@/lib/lists/state';
+import type { SellerReputation } from '@/lib/trade/types';
 
-// The seller's side of Comercio (spec 9.6, 9.8, 9.10), phase A:
+// The seller's side of Comercio (spec 9.6, 9.8, 9.10, 9.15.4, 9.15.6):
 //
-//   - `SellerCard`, the «Vendedor» section of a listing detail (9.6): the seller as `Rating`,
-//     linked to the profile, and «Operaciones confirmadas: N» as a `FactLine`. A server
+//   - `SellerCard`, the «Vendedor» section of a listing detail (9.6): the seller's name, linked
+//     to the profile, with its online status (9.15.6), and its reputation as a `FactLine`,
+//     «Valoración: ★ 4.8 · 50 operaciones · 5 compradores distintos» (9.15.4). A server
 //     component: the detail page renders it with no client directive.
+//   - `reputationValues`, the values of that line, which the profile's data row repeats (9.8).
 //   - `SellerReviews`, the «Reseñas» section of a profile (9.8 step 6): the `DataTable`
-//     «Reseñas por puntuación» with the rows 5 to 0 and their counts (0 is a real figure), then
-//     the reviews from the newest to the oldest, 10 a page. Each review is an `article`: «{n} de
-//     5» in 700, the buyer's handle and the date, then «Operación: {título}», where the traded
-//     Pokémon or item is a `NestedEntity` with its panel and links to the listing's detail (9.4:
-//     reviews link to those details), and the comment when there is one. No evidence is ever
-//     shown in public (9.10).
+//     «Reseñas por puntuación» with the rows 5 to 1 (9.15.4) and their counts (0 is a real
+//     figure), then the reviews from the newest to the oldest, 10 a page. Each review is an
+//     `article`: «{n} de 5» in 700, the buyer's handle and the date, then «Operación: {título}»,
+//     where the traded Pokémon or item is a `NestedEntity` with its panel and links to the
+//     listing's detail (9.4: reviews link to those details), and the comment when there is one.
+//     No evidence is ever shown in public (9.10).
 //
 // The reviews are a paginated list with the controller of 7.7 (`useListState`): its page lives
 // in the URL under the `resenas` prefix (U1), because the profile's «Anuncios» list owns the
@@ -41,18 +45,63 @@ import type { ListConfig } from '@/lib/lists/state';
 // draws its own articles and pagination instead of `EntityList`.
 //
 // Data (9.8 «Fase A»): content/comercio/vendedores.json, read only with COMERCIO_DEMO=1 (9.2).
-// The page computes the score from the reviews (9.10) and hands over each traded listing once,
-// in `operations`, with its title (9.4) and the panel of its asset (7.5.3), built in the build.
-// Every visible text arrives by props (DP1).
+// The page computes the reputation from the reviews (`sellerReputation`, 9.15.4) and hands over
+// each traded listing once, in `operations`, with its title (9.4) and the panel of its asset
+// (7.5.3), built in the build. Every visible text arrives by props (DP1).
+
+// ------------------------------------------------------------------------ reputation
+
+/** The texts of a reputation (DP1). */
+export interface ReputationLabels {
+  /** `ui.money.outOf`, «de 5»: what a screen reader hears after the score. */
+  outOf: string;
+  /** «{n} operación» / «{n} operaciones». */
+  deals: MessageLeaf;
+  /** «{n} comprador distinto» / «{n} compradores distintos». */
+  buyers: MessageLeaf;
+  /** «sin reseñas»: the value of a seller nobody reviewed yet. */
+  noReviews: string;
+}
+
+/** A plural or a plain template, filled with the figure already formatted (13.2, 13.3). */
+function counted(template: MessageLeaf, n: number, locale: Locale): string {
+  const chosen = isPluralMessage(template) ? plural(locale, n, template) : template;
+  return fill(chosen, { n: formatInteger(n, locale) });
+}
+
+/**
+ * The values of «Valoración» (9.15.4): «★ 4.8», «50 operaciones» and «5 compradores distintos»,
+ * which `FactLine` joins with « · ». The score is the «media», written as every score of the site
+ * with one decimal and a point in both languages (`formatRating`, X5), so the card, the row and
+ * the detail show the same figure; the star is `aria-hidden` and a screen reader hears «4.8 de
+ * 5». A seller nobody reviewed yet is «sin reseñas», followed by its confirmed trades when it has
+ * some.
+ */
+export function reputationValues(
+  reputation: Pick<SellerReputation, 'valoracion' | 'operaciones' | 'contrapartes'>,
+  locale: Locale,
+  labels: ReputationLabels,
+): ReactNode[] {
+  const { valoracion, operaciones, contrapartes } = reputation;
+  const deals = counted(labels.deals, operaciones, locale);
+  if (valoracion === null) return operaciones > 0 ? [labels.noReviews, deals] : [labels.noReviews];
+  return [
+    <span key="score" className="ac-reputation__score">
+      <span aria-hidden="true">★ </span>
+      {formatRating(valoracion)}
+      <span className="sr-only">{` ${labels.outOf}`}</span>
+    </span>,
+    deals,
+    counted(labels.buyers, contrapartes, locale),
+  ];
+}
 
 // ------------------------------------------------------------------------ SellerCard
 
 /** The texts of the seller block of a detail (DP1). */
-export interface SellerCardLabels {
-  /** «Operaciones confirmadas», without the colon `FactLine` adds. */
-  operations: string;
-  /** `ui.money`: the hidden phrases of the score. */
-  money: RatingLabels;
+export interface SellerCardLabels extends ReputationLabels {
+  /** «Valoración», without the colon `FactLine` adds. */
+  rating: string;
 }
 
 export interface SellerCardProps {
@@ -60,38 +109,25 @@ export interface SellerCardProps {
   name: string;
   /** The profile (9.8). */
   href: string;
-  /** Mean of the reviews rounded to one decimal (9.10), or `null` without reviews. */
-  score: number | null;
-  reviews: number;
-  /** Confirmed trades as seller (9.6). */
-  operations: number;
+  /** Its online status with its label (9.15.6); `null` draws none. */
+  presence: SellerPresenceData | null;
+  /** Its reputation as seller (9.15.4). */
+  reputation: Pick<SellerReputation, 'valoracion' | 'operaciones' | 'contrapartes'>;
   locale: Locale;
   labels: SellerCardLabels;
 }
 
-/** The «Vendedor» section of a listing detail (9.6). */
-export function SellerCard({
-  name,
-  href,
-  score,
-  reviews,
-  operations,
-  locale,
-  labels,
-}: SellerCardProps) {
+/** The «Vendedor» section of a listing detail (9.6, 9.15.4, 9.15.6). */
+export function SellerCard({ name, href, presence, reputation, locale, labels }: SellerCardProps) {
   return (
     <div className="ac-seller-card">
-      <p className="ac-seller-card__rating">
-        <Rating
-          seller={name}
-          href={href}
-          score={score}
-          reviews={reviews}
-          locale={locale}
-          labels={labels.money}
-        />
+      <p className="ac-seller-card__name">
+        <TextLink href={href}>{name}</TextLink>
+        {presence === null ? null : (
+          <SellerPresence state={presence.state} label={presence.label} />
+        )}
       </p>
-      <FactLine label={labels.operations} values={[formatInteger(operations, locale)]} />
+      <FactLine label={labels.rating} values={reputationValues(reputation, locale, labels)} />
     </div>
   );
 }
@@ -100,7 +136,7 @@ export function SellerCard({
 
 /** One review of `content/comercio/vendedores.json` (9.4), as the profile shows it. */
 export interface SellerReview {
-  /** 0 to 5. */
+  /** 1 to 5 (9.15.4). */
   puntuacion: number;
   comentario: string | null;
   /** ISO 8601 instant. */
@@ -154,8 +190,8 @@ export interface SellerReviewsProps {
 /** Reviews per page (9.8). */
 export const REVIEWS_PAGE_SIZE = 10;
 
-/** The rows of the table, from the top score down (9.8). */
-const SCORES = [5, 4, 3, 2, 1, 0] as const;
+/** The rows of the table, from the top score down: 1 to 5 stars (9.8, 9.15.4). */
+const SCORES = [5, 4, 3, 2, 1] as const;
 
 /** The newest first; a date that does not read goes last. */
 function newestFirst(a: SellerReview, b: SellerReview): number {

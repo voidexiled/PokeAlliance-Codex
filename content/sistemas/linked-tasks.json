@@ -2,10 +2,10 @@
   "$schema": "../schemas/sistemas.schema.json",
   "id": "linked-tasks",
   "titulo": {
-    "es": "Linked Tasks",
+    "es": "Tareas Vinculadas",
     "en": "Linked Tasks"
   },
-  "sprite": null,
+  "sprite": "ui/sistemas/linked-tasks",
   "orden": 4,
   "tooltip": [],
   "intro": [],

@@ -2,10 +2,10 @@
   "$schema": "../schemas/sistemas.schema.json",
   "id": "experience",
   "titulo": {
-    "es": "Experiencia y Level",
+    "es": "Experiencia y Nivel",
     "en": "Experience and Level"
   },
-  "sprite": null,
+  "sprite": "ui/sistemas/experience",
   "orden": 10,
   "tooltip": [],
   "intro": [],

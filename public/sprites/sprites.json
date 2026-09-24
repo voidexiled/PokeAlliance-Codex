@@ -39,103 +39,298 @@
       "modo": "estatico",
       "borrador": true
     },
-    "ui/categorias/todo": {
-      "archivo": "ui/balls/ultra-ball.png",
-      "frame": [32, 32],
-      "frames": 1,
-      "modo": "estatico",
-      "borrador": true
-    },
-    "ui/categorias/diamantes": {
-      "archivo": "ui/diamond.png",
-      "frame": [32, 32],
-      "frames": 7,
-      "modo": "variante",
-      "borrador": true
-    },
-    "ui/categorias/pokemon": {
+    "ui/inicio": {
       "archivo": "ui/balls/alliance-ball.png",
       "frame": [32, 32],
       "frames": 1,
-      "modo": "estatico",
-      "borrador": true
+      "modo": "estatico"
+    },
+    "ui/indice/sistemas": {
+      "archivo": "ui/indice/sistemas.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "ui/indice/items": {
+      "archivo": "ui/indice/items.png",
+      "frame": [32, 32],
+      "frames": 11,
+      "modo": "animacion",
+      "duracionMs": [110, 110, 110, 110, 110, 110, 110, 110, 110, 110, 110]
+    },
+    "ui/indice/actividades": {
+      "archivo": "ui/indice/actividades.png",
+      "frame": [32, 32],
+      "frames": 6,
+      "modo": "animacion",
+      "duracionMs": [110, 110, 110, 110, 110, 110]
+    },
+    "ui/indice/pokedex": {
+      "archivo": "outfits/2/sur.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "ui/herramientas/guild": {
+      "archivo": "ui/herramientas/guild.png",
+      "frame": [28, 28],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "ui/herramientas/mapa": {
+      "archivo": "ui/herramientas/mapa.png",
+      "frame": [28, 28],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "ui/cambios": {
+      "archivo": "ui/cambios.png",
+      "frame": [28, 28],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "ui/shiny": {
+      "archivo": "ui/shiny.png",
+      "frame": [45, 45],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "ui/categorias/todo": {
+      "archivo": "ui/categorias/todo.png",
+      "frame": [18, 18],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "ui/categorias/diamantes": {
+      "archivo": "ui/categorias/diamantes.png",
+      "frame": [22, 20],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "ui/categorias/pokemon": {
+      "archivo": "ui/categorias/pokemon.png",
+      "frame": [23, 21],
+      "frames": 1,
+      "modo": "estatico"
     },
     "ui/categorias/poke-balls": {
       "archivo": "ui/categorias/poke-balls.png",
-      "frame": [32, 32],
+      "frame": [18, 17],
       "frames": 1,
-      "modo": "estatico",
-      "borrador": true
+      "modo": "estatico"
     },
     "ui/categorias/stones": {
-      "archivo": "items/stones/fire-stone.png",
-      "frame": [32, 32],
-      "frames": 8,
-      "modo": "variante",
-      "borrador": true
+      "archivo": "ui/categorias/stones.png",
+      "frame": [23, 24],
+      "frames": 1,
+      "modo": "estatico"
     },
     "ui/categorias/helds": {
-      "archivo": "ui/balls/premier-ball.png",
-      "frame": [32, 32],
+      "archivo": "ui/categorias/helds.png",
+      "frame": [28, 28],
       "frames": 1,
-      "modo": "estatico",
-      "borrador": true
+      "modo": "estatico"
     },
     "ui/categorias/orbs": {
-      "archivo": "ui/balls/premier-ball.png",
-      "frame": [32, 32],
+      "archivo": "ui/categorias/orbs.png",
+      "frame": [18, 17],
       "frames": 1,
-      "modo": "estatico",
-      "borrador": true
+      "modo": "estatico"
     },
     "ui/categorias/creature-items": {
-      "archivo": "ui/balls/premier-ball.png",
-      "frame": [32, 32],
+      "archivo": "ui/categorias/creature-items.png",
+      "frame": [22, 17],
       "frames": 1,
-      "modo": "estatico",
-      "borrador": true
+      "modo": "estatico"
     },
     "ui/categorias/general-items": {
-      "archivo": "ui/balls/premier-ball.png",
-      "frame": [32, 32],
+      "archivo": "ui/categorias/general-items.png",
+      "frame": [22, 22],
       "frames": 1,
-      "modo": "estatico",
-      "borrador": true
+      "modo": "estatico"
     },
     "ui/categorias/utilities": {
-      "archivo": "ui/balls/premier-ball.png",
-      "frame": [32, 32],
+      "archivo": "ui/categorias/utilities.png",
+      "frame": [16, 22],
       "frames": 1,
-      "modo": "estatico",
-      "borrador": true
+      "modo": "estatico"
     },
     "ui/categorias/addons": {
-      "archivo": "ui/balls/premier-ball.png",
-      "frame": [32, 32],
+      "archivo": "ui/categorias/addons.png",
+      "frame": [22, 24],
       "frames": 1,
-      "modo": "estatico",
-      "borrador": true
+      "modo": "estatico"
     },
     "ui/categorias/consumable": {
-      "archivo": "ui/balls/premier-ball.png",
-      "frame": [32, 32],
+      "archivo": "ui/categorias/consumable.png",
+      "frame": [20, 18],
       "frames": 1,
-      "modo": "estatico",
-      "borrador": true
+      "modo": "estatico"
     },
     "ui/categorias/foods": {
-      "archivo": "ui/balls/premier-ball.png",
-      "frame": [32, 32],
+      "archivo": "ui/categorias/foods.png",
+      "frame": [22, 19],
       "frames": 1,
-      "modo": "estatico",
-      "borrador": true
+      "modo": "estatico"
     },
     "ui/categorias/furnitures": {
-      "archivo": "ui/balls/premier-ball.png",
+      "archivo": "ui/categorias/furnitures.png",
+      "frame": [21, 21],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "ui/elementos/normal": {
+      "archivo": "ui/elementos/normal.png",
+      "frame": [24, 24],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "ui/elementos/fire": {
+      "archivo": "ui/elementos/fire.png",
+      "frame": [24, 24],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "ui/elementos/water": {
+      "archivo": "ui/elementos/water.png",
+      "frame": [24, 24],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "ui/elementos/grass": {
+      "archivo": "ui/elementos/grass.png",
+      "frame": [24, 24],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "ui/elementos/electric": {
+      "archivo": "ui/elementos/electric.png",
+      "frame": [24, 24],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "ui/elementos/ice": {
+      "archivo": "ui/elementos/ice.png",
+      "frame": [24, 24],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "ui/elementos/fighting": {
+      "archivo": "ui/elementos/fighting.png",
+      "frame": [24, 24],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "ui/elementos/poison": {
+      "archivo": "ui/elementos/poison.png",
+      "frame": [24, 24],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "ui/elementos/ground": {
+      "archivo": "ui/elementos/ground.png",
+      "frame": [24, 24],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "ui/elementos/flying": {
+      "archivo": "ui/elementos/flying.png",
+      "frame": [24, 24],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "ui/elementos/psychic": {
+      "archivo": "ui/elementos/psychic.png",
+      "frame": [24, 24],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "ui/elementos/bug": {
+      "archivo": "ui/elementos/bug.png",
+      "frame": [24, 24],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "ui/elementos/rock": {
+      "archivo": "ui/elementos/rock.png",
+      "frame": [24, 24],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "ui/elementos/ghost": {
+      "archivo": "ui/elementos/ghost.png",
+      "frame": [24, 24],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "ui/elementos/dragon": {
+      "archivo": "ui/elementos/dragon.png",
+      "frame": [24, 24],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "ui/elementos/fairy": {
+      "archivo": "ui/elementos/fairy.png",
+      "frame": [24, 24],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "ui/elementos/dark": {
+      "archivo": "ui/elementos/dark.png",
+      "frame": [24, 24],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "ui/elementos/steel": {
+      "archivo": "ui/elementos/steel.png",
+      "frame": [24, 24],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "ui/sistemas/boost": {
+      "archivo": "ui/sistemas/boost.png",
+      "frame": [32, 32],
+      "frames": 9,
+      "modo": "animacion",
+      "duracionMs": [110, 110, 110, 110, 110, 110, 110, 110, 110]
+    },
+    "ui/sistemas/achievements": {
+      "archivo": "ui/sistemas/achievements.png",
       "frame": [32, 32],
       "frames": 1,
-      "modo": "estatico",
-      "borrador": true
+      "modo": "estatico"
+    },
+    "ui/sistemas/experience": {
+      "archivo": "ui/indice/sistemas.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "ui/sistemas/gamepass": {
+      "archivo": "ui/sistemas/gamepass.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "ui/sistemas/linked-tasks": {
+      "archivo": "ui/sistemas/linked-tasks.png",
+      "frame": [32, 32],
+      "frames": 8,
+      "modo": "animacion",
+      "duracionMs": [110, 110, 110, 110, 110, 110, 110, 110]
+    },
+    "ui/sistemas/medals": {
+      "archivo": "ui/indice/actividades.png",
+      "frame": [32, 32],
+      "frames": 6,
+      "modo": "animacion",
+      "duracionMs": [110, 110, 110, 110, 110, 110]
+    },
+    "ui/actividades/porygon-quest-dr-vektor": {
+      "archivo": "ui/actividades/porygon-quest-dr-vektor.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
     },
     "items/poke-balls/alliance-ball": {
       "archivo": "items/poke-balls/alliance-ball.png",
@@ -148,48 +343,332 @@
       "archivo": "items/poke-balls/premier-ball.png",
       "frame": [32, 32],
       "frames": 5,
-      "modo": "variante"
+      "modo": "animacion",
+      "duracionMs": [110, 110, 110, 110, 110]
     },
     "items/poke-balls/ultra-ball": {
       "archivo": "items/poke-balls/ultra-ball.png",
       "frame": [32, 32],
       "frames": 5,
-      "modo": "variante"
+      "modo": "animacion",
+      "duracionMs": [110, 110, 110, 110, 110]
+    },
+    "items/poke-balls/poke-ball": {
+      "archivo": "items/poke-balls/poke-ball.png",
+      "frame": [20, 20],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/poke-balls/great-ball": {
+      "archivo": "items/poke-balls/great-ball.png",
+      "frame": [20, 20],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/poke-balls/super-ball": {
+      "archivo": "items/poke-balls/super-ball.png",
+      "frame": [21, 21],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/poke-balls/safari-ball": {
+      "archivo": "items/poke-balls/safari-ball.png",
+      "frame": [20, 20],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/poke-balls/moon-ball": {
+      "archivo": "items/poke-balls/moon-ball.png",
+      "frame": [20, 20],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/poke-balls/tinker-ball": {
+      "archivo": "items/poke-balls/tinker-ball.png",
+      "frame": [21, 20],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/poke-balls/yume-ball": {
+      "archivo": "items/poke-balls/yume-ball.png",
+      "frame": [20, 20],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/poke-balls/dusk-ball": {
+      "archivo": "items/poke-balls/dusk-ball.png",
+      "frame": [20, 20],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/poke-balls/heavy-ball": {
+      "archivo": "items/poke-balls/heavy-ball.png",
+      "frame": [20, 20],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/poke-balls/janguru-ball": {
+      "archivo": "items/poke-balls/janguru-ball.png",
+      "frame": [20, 20],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/poke-balls/magu-ball": {
+      "archivo": "items/poke-balls/magu-ball.png",
+      "frame": [21, 21],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/poke-balls/net-ball": {
+      "archivo": "items/poke-balls/net-ball.png",
+      "frame": [21, 21],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/poke-balls/sora-ball": {
+      "archivo": "items/poke-balls/sora-ball.png",
+      "frame": [20, 20],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/poke-balls/tale-ball": {
+      "archivo": "items/poke-balls/tale-ball.png",
+      "frame": [20, 20],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/poke-balls/fast-ball": {
+      "archivo": "items/poke-balls/fast-ball.png",
+      "frame": [20, 20],
+      "frames": 1,
+      "modo": "estatico"
     },
     "items/stones/fire-stone": {
       "archivo": "items/stones/fire-stone.png",
       "frame": [32, 32],
       "frames": 8,
-      "modo": "cantidad",
-      "umbrales": [1, 2, 3, 4, 5, 10, 25, 100]
+      "modo": "animacion",
+      "duracionMs": [110, 110, 110, 110, 110, 110, 110, 110]
     },
     "items/stones/heart-stone": {
       "archivo": "items/stones/heart-stone.png",
       "frame": [32, 32],
       "frames": 8,
-      "modo": "cantidad",
-      "umbrales": [1, 2, 3, 4, 5, 10, 25, 100]
+      "modo": "animacion",
+      "duracionMs": [110, 110, 110, 110, 110, 110, 110, 110]
     },
     "items/stones/leaf-stone": {
       "archivo": "items/stones/leaf-stone.png",
       "frame": [32, 32],
       "frames": 8,
-      "modo": "cantidad",
-      "umbrales": [1, 2, 3, 4, 5, 10, 25, 100]
+      "modo": "animacion",
+      "duracionMs": [110, 110, 110, 110, 110, 110, 110, 110]
     },
     "items/stones/thunder-stone": {
       "archivo": "items/stones/thunder-stone.png",
       "frame": [32, 32],
       "frames": 8,
-      "modo": "cantidad",
-      "umbrales": [1, 2, 3, 4, 5, 10, 25, 100]
+      "modo": "animacion",
+      "duracionMs": [110, 110, 110, 110, 110, 110, 110, 110]
     },
     "items/stones/water-stone": {
       "archivo": "items/stones/water-stone.png",
       "frame": [32, 32],
       "frames": 8,
-      "modo": "cantidad",
-      "umbrales": [1, 2, 3, 4, 5, 10, 25, 100]
+      "modo": "animacion",
+      "duracionMs": [110, 110, 110, 110, 110, 110, 110, 110]
+    },
+    "items/stones/ice-stone": {
+      "archivo": "items/stones/ice-stone.png",
+      "frame": [32, 32],
+      "frames": 8,
+      "modo": "animacion",
+      "duracionMs": [110, 110, 110, 110, 110, 110, 110, 110]
+    },
+    "items/stones/punch-stone": {
+      "archivo": "items/stones/punch-stone.png",
+      "frame": [32, 32],
+      "frames": 8,
+      "modo": "animacion",
+      "duracionMs": [110, 110, 110, 110, 110, 110, 110, 110]
+    },
+    "items/stones/venom-stone": {
+      "archivo": "items/stones/venom-stone.png",
+      "frame": [32, 32],
+      "frames": 8,
+      "modo": "animacion",
+      "duracionMs": [110, 110, 110, 110, 110, 110, 110, 110]
+    },
+    "items/stones/earth-stone": {
+      "archivo": "items/stones/earth-stone.png",
+      "frame": [32, 32],
+      "frames": 8,
+      "modo": "animacion",
+      "duracionMs": [110, 110, 110, 110, 110, 110, 110, 110]
+    },
+    "items/stones/feather-stone": {
+      "archivo": "items/stones/feather-stone.png",
+      "frame": [32, 32],
+      "frames": 8,
+      "modo": "animacion",
+      "duracionMs": [110, 110, 110, 110, 110, 110, 110, 110]
+    },
+    "items/stones/enigma-stone": {
+      "archivo": "items/stones/enigma-stone.png",
+      "frame": [32, 32],
+      "frames": 8,
+      "modo": "animacion",
+      "duracionMs": [110, 110, 110, 110, 110, 110, 110, 110]
+    },
+    "items/stones/cocoon-stone": {
+      "archivo": "items/stones/cocoon-stone.png",
+      "frame": [32, 32],
+      "frames": 8,
+      "modo": "animacion",
+      "duracionMs": [110, 110, 110, 110, 110, 110, 110, 110]
+    },
+    "items/stones/rock-stone": {
+      "archivo": "items/stones/rock-stone.png",
+      "frame": [32, 32],
+      "frames": 8,
+      "modo": "animacion",
+      "duracionMs": [110, 110, 110, 110, 110, 110, 110, 110]
+    },
+    "items/stones/ghost-stone": {
+      "archivo": "items/stones/ghost-stone.png",
+      "frame": [32, 32],
+      "frames": 8,
+      "modo": "animacion",
+      "duracionMs": [110, 110, 110, 110, 110, 110, 110, 110]
+    },
+    "items/stones/crystal-stone": {
+      "archivo": "items/stones/crystal-stone.png",
+      "frame": [32, 32],
+      "frames": 8,
+      "modo": "animacion",
+      "duracionMs": [110, 110, 110, 110, 110, 110, 110, 110]
+    },
+    "items/stones/darkness-stone": {
+      "archivo": "items/stones/darkness-stone.png",
+      "frame": [32, 32],
+      "frames": 8,
+      "modo": "animacion",
+      "duracionMs": [110, 110, 110, 110, 110, 110, 110, 110]
+    },
+    "items/stones/metal-stone": {
+      "archivo": "items/stones/metal-stone.png",
+      "frame": [32, 32],
+      "frames": 8,
+      "modo": "animacion",
+      "duracionMs": [110, 110, 110, 110, 110, 110, 110, 110]
+    },
+    "items/stones/normal-fragment": {
+      "archivo": "items/stones/normal-fragment.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/stones/fire-fragment": {
+      "archivo": "items/stones/fire-fragment.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/stones/water-fragment": {
+      "archivo": "items/stones/water-fragment.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/stones/grass-fragment": {
+      "archivo": "items/stones/grass-fragment.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/stones/electric-fragment": {
+      "archivo": "items/stones/electric-fragment.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/stones/ice-fragment": {
+      "archivo": "items/stones/ice-fragment.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/stones/fighting-fragment": {
+      "archivo": "items/stones/fighting-fragment.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/stones/poison-fragment": {
+      "archivo": "items/stones/poison-fragment.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/stones/ground-fragment": {
+      "archivo": "items/stones/ground-fragment.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/stones/flying-fragment": {
+      "archivo": "items/stones/flying-fragment.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/stones/psychic-fragment": {
+      "archivo": "items/stones/psychic-fragment.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/stones/bug-fragment": {
+      "archivo": "items/stones/bug-fragment.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/stones/rock-fragment": {
+      "archivo": "items/stones/rock-fragment.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/stones/ghost-fragment": {
+      "archivo": "items/stones/ghost-fragment.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/stones/dragon-fragment": {
+      "archivo": "items/stones/dragon-fragment.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/stones/fairy-fragment": {
+      "archivo": "items/stones/fairy-fragment.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/stones/dark-fragment": {
+      "archivo": "items/stones/dark-fragment.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/stones/steel-fragment": {
+      "archivo": "items/stones/steel-fragment.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
     },
     "items/diamantes/diamantes-ejemplo-1": {
       "archivo": "ui/balls/premier-ball.png",

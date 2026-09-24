@@ -25,7 +25,7 @@
         "en": "Linked Tasks"
       },
       "ruta": "/sistemas/linked-tasks/",
-      "sprite": null,
+      "sprite": "ui/sistemas/linked-tasks",
       "borrador": true
     },
     {

@@ -361,9 +361,15 @@ const REDIRECTS = {
  * reaches it, and the parity routes are filtered below on their own.
  */
 const NOINDEX_ROUTES = new Set(
-  ['/{l}/mapa/', '/{l}/herramientas/pokemon/', '/{l}/comercio/publicar/'].flatMap((route) =>
-    LOCALES.map((locale) => route.replaceAll('{l}', locale)),
-  ),
+  [
+    '/{l}/mapa/',
+    '/{l}/herramientas/pokemon/',
+    '/{l}/comercio/publicar/',
+    // Prerendered only with COMERCIO_PUBLICO or the public Supabase settings (9.3, 9.16.3).
+    '/{l}/comercio/operaciones/',
+    '/{l}/cuenta/',
+    '/{l}/cuenta/perfil/',
+  ].flatMap((route) => LOCALES.map((locale) => route.replaceAll('{l}', locale))),
 );
 
 /**

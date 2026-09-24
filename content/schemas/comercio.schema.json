@@ -409,11 +409,11 @@
     },
     "canal": {
       "type": "object",
-      "description": "Canal de contacto verificado. En público solo se ve su etiqueta: «Correo», «Teléfono +55», «Discord», «Twitch» o el nombre de otra plataforma; nunca el correo, el número ni el usuario. etiqueta lleva el código del país de un teléfono y el nombre de otra plataforma; en los demás canales es null.",
+      "description": "Canal de contacto verificado. En público solo se ve su etiqueta: «Correo», «Teléfono +55», «Discord», «Twitch», «Google» o el nombre de otra plataforma; nunca el correo, el número ni el usuario. etiqueta lleva el código del país de un teléfono y el nombre de otra plataforma; en los demás canales es null.",
       "required": ["tipo", "etiqueta"],
       "additionalProperties": false,
       "properties": {
-        "tipo": { "enum": ["correo", "telefono", "discord", "twitch", "otra"] },
+        "tipo": { "enum": ["correo", "telefono", "discord", "twitch", "google", "otra"] },
         "etiqueta": { "type": ["string", "null"] }
       },
       "allOf": [
@@ -433,7 +433,7 @@
         },
         {
           "if": {
-            "properties": { "tipo": { "enum": ["correo", "discord", "twitch"] } },
+            "properties": { "tipo": { "enum": ["correo", "discord", "twitch", "google"] } },
             "required": ["tipo"]
           },
           "then": { "properties": { "etiqueta": { "type": "null" } } }
@@ -442,11 +442,11 @@
     },
     "resena": {
       "type": "object",
-      "description": "Reseña de una operación confirmada: de 0 a 5, sobre un anuncio del mismo vendedor.",
+      "description": "Reseña de una operación confirmada: de 1 a 5 estrellas, sobre un anuncio del mismo vendedor.",
       "required": ["puntuacion", "comentario", "fecha", "anuncio", "comprador"],
       "additionalProperties": false,
       "properties": {
-        "puntuacion": { "type": "integer", "minimum": 0, "maximum": 5 },
+        "puntuacion": { "type": "integer", "minimum": 1, "maximum": 5 },
         "comentario": {
           "type": ["string", "null"],
           "if": { "type": "string" },
@@ -466,7 +466,7 @@
     "vendedor": {
       "type": "object",
       "description": "Un vendedor ficticio: nunca el nombre de una persona o de un jugador real. La valoración no se guarda: se calcula de sus reseñas.",
-      "required": ["id", "nombre", "desde", "canales", "resenas"],
+      "required": ["id", "nombre", "desde", "presencia", "canales", "resenas"],
       "additionalProperties": false,
       "properties": {
         "id": {
@@ -479,6 +479,10 @@
           "description": "Desde cuándo tiene cuenta. null si no se conoce.",
           "if": { "type": "string" },
           "then": { "$ref": "#/$defs/instante" }
+        },
+        "presencia": {
+          "description": "Estado en línea fijo del vendedor de ejemplo: en el juego, ausente o desconectado.",
+          "enum": ["en_juego", "ausente", "desconectado"]
         },
         "canales": {
           "type": "array",

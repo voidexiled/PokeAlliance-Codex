@@ -1,0 +1,48 @@
+/* The moderation queue of Comercio (spec 9.11 with 9.15.5; template H of 8.0.2): the island of
+   src/components/trade/ModerationQueue.tsx on src/routes/comercio/moderacion.astro. There is no
+   board for this page, so the blocks are composed only of design-system components and tokens
+   (R16).
+
+   Per-page stylesheet (D-018, 13.6): only this page draws these blocks, so global.css does not
+   import it; the page imports it. It repeats the layer order of global.css before its block, so
+   the `components` layer keeps its place whichever sheet the browser reads first (3.6).
+
+   - The island is the h1 and a column of `Section`s 48 apart, the rhythm of the page (5.9):
+     «Reportes», «Alertas» and «Canales pendientes».
+   - In the tables, «Detalle» stacks its lines 4 apart, «Acciones» is a row of buttons that
+     wraps, and a user name or a code breaks anywhere rather than widen its column. */
+
+@reference '../theme.css';
+
+@layer properties, theme, base, components, utilities;
+
+@layer components {
+  .ac-trade-mod {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-48);
+    min-width: 0;
+  }
+
+  .ac-trade-mod__lines {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+    min-width: 0;
+  }
+
+  .ac-trade-mod__line {
+    margin: 0;
+    overflow-wrap: anywhere;
+  }
+
+  .ac-trade-mod__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-8);
+  }
+
+  .ac-trade-mod__value {
+    overflow-wrap: anywhere;
+  }
+}

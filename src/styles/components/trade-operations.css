@@ -1,0 +1,180 @@
+/* «Mis operaciones» (spec 9.10 with 9.15.4; template H of 8.0.2): the island of
+   src/components/trade/OperationsPanel.tsx on src/routes/comercio/operaciones.astro, with the
+   review dialog of ReviewForm.tsx. There is no board for this page, so the blocks are composed
+   only of design-system components and tokens (R16).
+
+   Per-page stylesheet (D-018, 13.6): only this page draws these blocks, so global.css does not
+   import it; the page imports it. It repeats the layer order of global.css before its block, so
+   the `components` layer keeps its place whichever sheet the browser reads first (3.6).
+
+   - The island is a column 16 apart: «Compras» / «Ventas», the notice and the table.
+   - In the table, «Contacto» is a list of values, each one with its «Copiar», and «Acciones» a
+     row of buttons that wraps, under the line of the account's own review or of the pair cap.
+   - The stars of «Puntuación» are the options of a native radio group: the transparent input
+     lies over each 40 × 40 option, the star under it takes `selected` up to the chosen one, and
+     the focus ring of spec 5.2 is drawn around the star. The DS has no error look, so the
+     missing-score line is the helper of 12/16. */
+
+@reference '../theme.css';
+
+@layer properties, theme, base, components, utilities;
+
+@layer components {
+  .ac-trade-ops {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-16);
+    min-width: 0;
+  }
+
+  .ac-trade-ops__cell {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--space-8);
+    min-width: 0;
+  }
+
+  .ac-trade-ops__line {
+    margin: 0;
+  }
+
+  .ac-trade-ops__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-8);
+  }
+
+  .ac-trade-ops__contacts {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-8);
+    min-width: 0;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .ac-trade-ops__contact {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-4) var(--space-8);
+    min-width: 0;
+  }
+
+  /* An address, a number or a user name: it breaks anywhere rather than widen the column. */
+  .ac-trade-ops__contact-text {
+    min-width: 0;
+    overflow-wrap: anywhere;
+  }
+
+  .ac-trade-ops__contact-value {
+    color: var(--text-primary);
+    font-weight: 700;
+  }
+
+  /* The review dialog. */
+  .ac-review-form {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-16);
+  }
+
+  .ac-review-form__deal {
+    color: var(--text-secondary);
+    overflow-wrap: anywhere;
+    @apply type-body;
+  }
+
+  .ac-review-stars {
+    min-width: 0;
+    margin: 0;
+    padding: 0;
+    border: 0;
+  }
+
+  .ac-review-stars__legend {
+    margin: 0 0 var(--space-8);
+    padding: 0;
+    color: var(--text-primary);
+    @apply type-body;
+  }
+
+  .ac-review-stars__options {
+    display: flex;
+    gap: var(--space-4);
+  }
+
+  .ac-review-stars__option {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: var(--size-control);
+    height: var(--size-control);
+    border-radius: var(--radius-8);
+    color: var(--text-quaternary);
+  }
+
+  .ac-review-stars__option--on {
+    color: var(--selected);
+  }
+
+  /* The real control: the size of the option, transparent, above the star. */
+  .ac-review-stars__input {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    opacity: 0;
+    cursor: pointer;
+  }
+
+  .ac-review-stars__star {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    border-radius: var(--radius-8);
+    @apply type-h2;
+  }
+
+  /* Hover (spec 5.2): `bg-tertiary`, the one hover ink. */
+  .ac-review-stars__input:hover + .ac-review-stars__star {
+    background: var(--bg-tertiary);
+  }
+
+  /* Focus (spec 5.2): the ring of base.css, drawn on the star because the input is transparent. */
+  .ac-review-stars__input:focus-visible + .ac-review-stars__star {
+    outline: 2px solid var(--ring);
+    outline-offset: 1px;
+  }
+
+  .ac-review-stars__error {
+    margin: var(--space-4) 0 0;
+    color: var(--helper);
+    @apply type-ui;
+  }
+
+  /* Touch (spec 13.7, S14): each star, which is the target, is at least `size-touch`. */
+  @media (pointer: coarse) {
+    .ac-review-stars__option {
+      width: var(--size-touch);
+      height: var(--size-touch);
+    }
+  }
+
+  /* Forced colours: the chosen stars keep a colour of the mode and the ring its outline. */
+  @media (forced-colors: active) {
+    .ac-review-stars__option--on {
+      color: Highlight;
+    }
+
+    .ac-review-stars__input:focus-visible + .ac-review-stars__star {
+      outline-color: Highlight;
+    }
+  }
+}

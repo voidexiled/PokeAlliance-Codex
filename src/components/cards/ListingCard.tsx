@@ -1,10 +1,13 @@
 import { Fragment } from 'react';
 import type { HTMLAttributes, ReactNode } from 'react';
 
+import '@/styles/components/trade-presence.css';
+
 import { Card, Head, Meta, ShinyLine, Title, Zone } from '@/components/cards/Card';
 import type { CardHeadingLevel } from '@/components/cards/Card';
 import { FactList } from '@/components/cards/FactList';
 import type { FactMode, FactRow } from '@/components/cards/FactList';
+import { Chip } from '@/components/content/Chip';
 import { ElementChip } from '@/components/game/ElementChip';
 import type { ElementChipEntry } from '@/components/game/ElementChip';
 import { NestedEntity } from '@/components/game/NestedEntity';
@@ -30,6 +33,7 @@ import type { ListingKey, ListingLayout, ListingType } from '@/lib/cards/layout'
 import { formatInteger } from '@/lib/format/numbers';
 import { present } from '@/lib/format/unknown';
 import type { TipData } from '@/lib/game/tips';
+import type { EstadoPresencia } from '@/lib/trade/types';
 
 // ListingCard (spec 7.2.6, 7.5.5, 7.5.10, 7.6.2, 7.6.3, 9.4, 9.5.8; CARD_GRID_SYSTEM §6.1;
 // DS:ListingCard, DS:guias/30, DS:guias/40): the card of a Comercio listing — the 72 stage,
@@ -69,6 +73,12 @@ import type { TipData } from '@/lib/game/tips';
 //     Held Items open `up` (HeldStrip), and in the footer the Diamonds of a price open `up` +
 //     `end` and the «+N» of the channels `up` + `start`.
 //   - `loading` is the `lazy` of 7.4.2 for a card from index 4 of its list on.
+//   - The seller's online status (9.15.6): `SellerPresence`, a small dot with its label, next to
+//     the seller in the footer, and under it when the row has no room for both. The Lista row and
+//     the detail draw the same piece (TradeListRoot.tsx, SellerCard.tsx); trade-presence.css
+//     holds its look, a per-page sheet (D-018) that only the pages drawing a seller load.
+//   - «Dinero real» (9.15.2): with `labels.realMoney`, which the page passes only in phase B, a
+//     listing with a real-money price carries that tag, a `Chip` under the meta line.
 //
 // The card is not a link and never opens a tooltip: it already shows what the tooltip of its
 // listing would (§9.5.9 is for Slots and Lista); its title links to the detail and its
@@ -96,6 +106,12 @@ export type ListingFactValue =
   | ListingCardEntity
   | null;
 
+/** An online status (9.15.6) and its label in the page's language: «En el juego». */
+export interface SellerPresenceData {
+  state: EstadoPresencia;
+  label: string;
+}
+
 /** The seller of a listing, with the score of the confirmed trades (9.10). */
 export interface ListingCardSeller {
   name: string;
@@ -103,6 +119,27 @@ export interface ListingCardSeller {
   href: string;
   score?: number | null;
   reviews?: number | null;
+  /** The seller's online status (9.15.6); none draws no dot. */
+  presence?: SellerPresenceData | null;
+}
+
+export interface SellerPresenceProps extends SellerPresenceData {
+  /** Utilities added by the caller, after the component's class (3.8). */
+  className?: string;
+}
+
+/**
+ * The online status next to a seller (9.15.6): a small dot, `aria-hidden` because the label
+ * names the state, and the label. The state is a `data-presence` attribute (3.7): «En el juego»
+ * in the colour of success, «Ausente» in the one of warning, «Desconectado» dimmed.
+ */
+export function SellerPresence({ state, label, className }: SellerPresenceProps) {
+  return (
+    <span className={className ? `ac-presence ${className}` : 'ac-presence'} data-presence={state}>
+      <span className="ac-presence__dot" aria-hidden="true" />
+      {label}
+    </span>
+  );
 }
 
 /** The first declared training of a Pokémon (§9.5.8): «Attack 16 (53%)». */
@@ -173,6 +210,11 @@ export interface ListingCardLabels {
   negotiable: string;
   /** «Reservado» / «Reserved». */
   reserved: string;
+  /**
+   * «Dinero real» / «Real money», the tag of a listing with a real-money price (9.15.2). Only
+   * phase B passes it; without it no card carries the tag.
+   */
+  realMoney?: string;
   /** `ui.money`: Held Items, Entrenamiento, the score and the «+N» of the channels. */
   money: HeldStripLabels & TrainingMeterLabels & RatingLabels & ChipRowLabels;
 }
@@ -380,6 +422,11 @@ export function ListingCard({
               ))}
             </Meta>
           ) : null}
+          {labels.realMoney !== undefined && present(listing.fiat) ? (
+            <p className="ac-listing-card__tag">
+              <Chip>{labels.realMoney}</Chip>
+            </p>
+          ) : null}
         </>
       }
     />
@@ -427,20 +474,31 @@ export function ListingCard({
     }
   }
   const seller = listing.seller;
+  const rating = seller ? (
+    <Rating
+      seller={seller.name}
+      href={seller.href}
+      score={seller.score}
+      reviews={seller.reviews}
+      locale={locale}
+      labels={labels.money}
+    />
+  ) : null;
+  const presence = seller?.presence ?? null;
   foot.push({
     key: 'seller',
     label: labels.seller,
-    mode: 'node',
-    value: seller ? (
-      <Rating
-        seller={seller.name}
-        href={seller.href}
-        score={seller.score}
-        reviews={seller.reviews}
-        locale={locale}
-        labels={labels.money}
-      />
-    ) : null,
+    // With the status the value may take two lines: the label stays on the first (9.15.6).
+    mode: presence === null ? 'node' : 'nodetop',
+    value:
+      rating !== null && presence !== null ? (
+        <span className="ac-listing-card__seller">
+          {rating}
+          <SellerPresence state={presence.state} label={presence.label} />
+        </span>
+      ) : (
+        rating
+      ),
   });
   const channels = listing.channels ?? [];
   foot.push({

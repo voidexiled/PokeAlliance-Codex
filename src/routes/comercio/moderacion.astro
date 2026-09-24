@@ -1,0 +1,91 @@
+---
+// The moderation queue of Comercio (spec 9.11 with 9.15.5; template H of 8.0.2):
+// `/{l}/comercio/moderacion/`, for moderators only. `noindex` (9.3, 13.5).
+//
+// Route (9.3): it does not live in src/pages/. src/integrations/comercio-fases.ts injects it as
+// `/[locale]/comercio/moderacion` only with COMERCIO_PUBLICO, rendered on demand
+// (`prerender: false`: a file outside src/pages/ cannot export `prerender`; the injection sets it,
+// and the output is `server`). Without the switch it does not exist and answers 404 (S11,
+// CA-9.13).
+//
+// Who sees it (9.3, «404 si la cuenta no es moderadora»):
+// - A locale the site does not have, or a build without account mode (no public Supabase
+//   configuration: nobody can sign in, so nobody moderates), answers the 404 of 8.12 here.
+// - Otherwise the server cannot tell who is asking: the session lives in the browser
+//   (src/lib/supabase/client.ts, D-025), not in a cookie. The response is the same frame for
+//   everyone, never cached or indexed, and the island decides: it asks the database whether the
+//   account has its row in `trade_moderators` and, without a session or without that row, shows
+//   the text of the 404 and reads nothing else. No moderation data is in this HTML, and every read
+//   and action of the island is refused by RLS and the security definer functions to any other
+//   account (9.12.2, 9.12.3). A real 404 status for a signed-in non-moderator needs a session the
+//   server can read, which the site does not have.
+//
+// Composition: the crumbs «Comunidad › Comercio › Moderación» (8.0.4) and the island
+// (`ModerationQueue`), which draws the h1 once it knows whether it is «Moderación» or «Página no
+// encontrada», and the sections «Reportes», «Alertas» and «Canales pendientes». Unlike the other
+// Comercio routes it has no 18+ gate (`AgeGate`, 9.15.2): to everyone but a moderator this page
+// is the 404, which a Comercio dialog would give away, and a moderator is an adult the owner
+// named in `trade_moderators` (D-B6), whose every action the server checks again.
+//
+// Data (13.2): `trade.moderation`, the reason labels of `trade.report`, `errors` for the 404 text
+// and the two leaves of `ui` the island reads.
+import { getAlternatePath, isLocale, locales, type Locale } from '@/i18n/config';
+import type { Messages } from '@/i18n/messages/en';
+import { en } from '@/i18n/messages/en';
+import { es } from '@/i18n/messages/es';
+import { fill } from '@/i18n/messages/types';
+import { buildNav } from '@/lib/nav/groups';
+import { getSupabasePublicConfig } from '@/lib/supabase/env';
+
+import { ModerationQueue } from '@/components/trade/ModerationQueue';
+import PageLayout from '@/layouts/PageLayout.astro';
+
+import '@/styles/components/trade-moderation.css';
+
+const dictionaries: Record<Locale, Messages> = { es, en };
+
+const requested = Astro.params.locale ?? '';
+if (!isLocale(requested) || getSupabasePublicConfig() === null) {
+  return new Response(null, { status: 404 });
+}
+const locale: Locale = requested;
+
+// Personal to whoever asks, so no shared cache keeps it; and never indexed (13.5).
+Astro.response.headers.set('Cache-Control', 'private, no-store');
+Astro.response.headers.set('X-Robots-Tag', 'noindex, nofollow');
+
+const path = Astro.url.pathname;
+const alternates = Object.fromEntries(
+  locales.map((option) => [option, getAlternatePath(path, option)]),
+) as Record<Locale, string>;
+const { trade, ui, errors } = dictionaries[locale];
+
+// 8.0.4: «Comunidad › Comercio › Moderación».
+const group = buildNav(locale, path).groups.find((entry) => entry.id === 'comunidad');
+const comercio = group?.items.find((item) => item.id === 'comercio');
+if (group === undefined || comercio === undefined) {
+  throw new Error('src/lib/nav/groups.ts: no «comercio» entry in the «comunidad» group (8.0.3).');
+}
+---
+
+<PageLayout
+  locale={locale}
+  title={trade.moderation.title}
+  description={trade.moderation.description}
+  alternates={alternates}
+  breadcrumb={[
+    { label: group.label },
+    { label: comercio.label, href: comercio.href },
+    { label: trade.moderation.title },
+  ]}
+  noindex
+>
+  <ModerationQueue
+    client:load
+    locale={locale}
+    messages={trade.moderation}
+    report={{ reasons: trade.report.reasons }}
+    notFound={{ title: errors.notFound, line: fill(errors.notFoundLine, { path }) }}
+    ui={{ close: ui.close, dismiss: ui.dismiss }}
+  />
+</PageLayout>

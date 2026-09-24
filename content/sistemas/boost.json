@@ -3,7 +3,7 @@
   "id": "boost",
   "titulo": { "es": "Boost", "en": "Boost" },
   "subtitulo": { "es": "(Potenciación)", "en": "(Enhancement)" },
-  "sprite": null,
+  "sprite": "ui/sistemas/boost",
   "orden": 1,
   "tooltip": [
     {

@@ -21,7 +21,9 @@ import { ACCOUNT_ORIGIN, localSupabase } from './tests/e2e/local-supabase';
 // site is in local mode and `/{l}/cuenta/` does not exist on them. Account mode is tested on
 // a third server, on 4323, pointed at the LOCAL stack (`supabase start`,
 // tests/e2e/local-supabase.ts); it is only started when `supabase status` reports one, and
-// the specs that use it (cuenta.spec.ts and the account case of guild.spec.ts) skip otherwise.
+// the specs that use it (cuenta.spec.ts, comercio-fase-b.spec.ts and the account case of
+// guild.spec.ts) skip otherwise. It runs Comercio phase B (COMERCIO_PUBLICO and COMERCIO_DEMO,
+// 9.2): registration is the same for every account (9.15.1), and phase B only adds to it.
 //
 // Two things §14.3 asks of every project are not here, because Playwright 1.63 has no
 // configuration option for either: `page.route('https://wiki.pokealliance.com/**')` and
@@ -41,6 +43,19 @@ const NO_SUPABASE = {
 };
 
 const stack = localSupabase();
+
+/**
+ * The answer of the Comercio 18+ gate (9.15.2, `AGE_ANSWER_KEY` of AgeGate.tsx), already given
+ * on every server: otherwise its dialog covers every Comercio page a spec opens. The specs of the
+ * gate itself clear it with `test.use({ storageState: NO_STORAGE })`.
+ */
+const AGE_ANSWERED = {
+  cookies: [],
+  origins: [DEV, OUTPUT, ACCOUNT_ORIGIN].map((origin) => ({
+    origin,
+    localStorage: [{ name: 'alliance-codex:comercio:edad:v1', value: 'adulto' }],
+  })),
+};
 
 const DESKTOP = { width: 1440, height: 900 };
 const PHONE = { width: 390, height: 844 };
@@ -78,6 +93,7 @@ export default defineConfig({
   reporter: process.env.CI ? 'github' : 'list',
   use: {
     trace: 'on-first-retry',
+    storageState: AGE_ANSWERED,
   },
   projects: [
     {
@@ -199,6 +215,8 @@ export default defineConfig({
               ...NO_SUPABASE,
               PUBLIC_SUPABASE_URL: stack.url,
               PUBLIC_SUPABASE_ANON_KEY: stack.anonKey,
+              COMERCIO_PUBLICO: '1',
+              COMERCIO_DEMO: '1',
               ASTRO_DEV_BACKGROUND: '0',
             },
             reuseExistingServer: false,

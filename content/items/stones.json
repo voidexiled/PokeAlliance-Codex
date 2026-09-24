@@ -4,48 +4,105 @@
     {
       "id": "fire-stone",
       "nombre": "Fire Stone",
-      "clientId": null,
+      "clientId": 37853,
       "categoria": "stones",
       "sprite": "items/stones/fire-stone",
       "apilable": true,
       "precioNpc": {
         "vende": null,
         "compra": null
-      },
-      "borrador": true
+      }
     },
     {
       "id": "heart-stone",
       "nombre": "Heart Stone",
-      "clientId": null,
+      "clientId": 37857,
       "categoria": "stones",
       "sprite": "items/stones/heart-stone",
       "apilable": true,
       "precioNpc": {
         "vende": null,
         "compra": null
-      },
-      "borrador": true
+      }
     },
     {
       "id": "leaf-stone",
       "nombre": "Leaf Stone",
-      "clientId": null,
+      "clientId": 37855,
       "categoria": "stones",
       "sprite": "items/stones/leaf-stone",
       "apilable": true,
       "precioNpc": {
         "vende": null,
         "compra": null
-      },
-      "borrador": true
+      }
     },
     {
       "id": "thunder-stone",
       "nombre": "Thunder Stone",
-      "clientId": null,
+      "clientId": 37856,
       "categoria": "stones",
       "sprite": "items/stones/thunder-stone",
+      "apilable": true,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      }
+    },
+    {
+      "id": "water-stone",
+      "nombre": "Water Stone",
+      "clientId": 37854,
+      "categoria": "stones",
+      "sprite": "items/stones/water-stone",
+      "apilable": true,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      }
+    },
+    {
+      "id": "ice-stone",
+      "nombre": "Ice Stone",
+      "clientId": 37861,
+      "categoria": "stones",
+      "sprite": "items/stones/ice-stone",
+      "apilable": true,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      }
+    },
+    {
+      "id": "punch-stone",
+      "nombre": "Punch Stone",
+      "clientId": 37860,
+      "categoria": "stones",
+      "sprite": "items/stones/punch-stone",
+      "apilable": true,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      }
+    },
+    {
+      "id": "venom-stone",
+      "nombre": "Venom Stone",
+      "clientId": 37870,
+      "categoria": "stones",
+      "sprite": "items/stones/venom-stone",
+      "apilable": true,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      }
+    },
+    {
+      "id": "earth-stone",
+      "nombre": "Earth Stone",
+      "clientId": 37859,
+      "categoria": "stones",
+      "sprite": "items/stones/earth-stone",
       "apilable": true,
       "precioNpc": {
         "vende": null,
@@ -54,11 +111,329 @@
       "borrador": true
     },
     {
-      "id": "water-stone",
-      "nombre": "Water Stone",
-      "clientId": null,
+      "id": "feather-stone",
+      "nombre": "Feather Stone",
+      "clientId": 37869,
       "categoria": "stones",
-      "sprite": "items/stones/water-stone",
+      "sprite": "items/stones/feather-stone",
+      "apilable": true,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      }
+    },
+    {
+      "id": "enigma-stone",
+      "nombre": "Enigma Stone",
+      "clientId": 37862,
+      "categoria": "stones",
+      "sprite": "items/stones/enigma-stone",
+      "apilable": true,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      }
+    },
+    {
+      "id": "cocoon-stone",
+      "nombre": "Cocoon Stone",
+      "clientId": 37866,
+      "categoria": "stones",
+      "sprite": "items/stones/cocoon-stone",
+      "apilable": true,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      }
+    },
+    {
+      "id": "rock-stone",
+      "nombre": "Rock Stone",
+      "clientId": 37858,
+      "categoria": "stones",
+      "sprite": "items/stones/rock-stone",
+      "apilable": true,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      }
+    },
+    {
+      "id": "ghost-stone",
+      "nombre": "Ghost Stone",
+      "clientId": 37864,
+      "categoria": "stones",
+      "sprite": "items/stones/ghost-stone",
+      "apilable": true,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      }
+    },
+    {
+      "id": "crystal-stone",
+      "nombre": "Crystal Stone",
+      "clientId": 37867,
+      "categoria": "stones",
+      "sprite": "items/stones/crystal-stone",
+      "apilable": true,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      }
+    },
+    {
+      "id": "darkness-stone",
+      "nombre": "Darkness Stone",
+      "clientId": 37863,
+      "categoria": "stones",
+      "sprite": "items/stones/darkness-stone",
+      "apilable": true,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      },
+      "borrador": true
+    },
+    {
+      "id": "metal-stone",
+      "nombre": "Metal Stone",
+      "clientId": 37868,
+      "categoria": "stones",
+      "sprite": "items/stones/metal-stone",
+      "apilable": true,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      }
+    },
+    {
+      "id": "normal-fragment",
+      "nombre": "Normal Fragment",
+      "clientId": 41707,
+      "categoria": "stones",
+      "sprite": "items/stones/normal-fragment",
+      "apilable": true,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      },
+      "borrador": true
+    },
+    {
+      "id": "fire-fragment",
+      "nombre": "Fire Fragment",
+      "clientId": 41701,
+      "categoria": "stones",
+      "sprite": "items/stones/fire-fragment",
+      "apilable": true,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      },
+      "borrador": true
+    },
+    {
+      "id": "water-fragment",
+      "nombre": "Water Fragment",
+      "clientId": 41712,
+      "categoria": "stones",
+      "sprite": "items/stones/water-fragment",
+      "apilable": true,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      },
+      "borrador": true
+    },
+    {
+      "id": "grass-fragment",
+      "nombre": "Grass Fragment",
+      "clientId": 41704,
+      "categoria": "stones",
+      "sprite": "items/stones/grass-fragment",
+      "apilable": true,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      },
+      "borrador": true
+    },
+    {
+      "id": "electric-fragment",
+      "nombre": "Electric Fragment",
+      "clientId": 41698,
+      "categoria": "stones",
+      "sprite": "items/stones/electric-fragment",
+      "apilable": true,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      },
+      "borrador": true
+    },
+    {
+      "id": "ice-fragment",
+      "nombre": "Ice Fragment",
+      "clientId": 41706,
+      "categoria": "stones",
+      "sprite": "items/stones/ice-fragment",
+      "apilable": true,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      },
+      "borrador": true
+    },
+    {
+      "id": "fighting-fragment",
+      "nombre": "Fighting Fragment",
+      "clientId": 41700,
+      "categoria": "stones",
+      "sprite": "items/stones/fighting-fragment",
+      "apilable": true,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      },
+      "borrador": true
+    },
+    {
+      "id": "poison-fragment",
+      "nombre": "Poison Fragment",
+      "clientId": 41708,
+      "categoria": "stones",
+      "sprite": "items/stones/poison-fragment",
+      "apilable": true,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      },
+      "borrador": true
+    },
+    {
+      "id": "ground-fragment",
+      "nombre": "Ground Fragment",
+      "clientId": 41705,
+      "categoria": "stones",
+      "sprite": "items/stones/ground-fragment",
+      "apilable": true,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      },
+      "borrador": true
+    },
+    {
+      "id": "flying-fragment",
+      "nombre": "Flying Fragment",
+      "clientId": 41702,
+      "categoria": "stones",
+      "sprite": "items/stones/flying-fragment",
+      "apilable": true,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      },
+      "borrador": true
+    },
+    {
+      "id": "psychic-fragment",
+      "nombre": "Psychic Fragment",
+      "clientId": 41709,
+      "categoria": "stones",
+      "sprite": "items/stones/psychic-fragment",
+      "apilable": true,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      },
+      "borrador": true
+    },
+    {
+      "id": "bug-fragment",
+      "nombre": "Bug Fragment",
+      "clientId": 41695,
+      "categoria": "stones",
+      "sprite": "items/stones/bug-fragment",
+      "apilable": true,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      },
+      "borrador": true
+    },
+    {
+      "id": "rock-fragment",
+      "nombre": "Rock Fragment",
+      "clientId": 41710,
+      "categoria": "stones",
+      "sprite": "items/stones/rock-fragment",
+      "apilable": true,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      },
+      "borrador": true
+    },
+    {
+      "id": "ghost-fragment",
+      "nombre": "Ghost Fragment",
+      "clientId": 41703,
+      "categoria": "stones",
+      "sprite": "items/stones/ghost-fragment",
+      "apilable": true,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      },
+      "borrador": true
+    },
+    {
+      "id": "dragon-fragment",
+      "nombre": "Dragon Fragment",
+      "clientId": 41697,
+      "categoria": "stones",
+      "sprite": "items/stones/dragon-fragment",
+      "apilable": true,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      },
+      "borrador": true
+    },
+    {
+      "id": "fairy-fragment",
+      "nombre": "Fairy Fragment",
+      "clientId": 41699,
+      "categoria": "stones",
+      "sprite": "items/stones/fairy-fragment",
+      "apilable": true,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      },
+      "borrador": true
+    },
+    {
+      "id": "dark-fragment",
+      "nombre": "Dark Fragment",
+      "clientId": 41696,
+      "categoria": "stones",
+      "sprite": "items/stones/dark-fragment",
+      "apilable": true,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      },
+      "borrador": true
+    },
+    {
+      "id": "steel-fragment",
+      "nombre": "Steel Fragment",
+      "clientId": 41711,
+      "categoria": "stones",
+      "sprite": "items/stones/steel-fragment",
       "apilable": true,
       "precioNpc": {
         "vende": null,

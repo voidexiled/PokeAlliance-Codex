@@ -2,10 +2,10 @@
   "$schema": "../schemas/sistemas.schema.json",
   "id": "medals",
   "titulo": {
-    "es": "Medal System",
+    "es": "Medallas",
     "en": "Medal System"
   },
-  "sprite": null,
+  "sprite": "ui/sistemas/medals",
   "orden": 6,
   "tooltip": [],
   "intro": [],

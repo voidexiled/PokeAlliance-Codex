@@ -38,6 +38,7 @@
 @import './components/page-layout.css' layer(components);
 @import './components/header.css' layer(components);
 @import './components/language-menu.css' layer(components);
+@import './components/account-entry.css' layer(components);
 @import './components/search-trigger.css' layer(components);
 @import './components/search-palette.css' layer(components);
 @import './components/sidebar.css' layer(components);

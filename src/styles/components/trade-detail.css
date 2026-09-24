@@ -19,8 +19,14 @@
      them. The build writes this sheet before the shared one, so inside `components` a rule here
      that only matches the rule of `GameTooltip` it overrides would lose to it: each of these
      rules names the sheet as well, and outweighs the `GameTooltip` rule in every build.
-   - The seller block (`SellerCard`): the seller's `Rating` on its line, «Operaciones
-     confirmadas: N» under it. */
+   - The seller block (`SellerCard`): the seller's name, linked to the profile, with its online
+     status 8 to its right (9.15.6, trade-presence.css), and 4 under them the reputation line
+     «Valoración: ★ 4.8 · 50 operaciones · 5 compradores distintos» (9.15.4), the score tabular
+     like every figure of a price.
+   - Phase B (9.15.2): the tag «Dinero real», a `Chip` on its own line 8 under the head line; the
+     actions under the sections, «Contactar al vendedor» (`ContactSeller`) above «Reportar
+     anuncio» (`ReportAction`), 16 apart, each at its own width, with the notice of a contact 8
+     under its button. */
 
 @reference '../theme.css';
 
@@ -38,6 +44,12 @@
     margin: 0;
     color: var(--text-tertiary);
     @apply type-ui;
+  }
+
+  /* The head is a column 16 apart; the tag sits 8 under the line it qualifies. */
+  .ac-trade-detail__tag {
+    display: flex;
+    margin: calc(var(--space-8) - var(--space-16)) 0 0;
   }
 
   .ac-trade-detail {
@@ -118,10 +130,36 @@
   .ac-seller-card {
     display: flex;
     flex-direction: column;
+    gap: var(--space-4);
     min-width: 0;
   }
 
-  .ac-seller-card__rating {
+  .ac-seller-card__name {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-4) var(--space-8);
+    min-width: 0;
     margin: 0;
+  }
+
+  .ac-reputation__score {
+    font-variant-numeric: tabular-nums;
+  }
+
+  .ac-trade-detail__actions {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--space-16);
+    min-width: 0;
+  }
+
+  .ac-contact-seller {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--space-8);
+    min-width: 0;
   }
 }

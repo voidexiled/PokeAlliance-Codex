@@ -30,6 +30,7 @@ import {
   BOOST_MAX,
   CANTIDAD_MAX,
   ESTADOS_ANUNCIO,
+  ESTADOS_PRESENCIA,
   HABILIDADES,
   HELD_TIER_MAX,
   HELDS_MAX,
@@ -95,6 +96,7 @@ sameList('moneda', defs.precioReal.properties.moneda.enum, MONEDAS_REALES);
 sameList('opcionJuego.tipo', defs.opcionJuego.properties.tipo.enum, MONEDAS_JUEGO);
 sameList('habilidad', defs.entrenamiento.properties.habilidad.enum, HABILIDADES);
 sameList('canal.tipo', defs.canal.properties.tipo.enum, TIPOS_CANAL);
+sameList('presencia', defs.vendedor.properties.presencia.enum, ESTADOS_PRESENCIA);
 
 /** A pattern of the JSON Schema, compiled as `pnpm content:check` compiles it (flag `u`). */
 function pattern(source: string): RegExp {
@@ -200,11 +202,15 @@ export const anuncioSchema: z.ZodType<Anuncio> = z.discriminatedUnion('tipo', [
 const canal = z.discriminatedUnion('tipo', [
   z.strictObject({ tipo: z.literal('telefono'), etiqueta: codigoPais }),
   z.strictObject({ tipo: z.literal('otra'), etiqueta: plataforma }),
-  z.strictObject({ tipo: z.enum(['correo', 'discord', 'twitch']), etiqueta: z.null() }),
+  z.strictObject({ tipo: z.enum(['correo', 'discord', 'twitch', 'google']), etiqueta: z.null() }),
 ]);
 
 const resena = z.strictObject({
-  puntuacion: z.number().int().min(0).max(5),
+  puntuacion: z
+    .number()
+    .int()
+    .min(defs.resena.properties.puntuacion.minimum)
+    .max(defs.resena.properties.puntuacion.maximum),
   comentario: comentario.nullable(),
   fecha: instante,
   anuncio: slug,
@@ -216,6 +222,7 @@ export const vendedorSchema: z.ZodType<Vendedor> = z.strictObject({
   id: handle,
   nombre: nombreVendedor,
   desde: instante.nullable(),
+  presencia: z.enum(ESTADOS_PRESENCIA),
   canales: z.array(canal),
   resenas: z.array(resena),
   borrador,

@@ -14,12 +14,21 @@
 //
 // The menu button is the only handle of the sheet: `src/scripts/mobile-menu.ts`
 // delegates on `button[aria-controls="menu-movil"]` and keeps `aria-expanded`.
+//
+// The account entry (9.16.1) exists only when the build has the public Supabase
+// settings: without them nothing of it is rendered, not even its script (S11). It
+// sits before the language selector from 1280 and before the rule of the compact
+// group below, so each group carries its own instance and header.css, which shows
+// one group at a time, decides which one is on screen. The first instance prints
+// the template of the account menu.
 import type { Locale } from '@/i18n/config';
 import type { Messages } from '@/i18n/messages/en';
 import { en } from '@/i18n/messages/en';
 import { es } from '@/i18n/messages/es';
+import { getSupabasePublicConfig } from '@/lib/supabase/env';
 import { Glyph } from '@/components/icons/Glyph';
 
+import AccountEntry from './AccountEntry.astro';
 import LanguageMenu from './LanguageMenu.astro';
 import SearchTrigger from './SearchTrigger.astro';
 
@@ -41,6 +50,8 @@ const shell = dictionaries[locale].shell;
 
 // A proper noun, the same in both locales (13.4), so it is not a dictionary key.
 const BRAND = 'Alliance Codex';
+
+const accounts = getSupabasePublicConfig() !== null;
 ---
 
 <header class:list={['ac-header', className]}>
@@ -55,6 +66,7 @@ const BRAND = 'Alliance Codex';
   }
 
   <div class="ac-header__end">
+    {accounts && <AccountEntry locale={locale} variant="full" menu />}
     <LanguageMenu locale={locale} alternates={alternates} />
   </div>
 
@@ -66,6 +78,7 @@ const BRAND = 'Alliance Codex';
         </span>
       )
     }
+    {accounts && <AccountEntry locale={locale} variant="compact" />}
     <div role="none" class="ac-header__sep"></div>
     <button
       type="button"

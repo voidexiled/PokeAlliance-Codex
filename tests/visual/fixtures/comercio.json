@@ -369,6 +369,7 @@
       "id": "kaiser",
       "nombre": "Kaiser",
       "desde": null,
+      "presencia": "en_juego",
       "canales": [
         {
           "tipo": "discord",
@@ -551,6 +552,7 @@
       "id": "tsubame",
       "nombre": "Tsubame",
       "desde": null,
+      "presencia": "en_juego",
       "canales": [
         {
           "tipo": "discord",
@@ -855,6 +857,7 @@
       "id": "leafar",
       "nombre": "Leafar",
       "desde": null,
+      "presencia": "en_juego",
       "canales": [
         {
           "tipo": "discord",
@@ -931,6 +934,7 @@
       "id": "mariana",
       "nombre": "Mariana",
       "desde": null,
+      "presencia": "en_juego",
       "canales": [
         {
           "tipo": "correo",
@@ -1036,6 +1040,7 @@
       "id": "renzo",
       "nombre": "Renzo",
       "desde": null,
+      "presencia": "en_juego",
       "canales": [
         {
           "tipo": "discord",
@@ -1270,6 +1275,7 @@
       "id": "hikari",
       "nombre": "Hikari",
       "desde": null,
+      "presencia": "en_juego",
       "canales": [
         {
           "tipo": "discord",
@@ -1698,6 +1704,7 @@
       "id": "bruma",
       "nombre": "Bruma",
       "desde": null,
+      "presencia": "en_juego",
       "canales": [
         {
           "tipo": "discord",

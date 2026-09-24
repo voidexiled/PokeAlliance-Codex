@@ -2,10 +2,10 @@
   "$schema": "../schemas/sistemas.schema.json",
   "id": "achievements",
   "titulo": {
-    "es": "Achievements",
+    "es": "Logros",
     "en": "Achievements"
   },
-  "sprite": null,
+  "sprite": "ui/sistemas/achievements",
   "orden": 8,
   "tooltip": [],
   "intro": [],

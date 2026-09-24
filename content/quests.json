@@ -37,7 +37,8 @@
       "notas": [
         { "en": "The instance accepts one player at a time." },
         { "en": "The computer positions change on a new attempt." }
-      ]
+      ],
+      "sprite": "ui/actividades/porygon-quest-dr-vektor"
     }
   ]
 }

@@ -20,4 +20,8 @@ export const dynamicKeys = [
   'search.groups.item',
   'search.groups.actividad',
   'search.groups.pagina',
+  // The state of a listing is read by its value (`states[estado]`, `filters[estado]`): no
+  // visible list shows a withdrawn listing, so only the seller's own views spell `.retirado`.
+  'trade.states.retirado',
+  'profile.listings.filters.retirado',
 ] as const satisfies readonly string[];

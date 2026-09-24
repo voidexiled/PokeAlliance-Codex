@@ -79,6 +79,7 @@ const PRESUPUESTO = {
   cssGzip: 30 * KB,
   htmlGzip: 80 * KB,
   htmlPlano: 450 * KB,
+  entradaCuenta: 4 * KB,
 };
 
 /**
@@ -105,7 +106,14 @@ const RUTAS_PRESUPUESTO = [
   [/^herramientas\/guild\/$/, 'guild'],
   [/^herramientas\/$/, 'contenido'],
   [/^comercio\/(?:.*\/)?$/, 'comercio'],
+  [/^cuenta\/(?:perfil\/)?$/, 'comercio'], // /{l}/cuenta/ and «Mi perfil» (§9.9, §9.16.3)
 ];
+
+/**
+ * The script of the header account entry (§9.16.1): Astro emits it as its own module, named
+ * after the component. It only exists in a build with the public Supabase settings.
+ */
+const ENTRADA_CUENTA = /AccountEntry\.astro_astro_type_script/;
 
 /**
  * Data files a route downloads after hydrating (PR5, §8.0.6 and §7.9.1), with
@@ -457,6 +465,28 @@ async function main(options = {}) {
       }
       if (!inicial && island.componentUrl && !/^(?:[a-z]+:)?\/\//i.test(island.componentUrl)) {
         semillasDiferidas.push(island.componentUrl.replace(/^\/+/, ''));
+      }
+    }
+
+    // --- 1b. what the account entry adds to the initial JS of every page (§9.16.1): the files
+    // its script reaches that no other initial seed of the page reaches.
+    const semillasEntrada = semillasIniciales.filter((src) => ENTRADA_CUENTA.test(src));
+    if (semillasEntrada.length > 0) {
+      const resto = await cierre(
+        semillasIniciales.filter((src) => !ENTRADA_CUENTA.test(src)),
+        absoluteRoot,
+      );
+      const entrada = await cierre(semillasEntrada, absoluteRoot);
+      let anadido = 0;
+      for (const file of entrada.estaticos) {
+        if (resto.estaticos.has(file)) continue;
+        const medida = await medir(file);
+        if (medida) anadido += medida.gzip;
+      }
+      if (anadido > PRESUPUESTO.entradaCuenta) {
+        problems.push(
+          `${etiqueta}: la entrada de cuenta añade ${kb(anadido)} gzip de JS inicial; el presupuesto es ${kb(PRESUPUESTO.entradaCuenta)}`,
+        );
       }
     }
 

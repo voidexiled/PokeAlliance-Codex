@@ -15,6 +15,8 @@
    - PR4 (7.7.5): while the block carries `data-ac-pending` it keeps the height of the
      prerendered HTML and paints nothing of it. It is the last section of the page, so nothing
      after it in its column moves.
+   - Phase B: «Reportar vendedor» (`ReportAction`, 9.11) after the last section, at its own
+     width, with its notice 8 under it.
    - A review is 14/22 text, 4 apart: «{n} de 5» in 700, the buyer and the date, «Operación:»
      (a `FactLine`) and the comment. H4 moves the focus to the reviews after a page change, and
      they come 16 under the header like the results of a list. */
@@ -28,6 +30,14 @@
     display: flex;
     flex-direction: column;
     gap: var(--space-16);
+    min-width: 0;
+  }
+
+  .ac-seller-report {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--space-8);
     min-width: 0;
   }
 

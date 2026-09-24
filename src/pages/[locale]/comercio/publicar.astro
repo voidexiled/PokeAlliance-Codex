@@ -43,6 +43,7 @@ import {
   type ListingFormProps,
   type ListingFormSprites,
 } from '@/components/trade/ListingForm';
+import { AgeGate } from '@/components/trade/AgeGate';
 import PageLayout from '@/layouts/PageLayout.astro';
 
 export const prerender = true;
@@ -217,4 +218,11 @@ const form: ListingFormProps = {
 >
   <PageTitle title={trade.create} />
   <ListingForm client:load {...form} />
+  {/* 9.15.2: every Comercio route opens with the 18+ gate. */}
+  <AgeGate
+    client:load
+    locale={locale}
+    labels={{ title: trade.adultsOnly, adult: trade.ageGate.adult, minor: trade.ageGate.minor }}
+    closeLabel={ui.close}
+  />
 </PageLayout>

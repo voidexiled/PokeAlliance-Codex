@@ -5,19 +5,22 @@ import '@/styles/components/trade-list.css';
 
 import { CardGrid } from '@/components/cards/CardGrid';
 import { CardGroup } from '@/components/cards/CardGroup';
-import { ListingCard } from '@/components/cards/ListingCard';
+import { ListingCard, SellerPresence } from '@/components/cards/ListingCard';
 import type {
   ListingCardEntity,
   ListingCardLabels,
   ListingCardListing,
   ListingFactValue,
+  SellerPresenceData,
 } from '@/components/cards/ListingCard';
 import type * as RowModule from '@/components/cards/ListRow';
 import type * as SlotsModule from '@/components/cards/SlotsPanel';
 import type * as TableModule from '@/components/content/DataTable';
 import type { DataTableColumn } from '@/components/content/DataTable';
+import { Chip } from '@/components/content/Chip';
 import { EmptyState } from '@/components/content/EmptyState';
 import { Button } from '@/components/controls/Button';
+import { Checkbox } from '@/components/controls/Checkbox';
 import { FilterBar } from '@/components/controls/FilterBar';
 import { RangeField } from '@/components/controls/RangeField';
 import type { RangeFieldValue } from '@/components/controls/RangeField';
@@ -91,14 +94,16 @@ import { listingTitle } from '@/lib/trade/title';
 import type { ListingNames } from '@/lib/trade/title';
 import {
   ESTADOS_ANUNCIO,
+  ESTADOS_PRESENCIA,
   HABILIDADES,
   MONEDAS_JUEGO,
   MONEDAS_REALES,
   SIMBOLOS_MONEDA,
   TIPOS_ACTIVO,
   channelLabel,
+  inGameFirst,
   isListed,
-  sellerRating,
+  sellerReputation,
 } from '@/lib/trade/types';
 import type {
   AddonDeclarado,
@@ -107,6 +112,7 @@ import type {
   ChannelLabels,
   EntrenamientoDeclarado,
   EstadoAnuncio,
+  EstadoPresencia,
   HeldDeclarado,
   ItemDeclarado,
   MonedaReal,
@@ -126,10 +132,12 @@ import type {
 //
 //   - `market`, `/{l}/comercio/` (§9.5, `ListConfig` id `comercio`): the search row (the
 //     `TextField` «Buscar anuncios» and «Crear anuncio»), the type tabs, the `FilterBar` of four
-//     columns («Mundo», «Moneda», «Precio», «Valoración del vendedor»), the results bar with its
-//     `SortSelect` and `ViewToggle`, the view and the pagination, 16 apart (V6). The page renders
-//     the island only when there is a listing: the production build of phase A has none and
-//     shows the empty state of 9.5.10 on its own, with no control at all (CA-9.1).
+//     columns («Mundo», «Moneda», «Precio», «Valoración del vendedor»), the `Checkbox` «Solo en
+//     el juego» under it (9.15.6), the results bar with its `SortSelect` and `ViewToggle`, the
+//     view and the pagination, 16 apart (V6). The default order «Recientes» puts the sellers «En
+//     el juego» first (9.15.6, `inGameFirst`). The page renders the island only when there is a
+//     listing: the production build of phase A has none and shows the empty state of 9.5.10 on
+//     its own, with no control at all (CA-9.1).
 //   - `seller`, the «Anuncios» section of a seller profile (§9.8 step 5, id
 //     `comercio-vendedor`): `Count`, `ViewToggle` and the same three views, with no filter, no
 //     search and one order, «Recientes».
@@ -316,11 +324,15 @@ export interface TradeAuraRef {
   icono: SpriteData | null;
 }
 
-/** A seller: the score of the confirmed trades (9.10) and the public labels of its channels. */
+/**
+ * A seller: the score of the confirmed trades (9.15.4, the «media» of `sellerReputation`), the
+ * public labels of its channels and its online status (9.15.6).
+ */
 export interface TradeSellerRef extends SellerScore {
   nombre: string;
   /** Labels only, never a value (R13, CA-9.9): «Discord», «Teléfono +55». */
   canales: string[];
+  presencia: EstadoPresencia | null;
 }
 
 /** What the rows name, once each (PR5). */
@@ -468,6 +480,10 @@ export interface TradeListLabels {
   allRatings: string;
   /** «4.5 o más», «4.0 o más», «3.0 o más». */
   ratings: Record<RatingFloor, string>;
+  /** The label of each online status (9.15.6): «En el juego», «Ausente», «Desconectado». */
+  presence: Record<EstadoPresencia, string>;
+  /** «Solo en el juego»: the filter of the sellers in the game (9.15.6). */
+  onlyInGame: string;
   /** The option of each order in `SortSelect`, by its id in the URL (9.5.5). */
   sorts: Record<ListingOrder, string>;
   /** «{n} anuncio» / «{n} anuncios». */
@@ -522,7 +538,14 @@ export interface TradeContext {
   ui: TradeUi;
   labels: Pick<
     TradeListLabels,
-    'card' | 'unsellable' | 'types' | 'world' | 'training' | 'market' | 'droppedByCount'
+    | 'card'
+    | 'unsellable'
+    | 'types'
+    | 'world'
+    | 'training'
+    | 'market'
+    | 'droppedByCount'
+    | 'presence'
   >;
 }
 
@@ -530,9 +553,10 @@ export interface TradeContext {
  * The texts of a Comercio list from the dictionary of the page's locale (DP1, 13.2): the page
  * composes them and the island receives these and `ui`, never the dictionary. A search with no
  * result says `search.empty` (9.5.10) and «Drop de» of several Pokémon is `items.droppedByCount`,
- * the words the other lists use.
+ * the words the other lists use. `publico` is phase B (9.2): only then does a listing with a
+ * real-money price carry the tag «Dinero real», the word of its price row (9.15.2).
  */
-export function tradeLabels(messages: Messages): TradeListLabels {
+export function tradeLabels(messages: Messages, publico = false): TradeListLabels {
   const { trade } = messages;
   return {
     search: trade.list.searchLabel,
@@ -563,6 +587,12 @@ export function tradeLabels(messages: Messages): TradeListLabels {
       '4.0': fill(trade.filters.ratingAtLeast, { score: formatRating(4) }),
       '3.0': fill(trade.filters.ratingAtLeast, { score: formatRating(3) }),
     },
+    presence: {
+      en_juego: trade.presence.en_juego,
+      ausente: trade.presence.ausente,
+      desconectado: trade.presence.desconectado,
+    },
+    onlyInGame: trade.filters.onlyInGame,
     sorts: trade.list.sort,
     count: trade.list.count,
     none: trade.list.empty,
@@ -584,6 +614,7 @@ export function tradeLabels(messages: Messages): TradeListLabels {
       contact: trade.listing.contact,
       negotiable: trade.listing.negotiable,
       reserved: trade.states.reservado,
+      ...(publico ? { realMoney: trade.listing.fiat } : {}),
     },
     unsellable: trade.unsellable,
     training: trade.tip.training,
@@ -698,6 +729,7 @@ const SELLER_REF_FIELDS = fieldList<WithId<TradeSellerRef>>()([
   'valoracion',
   'resenas',
   'canales',
+  'presencia',
 ]);
 /** An addon or a world: its id and its name. */
 const NAME_FIELDS = ['id', 'nombre'] as const;
@@ -961,9 +993,10 @@ function readRefs(value: unknown): TradeRefs {
     })),
     addons: readTable(value.addons, NAME_FIELDS, 'refs.addons', readName),
     mundos: readTable(value.mundos, NAME_FIELDS, 'refs.mundos', readName),
-    vendedores: readTable(value.vendedores, SELLER_REF_FIELDS, 'refs.vendedores', (ref) =>
-      trusted<TradeSellerRef>(ref),
-    ),
+    vendedores: readTable(value.vendedores, SELLER_REF_FIELDS, 'refs.vendedores', (ref) => ({
+      ...trusted<TradeSellerRef>(ref),
+      presencia: ESTADOS_PRESENCIA.find((estado) => estado === ref.presencia) ?? null,
+    })),
   };
 }
 
@@ -1206,12 +1239,13 @@ export function tradeRecords(
     if (world !== undefined) mundos[listing.mundo] = world;
     const seller = sellerById.get(listing.vendedor);
     if (seller === undefined || Object.hasOwn(vendedores, seller.id)) continue;
-    const rating = sellerRating(seller.resenas);
+    const reputation = sellerReputation(seller.resenas);
     vendedores[seller.id] = {
       nombre: seller.nombre,
-      valoracion: rating.valoracion,
-      resenas: rating.resenas,
+      valoracion: reputation.valoracion,
+      resenas: reputation.resenas,
       canales: seller.canales.map((canal) => channelLabel(canal, catalog.channels)),
+      presencia: seller.presencia,
     };
   }
 
@@ -1255,6 +1289,15 @@ export function publishHref(locale: Locale): string {
 function scoresOf(refs: TradeRefs): (handle: string) => SellerScore | null {
   return (handle) => (Object.hasOwn(refs.vendedores, handle) ? refs.vendedores[handle] : null);
 }
+
+/** The online status of the seller of a row (9.15.6), or `null` for a seller the refs lack. */
+function presenceOf(refs: TradeRefs): (row: Pick<TradeRow, 'vendedor'>) => EstadoPresencia | null {
+  return (row) =>
+    Object.hasOwn(refs.vendedores, row.vendedor) ? refs.vendedores[row.vendedor].presencia : null;
+}
+
+/** The value of the filter «Solo en el juego» in the URL (U3): the id of the status. */
+export const IN_GAME: EstadoPresencia = 'en_juego';
 
 /** The amount of a listing in `currency`, as stored, or `null` when it has none (9.5.4). */
 function amountIn(precio: Precio, currency: PriceCurrency): number | null {
@@ -1306,10 +1349,11 @@ interface TradeConfigInput {
 
 /**
  * The `ListConfig` of 9.5.7 (`comercio`) and of the profile (`comercio-vendedor`, 9.8):
- * 24 rows a page; the text of `q`; the filters `tipo`, `mundo`, `moneda`, `min`, `max` and
- * `val`, whose values are ids (U3); the three orders of 9.5.5, from src/lib/trade/sort.ts;
- * groups by type in the fixed order (R4). The profile keeps the groups and the first order
- * and has no filter.
+ * 24 rows a page; the text of `q`; the filters `tipo`, `mundo`, `moneda`, `min`, `max`, `val`
+ * and `presencia` («Solo en el juego», 9.15.6), whose values are ids (U3); the three orders of
+ * 9.5.5, from src/lib/trade/sort.ts, the default one with the sellers «En el juego» first
+ * (9.15.6); groups by type in the fixed order (R4). The profile keeps the groups and the first
+ * order, where every listing has the one seller, and has no filter.
  */
 export function tradeConfig({
   variant,
@@ -1335,13 +1379,17 @@ export function tradeConfig({
       filters: [],
     };
   }
+  const presence = presenceOf(refs);
   return {
     ...base,
     id: 'comercio',
     sorts: LISTING_ORDERS.map((id) => ({
       id,
       label: sorts[id],
-      compare: listingComparator(id, scores),
+      compare:
+        id === 'recientes'
+          ? inGameFirst(presence, listingComparator(id, scores))
+          : listingComparator(id, scores),
     })),
     filters: [
       { key: 'tipo', values: TIPOS_ACTIVO, test: (row, value) => row.tipo === value },
@@ -1368,6 +1416,7 @@ export function tradeConfig({
           );
         },
       },
+      { key: 'presencia', values: [IN_GAME], test: (row, value) => presence(row) === value },
     ],
     text: (row) => row.busqueda,
     dataUrl,
@@ -1671,6 +1720,15 @@ export function priceLabel(row: TradeRow, context: TradeContext): string {
   return context.labels.card.negotiable;
 }
 
+/** A seller's online status with its label (9.15.6), or `null` for a seller without one. */
+export function sellerPresence(
+  seller: Pick<TradeSellerRef, 'presencia'> | null,
+  context: Pick<TradeContext, 'labels'>,
+): SellerPresenceData | null {
+  const state = seller?.presencia ?? null;
+  return state === null ? null : { state, label: context.labels.presence[state] };
+}
+
 /** A listing as `ListingCard` reads it (9.5.8). `posted` is the text of its `<time>`. */
 export function listingCard(
   row: TradeRow,
@@ -1707,6 +1765,7 @@ export function listingCard(
             href: sellerHref(locale, row.vendedor),
             score: seller.valoracion,
             reviews: seller.resenas,
+            presence: sellerPresence(seller, context),
           },
     channels: seller?.canales ?? null,
   };
@@ -2336,6 +2395,11 @@ export function TradeListRoot({
           onChange={(value) => controller.setFilter('val', value || null)}
         />
       </FilterBar>
+      <Checkbox
+        label={labels.onlyInGame}
+        checked={filters.presencia === IN_GAME}
+        onChange={(checked) => controller.setFilter('presencia', checked ? IN_GAME : null)}
+      />
       {invalidMin || invalidMax ? (
         <span id={`${PRICE_ID}-error`} className="sr-only">
           {labels.invalidAmount}
@@ -2456,6 +2520,11 @@ export function TradeListRoot({
             : null;
           const fiat = fiatText(row.precio, locale);
           const options = gameOptions(row.precio);
+          const presence = sellerPresence(seller, context);
+          const sub = listSub(row, context);
+          // 9.15.2: in phase B the tag «Dinero real» follows what the row declares.
+          const tag =
+            card.realMoney !== undefined && fiat !== null ? <Chip>{card.realMoney}</Chip> : null;
           const loading = lazy();
           let art: ReactNode;
           if (sprite === null) art = <MissingSprite size={pokemon ? 40 : 16} />;
@@ -2476,7 +2545,16 @@ export function TradeListRoot({
               sprite={art}
               name={listingTitleNode(row)}
               href={listingHref(locale, row.id)}
-              sub={listSub(row, context)}
+              sub={
+                tag === null ? (
+                  sub
+                ) : (
+                  <span className="ac-trade-list__sub">
+                    {sub}
+                    {tag}
+                  </span>
+                )
+              }
               tip={listingTip(row, context)}
               hint={ui.pinHint}
               shinyLabel={ui.shiny}
@@ -2506,14 +2584,19 @@ export function TradeListRoot({
                   />
                 ) : null,
                 seller === null ? null : (
-                  <Rating
-                    seller={seller.nombre}
-                    href={sellerHref(locale, row.vendedor)}
-                    score={seller.valoracion}
-                    reviews={seller.resenas}
-                    locale={locale}
-                    labels={ui.money}
-                  />
+                  <span className="ac-trade-list__seller">
+                    <Rating
+                      seller={seller.nombre}
+                      href={sellerHref(locale, row.vendedor)}
+                      score={seller.valoracion}
+                      reviews={seller.resenas}
+                      locale={locale}
+                      labels={ui.money}
+                    />
+                    {presence === null ? null : (
+                      <SellerPresence state={presence.state} label={presence.label} />
+                    )}
+                  </span>
                 ),
                 // 100 wide at 944 (9.5.8, CA-9.7). The relative times fit on one line; from
                 // 24 h the date does in `es` («18/09/2026») and not in `en` («Sep 18, 2026»,

@@ -13,9 +13,10 @@
 //   bento            the four IndexPanel and the WorldsTable, placed by grid-template-areas in 3,
 //                    2 or 1 columns (step 4, E17)
 //
-// PageLayout adds the footer, the 208 spacer and the frame. No island of its own: HomeIntro and
+// PageLayout adds the footer, the 208 spacer and the frame. The notice of the Comercio 18+ gate
+// (9.15.2) is static markup with a small script. HomeIntro and
 // IndexPanel are Astro, FeaturedSection and WorldsTable render here on the server with no client
-// directive, and the only JavaScript is the frame's (7.3, C7-01). What the page showed before —
+// directive, and the rest of the JavaScript is the frame's (7.3, C7-01). What the page showed before —
 // the kicker, the slogan, the call to action, the three starters, «Explorar la wiki» with its four
 // cards and ServerSaveStatus — is gone (H-01 to H-11, A17, Q7).
 //
@@ -83,6 +84,7 @@ import HomeIntro from '@/components/home/HomeIntro.astro';
 import IndexPanel, { type IndexPanelLink } from '@/components/home/IndexPanel.astro';
 import { WorldsTable } from '@/components/home/WorldsTable';
 import SearchTrigger from '@/components/layout/SearchTrigger.astro';
+import { Glyph } from '@/components/icons/Glyph';
 import PageLayout from '@/layouts/PageLayout.astro';
 
 export const prerender = true;
@@ -225,6 +227,17 @@ const featured = buildFeatured(locale);
   alternates={alternates}
   rhythm="home"
 >
+  {
+    /* 9.15.2: the notice of the Comercio 18+ gate (the markup of `Notice`), hidden until the
+       gate sends someone under 18 here; the script below shows it once. No island: the page
+       stays in its «contenido» budget (13.6). */
+  }
+  <div role="status" class="ac-notice" data-ac-age-notice hidden>
+    <p class="ac-notice__text">{messages.trade.adultsOnly}</p>
+    <button type="button" class="ac-notice__close" aria-label={messages.ui.dismiss}>
+      <Glyph name="close" size={14} />
+    </button>
+  </div>
   <HomeIntro title={home.title} description={intro} sprite={spriteOrNull(registry, 'ui/inicio')} />
 
   <div class="ac-home-search ac-home-search--wide">
@@ -291,3 +304,20 @@ const featured = buildFeatured(locale);
     )
   }
 </PageLayout>
+
+<script>
+  // 9.15.2: `AGE_NOTICE_KEY` of src/components/trade/AgeGate.tsx, left by the gate right
+  // before it sends someone under 18 here. Shown once, then cleared.
+  const notice = document.querySelector<HTMLElement>('[data-ac-age-notice]');
+  try {
+    if (notice && window.sessionStorage.getItem('alliance-codex:comercio:aviso-edad') !== null) {
+      window.sessionStorage.removeItem('alliance-codex:comercio:aviso-edad');
+      notice.hidden = false;
+      notice.querySelector('button')?.addEventListener('click', () => {
+        notice.hidden = true;
+      });
+    }
+  } catch {
+    // Without storage there is no note to read.
+  }
+</script>

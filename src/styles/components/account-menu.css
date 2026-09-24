@@ -1,0 +1,193 @@
+/* The account menu of the header (spec 9.16.2): the panel src/scripts/account-menu.ts clones from
+   the template of AccountEntry.astro. That module imports this sheet, so it reaches a page only
+   with the first open of the menu and never the shared sheet (D-018, 13.6). It repeats the layer
+   order of global.css before its block, so the `components` layer keeps its place whichever sheet
+   the browser reads first (3.6).
+
+   There is no board for the menu: it is composed with the tokens of the language list of the
+   header (language-menu.css), which follows the Select listbox: `bg-tertiary`, radius 8, padding
+   4, items of radius 2 that take `bg-quaternary` on hover and focus, 40 tall and 44 with a coarse
+   pointer (13.7). It does not animate on opening: the entries of 6.2 are the game tooltip, the
+   Select listbox, «+N» and the Guild chart.
+
+   - Under the chip, 4 below it, against the end of the entry, 240 wide and never wider than the
+     window minus its 16 margins.
+   - The head: the 28 avatar and, beside it, the username in 700, «{jugador} · {mundo}» and the
+     status with its dot in `text-secondary`.
+   - «Estado»: its label in the caps of the design system's small titles, then the three statuses,
+     each with its dot and the check of the chosen one.
+   - Separators are 1 px `border-secondary` lines; an error line under the items only while it has
+     a text. */
+
+@reference '../theme.css';
+
+@layer properties, theme, base, components, utilities;
+
+@layer components {
+  .ac-account-menu {
+    position: absolute;
+    top: calc(100% + var(--space-4));
+    right: 0;
+    z-index: var(--z-listbox);
+    width: 240px; /* sin token: el ancho del menú de cuenta */
+    max-width: calc(100vw - var(--space-32)); /* sin token: la ventana menos sus márgenes de 16 */
+    padding: var(--space-4);
+    border-radius: var(--radius-8);
+    background: var(--bg-tertiary);
+    color: var(--text-primary);
+    font-family: var(--font-sans);
+    @apply type-field;
+  }
+
+  .ac-account-menu__head {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--space-8);
+    padding: var(--space-8);
+  }
+
+  .ac-account-menu__avatar {
+    display: flex;
+    flex: none;
+    align-items: center;
+    justify-content: center;
+    width: 28px; /* sin token: el avatar de 9.16.1 */
+    height: 28px; /* sin token: el avatar de 9.16.1 */
+    overflow: hidden;
+    border-radius: var(--radius-full);
+    background: var(--bg-quaternary);
+    @apply type-ui-strong;
+  }
+
+  .ac-account-menu__avatar > img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .ac-account-menu__who {
+    display: flex;
+    min-width: 0;
+    flex-direction: column;
+    gap: var(--space-2);
+  }
+
+  .ac-account-menu__name {
+    overflow-wrap: anywhere;
+    @apply type-body-strong;
+  }
+
+  .ac-account-menu__line {
+    color: var(--text-secondary);
+    overflow-wrap: anywhere;
+    @apply type-ui;
+  }
+
+  .ac-account-menu__list {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .ac-account-menu__label {
+    padding: var(--space-8) var(--space-8) var(--space-4);
+    color: var(--text-tertiary);
+    @apply type-ui-caps;
+  }
+
+  .ac-account-menu__item {
+    display: flex;
+    align-items: center;
+    gap: var(--space-8);
+    width: 100%;
+    margin: 0;
+    padding: var(--space-10) var(--space-8);
+    border: 0;
+    border-radius: var(--radius-2);
+    background: transparent;
+    color: var(--text-primary);
+    text-align: left;
+    text-decoration: none;
+    cursor: pointer;
+  }
+
+  .ac-account-menu__item:hover,
+  .ac-account-menu__item:focus-visible {
+    background: var(--bg-quaternary);
+  }
+
+  .ac-account-menu__item[aria-disabled='true'] {
+    color: var(--text-quaternary);
+    cursor: progress;
+  }
+
+  .ac-account-menu__check {
+    display: block;
+    flex: none;
+    margin-left: auto;
+    visibility: hidden;
+  }
+
+  .ac-account-menu__item[aria-checked='true'] > .ac-account-menu__check {
+    visibility: visible;
+  }
+
+  /* The dot of a status, in the colours of the chip's (account-entry.css) and Comercio's. */
+  .ac-account-menu__dot,
+  .ac-account-menu__line[data-presence]::before {
+    width: var(--space-6);
+    height: var(--space-6);
+    flex: none;
+    border-radius: var(--radius-full);
+    background: var(--text-quinary);
+  }
+
+  .ac-account-menu__line[data-presence] {
+    display: flex;
+    align-items: center;
+    gap: var(--space-4);
+  }
+
+  .ac-account-menu__line[data-presence]::before {
+    content: '';
+  }
+
+  [data-ac-presence='en_juego'] > .ac-account-menu__dot,
+  .ac-account-menu__line[data-presence='en_juego']::before {
+    background: var(--success, var(--text-secondary));
+  }
+
+  [data-ac-presence='ausente'] > .ac-account-menu__dot,
+  .ac-account-menu__line[data-presence='ausente']::before {
+    background: var(--amber);
+  }
+
+  .ac-account-menu__sep {
+    height: 1px;
+    margin: var(--space-4) 0;
+    background: var(--border-secondary);
+  }
+
+  .ac-account-menu__error {
+    padding: var(--space-8);
+    color: var(--text-secondary);
+    @apply type-ui;
+  }
+
+  .ac-account-menu__error:empty {
+    display: none;
+  }
+
+  /* With a coarse pointer an item grows from 40 to 44 (13.7), as the language list does. */
+  @media (pointer: coarse) {
+    .ac-account-menu__item {
+      padding-top: var(--space-12);
+      padding-bottom: var(--space-12);
+    }
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .ac-account-menu__item {
+      transition: background-color var(--duration-fast) var(--ease-standard);
+    }
+  }
+}

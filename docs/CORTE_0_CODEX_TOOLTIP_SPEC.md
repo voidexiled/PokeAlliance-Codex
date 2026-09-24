@@ -33,6 +33,7 @@
 - [13. i18n, SEO, rendimiento y accesibilidad](#13-i18n-seo-rendimiento-y-accesibilidad)
 - [14. Pruebas](#14-pruebas)
 - [15. Fuera de alcance y trabajo futuro](#15-fuera-de-alcance-y-trabajo-futuro)
+- [16. Selectores, ranuras y filtros (revisión del propietario, 2026-09-23)](#16-selectores-ranuras-y-filtros-revisión-del-propietario-2026-09-23)
 
 ## Cómo leer este documento
 
@@ -3007,7 +3008,7 @@ Decidido por el propietario el 2026-09-23. Esta sección manda sobre §9.9–§9
      - «Fecha de nacimiento» (se guarda la fecha; nunca se muestra).
      - Casilla «Acepto los términos y la política de privacidad», con enlace a los dos textos y la línea de no afiliación de §9.15.2. Se guarda la versión aceptada y su fecha.
 - **No se pide** nombre real, documento de identidad ni domicilio.
-- **Correo normalizado:** minúsculas; sin la parte `+etiqueta`; en `gmail.com` y `googlemail.com`, además, sin puntos. El correo normalizado es único entre todas las cuentas, baneadas incluidas. Los dominios de correo desechable se rechazan (tabla `blocked_email_domains`, sembrada por migración desde una lista pública CC0). Lo comprueba un Auth hook `before_user_created` (función Postgres) y no solo la interfaz.
+- **Correo normalizado:** minúsculas; sin la parte `+etiqueta`; en `gmail.com` y `googlemail.com`, además, sin puntos. El correo normalizado es único entre todas las cuentas, baneadas incluidas. Los dominios de correo desechable se rechazan (tabla `blocked_email_domains`, sembrada en la migración con una lista corta escrita a mano, como mucho 20 dominios frecuentes; el propietario puede cargar una lista pública mayor con la importación que explica `docs/LANZAMIENTO.md`). Lo comprueba un Auth hook `before_user_created` (función Postgres) y no solo la interfaz.
 - **Vinculaciones opcionales** (insignias en el perfil): Twitch y las «Otras plataformas» de §9.9 (D-B5). Discord y Google también cuentan como canal de contacto cuando el usuario lo activa (§9.9).
 - **Teléfono:** construido y apagado (`TELEFONO_OBLIGATORIO = false`) mientras el proyecto no pueda pagar SMS. Encendido, se vuelve el paso 2b del registro y una insignia, con el flujo de §9.9 «Verificación» y Twilio Verify (D-B1).
 
@@ -3061,7 +3062,7 @@ Decidido por el propietario el 2026-09-23. Esta sección manda sobre §9.9–§9
 
 - Tabla `trade_presence` (`user_id` pk, `estado` enum `en_juego` | `ausente` | `desconectado`, `last_seen_at`, `last_input_at`).
 - El usuario elige su estado («En el juego», «Ausente», «Desconectado») con un `ToggleGroup` en su cuenta y en Comercio.
-- Con sesión y cualquier pestaña del sitio abierta, la página manda un latido cada 60 s (`trade_heartbeat(activo)`, donde `activo` dice si hubo teclado o puntero desde el latido anterior); cerrar sesión pone `desconectado`.
+- Con sesión y cualquier pestaña del sitio abierta y visible, la página manda un latido cada 120 s (§9.16.4) (`trade_heartbeat(activo)`, donde `activo` dice si hubo teclado o puntero desde el latido anterior); cerrar sesión pone `desconectado`.
 - **Estado que ven los demás** (`trade_effective_presence`):
   - `desconectado` si el último latido tiene más de 10 minutos (`PRESENCIA_SIN_SENAL_MIN`) o no hay sesión;
   - `ausente` si eligió «En el juego» pero no hubo actividad en 6 horas (`PRESENCIA_INACTIVO_HORAS`);
@@ -3102,6 +3103,62 @@ Pruebas sobre la Supabase local (§14), además de CA-9.13 a CA-9.16:
 7. Las cuatro alertas se disparan con sus patrones y no con una IP compartida entre cuentas sin relación.
 8. Un baneo deja ocupados el correo normalizado, las identidades y el nombre de jugador; eliminar la cuenta baneada no los libera.
 9. El estado efectivo pasa a «Desconectado» a los 10 minutos sin latido y a «Ausente» a las 6 horas sin actividad, con el reloj inyectado.
+
+### 9.16 Cuenta en la cabecera y «Mi perfil» (decisión del propietario, 2026-09-23)
+
+El propietario revisó la vista previa: no había forma visible de saber si la sesión estaba iniciada ni de entrar desde cualquier página. Esta sección añade la entrada de cuenta a la cabecera de todo el sitio y la página «Mi perfil». Amplía §5.6 (cabecera) y §9.9 (cuenta); gana sobre ellas si chocan.
+
+#### 9.16.1 Entrada de cuenta en la cabecera
+
+- **Solo con cuentas:** existe cuando el build tiene `PUBLIC_SUPABASE_URL` y `PUBLIC_SUPABASE_ANON_KEY`. Sin ellas la cabecera no dibuja nada de cuenta (sin controles falsos).
+- **Posición:** a la derecha de la cabecera, antes del selector de idioma desde 1280 y antes del separador del grupo compacto por debajo; siempre visible, también en móvil (el menú móvil no la sustituye).
+- **Estados**, con la misma geometría para que nada se mueva (CLS 0):
+  1. **Sin saber aún:** un hueco del tamaño final, sin texto.
+  2. **Sin sesión:** `Button` secundario «Iniciar sesión» / «Sign in» hacia `/{l}/cuenta/`. Por debajo de 768 es un botón de icono con el sprite del entrenador y la misma etiqueta accesible.
+  3. **Con sesión:** chip de cuenta con avatar de 28 px (el de la identidad de Discord o Google vinculada; si no hay, la inicial del nombre de usuario sobre un disco con color del sistema), el nombre de usuario desde 768 y, con `COMERCIO_PUBLICO`, el punto de estado en la esquina del avatar con el color de §9.15.6 y su etiqueta como nombre accesible («En el juego», «Ausente», «Desconectado»). El estado se ve sin abrir el menú.
+  4. **Registro sin terminar** (faltan los pasos 2 o 3 de §9.15.1): el chip lleva una marca «!» y la primera opción del menú es «Completar registro».
+
+#### 9.16.2 Menú de cuenta
+
+Patrón de botón de menú: se abre con clic, Intro, Espacio o flecha abajo; Esc lo cierra y devuelve el foco; un clic fuera lo cierra. Contenido, en este orden:
+
+1. **Cabecera:** avatar, nombre de usuario, «{jugador} · {mundo}» y la etiqueta del estado.
+2. **«Estado»** (solo con `COMERCIO_PUBLICO`): tres `menuitemradio` «En el juego», «Ausente», «Desconectado». Elegir uno cambia el estado de §9.15.6 al momento y el punto del chip lo refleja.
+3. **Enlaces:** «Mi perfil» (`/{l}/cuenta/perfil/`), «Mis anuncios» (`/{l}/cuenta/perfil/?pestana=anuncios`), «Mis operaciones» (`/{l}/comercio/operaciones/`), «Crear anuncio» (`/{l}/comercio/publicar/`), «Mis guilds» (`/{l}/cuenta/#guilds`), «Ajustes de la cuenta» (`/{l}/cuenta/`) y «Moderación» (`/{l}/comercio/moderacion/`, solo moderadores). Los de Comercio solo con `COMERCIO_PUBLICO`.
+4. Separador y **«Cerrar sesión»**, que pone `desconectado` (§9.15.6), cierra la sesión y deja la página en el estado «Sin sesión».
+
+#### 9.16.3 «Mi perfil» (`/{l}/cuenta/perfil/`)
+
+Página prerenderizada con una isla. Sin sesión: `Notice` «Inicia sesión para ver tu perfil.» y el botón «Iniciar sesión». Con registro sin terminar: el botón «Completar registro».
+
+1. **Tarjeta de cabecera:** avatar, nombre de usuario, «{jugador} · {mundo}», país con su nombre (`Intl.DisplayNames`), «Miembro desde 09/2026», las identidades vinculadas (Discord, Google, Twitch) como chips y el control de estado (`ToggleGroup` de §9.15.6, con `COMERCIO_PUBLICO`). Acciones: «Editar perfil» (lleva a la sección de perfil de `/{l}/cuenta/`) y «Ver perfil público» (`/{l}/comercio/vendedor/{usuario}/`, con `COMERCIO_PUBLICO`).
+2. **Reputación** (con `COMERCIO_PUBLICO`): dos bloques, «Como vendedor» y «Como comprador», cada uno con «★ 4,8 · 50 operaciones · 5 compradores distintos» (o «vendedores distintos») según §9.15.4 y la barra de reparto de 1 a 5 estrellas; sin reseñas, «Sin reseñas todavía.»
+3. **Pestañas** (estado en la URL, `?pestana=`), con `COMERCIO_PUBLICO`:
+   - **«Anuncios»:** todos los anuncios propios en cualquier estado, del más reciente al más antiguo, con filtros de estado como chips con su cuenta («Publicados», «Reservados», «Expirados», «Completados», «Retirados»), las vistas y tarjetas de §9.5.8 y en cada anuncio las acciones que §9.7.8 permite en su estado («Editar», «Renovar», «Reservar» / «Quitar reserva», «Marcar completado», «Retirar»). Es el historial de lo publicado: el sitio no sabe si algo se vendió fuera de una operación confirmada.
+   - **«Reseñas recibidas»:** estrellas, comentario, la contraparte (su usuario), el papel («como vendedor» / «como comprador»), el número de operación y la fecha; 10 por página.
+   - **«Reseñas hechas»:** lo mismo desde el otro lado, con «Editar» mientras siga abierto el plazo de 30 días (§9.15.4).
+   - **«Operaciones»:** las cuentas de pendientes y confirmadas y el enlace a `/{l}/comercio/operaciones/`.
+4. Sin `COMERCIO_PUBLICO` la página solo tiene la tarjeta de cabecera y el enlace «Mis guilds».
+
+**Editar la información propia** (sección «Perfil» de `/{l}/cuenta/`): el país, el nombre de jugador y el mundo (con la comprobación de unicidad de §9.15.1) y qué canales se muestran en los anuncios (§9.9). El nombre de usuario no cambia después del primer anuncio y la fecha de nacimiento no cambia una vez guardada.
+
+#### 9.16.4 Rendimiento y datos
+
+- La entrada de cuenta no carga supabase-js al abrir una página: lee la sesión que supabase-js guarda en `localStorage` y una caché pequeña del perfil (`alliance-codex:cuenta:v1`: usuario, jugador, mundo, avatar, estado, moderador, registro completo), con cada lectura y escritura en `try/catch`. Sin almacenamiento, se ve «Iniciar sesión».
+- El cliente de Supabase se carga bajo demanda (`import()`, D-025) al abrir el menú, al cambiar el estado o al cerrar sesión, y entonces refresca la caché. Si la sesión ya no es válida, el chip pasa a «Sin sesión».
+- El evento `storage` sincroniza el chip entre pestañas.
+- El latido de §9.15.6 tampoco carga supabase-js en cada página: llama a la función por HTTP con el token de la sesión guardada y solo carga el cliente para renovar un token vencido.
+- **Tráfico de salida de Supabase (egress, 5 GB al mes en el plan gratuito):** el latido sale cada 120 s y solo con la pestaña visible (`visibilitychange`), pide `Prefer: return=minimal` y la función no devuelve cuerpo; «desconectado» sigue siendo 10 minutos sin latido. Las páginas públicas de Comercio que se renderizan en el servidor (lista, detalle y perfil del vendedor) responden con `Cache-Control: public, s-maxage=30, stale-while-revalidate=300` y no llevan nada personal en su HTML (lo personal lo pide la isla del navegador), así que la CDN de Vercel consulta Supabase como mucho una vez cada 30 s por dirección. Estimación con 3.000 cuentas activas: menos de 2 GB al mes.
+- Presupuesto: el script de la entrada y del latido suma ≤ 4 KB gzip en toda página (fila nueva de §13.6); «Mi perfil» usa la fila de Comercio (140 KB).
+
+#### 9.16.5 Criterios de aceptación
+
+1. Sin las variables de Supabase, ninguna página tiene entrada de cuenta; con ellas, toda página la tiene, en escritorio y en móvil.
+2. Sin sesión se ve «Iniciar sesión» y lleva a `/{l}/cuenta/`; al iniciar sesión, sin recargar otras pestañas, el chip muestra el usuario y el punto de estado.
+3. Cambiar el estado desde el menú actualiza el punto al momento y lo que ven los demás en Comercio (§9.15.6).
+4. «Cerrar sesión» desde el menú deja el chip en «Iniciar sesión» y el estado en «Desconectado».
+5. «Mi perfil» lista los anuncios propios de todos los estados, las reseñas recibidas y las hechas, y la reputación como vendedor y como comprador.
+6. El JS inicial de las páginas de contenido sigue dentro de 90 KB y la entrada no mueve nada al pintarse (CLS 0).
 
 ---
 
@@ -4224,7 +4281,8 @@ Todos viven en `src/lib/format/` y no dependen de `@js-temporal/polyfill`. Las f
 | JS inicial de páginas de contenido (Inicio, Sistemas y páginas de sistema, Actividades, Cambios, Herramientas, 404, marcador del mapa) | ≤ 90 KB gzip | Suma gzip -9 de los `script[type=module][src]` y de `component-url` y `renderer-url` de cada `astro-island` con `client:load` o `client:idle`, más sus `import` estáticos recursivos. |
 | JS inicial de la Pokédex, Tier list, Ítems, Buscar y la ficha | ≤ 110 KB gzip | igual |
 | JS inicial de Comparar | ≤ 120 KB gzip | igual |
-| JS inicial de Comercio | ≤ 140 KB gzip | igual |
+| JS inicial de Comercio, de `/{l}/cuenta/` y de «Mi perfil» (`/{l}/cuenta/perfil/`) | ≤ 140 KB gzip | igual |
+| JS inicial que añade la entrada de cuenta de la cabecera (§9.16.1) a cada página | ≤ 4 KB gzip | Suma gzip -9 de los archivos que alcanza el script de `AccountEntry` y ningún otro script inicial de la página. Solo existe en un build con los ajustes públicos de Supabase. |
 | JS inicial de Guild | ≤ 200 KB gzip, polyfill de Temporal incluido (45,3 KB hoy; §3.13) | igual |
 | Cada chunk diferido (`client:visible`, `client:only` tras interacción, `import()` dinámico: vista de outfit WebGL, gráficos) | ≤ 60 KB gzip | por archivo |
 | Índice de la paleta de búsqueda, cargado al abrirla | ≤ 60 KB gzip | archivo JSON |
@@ -4494,3 +4552,197 @@ El build de producción no contiene `/_paridad/` ni lee `tests/`. Lo comprueba `
 | Guild y Comparar | Lista de altas y bajas de Guild (E7); reordenar columnas en Comparar. | Decisión del propietario. |
 | Transiciones de página | View transitions entre documentos (T4). | Un tablero o una regla del DS que las defina. |
 | Ancho completo | `layout-main-full`: el token existe en el DS y ninguna pantalla lo usa (DP6). | Un tablero que lo use. |
+
+## 16. Selectores, ranuras y filtros (revisión del propietario, 2026-09-23)
+
+El propietario revisó la vista previa y pidió componentes a la altura del juego: cada entidad se ve con su sprite y se elige en una rejilla, no escribiendo su nombre; los filtros responden preguntas reales (tipo, tipo de moveset, tier); y la página debe ahorrar ir al juego a consultar. Esta sección gana sobre §7, §8.2, §8.5, §8.8, §9.4, §9.5 y §9.7 cuando chocan.
+
+### 16.1 Principios
+
+1. **La entidad es su sprite.** Un ítem, ball, held, aura, addon, stone o Pokémon que aparece dentro de un componente se dibuja como `EntitySlot`: la ranura del juego con el sprite y nada más. Nombre, descripción, precio NPC, obtención y demás datos salen en el tooltip del juego (§7.5) al pasar el puntero, enfocar o tocar. El nombre solo se escribe como texto donde el nombre es el contenido (títulos, la columna «Nombre» de una Lista, la ficha).
+2. **Elegir una entidad del juego es abrir una rejilla** (`EntityPicker`, §16.3), nunca un campo de texto libre, un `Select` simple ni una fila de botones. El disparador enseña lo elegido con sus sprites; el panel tiene búsqueda en vivo, filtros propios de la entidad y teclado completo.
+3. **Una sola o varias se nota a la vista:** la elección única reemplaza y cierra; la múltiple marca cada ranura elegida con una palomita, cuenta «3 elegidas» y deja las elegidas en una bandeja con su botón de quitar.
+4. **Un componente por tipo de entidad, el mismo en todo el sitio:** el selector de Pokémon del formulario de Comercio es el de los filtros de Comercio, del Comparador futuro y de cualquier otro lugar que elija Pokémon. Igual con ítems.
+5. **El sitio hace el trabajo:** los registros de `content/` guardan categoría, tier, ranura de held y tipo de moveset; el usuario nunca escribe un nombre que el registro ya conoce.
+6. **Nada de controles de relleno:** un filtro con menos de dos valores presentes no se dibuja (C-R5); una rejilla sin datos muestra su vacío, no ranuras falsas.
+
+### 16.2 Datos
+
+#### 16.2.1 Jerarquía de tiers
+
+Del mejor al peor: **ULTIMATE, Mythic, Legendary, Ultra Rare, Super Rare, T1, T2, T3, T4, T5, T6, T7.** El cliente lo confirma para los especiales (en el buscador de hunts, 8 = Super Rare, 9 = Ultra Rare, 10 = Legendary, 11 = Mythic, por encima de los numéricos) y el roster para los numéricos (T7 son Caterpie, Weedle, Magikarp; T1, finales Shiny de nivel 120). ULTIMATE, que no está en el cliente, reúne a los legendarios (Articuno, Mewtwo, Lugia…) y va arriba; el propietario puede corregirlo.
+
+- `$defs.tierEspecial` de `content/schemas/pokemon.schema.json` pasa a ser una jerarquía, de menor a mayor: Super Rare, Ultra Rare, Legendary, Mythic, ULTIMATE (el orden actual).
+- `src/lib/content/tier-rank.ts` (seguro para islas): `tierRank(tier)` (0 = el mejor), `compareTierRank` y la lista ordenada. Todo lo que ordena por tier la usa: grupos de la Tier list, opciones del filtro «Tier», orden «Tier» de las listas.
+- `TierBadge` (§16.3.6) da a cada tier su color.
+
+#### 16.2.2 Tipo de moveset
+
+`elementoMoveset` (ya en el esquema) es el elemento que define el moveset del Pokémon para cazar:
+
+1. se cuentan sus movimientos de área por elemento y gana el de más movimientos;
+2. sin movimientos de área, se cuentan todos sus movimientos de daño;
+3. un empate lo gana el elemento empatado que sea uno de los tipos del Pokémon; si ninguno lo es, el primero en el orden de movimientos del juego;
+4. un valor escrito a mano gana: el importador nunca lo pisa sin la orden del propietario.
+
+Ejemplos del propietario: Shiny Tauros (tipo Normal, casi todo su daño de área es Dark) → Dark; Eevee (un solo ataque de área, Fairy) → Fairy; Magikarp (sin área, sus ataques son Water) → Water. Mientras no llegue la exportación del cliente el campo es `null` («—») y su filtro no aparece (C-R5).
+
+`content/moves.json` gana `alcance`: `"area"`, `"objetivo"`, `"pasivo"` o `null` (las etiquetas aoe / target / passive del Pokédex del juego), para que el importador aplique la regla y la ficha marque los movimientos de área.
+
+#### 16.2.3 Held items y Mega Stones
+
+- Cada ítem de `content/items/helds.json` lleva `held` obligatorio: `{ "ranura": "x" | "y", "efecto": "X-Attack", "tier": 1…8 }`. `efecto` es el nombre canónico del efecto sin el tier; `tier` es un entero de 1 a `HELD_TIER_MAX = 8`. Así cada tier es su propio ítem (X-Attack T1, X-Attack T2…), como en el juego, y el tier se puede filtrar y ordenar. `HELD_TIER_MAX` baja de 99 a 8 (Q8, respuesta del propietario: «pon que 8»).
+- Un ítem de cualquier categoría puede llevar `mega`: `{ "pokemon": ["charizard", …] }` (ids de `content/pokemon.json`; lista vacía si no se sabe cuál). Marca una Mega Stone.
+- Un Pokémon lleva como mucho: una ball, varias auras, varios addons, un held X, un held Y y una Mega Stone.
+
+#### 16.2.4 Auras
+
+`content/auras.json` tiene las siete auras del cliente, con su nombre del juego: Premier, Alliance, Christmas 2024, Halloween 2025, Solo Leveling, Digimon Red Aura y Killua God Speed (ids `premier`, `alliance`, `christmas-2024`, `halloween-2025`, `solo-leveling`, `digimon-red-aura`, `killua-god-speed`). El cliente no trae iconos de aura: se ven en el juego como un anillo con el sombreador del aura. Mientras el propietario no aporte los suyos, cada aura usa un anillo de color propio generado desde el anillo del cliente (`ui/auras/<id>`, marcado `borrador` en `sprites.json`), y el icono se cambia en el registro sin tocar código.
+
+#### 16.2.5 Anuncio (sustituye a `UnidadPokemon` de §9.4)
+
+```ts
+type UnidadPokemon = {
+  pokemon: string;                 // id de content/pokemon.json
+  ball: string | null;             // id de un ítem de poke-balls
+  auras: string[];                 // ids de content/auras.json, sin repetir
+  addons: string[];                // ids de los addons de ese Pokémon (content/outfits.json)
+  heldX: string | null;            // id de un ítem con held.ranura = "x"
+  heldY: string | null;            // id de un ítem con held.ranura = "y"
+  mega: string | null;             // id de un ítem con mega
+  boost: number | null;            // 0–50
+  starLevel: number | null;        // 0–5
+  nickname: string | null;         // ≤ 40
+  memorySlots: number | null;      // 1–6, solo Ditto y Shiny Ditto
+  memorias: (string | null)[];     // largo = memorySlots; ids del roster
+  nextBoostChance: string | null;  // "0"–"100", ≤ 2 decimales
+  entrenamiento: { habilidad: Habilidad; nivel: number | null; progreso: string | null }[];
+  precioNpc: { tipo: 'unsellable' } | { tipo: 'pokedolares'; cantidad: number } | null;
+};
+// Anuncio de ítem: item: { item: string; cantidad: number } — id del registro, sin nombre declarado.
+```
+
+- Los nombres declarados de texto libre desaparecen (R2 queda solo para registros viejos): ball, held, addon e ítem se eligen del registro. El tier de un held sale de su ítem.
+- La fase B valida esta forma en el servidor con una migración nueva que reemplaza la validación del activo de §9.12.3 (nunca se reescribe una migración ya creada).
+- El registro de demostración (`content/comercio/`), su esquema, `content:check`, `listingTitle`, `listingText`, la búsqueda y el fixture visual pasan a la forma nueva.
+
+### 16.3 Componentes
+
+#### 16.3.1 `EntitySlot`, la ranura estándar
+
+La ranura del juego: cuadrado oscuro con borde de 1 y esquinas de 4, como `pokemon_background.png` del cliente, con el sprite centrado a escala entera. Tamaños 32, 40, 48, 64 y 72 (objetivo táctil 44). Estados: reposo, puntero (borde más claro), foco visible (anillo de foco), elegida (borde de acento y brillo interior, como la ranura elegida del juego), no disponible (atenuada con el candado del cliente). Marcas en las esquinas, cada una opcional: palomita arriba a la derecha (elegida en una elección múltiple), `ShinyMark` arriba a la derecha (si no hay palomita), `TierBadge` mini arriba a la izquierda, cantidad abajo a la derecha. Abre el tooltip de su entidad (§7.5.10).
+
+#### 16.3.2 `EntityPicker`, el selector genérico
+
+- **Disparador**, con el aspecto de un campo (etiqueta encima, borde, altura 48):
+  - vacío: una ranura de contorno punteado y el texto «Elegir Pokémon» / «Choose Pokémon» (o la entidad que sea);
+  - elección única: la ranura con el sprite y, a su lado, el nombre en texto secundario;
+  - elección múltiple: las ranuras elegidas en fila (sin nombres) y «+N» si no caben;
+  - botón «Quitar» (×) cuando el campo es opcional y hay algo elegido.
+- **Panel:** desde 768, un popover anclado al disparador (`@floating-ui/dom`, ya cargado bajo demanda, D-021) de al menos 640 de ancho y hasta 480 de alto; por debajo, una hoja inferior a pantalla completa con el mismo contenido.
+  1. **Búsqueda** con el foco al abrir; filtra mientras se escribe, sin acentos ni mayúsculas, por nombre, alias y número («#6», «6»); muestra la cuenta de resultados.
+  2. **Filtros** de la entidad (§16.3.3), como chips con sprite o icono; dentro de un filtro, cualquiera de los elegidos (O); entre filtros, todos (Y). «Limpiar filtros» cuando hay alguno.
+  3. **Rejilla** de `EntitySlot` de 48 en columnas automáticas, con el orden de la entidad. Se pinta por tandas (las primeras 120 y el resto al desplazarse) para que abrir y escribir respondan en menos de 200 ms.
+  4. **Panel de detalle** acoplado, a la derecha desde 1024 y como franja inferior por debajo: el contenido del tooltip de la ranura bajo el puntero o el foco (§7.5.2). Dentro del panel las ranuras no abren un tooltip flotante: el detalle ocupa su lugar.
+  5. **Elección múltiple:** una bandeja arriba con las elegidas (cada una con quitar), la cuenta «N elegidas» y el botón «Listo».
+- **Teclado:** flechas entre ranuras (fila y columna), Inicio/Fin, RePág/AvPág, Intro o Espacio elige, escribir va a la búsqueda, Esc cierra y devuelve el foco al disparador.
+- **Accesibilidad:** el disparador es un botón con `aria-haspopup="dialog"` y `aria-expanded`; la rejilla es `listbox` (`aria-multiselectable` en la múltiple) con `aria-activedescendant`; cada ranura es `option` con `aria-selected` y el nombre de la entidad como nombre accesible.
+- **Opción «Ninguno»** (elección única y opcional): primera ranura, con el icono de «sin elección» del cliente (`none_background.png`), como el panel de auras del juego.
+- **Vacío:** «No hay coincidencias.» con «Limpiar filtros».
+- **Carga:** el código del panel se carga al abrirlo por primera vez (`import()`, ≤ 60 KB gzip); los datos, del `datos.json` de la entidad (PR5). Mientras llegan, el panel muestra su esqueleto con la altura final.
+
+#### 16.3.3 Selectores de cada entidad
+
+| Selector | Datos | Filtros del panel | Orden | Única / múltiple |
+|---|---|---|---|---|
+| `PokemonPicker` | `/{l}/pokedex/datos.json` | Tier (chips en el orden de §16.2.1, con `TierBadge`), Tipo (los 18 iconos de elemento), Tipo de moveset (iconos; oculto sin datos), Variante (Normal / Shiny con `ShinyMark`), Generación | Número de Pokédex; la normal antes que la Shiny | las dos |
+| `ItemPicker` | `/{l}/items/datos.json` | Categoría (pestañas con el sprite de categoría del Market) cuando admite más de una; sus propios filtros cuando los tiene | El del registro | las dos |
+| `HeldPicker` | ítems con `held` | Ranura fija (X o Y), Tier 1–8 | Matriz: una fila por `efecto`, una columna por tier; la búsqueda filtra filas | única |
+| `MegaPicker` | ítems con `mega` | — | El del registro; primero las del Pokémon elegido | única |
+| `AuraPicker` | `content/auras.json` | — | El del registro | múltiple |
+| `AddonPicker` | addons del Pokémon elegido | — | El del registro | múltiple |
+
+- **Ranura de un Pokémon:** su outfit del juego (el sprite de `content/outfits.json` hacia el sur y quieto) cuando existe; si no, su retrato (`imagen`) dentro de la ranura. Con `ShinyMark` en las Shiny.
+- **`AuraPicker` y `AddonPicker`** tienen pocas opciones y se dibujan en línea, sin popover: una rejilla de ranuras de 56 bajo su etiqueta, como el panel «Auras» del juego (primera ranura «Ninguna», que vacía la elección; las elegidas con borde de acento y palomita). `AddonPicker` se oculta si el Pokémon no tiene addons y espera a que haya Pokémon.
+- **`HeldPicker`** es la matriz efecto × tier: se ve de un vistazo qué efectos existen y en qué tiers; una columna sin ítems no se dibuja.
+
+#### 16.3.4 Otros controles
+
+- **Star Level:** cinco estrellas pulsables con los sprites de estrella del cliente (`selected_star.png`, `empty_star.png`); pulsar la estrella elegida la quita.
+- **Boost:** control de pasos (−, valor, +) con un deslizador de 0 a 50.
+- **Mundo** (formulario y filtros de Comercio): chips con el nombre de cada mundo de `content/mundos.json`, no un `Select`.
+- **Tipo de activo** del formulario: cuatro fichas grandes con sprite (un Pokémon, la mochila de ítems, el diamante, la moneda) y su nombre, no pestañas de texto.
+
+#### 16.3.5 `ShinyMark`
+
+Usa el icono Shiny del cliente (`ui/shiny`, de `game_pokedex/images/shiny_icon.png`) en lugar del glifo actual, que el propietario no reconoce como Shiny. Donde se escribe «Variante: Shiny», el icono va delante.
+
+#### 16.3.6 `TierBadge`
+
+Pastilla con el tier («T1», «Super Rare»…) y un color por escalón de la jerarquía (§16.2.1): los numéricos en grises de más claro (T1) a más apagado (T7) y cada especial con su token (`--tier-super-rare`, `--tier-ultra-rare`, `--tier-legendary`, `--tier-mythic`, `--tier-ultimate`) definido en los tokens del tema, con contraste AA sobre su fondo. Lo usan `DexCard`, las ranuras (en mini), los filtros y la Tier list.
+
+### 16.4 Páginas
+
+#### 16.4.1 Ítems (§8.5)
+
+- **Dos vistas:** «Ranuras» (por defecto) y «Lista». La vista Cards desaparece de esta página (su `ViewToggle` ofrece dos).
+- **Ranuras = el inventario del juego:** un panel oscuro con una rejilla de ranuras de 48 pegadas (separación 2), sin tarjetas; en «Todo», un bloque de inventario por categoría con su sprite y nombre como cabecera. Cada ranura es el sprite y nada más; puntero, foco o toque abren el tooltip completo del ítem (nombre, categoría, elemento, uso, precio NPC, precio de tienda, «Drop de», «Se obtiene en» cuando haya datos). Mayús fija el tooltip (§7.5.9).
+- **Lista:** la tabla de hoy (sprite, nombre, categoría y las claves de la unión).
+- **Búsqueda en la página:** campo «Buscar ítem» que filtra en vivo el inventario y la lista.
+- **Tamaño de página:** 96 ítems.
+
+#### 16.4.2 Pokédex (§8.2)
+
+- **Filtros:** «Tipo» (iconos de elemento, varios), «Tipo de moveset» (iconos, varios; oculto sin datos), «Tier» (chips en el orden de §16.2.1, varios), «Variante» (Normal / Shiny con `ShinyMark`) y «Generación». Los mismos chips que el panel de `PokemonPicker`, en el mismo orden. En la URL: `?tipo=fire,water&moveset=dark&tier=t1,legendary&variante=shiny&gen=3` (el parámetro `elemento` de hoy se sigue leyendo como `tipo`).
+- **Orden** (`SortSelect`): «Número» (por defecto), «Nombre», «Tier (mejor primero)», «Requisito».
+- **Hechos:** «Moveset» con el chip de su elemento, y el tier con `TierBadge`.
+
+#### 16.4.3 Tier list (§8.8)
+
+- **Orden:** del mejor al peor (§16.2.1): ULTIMATE arriba y T7 abajo.
+- **Vista por defecto «Ranuras» como una tier list clásica:** una fila por tier, con la etiqueta del tier en una celda de color a la izquierda (el color de `TierBadge`) y las ranuras de sus Pokémon a la derecha, saltando de línea. Esta vista muestra toda la lista sin paginar (las imágenes fuera de pantalla cargan tarde); Cards y Lista siguen con 48 por página.
+- **Filtros:** los de la Pokédex salvo «Tier» (las filas son los tiers).
+
+#### 16.4.4 Crear anuncio (§9.7)
+
+La disposición de §9.7.1 se queda (formulario y vista previa fija). El formulario pasa a ser guiado:
+
+1. **«¿Qué vendes?»:** las cuatro fichas de §16.3.4.
+2. **Pokémon:**
+   - «Pokémon»: `PokemonPicker` (única, obligatorio). Al elegirlo, la vista previa se pinta con su sprite.
+   - «Ball»: `ItemPicker` de poke-balls (única).
+   - «Auras»: `AuraPicker` (múltiple, en línea).
+   - «Addons»: `AddonPicker` (múltiple, en línea).
+   - «Held X» y «Held Y»: un `HeldPicker` cada uno; «Mega Stone»: `MegaPicker`. No hay campo «Tier» aparte.
+   - «Boost», «Star Level» (§16.3.4), «Nickname», «Next Boost chance».
+   - Ditto: «Memory Slots» con el control de pasos (1–6) y una ranura `PokemonPicker` por memoria.
+   - «Entrenamiento»: tabla compacta de las 8 habilidades con nivel (control de pasos) y progreso (%), con `TrainingMeter` como vista.
+   - «NPC Price»: como hoy.
+3. **Ítem:** `ItemPicker` de todas las categorías (única) y «Cantidad».
+4. **Diamonds / Pokédólares:** la cantidad con su sprite y la cifra exacta en vivo (como hoy).
+5. **Precio** (§9.7.4) y **Mundo** (chips).
+6. **Acciones:**
+   - con `COMERCIO_PUBLICO`: la acción principal es «Publicar anuncio» (§9.7.8), con el consentimiento de dinero real (§9.15.2) cuando el precio lo tiene; sin sesión, «Inicia sesión para publicar» con el botón «Iniciar sesión»; sin cumplir un requisito, la línea nombra el que falta (registro sin terminar, menor de 18, Discord con menos de 60 días, sin canal visible, suspensión) y enlaza a donde se arregla;
+   - «Copiar texto para Discord» / «Copy text for Discord» queda siempre como acción secundaria (el texto de §9.7.7); sin `COMERCIO_PUBLICO` es la única.
+7. La vista previa es la `ListingCard` real, con ball, auras, addons, helds y Mega Stone como ranuras con tooltip (§16.4.5).
+
+#### 16.4.5 Tarjeta, fila y detalle del anuncio
+
+El equipo del Pokémon (ball, auras, addons, held X, held Y, Mega Stone) se dibuja como una tira de `EntitySlot` de 32, sin nombres y con su tooltip, en el orden del juego. `HeldStrip` pasa a esta tira. El tier del held sale en su tooltip y como marca mini de la ranura.
+
+#### 16.4.6 Filtros de la lista de Comercio (§9.5.4)
+
+Se añaden «Pokémon» (`PokemonPicker` múltiple, con sus filtros de tipo, moveset y tier dentro del panel) e «Ítem» (`ItemPicker` múltiple). «Mundo» pasa a chips. En la URL: `?pokemon=charizard,shiny-charizard&item=fire-stone`.
+
+### 16.5 Criterios de aceptación
+
+1. El formulario de Comercio no tiene ningún campo de texto libre ni `Select` simple para una entidad del juego: Pokémon, ball, auras, addons, helds, Mega Stone, ítem y memorias se eligen en su selector con sprites.
+2. `PokemonPicker`: «char» deja Charmander, Charmeleon, Charizard y sus Shiny; «#6» da Charizard; Tier, Tipo, Tipo de moveset, Variante y Generación se combinan (O dentro de un filtro, Y entre filtros); la rejilla sigue el número de Pokédex; flechas, Intro y Esc funcionan; abrir el panel responde en menos de 200 ms.
+3. `AuraPicker` y `AddonPicker` admiten varias, marcan cada elegida con palomita y «Ninguna» vacía la elección.
+4. «Held X» solo ofrece ítems con `held.ranura = "x"` en la matriz efecto × tier; el anuncio guarda el id del ítem y su tier sale del registro.
+5. La página de Ítems ofrece solo «Ranuras» y «Lista»; en Ranuras ninguna tarjeta envuelve a un ítem y cada ranura abre el tooltip.
+6. La Tier list empieza por ULTIMATE y termina en T7; el filtro «Tier» de la Pokédex y de `PokemonPicker` sigue ese orden.
+7. Toda variante Shiny muestra el icono Shiny del cliente.
+8. Con un registro de prueba que tiene `elementoMoveset`, `?moveset=dark` deja solo esos Pokémon, y combinado con `?tipo=normal` deja los Normal con moveset Dark.
+9. Con `COMERCIO_PUBLICO` la acción principal del formulario es «Publicar anuncio»; sin sesión pide iniciarla; «Copiar texto para Discord» es secundaria.
+10. Ningún límite de §13.6 sube.

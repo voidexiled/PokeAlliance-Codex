@@ -72,13 +72,12 @@ describe('registry loaders', () => {
   });
 
   it('loads items per category and "todo" as every category', () => {
-    expect(getItems('stones').map((item) => item.nombre)).toEqual([
-      'Fire Stone',
-      'Heart Stone',
-      'Leaf Stone',
-      'Thunder Stone',
-      'Water Stone',
-    ]);
+    expect(getItems('stones')).toHaveLength(35);
+    expect(
+      getItems('stones')
+        .slice(0, 5)
+        .map((item) => item.nombre),
+    ).toEqual(['Fire Stone', 'Heart Stone', 'Leaf Stone', 'Thunder Stone', 'Water Stone']);
     expect(getItems('todo')).toEqual(getItems());
     expect(getItems().length).toBe(
       getCategorias().reduce((total, categoria) => total + getItems(categoria.id).length, 0) -
@@ -475,8 +474,8 @@ describe('pnpm content:check', () => {
     expect(result.errors).toEqual([]);
     expect(result.summary.find((row) => row.file === 'content/items/stones.json')).toEqual({
       file: 'content/items/stones.json',
-      registros: '5 items',
-      borradores: 5,
+      registros: '35 items',
+      borradores: 20,
     });
     expect(formatReport(result)).toMatch(/Resultado: sin errores/);
   });

@@ -114,6 +114,7 @@ pnpm exec playwright test --project=prod tests/e2e/perf.spec.ts
 | M14 | Comercio fase B: Supabase local, verificación, operaciones, reseñas y moderación | F3 | M12, M13 | 10 |
 | M15 | Cierre del corte: borrado de CSS y componentes viejos, dependencias y documentación | cierre | M14 | 7 |
 | M16 | Comparar Pokémon | F5 | M15 + tablero aprobado (OG-11) | 7 |
+| M17 | Selectores con rejilla, ranuras, Ítems como inventario, jerarquía de tiers y formulario guiado (§16) | F3 | M14 | 8 |
 
 **Camino crítico:** M1 → M2 → M3 → M4 → M5 → M6 → M7/M8 → M9/M10 → M11 → M12 → M13 → M14 → M15. M16 no bloquea el cierre (E18).
 
@@ -1220,6 +1221,30 @@ Las cinco últimas devuelven **0 coincidencias**. La búsqueda de `[W:` se limit
 1. **Sin tablero aprobado no hay fidelidad medible** (WG2/WG3): la prueba visual se limita a la línea base propia hasta que exista tablero.
 2. **`?add=` no tiene origen**: hoy ninguna página enlaza así. El tablero fija desde dónde se entra; hasta entonces el parámetro existe pero no se enlaza (no es un control falso: no hay control).
 3. La tabla con 4 columnas a 390 px es el caso más apretado de S14 (objetivos de 44 × 44) y de desplazamiento dentro de la región.
+
+## M17 — Selectores, ranuras y filtros (§16, revisión del propietario del 2026-09-23)
+
+**Objetivo.** Aplicar §16 de la especificación: toda entidad del juego se ve como `EntitySlot` con su tooltip y se elige en un selector con rejilla (`EntityPicker` y sus variantes); Ítems pasa a inventario (Ranuras y Lista); la Tier list y los filtros siguen la jerarquía de tiers; la Pokédex y la Tier list filtran por tipo, tipo de moveset y tier; el formulario de Comercio se vuelve guiado y publica en la fase B.
+
+**Crear**
+
+- `src/components/pickers/` (`EntityPicker` con su panel diferido, `PokemonPicker`, `ItemPicker`, `HeldPicker`, `MegaPicker`, `AuraPicker`, `AddonPicker` y los filtros compartidos de tipo, tier, variante y generación), `src/lib/pickers/` (búsqueda, filtros, teclado de rejilla, matriz de helds) y sus hojas por componente.
+- `src/components/controls/Stepper.tsx`, `StarLevel.tsx`, `ChoiceTiles.tsx`; `src/components/game/TierBadge.tsx`; `src/lib/content/tier-rank.ts`.
+- Sprites `ui/auras/<id>` (anillos provisionales, `borrador`) y la migración que valida la forma nueva del activo (§16.2.5).
+- Pruebas unitarias de selectores, jerarquía de tiers, filtros múltiples y modelo del anuncio; una prueba de humo `tests/e2e/selectores.spec.ts`.
+
+**Cambiar**
+
+- Esquemas y espejos Zod: `held` y `mega` en ítems, `alcance` en movimientos, la jerarquía de `tierEspecial`; `content/auras.json` con las siete auras del cliente; `docs/REGISTROS.md`.
+- `EntitySlot`, `ShinyMark` (icono Shiny del cliente), `DexCard`, `ListingCard` y `HeldStrip` (tira de equipo).
+- Ítems (`src/components/items/`), Pokédex y Tier list (`src/components/pokedex/`, `src/components/tiers/`, `src/lib/lists/state.ts` con filtros múltiples), Comercio (`ListingForm`, `ListingPreview`, `TradeListRoot`, `src/lib/trade/`, registro de demostración y su esquema).
+- Diccionarios `es` y `en`.
+
+**Borrar**
+
+- La vista Cards de Ítems, el campo «Tier» suelto de los helds, los nombres declarados de texto libre del anuncio y el glifo Shiny anterior.
+
+**Aceptación.** §16.5 y G0.
 
 ---
 

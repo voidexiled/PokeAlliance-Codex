@@ -1,10 +1,13 @@
 // Cuenta (§9.9 without Comercio, §10.4; M13): one short smoke of `/{l}/cuenta/` in account mode,
 // on the development server of the LOCAL Supabase stack (tests/e2e/local-supabase.ts). The page
-// exists only with Supabase configured, so this spec skips without a local stack. An account is
-// created in the page, it creates a guild in a world of content/mundos.json and an invitation
+// exists only with Supabase configured, so this spec skips without a local stack. An account with
+// the three registration steps of §9.15.1 done (created through the API: a Discord identity is
+// written to auth.identities, as no OAuth app exists locally) signs in in the page, creates a guild in a world of content/mundos.json and an invitation
 // link, a second account joins through that link, and «Quitar» and «Eliminar guild» open their
 // confirmation with the focus on «Cancelar» (CA-10.14). The test accounts are deleted after.
 import { randomUUID } from 'node:crypto';
+import { execFileSync } from 'node:child_process';
+import { randomInt } from 'node:crypto';
 import { readFileSync } from 'node:fs';
 
 import { createClient } from '@supabase/supabase-js';
@@ -12,6 +15,7 @@ import type { SupabaseClient } from '@supabase/supabase-js';
 
 import { es } from '../../src/i18n/messages/es';
 import { fill } from '../../src/i18n/messages/types';
+import { TERMINOS_VERSION } from '../../src/lib/trade/limits';
 import { expect, test } from './fixtures';
 import { ACCOUNT_ORIGIN, localSupabase } from './local-supabase';
 
@@ -39,6 +43,46 @@ function admin(): SupabaseClient {
   });
 }
 
+/** One statement as the database owner of the LOCAL stack (loopback only). */
+function sql(statement: string): void {
+  const status = execFileSync('supabase', ['status', '-o', 'env'], { encoding: 'utf8' });
+  const url = /^DB_URL="?([^"\r\n]*)"?$/m.exec(status)?.[1] ?? '';
+  if (!['127.0.0.1', 'localhost'].includes(new URL(url).hostname)) {
+    throw new Error('The database is not on a loopback address');
+  }
+  execFileSync('supabase', ['db', 'query', '--db-url', url, statement], {
+    stdio: ['ignore', 'pipe', 'pipe'],
+    timeout: 60_000,
+  });
+}
+
+/** A confirmed account with a Discord identity older than 60 days and its profile (§9.15.1). */
+async function registeredAccount(email: string, handle: string): Promise<SupabaseClient> {
+  const created = await admin().auth.admin.createUser({ email, password, email_confirm: true });
+  if (created.error || !created.data.user) throw created.error ?? new Error('No user');
+  const snowflake = (
+    ((BigInt(Date.now() - 400 * 86_400_000) - 1_420_070_400_000n) << 22n) |
+    BigInt(randomInt(0, 4_194_304))
+  ).toString();
+  sql(
+    `insert into auth.identities (provider_id, user_id, identity_data, provider, last_sign_in_at, created_at, updated_at) values ('${snowflake}', '${created.data.user.id}', jsonb_build_object('sub', '${snowflake}', 'name', '${handle}'), 'discord', now(), now(), now())`,
+  );
+  const client = createClient(stack!.url, stack!.anonKey, {
+    auth: { persistSession: false, autoRefreshToken: false },
+  });
+  expect((await client.auth.signInWithPassword({ email, password })).error).toBeNull();
+  const saved = await client.rpc('account_save_profile', {
+    p_username: handle,
+    p_player_name: `Player ${handle}`,
+    p_world_key: WORLD.id,
+    p_country_code: 'MX',
+    p_birth_date: '1990-01-01',
+    p_terms_version: TERMINOS_VERSION,
+  });
+  expect(saved.error).toBeNull();
+  return client;
+}
+
 test.afterAll(async () => {
   if (stack === null) return;
   const { data } = await admin().auth.admin.listUsers({ perPage: 1000 });
@@ -54,9 +98,9 @@ test('an account creates a guild, invites, and «Quitar» and «Eliminar guild»
 }) => {
   if (stack === null) return;
 
-  // «Acceso»: create the account in the page (the local stack confirms it at once).
+  // «Acceso»: a registered account signs in in the page.
+  await registeredAccount(ownerEmail, `o-${run}`);
   await page.goto('/es/cuenta/');
-  await page.getByRole('button', { name: account.access.signUp, exact: true }).click();
   await page.getByLabel(account.access.email, { exact: true }).fill(ownerEmail);
   await page.getByLabel(account.access.password, { exact: true }).fill(password);
   await page.locator('form.ac-account-form button[type="submit"]').click();
@@ -80,16 +124,7 @@ test('an account creates a guild, invites, and «Quitar» and «Eliminar guild»
   const token = decodeURIComponent(link.split('#invitacion=')[1] ?? '');
 
   // A second account accepts the link, so the owner has someone to «Quitar».
-  const created = await admin().auth.admin.createUser({
-    email: memberEmail,
-    password,
-    email_confirm: true,
-  });
-  expect(created.error).toBeNull();
-  const member = createClient(stack.url, stack.anonKey, {
-    auth: { persistSession: false, autoRefreshToken: false },
-  });
-  expect((await member.auth.signInWithPassword({ email: memberEmail, password })).error).toBeNull();
+  const member = await registeredAccount(memberEmail, `n-${run}`);
   expect((await member.rpc('accept_guild_invitation', { p_token: token })).error).toBeNull();
 
   await page.reload();

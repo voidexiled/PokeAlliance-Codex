@@ -68,6 +68,32 @@
     justify-content: center;
   }
 
+  /* The line of non-affiliation of `/{l}/comercio/` (9.15.2): one discreet line after the list,
+     12/16 in `text-tertiary` like the data line of a detail. */
+  .ac-trade-disclaimer {
+    margin: 0;
+    color: var(--text-tertiary);
+    @apply type-ui;
+  }
+
+  /* The «Vendedor» cell of the Lista: the seller's `Rating` and, under it, its online status
+     (9.15.6), both centred in the column. */
+  .ac-trade-list__seller {
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-2);
+  }
+
+  /* The second line of a Lista name with the tag «Dinero real» of phase B (9.15.2): what the
+     listing declares, then the tag, 8 apart, wrapping in the «Anuncio» column. */
+  .ac-trade-list__sub {
+    display: inline-flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-4) var(--space-8);
+  }
+
   /* «Entrenamiento: N» of a listing panel (9.5.9) stacks every skill declared, 8 apart, as the
      sheet of a detail does (trade-detail.css). */
   .ac-game-tooltip__section-body > .ac-training-meter + .ac-training-meter {

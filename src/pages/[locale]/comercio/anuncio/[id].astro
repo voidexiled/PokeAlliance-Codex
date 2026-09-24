@@ -12,8 +12,16 @@
 //      the rows of the listing panel (9.5.9) plus «Addon:» and «Next Boost chance:», every held
 //      item, every trained skill and «Ditto Memory: N», each memorised Pokémon a `NestedEntity`
 //      with its panel; and 24 to its right the sections «Precio» (`FactList`), «Vendedor»
-//      (`SellerCard`) and «Contacto verificado» (`ChipRow` with no cap). Below 768 one column,
-//      the sheet first. Phase A has no action at all (9.6 step 4): the channels are chips.
+//      (`SellerCard`: the seller with its online status, 9.15.6, and its reputation «★ 4.8 · 50
+//      operaciones · 5 compradores distintos», 9.15.4) and «Contacto verificado» (`ChipRow` with
+//      no cap). Below 768 one column, the sheet first. Phase A has no action at all (9.6 step 4):
+//      the channels are chips.
+//   4. Phase B only (COMERCIO_PUBLICO, 9.2, S11): a listing with a real-money price carries the
+//      tag «Dinero real» under the head line and the short safety `Note` in «Precio» (9.15.2);
+//      under the sections, «Contactar al vendedor» (`ContactSeller`, with the real-money consent
+//      of 9.15.2) and «Reportar anuncio» (`ReportAction`, 9.11).
+//
+// Every Comercio route opens with the 18+ gate (`AgeGate`, 9.15.2), in both phases.
 //
 // Render (9.3). No `prerender` export: src/integrations/comercio-fases.ts sets it by phase and
 // fails the build on one. In phase A the build writes one HTML per listing from `getStaticPaths`,
@@ -50,9 +58,13 @@ import { formatDate } from '@/lib/format/dates';
 import { formatInteger, formatRealMoney } from '@/lib/format/numbers';
 import { diamondsTip } from '@/lib/game/tips';
 import { buildNav } from '@/lib/nav/groups';
-import { getAnuncio, getAnuncios, getVendedor, getVendedores } from '@/lib/trade/registry';
-import { hasPublicDetail, sellerRating, visibleStatus } from '@/lib/trade/types';
+import { DISCORD_EDAD_MIN_DIAS, EVIDENCIA_DIAS } from '@/lib/trade/limits';
+import { comercioPublico, getAnuncios } from '@/lib/trade/registry';
+import { loadAnuncio } from '@/lib/trade/source';
+import { hasPublicDetail, sellerReputation, visibleStatus } from '@/lib/trade/types';
 import { FactList, type FactRow } from '@/components/cards/FactList';
+import { Chip } from '@/components/content/Chip';
+import Note from '@/components/content/Note.astro';
 import { GameTooltip } from '@/components/game/GameTooltip';
 import { NestedEntity } from '@/components/game/NestedEntity';
 import { Glyph } from '@/components/icons/Glyph';
@@ -61,12 +73,20 @@ import { Section } from '@/components/layout/Section';
 import { ChipRow } from '@/components/money/ChipRow';
 import { PriceOptions } from '@/components/money/PriceOptions';
 import { TrainingMeter } from '@/components/money/TrainingMeter';
+import { AgeGate } from '@/components/trade/AgeGate';
+import {
+  ContactSeller,
+  realMoneyConsentLabels,
+  type ContactSellerLabels,
+} from '@/components/trade/RealMoneyConsent';
+import { ReportAction } from '@/components/trade/ReportDialog';
 import { SellerCard } from '@/components/trade/SellerCard';
 import {
   listingTip,
   listingTitleNode,
   pokemonPanel,
   sellerHref,
+  sellerPresence,
   tradeDiamonds,
   tradeLabels,
   tradeRecords,
@@ -88,7 +108,8 @@ export function getStaticPaths() {
 const dictionaries: Record<Locale, Messages> = { es, en };
 
 const locale = getLocale(Astro.params.locale);
-const anuncio = getAnuncio(Astro.params.id ?? '');
+// Phase A reads the sample registry, phase B the database (src/lib/trade/source.ts, 9.3).
+const { anuncio, vendedores } = await loadAnuncio(Astro.params.id ?? '');
 // 9.4: a withdrawn listing, or one this build does not have, is not a page.
 if (anuncio === undefined || !hasPublicDetail(anuncio)) {
   return new Response(null, { status: 404 });
@@ -117,7 +138,7 @@ const catalog: TradeCatalog = {
   auras: getAuras(),
   outfits: getOutfits(),
   mundos: getMundos(locale),
-  vendedores: getVendedores(),
+  vendedores,
   sprites: registry,
   channels: trade.channels,
 };
@@ -125,6 +146,8 @@ const {
   rows: [row],
   refs,
 } = tradeRecords([anuncio], catalog, locale);
+// Phase B (9.2): the tag, the note and the actions exist only with COMERCIO_PUBLICO (S11).
+const publico = comercioPublico();
 // The `moneda` object of content/items/diamantes.json (§3.13): the facts «Se compran en» and
 // «Se usan en» of a Diamonds listing and the rows of the Diamonds panel its price opens (7.5.3).
 const moneda = getMonedaDiamantes();
@@ -135,7 +158,7 @@ const context: TradeContext = {
   sprites,
   diamonds: tradeDiamonds(moneda, locale),
   ui,
-  labels: tradeLabels(messages),
+  labels: tradeLabels(messages, publico),
 };
 // The Diamond turns in Comercio (7.8). Without a row there is no panel, and the Diamonds of the
 // price stay text (R2).
@@ -189,8 +212,10 @@ const memories = (unit?.memorias ?? []).flatMap((id) => {
 });
 const heldSection = (sheet.sections ?? []).length > 0;
 
-// «Precio» (9.6): real money in 700 or «A convenir», and the in-game options.
+// «Precio» (9.6): real money in 700 or «A convenir», and the in-game options. In phase B a
+// real-money price also carries the tag «Dinero real» and the safety note (9.15.2).
 const precio = row.precio;
+const realMoney = publico && precio.real !== null;
 const importe = precio.real === null ? Number.NaN : Number(precio.real.importe);
 const fiat =
   precio.real !== null && Number.isFinite(importe)
@@ -224,13 +249,36 @@ const priceRows: FactRow[] = [
   },
 ];
 
-// «Vendedor» and «Contacto verificado» (9.6): the seller's standing from its reviews (9.10).
-const seller = getVendedor(row.vendedor);
+// «Vendedor» and «Contacto verificado» (9.6): the seller's online status (9.15.6) and its
+// reputation from its reviews (9.15.4).
+const seller = vendedores.find((vendedor) => vendedor.id === row.vendedor);
 const sellerRef = Object.hasOwn(refs.vendedores, row.vendedor)
   ? refs.vendedores[row.vendedor]
   : null;
-const operations = seller === undefined ? 0 : sellerRating(seller.resenas).operaciones;
+const reputation = sellerReputation(seller?.resenas ?? []);
 const channels = sellerRef?.canales ?? [];
+
+// The actions of phase B (9.6, 9.10, 9.11, 9.15.2). Their texts travel as props (DP1). A deal
+// only starts on a listing the visitor sees `publicado` or `reservado` (9.10).
+const contactable = status === 'publicado' || status === 'reservado';
+const dialogUi = { close: ui.close, dismiss: ui.dismiss };
+const contactLabels: ContactSellerLabels = {
+  contact: trade.contactSeller,
+  started: trade.dealStarted,
+  goToDeals: trade.goToDeals,
+  signIn: trade.requirements.signIn,
+  account: trade.requirements.account,
+  adultsOnly: trade.adultsOnly,
+  discord: trade.requirements.discord,
+  discordAge: fill(trade.requirements.discordAge, {
+    days: formatInteger(DISCORD_EDAD_MIN_DIAS, locale),
+  }),
+  suspendedUntil: trade.suspension.until,
+  suspended: trade.suspension.indefinite,
+  goToAccount: trade.requirements.goToAccount,
+  openDeal: trade.limits.openDeal,
+  consent: realMoneyConsentLabels(trade, formatInteger(EVIDENCIA_DIAS, locale)),
+};
 ---
 
 <PageLayout
@@ -259,6 +307,13 @@ const channels = sellerRef?.canales ?? [];
         )
       }
     </p>
+    {
+      realMoney && (
+        <p class="ac-trade-detail__tag">
+          <Chip>{trade.listing.fiat}</Chip>
+        </p>
+      )
+    }
   </div>
 
   <div class="ac-trade-detail">
@@ -362,6 +417,7 @@ const channels = sellerRef?.canales ?? [];
     <div class="ac-trade-detail__side">
       <Section id="precio" title={trade.price}>
         <FactList rows={priceRows} gap={8} zone={null} />
+        {realMoney && <Note lead={null}>{trade.realMoney.note}</Note>}
       </Section>
       {
         sellerRef !== null && (
@@ -369,11 +425,16 @@ const channels = sellerRef?.canales ?? [];
             <SellerCard
               name={sellerRef.nombre}
               href={sellerHref(locale, row.vendedor)}
-              score={sellerRef.valoracion}
-              reviews={sellerRef.resenas}
-              operations={operations}
+              presence={sellerPresence(sellerRef, context)}
+              reputation={reputation}
               locale={locale}
-              labels={{ operations: trade.confirmed, money: ui.money }}
+              labels={{
+                rating: trade.seller.rating,
+                outOf: ui.money.outOf,
+                deals: trade.reputation.deals,
+                buyers: trade.reputation.buyers,
+                noReviews: trade.seller.noReviews,
+              }}
             />
           </Section>
         )
@@ -389,8 +450,39 @@ const channels = sellerRef?.canales ?? [];
           </Section>
         )
       }
+      {
+        publico && (
+          <div class="ac-trade-detail__actions">
+            {contactable && (
+              <ContactSeller
+                client:load
+                locale={locale}
+                listingId={anuncio.id}
+                realMoney={precio.real !== null}
+                labels={contactLabels}
+                ui={dialogUi}
+              />
+            )}
+            <ReportAction
+              client:load
+              locale={locale}
+              messages={trade.report}
+              ui={dialogUi}
+              targetType="listing"
+              targetId={anuncio.id}
+            />
+          </div>
+        )
+      }
     </div>
   </div>
+  {/* 9.15.2: the 18+ gate, a closed dialog until the island decides. */}
+  <AgeGate
+    client:load
+    locale={locale}
+    labels={{ title: trade.adultsOnly, adult: trade.ageGate.adult, minor: trade.ageGate.minor }}
+    closeLabel={ui.close}
+  />
 </PageLayout>
 
 <script>

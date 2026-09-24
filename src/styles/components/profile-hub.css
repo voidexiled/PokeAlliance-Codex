@@ -1,0 +1,283 @@
+/* «Mi perfil» (spec 9.16.3; template H of 8.0.2): the island of
+   src/components/account/ProfileHub.tsx on src/pages/[locale]/cuenta/perfil.astro. There is no
+   board for this page, so the blocks are composed only of design-system components and tokens
+   (R16).
+
+   Per-page stylesheet (D-018, 13.6): only this page draws these blocks, so global.css does not
+   import it; the page imports it. It repeats the layer order of global.css before its block, so
+   the `components` layer keeps its place whichever sheet the browser reads first (3.6).
+
+   - The island is a column 48 apart, the rhythm of the page (5.9): the header card, the two
+     reputation blocks and the tabs. Until the session is known it paints nothing.
+   - The header card is a card box (card.css: 1 px `border-secondary`, radius 12, padding 16):
+     the 64 avatar beside the username (`h2` in `h3` type) and its lines in `text-secondary`, the
+     linked identities as chips, the status `ToggleGroup` and the actions, 16 apart.
+   - Reputation: two blocks side by side from 768, one above the other below. Each has its title,
+     the line «★ 4.8 · 50 operaciones · 5 compradores distintos» and the distribution, five rows
+     from 5 to 1 stars: the label, a bar as long as the share of the largest row (the
+     `--ac-share` of each row, 4 tall, the meter height of the design system) and the count.
+   - «Anuncios»: the state filter, then one `CardGroup` per asset type. Each card sits with its
+     state and its actions in a box that spans the tracks of the card plus one, on subgrid rows
+     like the card itself (card.css), so the cards of a row keep their shared tracks and the
+     actions line up under them.
+   - Reviews: articles 16 apart with a 1 px rule between them, the head in `ui`, then the
+     comment. */
+
+@reference '../theme.css';
+
+@layer properties, theme, base, components, utilities;
+
+@layer components {
+  .ac-profile {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-48);
+    min-width: 0;
+  }
+
+  .ac-profile__signed-out {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--space-16);
+  }
+
+  .ac-profile__retry {
+    margin-left: var(--space-8);
+  }
+
+  .ac-profile__line {
+    color: var(--text-secondary);
+    overflow-wrap: anywhere;
+    @apply type-body;
+  }
+
+  .ac-profile__count {
+    color: var(--text-quaternary);
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* Header card */
+
+  .ac-profile__card {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-16);
+    min-width: 0;
+    padding: var(--space-16);
+    border: 1px solid var(--border-secondary);
+    border-radius: var(--radius-12);
+  }
+
+  .ac-profile__identity {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--space-16);
+    min-width: 0;
+  }
+
+  .ac-profile__avatar {
+    display: flex;
+    flex: none;
+    align-items: center;
+    justify-content: center;
+    width: var(--size-art);
+    height: var(--size-art);
+    overflow: hidden;
+    border-radius: var(--radius-full);
+    background: var(--bg-quaternary);
+    @apply type-h2;
+  }
+
+  .ac-profile__avatar > img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .ac-profile__who {
+    display: flex;
+    min-width: 0;
+    flex-direction: column;
+    gap: var(--space-4);
+  }
+
+  .ac-profile__name {
+    margin: 0;
+    overflow-wrap: anywhere;
+    @apply type-h3;
+  }
+
+  .ac-profile__chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-8);
+    margin: var(--space-4) 0 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .ac-profile__presence {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--space-8);
+  }
+
+  .ac-profile__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-8);
+  }
+
+  /* Reputation */
+
+  .ac-profile__reputation {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--space-32);
+  }
+
+  @media (width >= 48rem) {
+    .ac-profile__reputation {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  .ac-profile__block {
+    display: flex;
+    min-width: 0;
+    flex-direction: column;
+    gap: var(--space-12);
+  }
+
+  .ac-profile__block-title {
+    margin: 0;
+    @apply type-h3;
+  }
+
+  .ac-profile__score {
+    @apply type-body;
+  }
+
+  .ac-profile__bars {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+    margin: 0;
+  }
+
+  .ac-profile__bar {
+    display: grid;
+    grid-template-columns: 96px minmax(0, 1fr); /* sin token: la etiqueta «5 estrellas» */
+    align-items: center;
+    gap: var(--space-12);
+    color: var(--text-secondary);
+    @apply type-ui;
+  }
+
+  .ac-profile__bar > dd {
+    display: flex;
+    align-items: center;
+    gap: var(--space-8);
+    margin: 0;
+  }
+
+  .ac-profile__bar-fill {
+    width: var(--ac-share, 0%);
+    height: var(--size-meter);
+    border-radius: var(--radius-full);
+    background: var(--amber);
+  }
+
+  .ac-profile__bar-count {
+    flex: none;
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* Tabs */
+
+  .ac-profile__tabs {
+    display: flex;
+    min-width: 0;
+    flex-direction: column;
+    gap: var(--space-24);
+  }
+
+  .ac-profile__panel {
+    min-width: 0;
+  }
+
+  .ac-profile__listings,
+  .ac-profile__reviews,
+  .ac-profile__deals {
+    display: flex;
+    min-width: 0;
+    flex-direction: column;
+    align-items: stretch;
+    gap: var(--space-24);
+  }
+
+  .ac-profile__deals {
+    align-items: flex-start;
+    gap: var(--space-8);
+  }
+
+  /* A card and its actions on the subgrid rows of the grid (card.css). The card's own footer
+     ends with «Vendedor» and «Contacto verificado», which say nothing of the account's own
+     listing: both rows leave the layout and the accessibility tree, as on the publish page
+     (listing-preview.css). */
+
+  .ac-profile-listing {
+    display: grid;
+    grid-template-rows: subgrid;
+    min-width: 0;
+  }
+
+  .ac-profile-listing [data-zone='footer'] > .ac-fact-list__row:nth-last-child(-n + 2) {
+    display: none;
+  }
+
+  .ac-profile-listing__actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    align-self: start;
+    gap: var(--space-8);
+  }
+
+  @supports not (grid-template-rows: subgrid) {
+    .ac-profile-listing {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-12);
+    }
+  }
+
+  /* Reviews */
+
+  .ac-profile-review {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--space-8);
+    padding-bottom: var(--space-16);
+    border-bottom: 1px solid var(--border-secondary);
+  }
+
+  .ac-profile-review__head {
+    color: var(--text-secondary);
+    @apply type-ui;
+  }
+
+  .ac-profile-review__head > strong {
+    color: var(--text-primary);
+    @apply type-ui-strong;
+  }
+
+  .ac-profile-review__comment {
+    overflow-wrap: anywhere;
+    white-space: pre-line;
+    @apply type-body;
+  }
+}

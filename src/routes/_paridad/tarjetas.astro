@@ -177,7 +177,9 @@ const comercioHref = nav.groups
 /** The sprite the registry has under `key`, or `null`: the missing mark (7.4.1). */
 function registrySprite(key: string | null, cantidad?: number): SpriteProps | null {
   if (key === null || !Object.hasOwn(registry, key)) return null;
-  return spriteData(registry, key, cantidad === undefined ? {} : { cantidad });
+  // Only a quantity sprite takes the amount (its frame); an animated one ignores it.
+  const quantity = cantidad !== undefined && registry[key].modo === 'cantidad';
+  return spriteData(registry, key, quantity ? { cantidad } : {});
 }
 
 /** The registry sprite of an item id (`items/<categoria>/<id>`), or `null`. */

@@ -1,0 +1,75 @@
+/* AccountEntry (spec 9.16.1): the closed account entry of the header. Every page with account
+   mode draws it, so it lives in the shared sheet (global.css imports this file with
+   layer(components), after header.css and language-menu.css), which has little room left (S17).
+   The chip takes the classes of the header's own triggers (`ac-header__lang` from 1280,
+   `ac-header__icon` below) and the «Iniciar sesión» link those of `Button`, so this file only
+   holds the slot, the avatar and its badge. The open menu is account-menu.css, loaded with its
+   script on the first open. There is no board for the entry (R16).
+
+   - The slot keeps its size in the three states (CLS 0): 192 wide in the end group, the width
+     of the chip and of the language selector beside it, and 44 in the compact group, like the
+     lens and the menu button. What it holds sits at its end.
+   - The avatar is the linked identity's picture or the initial on a `bg-quaternary` disc. Its
+     badge sits on the lower right corner with a ring of the header's background: the status dot
+     («En el juego» in the colour of success, «Ausente» in `amber`, «Desconectado» in
+     `text-quinary`, 9.15.6, as the dot of Comercio in trade-presence.css), or the «!» of an
+     unfinished registration in `amber`. */
+
+.ac-account-entry {
+  position: relative;
+  display: flex;
+  flex: none;
+  justify-content: flex-end;
+  width: 192px; /* sin token: el ancho del selector de idioma, al lado */
+}
+
+.ac-account-entry--compact {
+  width: var(--size-touch);
+}
+
+.ac-account-entry__avatar {
+  position: relative;
+  display: grid;
+  flex: none;
+  place-items: center;
+  width: 28px; /* sin token: el avatar de 9.16.1 */
+  height: 28px; /* sin token: el avatar de 9.16.1 */
+  border-radius: var(--radius-full);
+  background: var(--bg-quaternary);
+}
+
+.ac-account-entry__avatar > img {
+  width: 100%;
+  height: 100%;
+  border-radius: inherit;
+  object-fit: cover;
+}
+
+.ac-account-entry__badge {
+  position: absolute;
+  right: -4px; /* sin token: la marca asoma de la esquina del avatar */
+  bottom: -4px; /* sin token: la marca asoma de la esquina del avatar */
+  display: grid;
+  place-items: center;
+  width: var(--space-16);
+  height: var(--space-16);
+  border: 2px solid var(--bg-primary);
+  border-radius: var(--radius-full);
+  background: var(--text-quinary);
+  color: var(--black);
+}
+
+[data-presence='en_juego'] .ac-account-entry__badge {
+  background: var(--success, var(--text-secondary));
+}
+
+[data-presence='ausente'] .ac-account-entry__badge,
+[data-unfinished] .ac-account-entry__badge {
+  background: var(--amber);
+}
+
+.ac-account-entry__name {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}

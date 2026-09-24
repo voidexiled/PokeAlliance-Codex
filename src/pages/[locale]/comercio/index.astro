@@ -1,8 +1,10 @@
 ---
 // Comercio (spec 9.5, `Lienzo:Comercio`): the listings of phase A in template B of 8.0.2 —
 // breadcrumb «Comunidad › Comercio», PageTitle, the red InfoBanner and the list island (search
-// row with «Crear anuncio», type tabs, FilterBar, results bar, the active view and the
-// pagination), then the footer PageLayout adds.
+// row with «Crear anuncio», type tabs, FilterBar with «Solo en el juego», results bar, the active
+// view and the pagination), the one discreet line of non-affiliation (9.15.2), then the footer
+// PageLayout adds. The 18+ gate (`AgeGate`, 9.15.2) opens every Comercio route, in both phases,
+// except the empty list of a production phase A, which has no island (CA-9.1).
 //
 // Render (9.3). The page exports no `prerender`: src/integrations/comercio-fases.ts sets it by
 // phase (prerendered in phase A, rendered on demand in phase B) and fails the build if a Comercio
@@ -13,15 +15,16 @@
 // then the page is the empty state of 9.5.10 alone — «Aún no hay anuncios.» and «Crear anuncio» —
 // with no search, tab, filter, banner or results bar (CA-9.1, S11). With listings, the public
 // ones (9.4: `publicado` or `reservado`, not yet expired when the build runs) are sorted by
-// «Recientes» and the island receives the first page of that default state with what it names
+// «Recientes» with the sellers «En el juego» first (9.15.6, the order of the island's
+// `tradeConfig`) and the island receives the first page of that default state with what it names
 // (`tradeData`, as one JSON text), and the length of the list; a list longer than one page asks
 // for `/{l}/comercio/datos.json` when it hydrates (PR5). A prerendered page never reads its
 // query (PR2): the state of the URL is the island's.
 //
 // Text (DP1, 13.2). The h1 and the crumbs are the menu entry and its group
 // (src/lib/nav/groups.ts); everything else is `messages.trade` — the island gets the part of
-// `ui` it reads (`tradeUi`) and the labels `tradeLabels` composes — and the names come from the
-// registries.
+// `ui` it reads (`tradeUi`) and the labels `tradeLabels` composes, with the tag «Dinero real» of
+// phase B (9.15.2) — and the names come from the registries.
 import { createElement } from 'react';
 
 import { getAlternatePath, getLocale, locales, type Locale } from '@/i18n/config';
@@ -41,13 +44,15 @@ import {
 import { getPokemon } from '@/lib/content/repository';
 import { buildNav } from '@/lib/nav/groups';
 import { spriteOrNull } from '@/lib/sprites/resolve';
-import { comercioPublico, getAnuncios, getVendedores } from '@/lib/trade/registry';
+import { comercioPublico } from '@/lib/trade/registry';
+import { loadListado } from '@/lib/trade/source';
 import { sortListings } from '@/lib/trade/sort';
-import { isListed } from '@/lib/trade/types';
+import { inGameFirst, isListed } from '@/lib/trade/types';
 import { EmptyState } from '@/components/content/EmptyState';
 import InfoBanner from '@/components/content/InfoBanner.astro';
 import { Button } from '@/components/controls/Button';
 import { PageTitle } from '@/components/layout/PageTitle';
+import { AgeGate } from '@/components/trade/AgeGate';
 import {
   TRADE_PAGE_SIZE,
   TradeListRoot,
@@ -60,6 +65,9 @@ import {
   type TradeCatalog,
 } from '@/components/trade/TradeListRoot';
 import PageLayout from '@/layouts/PageLayout.astro';
+
+// The line of non-affiliation is also on the empty list, which renders no island (9.15.2).
+import '@/styles/components/trade-list.css';
 
 export function getStaticPaths() {
   return locales.map((locale) => ({ params: { locale } }));
@@ -83,11 +91,20 @@ if (group === undefined || entry === undefined) {
 }
 const title = entry.label;
 
-// 9.4: what is public when the build runs, in the default order (9.5.5).
+// 9.4: what is public when the build runs, in the default order (9.5.5): «Recientes», the
+// sellers «En el juego» first (9.15.6). The sort is stable, so each part keeps «Recientes».
 const builtAt = new Date();
+// Phase A reads the sample registry, phase B the database (src/lib/trade/source.ts, 9.3).
+const { anuncios, vendedores } = await loadListado();
+const presence = new Map(vendedores.map((vendedor) => [vendedor.id, vendedor.presencia]));
 const listed = sortListings(
-  getAnuncios().filter((anuncio) => isListed(anuncio, builtAt)),
+  anuncios.filter((anuncio) => isListed(anuncio, builtAt)),
   'recientes',
+).sort(
+  inGameFirst(
+    (anuncio) => presence.get(anuncio.vendedor),
+    () => 0,
+  ),
 );
 
 const registry = getSpriteRegistry();
@@ -99,16 +116,20 @@ const catalog: TradeCatalog = {
   auras: getAuras(),
   outfits: getOutfits(),
   mundos: getMundos(locale),
-  vendedores: getVendedores(),
+  vendedores,
   sprites: registry,
   channels: trade.channels,
 };
-const firstPage = JSON.stringify(tradeData(listed.slice(0, TRADE_PAGE_SIZE), catalog, locale));
+// Phase B has no `datos.json` (9.3): the server hands the island every row it read
+// (src/lib/trade/source.ts caps them) and the island pages them itself.
+const inline = comercioPublico() ? listed : listed.slice(0, TRADE_PAGE_SIZE);
+const firstPage = JSON.stringify(tradeData(inline, catalog, locale));
 const worlds = catalog.mundos.map((world) => [world.id, world.nombre] as const);
 
 // 9.5.1 step 3: the banner speaks of verification and reviews, which only exist with phase B
 // or with listings to contact; the empty list of production has neither (R12).
-const banner = comercioPublico() || listed.length > 0;
+const publico = comercioPublico();
+const banner = publico || listed.length > 0;
 const diamond = spriteOrNull(registry, 'ui/diamond', { animado: true });
 
 // 9.5.10: the one action of the empty list, a link to the publish page.
@@ -140,17 +161,34 @@ const create = createElement(Button, { href: publishHref(locale), children: trad
         path={path}
         data={firstPage}
         total={listed.length}
-        dataUrl={listed.length > TRADE_PAGE_SIZE ? `/${locale}/comercio/datos.json` : undefined}
+        dataUrl={inline.length < listed.length ? `/${locale}/comercio/datos.json` : undefined}
         builtAt={builtAt.toISOString()}
         sprites={tradeSprites(registry)}
         worlds={worlds}
         diamonds={tradeDiamonds(getMonedaDiamantes(), locale)}
         caption={trade.list.caption}
         ui={tradeUi(ui)}
-        labels={tradeLabels(messages)}
+        labels={tradeLabels(messages, publico)}
       />
     ) : (
       <EmptyState action={create}>{trade.list.empty}</EmptyState>
+    )
+  }
+  <p class="ac-trade-disclaimer">{trade.nonAffiliation}</p>
+  {
+    /* 9.15.2: the 18+ gate, a closed dialog until the island decides. The empty list of a
+       production phase A has no offer to guard and no island (CA-9.1), so it has no gate. */
+    banner && (
+      <AgeGate
+        client:load
+        locale={locale}
+        labels={{
+          title: trade.adultsOnly,
+          adult: trade.ageGate.adult,
+          minor: trade.ageGate.minor,
+        }}
+        closeLabel={ui.close}
+      />
     )
   }
 </PageLayout>

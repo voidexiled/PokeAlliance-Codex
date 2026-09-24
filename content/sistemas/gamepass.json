@@ -2,10 +2,10 @@
   "$schema": "../schemas/sistemas.schema.json",
   "id": "gamepass",
   "titulo": {
-    "es": "GamePass",
+    "es": "Pase de Juego",
     "en": "GamePass"
   },
-  "sprite": null,
+  "sprite": "ui/sistemas/gamepass",
   "orden": 7,
   "tooltip": [],
   "intro": [],

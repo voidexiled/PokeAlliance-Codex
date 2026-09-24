@@ -148,6 +148,28 @@ export const es = {
     toc: 'Resumen',
     tocLabel: 'En esta página',
     footer: 'Alliance Codex es un proyecto comunitario independiente, no afiliado a PokeAlliance.',
+    // The account entry of the header (§9.16.1) and its menu (§9.16.2), only in a build with the
+    // public Supabase settings. Without a session: `signIn` to `/{l}/cuenta/` (below 768 an icon
+    // button with the trainer sprite and the same label). With one: the chip, named `label`
+    // (`{user}` the username), whose «!» mark is named `incomplete` while registration steps 2 or
+    // 3 are missing (§9.15.1), and then `completeRegistration` is the first item of the menu. The
+    // status dot and the «Estado» radios read `trade.presence`. The Comercio links (`myListings`,
+    // `myDeals`, `createListing`, `moderation`) exist only with COMERCIO_PUBLICO, and
+    // `moderation` only for moderators.
+    account: {
+      signIn: 'Iniciar sesión',
+      label: 'Cuenta de {user}',
+      incomplete: 'Registro sin terminar',
+      completeRegistration: 'Completar registro',
+      myProfile: 'Mi perfil',
+      myListings: 'Mis anuncios',
+      myDeals: 'Mis operaciones',
+      createListing: 'Crear anuncio',
+      myGuilds: 'Mis guilds',
+      settings: 'Ajustes de la cuenta',
+      moderation: 'Moderación',
+      signOut: 'Cerrar sesión',
+    },
   },
   // Inicio (§8.1, template A). `documentTitle` is the whole `<title>` of the page
   // (S-01) and `description` its `<meta name="description">` (§13.5).
@@ -681,9 +703,12 @@ export const es = {
       footer: 'Alliance Codex · Guild',
     },
   },
-  // Cuenta (`/{l}/cuenta/`, §9.9 without Comercio, §10.4; template H without crumbs). Only
-  // «Acceso» and «Guilds» exist until M14. The island receives this namespace and the leaves of
-  // `ui` it reads. Site roles, not game ranks (X9). G-42, G-45 and G-47 give the access texts.
+  // Cuenta (`/{l}/cuenta/`, §9.9 and §10.4, with the owner decisions of §9.15 and §9.16 over §9.9
+  // where they clash; template H without crumbs). Registration (§9.15.1) applies to every account;
+  // without COMERCIO_PUBLICO the page has «Acceso», the email row of «Verificación», «Guilds» and
+  // «Eliminar cuenta». The island receives this namespace, the leaves of `ui` it reads,
+  // `trade.presence` (§9.15.6) and `trade.channels` (the chips of «Canales de contacto»). Site
+  // roles, not game ranks (X9). G-42, G-45 and G-47 give the access texts.
   account: {
     title: 'Cuenta',
     description:
@@ -691,17 +716,168 @@ export const es = {
     retry: 'Reintentar',
     cancel: 'Cancelar',
     creating: 'Creando…',
+    save: 'Guardar',
+    saving: 'Guardando…',
+    saved: 'Cambios guardados.',
     access: {
       title: 'Acceso',
       signIn: 'Entrar',
       signUp: 'Crear cuenta',
       email: 'Correo',
       password: 'Contraseña',
-      passwordHelp: 'Mínimo 8 caracteres.',
+      passwordHelp: 'Mínimo 10 caracteres.',
       signingIn: 'Entrando…',
-      created: 'Cuenta creada. Revisa tu correo para confirmarla antes de iniciar sesión.',
       signedIn: 'Sesión iniciada como {email}.',
       signOut: 'Cerrar sesión',
+      // «¿Olvidaste tu contraseña?» (§9.9) sends the recovery mail, whose link opens this page to
+      // set the new password. `resetSent` names no address: it reads the same whether or not an
+      // account exists.
+      forgot: '¿Olvidaste tu contraseña?',
+      resetSent:
+        'Si hay una cuenta con ese correo, le enviamos un enlace para cambiar la contraseña.',
+      newPassword: 'Nueva contraseña',
+      savePassword: 'Guardar contraseña',
+      passwordSaved: 'Contraseña cambiada.',
+      // The invisible Turnstile check (§9.15.1, D-B3) when it does not pass, before «Reintentar».
+      captchaError: 'No se pudo completar la comprobación contra bots.',
+    },
+    // Registration (§9.15.1): the account is active once the three steps are done, and until then
+    // the page shows only the steps, an `ol` named `steps` with one item per step. Step 1 confirms
+    // the email with the 6-digit code of the confirmation mail (`code`, `verify`, `resend`,
+    // `otherEmail`). Step 2 links Discord or Google, each button only with its provider on (S11);
+    // with TELEFONO_OBLIGATORIO the phone is step 2b. Step 3 is the profile: «Nombre de usuario»
+    // is the public handle of Comercio (§9.9), the «Mundo» options are `content/mundos.json` and
+    // the «País» names come from `Intl.DisplayNames` (ISO 3166-1 alfa-2). `termsLink` and
+    // `privacyLink` name the two links of the box (drafts in docs/legal/ until the owner
+    // publishes them, D-B7); `nonAffiliation` is the line of §9.15.2, the same as
+    // `trade.nonAffiliation`. `errors.age` takes `{n}`, EDAD_MINIMA_CUENTA.
+    register: {
+      steps: 'Pasos del registro',
+      credentials: 'Correo y contraseña',
+      identity: 'Identidad vinculada',
+      phone: 'Teléfono',
+      profile: 'Perfil',
+      codeSent: 'Te enviamos un código de 6 dígitos a {email}.',
+      code: 'Código',
+      verify: 'Verificar',
+      resend: 'Reenviar código',
+      resent: 'Te enviamos un código nuevo.',
+      otherEmail: 'Usar otro correo',
+      identityText:
+        'Vincula Discord o Google. Cada cuenta de Discord o de Google solo puede estar vinculada a una cuenta de Alliance Codex.',
+      linkDiscord: 'Vincular Discord',
+      linkGoogle: 'Vincular Google',
+      username: 'Nombre de usuario',
+      usernameHelp: 'Público. De 3 a 24 caracteres: a-z, 0-9, _ y -.',
+      player: 'Nombre del jugador',
+      world: 'Mundo',
+      country: 'País',
+      birthDate: 'Fecha de nacimiento',
+      birthDateHelp: 'No se muestra en tu perfil.',
+      terms: 'Acepto los términos y la política de privacidad',
+      termsLink: 'Términos',
+      privacyLink: 'Política de privacidad',
+      nonAffiliation:
+        'Alliance Codex es un proyecto independiente. PokeAlliance, su servidor oficial, sus administradores y sus creadores no moderan ni garantizan este comercio. Las operaciones son entre jugadores.',
+      finish: 'Completar registro',
+      done: 'Registro completo.',
+      errors: {
+        emailTaken: 'Ya hay una cuenta con ese correo.',
+        disposableEmail: 'Ese dominio de correo no se admite. Usa un correo permanente.',
+        code: 'Escribe el código de 6 dígitos.',
+        codeExpired: 'El código caducó. Pide uno nuevo.',
+        phone: 'Escribe un número de teléfono válido.',
+        username: 'Escribe de 3 a 24 caracteres: a-z, 0-9, _ o -.',
+        usernameTaken: 'Ese nombre de usuario ya está en uso.',
+        player: 'Escribe el nombre del jugador, de 1 a 32 caracteres.',
+        playerTaken: 'Ese jugador ya está registrado en ese mundo.',
+        world: 'Elige un mundo.',
+        country: 'Elige un país.',
+        birthDate: 'Escribe una fecha de nacimiento válida.',
+        age: 'Necesitas al menos {n} años para crear una cuenta.',
+        terms: 'Acepta los términos y la política de privacidad para continuar.',
+      },
+    },
+    // «Cuentas vinculadas» (§9.15.1): Discord or Google anchor the account and Twitch is an
+    // optional badge; each link button renders only with its provider on (S11). `{name}` is the
+    // provider's username, `{provider}` Discord, Google or Twitch and `{days}`
+    // DISCORD_EDAD_MIN_DIAS. The last anchor cannot be unlinked (`anchorRequired`).
+    identities: {
+      title: 'Cuentas vinculadas',
+      linkDiscord: 'Vincular Discord',
+      linkGoogle: 'Vincular Google',
+      linkTwitch: 'Vincular Twitch',
+      linked: 'Vinculada: {name}',
+      unlink: 'Desvincular',
+      anchorRequired: 'Tu cuenta necesita Discord o Google vinculado.',
+      taken: 'Esa cuenta de {provider} ya está vinculada a otra cuenta de Alliance Codex.',
+      discordTooNew: 'Tu cuenta de Discord tiene menos de {days} días: Comercio aún no la acepta.',
+    },
+    // «Verificación» (§9.9): one `FactLine` per row, «Correo: verificado» with «Reenviar correo»
+    // while unverified, and the phone rows and form only with TELEFONO_OBLIGATORIO (§9.15.1,
+    // Twilio Verify): «Teléfono: verificado (+55 ••• ••• 1234)», `{number}` the masked number. The
+    // form: the country `Select` with its calling code, «Número», «Enviar código», «Código» and
+    // `register.verify`.
+    verification: {
+      title: 'Verificación',
+      email: 'Correo',
+      phone: 'Teléfono',
+      verified: 'verificado',
+      unverified: 'sin verificar',
+      phoneVerified: 'verificado ({number})',
+      country: 'País',
+      number: 'Número',
+      sendCode: 'Enviar código',
+      codeSent: 'Te enviamos un código por SMS.',
+      code: 'Código',
+      changePhone: 'Cambiar teléfono',
+      phoneSaved: 'Teléfono verificado.',
+    },
+    // «Perfil» (§9.16.3, «Editar la información propia»): country, player name and world with the
+    // fields and errors of `register`, and the channels shown on listings. The username stops
+    // changing after the first listing and the birth date once saved.
+    profile: {
+      title: 'Perfil',
+      usernameLocked: 'El nombre de usuario ya no cambia: publicaste un anuncio.',
+      birthDateLocked: 'La fecha de nacimiento no cambia una vez guardada.',
+    },
+    // «Canales de contacto» (§9.9): one row per channel with its `ContactChip` (labels in
+    // `trade.channels`), its state and «Mostrar en mis anuncios». Correo, Discord, Google and
+    // Twitch come verified from the account; another platform stays «Pendiente» until a moderator
+    // finds the code on its public profile (D-B5).
+    channels: {
+      title: 'Canales de contacto',
+      verified: 'Verificado',
+      pending: 'Pendiente',
+      show: 'Mostrar en mis anuncios',
+      addOther: 'Añadir otra plataforma',
+      platform: 'Plataforma',
+      user: 'Usuario',
+      requestCode: 'Generar código',
+      codeLine:
+        'Pon este código en tu perfil público de {platform}: {code}. Un moderador lo comprobará.',
+      remove: 'Desvincular',
+      platformInvalid: 'Escribe la plataforma, hasta 32 caracteres.',
+      userInvalid: 'Escribe tu usuario en esa plataforma.',
+    },
+    // «Eliminar cuenta» (§9.9) and its `Dialog`, with the initial focus on «Cancelar»: `withGuilds`
+    // or `withoutGuilds`, then `trade` with COMERCIO_PUBLICO and `banned` for an account banned
+    // from Comercio, whose identifiers stay taken (§9.15.5).
+    delete: {
+      title: 'Eliminar cuenta',
+      dialogTitle: '¿Eliminar tu cuenta?',
+      withGuilds: {
+        one: 'Se borran tu cuenta, la guild de la que eres propietario con sus cortes y tu acceso a las demás. No se puede deshacer.',
+        other:
+          'Se borran tu cuenta, las {n} guilds de las que eres propietario con sus cortes y tu acceso a las demás. No se puede deshacer.',
+      },
+      withoutGuilds: 'Se borran tu cuenta y tu acceso a las guilds. No se puede deshacer.',
+      trade: 'Tus anuncios se retiran y tus reseñas quedan con el autor «Cuenta eliminada».',
+      banned:
+        'Tu cuenta está suspendida en Comercio: tu correo, tus cuentas de Discord y Google y tu nombre de jugador quedan reservados y no se pueden volver a registrar.',
+      // Not «Eliminando…»: the §12.22 sentinel reads «nan» in it as «NaN».
+      deleting: 'Borrando…',
+      deleted: 'Tu cuenta se eliminó.',
     },
     guilds: {
       title: 'Guilds',
@@ -732,6 +908,71 @@ export const es = {
       invitationSignIn: 'Entra o crea una cuenta para aceptar la invitación a una guild.',
       accept: 'Aceptar invitación',
       joined: 'Te uniste a {guild}.',
+    },
+  },
+  // «Mi perfil» (`/{l}/cuenta/perfil/`, §9.16.3): prerendered, one island. `title` is the h1 and
+  // the `<title>`. Without a session the page shows `signInNotice` with `shell.account.signIn`,
+  // and an account with registration steps missing gets `shell.account.completeRegistration`.
+  // The header card: «{jugador} · {mundo}», the country name from `Intl.DisplayNames`,
+  // `memberSince` (`{date}` as «09/2026»), the linked identities as chips (`trade.channels`) and
+  // the status control (`trade.presence`, with COMERCIO_PUBLICO). Only with COMERCIO_PUBLICO:
+  // `publicProfile`, the reputation (the blocks and counts of `trade.reputation`, the bar named
+  // `distribution`) and the tabs, whose state is `?pestana=` (`tabs` by id). A listing's actions
+  // are `trade.manage` and its state line `trade.states`; a review shows its stars as
+  // `trade.seller.reviewScore`, its deal as `reviews.deal` and a deleted counterpart as
+  // `trade.review.deletedAuthor`. Without COMERCIO_PUBLICO the page has the header card and
+  // `myGuilds`.
+  profile: {
+    title: 'Mi perfil',
+    description:
+      'Tu nombre de usuario, tu jugador y mundo de PokeAlliance y las cuentas vinculadas a tu perfil.',
+    signInNotice: 'Inicia sesión para ver tu perfil.',
+    memberSince: 'Miembro desde {date}',
+    country: 'País',
+    identities: 'Cuentas vinculadas',
+    editProfile: 'Editar perfil',
+    publicProfile: 'Ver perfil público',
+    myGuilds: 'Mis guilds',
+    reputation: 'Reputación',
+    noReviews: 'Sin reseñas todavía.',
+    distribution: 'Reseñas por estrellas',
+    tabsLabel: 'Secciones del perfil',
+    tabs: {
+      listings: 'Anuncios',
+      received: 'Reseñas recibidas',
+      given: 'Reseñas hechas',
+      deals: 'Operaciones',
+    },
+    // «Anuncios»: every own listing in any state, newest first, with one filter chip per state
+    // (by `estado`, with its count).
+    listings: {
+      filtersLabel: 'Estado del anuncio',
+      filters: {
+        publicado: 'Publicados',
+        reservado: 'Reservados',
+        expirado: 'Expirados',
+        completado: 'Completados',
+        retirado: 'Retirados',
+      },
+      empty: 'Aún no publicaste anuncios.',
+      emptyFilter: 'Ningún anuncio en este estado.',
+    },
+    // «Reseñas recibidas» and «Reseñas hechas», 10 per page: the role of the reviewed account,
+    // the deal number (`{number}`, «OP-000123») and «Editar» while the author may still edit.
+    reviews: {
+      asSeller: 'como vendedor',
+      asBuyer: 'como comprador',
+      deal: 'Operación {number}',
+      edit: 'Editar',
+      emptyReceived: 'Aún no recibiste reseñas.',
+      emptyGiven: 'Aún no hiciste reseñas.',
+    },
+    // «Operaciones»: the counts of pending and confirmed deals and the link to
+    // `/{l}/comercio/operaciones/`.
+    deals: {
+      pending: { one: '{n} operación pendiente', other: '{n} operaciones pendientes' },
+      confirmed: { one: '{n} operación confirmada', other: '{n} operaciones confirmadas' },
+      link: 'Ver mis operaciones',
     },
   },
   // Comercio (§9), phase A: sample data, no account and no contact (9.2). The list
@@ -776,26 +1017,31 @@ export const es = {
       pokedolares: 'Pokédólares',
     },
     // By `estado`: the state line of a detail (9.6) and «· Reservado» after a card meta (9.5.8).
+    // «Retirado» is what the seller and the moderators see of a withdrawn listing (9.6, phase B).
     states: {
       reservado: 'Reservado',
       completado: 'Completado',
       expirado: 'Expirado',
+      retirado: 'Retirado',
     },
     // The public label of a verified channel (9.9) by type: `{code}` is the country calling code
     // of the phone («Teléfono +55»). Another platform shows its own name. `channelLabel` of
-    // src/lib/trade/types.ts writes it.
+    // src/lib/trade/types.ts writes it. Google is a channel once its owner shows it (9.15.1).
     channels: {
       correo: 'Correo',
       telefono: 'Teléfono {code}',
       discord: 'Discord',
       twitch: 'Twitch',
+      google: 'Google',
     },
     // `InfoBanner` of the list (9.5.1 step 3, A15): its three facts in reading order. It shows with
-    // phase B or with listings in the set, never on the empty list of production (R12).
+    // phase B or with listings in the set, never on the empty list of production (R12). Reviews
+    // go both ways, from 1 to 5 stars (9.15.4).
     banner: {
       payments: 'Alliance Codex no procesa pagos',
       contact: 'El comprador contacta al vendedor por sus canales verificados',
-      reviews: 'Reseñas de 0 a 5, solo de operaciones confirmadas por ambas partes',
+      reviews:
+        'Reseñas de 1 a 5 en los dos sentidos, solo de operaciones confirmadas por ambas partes',
     },
     // The labels of `ListingCard` (DP1): one per fact key, in the order of `listingKeys`
     // (src/lib/cards/layout.ts), and the rows of its footer. The page adds `reserved`
@@ -843,14 +1089,15 @@ export const es = {
     // The list (9.5): the hidden label and the example of the search field (DS:guias/40); the
     // count of the results bar; the orders of `SortSelect` by their id in the URL (9.5.5, U3); the
     // hidden caption of the Lista and the headers no other key carries; and the empty states of
-    // 9.5.10. A search with no result is `search.empty`.
+    // 9.5.10. A search with no result is `search.empty`. The order `valoracion` is «Reputación»
+    // (9.15.4), the weighted score over distinct counterparts.
     list: {
       searchLabel: 'Buscar anuncios',
       searchPlaceholder: 'Shiny Ditto +20, Premier, Memory Slots 6, Fire Stone, 50kk…',
       count: { one: '{n} anuncio', other: '{n} anuncios' },
       sort: {
         recientes: 'Recientes',
-        valoracion: 'Mejor valorados',
+        valoracion: 'Reputación',
         precio: 'Precio, menor primero',
       },
       caption: 'Anuncios de Comercio',
@@ -876,6 +1123,8 @@ export const es = {
       rating: 'Valoración del vendedor',
       allRatings: 'Todas',
       ratingAtLeast: '{score} o más',
+      // The list filter of 9.15.6: only sellers «En el juego».
+      onlyInGame: 'Solo en el juego',
     },
     // A listing tooltip (9.5.9): the title of its training section, the market row with the
     // public channel labels and the seller's value; a seller without reviews is the name alone.
@@ -900,8 +1149,6 @@ export const es = {
     seller: {
       memberSince: 'Miembro desde',
       rating: 'Valoración',
-      ratingValue: '{score} de 5 ({reviews})',
-      reviewCount: { one: '{n} reseña', other: '{n} reseñas' },
       noReviews: 'sin reseñas',
       listings: 'Anuncios',
       reviews: 'Reseñas',
@@ -911,6 +1158,7 @@ export const es = {
       columnReviews: 'Reseñas',
       reviewScore: '{n} de 5',
       operation: 'Operación: {title}',
+      // Phase B (9.15.1): the row of optional badges, Twitch and other verified platforms.
     },
     // The publish page (9.7) in phase A, with what `listing.keys`, `types`, `typeNames` and the
     // shared words above do not carry: the «none» options of Aura and Addon, the help of Boost,
@@ -975,6 +1223,331 @@ export const es = {
       fiat: 'Dinero real',
       game: 'En el juego',
       world: 'Mundo',
+    },
+    // Phase B (9.9 to 9.12, with the owner decisions of 9.15 over them where they clash), only with
+    // COMERCIO_PUBLICO (CA-9.13). The UI never uses the three words of the §12.22 Comercio list.
+    // An island that takes one of these objects whole (`operations`, `review`, `report`,
+    // `moderation`) finds every word it needs inside it, so its route passes the object as a prop.
+    // Buttons that several surfaces share.
+    cancel: 'Cancelar',
+    retry: 'Reintentar',
+    // The non-affiliation line (9.15.2), one discreet line on the list. Registration step 3 reads
+    // the same sentence from `account.register.nonAffiliation`.
+    nonAffiliation:
+      'Alliance Codex es un proyecto independiente. PokeAlliance, su servidor oficial, sus administradores y sus creadores no moderan ni garantizan este comercio. Las operaciones son entre jugadores.',
+    // Adults only (9.15.2): the title of the `Dialog` a visitor without a session gets on the first
+    // Comercio route, with its two buttons (the second leads to `/{l}/`), and the `Notice` of an
+    // account under 18.
+    adultsOnly: 'Comercio es solo para mayores de 18 años.',
+    ageGate: {
+      adult: 'Tengo 18 años o más',
+      minor: 'Soy menor de edad',
+    },
+    // Real money (9.15.2): the short `Note` of a detail with a real-money price, and the consent
+    // `Dialog` asked before the first real-money listing or contact: `title`, one paragraph per
+    // point, «Entiendo y acepto» and `cancel` (initial focus). `{days}` is EVIDENCIA_DIAS (9.15.3).
+    // The tag «Dinero real» is `listing.fiat`.
+    realMoney: {
+      note: 'Alliance Codex no procesa el pago ni lo devuelve. Antes de pagar, confirma en el juego el personaje del vendedor.',
+      title: 'Operaciones con dinero real',
+      payments:
+        'Alliance Codex no procesa pagos ni garantiza operaciones: cada operación es entre las dos partes.',
+      risk: 'Hay riesgo de estafa. Confirma en el juego el personaje de la otra parte antes de pagar y nunca compartas contraseñas ni códigos de tus cuentas.',
+      data: 'Si hay un reporte, la moderación revisa la IP y el identificador del navegador de tus acciones de Comercio. Se guardan {days} días, o mientras siga abierto un reporte o una alerta sobre ellas.',
+      sanctions: 'Las sanciones solo afectan a Comercio: la wiki y Guild siguen disponibles.',
+      accept: 'Entiendo y acepto',
+    },
+    // Online status (9.15.6): the `ToggleGroup` of the account, of «Mi perfil» and of Comercio
+    // (`label` and one option per `estado`, read by the enum), the dot with its label beside a
+    // seller and on the header chip (§9.16.1), and the «Estado» radios of the account menu
+    // (§9.16.2). The list filter is `filters.onlyInGame`.
+    presence: {
+      label: 'Estado',
+      en_juego: 'En el juego',
+      ausente: 'Ausente',
+      desconectado: 'Desconectado',
+    },
+    // What stops a Comercio action (9.15.2), which the server also enforces: the line in place of
+    // the action and its link to the account. `{days}` is DISCORD_EDAD_MIN_DIAS; an account under
+    // 18 gets `adultsOnly`.
+    requirements: {
+      signIn: 'Entra o crea una cuenta para usar Comercio.',
+      account: 'Completa tu cuenta para usar Comercio.',
+      discord: 'Vincula Discord para usar Comercio.',
+      discordAge: 'Comercio pide una cuenta de Discord con al menos {days} días.',
+      consent: 'Acepta el aviso de dinero real para continuar.',
+      publish:
+        'Para publicar necesitas una cuenta completa, 18 años o más, una cuenta de Discord vinculada con al menos {days} días y un canal de contacto verificado y visible.',
+      goToAccount: 'Ir a mi cuenta',
+    },
+    // The limits of 9.12.6 when the server refuses an action, `{n}` from src/lib/trade/limits.ts.
+    limits: {
+      reports: 'Llegaste al máximo de {n} reportes en 24 horas.',
+      openDeal: 'Ya tienes una operación abierta con este anuncio.',
+    },
+    // A sanctioned account (9.11, 9.15.5): the `Notice` on Comercio and on the account page.
+    suspension: {
+      until: 'Tu cuenta está suspendida en Comercio hasta el {date}.',
+      indefinite: 'Tu cuenta está suspendida en Comercio.',
+      reason: 'Motivo: {reason}',
+    },
+    // Publishing and managing a listing in phase B (9.6, 9.7.8, 9.16.3): `title` is the h1 of the
+    // publish page and the button of the search row; the seller's actions valid in each state, on
+    // a detail and in «Mi perfil»; the line of a listing withdrawn by moderation.
+    manage: {
+      title: 'Publicar anuncio',
+      publish: 'Publicar',
+      edit: 'Editar',
+      save: 'Guardar cambios',
+      saved: 'Cambios guardados.',
+      renew: 'Renovar',
+      reserve: 'Reservar',
+      release: 'Quitar reserva',
+      complete: 'Marcar completado',
+      withdraw: 'Retirar',
+    },
+    // «Contactar al vendedor» (9.10) on a detail and the `Notice` once the deal exists; `{number}`
+    // is the deal number, `OP-` and 6 digits (9.15.4).
+    contactSeller: 'Contactar al vendedor',
+    dealStarted: 'Operación {number} iniciada.',
+    goToDeals: 'Ver mis operaciones',
+    // «Operaciones» (`/{l}/comercio/operaciones/`, 9.10, noindex), for `OperationsPanel`: h1 and
+    // description, the «Compras» / «Ventas» group (`roles`) with the hidden captions of its two
+    // tables, the columns, the states by `status` (read by the enum), the empty tables, the line
+    // without a session with its link, the «Copiar» button of each revealed contact value
+    // (`{channel}` its public label), the actions valid for each state and role, the reviewer's own
+    // score (`{score}`), and the three dialogs, whose safe button is `back` (`{number}` the deal
+    // number, `{max}` the length of the dispute detail).
+    operations: {
+      title: 'Operaciones',
+      description:
+        'Tus compras y ventas en el Comercio de PokeAlliance: estado, contacto y reseñas.',
+      roles: 'Compras o ventas',
+      purchases: 'Compras',
+      sales: 'Ventas',
+      captionPurchases: 'Mis compras',
+      captionSales: 'Mis ventas',
+      columns: {
+        number: 'Operación',
+        listing: 'Anuncio',
+        counterpart: 'Contraparte',
+        status: 'Estado',
+        date: 'Fecha',
+        contact: 'Contacto',
+        actions: 'Acciones',
+      },
+      states: {
+        contacto: 'En contacto',
+        confirmada_vendedor: 'Confirmada por el vendedor',
+        confirmada_comprador: 'Confirmada por el comprador',
+        confirmada: 'Confirmada',
+        cancelada: 'Cancelada',
+        disputada: 'En disputa',
+        caducada: 'Caducada',
+      },
+      emptyPurchases: 'Aún no tienes compras.',
+      emptySales: 'Aún no tienes ventas.',
+      signIn: 'Entra en tu cuenta para ver tus operaciones.',
+      account: 'Ir a mi cuenta',
+      deletedAccount: 'Cuenta eliminada',
+      copy: 'Copiar',
+      copyLabel: 'Copiar {channel}',
+      copied: 'Copiado.',
+      copyFailed: 'No se pudo copiar. Selecciona el texto y cópialo.',
+      actions: {
+        confirm: 'Operación completada',
+        dispute: 'No se completó',
+        cancel: 'Cancelar',
+        review: 'Reseñar',
+        editReview: 'Editar reseña',
+      },
+      yourReview: 'Tu reseña: {score} de 5',
+      confirmTitle: '¿Completaste la operación {number}?',
+      confirmText:
+        'La otra parte también tiene que confirmarla. Confirmada por las dos, ya no cambia.',
+      cancelTitle: '¿Cancelar la operación {number}?',
+      cancelText: 'La operación se cierra sin reseña. No se puede deshacer.',
+      cancelConfirm: 'Cancelar operación',
+      disputeTitle: 'La operación {number} no se completó',
+      disputeText:
+        'La otra parte la dio por completada. La moderación revisa la operación y la confirma o la cancela.',
+      disputeDetail: 'Qué pasó',
+      disputeHelp: 'Hasta {max} caracteres. Lo lee la moderación.',
+      disputeConfirm: 'Enviar a moderación',
+      disputed: 'La operación pasó a moderación.',
+      back: 'Volver',
+      sending: 'Enviando…',
+      retry: 'Reintentar',
+    },
+    // Reviews both ways (9.15.4), for `ReviewForm`: 1 to 5 stars (`star` names each one) and an
+    // optional comment (`{max}` its length), no images. `title` names the other party (`{name}`)
+    // and `deal` is the line under it (`{number}` the deal number, `{title}` the listing).
+    // `pairCap` replaces the action once the pair reached RESENAS_PAR_DIA reviewed deals in 24
+    // hours (`{n}`). `hidden` is what the reviewed account sees of a review moderation hid, and
+    // `deletedAuthor` stands for an account that no longer exists (9.8, 9.9).
+    review: {
+      title: 'Reseñar a {name}',
+      titleSeller: 'Reseñar al vendedor',
+      titleBuyer: 'Reseñar al comprador',
+      editTitle: 'Editar reseña',
+      deal: 'Operación {number}: {title}',
+      score: 'Puntuación',
+      star: { one: '{n} estrella', other: '{n} estrellas' },
+      scoreRequired: 'Elige de 1 a 5 estrellas.',
+      comment: 'Comentario',
+      commentHelp: 'Opcional. Hasta {max} caracteres.',
+      submit: 'Publicar reseña',
+      save: 'Guardar cambios',
+      sending: 'Enviando…',
+      cancel: 'Cancelar',
+      sent: 'Reseña publicada.',
+      saved: 'Reseña guardada.',
+      pairCap:
+        'Sin reseña: estas dos cuentas ya tienen {n} operaciones con reseña en las últimas 24 horas.',
+      closed: 'El plazo para reseñar esta operación terminó.',
+      duplicate: 'Ya reseñaste esta operación.',
+      editableUntil: 'Puedes editarla hasta el {date}.',
+      hidden: 'Oculta por moderación',
+      deletedAuthor: 'Cuenta eliminada',
+    },
+    // Reputation (9.15.4), as seller and as buyer, on the profiles and beside a seller: the score
+    // (`formatRating`) and its star come from the component, then `deals` and `buyers` (as seller)
+    // or `sellers` (as buyer), joined with « · ».
+    reputation: {
+      asSeller: 'Como vendedor',
+      asBuyer: 'Como comprador',
+      deals: { one: '{n} operación', other: '{n} operaciones' },
+      buyers: { one: '{n} comprador distinto', other: '{n} compradores distintos' },
+      sellers: { one: '{n} vendedor distinto', other: '{n} vendedores distintos' },
+    },
+    // Reports (9.11, 9.15.5), for `ReportDialog`: the title and trigger by target (`titles`), the
+    // «Motivo» options by the value of the reason enum, «Detalle» (required with «Otro»; `{max}`
+    // its length), the optional deal number of a scam report (`{example}` is «OP-000123») and the
+    // answers of `trade_report`.
+    report: {
+      titles: {
+        listing: 'Reportar anuncio',
+        seller: 'Reportar vendedor',
+        review: 'Reportar reseña',
+      },
+      reason: 'Motivo',
+      reasons: {
+        estafa: 'Estafa o intento de estafa',
+        datos_personales: 'Datos personales expuestos',
+        ofensivo: 'Contenido ofensivo',
+        falso: 'Anuncio falso o duplicado',
+        otro: 'Otro',
+      },
+      reasonRequired: 'Elige un motivo.',
+      detail: 'Detalle',
+      detailHelp: 'Obligatorio con «Otro». Hasta {max} caracteres.',
+      detailRequired: 'Escribe el detalle del reporte.',
+      operation: 'Número de operación',
+      operationHelp: 'Opcional, como {example}.',
+      operationInvalid: 'Escribe el número como {example}.',
+      send: 'Enviar reporte',
+      sending: 'Enviando…',
+      sent: 'Reporte enviado.',
+      duplicate: 'Ya reportaste esto.',
+      cancel: 'Cancelar',
+    },
+    // Moderation (`/{l}/comercio/moderacion/`, 9.11 and 9.15.5, moderators only, noindex), for
+    // `ModerationQueue`: the reports with their «Abiertos» / «Resueltos» group (`filter`), the
+    // alerts and the pending channels, one `DataTable` each with its hidden caption. A target
+    // names its owner (`{handle}`) and a review its author (`{author}`); a deleted account is
+    // `deletedAccount`. `kinds` and `evidence` go by the alert kind: `evidence` says what matched,
+    // with `{a}` and `{b}` (the two accounts), `{account}`, `{accounts}` (joined with
+    // `Intl.ListFormat`), `{device}`, `{n}`, `{from}` and `{to}`, then `evidenceOperations`. The
+    // actions go by the action enum (`confirm_deal` and `cancel_deal` settle a disputed deal), each
+    // with its required «Motivo» (`{max}` its length) and, for a suspension, `durations`.
+    moderation: {
+      title: 'Moderación',
+      description: 'Reportes, alertas y canales pendientes del Comercio de PokeAlliance.',
+      reports: 'Reportes',
+      filter: 'Estado de los reportes',
+      open: 'Abiertos',
+      resolved: 'Resueltos',
+      reportsCaption: 'Reportes recibidos',
+      columns: {
+        date: 'Fecha',
+        target: 'Objetivo',
+        reason: 'Motivo',
+        count: 'Reportes',
+        detail: 'Detalle',
+        actions: 'Acciones',
+        kind: 'Alerta',
+        evidence: 'Detalle',
+        account: 'Cuenta',
+        platform: 'Plataforma',
+        user: 'Usuario',
+        code: 'Código',
+      },
+      targets: {
+        listing: 'Anuncio de {handle}',
+        seller: 'Vendedor',
+        review: 'Reseña de {author} a {handle}',
+      },
+      operation: 'Operación {number}',
+      statuses: {
+        resolved: 'Resuelto',
+        dismissed: 'Descartado',
+      },
+      noOpenReports: 'No hay reportes abiertos.',
+      noResolvedReports: 'No hay reportes resueltos.',
+      alerts: 'Alertas',
+      alertsCaption: 'Alertas abiertas',
+      noAlerts: 'No hay alertas abiertas.',
+      kinds: {
+        dispositivo_contrapartes: 'Mismo dispositivo entre contrapartes',
+        dispositivo_cuentas: 'Varias cuentas en un dispositivo',
+        resenas_cuentas_nuevas: 'Reseñas de cuentas nuevas',
+        tope_resenas: 'Tope diario de reseñas repetido',
+      },
+      evidence: {
+        dispositivo_contrapartes:
+          '{a} y {b}, contrapartes de una operación o de una reseña, usaron el mismo dispositivo ({device}) en acciones de Comercio entre el {from} y el {to}.',
+        dispositivo_cuentas:
+          '{n} cuentas usaron el mismo dispositivo ({device}) en acciones de Comercio entre el {from} y el {to}: {accounts}.',
+        resenas_cuentas_nuevas:
+          '{account} recibió {n} reseñas entre el {from} y el {to} de cuentas con menos de 14 días que solo operaron con ella: {accounts}.',
+        tope_resenas:
+          '{a} y {b} llegaron al tope diario de reseñas entre ellas 3 días seguidos, del {from} al {to}.',
+      },
+      evidenceOperations: 'Operaciones: {operations}.',
+      channels: 'Canales pendientes',
+      channelsCaption: 'Canales por comprobar',
+      noChannels: 'No hay canales pendientes.',
+      approve: 'Aprobar',
+      reject: 'Rechazar',
+      approved: 'Canal aprobado.',
+      rejected: 'Canal rechazado.',
+      actions: {
+        dismiss: 'Descartar',
+        withdraw_listing: 'Retirar anuncio',
+        hide_review: 'Ocultar reseña',
+        restore_review: 'Restaurar reseña',
+        warn: 'Advertir',
+        suspend: 'Suspender en Comercio',
+        lift_suspension: 'Levantar suspensión',
+        confirm_deal: 'Dar por confirmada',
+        cancel_deal: 'Dar por cancelada',
+      },
+      reason: 'Motivo',
+      reasonHelp: 'Obligatorio. Hasta {max} caracteres.',
+      reasonRequired: 'Escribe el motivo.',
+      account: 'Cuenta',
+      duration: 'Duración',
+      durations: {
+        d7: '7 días',
+        d30: '30 días',
+        indefinida: 'Indefinida',
+      },
+      apply: 'Aplicar',
+      applying: 'Aplicando…',
+      done: 'Acción registrada.',
+      cancel: 'Cancelar',
+      retry: 'Reintentar',
+      deletedAccount: 'Cuenta eliminada',
     },
   },
   // Mapa (§8.11, R9): the placeholder of template E, `noindex` while it has no content of its

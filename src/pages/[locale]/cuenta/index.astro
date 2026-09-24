@@ -1,23 +1,36 @@
 ---
-// Cuenta (spec 9.9 without Comercio, 10.4; template H of 8.0.2): `/{l}/cuenta/`, the sections
-// «Acceso» and «Guilds». It is what opens account mode for Guild. `noindex` (9.3, 13.5), and no
-// crumbs: «Cuenta» belongs to no group of the menu (8.0.4, 9.3).
+// Cuenta (spec 9.9 with the owner decisions of 9.15 and 9.16, 10.4; template H of 8.0.2):
+// `/{l}/cuenta/`, the registration of 9.15.1 and the sections «Acceso», «Verificación»,
+// «Perfil», «Canales de contacto» (COMERCIO_PUBLICO), «Guilds» and «Eliminar cuenta». It is what
+// opens account mode for Guild and Comercio. `noindex` (9.3, 13.5), and no crumbs: «Cuenta»
+// belongs to no group of the menu (8.0.4, 9.3).
 //
 // Render (9.3): the prerendered frame and the island, which reads the session once hydrated. The
 // route exists only when getSupabasePublicConfig() is not null: without Supabase variables
 // `getStaticPaths` gives no path, the build writes no page and Guild stays in local mode.
 //
+// Build switches, read here and passed as props so the island needs no environment (S11): every
+// provider button and the CAPTCHA render only when their public variable is set.
+//   COMERCIO_PUBLICO        contact channels, online status and the Comercio lines (9.2)
+//   TELEFONO_OBLIGATORIO    the phone as step 2b and a row of «Verificación» (9.15.1)
+//   PUBLIC_TURNSTILE_SITE_KEY  the invisible Turnstile check of the Auth forms (D-B3)
+//   PUBLIC_AUTH_DISCORD, PUBLIC_AUTH_GOOGLE, PUBLIC_AUTH_TWITCH  «Vincular …» (D-B4)
+// The terms and the privacy policy are drafts in docs/legal/ (D-B7): until the owner publishes
+// them the terms box has no links (`legal: null`).
+//
 // Data: the island gets the worlds of content/mundos.json in the language of the page (the
-// «Mundo» Select and the world of each guild), the `account` namespace and the leaves of `ui` it
-// reads (13.2).
+// «Mundo» Selects and the world of each guild), the `account` namespace, the leaves of `trade`
+// and `ui` it reads (13.2).
 import { getAlternatePath, getLocale, locales, type Locale } from '@/i18n/config';
 import type { Messages } from '@/i18n/messages/en';
 import { en } from '@/i18n/messages/en';
 import { es } from '@/i18n/messages/es';
 import { getMundos } from '@/lib/content/registry';
 import { getSupabasePublicConfig } from '@/lib/supabase/env';
+import { telefonoObligatorio } from '@/lib/trade/limits';
+import { comercioPublico } from '@/lib/trade/registry';
 
-import { AccountPanel } from '@/components/account/AccountPanel';
+import { AccountPanel, type AccountConfig } from '@/components/account/AccountPanel';
 import { PageTitle } from '@/components/layout/PageTitle';
 import PageLayout from '@/layouts/PageLayout.astro';
 
@@ -32,14 +45,56 @@ export function getStaticPaths() {
 
 const dictionaries: Record<Locale, Messages> = { es, en };
 
+// Each variable is named in full: the build only replaces `import.meta.env.NAME` written out, and
+// the shell (the test servers, Vercel) passes the rest through process.env.
+const shell = typeof process === 'undefined' ? undefined : process.env;
+const variables = {
+  turnstile: import.meta.env.PUBLIC_TURNSTILE_SITE_KEY ?? shell?.PUBLIC_TURNSTILE_SITE_KEY,
+  discord: import.meta.env.PUBLIC_AUTH_DISCORD ?? shell?.PUBLIC_AUTH_DISCORD,
+  google: import.meta.env.PUBLIC_AUTH_GOOGLE ?? shell?.PUBLIC_AUTH_GOOGLE,
+  twitch: import.meta.env.PUBLIC_AUTH_TWITCH ?? shell?.PUBLIC_AUTH_TWITCH,
+  phone: import.meta.env.TELEFONO_OBLIGATORIO ?? shell?.TELEFONO_OBLIGATORIO,
+};
+
+function text(value: unknown): string {
+  return typeof value === 'string' ? value.trim() : '';
+}
+
+/** `1` or `true`, in any case, as the other switches read them. */
+function isOn(value: unknown): boolean {
+  const flag = text(value).toLowerCase();
+  return flag === '1' || flag === 'true';
+}
+
 const locale = getLocale(Astro.params.locale);
 const path = Astro.url.pathname;
 const alternates = Object.fromEntries(
   locales.map((option) => [option, getAlternatePath(path, option)]),
 ) as Record<Locale, string>;
 
-const { account, ui } = dictionaries[locale];
+const { account, trade, ui } = dictionaries[locale];
 const worlds = getMundos(locale).map((world) => ({ id: world.id, nombre: world.nombre }));
+const captchaSiteKey = text(variables.turnstile);
+const config: AccountConfig = {
+  comercio: comercioPublico(),
+  phoneRequired: telefonoObligatorio(text(variables.phone)),
+  captchaSiteKey: captchaSiteKey === '' ? null : captchaSiteKey,
+  providers: {
+    discord: isOn(variables.discord),
+    google: isOn(variables.google),
+    twitch: isOn(variables.twitch),
+  },
+  legal: null,
+};
+const tradeTexts = {
+  presence: {
+    label: trade.presence.label,
+    en_juego: trade.presence.en_juego,
+    ausente: trade.presence.ausente,
+    desconectado: trade.presence.desconectado,
+  },
+  channels: trade.channels,
+};
 ---
 
 <PageLayout
@@ -55,6 +110,8 @@ const worlds = getMundos(locale).map((world) => ({ id: world.id, nombre: world.n
     locale={locale}
     worlds={worlds}
     messages={account}
+    trade={tradeTexts}
     ui={{ close: ui.close, dismiss: ui.dismiss }}
+    config={config}
   />
 </PageLayout>

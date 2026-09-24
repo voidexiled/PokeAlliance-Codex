@@ -7,9 +7,9 @@
         "es": "Normal",
         "en": "Normal"
       },
-      "icono": null,
-      "stone": null,
-      "fragment": null
+      "icono": "ui/elementos/normal",
+      "stone": "heart-stone",
+      "fragment": "normal-fragment"
     },
     {
       "id": "fire",
@@ -17,9 +17,9 @@
         "es": "Fuego",
         "en": "Fire"
       },
-      "icono": null,
-      "stone": null,
-      "fragment": null
+      "icono": "ui/elementos/fire",
+      "stone": "fire-stone",
+      "fragment": "fire-fragment"
     },
     {
       "id": "water",
@@ -27,9 +27,9 @@
         "es": "Agua",
         "en": "Water"
       },
-      "icono": null,
-      "stone": null,
-      "fragment": null
+      "icono": "ui/elementos/water",
+      "stone": "water-stone",
+      "fragment": "water-fragment"
     },
     {
       "id": "grass",
@@ -37,9 +37,9 @@
         "es": "Planta",
         "en": "Grass"
       },
-      "icono": null,
-      "stone": null,
-      "fragment": null
+      "icono": "ui/elementos/grass",
+      "stone": "leaf-stone",
+      "fragment": "grass-fragment"
     },
     {
       "id": "electric",
@@ -47,9 +47,9 @@
         "es": "Eléctrico",
         "en": "Electric"
       },
-      "icono": null,
-      "stone": null,
-      "fragment": null
+      "icono": "ui/elementos/electric",
+      "stone": "thunder-stone",
+      "fragment": "electric-fragment"
     },
     {
       "id": "ice",
@@ -57,9 +57,9 @@
         "es": "Hielo",
         "en": "Ice"
       },
-      "icono": null,
-      "stone": null,
-      "fragment": null
+      "icono": "ui/elementos/ice",
+      "stone": "ice-stone",
+      "fragment": "ice-fragment"
     },
     {
       "id": "fighting",
@@ -67,9 +67,9 @@
         "es": "Lucha",
         "en": "Fighting"
       },
-      "icono": null,
-      "stone": null,
-      "fragment": null
+      "icono": "ui/elementos/fighting",
+      "stone": "punch-stone",
+      "fragment": "fighting-fragment"
     },
     {
       "id": "poison",
@@ -77,9 +77,9 @@
         "es": "Veneno",
         "en": "Poison"
       },
-      "icono": null,
-      "stone": null,
-      "fragment": null
+      "icono": "ui/elementos/poison",
+      "stone": "venom-stone",
+      "fragment": "poison-fragment"
     },
     {
       "id": "ground",
@@ -87,9 +87,9 @@
         "es": "Tierra",
         "en": "Ground"
       },
-      "icono": null,
-      "stone": null,
-      "fragment": null
+      "icono": "ui/elementos/ground",
+      "stone": "earth-stone",
+      "fragment": "ground-fragment"
     },
     {
       "id": "flying",
@@ -97,9 +97,9 @@
         "es": "Volador",
         "en": "Flying"
       },
-      "icono": null,
-      "stone": null,
-      "fragment": null
+      "icono": "ui/elementos/flying",
+      "stone": "feather-stone",
+      "fragment": "flying-fragment"
     },
     {
       "id": "psychic",
@@ -107,9 +107,9 @@
         "es": "Psíquico",
         "en": "Psychic"
       },
-      "icono": null,
-      "stone": null,
-      "fragment": null
+      "icono": "ui/elementos/psychic",
+      "stone": "enigma-stone",
+      "fragment": "psychic-fragment"
     },
     {
       "id": "bug",
@@ -117,9 +117,9 @@
         "es": "Bicho",
         "en": "Bug"
       },
-      "icono": null,
-      "stone": null,
-      "fragment": null
+      "icono": "ui/elementos/bug",
+      "stone": "cocoon-stone",
+      "fragment": "bug-fragment"
     },
     {
       "id": "rock",
@@ -127,9 +127,9 @@
         "es": "Roca",
         "en": "Rock"
       },
-      "icono": null,
-      "stone": null,
-      "fragment": null
+      "icono": "ui/elementos/rock",
+      "stone": "rock-stone",
+      "fragment": "rock-fragment"
     },
     {
       "id": "ghost",
@@ -137,9 +137,9 @@
         "es": "Fantasma",
         "en": "Ghost"
       },
-      "icono": null,
-      "stone": null,
-      "fragment": null
+      "icono": "ui/elementos/ghost",
+      "stone": "ghost-stone",
+      "fragment": "ghost-fragment"
     },
     {
       "id": "dragon",
@@ -147,9 +147,9 @@
         "es": "Dragón",
         "en": "Dragon"
       },
-      "icono": null,
-      "stone": null,
-      "fragment": null
+      "icono": "ui/elementos/dragon",
+      "stone": "crystal-stone",
+      "fragment": "dragon-fragment"
     },
     {
       "id": "fairy",
@@ -157,9 +157,9 @@
         "es": "Hada",
         "en": "Fairy"
       },
-      "icono": null,
-      "stone": null,
-      "fragment": null
+      "icono": "ui/elementos/fairy",
+      "stone": "heart-stone",
+      "fragment": "fairy-fragment"
     },
     {
       "id": "dark",
@@ -167,9 +167,9 @@
         "es": "Siniestro",
         "en": "Dark"
       },
-      "icono": null,
-      "stone": null,
-      "fragment": null
+      "icono": "ui/elementos/dark",
+      "stone": "darkness-stone",
+      "fragment": "dark-fragment"
     },
     {
       "id": "steel",
@@ -177,9 +177,9 @@
         "es": "Acero",
         "en": "Steel"
       },
-      "icono": null,
-      "stone": null,
-      "fragment": null
+      "icono": "ui/elementos/steel",
+      "stone": "metal-stone",
+      "fragment": "steel-fragment"
     }
   ]
 }

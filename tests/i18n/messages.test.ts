@@ -46,6 +46,7 @@ describe('the dictionaries of es and en', () => {
       'compare',
       'guild',
       'account',
+      'profile',
       'trade',
       'map',
       'errors',

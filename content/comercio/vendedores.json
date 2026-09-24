@@ -5,6 +5,7 @@
       "id": "ejemplo-norte",
       "nombre": "Ejemplo Norte",
       "desde": "2026-02-11T15:00:00Z",
+      "presencia": "en_juego",
       "canales": [
         { "tipo": "discord", "etiqueta": null },
         { "tipo": "correo", "etiqueta": null },
@@ -60,6 +61,7 @@
       "id": "ejemplo-sur",
       "nombre": "Ejemplo Sur",
       "desde": "2025-11-03T12:00:00Z",
+      "presencia": "desconectado",
       "canales": [
         { "tipo": "discord", "etiqueta": null },
         { "tipo": "twitch", "etiqueta": null },
@@ -102,6 +104,7 @@
       "id": "ejemplo-este",
       "nombre": "Ejemplo Este",
       "desde": null,
+      "presencia": "ausente",
       "canales": [
         { "tipo": "correo", "etiqueta": null },
         { "tipo": "telefono", "etiqueta": "+52" }
@@ -135,6 +138,7 @@
       "id": "ejemplo-oeste",
       "nombre": "Ejemplo Oeste",
       "desde": "2026-06-20T18:30:00Z",
+      "presencia": "desconectado",
       "canales": [
         { "tipo": "discord", "etiqueta": null },
         { "tipo": "telefono", "etiqueta": "+1" },
@@ -142,7 +146,7 @@
       ],
       "resenas": [
         {
-          "puntuacion": 0,
+          "puntuacion": 1,
           "comentario": "El Pokémon no tenía el Boost del anuncio.",
           "fecha": "2026-09-05T19:00:00Z",
           "anuncio": "ejemplo-shiny-kingdra-completado",
@@ -183,6 +187,7 @@
       "id": "ejemplo-centro",
       "nombre": "Ejemplo Centro",
       "desde": "2026-09-01T10:00:00Z",
+      "presencia": "en_juego",
       "canales": [{ "tipo": "correo", "etiqueta": null }],
       "resenas": [],
       "borrador": true

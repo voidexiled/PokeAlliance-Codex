@@ -177,18 +177,30 @@ export type Anuncio = {
  * Contact channel types (9.9), with the keys of the registry in Spanish (R7). Phase B keeps them in
  * `trade_contact_channels.kind` as `email`, `phone`, `discord`, `twitch` and `other`.
  */
-export const TIPOS_CANAL = ['correo', 'telefono', 'discord', 'twitch', 'otra'] as const;
+export const TIPOS_CANAL = ['correo', 'telefono', 'discord', 'twitch', 'google', 'otra'] as const;
 export type TipoCanal = (typeof TIPOS_CANAL)[number];
 
 /**
  * A verified contact channel as the public sees it (9.9): only its label, never the address, the
  * number or the user behind it (R13). `etiqueta` holds the part of the label the dictionary cannot
  * write: the country calling code of a phone («+55») and the name of another platform; it is
- * `null` for `correo`, `discord` and `twitch`.
+ * `null` for `correo`, `discord`, `twitch` and `google` (Google counts as a channel once its owner
+ * shows it, 9.15.1).
  */
 export type Canal = { tipo: TipoCanal; etiqueta: string | null };
 
-/** A review of one confirmed trade (9.10): 0 to 5, an optional comment of up to 1000 characters. */
+/**
+ * The online status of an account (9.15.6), in the order of the `ToggleGroup` that chooses it:
+ * «En el juego», «Ausente», «Desconectado». Phase B reads what others see from
+ * `trade_effective_presence`; the sellers of the phase A registry carry a fixed one.
+ */
+export const ESTADOS_PRESENCIA = ['en_juego', 'ausente', 'desconectado'] as const;
+export type EstadoPresencia = (typeof ESTADOS_PRESENCIA)[number];
+
+/**
+ * A review of one confirmed trade (9.15.4): 1 to 5 stars, an optional comment of up to 1000
+ * characters. It replaced the 0 to 5 of 9.10.
+ */
 export type Resena = {
   puntuacion: number;
   comentario: string | null;
@@ -211,6 +223,8 @@ export type Vendedor = {
   nombre: string;
   /** Since when the seller has an account, ISO 8601 instant; `null` while unknown. */
   desde: string | null;
+  /** The fixed online status of a sample seller (9.15.6). */
+  presencia: EstadoPresencia;
   canales: Canal[];
   resenas: Resena[];
   /** Every record of the phase A registry carries it (9.4). */
@@ -274,22 +288,92 @@ export interface SellerRating {
 }
 
 /**
- * The rating of a seller from its reviews (9.10). The rounding works on the integer sum, so a mean
- * of 4.35 is 4.4 and never 4.3 through a binary fraction. A score outside 0 to 5 does not count.
+ * A seller's reputation (9.15.4): the standing of `SellerRating`, whose `valoracion` is here the
+ * «media», and the counterparts behind it.
  */
-export function sellerRating(resenas: readonly Pick<Resena, 'puntuacion'>[]): SellerRating {
+export interface SellerReputation extends SellerRating {
+  /** Distinct buyers with at least one counted review: «5 compradores distintos». */
+  contrapartes: number;
+}
+
+function greatestDivisor(a: bigint, b: bigint): bigint {
+  let [x, y] = [a, b];
+  while (y !== 0n) [x, y] = [y, x % y];
+  return x;
+}
+
+/**
+ * The reputation of a seller from its reviews (9.15.4). The «media» is the mean of the means of
+ * each buyer, so a buyer counts once however many reviews it wrote, rounded half up to one decimal.
+ * It is computed as one exact fraction (the means of the buyers share the least common multiple of
+ * their counts as denominator), so a mean of 4.35 is 4.4 and never 4.3 through a binary fraction,
+ * as `round(…, 1)` gives it in SQL. A score outside 0 to 5 does not count: the registry and the
+ * database only hold 1 to 5, and `sellerRating` still reads the 0 of 9.10. «Operaciones» is the
+ * number of counted reviews: the registry records only the trades that carry one (D-024); phase B
+ * reads the confirmed trades of `trade_seller_stats`.
+ */
+export function sellerReputation(
+  resenas: readonly Pick<Resena, 'puntuacion' | 'comprador'>[],
+): SellerReputation {
   const distribucion: SellerRating['distribucion'] = [0, 0, 0, 0, 0, 0];
+  const buyers = new Map<string, { sum: bigint; count: bigint }>();
   let count = 0;
-  let sum = 0;
-  for (const { puntuacion } of resenas) {
+  for (const { puntuacion, comprador } of resenas) {
     if (!Number.isInteger(puntuacion) || puntuacion < 0 || puntuacion > 5) continue;
     distribucion[puntuacion] += 1;
     count += 1;
-    sum += puntuacion;
+    const buyer = buyers.get(comprador) ?? { sum: 0n, count: 0n };
+    buyer.sum += BigInt(puntuacion);
+    buyer.count += 1n;
+    buyers.set(comprador, buyer);
   }
-  // round(sum / count, 1) half up = floor((10 · sum / count) + 1/2) / 10, on integers only.
-  const valoracion = count === 0 ? null : Math.floor((20 * sum + count) / (2 * count)) / 10;
-  return { valoracion, resenas: count, distribucion, operaciones: count };
+  let valoracion: number | null = null;
+  if (buyers.size > 0) {
+    // mean = Σ (sum_b / count_b) / B = numerator / denominator, with the counts' common multiple.
+    let multiple = 1n;
+    for (const { count: n } of buyers.values())
+      multiple = (multiple / greatestDivisor(multiple, n)) * n;
+    let numerator = 0n;
+    for (const { sum, count: n } of buyers.values()) numerator += sum * (multiple / n);
+    const denominator = multiple * BigInt(buyers.size);
+    // round(mean, 1) half up = floor(10 · mean + 1/2) / 10 = floor((20·num + den) / (2·den)) / 10.
+    valoracion = Number((20n * numerator + denominator) / (2n * denominator)) / 10;
+  }
+  return {
+    valoracion,
+    resenas: count,
+    distribucion,
+    operaciones: count,
+    contrapartes: buyers.size,
+  };
+}
+
+/**
+ * The rating of a seller from its reviews (9.10), every review its own buyer: the mean of the
+ * scores, rounded half up to one decimal. A score outside 0 to 5 does not count.
+ */
+export function sellerRating(resenas: readonly Pick<Resena, 'puntuacion'>[]): SellerRating {
+  const {
+    valoracion,
+    resenas: count,
+    distribucion,
+    operaciones,
+  } = sellerReputation(
+    resenas.map(({ puntuacion }, index) => ({ puntuacion, comprador: String(index) })),
+  );
+  return { valoracion, resenas: count, distribucion, operaciones };
+}
+
+/**
+ * The list order of 9.15.6 over another one: the sellers «En el juego» first, then everyone else,
+ * each part in the order of `compare`. A listing whose seller has no status is not in the game.
+ */
+export function inGameFirst<T>(
+  presenceOf: (item: T) => EstadoPresencia | null | undefined,
+  compare: (a: T, b: T) => number,
+): (a: T, b: T) => number {
+  const rank = (item: T) => (presenceOf(item) === 'en_juego' ? 0 : 1);
+  return (a, b) => rank(a) - rank(b) || compare(a, b);
 }
 
 /** The labels of the channel types, `trade.channels` of the dictionary: «Teléfono {code}»… */
@@ -309,6 +393,8 @@ function channelTemplate(tipo: Exclude<TipoCanal, 'otra'>, labels: ChannelLabels
       return labels.discord;
     case 'twitch':
       return labels.twitch;
+    case 'google':
+      return labels.google;
   }
 }
 

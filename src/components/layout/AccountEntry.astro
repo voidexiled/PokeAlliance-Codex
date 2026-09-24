@@ -1,0 +1,262 @@
+---
+// AccountEntry (spec 9.16.1, 9.16.2, 9.16.4): the account entry of the header. Header.astro
+// mounts it only when the build has the public Supabase settings; without them there is no entry,
+// no template and no script on any page (S11).
+//
+// The server draws the three states with their final geometry and `src/scripts/account-entry.ts`
+// shows one of them, so nothing moves when the state becomes known (CLS 0):
+//
+//   1. unknown: the empty slot, the only state of the HTML (`data-state="unknown"`);
+//   2. without a session: the bordered `Button` «Iniciar sesión» to `/{l}/cuenta/`, or in the
+//      compact group the 44 icon button with the trainer sprite and the same accessible name;
+//   3. with a session: the chip, a 28 avatar (the picture of the linked Discord or Google
+//      identity, or the initial of the username on a disc), the username in the full variant,
+//      and with COMERCIO_PUBLICO the status dot on the corner of the avatar. An unfinished
+//      registration puts the «!» mark there instead. The chip's accessible name says all of it,
+//      «Cuenta de {user}, En el juego» (`shell.account.label`, the label of the dot, and
+//      «Registro sin terminar» for the mark), so the dot and the mark are only drawn.
+//
+// The chip is a header trigger and takes the classes of the header's own: the 192 x 40 trigger of
+// the language selector with its text and chevron (`ac-header__lang`, language-menu.css) in the
+// full variant, and the 44 icon button of the compact group (`ac-header__icon`, header.css). So
+// account-entry.css, in the shared sheet, only holds the slot, the avatar and its badge.
+//
+// Two instances, one per group of the header: `full` sits before the language selector (from
+// 1280) and `compact` before the rule of the compact group (below 1280). header.css shows one
+// group at a time. Below 1280 the centred 448 search trigger leaves 83 to 338 px on the right
+// (5.6), less than a text button needs on the narrow end, so the compact group, whose other
+// controls are icon buttons too, carries the icon forms: the username shows from 1280 instead of
+// the 768 of 9.16.1.
+//
+// The trainer sprite is the registry key `ui/entrenador` (D-011). Until the owner registers it,
+// the icon button draws the Alliance Ball of `ui/inicio`, the site's own sprite; with neither the
+// button keeps its text.
+//
+// The instance that gets `menu` prints the `<template>` of the account menu (9.16.2): its items
+// with their texts and links for this page, in the order of 9.16.2. `src/scripts/account-menu.ts`,
+// loaded with `import()` on the first open, clones it once. Items that depend on the account carry
+// `data-ac-only`: «Completar registro» (`unfinished`) and «Moderación» (`moderator`); the Comercio
+// items, the status group and the status line exist only with COMERCIO_PUBLICO. Showing the
+// moderation link is a convenience: the moderation page and its functions check the role.
+import type { Locale } from '@/i18n/config';
+import type { Messages } from '@/i18n/messages/en';
+import { en } from '@/i18n/messages/en';
+import { es } from '@/i18n/messages/es';
+import { getMundos } from '@/lib/content/registry';
+import { hasSprite, spriteRegistry } from '@/lib/sprites/registry';
+import { spriteData, type SpriteData } from '@/lib/sprites/resolve';
+import { comercioPublico } from '@/lib/trade/registry';
+import { ESTADOS_PRESENCIA } from '@/lib/trade/types';
+import { Sprite } from '@/components/game/Sprite';
+import { Glyph } from '@/components/icons/Glyph';
+
+interface Props {
+  /** Page locale: the dictionary, the links and the world names of the menu. */
+  locale: Locale;
+  /** `full` in the end group of the header (from 1280), `compact` in the compact group. */
+  variant: 'full' | 'compact';
+  /** Prints the template of the account menu; exactly one instance of the page sets it. */
+  menu?: boolean;
+}
+
+const { locale, variant, menu = false } = Astro.props;
+
+const dictionaries: Record<Locale, Messages> = { es, en };
+const messages = dictionaries[locale];
+const { shell, trade } = messages;
+const comercio = comercioPublico();
+
+// The one place of the header entry that reads the dictionary (13.2): `shell.account` for the
+// entry and its menu, `trade.presence` for the statuses (9.15.6).
+const texts = {
+  ...shell.account,
+  status: trade.presence.label,
+  presence: {
+    en_juego: trade.presence.en_juego,
+    ausente: trade.presence.ausente,
+    desconectado: trade.presence.desconectado,
+  },
+};
+
+const base = `/${locale}`;
+const links = {
+  account: `${base}/cuenta/`,
+  profile: `${base}/cuenta/perfil/`,
+  listings: `${base}/cuenta/perfil/?pestana=anuncios`,
+  deals: `${base}/comercio/operaciones/`,
+  create: `${base}/comercio/publicar/`,
+  guilds: `${base}/cuenta/#guilds`,
+  moderation: `${base}/comercio/moderacion/`,
+};
+
+// DP2: the sprite through the adapter, only when the registry has it.
+function registered(key: string): SpriteData | null {
+  return hasSprite(key) ? spriteData(spriteRegistry, key) : null;
+}
+const trainer =
+  variant === 'compact' ? (registered('ui/entrenador') ?? registered('ui/inicio')) : null;
+
+// What the script writes at run time: the chip's name and its parts. It builds no text of its own.
+const runtime = JSON.stringify({
+  label: texts.label,
+  incomplete: texts.incomplete,
+  finish: texts.completeRegistration,
+  presence: comercio ? texts.presence : null,
+});
+// «{jugador} · {mundo}» of the menu head: the world id of the account by its name (13.4).
+const worlds = JSON.stringify(
+  Object.fromEntries(getMundos(locale).map((world) => [world.id, world.nombre])),
+);
+const menuItem = 'ac-account-menu__item';
+---
+
+<div
+  class:list={['ac-account-entry', `ac-account-entry--${variant}`]}
+  data-ac-account={variant}
+  data-state="unknown"
+  data-comercio={comercio ? '' : undefined}
+  data-texts={runtime}
+>
+  {
+    trainer === null ? (
+      <a class="ac-button ac-account-entry__signin" href={links.account} hidden>
+        {texts.signIn}
+      </a>
+    ) : (
+      <a
+        class="ac-button ac-button--icon ac-button--touch ac-account-entry__signin"
+        href={links.account}
+        aria-label={texts.signIn}
+        hidden
+      >
+        <Sprite {...trainer} />
+      </a>
+    )
+  }
+  <button
+    type="button"
+    class={variant === 'full' ? 'ac-header__lang' : 'ac-header__icon'}
+    aria-haspopup="menu"
+    aria-expanded="false"
+    data-ac-account-chip
+    hidden
+  >
+    <span class="ac-account-entry__avatar" aria-hidden="true">
+      <img alt="" width="28" height="28" hidden />
+      <span class="ac-account-entry__initial"></span>
+      <span class="ac-account-entry__badge" hidden></span>
+    </span>
+    <span
+      class:list={[
+        variant === 'full' ? 'ac-header__lang-text ac-account-entry__name' : 'sr-only',
+        'ac-account-entry__label',
+      ]}></span>
+    {variant === 'full' && <Glyph name="chevron-down" size={16} className="ac-header__glyph" />}
+  </button>
+  {
+    menu && (
+      <template data-ac-account-menu data-locale={locale} data-worlds={worlds}>
+        <div class="ac-account-menu" id="menu-cuenta" hidden>
+          <div class="ac-account-menu__head">
+            <span class="ac-account-menu__avatar" data-ac-slot="avatar" aria-hidden="true" />
+            <div class="ac-account-menu__who">
+              <p class="ac-account-menu__name" id="menu-cuenta-nombre" data-ac-slot="name" />
+              <p class="ac-account-menu__line" id="menu-cuenta-jugador" data-ac-slot="player" />
+              {comercio && <p class="ac-account-menu__line" data-ac-slot="presence" />}
+            </div>
+          </div>
+          <div
+            class="ac-account-menu__list"
+            role="menu"
+            aria-labelledby="menu-cuenta-nombre"
+            aria-describedby="menu-cuenta-jugador"
+          >
+            <a
+              class={menuItem}
+              role="menuitem"
+              tabindex="-1"
+              href={links.account}
+              data-ac-only="unfinished"
+            >
+              {texts.completeRegistration}
+            </a>
+            {comercio && (
+              <div class="ac-account-menu__group" role="group" aria-label={texts.status}>
+                <p class="ac-account-menu__label" aria-hidden="true">
+                  {texts.status}
+                </p>
+                {ESTADOS_PRESENCIA.map((state) => (
+                  <button
+                    type="button"
+                    class={menuItem}
+                    role="menuitemradio"
+                    aria-checked="false"
+                    tabindex="-1"
+                    data-ac-presence={state}
+                  >
+                    <span class="ac-account-menu__dot" aria-hidden="true" />
+                    {texts.presence[state]}
+                    <Glyph name="check" size={16} className="ac-account-menu__check" />
+                  </button>
+                ))}
+              </div>
+            )}
+            {comercio && <div class="ac-account-menu__sep" role="separator" />}
+            <a class={menuItem} role="menuitem" tabindex="-1" href={links.profile}>
+              {texts.myProfile}
+            </a>
+            {comercio && (
+              <a class={menuItem} role="menuitem" tabindex="-1" href={links.listings}>
+                {texts.myListings}
+              </a>
+            )}
+            {comercio && (
+              <a class={menuItem} role="menuitem" tabindex="-1" href={links.deals}>
+                {texts.myDeals}
+              </a>
+            )}
+            {comercio && (
+              <a class={menuItem} role="menuitem" tabindex="-1" href={links.create}>
+                {texts.createListing}
+              </a>
+            )}
+            <a class={menuItem} role="menuitem" tabindex="-1" href={links.guilds}>
+              {texts.myGuilds}
+            </a>
+            <a class={menuItem} role="menuitem" tabindex="-1" href={links.account}>
+              {texts.settings}
+            </a>
+            {comercio && (
+              <a
+                class={menuItem}
+                role="menuitem"
+                tabindex="-1"
+                href={links.moderation}
+                data-ac-only="moderator"
+              >
+                {texts.moderation}
+              </a>
+            )}
+            <div class="ac-account-menu__sep" role="separator" />
+            <button
+              type="button"
+              class={menuItem}
+              role="menuitem"
+              tabindex="-1"
+              data-ac-action="sign-out"
+            >
+              {texts.signOut}
+            </button>
+          </div>
+          <p class="ac-account-menu__error" role="alert" data-ac-slot="error" />
+        </div>
+      </template>
+    )
+  }
+</div>
+
+<script>
+  // Loaded as its own chunk (D-025): the slot is drawn with its final geometry on the server,
+  // so the entry adds only this loader to the initial JS of every page (13.6).
+  void import('@/scripts/account-entry.ts');
+</script>

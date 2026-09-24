@@ -1,7 +1,7 @@
-/* Cuenta (spec 9.9 without Comercio, 10.4; template H of 8.0.2): the island of
-   src/components/account/AccountPanel.tsx on src/pages/[locale]/cuenta/index.astro. There is no
-   board for this page, so the blocks are composed only of design-system components and tokens
-   (R16).
+/* Cuenta (spec 9.9 with 9.15 and 9.16, 10.4; template H of 8.0.2): the island of
+   src/components/account/AccountPanel.tsx, RegistrationSteps.tsx and ChannelsPanel.tsx on
+   src/pages/[locale]/cuenta/index.astro. There is no board for this page, so the blocks are
+   composed only of design-system components and tokens (R16).
 
    Per-page stylesheet (D-018, 13.6): only this page draws these blocks, so global.css does not
    import it; the page imports it. It repeats the layer order of global.css before its block, so
@@ -10,6 +10,10 @@
    - The island is a column of `Section`s 48 apart, the rhythm of the page (5.9). Until the
      session is known it paints nothing and carries `aria-busy` (9.9).
    - Forms are a column 16 apart, 360 wide at most: a sign-in form does not span the column.
+   - A registration step opens with «Paso 2 de 3» over its h3; a field's error is text under
+     it, 4 away like the helper (9.7.5).
+   - The Turnstile box takes no room until Cloudflare asks the person to act (9.15.1).
+   - Identities and contact channels are rows 12 apart, each a line that wraps.
    - A guild is a block 16 apart under its h3: its facts, its actions, the invitation link, the
      table of accounts and «Eliminar guild». Guilds are 32 apart with a rule between them. */
 
@@ -31,6 +35,7 @@
     align-items: stretch;
     gap: var(--space-16);
     max-width: 360px; /* sin token: ancho de un formulario corto de la cuenta */
+    min-width: 0;
   }
 
   .ac-account-form > .ac-button {
@@ -43,6 +48,164 @@
     align-items: center;
     gap: var(--space-16);
     min-width: 0;
+  }
+
+  /* A block of a section with its own h3: linked identities, the phone rows. */
+  .ac-account-block {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-12);
+    min-width: 0;
+  }
+
+  .ac-account-subtitle {
+    margin: 0;
+    color: var(--text-primary);
+    @apply type-h3;
+  }
+
+  /* The steps of the registration (9.15.1): one line that wraps, each number in a disc. The
+     current step is primary with the `selected` border; a done one has its disc filled. */
+  .ac-account-steps {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-8) var(--space-16);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .ac-account-steps__item {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-8);
+    color: var(--text-tertiary);
+    @apply type-ui-strong;
+  }
+
+  .ac-account-steps__item[aria-current='step'] {
+    color: var(--text-primary);
+  }
+
+  .ac-account-steps__number {
+    display: inline-grid;
+    place-items: center;
+    min-width: 24px; /* sin token: disco del número del paso */
+    height: 24px; /* sin token: disco del número del paso */
+    padding: 0 var(--space-4);
+    border: 1px solid var(--border-primary);
+    border-radius: var(--radius-full);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .ac-account-steps__item[aria-current='step'] .ac-account-steps__number {
+    border-color: var(--selected);
+  }
+
+  .ac-account-steps__item--done .ac-account-steps__number {
+    background: var(--bg-tertiary);
+  }
+
+  .ac-account-field {
+    min-width: 0;
+  }
+
+  /* The error of a field (9.7.5): under it, 4 away like the helper. */
+  .ac-account-field__error {
+    margin: var(--space-4) 0 0;
+    color: var(--text-primary);
+    @apply type-ui-strong;
+  }
+
+  /* Invisible until Cloudflare asks for a check, then the widget sets its own height. Closed,
+     it also gives back the gap of the form, so the fields and the buttons stay 16 apart. */
+  .ac-account-captcha:not(.ac-account-captcha--open) {
+    height: 0;
+    margin-top: calc(-1 * var(--space-16));
+    overflow: hidden;
+  }
+
+  /* The non-affiliation line of 9.15.2, discreet under the terms. */
+  .ac-account-legal {
+    margin: 0;
+    color: var(--text-tertiary);
+    @apply type-ui;
+  }
+
+  .ac-account-help {
+    margin: 0;
+    color: var(--text-tertiary);
+    @apply type-ui;
+  }
+
+  .ac-account-identities,
+  .ac-account-channels {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-12);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  /* Provider, «Vinculada: …» or «Vincular …», and «Desvincular», on one line that wraps. */
+  .ac-account-identity {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-8) var(--space-16);
+    min-width: 0;
+  }
+
+  .ac-account-identity__provider {
+    min-width: 72px; /* sin token: columna del nombre del proveedor */
+    color: var(--text-primary);
+    @apply type-body-strong;
+  }
+
+  .ac-account-identity__name {
+    min-width: 0;
+    color: var(--text-secondary);
+    overflow-wrap: anywhere;
+    @apply type-body;
+  }
+
+  .ac-account-identity__note {
+    flex-basis: 100%;
+  }
+
+  /* A channel: its chip, its value and its state on the first line; the choice and the
+     actions under it. */
+  .ac-account-channel {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-8);
+    min-width: 0;
+  }
+
+  .ac-account-channels > li + li {
+    padding-top: var(--space-12);
+    border-top: 1px solid var(--border-secondary);
+  }
+
+  .ac-account-channel__head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-8) var(--space-12);
+    min-width: 0;
+  }
+
+  .ac-account-channel__value {
+    min-width: 0;
+    color: var(--text-secondary);
+    overflow-wrap: anywhere;
+    @apply type-body;
+  }
+
+  .ac-account-channel__state {
+    color: var(--text-tertiary);
+    @apply type-ui-strong;
   }
 
   /* «Crear guild»: name and world side by side from 768, the button on their baseline. */
