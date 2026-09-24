@@ -112,6 +112,11 @@ describe('registry loaders', () => {
     expect(getAuras().map(({ nombre, shader }) => [nombre, shader])).toEqual([
       ['Alliance', 'outfit_alliance'],
       ['Premier', 'outfit_rainbow'],
+      ['Christmas 2024', 'outfit_rainbow'],
+      ['Halloween 2025', 'outfit_rainbow'],
+      ['Solo Leveling', 'outfit_rainbow'],
+      ['Digimon Red Aura', 'outfit_rainbow'],
+      ['Killua God Speed', 'outfit_rainbow'],
     ]);
     expect(getSpriteRegistry()['ui/diamond']).toMatchObject({ frames: 7, modo: 'animacion' });
   });

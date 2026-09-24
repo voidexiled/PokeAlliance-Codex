@@ -7,16 +7,28 @@ import { flushSync } from 'react-dom';
 import { Notice } from '@/components/content/Notice';
 import { Button } from '@/components/controls/Button';
 import { Checkbox } from '@/components/controls/Checkbox';
-import { Combobox, type ComboboxOption } from '@/components/controls/Combobox';
-import { NumberField } from '@/components/controls/NumberField';
+import { ChipChoice } from '@/components/controls/ChipChoice';
+import { ChoiceTiles } from '@/components/controls/ChoiceTiles';
 import { Select, type SelectOption } from '@/components/controls/Select';
+import { StarLevel } from '@/components/controls/StarLevel';
+import { Stepper } from '@/components/controls/Stepper';
 import { TextField } from '@/components/controls/TextField';
+import { TextLink } from '@/components/controls/TextLink';
 import { Textarea } from '@/components/controls/Textarea';
 import { ToggleGroup, type ToggleGroupOption } from '@/components/controls/ToggleGroup';
-import { ShinyMark } from '@/components/game/ShinyMark';
 import { Sprite } from '@/components/game/Sprite';
-import { Glyph } from '@/components/icons/Glyph';
+import { TrainingMeter } from '@/components/money/TrainingMeter';
 import {
+  AddonPicker,
+  AuraPicker,
+  HeldPicker,
+  ItemPicker,
+  MegaPicker,
+  PokemonPicker,
+  type PokemonFilterLabels,
+} from '@/components/pickers/pickers';
+import {
+  itemPanel,
   decodeItems,
   decodeItemsRefs,
   type ItemsData,
@@ -31,10 +43,18 @@ import {
 import type { Locale } from '@/i18n/config';
 import type { Messages } from '@/i18n/messages/en';
 import { fill } from '@/i18n/messages/types';
-import { resolvePokemonImage } from '@/lib/content/pokemon-media';
+import { itemTip, pokemonTip } from '@/lib/game/tips';
+import type { PickerLabels } from '@/lib/pickers/labels';
+import { itemOptions, pokemonOptions } from '@/lib/pickers/options';
+import { getSupabaseBrowserClient } from '@/lib/supabase/client';
+import {
+  BALL_CATEGORY,
+  itemPickerRecords,
+  rosterPickerRecords,
+  slotRecords,
+} from '@/lib/trade/pickers';
 import { formatInteger, formatPokedolaresLabel, parsePokedolares } from '@/lib/format/numbers';
 import { UNKNOWN } from '@/lib/format/unknown';
-import { normalize, normalizeQuery } from '@/lib/search/normalize';
 import type { SpriteData } from '@/lib/sprites/resolve';
 import {
   isDittoSlug,
@@ -47,13 +67,10 @@ import { listingTitle, type ListingNames } from '@/lib/trade/title';
 import {
   BOOST_MAX,
   HABILIDADES,
-  HELDS_MAX,
-  HELD_TIER_MAX,
   MEMORY_SLOTS_MAX,
   MONEDAS_JUEGO,
   MONEDAS_REALES,
   NIVEL_ENTRENAMIENTO_MAX,
-  NOMBRE_ITEM_MAX,
   NOMBRE_MAX,
   SIMBOLOS_MONEDA,
   STAR_LEVEL_MAX,
@@ -73,9 +90,20 @@ import type {
   ListingPreviewLabels,
   ListingPreviewSprites,
 } from './ListingPreview';
+import type {
+  ContactMessage,
+  ContactSellerLabels,
+  RealMoneyConsentLabels,
+} from './RealMoneyConsent';
 
 // ListingForm (spec 9.7, template G of 8.0.2; §12.16, §12.20 points 59–69): the island of
-// `/{l}/comercio/publicar/`, «Crear anuncio» of phase A. The form of a listing — «Tipo de
+// `/{l}/comercio/publicar/`, «Crear anuncio». Since 16.4.4 the form is guided: every game entity
+// is chosen in a picker (src/components/pickers), the asset type is a set of tiles, Boost and
+// the training levels are steppers, Star Level is stars and the world is chips. With
+// `publish` (COMERCIO_PUBLICO) the primary action is «Publicar anuncio» through
+// src/lib/supabase/trade.ts, with the real-money consent; «Copiar texto para Discord» stays as
+// the secondary action. The notes below describe phase A where they differ.
+// The form of a listing — «Tipo de
 // activo», the fields of the asset (9.7.2, 9.7.3), «Precio» (9.7.4) and «Mundo» — and its live
 // preview, the real `ListingCard` (ListingPreview.tsx, 9.7.6). Phase A publishes nothing: there
 // is no Supabase, no account and no contact, and the action is «Copiar anuncio», which puts the
@@ -123,14 +151,15 @@ import type {
 // first, so neither write is undone.
 
 /** The draft of a visitor (9.7.7). A change of its shape takes a new version of the key. */
-const STORAGE_KEY = 'alliance-codex:comercio:borrador:v1';
+const STORAGE_KEY = 'alliance-codex:comercio:borrador:v2';
+/** The draft of the free-text form before 16.4.4: removed on arrival, never read. */
+const OLD_STORAGE_KEY = 'alliance-codex:comercio:borrador:v1';
 
 /** Limits of the fields of 9.7.2: limits of the form, not game data (Q8). */
 const LIMITS = {
   boost: [0, BOOST_MAX],
   starLevel: [0, STAR_LEVEL_MAX],
   memorySlots: [1, MEMORY_SLOTS_MAX],
-  tier: [1, HELD_TIER_MAX],
   level: [0, NIVEL_ENTRENAMIENTO_MAX],
 } as const satisfies Record<string, readonly [number, number]>;
 
@@ -139,16 +168,6 @@ const GAME_OPTIONS_MAX = 2;
 
 /** Longest typed amount or percentage: the 15 digits of 9.4 with their separators. */
 const AMOUNT_MAX = 24;
-
-/** Suggestions of a combobox: the first ones that match (7.2.8). */
-const MAX_MATCHES = 20;
-
-/** A Pokédex number, with or without «#» and leading zeros: «6», «#6», «006». */
-const NUMBER_QUERY = /^#?\s*0*(\d+)$/;
-
-/** The item categories of the Ball and of the held items (content/items/categorias.json). */
-const BALL_CATEGORY = 'poke-balls';
-const HELD_CATEGORY = 'helds';
 
 // ------------------------------------------------------------------------------ props
 
@@ -169,6 +188,62 @@ export interface ListingFormAura {
 export interface ListingFormAddon {
   id: string;
   nombre: string;
+  /** Its sprite through the adapter (DP2), or `null` (R11). */
+  icono?: SpriteData | null;
+}
+
+/** The texts of the pickers and controls of 16.3 (DP1). */
+export interface ListingFormPickerLabels {
+  picker: PickerLabels;
+  filters: PokemonFilterLabels;
+  /** «Categoría». */
+  category: string;
+  /** «¿Qué vendes?». */
+  assetQuestion: string;
+  /** «Elegir Pokémon», «Elegir Ball», «Elegir ítem», «Elegir held», «Elegir Mega Stone». */
+  choosePokemon: string;
+  chooseBall: string;
+  chooseItem: string;
+  chooseHeld: string;
+  chooseMega: string;
+  /** «Held X», «Held Y», «Mega Stone», «Addons», «Auras». */
+  heldX: string;
+  heldY: string;
+  mega: string;
+  addons: string;
+  auras: string;
+  /** «{n} estrellas». */
+  star: string;
+}
+
+/**
+ * «Publicar anuncio» of phase B (9.7.8, 16.4.4), given only with COMERCIO_PUBLICO. `contact` is
+ * the text of the requirement lines, shared with «Contactar al vendedor».
+ */
+export interface ListingFormPublish {
+  /** «Publicar anuncio». */
+  publish: string;
+  /** «Anuncio publicado.». */
+  published: string;
+  /** «Ver anuncio». */
+  view: string;
+  /** «Inicia sesión para publicar». */
+  signInLine: string;
+  /** «Iniciar sesión». */
+  signIn: string;
+  contact: Pick<
+    ContactSellerLabels,
+    | 'account'
+    | 'adultsOnly'
+    | 'discord'
+    | 'discordAge'
+    | 'suspendedUntil'
+    | 'suspended'
+    | 'goToAccount'
+  >;
+  consent: RealMoneyConsentLabels;
+  /** `ui.close`. */
+  close: string;
 }
 
 /** The sprites of the form (DP2): the four asset tabs and the stages of the preview. */
@@ -240,7 +315,7 @@ export interface ListingFormLabels {
   negotiable: string;
   /** «Mundo». */
   world: string;
-  /** «Copiar anuncio». */
+  /** «Copiar texto para Discord». */
   copy: string;
   /** «Anuncio copiado.». */
   copied: string;
@@ -275,7 +350,7 @@ export interface ListingFormErrors {
   priceOption: string;
   /** «Elige un mundo.». */
   world: string;
-  /** «Escribe el nombre del item.»: an items listing without its item. */
+  /** «Elige un ítem.»: an items listing without its item. */
   item: string;
 }
 
@@ -330,26 +405,19 @@ export interface ListingFormProps {
   preview: ListingFormCardLabels;
   /** The labels of the copied text (9.7.7). */
   text: ListingTextLabels;
+  /** The pickers and controls of 16.3. */
+  pickers: ListingFormPickerLabels;
+  /** Phase B: «Publicar anuncio»; absent in phase A. */
+  publish?: ListingFormPublish | null;
   /** `messages.ui` of the page's locale, the part the island reads (13.2). */
   ui: ListingFormUi;
 }
 
 // ------------------------------------------------------------------------------ draft
 
-/** A combobox over a registry: what the reader wrote and the record it names, if any. */
-interface Choice {
-  text: string;
-  id: string | null;
-}
-
 type NpcChoice = 'none' | 'unsellable' | 'amount';
 
 const NPC_CHOICES: readonly NpcChoice[] = ['none', 'unsellable', 'amount'];
-
-interface HeldRow {
-  name: string;
-  tier: number | null;
-}
 
 interface TrainingRow {
   level: number | null;
@@ -357,20 +425,19 @@ interface TrainingRow {
 }
 
 interface PokemonDraft {
-  pokemon: Choice;
+  pokemon: string | null;
   nickname: string;
-  ball: string;
-  /** Aura id, or '' for «Ninguna». */
-  aura: string;
+  ball: string | null;
+  auras: string[];
+  addons: string[];
+  heldX: string | null;
+  heldY: string | null;
+  mega: string | null;
   boost: number | null;
   starLevel: number | null;
   memorySlots: number | null;
   /** MEMORY_SLOTS_MAX entries; the first `memorySlots` are shown. */
-  memories: Choice[];
-  /** HELDS_MAX rows. */
-  helds: HeldRow[];
-  /** Addon id, or '' for «Ninguno». */
-  addon: string;
+  memories: (string | null)[];
   nextBoostChance: string;
   /** One row per skill, in the order of HABILIDADES. */
   training: TrainingRow[];
@@ -394,15 +461,13 @@ interface PriceDraft {
 interface Draft {
   tipo: TipoActivo;
   pokemon: PokemonDraft;
-  item: { name: string; quantity: string };
+  item: { id: string | null; quantity: string };
   diamonds: string;
   pokedolares: string;
   price: PriceDraft;
   /** World id, or '' while none is chosen. */
   world: string;
 }
-
-const NO_CHOICE: Choice = { text: '', id: null };
 
 /** The other in-game currency. */
 function other(kind: MonedaJuego): MonedaJuego {
@@ -421,22 +486,24 @@ function emptyDraft(): Draft {
   return {
     tipo: TIPOS_ACTIVO[0],
     pokemon: {
-      pokemon: NO_CHOICE,
+      pokemon: null,
       nickname: '',
-      ball: '',
-      aura: '',
+      ball: null,
+      auras: [],
+      addons: [],
+      heldX: null,
+      heldY: null,
+      mega: null,
       boost: null,
       starLevel: null,
       memorySlots: null,
-      memories: Array.from({ length: MEMORY_SLOTS_MAX }, () => NO_CHOICE),
-      helds: Array.from({ length: HELDS_MAX }, () => ({ name: '', tier: null })),
-      addon: '',
+      memories: Array.from({ length: MEMORY_SLOTS_MAX }, () => null),
       nextBoostChance: '',
       training: HABILIDADES.map(() => ({ level: null, progress: '' })),
       npc: 'none',
       npcAmount: '',
     },
-    item: { name: '', quantity: '' },
+    item: { id: null, quantity: '' },
     diamonds: '',
     pokedolares: '',
     price: {
@@ -474,10 +541,17 @@ function looseOneOf<Value extends string>(
   return options.find((option) => option === value) ?? fallback;
 }
 
-function looseChoice(value: unknown): Choice {
-  if (!isObject(value)) return NO_CHOICE;
-  const id = typeof value.id === 'string' && value.id !== '' ? value.id : null;
-  return { text: looseText(value.text, NOMBRE_MAX), id };
+const SLUG = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
+
+/** A registry id of a stored draft, or `null`. */
+function looseId(value: unknown): string | null {
+  return typeof value === 'string' && SLUG.test(value) ? value : null;
+}
+
+/** Distinct registry ids of a stored draft. */
+function looseIds(value: unknown): string[] {
+  const ids = Array.isArray(value) ? value.flatMap((entry) => looseId(entry) ?? []) : [];
+  return [...new Set(ids)].slice(0, 32);
 }
 
 function looseList<Entry>(value: unknown, length: number, read: (entry: Loose) => Entry): Entry[] {
@@ -507,21 +581,20 @@ function restoreDraft(stored: unknown): Draft | null {
   return {
     tipo,
     pokemon: {
-      pokemon: looseChoice(unit.pokemon),
+      pokemon: looseId(unit.pokemon),
       nickname: looseText(unit.nickname, NOMBRE_MAX),
-      ball: looseText(unit.ball, NOMBRE_MAX),
-      aura: looseText(unit.aura, NOMBRE_MAX),
+      ball: looseId(unit.ball),
+      auras: looseIds(unit.auras),
+      addons: looseIds(unit.addons),
+      heldX: looseId(unit.heldX),
+      heldY: looseId(unit.heldY),
+      mega: looseId(unit.mega),
       boost: looseWhole(unit.boost),
       starLevel: looseWhole(unit.starLevel),
       memorySlots: looseWhole(unit.memorySlots),
       memories: Array.from({ length: MEMORY_SLOTS_MAX }, (_, index) =>
-        looseChoice(Array.isArray(unit.memories) ? unit.memories[index] : undefined),
+        looseId(Array.isArray(unit.memories) ? unit.memories[index] : undefined),
       ),
-      helds: looseList(unit.helds, HELDS_MAX, (entry) => ({
-        name: looseText(entry.name, NOMBRE_MAX),
-        tier: looseWhole(entry.tier),
-      })),
-      addon: looseText(unit.addon, NOMBRE_ITEM_MAX),
       nextBoostChance: looseText(unit.nextBoostChance, AMOUNT_MAX),
       training: looseList(unit.training, HABILIDADES.length, (entry) => ({
         level: looseWhole(entry.level),
@@ -531,7 +604,7 @@ function restoreDraft(stored: unknown): Draft | null {
       npcAmount: looseText(unit.npcAmount, AMOUNT_MAX),
     },
     item: {
-      name: looseText(item.name, NOMBRE_ITEM_MAX),
+      id: looseId(item.id),
       quantity: looseText(item.quantity, AMOUNT_MAX),
     },
     diamonds: looseText(stored.diamonds, AMOUNT_MAX),
@@ -542,12 +615,13 @@ function restoreDraft(stored: unknown): Draft | null {
       real: looseText(price.real, AMOUNT_MAX),
       game: game.length > 0 ? game : [emptyRow(tipo)],
     },
-    world: looseText(stored.world, NOMBRE_ITEM_MAX),
+    world: looseId(stored.world) ?? '',
   };
 }
 
 function readStoredDraft(): Draft | null {
   try {
+    window.localStorage.removeItem(OLD_STORAGE_KEY);
     const raw = window.localStorage.getItem(STORAGE_KEY);
     return raw === null ? null : restoreDraft(JSON.parse(raw));
   } catch {
@@ -568,13 +642,10 @@ function storeDraft(draft: Draft): void {
 /** A data file of the page, read once hydrated (PR5). */
 type Loaded<Data> = { state: 'loading' } | { state: 'error' } | { state: 'ready'; data: Data };
 
-/** Records by id and by their name as the search compares it (NFD, no accents, lowercase). */
+/** Records by id, in the order of the file. */
 interface Catalogue<Row> {
   rows: readonly Row[];
   byId: ReadonlyMap<string, Row>;
-  byName: ReadonlyMap<string, Row>;
-  /** The compared name of each row, in the order of `rows`. */
-  names: readonly string[];
 }
 
 interface Roster extends Catalogue<PokedexRow> {
@@ -585,15 +656,8 @@ interface Items extends Catalogue<ItemsRow> {
   refs: ItemsData['refs'];
 }
 
-function catalogue<Row extends { id: string; nombre: string }>(
-  rows: readonly Row[],
-): Catalogue<Row> {
-  const names = rows.map((row) => normalizeQuery(row.nombre));
-  const byName = new Map<string, Row>();
-  rows.forEach((row, index) => {
-    if (!byName.has(names[index])) byName.set(names[index], row);
-  });
-  return { rows, byId: new Map(rows.map((row) => [row.id, row])), byName, names };
+function catalogue<Row extends { id: string }>(rows: readonly Row[]): Catalogue<Row> {
+  return { rows, byId: new Map(rows.map((row) => [row.id, row])) };
 }
 
 function readRoster(json: unknown): Roster {
@@ -627,40 +691,13 @@ function useData<Data>(url: string, read: (json: unknown) => Data): Loaded<Data>
   return loaded;
 }
 
-/** The record whose name is exactly the text, accents and case aside (9.4), or `null`. */
-function named<Row>(data: Catalogue<Row> | null, typed: string): Row | null {
-  if (data === null) return null;
-  const wanted = normalizeQuery(typed);
-  return wanted === '' ? null : (data.byName.get(wanted) ?? null);
-}
-
-/** The first MAX_MATCHES records whose name holds the text, in the order of the file. */
-function containing<Row>(
-  data: Catalogue<Row> | null,
-  typed: string,
-  keep: (row: Row) => boolean = () => true,
-): Row[] {
-  if (data === null) return [];
-  const wanted = normalizeQuery(typed);
-  if (wanted === '') return [];
-  const found: Row[] = [];
-  data.rows.forEach((row, index) => {
-    if (found.length < MAX_MATCHES && data.names[index].includes(wanted) && keep(row)) {
-      found.push(row);
-    }
-  });
-  return found;
-}
-
-/** The Pokémon a combobox suggests: by name, or by Pokédex number (7.2.8, 11.3). */
-function rosterMatches(roster: Roster | null, typed: string): PokedexRow[] {
-  const digits = NUMBER_QUERY.exec(normalize(typed).trim())?.[1];
-  if (roster === null || digits === undefined) return containing(roster, typed);
-  const wanted = Number(digits);
-  return roster.rows.filter((row) => row.numero === wanted).slice(0, MAX_MATCHES);
-}
-
 // ------------------------------------------------------------------------ the listing
+
+/** Tier of a held item row (16.2.3), or `undefined`. */
+function heldTierOf(row: object): number | undefined {
+  const held = (row as { held?: { tier?: unknown } | null }).held;
+  return typeof held?.tier === 'number' ? held.tier : undefined;
+}
 
 /** A whole number within its limits, or `null`. */
 function within(value: number | null, [min, max]: readonly [number, number]): number | null {
@@ -677,21 +714,7 @@ function percent(typed: string): string | null {
 interface Context {
   locale: Locale;
   roster: Roster | null;
-  items: Items | null;
   addons: ListingFormProps['addons'];
-}
-
-/** The Pokémon a combobox names: the one chosen from the list, or the one its text is. */
-function pokemonOf(value: Choice, roster: Roster | null): string | null {
-  if (roster === null) return value.id;
-  if (value.id !== null && roster.byId.get(value.id)?.nombre === value.text) return value.id;
-  return named(roster, value.text)?.id ?? null;
-}
-
-/** The id of the item a declared name matches exactly, in a category or in all (9.4, R2). */
-function itemOf(items: Items | null, typed: string, category?: string): string | null {
-  const row = named(items, typed);
-  return row === null || (category !== undefined && row.categoria !== category) ? null : row.id;
 }
 
 /** What the draft says, once read (9.4): only the valid values of its fields. */
@@ -733,14 +756,14 @@ function readUnit(
 ): Omit<Reading, 'anuncio'> & {
   pokemon: UnidadPokemon;
 } {
-  const { roster, items, locale } = context;
-  const id = pokemonOf(unit.pokemon, roster);
+  const { roster, locale } = context;
+  const known = (id: string | null) =>
+    id !== null && (roster === null || roster.byId.has(id)) ? id : null;
+  const id = known(unit.pokemon);
   const ditto = isDittoSlug(id);
   const addons = id === null ? [] : (context.addons[id] ?? []);
   const slots = ditto ? within(unit.memorySlots, LIMITS.memorySlots) : null;
   const nickname = unit.nickname.trim();
-  const ball = unit.ball.trim();
-  const addon = addons.find((entry) => entry.id === unit.addon);
   const npcAmount = unit.npc === 'amount' ? parsePokedolares(unit.npcAmount, locale) : null;
 
   return {
@@ -748,23 +771,18 @@ function readUnit(
     addons,
     pokemon: {
       pokemon: id ?? '',
-      ball: ball === '' ? null : { item: itemOf(items, ball, BALL_CATEGORY), nombre: ball },
-      aura: unit.aura === '' ? null : unit.aura,
+      ball: unit.ball,
+      auras: unit.auras,
+      // 9.7.2: only the addons of the chosen Pokémon.
+      addons: unit.addons.filter((addon) => addons.some((own) => own.id === addon)),
+      heldX: unit.heldX,
+      heldY: unit.heldY,
+      mega: unit.mega,
       boost: within(unit.boost, LIMITS.boost),
       starLevel: within(unit.starLevel, LIMITS.starLevel),
       nickname: nickname === '' ? null : nickname,
       memorySlots: slots,
-      memorias:
-        slots === null
-          ? []
-          : unit.memories.slice(0, slots).map((memory) => pokemonOf(memory, roster)),
-      helds: unit.helds.flatMap((held) => {
-        const name = held.name.trim();
-        const tier = within(held.tier, LIMITS.tier);
-        if (name === '' || tier === null) return [];
-        return [{ item: itemOf(items, name, HELD_CATEGORY), nombre: name, tier }];
-      }),
-      addon: addon === undefined ? null : { id: addon.id, nombre: addon.nombre },
+      memorias: slots === null ? [] : unit.memories.slice(0, slots).map(known),
       nextBoostChance: percent(unit.nextBoostChance),
       entrenamiento: HABILIDADES.flatMap((habilidad, index) => {
         const row = unit.training[index];
@@ -784,16 +802,15 @@ function readUnit(
 
 /** The listing the draft describes (9.4). An unknown amount is `NaN`, never 0 (G7). */
 function readDraft(draft: Draft, context: Context): Reading {
-  const { locale, items } = context;
+  const { locale } = context;
   const base = { tipo: draft.tipo, precio: readPrice(draft, locale), mundo: draft.world };
   if (draft.tipo === 'pokemon') {
     const { pokemon, ditto, addons } = readUnit(draft.pokemon, context);
     return { anuncio: { ...base, pokemon }, ditto, addons };
   }
   if (draft.tipo === 'items') {
-    const name = draft.item.name.trim();
     const cantidad = parsePositiveWhole(draft.item.quantity, locale) ?? Number.NaN;
-    const item = name === '' ? {} : { item: { item: itemOf(items, name), nombre: name, cantidad } };
+    const item = draft.item.id === null ? {} : { item: { item: draft.item.id, cantidad } };
     return { anuncio: { ...base, ...item }, ditto: false, addons: [] };
   }
   const cantidad =
@@ -822,9 +839,6 @@ const ID = {
   starLevel: 'lf-star-level',
   memorySlots: 'lf-memory-slots',
   memory: (index: number) => `lf-memory-${index}`,
-  held: (index: number) => `lf-held-${index}`,
-  heldTier: (index: number) => `lf-held-${index}-tier`,
-  addon: 'lf-addon',
   nextBoostChance: 'lf-next-boost',
   trainLevel: (index: number) => `lf-train-${index}-level`,
   trainProgress: (index: number) => `lf-train-${index}-progress`,
@@ -841,11 +855,9 @@ const ID = {
   negotiable: 'lf-negotiable',
   world: 'lf-world',
   copy: 'lf-copy',
+  publish: 'lf-publish',
   text: 'lf-text',
 } as const;
-
-/** The fields of the folding «Entrenamiento» (9.7.5). */
-const TRAINING_FIELD = /^lf-train-/;
 
 /** The fields of the in-game price options, whose position moves when one is removed. */
 const GAME_FIELD = /^lf-game-/;
@@ -902,20 +914,7 @@ function validate(
     check(ID.starLevel, number(unit.starLevel, LIMITS.starLevel));
     if (reading.ditto) {
       check(ID.memorySlots, number(unit.memorySlots, LIMITS.memorySlots, true));
-      const slots = within(unit.memorySlots, LIMITS.memorySlots) ?? 0;
-      unit.memories.slice(0, slots).forEach((memory, index) => {
-        const unknown = memory.text.trim() !== '' && pokemonOf(memory, context.roster) === null;
-        check(ID.memory(index), unknown ? messages.pokemon : null);
-      });
     }
-    unit.helds.forEach((held, index) => {
-      check(ID.held(index), null);
-      check(
-        ID.heldTier(index),
-        held.name.trim() === '' ? null : number(held.tier, LIMITS.tier, true),
-      );
-    });
-    if (reading.addons.length > 0) check(ID.addon, null);
     check(ID.nextBoostChance, ratio(unit.nextBoostChance));
     unit.training.forEach((row, index) => {
       check(ID.trainLevel(index), number(row.level, LIMITS.level));
@@ -923,7 +922,7 @@ function validate(
     });
     if (unit.npc === 'amount') check(ID.npcAmount, pokedolares(unit.npcAmount));
   } else if (draft.tipo === 'items') {
-    check(ID.item, draft.item.name.trim() === '' ? messages.item : null);
+    check(ID.item, draft.item.id === null ? messages.item : null);
     check(ID.itemQuantity, whole(draft.item.quantity));
   } else if (draft.tipo === 'diamonds') {
     check(ID.diamonds, whole(draft.diamonds));
@@ -1036,6 +1035,23 @@ function Group({
   );
 }
 
+/**
+ * What «Publicar anuncio» needs (9.7.8): the Supabase calls, their error texts, the contact
+ * requirement and the consent dialog. Nothing of it draws the first paint, so it is one
+ * deferred chunk (13.6), asked for when the reader publishes or the dialog opens.
+ */
+function publishModules() {
+  return Promise.all([
+    import('@/lib/supabase/trade'),
+    import('@/lib/supabase/errors'),
+    import('./RealMoneyConsent'),
+  ]);
+}
+
+const RealMoneyConsent = lazy(() =>
+  import('./RealMoneyConsent').then((module) => ({ default: module.RealMoneyConsent })),
+);
+
 /** The preview, a chunk of its own that the first render never needs (13.6, 9.7.6). */
 const ListingPreview = lazy(() =>
   import('./ListingPreview').then((module) => ({ default: module.ListingPreview })),
@@ -1044,17 +1060,21 @@ const ListingPreview = lazy(() =>
 type CopyState = { state: 'idle' } | { state: 'copied' } | { state: 'failed'; text: string };
 
 export function ListingForm(props: ListingFormProps) {
-  const { locale, labels, ui, sprites, worlds, auras, addons } = props;
+  const { locale, labels, ui, sprites, worlds, auras, addons, pickers } = props;
   const roster = useData(props.pokedexUrl, readRoster);
   const items = useData(props.itemsUrl, readItems);
   const rosterData = roster.state === 'ready' ? roster.data : null;
   const itemsData = items.state === 'ready' ? items.data : null;
 
   const [draft, setDraft] = useState<Draft>(emptyDraft);
-  const [trainingOpen, setTrainingOpen] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const [touched, setTouched] = useState<ReadonlySet<string>>(() => new Set());
   const [copy, setCopy] = useState<CopyState>({ state: 'idle' });
+  const [publishing, setPublishing] = useState(false);
+  const [published, setPublished] = useState<string | null>(null);
+  const [blocker, setBlocker] = useState<ContactMessage | null>(null);
+  const [consentOpen, setConsentOpen] = useState(false);
+  const [consentError, setConsentError] = useState<string | null>(null);
   const [focusNext, setFocusNext] = useState<string | null>(null);
   /** Text fields the reader changed and has not left yet: they validate on leaving. */
   const changed = useRef(new Set<string>());
@@ -1066,6 +1086,19 @@ export function ListingForm(props: ListingFormProps) {
   const auraNames = useMemo(
     () => Object.fromEntries(auras.map((aura) => [aura.id, aura.nombre])),
     [auras],
+  );
+  const auraEntities = useMemo(
+    () => Object.fromEntries(auras.map((aura) => [aura.id, aura])),
+    [auras],
+  );
+  const addonEntities = useMemo(
+    () =>
+      Object.fromEntries(
+        Object.values(addons)
+          .flat()
+          .map((addon) => [addon.id, { nombre: addon.nombre, icono: addon.icono ?? null }]),
+      ),
+    [addons],
   );
   const worldNames = useMemo(
     () => Object.fromEntries(worlds.map((world) => [world.id, world.nombre])),
@@ -1087,10 +1120,6 @@ export function ListingForm(props: ListingFormProps) {
     const stored = readStoredDraft();
     if (stored === null) return;
     setDraft(stored);
-    const trained = stored.pokemon.training.some(
-      (row) => row.level !== null || row.progress.trim() !== '',
-    );
-    if (trained) setTrainingOpen(true);
   }, []);
 
   useEffect(() => {
@@ -1114,7 +1143,7 @@ export function ListingForm(props: ListingFormProps) {
     }
   }, [copy]);
 
-  const context: Context = { locale, roster: rosterData, items: itemsData, addons };
+  const context: Context = { locale, roster: rosterData, addons };
   const reading = readDraft(draft, context);
   const validation = validate(draft, reading, context, labels.errors, worlds.length);
   const shown: Record<string, string> = {};
@@ -1127,20 +1156,71 @@ export function ListingForm(props: ListingFormProps) {
     if (formRef.current !== null) markInvalid(formRef.current, shown);
   });
 
-  // The names the title and the copied text read (9.4). Until the roster arrives, a Pokémon of a
-  // restored draft is called what its field says.
-  const typedNames = new Map<string, string>();
-  for (const choice of [draft.pokemon.pokemon, ...draft.pokemon.memories]) {
-    if (choice.id !== null) typedNames.set(choice.id, choice.text);
-  }
+  // The names the title and the copied text read (9.4).
   const names: ListingNames = {
-    pokemon: (id) => rosterData?.byId.get(id)?.nombre ?? typedNames.get(id),
+    pokemon: (id) => rosterData?.byId.get(id)?.nombre,
     item: (id) => itemsData?.byId.get(id)?.nombre,
     addon: (id) => addonNames.get(id),
     aura: (id) => auraNames[id],
     mundo: (id) => worldNames[id],
     vendedor: () => undefined,
+    heldTier: (id) => {
+      const row = itemsData?.byId.get(id);
+      return row === undefined ? undefined : heldTierOf(row);
+    },
   };
+
+  // ------------------------------------------------------------------ picker options
+
+  const tipLabels = ui.tooltip;
+  const pokemonChoices = useMemo(
+    () =>
+      rosterData === null
+        ? []
+        : pokemonOptions(
+            rosterPickerRecords(rosterData.rows, (row) =>
+              pokemonTip(
+                {
+                  ...(row as PokedexRow),
+                  elementos: row.elementos.map((element) => {
+                    const nombre = rosterData.elements[element]?.nombre ?? element;
+                    return { nombre: { es: nombre, en: nombre } };
+                  }),
+                },
+                locale,
+                tipLabels,
+              ),
+            ),
+          ),
+    [rosterData, locale, tipLabels],
+  );
+  const itemChoices = useMemo(
+    () =>
+      itemsData === null
+        ? []
+        : itemOptions(
+            itemPickerRecords(itemsData.rows as readonly ItemsRow[], (row) =>
+              itemPanel(
+                row as ItemsRow,
+                itemsData.refs,
+                props.categories[row.categoria] ?? null,
+                locale,
+                tipLabels,
+                itemTip,
+              ),
+            ),
+          ),
+    [itemsData, props.categories, locale, tipLabels],
+  );
+  const ballChoices = useMemo(
+    () => itemChoices.filter((option) => option.facets?.categoria?.includes(BALL_CATEGORY)),
+    [itemChoices],
+  );
+  const elementChoices = useMemo(
+    () => Object.entries(rosterData?.elements ?? {}).map(([id, ref]) => ({ id, name: ref.nombre })),
+    [rosterData],
+  );
+  const auraSlots = useMemo(() => slotRecords(auras), [auras]);
 
   const previewLabels = useMemo<ListingPreviewLabels>(
     () => ({
@@ -1159,12 +1239,22 @@ export function ListingForm(props: ListingFormProps) {
       items: itemsData?.byId ?? new Map(),
       itemRefs: itemsData?.refs ?? { elementos: {}, pokemon: {} },
       categories: props.categories,
-      auras: auraNames,
+      auras: auraEntities,
+      addons: addonEntities,
       worlds: worldNames,
       sprites,
       diamonds: props.diamonds,
     }),
-    [rosterData, itemsData, props.categories, auraNames, worldNames, sprites, props.diamonds],
+    [
+      rosterData,
+      itemsData,
+      props.categories,
+      auraEntities,
+      addonEntities,
+      worldNames,
+      sprites,
+      props.diamonds,
+    ],
   );
 
   // ------------------------------------------------------------------------- changes
@@ -1210,17 +1300,19 @@ export function ListingForm(props: ListingFormProps) {
     });
   }
 
-  function choosePokemon(pokemon: Choice) {
+  function choosePokemon(pokemon: string | null) {
+    touch(ID.pokemon);
     setUnit((unit) => {
-      const id = pokemonOf(pokemon, rosterData);
-      const own = id === null ? [] : (addons[id] ?? []);
+      const own = pokemon === null ? [] : (addons[pokemon] ?? []);
       return {
         ...unit,
         pokemon,
         // 9.7.2: one Memory Slot by default when the Pokémon becomes a Ditto.
         memorySlots:
-          isDittoSlug(id) && unit.memorySlots === null ? LIMITS.memorySlots[0] : unit.memorySlots,
-        addon: own.some((addon) => addon.id === unit.addon) ? unit.addon : '',
+          isDittoSlug(pokemon) && unit.memorySlots === null
+            ? LIMITS.memorySlots[0]
+            : unit.memorySlots,
+        addons: unit.addons.filter((addon) => own.some((entry) => entry.id === addon)),
       };
     });
   }
@@ -1265,24 +1357,110 @@ export function ListingForm(props: ListingFormProps) {
     }
   }
 
-  function submit(event: SubmitEvent<HTMLFormElement>) {
-    event.preventDefault();
+  /** Validates the draft; with errors, shows them and focuses the first (9.7.5). */
+  function valid(): boolean {
     const first = validation.order.find((id) => validation.errors[id] !== undefined);
     if (first === undefined) {
       setSubmitted(true);
-      // A new copy is a new status: the Notice of the last one goes, so the next one is read.
-      setCopy({ state: 'idle' });
-      void copyText(listingText(reading.anuncio, locale, names, props.text));
-      return;
+      return true;
     }
-    // 9.7.5: every error shows, and the focus goes to the first invalid field; one inside the
-    // folded «Entrenamiento» opens it before. The errors are committed first, so the field
-    // already says it is invalid, and why, when a screen reader announces it on focus.
-    flushSync(() => {
-      setSubmitted(true);
-      if (TRAINING_FIELD.test(first)) setTrainingOpen(true);
-    });
+    // The errors are committed first, so the field already says it is invalid, and why, when a
+    // screen reader announces it on focus.
+    flushSync(() => setSubmitted(true));
     document.getElementById(first)?.focus();
+    return false;
+  }
+
+  function copyForDiscord() {
+    if (!valid()) return;
+    // A new copy is a new status: the Notice of the last one goes, so the next one is read.
+    setCopy({ state: 'idle' });
+    void copyText(listingText(reading.anuncio, locale, names, props.text));
+  }
+
+  /** «Publicar anuncio» (9.7.8, 16.4.4): session, requirements, consent, then the RPC. */
+  async function publish(consented = false): Promise<void> {
+    const texts = props.publish;
+    if (texts == null || publishing || !valid()) return;
+    setPublishing(true);
+    setBlocker(null);
+    setPublished(null);
+    let mapSupabaseError: (error: unknown, locale: Locale) => string = () => texts.signInLine;
+    try {
+      const [trade, errors, consent] = await publishModules();
+      mapSupabaseError = errors.mapSupabaseError;
+      const { getMyAccount, publishListing } = trade;
+      const { contactBlocker } = consent;
+      const client = await getSupabaseBrowserClient();
+      if (client === null) {
+        setBlocker({ text: mapSupabaseError(null, locale), link: null });
+        return;
+      }
+      const { data } = await client.auth.getSession();
+      const account = data.session === null ? null : await getMyAccount(client);
+      if (account === null || account.data === null) {
+        setBlocker({
+          text: texts.signInLine,
+          link: { href: `/${locale}/cuenta/`, label: texts.signIn },
+        });
+        return;
+      }
+      if (account.error !== null) {
+        setBlocker({ text: mapSupabaseError(account.error, locale), link: null });
+        return;
+      }
+      const missing = contactBlocker(account.data, locale, texts.contact);
+      if (missing !== null) {
+        setBlocker(missing);
+        return;
+      }
+      if (reading.anuncio.precio.real !== null && !account.data.consentCurrent && !consented) {
+        setConsentError(null);
+        setConsentOpen(true);
+        return;
+      }
+      const result = await publishListing(client, reading.anuncio);
+      if (result.error !== null || result.data === null) {
+        setBlocker({ text: mapSupabaseError(result.error, locale), link: null });
+        return;
+      }
+      setPublished(result.data);
+      edited.current = false;
+      try {
+        window.localStorage.removeItem(STORAGE_KEY);
+      } catch {
+        // Without storage there is no draft to remove.
+      }
+    } catch (caught) {
+      setBlocker({ text: mapSupabaseError(caught, locale), link: null });
+    } finally {
+      setPublishing(false);
+    }
+  }
+
+  async function acceptConsent(): Promise<void> {
+    setConsentError(null);
+    let mapSupabaseError: (error: unknown, locale: Locale) => string = () => '';
+    try {
+      const [{ acceptRealMoneyConsent }, errors] = await publishModules();
+      mapSupabaseError = errors.mapSupabaseError;
+      const client = await getSupabaseBrowserClient();
+      const result = client === null ? null : await acceptRealMoneyConsent(client);
+      if (result === null || result.error !== null) {
+        setConsentError(mapSupabaseError(result?.error ?? null, locale));
+        return;
+      }
+      setConsentOpen(false);
+      await publish(true);
+    } catch (caught) {
+      setConsentError(mapSupabaseError(caught, locale));
+    }
+  }
+
+  function submit(event: SubmitEvent<HTMLFormElement>) {
+    event.preventDefault();
+    if (props.publish) void publish();
+    else copyForDiscord();
   }
 
   function closeNotice() {
@@ -1301,86 +1479,6 @@ export function ListingForm(props: ListingFormProps) {
     'aria-invalid': shown[id] === undefined ? undefined : (true as const),
     'aria-describedby': shown[id] === undefined || shown[id] === '' ? undefined : errorId(id),
   });
-
-  const pokemonOptions = (value: string): ComboboxOption[] =>
-    rosterMatches(rosterData, value).map((row) => {
-      const art = resolvePokemonImage(row.imagen);
-      return {
-        value: row.id,
-        label: row.nombre,
-        meta: row.numero === null ? undefined : fill(ui.cards.number, { n: String(row.numero) }),
-        media:
-          art === null ? null : <Sprite src={art} smooth width={40} height={40} loading="lazy" />,
-        mark: row.variante === 'shiny' ? <ShinyMark /> : undefined,
-      };
-    });
-
-  const itemOptions = (value: string, category?: string): ComboboxOption[] =>
-    containing(itemsData, value, (row) => category === undefined || row.categoria === category).map(
-      (row) => ({
-        value: row.id,
-        label: row.nombre,
-        media: row.sprite === null ? null : <Sprite {...row.sprite} />,
-      }),
-    );
-
-  const pokemonCombobox = (
-    id: string,
-    label: string,
-    value: Choice,
-    onChoice: (next: Choice) => void,
-    required = false,
-  ) => (
-    <Combobox
-      id={id}
-      label={label}
-      options={pokemonOptions(value.text)}
-      value={value.text}
-      maxLength={NOMBRE_MAX}
-      required={required}
-      // Without the roster nothing can be chosen: the field says so once, under the Pokémon.
-      helper={required && roster.state === 'error' ? ui.dataError : undefined}
-      inputProps={invalid(id)}
-      onChange={(next) => {
-        typed(id);
-        onChoice({ text: next, id: named(rosterData, next)?.id ?? null });
-      }}
-      onSelect={(option) => {
-        // A choice from the list ends the interaction.
-        changed.current.delete(id);
-        touch(id);
-        onChoice({ text: option.label, id: option.value });
-      }}
-    />
-  );
-
-  const itemCombobox = (
-    id: string,
-    label: string,
-    value: string,
-    onName: (next: string) => void,
-    category?: string,
-  ) => (
-    <Combobox
-      id={id}
-      label={label}
-      options={itemOptions(value, category)}
-      value={value}
-      freeText
-      required={category === undefined}
-      maxLength={category === undefined ? NOMBRE_ITEM_MAX : NOMBRE_MAX}
-      inputProps={invalid(id)}
-      onChange={(next) => {
-        typed(id);
-        onName(next);
-      }}
-      onSelect={(option) => {
-        changed.current.delete(id);
-        touch(id);
-        onName(option.label);
-      }}
-    />
-  );
 
   const textField = (
     id: string,
@@ -1411,21 +1509,21 @@ export function ListingForm(props: ListingFormProps) {
     />
   );
 
-  const numberField = (
+  const stepper = (
     id: string,
     label: string,
     value: number | null,
     [min, max]: readonly [number, number],
     onNumber: (next: number | null) => void,
-    helper?: string,
+    slider = false,
   ) => (
-    <NumberField
-      id={id}
+    <Stepper
+      name={id}
       label={label}
-      value={value}
+      value={value ?? min}
       min={min}
       max={max}
-      helper={helper}
+      slider={slider}
       decrementLabel={fill(ui.decrease, { label })}
       incrementLabel={fill(ui.increase, { label })}
       onChange={(next) => {
@@ -1456,14 +1554,6 @@ export function ListingForm(props: ListingFormProps) {
   const unit = draft.pokemon;
   const slots = reading.ditto ? (within(unit.memorySlots, LIMITS.memorySlots) ?? 0) : 0;
 
-  const setHeld = (index: number, change: Partial<HeldRow>) =>
-    setUnit((current) => ({
-      ...current,
-      helds: current.helds.map((row, position) =>
-        position === index ? { ...row, ...change } : row,
-      ),
-    }));
-
   const setTraining = (index: number, change: Partial<TrainingRow>) =>
     setUnit((current) => ({
       ...current,
@@ -1472,20 +1562,41 @@ export function ListingForm(props: ListingFormProps) {
       ),
     }));
 
-  const setMemory = (index: number, memory: Choice) =>
+  const setMemory = (index: number, memory: string | null) =>
     setUnit((current) => ({
       ...current,
       memories: current.memories.map((entry, position) => (position === index ? memory : entry)),
     }));
 
-  const auraOptions: ToggleGroupOption[] = [
-    { value: '', label: labels.auraNone },
-    ...auras.map((aura) => ({
-      value: aura.id,
-      label: aura.nombre,
-      ...(aura.icono === null ? {} : { sprite: aura.icono }),
-    })),
-  ];
+  const pickerBase = {
+    locale,
+    labels: pickers.picker,
+    hint: ui.pinHint,
+    shinyLabel: ui.shiny,
+    orLabel: ui.or,
+  };
+  const one = (id: string | null) => (id === null ? [] : [id]);
+  const pokemonPicker = (
+    id: string,
+    label: string,
+    value: string | null,
+    onPick: (next: string | null) => void,
+  ) => (
+    <PokemonPicker
+      {...pickerBase}
+      name={id}
+      label={label}
+      placeholder={pickers.choosePokemon}
+      options={pokemonChoices}
+      value={one(value)}
+      optional={id !== ID.pokemon}
+      disabled={rosterData === null}
+      elements={elementChoices}
+      filterLabels={pickers.filters}
+      onChange={(ids) => onPick(ids[0] ?? null)}
+    />
+  );
+  const ownAddons = unit.pokemon === null ? [] : (addons[unit.pokemon] ?? []);
 
   const npcOptions: ToggleGroupOption[] = [
     { value: 'none', label: labels.npcNone },
@@ -1496,7 +1607,105 @@ export function ListingForm(props: ListingFormProps) {
   const pokemonFields = (
     <div className="ac-listing-form__fields">
       <Field id={ID.pokemon} error={shown[ID.pokemon]} wide>
-        {pokemonCombobox(ID.pokemon, labels.pokemon, unit.pokemon, choosePokemon, true)}
+        {pokemonPicker(ID.pokemon, labels.pokemon, unit.pokemon, choosePokemon)}
+        {roster.state === 'error' ? <p className="ac-listing-form__line">{ui.dataError}</p> : null}
+      </Field>
+      <Field id={ID.ball}>
+        <ItemPicker
+          {...pickerBase}
+          name={ID.ball}
+          label={labels.ball}
+          placeholder={pickers.chooseBall}
+          options={ballChoices}
+          value={one(unit.ball)}
+          optional
+          disabled={itemsData === null}
+          categoryLabel={pickers.category}
+          categoryNames={props.categories}
+          onChange={(ids) => setUnit((current) => ({ ...current, ball: ids[0] ?? null }))}
+        />
+      </Field>
+      <div className="ac-listing-form__wide">
+        <AuraPicker
+          locale={locale}
+          name="lf-auras"
+          label={pickers.auras}
+          noneLabel={labels.auraNone}
+          options={auraSlots}
+          value={unit.auras}
+          hint={ui.pinHint}
+          onChange={(ids) => setUnit((current) => ({ ...current, auras: ids }))}
+        />
+      </div>
+      <div className="ac-listing-form__wide">
+        <AddonPicker
+          locale={locale}
+          name="lf-addons"
+          label={pickers.addons}
+          noneLabel={labels.addonNone}
+          pokemonId={unit.pokemon}
+          options={slotRecords(
+            ownAddons.map((addon) => ({ ...addon, icono: addon.icono ?? null })),
+          )}
+          value={unit.addons}
+          hint={ui.pinHint}
+          onChange={(ids) => setUnit((current) => ({ ...current, addons: ids }))}
+        />
+      </div>
+      {(['x', 'y'] as const).map((ranura) => {
+        const key = ranura === 'x' ? 'heldX' : 'heldY';
+        return (
+          <Field key={ranura} id={`lf-held-${ranura}`}>
+            <HeldPicker
+              {...pickerBase}
+              name={`lf-held-${ranura}`}
+              label={ranura === 'x' ? pickers.heldX : pickers.heldY}
+              placeholder={pickers.chooseHeld}
+              options={itemChoices}
+              ranura={ranura}
+              tierLabel={labels.tier}
+              value={one(unit[key])}
+              optional
+              disabled={itemsData === null}
+              onChange={(ids) => setUnit((current) => ({ ...current, [key]: ids[0] ?? null }))}
+            />
+          </Field>
+        );
+      })}
+      <Field id="lf-mega">
+        <MegaPicker
+          {...pickerBase}
+          name="lf-mega"
+          label={pickers.mega}
+          placeholder={pickers.chooseMega}
+          options={itemChoices}
+          pokemonId={unit.pokemon}
+          value={one(unit.mega)}
+          optional
+          onChange={(ids) => setUnit((current) => ({ ...current, mega: ids[0] ?? null }))}
+        />
+      </Field>
+      <Field id={ID.boost} error={shown[ID.boost]}>
+        {stepper(
+          ID.boost,
+          labels.boost,
+          unit.boost,
+          LIMITS.boost,
+          (boost) => setUnit((current) => ({ ...current, boost })),
+          true,
+        )}
+      </Field>
+      <Field id={ID.starLevel} error={shown[ID.starLevel]}>
+        <StarLevel
+          name={ID.starLevel}
+          label={labels.starLevel}
+          value={unit.starLevel ?? 0}
+          max={LIMITS.starLevel[1]}
+          starLabel={pickers.star}
+          onChange={(starLevel) =>
+            setUnit((current) => ({ ...current, starLevel: starLevel === 0 ? null : starLevel }))
+          }
+        />
       </Field>
       <Field id={ID.nickname} error={shown[ID.nickname]}>
         {textField(
@@ -1507,50 +1716,18 @@ export function ListingForm(props: ListingFormProps) {
           { max: NOMBRE_MAX },
         )}
       </Field>
-      <Field id={ID.ball} error={shown[ID.ball]}>
-        {itemCombobox(
-          ID.ball,
-          labels.ball,
-          unit.ball,
-          (ball) => setUnit((current) => ({ ...current, ball })),
-          BALL_CATEGORY,
-        )}
-      </Field>
-      {auras.length > 0 ? (
-        <div className="ac-listing-form__wide">
-          <ToggleGroup
-            id="lf-aura"
-            variant="sprite"
-            label={labels.aura}
-            labelHidden={false}
-            options={auraOptions}
-            value={unit.aura}
-            onChange={(aura) => setUnit((current) => ({ ...current, aura }))}
-          />
-        </div>
-      ) : null}
-      <Field id={ID.boost} error={shown[ID.boost]}>
-        {numberField(
-          ID.boost,
-          labels.boost,
-          unit.boost,
-          LIMITS.boost,
-          (boost) => setUnit((current) => ({ ...current, boost })),
-          labels.boostHelp,
-        )}
-      </Field>
-      <Field id={ID.starLevel} error={shown[ID.starLevel]}>
-        {numberField(
-          ID.starLevel,
-          labels.starLevel,
-          unit.starLevel,
-          LIMITS.starLevel,
-          (starLevel) => setUnit((current) => ({ ...current, starLevel })),
+      <Field id={ID.nextBoostChance} error={shown[ID.nextBoostChance]}>
+        {textField(
+          ID.nextBoostChance,
+          labels.nextBoostChance,
+          unit.nextBoostChance,
+          (nextBoostChance) => setUnit((current) => ({ ...current, nextBoostChance })),
+          { inputMode: 'decimal' },
         )}
       </Field>
       {reading.ditto ? (
         <Field id={ID.memorySlots} error={shown[ID.memorySlots]}>
-          {numberField(
+          {stepper(
             ID.memorySlots,
             labels.memorySlots,
             unit.memorySlots,
@@ -1562,7 +1739,7 @@ export function ListingForm(props: ListingFormProps) {
       {unit.memories.slice(0, slots).map((memory, index) => (
         // The Memory Slots are a fixed sequence of the Ditto: the position is the identity.
         <Field key={index} id={ID.memory(index)} error={shown[ID.memory(index)]}>
-          {pokemonCombobox(
+          {pokemonPicker(
             ID.memory(index),
             fill(labels.memory, { n: formatInteger(index + 1, locale) }),
             memory,
@@ -1570,98 +1747,67 @@ export function ListingForm(props: ListingFormProps) {
           )}
         </Field>
       ))}
-      <Group legend={labels.heldItems} strong wide>
-        {unit.helds.map((held, index) => (
-          // The held items are the two fixed fields of the Pokémon: the position is the identity.
-          <div key={index} className="ac-listing-form__pair ac-listing-form__pair--tier">
-            <Field id={ID.held(index)} error={shown[ID.held(index)]}>
-              {itemCombobox(
-                ID.held(index),
-                fill(labels.heldItem, { n: formatInteger(index + 1, locale) }),
-                held.name,
-                (name) => setHeld(index, { name }),
-                HELD_CATEGORY,
-              )}
-            </Field>
-            <Field id={ID.heldTier(index)} error={shown[ID.heldTier(index)]}>
-              {numberField(ID.heldTier(index), labels.tier, held.tier, LIMITS.tier, (tier) =>
-                setHeld(index, { tier }),
-              )}
-            </Field>
-          </div>
-        ))}
-      </Group>
-      {reading.addons.length > 0 ? (
-        <Field id={ID.addon}>
-          <Select
-            id={ID.addon}
-            label={labels.addon}
-            options={[
-              { value: '', label: labels.addonNone },
-              ...reading.addons.map((addon) => ({ value: addon.id, label: addon.nombre })),
-            ]}
-            value={unit.addon}
-            onChange={(addon) => setUnit((current) => ({ ...current, addon }))}
-          />
-        </Field>
-      ) : null}
-      <Field id={ID.nextBoostChance} error={shown[ID.nextBoostChance]}>
-        {textField(
-          ID.nextBoostChance,
-          labels.nextBoostChance,
-          unit.nextBoostChance,
-          (nextBoostChance) => setUnit((current) => ({ ...current, nextBoostChance })),
-          { inputMode: 'decimal' },
-        )}
-      </Field>
-      <details
-        className="ac-listing-form__fold ac-listing-form__wide"
-        open={trainingOpen}
-        onToggle={(event) => setTrainingOpen(event.currentTarget.open)}
-      >
-        <summary className="ac-listing-form__fold-summary">
-          {labels.training}
-          <Glyph
-            name="chevron-down"
-            size={16}
-            className="ac-listing-form__fold-chevron ac-listing-form__fold-chevron--closed"
-          />
-          <Glyph
-            name="chevron-up"
-            size={16}
-            className="ac-listing-form__fold-chevron ac-listing-form__fold-chevron--open"
-          />
-        </summary>
-        <div className="ac-listing-form__fold-body">
-          {HABILIDADES.map((skill, index) => {
-            const row = unit.training[index];
-            return (
-              <Group key={skill} legend={skill} strong>
-                <div className="ac-listing-form__pair">
-                  <Field id={ID.trainLevel(index)} error={shown[ID.trainLevel(index)]}>
-                    {numberField(
+      <fieldset className="ac-listing-form__training ac-listing-form__wide">
+        <legend className="ac-listing-form__legend">{labels.training}</legend>
+        <table className="ac-listing-form__train-table">
+          <thead>
+            <tr>
+              <th scope="col">
+                <span className="sr-only">{labels.training}</span>
+              </th>
+              <th scope="col">{labels.level}</th>
+              <th scope="col">{labels.progress}</th>
+              <th scope="col">
+                <span className="sr-only">{labels.training}</span>
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            {HABILIDADES.map((skill, index) => {
+              const row = unit.training[index];
+              const level = within(row.level, LIMITS.level);
+              const progress = percent(row.progress);
+              return (
+                <tr key={skill}>
+                  <th scope="row">{skill}</th>
+                  <td>
+                    {stepper(
                       ID.trainLevel(index),
-                      labels.level,
+                      `${skill} · ${labels.level}`,
                       row.level,
                       LIMITS.level,
-                      (level) => setTraining(index, { level }),
+                      (next) => setTraining(index, { level: next }),
                     )}
-                  </Field>
-                  <Field id={ID.trainProgress(index)} error={shown[ID.trainProgress(index)]}>
-                    {textField(
-                      ID.trainProgress(index),
-                      labels.progress,
-                      row.progress,
-                      (progress) => setTraining(index, { progress }),
-                      { inputMode: 'decimal' },
-                    )}
-                  </Field>
-                </div>
-              </Group>
-            );
-          })}
-        </div>
-      </details>
+                  </td>
+                  <td>
+                    <Field id={ID.trainProgress(index)} error={shown[ID.trainProgress(index)]}>
+                      {textField(
+                        ID.trainProgress(index),
+                        `${skill} · ${labels.progress}`,
+                        row.progress,
+                        (next) => setTraining(index, { progress: next }),
+                        { inputMode: 'decimal', labelHidden: true },
+                      )}
+                    </Field>
+                  </td>
+                  <td>
+                    {level !== null && progress !== null ? (
+                      <TrainingMeter
+                        variant="card"
+                        stat={skill}
+                        level={level}
+                        percent={Number(progress)}
+                        locale={locale}
+                        labels={ui.money}
+                      />
+                    ) : null}
+                  </td>
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
+      </fieldset>
       <div className="ac-listing-form__stack ac-listing-form__wide">
         <ToggleGroup
           id="lf-npc"
@@ -1693,10 +1839,22 @@ export function ListingForm(props: ListingFormProps) {
       pokemonFields
     ) : draft.tipo === 'items' ? (
       <div className="ac-listing-form__fields">
-        <Field id={ID.item} error={shown[ID.item]}>
-          {itemCombobox(ID.item, labels.item, draft.item.name, (name) =>
-            update((current) => ({ ...current, item: { ...current.item, name } })),
-          )}
+        <Field id={ID.item} error={shown[ID.item]} wide>
+          <ItemPicker
+            {...pickerBase}
+            name={ID.item}
+            label={labels.item}
+            placeholder={pickers.chooseItem}
+            options={itemChoices}
+            value={one(draft.item.id)}
+            disabled={itemsData === null}
+            categoryLabel={pickers.category}
+            categoryNames={props.categories}
+            onChange={(ids) => {
+              touch(ID.item);
+              update((current) => ({ ...current, item: { ...current.item, id: ids[0] ?? null } }));
+            }}
+          />
         </Field>
         <Field id={ID.itemQuantity} error={shown[ID.itemQuantity]}>
           {textField(ID.itemQuantity, labels.quantity, draft.item.quantity, (quantity) =>
@@ -1847,46 +2005,87 @@ export function ListingForm(props: ListingFormProps) {
         ? items.state !== 'loading'
         : true;
 
-  const typeOptions: ToggleGroupOption[] = TIPOS_ACTIVO.map((tipo) => {
-    const sprite = sprites.tabs[tipo];
-    return { value: tipo, label: labels.types[tipo], ...(sprite === null ? {} : { sprite }) };
-  });
+  const typeTiles = TIPOS_ACTIVO.map((tipo) => ({
+    value: tipo,
+    label: labels.types[tipo],
+    sprite: sprites.tabs[tipo],
+  }));
 
   return (
     <div className="ac-listing-form">
       <form ref={formRef} className="ac-listing-form__form" noValidate onSubmit={submit}>
-        <ToggleGroup
-          id="lf-type"
-          variant="tab"
-          label={labels.assetType}
-          labelHidden={false}
-          strong
-          options={typeOptions}
+        <ChoiceTiles
+          name="lf-type"
+          label={pickers.assetQuestion}
+          tiles={typeTiles}
           value={draft.tipo}
           onChange={(tipo) => chooseType(looseOneOf(tipo, TIPOS_ACTIVO, draft.tipo))}
         />
         {assetFields}
         {priceFields}
-        {worlds.length > 0 ? (
+        {worlds.length > 1 ? (
           <div className="ac-listing-form__fields">
-            <Field id={ID.world} error={shown[ID.world]}>
-              <Select
-                id={ID.world}
+            <Field id={ID.world} error={shown[ID.world]} wide>
+              <ChipChoice
                 label={labels.world}
+                multiple={false}
                 options={worlds.map((world) => ({ value: world.id, label: world.nombre }))}
-                value={draft.world}
-                onChange={(world) => {
+                value={draft.world === '' ? [] : [draft.world]}
+                onChange={(ids) => {
                   touch(ID.world);
-                  update((current) => ({ ...current, world }));
+                  update((current) => ({ ...current, world: ids[0] ?? '' }));
                 }}
               />
             </Field>
           </div>
         ) : null}
         <div className="ac-listing-form__action">
-          <Button id={ID.copy} type="submit" variant="solid">
+          {props.publish ? (
+            <Button id={ID.publish} type="submit" variant="solid" disabled={publishing}>
+              {props.publish.publish}
+            </Button>
+          ) : null}
+          <Button
+            id={ID.copy}
+            type={props.publish ? 'button' : 'submit'}
+            variant={props.publish ? undefined : 'solid'}
+            onClick={props.publish ? copyForDiscord : undefined}
+          >
             {labels.copy}
           </Button>
+          {blocker !== null ? (
+            <p className="ac-listing-form__line" role="status">
+              {blocker.text}
+              {blocker.link === null ? null : (
+                <>
+                  {' '}
+                  <TextLink href={blocker.link.href}>{blocker.link.label}</TextLink>
+                </>
+              )}
+            </p>
+          ) : null}
+          {published !== null && props.publish ? (
+            <p className="ac-listing-form__line" role="status">
+              {props.publish.published}{' '}
+              <TextLink href={`/${locale}/comercio/anuncio/${published}/`}>
+                {props.publish.view}
+              </TextLink>
+            </p>
+          ) : null}
+          {props.publish && consentOpen ? (
+            <Suspense fallback={null}>
+              <RealMoneyConsent
+                open={consentOpen}
+                onAccept={() => void acceptConsent()}
+                onClose={() => setConsentOpen(false)}
+                labels={props.publish.consent}
+                ui={{ close: props.publish.close, dismiss: ui.dismiss }}
+                busy={publishing}
+                error={consentError}
+                onErrorClose={() => setConsentError(null)}
+              />
+            </Suspense>
+          ) : null}
           <Notice open={copy.state !== 'idle'} onClose={closeNotice} closeLabel={ui.dismiss}>
             {copy.state === 'failed' ? labels.copyFailed : labels.copied}
           </Notice>

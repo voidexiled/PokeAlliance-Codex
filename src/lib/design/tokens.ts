@@ -36,6 +36,18 @@ export const color = {
   ttMuted: '#9aa0a8',
   ttHint: '#8a91a0',
   ttShiny: '#4a9eff',
+  tierUltimate: '#ff6b6b',
+  tierMythic: '#f0abfc',
+  tierLegendary: '#fbbf24',
+  tierUltraRare: '#c4b5fd',
+  tierSuperRare: '#7dd3fc',
+  tierT1: '#f7f7f7',
+  tierT2: '#e2e3e5',
+  tierT3: '#cecfd2',
+  tierT4: '#b8babe',
+  tierT5: '#a6a8ad',
+  tierT6: '#95989d',
+  tierT7: '#85888e',
 } as const;
 
 /** Familias tipográficas (type.families). */

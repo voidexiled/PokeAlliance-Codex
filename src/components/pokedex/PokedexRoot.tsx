@@ -1,15 +1,14 @@
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import '@/styles/components/tier-badge.css';
+
+import { Suspense, lazy, useCallback, useEffect, useMemo, useState } from 'react';
 import type { ReactNode } from 'react';
 
 import { CardGrid } from '@/components/cards/CardGrid';
 import { DexCard } from '@/components/cards/DexCard';
 import type { DexCardDrop, DexCardEntry, DexCardLabels } from '@/components/cards/DexCard';
 import { EmptyState } from '@/components/content/EmptyState';
-import { FilterBar } from '@/components/controls/FilterBar';
-import { Select } from '@/components/controls/Select';
-import type { SelectOption } from '@/components/controls/Select';
-import { ToggleGroup } from '@/components/controls/ToggleGroup';
-import type { ToggleGroupOption } from '@/components/controls/ToggleGroup';
+import { SortSelect } from '@/components/controls/SortSelect';
+import { ElementChip } from '@/components/game/ElementChip';
 import type { ElementChipEntry } from '@/components/game/ElementChip';
 import { EntityList } from '@/components/lists/EntityList';
 import type { EntityListLabels } from '@/components/lists/EntityList';
@@ -18,10 +17,10 @@ import type { ListController } from '@/components/lists/useListState';
 import {
   decodePokedex,
   decodeRefs,
+  tierId,
   pokedexConfig,
   type PokedexData,
   type PokedexIds,
-  type PokedexOption,
   type PokedexRow,
   type PokedexRows,
 } from '@/components/pokedex/config';
@@ -51,11 +50,10 @@ import type { EntityView, ListPage, ListState } from '@/lib/lists/state';
 // `refs` of the file; the props only bring the ones of the first page, already written with
 // their panels.
 //
-// Filters (8.2 step 3): `FilterBar layout="fill"` with the selects «Generación», «Tier» and
-// «Elemento» and the toggle group «Variante», whose values are the ids of `ids` (U3). Each
-// one acts on change through the controller (H1, H3); there is no «Aplicar» and no search
-// field (E3, A22). A filter with fewer than two values narrows nothing and is not drawn
-// (C-R5).
+// Filters (§16.4.2): the chips of ./PokedexFilters.tsx — «Tipo», «Tipo de moveset», «Tier»,
+// «Variante» and «Generación», several values each, whose values are the ids of `ids` (U3).
+// Each one acts on change through the controller (H1, H3); there is no «Aplicar» and no search
+// field (E3, A22). A filter with fewer than two values is not drawn (C-R5).
 //
 // Views (7.7.4):
 //   - Cards: `CardGrid family="pokedex"` of `DexCard`, titles `h2` under the h1 (7.6.2), the
@@ -109,7 +107,11 @@ function dexEntry(
   locale: Locale,
   elements: readonly ElementChipEntry[],
   drops: ReadonlyMap<string, DexCardDrop>,
+  byId?: ReadonlyMap<string, ElementChipEntry>,
+  hint = '',
 ): DexCardEntry {
+  const tierKey = tierId(row.tier);
+  const moveset = row.elementoMoveset == null ? undefined : byId?.get(row.elementoMoveset);
   return {
     name: row.nombre,
     href: `/${locale}/pokedex/${row.id}/`,
@@ -117,7 +119,21 @@ function dexEntry(
     generation: row.generacion,
     art: resolvePokemonImage(row.imagen),
     level: row.nivel,
-    tier: row.tier === null ? null : formatTier(row.tier),
+    // §16.4.2: the tier as the `TierBadge` markup and the «Moveset» chip.
+    tier:
+      tierKey === null ? null : (
+        <span className={`ac-tier-badge ac-tier-badge--${tierKey}`}>{formatTier(row.tier)}</span>
+      ),
+    moveset:
+      moveset === undefined ? null : (
+        <ElementChip
+          element={moveset}
+          variant="chip"
+          placement="down"
+          locale={locale}
+          hint={hint}
+        />
+      ),
     role: row.funcion,
     variant: row.variante === 'shiny' || row.variante === 'normal' ? row.variante : null,
     elements,
@@ -142,10 +158,8 @@ function counted(template: MessageLeaf, n: number, locale: Locale): string {
   return fill(chosen, { n: formatInteger(n, locale) });
 }
 
-/** The first option, which leaves the filter open («Todas», «Todos»), then the registry's. */
-function selectOptions(all: string, options: readonly PokedexOption[]): SelectOption[] {
-  return [{ value: '', label: all }, ...options.map(([value, label]) => ({ value, label }))];
-}
+/** The filter chips (§16.4.2), a chunk of their own that the server still renders (13.6). */
+const PokedexFilters = lazy(() => import('@/components/pokedex/PokedexFilters'));
 
 // --------------------------------------------------------------------- the deferred part
 //
@@ -199,7 +213,19 @@ export function PokedexRoot({
     setRefs({ ...decodeRefs(json), rows });
     return rows;
   }, []);
-  const config = useMemo(() => pokedexConfig(dataUrl, ids), [dataUrl, ids]);
+  const sortLabels = useMemo(
+    () => ({
+      numero: pokedex.sort.number,
+      nombre: pokedex.sort.name,
+      tier: pokedex.sort.tier,
+      requisito: pokedex.sort.requirement,
+    }),
+    [pokedex.sort],
+  );
+  const config = useMemo(
+    () => pokedexConfig(dataUrl, ids, locale, sortLabels),
+    [dataUrl, ids, locale, sortLabels],
+  );
   const items = useMemo(() => decodePokedex(data), [data]);
   const controller = useListState(config, { items, total, decode, path });
   const shown = controller.page.items;
@@ -276,7 +302,8 @@ export function PokedexRoot({
   // sorting and paginating, the same call the build makes for a static grid. The Lista
   // takes its columns from it too.
   const layout: DexLayout = useMemo(
-    () => dexLayout(shown.map((row) => dexEntry(row, locale, rowElements(row, byId), byItem))),
+    () =>
+      dexLayout(shown.map((row) => dexEntry(row, locale, rowElements(row, byId), byItem, byId))),
     [shown, locale, byId, byItem],
   );
 
@@ -286,48 +313,24 @@ export function PokedexRoot({
     level: ui.tooltip.level,
     tier: ui.tooltip.tier,
     role: ui.tooltip.role,
+    moveset: pokedex.moveset,
     shiny: ui.shiny,
   };
 
   // ------------------------------------------------------------------------------ filters
   const text = pokedex.filters;
-  const variantOptions: ToggleGroupOption[] = [
-    { value: '', label: text.allVariants },
-    ...ids.variants.map((variant): ToggleGroupOption =>
-      variant === 'shiny'
-        ? { value: variant, label: ui.shiny, sprite: 'shiny' }
-        : { value: variant, label: ui.cards.normal },
-    ),
-  ];
-  const select = (key: string, label: string, all: string, options: readonly PokedexOption[]) =>
-    options.length > 1 ? (
-      <Select
-        label={label}
-        options={selectOptions(all, options)}
-        value={filters[key] ?? ''}
-        onChange={(value) => controller.setFilter(key, value || null)}
-      />
-    ) : null;
+  // §16.4.2: the chips of `PokemonPicker`'s panel, in its order, all of several values (OR
+  // within a filter, AND between them). A filter with fewer than two values is not drawn.
   const controls = (
-    <FilterBar layout="fill">
-      {select(
-        'gen',
-        text.generation,
-        text.allGenerations,
-        ids.generations.map((n): PokedexOption => [n, fill(ui.cards.generation, { n })]),
-      )}
-      {select('tier', text.tier, text.allTiers, ids.tiers)}
-      {select('elemento', text.element, text.allElements, ids.elements)}
-      {ids.variants.length > 1 ? (
-        <ToggleGroup
-          label={text.variant}
-          labelHidden={false}
-          options={variantOptions}
-          value={filters.variante ?? ''}
-          onChange={(value) => controller.setFilter('variante', value || null)}
-        />
-      ) : null}
-    </FilterBar>
+    <Suspense fallback={null}>
+      <PokedexFilters
+        ids={ids}
+        filters={filters}
+        onChange={controller.setFilter}
+        text={text}
+        normalLabel={ui.cards.normal}
+      />
+    </Suspense>
   );
 
   const lazy = (index: number) => (index >= EAGER_ART ? 'lazy' : undefined);
@@ -350,7 +353,7 @@ export function PokedexRoot({
           <DexCard
             key={row.id}
             id={anchor(row)}
-            entry={dexEntry(row, locale, elementsOf(row), byItem)}
+            entry={dexEntry(row, locale, elementsOf(row), byItem, byId, ui.pinHint)}
             layout={layout}
             labels={dexLabels}
             locale={locale}
@@ -387,6 +390,17 @@ export function PokedexRoot({
       </EmptyState>
     );
 
+  // §16.4.2: «Número», «Nombre», «Tier (mejor primero)» and «Requisito»; `Select` renders
+  // nothing under two orders, but the Pokédex always has four.
+  const sort = (
+    <SortSelect
+      label={ui.sortBy}
+      options={config.sorts.map((option) => ({ value: option.id, label: option.label }))}
+      value={controller.state.sort}
+      onChange={(value) => controller.setSort(value)}
+    />
+  );
+
   return (
     <EntityList
       controller={list}
@@ -395,6 +409,7 @@ export function PokedexRoot({
       empty={empty}
       views={views}
       controls={controls}
+      sort={sort}
       paginationAlign="center"
     />
   );

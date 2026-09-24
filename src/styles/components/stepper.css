@@ -1,0 +1,98 @@
+/* Stepper (spec 16.3.4). Per-component sheet (§13.6): Stepper.tsx imports it. */
+
+@layer properties, theme, base, components, utilities;
+
+@layer components {
+  .ac-stepper {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-6);
+  }
+
+  .ac-stepper__label {
+    color: var(--text-secondary);
+    font: 600 13px/16px var(--font-sans); /* sin token: pixel-exact game slot geometry */
+  }
+
+  .ac-stepper__row {
+    display: inline-flex;
+    align-self: flex-start;
+    align-items: stretch;
+    height: var(--size-control);
+    overflow: hidden;
+    border: 1px solid var(--border-primary);
+    border-radius: var(--radius-8);
+    background: var(--bg-secondary);
+  }
+
+  .ac-stepper__btn {
+    position: relative;
+    display: grid;
+    place-items: center;
+    width: var(--size-control);
+    border: 0;
+    background: var(--bg-tertiary);
+    color: var(--text-secondary);
+    cursor: pointer;
+  }
+  .ac-stepper__btn:hover:not(:disabled) {
+    background: var(--bg-quaternary);
+    color: var(--text-primary);
+  }
+  .ac-stepper__btn:disabled {
+    color: var(--text-quinary);
+    cursor: not-allowed;
+  }
+
+  .ac-stepper__minus,
+  .ac-stepper__plus {
+    position: relative;
+    width: 12px; /* sin token: pixel-exact game slot geometry */
+    height: 2px;
+    border-radius: 1px;
+    background: currentColor;
+  }
+  .ac-stepper__plus::after {
+    position: absolute;
+    inset: 0;
+    border-radius: 1px;
+    background: currentColor;
+    transform: rotate(90deg);
+    content: '';
+  }
+
+  .ac-stepper__input {
+    width: 56px; /* sin token: pixel-exact game slot geometry */
+    border: 0;
+    border-inline: 1px solid var(--border-primary);
+    background: var(--bg-primary);
+    color: var(--text-primary);
+    font: 700 15px/1 var(--font-sans); /* sin token: pixel-exact game slot geometry */
+    font-variant-numeric: tabular-nums;
+    text-align: center;
+    appearance: textfield;
+  }
+  .ac-stepper__input::-webkit-inner-spin-button,
+  .ac-stepper__input::-webkit-outer-spin-button {
+    margin: 0;
+    appearance: none;
+  }
+
+  .ac-stepper__slider {
+    width: 100%;
+    max-width: 320px; /* sin token: pixel-exact game slot geometry */
+    height: 20px; /* sin token: pixel-exact game slot geometry */
+    background: transparent;
+    accent-color: var(--selected);
+    cursor: pointer;
+  }
+
+  @media (pointer: coarse) {
+    .ac-stepper__row {
+      height: var(--size-touch);
+    }
+    .ac-stepper__btn {
+      width: var(--size-touch);
+    }
+  }
+}

@@ -152,7 +152,7 @@ export function clearFilters(path: string, label: string): ReactNode {
  * The panel of a slot and of a Lista name (7.5.3): Requisito, Tier, Elementos, Generación and
  * Rol. A name here is already in the page's language, the only one the builder reads.
  */
-function tipOf(row: PokedexRow, context: PokedexViewContext): TipData {
+export function tipOf(row: PokedexRow, context: PokedexViewContext): TipData {
   const { locale, names, ui } = context;
   return pokemonTip(
     {
@@ -262,6 +262,7 @@ export function pokedexList(page: ListPage<PokedexRow>, context: PokedexViewCont
     requirement: ui.tooltip.requirement,
     role: ui.tooltip.role,
     variant: ui.cards.variant,
+    moveset: pokedex.moveset,
   };
   const listKeys = LIST_KEYS.filter((key) => layout.keys.includes(key));
   const withElements = layout.zones.includes('elements');
@@ -274,7 +275,11 @@ export function pokedexList(page: ListPage<PokedexRow>, context: PokedexViewCont
       width: withElements ? LIST_WIDTHS.name : undefined,
     },
     ...(withElements ? [{ key: 'elements', label: ui.tooltip.elements }] : []),
-    ...listKeys.map((key) => ({ key, label: headers[key], width: LIST_WIDTHS[key] })),
+    ...listKeys.map((key) => ({
+      key,
+      label: headers[key],
+      width: (LIST_WIDTHS as Partial<Record<string, number>>)[key],
+    })),
   ];
 
   const variant = page.state.filters.variante;

@@ -39,6 +39,55 @@
       "modo": "estatico",
       "borrador": true
     },
+    "ui/auras/premier": {
+      "archivo": "ui/auras/premier.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico",
+      "borrador": true
+    },
+    "ui/auras/alliance": {
+      "archivo": "ui/auras/alliance.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico",
+      "borrador": true
+    },
+    "ui/auras/christmas-2024": {
+      "archivo": "ui/auras/christmas-2024.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico",
+      "borrador": true
+    },
+    "ui/auras/halloween-2025": {
+      "archivo": "ui/auras/halloween-2025.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico",
+      "borrador": true
+    },
+    "ui/auras/solo-leveling": {
+      "archivo": "ui/auras/solo-leveling.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico",
+      "borrador": true
+    },
+    "ui/auras/digimon-red-aura": {
+      "archivo": "ui/auras/digimon-red-aura.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico",
+      "borrador": true
+    },
+    "ui/auras/killua-god-speed": {
+      "archivo": "ui/auras/killua-god-speed.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico",
+      "borrador": true
+    },
     "ui/inicio": {
       "archivo": "ui/balls/alliance-ball.png",
       "frame": [32, 32],

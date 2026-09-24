@@ -243,6 +243,35 @@ export const es = {
       'Resultados de búsqueda de la wiki de PokeAlliance: Pokémon, ítems, sistemas y páginas.',
     count: { one: '{n} resultado', other: '{n} resultados' },
   },
+  // `EntityPicker`, `EntitySlot` and `TierBadge` (§16.1, §16.3.1, §16.3.2, §16.3.6): the same
+  // texts everywhere a game entity is chosen (Pokémon, ball, held, aura, addon, Mega Stone or
+  // ítem). `choose` is the empty trigger, `{entity}` the entity's own name («Pokémon», «Ball»…);
+  // `chosenCount` is the tray count; `none`/`noneFeminine` is the first slot of an optional
+  // single choice («Ninguno») or of an inline `AuraPicker`/`AddonPicker` («Ninguna»); `remove` is
+  // the «×» of the trigger and of a tray slot; `filters` are the chips shared by `PokemonPicker`
+  // and the Pokédex (§16.4.2).
+  picker: {
+    choose: 'Elegir {entity}',
+    chosen: 'Elegido: {entity}',
+    chosenCount: { one: '{n} elegida', other: '{n} elegidas' },
+    done: 'Listo',
+    none: 'Ninguno',
+    remove: 'Quitar',
+    removeItem: 'Quitar {name}',
+    search: 'Buscar',
+    resultsCount: { one: '{n} resultado', other: '{n} resultados' },
+    noMatches: 'No hay coincidencias.',
+    clearFilters: 'Limpiar filtros',
+    filters: {
+      tier: 'Tier',
+      type: 'Tipo',
+      allTypes: 'Todos',
+      movesetType: 'Tipo de moveset',
+      variant: 'Variante',
+      generation: 'Generación',
+      slot: 'Ranura',
+    },
+  },
   // Pokédex (§8.2): the description of the page (§13.5, `{n}` the variants of
   // the registry), the count of the results bar by Variante, the empty state
   // with its one action, and the captions and fixed column headers of the
@@ -271,15 +300,22 @@ export const es = {
     // `FilterBar` of step 3 (§8.2, P-10, P-11): the visible label of each filter
     // and its first option, which clears it. The Spanish option agrees with its
     // label: «Todas» for Generación and Variante, «Todos» for Tier and Elemento.
+    // «Moveset» fact of the card (§16.4.2), a game term (13.4).
+    moveset: 'Moveset',
     filters: {
       generation: 'Generación',
-      allGenerations: 'Todas',
       tier: 'Tier',
-      allTiers: 'Todos',
       element: 'Elemento',
-      allElements: 'Todos',
       variant: 'Variante',
-      allVariants: 'Todas',
+      // Tipo de moveset (§16.2.2, §16.4.2): oculto sin datos (C-R5, D-R5).
+      movesetType: 'Tipo de moveset',
+    },
+    // `SortSelect` (§16.4.2): «Número» es el orden de hoy y no lleva texto propio.
+    sort: {
+      number: 'Número',
+      name: 'Nombre',
+      tier: 'Tier (mejor primero)',
+      requirement: 'Requisito',
     },
   },
   // Pokémon page (§8.3). Whatever `ui` already carries is read from there: the
@@ -303,6 +339,8 @@ export const es = {
     // colon that `GameTooltip` adds.
     hp: 'HP',
     experience: 'Experiencia',
+    // Moveset (§16.2.2, §16.4.2): el chip de `elementoMoveset` en la ficha. Oculto sin dato.
+    moveset: 'Moveset',
     // Outfit panel and its Aura group (§8.3 step 3, D-11 to D-16). `outfitAlt`
     // is the alt of the idle south frame; `auraBall` names the ball drawn over
     // the panel with an aura on; `auraUnavailable` shows only without WebGL.
@@ -397,6 +435,10 @@ export const es = {
     columnSprite: 'Sprite',
     columnItem: 'Ítem',
     droppedByCount: { one: '{n} Pokémon', other: '{n} Pokémon' },
+    // §16.4.1: la página pasa a dos vistas, «Ranuras» (inventario del juego) y «Lista»; la
+    // vista Cards desaparece. `searchPlaceholder` es el campo «Buscar ítem» de la página.
+    searchPlaceholder: 'Buscar ítem',
+    noResults: 'Ningún ítem coincide con la búsqueda.',
   },
   // Sistemas (§8.4). The index of template D (8.4.1): its h1, which is also the
   // single crumb and the group crumb of every system page (8.0.4), the
@@ -1049,6 +1091,7 @@ export const es = {
     // rows of a listing tooltip (9.5.9) and of its sheet (9.6), and the Lista columns «Dinero
     // real», «En el juego» and «Vendedor».
     listing: {
+      equipment: 'Equipo',
       keys: {
         requirement: 'Requisito',
         tier: 'Tier',
@@ -1198,7 +1241,7 @@ export const es = {
         noPrice: 'Indica un precio o marca «A convenir».',
         priceOption: 'Esa opción de precio no es válida para este anuncio.',
         world: 'Elige un mundo.',
-        item: 'Escribe el nombre del item.',
+        item: 'Elige un ítem.',
       },
     },
     // The copied text (9.7.7, CA-9.12): one «{label}: {value}» line per declared fact, in the
@@ -1276,6 +1319,7 @@ export const es = {
       discord: 'Vincula Discord para usar Comercio.',
       discordAge: 'Comercio pide una cuenta de Discord con al menos {days} días.',
       consent: 'Acepta el aviso de dinero real para continuar.',
+      // Canal de contacto visible, requisito de publicar (§16.4.4 paso 6, §9.15.2).
       publish:
         'Para publicar necesitas una cuenta completa, 18 años o más, una cuenta de Discord vinculada con al menos {days} días y un canal de contacto verificado y visible.',
       goToAccount: 'Ir a mi cuenta',
@@ -1305,6 +1349,17 @@ export const es = {
       release: 'Quitar reserva',
       complete: 'Marcar completado',
       withdraw: 'Retirar',
+    },
+    // El formulario guiado de §16.4.4 paso 6: con COMERCIO_PUBLICO la acción principal es
+    // «Publicar anuncio»; sin sesión, «Inicia sesión para publicar»; «Copiar texto para
+    // Discord» queda siempre como acción secundaria (sin COMERCIO_PUBLICO, la única).
+    composer: {
+      published: 'Anuncio publicado.',
+      view: 'Ver anuncio',
+      assetQuestion: '¿Qué vendes?',
+      publish: 'Publicar anuncio',
+      signInToPublish: 'Inicia sesión para publicar',
+      copyDiscord: 'Copiar texto para Discord',
     },
     // «Contactar al vendedor» (9.10) on a detail and the `Notice` once the deal exists; `{number}`
     // is the deal number, `OP-` and 6 digits (9.15.4).

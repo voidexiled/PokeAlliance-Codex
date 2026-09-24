@@ -32,7 +32,7 @@ import type { ElementChipEntry } from '@/components/game/ElementChip';
 import {
   ALL_CATEGORY,
   ITEMS_FIELDS,
-  ITEMS_PAGE_SIZE,
+  ITEMS_PROPS_ROWS,
   decodeItems,
   dropperEntity,
   elementChip,
@@ -145,6 +145,8 @@ export function buildItemsData(locale: Locale): ItemsData {
       elemento,
       uso: record.uso?.[locale] ?? null,
       dropDe: by.length > 0 ? by.map((entry) => entry.id) : null,
+      held: record.held ?? null,
+      mega: record.mega ?? null,
     };
     return ITEMS_FIELDS.map((field) => values[field]);
   });
@@ -203,7 +205,7 @@ export function itemsFirstPage(data: ItemsData, category: string): ItemsFirstPag
       ? [{ row, fila: data.filas[index] }]
       : [],
   );
-  const first = kept.slice(0, ITEMS_PAGE_SIZE);
+  const first = kept.slice(0, ITEMS_PROPS_ROWS);
   const rows = first.map((entry) => entry.row);
   return {
     data: {

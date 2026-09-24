@@ -29,7 +29,8 @@ import {
 const data = buildPokedexData('es');
 const rows = decodePokedex(data);
 const ids = pokedexIds(rows, data.refs.elementos);
-const config = pokedexConfig('/es/pokedex/datos.json', ids);
+const sortLabels = { numero: 'Número', nombre: 'Nombre', tier: 'Tier', requisito: 'Requisito' };
+const config = pokedexConfig('/es/pokedex/datos.json', ids, 'es', sortLabels);
 
 describe('datos.json (PR5)', () => {
   it('writes every record once, in the order of 8.0.5', () => {

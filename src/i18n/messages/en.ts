@@ -147,6 +147,28 @@ export const en: Messages = {
     description: 'Search results from the PokeAlliance wiki: Pokémon, items, systems and pages.',
     count: { one: '{n} result', other: '{n} results' },
   },
+  picker: {
+    choose: 'Choose {entity}',
+    chosen: 'Chosen: {entity}',
+    chosenCount: { one: '{n} chosen', other: '{n} chosen' },
+    done: 'Done',
+    none: 'None',
+    remove: 'Remove',
+    removeItem: 'Remove {name}',
+    search: 'Search',
+    resultsCount: { one: '{n} result', other: '{n} results' },
+    noMatches: 'No matches.',
+    clearFilters: 'Clear filters',
+    filters: {
+      tier: 'Tier',
+      type: 'Type',
+      allTypes: 'All',
+      movesetType: 'Moveset type',
+      variant: 'Variant',
+      generation: 'Generation',
+      slot: 'Slot',
+    },
+  },
   pokedex: {
     description:
       'All {n} PokeAlliance Pokémon variants with required level, tier, elements and role.',
@@ -161,15 +183,20 @@ export const en: Messages = {
     columnSprite: 'Sprite',
     columnNumber: 'No.',
     columnName: 'Name',
+    // «Moveset» fact of the card (§16.4.2), a game term (13.4).
+    moveset: 'Moveset',
     filters: {
       generation: 'Generation',
-      allGenerations: 'All',
       tier: 'Tier',
-      allTiers: 'All',
       element: 'Element',
-      allElements: 'All',
       variant: 'Variant',
-      allVariants: 'All',
+      movesetType: 'Moveset type',
+    },
+    sort: {
+      number: 'Number',
+      name: 'Name',
+      tier: 'Tier (best first)',
+      requirement: 'Requirement',
     },
   },
   pokemon: {
@@ -180,6 +207,7 @@ export const en: Messages = {
     descriptionRole: 'role {role}',
     hp: 'HP',
     experience: 'Experience',
+    moveset: 'Moveset',
     outfit: 'Outfit',
     outfitAlt: '{name}, South',
     aura: 'Aura',
@@ -239,6 +267,8 @@ export const en: Messages = {
     columnSprite: 'Sprite',
     columnItem: 'Item',
     droppedByCount: { one: '{n} Pokémon', other: '{n} Pokémon' },
+    searchPlaceholder: 'Search item',
+    noResults: 'No item matches the search.',
   },
   systems: {
     title: 'Systems',
@@ -746,6 +776,7 @@ export const en: Messages = {
       reviews: 'Reviews from 1 to 5 both ways, only for deals both sides confirmed',
     },
     listing: {
+      equipment: 'Equipment',
       keys: {
         requirement: 'Requirement',
         tier: 'Tier',
@@ -859,7 +890,7 @@ export const en: Messages = {
         noPrice: 'Enter a price or choose “Negotiable”.',
         priceOption: "That price option isn't valid for this listing.",
         world: 'Choose a world.',
-        item: 'Enter the item name.',
+        item: 'Choose an item.',
       },
     },
     copy: {
@@ -936,6 +967,14 @@ export const en: Messages = {
       release: 'Remove reservation',
       complete: 'Mark completed',
       withdraw: 'Withdraw',
+    },
+    composer: {
+      published: 'Listing published.',
+      view: 'View listing',
+      assetQuestion: 'What are you selling?',
+      publish: 'Publish listing',
+      signInToPublish: 'Sign in to publish',
+      copyDiscord: 'Copy text for Discord',
     },
     contactSeller: 'Contact seller',
     dealStarted: 'Deal {number} started.',

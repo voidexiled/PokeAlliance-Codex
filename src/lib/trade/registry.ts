@@ -32,8 +32,6 @@ import {
   ESTADOS_ANUNCIO,
   ESTADOS_PRESENCIA,
   HABILIDADES,
-  HELD_TIER_MAX,
-  HELDS_MAX,
   MEMORY_SLOTS_MAX,
   MONEDAS_JUEGO,
   MONEDAS_REALES,
@@ -109,7 +107,6 @@ const instante = z.string().regex(pattern(defs.instante.pattern));
 const importe = z.string().regex(pattern(defs.importe.pattern));
 const porcentaje = z.string().regex(pattern(defs.porcentaje.pattern));
 const nombreDeclarado = z.string().regex(pattern(defs.nombreDeclarado.pattern));
-const nombreItem = z.string().regex(pattern(defs.nombreItem.pattern));
 const nombreVendedor = z.string().regex(pattern(defs.nombreVendedor.pattern));
 const codigoPais = z.string().regex(pattern(defs.codigoPais.pattern));
 const plataforma = z.string().regex(pattern(defs.plataforma.pattern));
@@ -138,25 +135,25 @@ const precio = z
     }
   });
 
+/** A list of registry ids without repeats. */
+const idSet = z
+  .array(slug)
+  .max(32)
+  .refine((ids) => new Set(ids).size === ids.length, 'ids repetidos');
+
 const unidadPokemon = z.strictObject({
   pokemon: slug,
-  ball: z.strictObject({ item: slug.nullable(), nombre: nombreDeclarado }).nullable(),
-  aura: slug.nullable(),
+  ball: slug.nullable(),
+  auras: idSet,
+  addons: idSet,
+  heldX: slug.nullable(),
+  heldY: slug.nullable(),
+  mega: slug.nullable(),
   boost: z.number().int().min(0).max(BOOST_MAX).nullable(),
   starLevel: z.number().int().min(0).max(STAR_LEVEL_MAX).nullable(),
   nickname: nombreDeclarado.nullable(),
   memorySlots: z.number().int().min(1).max(MEMORY_SLOTS_MAX).nullable(),
   memorias: z.array(slug.nullable()).max(MEMORY_SLOTS_MAX),
-  helds: z
-    .array(
-      z.strictObject({
-        item: slug.nullable(),
-        nombre: nombreDeclarado,
-        tier: z.number().int().min(1).max(HELD_TIER_MAX),
-      }),
-    )
-    .max(HELDS_MAX),
-  addon: z.strictObject({ id: slug.nullable(), nombre: nombreItem }).nullable(),
   nextBoostChance: porcentaje.nullable(),
   entrenamiento: z
     .array(
@@ -192,7 +189,7 @@ export const anuncioSchema: z.ZodType<Anuncio> = z.discriminatedUnion('tipo', [
   z.strictObject({
     ...anuncioBase,
     tipo: z.literal('items'),
-    item: z.strictObject({ item: slug.nullable(), nombre: nombreItem, cantidad }),
+    item: z.strictObject({ item: slug, cantidad }),
   }),
   z.strictObject({ ...anuncioBase, tipo: z.literal('diamonds'), cantidad }),
   z.strictObject({ ...anuncioBase, tipo: z.literal('pokedolares'), cantidad }),

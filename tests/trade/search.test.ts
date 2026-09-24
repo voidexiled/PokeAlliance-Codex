@@ -39,6 +39,7 @@ const NAMES: ListingNames = {
   aura: (id) => AURAS[id],
   mundo: (id) => MUNDOS[id],
   vendedor: (handle) => VENDEDORES[handle],
+  heldTier: (id) => (id === 'x-attack' ? 5 : undefined),
 };
 
 type Listing = ListingSearchInput & { id: string };
@@ -47,14 +48,16 @@ function unidad(pokemon: string, declared: Partial<UnidadPokemon> = {}): UnidadP
   return {
     pokemon,
     ball: null,
-    aura: null,
+    auras: [],
+    addons: [],
+    heldX: null,
+    heldY: null,
+    mega: null,
     boost: null,
     starLevel: null,
     nickname: null,
     memorySlots: null,
     memorias: [],
-    helds: [],
-    addon: null,
     nextBoostChance: null,
     entrenamiento: [],
     precioNpc: null,
@@ -78,12 +81,12 @@ const LISTINGS: Listing[] = [
     vendedor: 'vendedor-alfa',
     pokemon: unidad('shiny-ditto', {
       nickname: 'S U S A N O O',
-      ball: { item: 'premier-ball', nombre: 'Premier Ball' },
+      ball: 'premier-ball',
       boost: 20,
       starLevel: 3,
       memorySlots: 6,
       memorias: ['charizard', 'gengar', null, null, null, null],
-      helds: [{ item: 'x-attack', nombre: 'X-Attack', tier: 5 }],
+      heldX: 'x-attack',
     }),
     precio: precio({
       real: { moneda: 'BRL', importe: '90' },
@@ -95,12 +98,12 @@ const LISTINGS: Listing[] = [
   },
   listing('charizard-boost-2', {
     tipo: 'pokemon',
-    pokemon: unidad('charizard', { boost: 2, aura: 'premier' }),
+    pokemon: unidad('charizard', { boost: 2, auras: ['premier'] }),
     precio: precio({ juego: [{ tipo: 'pokedolares', cantidad: 30_000_000 }] }),
   }),
   listing('charizard-boost-25', {
     tipo: 'pokemon',
-    pokemon: unidad('charizard', { boost: 25, ball: { item: 'ultra-ball', nombre: 'Ultra Ball' } }),
+    pokemon: unidad('charizard', { boost: 25, ball: 'ultra-ball' }),
     precio: precio({ real: { moneda: 'USD', importe: '20' } }),
   }),
   listing('bulbasaur-boost-0', {
@@ -115,7 +118,7 @@ const LISTINGS: Listing[] = [
   }),
   listing('fire-stone', {
     tipo: 'items',
-    item: { item: 'fire-stone', nombre: 'fire stone', cantidad: 1500 },
+    item: { item: 'fire-stone', cantidad: 1500 },
     precio: precio({ juego: [{ tipo: 'diamonds', cantidad: 400 }] }),
   }),
   listing('diamonds-2400', {

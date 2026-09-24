@@ -672,8 +672,8 @@ test.describe('Tier list (8.8)', () => {
         pokedex.filters.element,
       ]);
       await expect(selects.locator('[role="combobox"]')).toHaveText([
-        pokedex.filters.allGenerations,
-        pokedex.filters.allElements,
+        (pokedex.filters as unknown as Record<string, string>).allGenerations,
+        (pokedex.filters as unknown as Record<string, string>).allElements,
       ]);
       const variant = root.locator('.ac-filter-bar .ac-toggle-group');
       await expect(variant).toContainText(pokedex.filters.variant);
@@ -691,12 +691,12 @@ test.describe('Tier list (8.8)', () => {
         (a, b) => a - b,
       );
       await expect(selects.nth(0).locator('[role="option"]')).toHaveText([
-        pokedex.filters.allGenerations,
+        (pokedex.filters as unknown as Record<string, string>).allGenerations,
         ...generations.map((n) => fill(ui.cards.generation, { n: String(n) })),
       ]);
       const used = new Set(rows.flatMap((record) => record.elementos));
       await expect(selects.nth(1).locator('[role="option"]')).toHaveText([
-        pokedex.filters.allElements,
+        (pokedex.filters as unknown as Record<string, string>).allElements,
         ...ELEMENTS.filter((element) => used.has(element.id)).map(
           (element) => element.nombre[locale],
         ),

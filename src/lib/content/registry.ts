@@ -192,6 +192,28 @@ export function getItem(id: string): Item | undefined {
 }
 
 /**
+ * Helds of one slot (§16.2.3, `HeldPicker`): items with `categoria === "helds"` and
+ * `held.ranura` equal to `ranura`, in the order of the file. Every item of `categoria`
+ * `"helds"` has `held` (the schema requires it), so no extra filter is needed.
+ */
+export function getHeldsBySlot(ranura: 'x' | 'y'): Item[] {
+  return getItems('helds').filter((item) => item.held?.ranura === ranura);
+}
+
+/**
+ * Mega Stones (§16.2.3, `MegaPicker`): items of any category with a `mega` object, in the
+ * order of the registry; when `pokemon` is given, the Mega Stones of that Pokémon come first
+ * (§16.3.3), the rest keep the registry order.
+ */
+export function getMegaStones(pokemon?: string): Item[] {
+  const stones = getItems().filter((item) => item.mega !== undefined);
+  if (pokemon === undefined) return stones;
+  const own = stones.filter((item) => item.mega?.pokemon.includes(pokemon));
+  const rest = stones.filter((item) => !item.mega?.pokemon.includes(pokemon));
+  return [...own, ...rest];
+}
+
+/**
  * The `moneda` object of content/items/diamantes.json (§3.13): where players buy Diamonds and what
  * they spend them on, one list per locale. Its lists are the rows of the Diamonds panel
  * (`diamondsTip`, §7.5.3) and the facts «Se compran en» and «Se usan en» of a Diamonds listing

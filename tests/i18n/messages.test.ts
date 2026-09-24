@@ -35,6 +35,7 @@ describe('the dictionaries of es and en', () => {
       'shell',
       'home',
       'search',
+      'picker',
       'pokedex',
       'pokemon',
       'tiers',

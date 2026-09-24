@@ -23,14 +23,16 @@ function unidad(pokemon: string, nickname: string | null = null): UnidadPokemon 
   return {
     pokemon,
     ball: null,
-    aura: null,
+    auras: [],
+    addons: [],
+    heldX: null,
+    heldY: null,
+    mega: null,
     boost: null,
     starLevel: null,
     nickname,
     memorySlots: null,
     memorias: [],
-    helds: [],
-    addon: null,
     nextBoostChance: null,
     entrenamiento: [],
     precioNpc: null,
@@ -54,21 +56,19 @@ describe('listingTitle', () => {
     }
   });
 
-  it('names an item by its registry name when matched, without its quantity', () => {
+  it('names an item by its registry name, without its quantity', () => {
     const matched: ListingTitleInput = {
       tipo: 'items',
-      item: { item: 'fire-stone', nombre: 'fire stone', cantidad: 1500 },
+      item: { item: 'fire-stone', cantidad: 1500 },
     };
     const declared: ListingTitleInput = {
       tipo: 'items',
-      item: { item: null, nombre: 'Declared Item', cantidad: 3 },
+      item: { item: 'no-record', cantidad: 3 },
     };
     for (const locale of LOCALES) {
       expect(title(matched, locale)).toEqual({ texto: 'Fire Stone', accesible: 'Fire Stone' });
-      expect(title(declared, locale)).toEqual({
-        texto: 'Declared Item',
-        accesible: 'Declared Item',
-      });
+      // 16.2.5: no declared name; an id without a record has no title.
+      expect(title(declared, locale)).toEqual({ texto: UNKNOWN, accesible: UNKNOWN });
     }
   });
 
@@ -117,7 +117,7 @@ describe('listingTitle', () => {
     expect(title({ tipo: 'pokemon', pokemon: unidad('sin-registro') }, 'es')).toEqual(unknown);
     expect(title({ tipo: 'pokemon', pokemon: unidad('') }, 'es')).toEqual(unknown);
     expect(title({ tipo: 'pokemon' }, 'es')).toEqual(unknown);
-    expect(title({ tipo: 'items', item: { item: null, nombre: ' ', cantidad: 1 } }, 'es')).toEqual(
+    expect(title({ tipo: 'items', item: { item: 'no-record', cantidad: 1 } }, 'es')).toEqual(
       unknown,
     );
     expect(title({ tipo: 'diamonds' }, 'es')).toEqual(unknown);

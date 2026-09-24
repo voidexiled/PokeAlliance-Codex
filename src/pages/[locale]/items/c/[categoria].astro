@@ -36,13 +36,7 @@ import {
 import { PageTitle } from '@/components/layout/PageTitle';
 import PageLayout from '@/layouts/PageLayout.astro';
 
-import {
-  buildItemsData,
-  itemTabs,
-  itemsDroppers,
-  itemsElements,
-  itemsFirstPage,
-} from '../datos.json.ts';
+import { buildItemsData, itemTabs, itemsFirstPage } from '../datos.json.ts';
 
 export const prerender = true;
 
@@ -84,6 +78,8 @@ const labels: ItemsListLabels = {
   sprite: copy.columnSprite,
   item: copy.columnItem,
   droppedByCount: copy.droppedByCount,
+  search: copy.searchPlaceholder,
+  noResults: copy.noResults,
 };
 ---
 
@@ -106,8 +102,8 @@ const labels: ItemsListLabels = {
         data={first.data}
         total={first.total}
         categories={[current]}
-        elements={itemsElements(first.rows, first.data.refs, locale, messages.ui.tooltip)}
-        droppers={itemsDroppers(first.rows, first.data.refs, locale, messages.ui.tooltip)}
+        elements={[]}
+        droppers={{}}
         title={title}
         caption={fill(copy.caption, { category: title })}
         ui={messages.ui}

@@ -138,14 +138,14 @@ function birthDate(years: number): string {
 const gameListing = {
   asset_type: 'items',
   world_key: worldId,
-  asset: { item: null, nombre: 'Fire Stone', cantidad: 3 },
+  asset: { item: 'fire-stone', cantidad: 3 },
   fiat_currency: null,
   fiat_amount: null,
   game_prices: [{ tipo: 'pokedolares', cantidad: 50_000_000 }],
   negotiable: false,
 };
 
-const ITEMS_ASSET = `'{"item": null, "nombre": "Fire Stone", "cantidad": 1}'::jsonb`;
+const ITEMS_ASSET = `'{"item": "fire-stone", "cantidad": 1}'::jsonb`;
 
 describe.skipIf(!ready)(title, { timeout: 240_000 }, () => {
   const admin = stack ? createClient(stack.url, stack.serviceRoleKey, clientOptions) : null!;

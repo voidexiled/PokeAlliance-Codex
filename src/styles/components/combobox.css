@@ -1,4 +1,11 @@
-/* Combobox (spec 7.2.8). global.css imports this file with layer(components).
+/* Per-component sheet (§13.6): imported by the components that draw it, not by global.css. */
+
+@layer properties, theme, base, components, utilities;
+
+@reference '../theme.css';
+
+@layer components {
+  /* Combobox (spec 7.2.8). global.css imports this file with layer(components).
 
    The design system has no combobox, so this block is composed only with its tokens and
    pieces (R16). The field is `TextField` and wears text-field.css untouched; this file
@@ -12,98 +19,99 @@
    animation: `ac-tt-in` belongs to the four uses of spec 6.2, and this list stays open
    while the reader types. */
 
-.ac-combobox {
-  --ac-combobox-max: 320px; /* sin token: alto máximo de la lista (spec 11.3) */
+  .ac-combobox {
+    --ac-combobox-max: 320px; /* sin token: alto máximo de la lista (spec 11.3) */
 
-  position: relative;
-  min-width: 0;
-}
+    position: relative;
+    min-width: 0;
+  }
 
-.ac-combobox__listbox {
-  position: fixed;
-  inset: auto;
-  z-index: var(--z-listbox);
-  width: var(--ac-listbox-width, auto);
-  max-height: min(var(--ac-combobox-max), var(--ac-listbox-room, var(--ac-combobox-max)));
-  margin: 0;
-  padding: var(--space-4);
-  overflow-x: hidden;
-  overflow-y: auto;
-  overscroll-behavior: contain;
-  border: 0;
-  border-radius: var(--radius-8);
-  background: var(--bg-tertiary);
-  color: var(--text-primary);
-  list-style: none;
-  @apply type-field;
-}
-
-/* Where `popover` is not supported (spec 6.5), as in select.css. */
-@supports not selector(:popover-open) {
   .ac-combobox__listbox {
-    display: none;
+    position: fixed;
+    inset: auto;
+    z-index: var(--z-listbox);
+    width: var(--ac-listbox-width, auto);
+    max-height: min(var(--ac-combobox-max), var(--ac-listbox-room, var(--ac-combobox-max)));
+    margin: 0;
+    padding: var(--space-4);
+    overflow-x: hidden;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    border: 0;
+    border-radius: var(--radius-8);
+    background: var(--bg-tertiary);
+    color: var(--text-primary);
+    list-style: none;
+    @apply type-field;
   }
 
-  .ac-combobox__listbox[data-open] {
-    display: block;
+  /* Where `popover` is not supported (spec 6.5), as in select.css. */
+  @supports not selector(:popover-open) {
+    .ac-combobox__listbox {
+      display: none;
+    }
+
+    .ac-combobox__listbox[data-open] {
+      display: block;
+    }
   }
-}
 
-/* A row of at least 40, like a Select option; with a 40 px picture, 48. */
-.ac-combobox__option {
-  display: flex;
-  min-height: var(--size-control);
-  align-items: center;
-  gap: var(--space-8);
-  padding: var(--space-4) var(--space-8);
-  border-radius: var(--radius-2);
-  cursor: pointer;
-}
-
-/* Hover and keyboard highlight are one state, as in the Select list. */
-.ac-combobox__option[aria-selected='true'] {
-  background: var(--bg-quaternary);
-}
-
-/* Disabled, spec 5.2: `text-quaternary` and `not-allowed`. */
-.ac-combobox__option[aria-disabled='true'] {
-  color: var(--text-quaternary);
-  cursor: not-allowed;
-}
-
-.ac-combobox__media {
-  display: flex;
-  width: var(--size-slot);
-  height: var(--size-slot);
-  flex: none;
-  align-items: center;
-  justify-content: center;
-}
-
-.ac-combobox__name {
-  min-width: 0;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-/* «Nº 132»: `text-secondary`, which keeps its contrast on the active `bg-quaternary`. */
-.ac-combobox__meta {
-  flex: none;
-  margin-left: auto;
-  padding-left: var(--space-8);
-  color: var(--text-secondary);
-  font-variant-numeric: tabular-nums;
-  @apply type-ui;
-}
-
-.ac-combobox__option[aria-disabled='true'] .ac-combobox__meta {
-  color: var(--text-quaternary);
-}
-
-/* A coarse pointer grows the row to the 44 px target (spec 13.7). */
-@media (pointer: coarse) {
+  /* A row of at least 40, like a Select option; with a 40 px picture, 48. */
   .ac-combobox__option {
-    min-height: var(--size-touch);
+    display: flex;
+    min-height: var(--size-control);
+    align-items: center;
+    gap: var(--space-8);
+    padding: var(--space-4) var(--space-8);
+    border-radius: var(--radius-2);
+    cursor: pointer;
+  }
+
+  /* Hover and keyboard highlight are one state, as in the Select list. */
+  .ac-combobox__option[aria-selected='true'] {
+    background: var(--bg-quaternary);
+  }
+
+  /* Disabled, spec 5.2: `text-quaternary` and `not-allowed`. */
+  .ac-combobox__option[aria-disabled='true'] {
+    color: var(--text-quaternary);
+    cursor: not-allowed;
+  }
+
+  .ac-combobox__media {
+    display: flex;
+    width: var(--size-slot);
+    height: var(--size-slot);
+    flex: none;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .ac-combobox__name {
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  /* «Nº 132»: `text-secondary`, which keeps its contrast on the active `bg-quaternary`. */
+  .ac-combobox__meta {
+    flex: none;
+    margin-left: auto;
+    padding-left: var(--space-8);
+    color: var(--text-secondary);
+    font-variant-numeric: tabular-nums;
+    @apply type-ui;
+  }
+
+  .ac-combobox__option[aria-disabled='true'] .ac-combobox__meta {
+    color: var(--text-quaternary);
+  }
+
+  /* A coarse pointer grows the row to the 44 px target (spec 13.7). */
+  @media (pointer: coarse) {
+    .ac-combobox__option {
+      min-height: var(--size-touch);
+    }
   }
 }

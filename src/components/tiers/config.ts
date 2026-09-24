@@ -1,11 +1,12 @@
 import {
-  SPECIAL_TIERS,
   pokedexConfig,
   tierId,
   type PokedexElementRefs,
   type PokedexIds,
   type PokedexRow,
 } from '@/components/pokedex/config';
+import type { Locale } from '@/i18n/config';
+import { compareTierRank, tierKey } from '@/lib/content/tier-rank';
 import type { ListConfig } from '@/lib/lists/state';
 import type { SpriteData } from '@/lib/sprites/resolve';
 
@@ -17,25 +18,29 @@ import type { SpriteData } from '@/lib/sprites/resolve';
 // component, so what the island takes from it is only what it runs.
 //
 // State (8.0.6, 8.8):
-//   - 48 rows a page.
-//   - The filters `gen`, `elemento` and `variante` of the Pokédex, the same objects in the
-//     same URL order (U1) with the same registry ids (U3): `?elemento=fire&variante=shiny`
-//     means the same on both pages. No `tier`: the groups are the tiers (8.8 step 3).
+//   - «Ranuras» (default, §16.4.3) draws every filtered row as the classic tier list, one
+//     row per tier, with no pages (`unpagedViews`); Cards and Lista keep 48 rows a page.
+//   - The filters of the Pokédex (`gen`, `tipo`, `moveset`, `variante`), the same objects in
+//     the same URL order (U1) with the same registry ids (U3). No `tier`: the rows are the
+//     tiers (8.8 step 3, §16.4.3).
 //   - Only the variants with a tier: a row whose `tier` is `null` is not on this page
 //     (8.8 step 4), so `tiersRows` leaves it out before anything counts it.
-//   - One order (V6, no `SortSelect`): by tier, T1…T7 and then the special tiers in the
-//     order of `$defs.tierEspecial` (`SPECIAL_TIERS`, the order of the schema, not a
-//     ranking), and inside a tier the Pokémon order of 8.0.5. `tiersRows` applies it once, to
+//   - One order (V6, no `SortSelect`): best tier first, ULTIMATE … T7 (`compareTierRank`,
+//     §16.2.1), and inside a tier the Pokémon order of 8.0.5. `tiersRows` applies it once, to
 //     rows that already come in the order of 8.0.5, with a stable sort; the list keeps it on
 //     every change of state.
-//   - Grouped by tier (`groupBy`), which Cards and Slots draw and the Lista does not (8.8
-//     step 5). The rows of a tier are contiguous, so the groups of a page come in the order
-//     of the list and need no `groupOrder`. The page is cut first and grouped after
-//     (CGS 2.1): page 1 of the whole list holds only «T1» while T1 has more than 48
-//     variants (TL1).
+//   - Grouped by tier (`groupBy`); the rows of a tier are contiguous, so the groups come in
+//     the order of the list and need no `groupOrder`. In the paged views the page is cut
+//     first and grouped after (CGS 2.1).
 
 /** Rows per page of the Tier list (8.0.6). */
 export const TIERS_PAGE_SIZE = 48;
+
+/**
+ * Rows the prerendered page and its props carry (13.6: props within 20 KB); the island takes
+ * the rest from `datos.json` as it hydrates (PR5).
+ */
+export const TIERS_PROPS_ROWS = 32;
 
 /**
  * The values each filter accepts (U3, U4), read from the rows with a tier. No tiers: the
@@ -48,28 +53,12 @@ export type TiersIds = Omit<PokedexIds, 'tiers'>;
  * this list always have a tier (`tiersRows`); `''` only answers a row that would not.
  */
 export function tierGroup(row: PokedexRow): string {
-  return tierId(row.tier) ?? '';
+  return tierKey(row.tier) ?? tierId(row.tier) ?? '';
 }
 
-/**
- * Where a tier goes (8.8 step 5): the numbered tiers by their number, then the special
- * ones in the order of `SPECIAL_TIERS`, then any other text by its id, so that the rows
- * of one tier are always together.
- */
-function tierPlace(row: PokedexRow): readonly [number, number, string] {
-  if (typeof row.tier === 'number') return [0, row.tier, ''];
-  const id = tierGroup(row);
-  const special = SPECIAL_TIERS.indexOf(id);
-  return special < 0 ? [2, 0, id] : [1, special, ''];
-}
-
-/** The order of the tiers (8.8 step 5), for a stable sort. */
+/** The order of the tiers, best first (§16.2.1), for a stable sort. */
 export function compareTiers(a: PokedexRow, b: PokedexRow): number {
-  const [bucketA, placeA, idA] = tierPlace(a);
-  const [bucketB, placeB, idB] = tierPlace(b);
-  if (bucketA !== bucketB) return bucketA - bucketB;
-  if (placeA !== placeB) return placeA - placeB;
-  return idA < idB ? -1 : idA > idB ? 1 : 0;
+  return compareTierRank(a.tier, b.tier);
 }
 
 /**
@@ -98,19 +87,40 @@ export function tierIcons(
   );
 }
 
+/** Its own order is `tiersRows`'s (a no-op, stable sort keeps it): no `sort` label needed. */
+function keepOrder(): number {
+  return 0;
+}
+
 /**
- * The configuration of the `tiers` list (8.0.6). The island memoises it; the tests build it
- * over the registry, so the filters and the inline script of PR4 are the page's.
+ * The configuration of the `tiers` list (§16.4.3). The island memoises it; the tests build
+ * it over the registry, so the filters and the inline script of PR4 are the page's. The
+ * Pokédex's four sorts do not apply here — the Tier list orders by tier, best first, via
+ * `tiersRows` and its own groups — so only its filters (all but «Tier») are reused;
+ * `locale` and the (unused) sort labels only satisfy `pokedexConfig`'s signature.
  */
-export function tiersConfig(dataUrl: string, ids: TiersIds): ListConfig<PokedexRow> {
-  const pokedex = pokedexConfig(dataUrl, { ...ids, tiers: [] });
+export function tiersConfig(
+  dataUrl: string,
+  ids: TiersIds,
+  locale: Locale,
+): ListConfig<PokedexRow> {
+  const pokedex = pokedexConfig(dataUrl, { ...ids, tiers: [] }, locale, {
+    numero: '',
+    nombre: '',
+    tier: '',
+    requisito: '',
+  });
   return {
     id: 'tiers',
     pageSize: TIERS_PAGE_SIZE,
     // One order, the one `tiersRows` gave the rows, so no `SortSelect` (V6).
-    sorts: pokedex.sorts,
+    sorts: [{ id: 'tier', label: '', compare: keepOrder }],
     filters: pokedex.filters.filter((filter) => filter.key !== 'tier'),
     groupBy: tierGroup,
+    // §16.4.3: «Ranuras» is the classic tier list, one row per tier with every Pokémon of the
+    // filtered list (no pages); Cards and Lista keep 48 a page.
+    defaultView: 'slots',
+    unpagedViews: ['slots'],
     anchorId: (row) => `pokemon-${row.id}`,
     dataUrl,
   };

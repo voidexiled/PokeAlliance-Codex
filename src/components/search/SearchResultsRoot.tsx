@@ -1,4 +1,6 @@
 import {
+  Suspense,
+  lazy as lazyComponent,
   useCallback,
   useDeferredValue,
   useEffect,
@@ -17,7 +19,6 @@ import { CardGroup } from '@/components/cards/CardGroup';
 import { DexCard } from '@/components/cards/DexCard';
 import type { DexCardDrop, DexCardEntry, DexCardLabels } from '@/components/cards/DexCard';
 import type * as ListRowModule from '@/components/cards/ListRow';
-import { LootCard } from '@/components/cards/LootCard';
 import type { LootCardDrop, LootCardEntity } from '@/components/cards/LootCard';
 import type * as SlotsPanelModule from '@/components/cards/SlotsPanel';
 import type * as DataTableModule from '@/components/content/DataTable';
@@ -393,6 +394,11 @@ interface ItemResult {
   category: string | null;
 }
 
+/** The item cards, a chunk of their own: results only exist once the reader types (13.6). */
+const LootCard = lazyComponent(() =>
+  import('@/components/cards/LootCard').then((module) => ({ default: module.LootCard })),
+);
+
 export function SearchResultsRoot({
   locale,
   path,
@@ -745,19 +751,21 @@ export function SearchResultsRoot({
 
       if (view === 'cards') {
         return (
-          <CardGrid family="loot">
-            {results.map((result, index) => (
-              <LootCard
-                key={result.id}
-                drop={result.card}
-                keys={keys}
-                labels={ui.tooltip}
-                locale={locale}
-                hint={ui.pinHint}
-                loading={lazy(index)}
-              />
-            ))}
-          </CardGrid>
+          <Suspense fallback={null}>
+            <CardGrid family="loot">
+              {results.map((result, index) => (
+                <LootCard
+                  key={result.id}
+                  drop={result.card}
+                  keys={keys}
+                  labels={ui.tooltip}
+                  locale={locale}
+                  hint={ui.pinHint}
+                  loading={lazy(index)}
+                />
+              ))}
+            </CardGrid>
+          </Suspense>
         );
       }
 

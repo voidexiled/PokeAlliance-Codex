@@ -4,7 +4,6 @@ import { useState } from 'react';
 
 import { ListingCard } from '@/components/cards/ListingCard';
 import type {
-  ListingCardEntity,
   ListingCardLabels,
   ListingCardListing,
   ListingFactValue,
@@ -17,7 +16,7 @@ import {
   type ItemsData,
   type ItemsRow,
 } from '@/components/items/config';
-import type { HeldStripItem } from '@/components/money/HeldStrip';
+import type { EquipmentStripItem } from '@/components/money/EquipmentStrip';
 import type { PriceOption } from '@/components/money/PriceOptions';
 import type { PokedexElementRefs, PokedexRow } from '@/components/pokedex/config';
 import type { Locale } from '@/i18n/config';
@@ -30,8 +29,8 @@ import { UNKNOWN, present } from '@/lib/format/unknown';
 import { elementTip, itemTip, pokemonTip, type TipData, type TipLabels } from '@/lib/game/tips';
 import type { SpriteData } from '@/lib/sprites/resolve';
 import { parsePrice } from '@/lib/trade/draft';
-import { entityName, knownAmount, listingTitle } from '@/lib/trade/title';
-import type { Anuncio, UnidadPokemon } from '@/lib/trade/types';
+import { knownAmount, listingTitle } from '@/lib/trade/title';
+import { equipmentOf, type Anuncio, type UnidadPokemon } from '@/lib/trade/types';
 
 // ListingPreview (spec 9.7.6, template G of 8.0.2): the live preview of the publish page. It is
 // the real `ListingCard` of the list (7.2.6, §9.5.8) with `layout = listingLayout([borrador])`,
@@ -76,14 +75,22 @@ export interface ListingPreviewData {
   itemRefs: ItemsData['refs'];
   /** `nombre` of each Market category of content/items/categorias.json, by id. */
   categories: Readonly<Record<string, string>>;
-  /** `nombre` of each aura of content/auras.json, by id. */
-  auras: Readonly<Record<string, string>>;
+  /** Each aura of content/auras.json by id: its name and its ball sprite. */
+  auras: Readonly<Record<string, ListingPreviewEntity | string>>;
+  /** Each addon of content/outfits.json by id: its name and its sprite. */
+  addons?: Readonly<Record<string, ListingPreviewEntity | string>>;
   /** `nombre` of each world of content/mundos.json, by id. */
   worlds: Readonly<Record<string, string>>;
   /** Sprites the page resolved with the adapter (DP2). */
   sprites: ListingPreviewSprites;
   /** The Diamonds of the registry: their panel and the two lists of their `moneda` object. */
   diamonds: ListingPreviewDiamonds;
+}
+
+/** An aura or an addon as a slot draws it (16.4.5). */
+export interface ListingPreviewEntity {
+  nombre: string;
+  icono: SpriteData | null;
 }
 
 /** The fixed sprites of a preview stage (DP2): `null` while the registry has no key (R11). */
@@ -132,16 +139,13 @@ export interface ListingPreviewProps {
 /** The 300 wide panel of a held item (7.5.3). */
 const HELD_WIDTH = 300;
 
-/**
- * The panel of a declared name that matches no record: no row, so `HeldStrip` draws it as plain
- * text, without a trigger (R2).
- */
-function plainTip(name: string): TipData {
+/** The panel of an aura or an addon: its name over its sprite (16.4.5). */
+function plainTip(name: string, sprite: SpriteData | null): TipData {
   return {
-    key: `item:${name}`,
+    key: `slot:${name}`,
     title: name,
     width: HELD_WIDTH,
-    head: { type: 'sprite', sprite: null },
+    head: { type: 'sprite', sprite },
     rows: [],
   };
 }
@@ -156,7 +160,7 @@ interface Built {
   sprite: SpriteProps | null;
   qty?: number | null;
   shiny?: boolean;
-  helds?: HeldStripItem[];
+  helds?: EquipmentStripItem[];
   train?: ListingCardListing['train'];
 }
 
@@ -178,21 +182,6 @@ function pokemonCard(unit: UnidadPokemon, props: ListingPreviewProps): Built {
   const row = data.pokemon.get(unit.pokemon);
   const art = resolvePokemonImage(row?.imagen);
 
-  const ball = unit.ball;
-  let ballValue: ListingFactValue = null;
-  if (ball !== null) {
-    const record = ball.item === null ? undefined : data.items.get(ball.item);
-    const name = entityName(ball.item, ball.nombre, (id) => data.items.get(id)?.nombre);
-    ballValue =
-      record === undefined
-        ? name
-        : ({
-            name: record.nombre,
-            sprite: record.sprite,
-            tip: itemTipOf(record, data, props),
-          } satisfies ListingCardEntity);
-  }
-
   const npc = unit.precioNpc;
   const facts: Built['facts'] = {
     requirement:
@@ -204,8 +193,6 @@ function pokemonCard(unit: UnidadPokemon, props: ListingPreviewProps): Built {
       const ref = data.elements[id];
       return ref === undefined ? [] : [elementChip(id, ref, locale, labels.tooltip, elementTip)];
     }),
-    ball: ballValue,
-    aura: unit.aura === null ? null : (data.auras[unit.aura] ?? null),
     boost: unit.boost === null ? null : formatSigned(unit.boost, locale),
     nickname: unit.nickname,
     memorySlots: unit.memorySlots,
@@ -214,15 +201,33 @@ function pokemonCard(unit: UnidadPokemon, props: ListingPreviewProps): Built {
       npc === null ? null : npc.tipo === 'unsellable' ? labels.unsellable : units(npc.cantidad),
   };
 
-  const helds = unit.helds.map((held): HeldStripItem => {
-    const record = held.item === null ? undefined : data.items.get(held.item);
-    const name = record?.nombre ?? held.nombre;
-    return {
-      name,
-      tier: formatTier(held.tier),
-      sprite: record?.sprite ?? null,
-      tip: record === undefined ? plainTip(name) : itemTipOf(record, data, props),
-    };
+  // 16.4.5: ball, auras, addons, held X, held Y and Mega Stone as slots, in the game's order.
+  const helds = equipmentOf(unit).flatMap(({ kind, id }): EquipmentStripItem[] => {
+    if (kind === 'aura' || kind === 'addon') {
+      const found = (kind === 'aura' ? data.auras : (data.addons ?? {}))[id];
+      if (found === undefined) return [];
+      const entity = typeof found === 'string' ? { nombre: found, icono: null } : found;
+      return [
+        {
+          id,
+          name: entity.nombre,
+          sprite: entity.icono,
+          tip: plainTip(entity.nombre, entity.icono),
+        },
+      ];
+    }
+    const record = data.items.get(id);
+    if (record === undefined) return [];
+    const tier = (record as { held?: { tier?: unknown } | null }).held?.tier;
+    return [
+      {
+        id,
+        name: record.nombre,
+        sprite: record.sprite,
+        tip: itemTipOf(record, data, props),
+        tier: typeof tier === 'number' ? tier : null,
+      },
+    ];
   });
 
   // The card shows the first declared skill, in the order of `Habilidad` (§9.5.8), as
@@ -252,7 +257,7 @@ function itemsCard(
   props: ListingPreviewProps,
 ): Built {
   const { data, labels, locale } = props;
-  const record = item.item === null ? undefined : data.items.get(item.item);
+  const record = data.items.get(item.item);
   const quantity = units(item.cantidad);
 
   let droppedBy: ListingFactValue = null;

@@ -100,8 +100,13 @@ export interface DexCardEntry {
   art: string | null;
   /** `nivel`, the value of Requisito: «Nivel 80». */
   level?: number | null;
-  /** `formatTier(tier)`: «T3», «Legendary». */
-  tier?: string | null;
+  /**
+   * `formatTier(tier)`: «T3», «Legendary»; or the caller's node, such as the `TierBadge`
+   * markup of the Pokédex (§16.4.2).
+   */
+  tier?: ReactNode;
+  /** The «Moveset» fact (§16.4.2): the chip of `elementoMoveset`, built by the caller. */
+  moveset?: ReactNode;
   /** `funcion`: «PVE». */
   role?: string | null;
   /** `variante`. */
@@ -130,6 +135,8 @@ export interface DexCardLabels {
   tier: string;
   /** «Rol» / «Role». */
   role: string;
+  /** «Moveset», a game term (13.4). */
+  moveset?: string;
   /** «Variante» / «Variant». */
   variant: string;
   /** «Normal». */
@@ -296,7 +303,14 @@ export function DexCard({
             : null,
         };
       case 'tier':
-        return { key, label: labels.tier, value: entry.tier };
+        return {
+          key,
+          label: labels.tier,
+          mode: typeof entry.tier === 'object' && entry.tier !== null ? 'node' : 'clip',
+          value: entry.tier,
+        };
+      case 'moveset':
+        return { key, label: labels.moveset ?? 'Moveset', mode: 'node', value: entry.moveset };
       case 'role':
         return { key, label: labels.role, value: entry.role };
       case 'variant':

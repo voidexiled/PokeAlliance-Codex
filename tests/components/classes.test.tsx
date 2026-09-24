@@ -775,9 +775,8 @@ const REFERENCE: Record<string, Record<string, string>> = {
             img.ac-sprite
             span.ac-toggle-group__text
           button.ac-toggle-group__item
-            span.ac-shiny-mark
-              span.ac-shiny-mark__back
-              span.ac-shiny-mark__front
+            span.ac-shiny-mark.ac-shiny-mark--sprite
+              img.ac-shiny-mark__icon
             span.ac-toggle-group__text
     `,
     tab: fp`
@@ -907,9 +906,8 @@ const REFERENCE: Record<string, Record<string, string>> = {
     `,
     shiny: fp`
       span.ac-chip.ac-chip--shiny.ac-chip--sprite
-        span.ac-shiny-mark
-          span.ac-shiny-mark__back
-          span.ac-shiny-mark__front
+        span.ac-shiny-mark.ac-shiny-mark--sprite
+          img.ac-shiny-mark__icon
     `,
     link: fp`a.ac-chip.ac-chip--link`,
     'entity text': fp`
@@ -927,9 +925,8 @@ const REFERENCE: Record<string, Record<string, string>> = {
     'entity shiny': fp`
       span.ac-nested-entity
         a.ac-chip--shiny.ac-nested-entity__trigger.ac-nested-entity__trigger--chip
-          span.ac-shiny-mark
-            span.ac-shiny-mark__back
-            span.ac-shiny-mark__front
+          span.ac-shiny-mark.ac-shiny-mark--sprite
+            img.ac-shiny-mark__icon
         (tooltip)
     `,
   },

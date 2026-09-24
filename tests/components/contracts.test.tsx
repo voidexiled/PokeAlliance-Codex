@@ -261,7 +261,7 @@ describe('PokedolaresAmount', () => {
   });
 });
 
-describe('ItemsRoot: the price of an item card (IT3, 8.5, S8)', () => {
+describe('ItemsRoot: the inventory of an item (8.5, 16.4.1)', () => {
   // A synthetic row, not a record of content/items/: no item of the registry has a price yet
   // and a price is never invented there (X4), so IT3 is measured on the island itself.
   const SYNTHETIC: ItemsRow = {
@@ -302,33 +302,20 @@ describe('ItemsRoot: the price of an item card (IT3, 8.5, S8)', () => {
           sprite: messages.items.columnSprite,
           item: messages.items.columnItem,
           droppedByCount: messages.items.droppedByCount,
+          search: messages.items.searchPlaceholder,
+          noResults: messages.items.noResults,
         }}
       />,
     );
   };
 
-  it('shows «Precio NPC» with the Pokédólares sprite first, 150kk and the exact figure', () => {
-    for (const [locale, label, exact] of [
-      ['es', es.ui.tooltip.npcPrice, '150.000.000 Pokédólares'],
-      ['en', en.ui.tooltip.npcPrice, '150,000,000 Pokédollars'],
-    ] as const) {
+  it('Ranuras (16.4.1): the item is a slot of 48 in the inventory, with no card around it', () => {
+    for (const locale of ['es', 'en'] as const) {
       const html = render(locale);
-      const row = new RegExp(`<dt[^>]*>${label}</dt><dd[^>]*>(.*?)</dd>`).exec(html);
-      expect(row, `${locale}: the «${label}» row`).not.toBeNull();
-      const value = row?.[1] ?? '';
-      const sprite = value.indexOf('ac-pokedolares-amount__sprite');
-      expect(sprite, `${locale}: the sprite of the amount`).toBeGreaterThan(-1);
-      expect(sprite, `${locale}: the sprite goes first`).toBeLessThan(value.indexOf('150kk'));
-      expect(value, locale).toContain('<span aria-hidden="true">150kk</span>');
-      expect(value, locale).toContain(`<span class="sr-only">${exact}</span>`);
-      // The card itself opens nothing (IT4): the price is a value, not a trigger.
-      expect(value, locale).not.toContain('aria-describedby');
+      expect(html, locale).toContain('ac-inventory');
+      expect(html, locale).toContain('ac-entity-slot--48');
+      expect(html, locale).toContain('id="item-it3-synthetic-item"');
+      expect(html, locale).not.toContain('ac-loot-card');
     }
-  });
-
-  it('leaves out the rows the item has no value for', () => {
-    const html = render('es');
-    expect(html).not.toContain(`>${es.ui.tooltip.shopPrice}</dt>`);
-    expect(html).not.toContain(`>${es.ui.tooltip.use}</dt>`);
   });
 });

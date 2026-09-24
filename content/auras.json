@@ -5,13 +5,48 @@
       "id": "alliance",
       "nombre": "Alliance",
       "shader": "outfit_alliance",
-      "icono": "ui/balls/alliance-ball"
+      "icono": "ui/auras/alliance"
     },
     {
       "id": "premier",
       "nombre": "Premier",
       "shader": "outfit_rainbow",
-      "icono": "ui/balls/premier-ball"
+      "icono": "ui/auras/premier"
+    },
+    {
+      "id": "christmas-2024",
+      "nombre": "Christmas 2024",
+      "shader": "outfit_rainbow",
+      "icono": "ui/auras/christmas-2024",
+      "borrador": true
+    },
+    {
+      "id": "halloween-2025",
+      "nombre": "Halloween 2025",
+      "shader": "outfit_rainbow",
+      "icono": "ui/auras/halloween-2025",
+      "borrador": true
+    },
+    {
+      "id": "solo-leveling",
+      "nombre": "Solo Leveling",
+      "shader": "outfit_rainbow",
+      "icono": "ui/auras/solo-leveling",
+      "borrador": true
+    },
+    {
+      "id": "digimon-red-aura",
+      "nombre": "Digimon Red Aura",
+      "shader": "outfit_rainbow",
+      "icono": "ui/auras/digimon-red-aura",
+      "borrador": true
+    },
+    {
+      "id": "killua-god-speed",
+      "nombre": "Killua God Speed",
+      "shader": "outfit_rainbow",
+      "icono": "ui/auras/killua-god-speed",
+      "borrador": true
     }
   ]
 }

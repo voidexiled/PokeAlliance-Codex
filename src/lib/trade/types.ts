@@ -78,10 +78,6 @@ export const HABILIDADES = [
 ] as const;
 export type Habilidad = (typeof HABILIDADES)[number];
 
-/** Held items of one Pokémon: the two fields Held X and Held Y of the old composer (9.4). */
-export const HELDS_MAX = 2;
-/** Highest tier of a held item: a limit of the field, not a fact of the game (Q8). */
-export const HELD_TIER_MAX = 99;
 /** Highest Boost (9.7.2, `docs/CONTENT_PLAN.md:207`). */
 export const BOOST_MAX = 50;
 /** Highest Star Level (9.7.2, `docs/CONTENT_PLAN.md:540`). */
@@ -90,22 +86,15 @@ export const STAR_LEVEL_MAX = 5;
 export const MEMORY_SLOTS_MAX = 6;
 /** Highest training level: up to 6 digits (9.7.2). */
 export const NIVEL_ENTRENAMIENTO_MAX = 999_999;
-/** Longest nickname and longest declared name of a Ball or a held item, in characters (9.7.2). */
+/** Longest nickname, in characters (9.7.2). */
 export const NOMBRE_MAX = 40;
-/** Longest declared name of a traded item (9.7.3). */
-export const NOMBRE_ITEM_MAX = 80;
 /** Largest amount of anything a listing counts: 15 digits (9.4), under `Number.MAX_SAFE_INTEGER`. */
 export const CANTIDAD_MAX = 999_999_999_999_999;
 
-/**
- * An entity the seller declares by name (9.4): `item` (or `id`) is the registry id when the name
- * matches a record exactly, ignoring case and accents, and `null` otherwise; then the name is shown
- * as text, without panel or sprite (R2).
- */
-export type BallDeclarada = { item: string | null; nombre: string };
-export type HeldDeclarado = { item: string | null; nombre: string; tier: number };
-export type AddonDeclarado = { id: string | null; nombre: string };
-export type ItemDeclarado = { item: string | null; nombre: string; cantidad: number };
+/** A traded item (16.2.5): the registry id and the amount, never a declared name. */
+export type ItemAnunciado = { item: string; cantidad: number };
+/** @deprecated The name of 9.4; the shape is `ItemAnunciado` since 16.2.5. */
+export type ItemDeclarado = ItemAnunciado;
 
 /** One declared training skill: its level and its progress to the next one («0» to «100»). */
 export type EntrenamientoDeclarado = {
@@ -118,16 +107,25 @@ export type EntrenamientoDeclarado = {
 export type PrecioNpc = { tipo: 'unsellable' } | { tipo: 'pokedolares'; cantidad: number };
 
 /**
- * The Pokémon a listing sells, as its seller declares it (9.4). The catalogue values (Requisito,
- * Tier, Elementos) are never stored: they are read from content/pokemon.json when shown. `null` is
- * «not declared».
+ * The Pokémon a listing sells (16.2.5). Every piece of equipment is a registry id, chosen in a
+ * picker: the catalogue values (Requisito, Tier, Elementos, the tier of a held) are read from
+ * content/ when shown, never stored. `null` is «not declared».
  */
 export type UnidadPokemon = {
   /** `id` of content/pokemon.json. */
   pokemon: string;
-  ball: BallDeclarada | null;
-  /** `id` of content/auras.json. */
-  aura: string | null;
+  /** `id` of an item of the category `poke-balls`. */
+  ball: string | null;
+  /** `id`s of content/auras.json, without repeats. */
+  auras: string[];
+  /** `id`s of the addons of this Pokémon in content/outfits.json, without repeats. */
+  addons: string[];
+  /** `id` of an item whose `held.ranura` is `x`. */
+  heldX: string | null;
+  /** `id` of an item whose `held.ranura` is `y`. */
+  heldY: string | null;
+  /** `id` of an item with `mega`. */
+  mega: string | null;
   /** 0 to `BOOST_MAX`. */
   boost: number | null;
   /** 0 to `STAR_LEVEL_MAX`. */
@@ -138,15 +136,28 @@ export type UnidadPokemon = {
   memorySlots: number | null;
   /** One entry per Memory Slot: an `id` of content/pokemon.json, or `null` for an empty slot. */
   memorias: (string | null)[];
-  /** At most `HELDS_MAX`, each with a tier of 1 to `HELD_TIER_MAX`. */
-  helds: HeldDeclarado[];
-  addon: AddonDeclarado | null;
   /** «0» to «100», at most 2 decimals. */
   nextBoostChance: string | null;
   /** At most one entry per skill. */
   entrenamiento: EntrenamientoDeclarado[];
   precioNpc: PrecioNpc | null;
 };
+
+/** The equipment of a unit in the order of the game (16.4.5): ball, auras, addons, X, Y, Mega. */
+export type Equipo = { kind: 'ball' | 'aura' | 'addon' | 'heldX' | 'heldY' | 'mega'; id: string };
+
+export function equipmentOf(
+  unit: Pick<UnidadPokemon, 'ball' | 'auras' | 'addons' | 'heldX' | 'heldY' | 'mega'>,
+): Equipo[] {
+  const list: Equipo[] = [];
+  if (unit.ball) list.push({ kind: 'ball', id: unit.ball });
+  for (const id of unit.auras) list.push({ kind: 'aura', id });
+  for (const id of unit.addons) list.push({ kind: 'addon', id });
+  if (unit.heldX) list.push({ kind: 'heldX', id: unit.heldX });
+  if (unit.heldY) list.push({ kind: 'heldY', id: unit.heldY });
+  if (unit.mega) list.push({ kind: 'mega', id: unit.mega });
+  return list;
+}
 
 /**
  * A listing (9.4). `pokemon` exists only for the type `pokemon`, `item` only for `items` and
@@ -167,7 +178,7 @@ export type Anuncio = {
   estado: EstadoAnuncio;
   precio: Precio;
   pokemon?: UnidadPokemon;
-  item?: ItemDeclarado;
+  item?: ItemAnunciado;
   cantidad?: number;
   /** Every record of the phase A registry carries it (9.4). */
   borrador?: true;

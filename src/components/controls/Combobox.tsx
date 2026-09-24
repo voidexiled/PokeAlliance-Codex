@@ -1,3 +1,4 @@
+import '@/styles/components/combobox.css';
 import { useEffect, useId, useRef, useState } from 'react';
 import type { FocusEvent, InputHTMLAttributes, KeyboardEvent, MouseEvent, ReactNode } from 'react';
 

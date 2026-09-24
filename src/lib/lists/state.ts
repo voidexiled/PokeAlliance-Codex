@@ -55,6 +55,17 @@ export interface ListFilter<T> {
   key: string;
   values: ListFilterValues;
   test: (item: T, value: string) => boolean;
+  /**
+   * §16.4.1: the URL carries the values comma-separated (`?tipo=fire,water`); an item
+   * matches when it matches any one of them (OR within the filter). Filters stay AND
+   * across each other, as before. Only meaningful with a list of ids (`values` an array).
+   */
+  multi?: boolean;
+  /**
+   * §16.4.2: older parameter names still read into this filter when the current one is
+   * absent from the URL (`?elemento=` still read as `?tipo=`). Never written back.
+   */
+  aliasKeys?: readonly string[];
 }
 
 /**
@@ -79,6 +90,10 @@ export interface ListConfig<T> {
   groupOrder?: readonly string[];
   /** `cards` when absent; `list` in the Tier list of the Pokémon page (E15). */
   defaultView?: EntityView;
+  /** The views `ViewToggle` offers, in its order; every one when absent (§16.4.1). */
+  views?: readonly EntityView[];
+  /** Views that draw every row with no pages, such as the tier rows of the Tier list (§16.4.3). */
+  unpagedViews?: readonly EntityView[];
   /** Id of the element of an item in the active view, such as `item-${id}` (H7). */
   anchorId?: (item: T) => string;
   /** Prerendered JSON with every row of the list (PR5); without it the props carry them. */
@@ -146,6 +161,25 @@ export function filterValue(values: ListFilterValues, raw: string): string | und
   return values.includes(raw) ? raw : undefined;
 }
 
+/**
+ * The canonical value of a filter that may carry several ids (`multi`, §16.4.1): `raw` is
+ * split on `,`, each id validated against `values` and duplicates dropped, keeping the
+ * first order seen; joined back with `,`. `undefined` when nothing valid is left. A
+ * non-multi filter, or one whose `values` is not a list of ids, falls back to
+ * `filterValue`.
+ */
+export function filterValues<T>(filter: ListFilter<T>, raw: string): string | undefined {
+  if (!filter.multi || filter.values === 'int' || filter.values === 'text') {
+    return filterValue(filter.values, raw);
+  }
+  const seen = new Set<string>();
+  for (const part of raw.split(',')) {
+    const value = filterValue(filter.values, part);
+    if (value !== undefined) seen.add(value);
+  }
+  return seen.size === 0 ? undefined : [...seen].join(',');
+}
+
 /** The state of a URL without parameters (U2). */
 export function defaultListState<T>(config: ListConfig<T>): ListState {
   return {
@@ -176,17 +210,25 @@ export function parseListState<T>(
   if (config.text && q !== null) state.q = q.trim();
 
   for (const filter of config.filters) {
-    const raw = read(filter.key);
-    const value = raw === null ? undefined : filterValue(filter.values, raw);
+    let raw = read(filter.key);
+    if (raw === null) {
+      for (const alias of filter.aliasKeys ?? []) {
+        raw = params.get(paramName(config, alias));
+        if (raw !== null) break;
+      }
+    }
+    const value = raw === null ? undefined : filterValues(filter, raw);
     if (value !== undefined) state.filters[filter.key] = value;
   }
 
   const sort = read('sort');
   if (sort !== null && config.sorts.some((option) => option.id === sort)) state.sort = sort;
 
+  const allowed = (value: unknown): value is EntityView =>
+    isView(value) && (config.views === undefined || config.views.includes(value));
   const view = read('view');
-  if (isView(view)) state.view = view;
-  else if (isView(savedView)) state.view = savedView;
+  if (allowed(view)) state.view = view;
+  else if (allowed(savedView)) state.view = savedView;
 
   const page = read('page');
   if (page !== null && /^\d{1,9}$/.test(page)) state.page = Math.max(1, Number(page));
@@ -208,7 +250,7 @@ export function serializeListState<T>(config: ListConfig<T>, state: ListState): 
 
   for (const filter of config.filters) {
     const raw = state.filters[filter.key];
-    const value = raw === undefined ? undefined : filterValue(filter.values, raw);
+    const value = raw === undefined ? undefined : filterValues(filter, raw);
     if (value !== undefined) write(filter.key, value);
   }
 
@@ -287,11 +329,12 @@ function groupItems<T>(config: ListConfig<T>, items: T[]): ListGroup<T>[] {
 }
 
 function cut<T>(config: ListConfig<T>, ordered: readonly T[], total: number, state: ListState) {
-  const pageCount = pageCountOf(config.pageSize, total);
+  const pageSize = config.unpagedViews?.includes(state.view) ? Infinity : config.pageSize;
+  const pageCount = pageCountOf(pageSize, total);
   const page = Math.min(Math.max(1, Math.floor(state.page) || 1), pageCount);
-  const size = Math.floor(config.pageSize);
+  const size = Math.floor(pageSize);
   const items =
-    Number.isFinite(config.pageSize) && size >= 1
+    Number.isFinite(pageSize) && size >= 1
       ? ordered.slice((page - 1) * size, page * size)
       : ordered.slice();
   const shown: ListPage<T> = {
@@ -327,8 +370,11 @@ export function applyListState<T>(
 
   for (const filter of config.filters) {
     const raw = state.filters[filter.key];
-    const value = raw === undefined ? undefined : filterValue(filter.values, raw);
-    if (value !== undefined) result = result.filter((item) => filter.test(item, value));
+    const value = raw === undefined ? undefined : filterValues(filter, raw);
+    if (value !== undefined) {
+      const wanted = filter.multi ? value.split(',') : [value];
+      result = result.filter((item) => wanted.some((one) => filter.test(item, one)));
+    }
   }
 
   const sort = config.sorts.find((option) => option.id === state.sort) ?? config.sorts[0];
@@ -373,9 +419,12 @@ export function pendingScript<T>(config: ListConfig<T>, pageCount: number): stri
   // The filters with a list of ids share one loop; the others are one check each.
   const lists: [string, readonly string[]][] = [];
   for (const filter of config.filters) {
-    const read = `x=g(${json(filter.key)});`;
+    // An alias (§16.4.2) falls back the same way the parser does: `g` tries the current
+    // key first, then each alias, in order.
+    const keys = [filter.key, ...(filter.aliasKeys ?? [])].map(json);
+    const read = `x=null;[${keys.join(',')}].some(function(k){x=g(k);return x!==null});`;
     if (filter.values === 'int') checks.push(`${read}if(/^\\d{1,15}$/.test(x))d=1;`);
-    else if (filter.values === 'text') checks.push(`${read}if(x&&x.trim())d=1;`);
+    else if (filter.values === 'text' || filter.multi) checks.push(`${read}if(x&&x.trim())d=1;`);
     else lists.push([filter.key, filter.values]);
   }
   if (lists.length > 0) {
@@ -398,7 +447,7 @@ export function pendingScript<T>(config: ListConfig<T>, pageCount: number): stri
   const attribute = json(PENDING_ATTRIBUTE);
   return (
     '(function(){try{var r=document.currentScript.parentNode.parentNode,' +
-    `u=new URLSearchParams(location.search),d=0,x,w=/^(?:${VIEWS.join('|')})$/,` +
+    `u=new URLSearchParams(location.search),d=0,x,w=/^(?:${(config.views ?? VIEWS).join('|')})$/,` +
     `g=function(k){return ${read}};` +
     checks.join('') +
     `if(d){r.setAttribute(${attribute},"");` +

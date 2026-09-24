@@ -1,0 +1,43 @@
+/* The classic tier list of the Tier list page (spec 16.4.3): one row per tier, the label cell in
+   the colour of its TierBadge, the Pokemon slots flowing right. Per-component sheet (13.6):
+   TiersRoot.tsx imports it. */
+
+@layer properties, theme, base, components, utilities;
+
+@layer components {
+  .ac-tier-rows {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+    overflow: hidden;
+    border-radius: var(--radius-8);
+    background: var(--tt-panel-deep);
+  }
+
+  .ac-tier-rows__row {
+    display: flex;
+    align-items: stretch;
+    gap: var(--space-8);
+    background: var(--tt-panel);
+  }
+
+  .ac-tier-rows__label {
+    display: flex;
+    flex: none;
+    align-items: center;
+    justify-content: center;
+    width: var(--size-stage);
+    border-left: var(--space-4) solid var(--tier-c, var(--text-tertiary));
+    background: var(--tt-panel-deep);
+  }
+
+  .ac-tier-rows__slots {
+    display: flex;
+    flex: 1;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+    margin: 0;
+    padding: var(--space-4) var(--space-4) var(--space-4) 0;
+    list-style: none;
+  }
+}

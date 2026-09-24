@@ -106,7 +106,13 @@ function itemRef(id: string, locale: Locale): PokedexItemRef | null {
 export function buildPokedexData(locale: Locale): PokedexData {
   const records = [...getPokemon()].sort(pokedexOrder(locale));
   const filas = records.map((record) =>
-    POKEDEX_FIELDS.map((field) => (field === 'drops' ? dropIds(record) : record[field])),
+    POKEDEX_FIELDS.map((field) => {
+      if (field === 'drops') return dropIds(record);
+      // `elementoMoveset` is optional on the registry's record (3.13); the column is
+      // always written, `null` for the unknown (§16.2.2).
+      if (field === 'elementoMoveset') return record.elementoMoveset ?? null;
+      return record[field];
+    }),
   );
   const dropped = [...new Set(records.flatMap((record) => dropIds(record) ?? []))];
   return {
@@ -218,6 +224,7 @@ export function pokedexIds(
   const numbered = new Map<number, PokedexOption>();
   const special = new Map<string, PokedexOption>();
   const variants = new Set<string>();
+  const movesetIds = new Set<string>();
   for (const record of records) {
     if (record.generacion !== null) generations.add(record.generacion);
     const tier = tierId(record.tier);
@@ -227,15 +234,22 @@ export function pokedexIds(
       else special.set(tier, option);
     }
     variants.add(record.variante);
+    if (record.elementoMoveset != null) movesetIds.add(record.elementoMoveset);
   }
   const ascending = (a: number, b: number) => a - b;
+  const elementOptions: PokedexOption[] = Object.entries(elements).map(([id, element]) => [
+    id,
+    element.nombre,
+  ]);
   return {
     generations: [...generations].sort(ascending).map(String),
     tiers: [
       ...[...numbered.entries()].sort(([a], [b]) => a - b).map(([, option]) => option),
       ...[...special.values()].sort(([a], [b]) => specialRank(a) - specialRank(b)),
     ],
-    elements: Object.entries(elements).map(([id, element]) => [id, element.nombre]),
+    elements: elementOptions,
+    // §16.2.2: only the elements at least one record's moveset names, in element order.
+    movesets: elementOptions.filter(([id]) => movesetIds.has(id)),
     variants: VARIANTS.filter((variant) => variants.has(variant)),
   };
 }

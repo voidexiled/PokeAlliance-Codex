@@ -49,8 +49,8 @@ export const PRESENCIA_INACTIVO_HORAS = 6;
 
 // ------------------------------------------------------------------ fixed by 9.9 to 9.15
 
-/** Seconds between two heartbeats of a signed-in tab (9.15.6). */
-export const PRESENCIA_LATIDO_S = 60;
+/** Seconds between two heartbeats of a signed-in, visible tab (9.15.6, egress 9.16.4). */
+export const PRESENCIA_LATIDO_S = 120;
 /** Stars of a review: 1 to 5, whole (9.15.4). */
 export const PUNTUACION_MIN = 1;
 export const PUNTUACION_MAX = 5;
@@ -179,3 +179,10 @@ export function telefonoObligatorio(raw: string | undefined): boolean {
   if (value === '0' || value === 'false') return false;
   return TELEFONO_OBLIGATORIO;
 }
+
+/**
+ * Cache-Control of the public Comercio pages rendered on the server (list, detail, seller).
+ * Their HTML holds nothing personal, so the Vercel CDN reads Supabase at most once every 30 s per
+ * address (egress, 9.16.4).
+ */
+export const COMERCIO_CACHE_CONTROL = 'public, s-maxage=30, stale-while-revalidate=300';

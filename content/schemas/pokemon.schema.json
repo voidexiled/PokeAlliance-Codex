@@ -26,6 +26,7 @@
       "enum": ["PVE", "PVP", null]
     },
     "tierEspecial": {
+      "description": "Jerarquía de tiers especiales (§16.2.1), del más bajo al más alto: Super Rare, Ultra Rare, Legendary, Mythic, ULTIMATE. src/lib/content/tier-rank.ts ordena por esta lista (0 = ULTIMATE, el mejor).",
       "enum": ["Super Rare", "Ultra Rare", "Legendary", "Mythic", "ULTIMATE"]
     },
     "elemento": {

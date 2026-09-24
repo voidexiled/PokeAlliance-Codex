@@ -183,7 +183,7 @@ function accessibleTitle(anuncio: Anuncio, locale: Locale): string {
   if (anuncio.tipo === 'items') {
     const item = anuncio.item;
     if (item === undefined) return '—';
-    return (item.item === null ? undefined : ITEM_NAME.get(item.item)) ?? item.nombre;
+    return ITEM_NAME.get(item.item) ?? item.item;
   }
   if (anuncio.tipo === 'diamonds') return formatDiamonds(anuncio.cantidad ?? null, locale);
   return formatPokedolaresLabel(anuncio.cantidad ?? null, locale);
@@ -745,8 +745,8 @@ test('CA-9.6: la búsqueda encuentra el Boost, el nickname sin espacios, la form
     });
   }
   const premier = (anuncio: Anuncio): boolean =>
-    folded(anuncio.pokemon?.ball?.nombre ?? '').includes('premier') ||
-    anuncio.pokemon?.aura === 'premier';
+    (anuncio.pokemon?.ball ?? '').includes('premier') ||
+    (anuncio.pokemon?.auras ?? []).includes('premier');
   if (LISTED.some(premier)) queries.push({ query: 'premier', expected: LISTED.filter(premier) });
   expect(queries.length, 'the sample registry gives every query of CA-9.6').toBe(4);
 

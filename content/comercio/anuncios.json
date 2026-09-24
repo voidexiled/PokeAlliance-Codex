@@ -10,30 +10,51 @@
       "expira": "2030-12-31T12:00:00Z",
       "estado": "publicado",
       "precio": {
-        "real": { "moneda": "BRL", "importe": "120" },
+        "real": {
+          "moneda": "BRL",
+          "importe": "120"
+        },
         "juego": [
-          { "tipo": "pokedolares", "cantidad": 200000000 },
-          { "tipo": "diamonds", "cantidad": 500 }
+          {
+            "tipo": "pokedolares",
+            "cantidad": 200000000
+          },
+          {
+            "tipo": "diamonds",
+            "cantidad": 500
+          }
         ],
         "aConvenir": false
       },
       "pokemon": {
         "pokemon": "shiny-ditto",
-        "ball": { "item": "premier-ball", "nombre": "Premier Ball" },
-        "aura": "alliance",
+        "ball": "premier-ball",
+        "auras": ["alliance"],
+        "addons": [],
+        "heldX": "helds-ejemplo-1",
+        "heldY": null,
+        "mega": null,
         "boost": 18,
         "starLevel": 1,
         "nickname": "N E B U L A",
         "memorySlots": 4,
         "memorias": ["dragonite", "alakazam", null, "snorlax"],
-        "helds": [{ "item": "helds-ejemplo-1", "nombre": "Item de ejemplo 1", "tier": 4 }],
-        "addon": null,
         "nextBoostChance": "8.5",
         "entrenamiento": [
-          { "habilidad": "Attack", "nivel": 12, "progreso": "40" },
-          { "habilidad": "Critical Chance", "nivel": 5, "progreso": "75.5" }
+          {
+            "habilidad": "Attack",
+            "nivel": 12,
+            "progreso": "40"
+          },
+          {
+            "habilidad": "Critical Chance",
+            "nivel": 5,
+            "progreso": "75.5"
+          }
         ],
-        "precioNpc": { "tipo": "unsellable" }
+        "precioNpc": {
+          "tipo": "unsellable"
+        }
       },
       "borrador": true
     },
@@ -46,24 +67,32 @@
       "expira": "2030-12-31T12:00:00Z",
       "estado": "publicado",
       "precio": {
-        "real": { "moneda": "USD", "importe": "15.50" },
+        "real": {
+          "moneda": "USD",
+          "importe": "15.50"
+        },
         "juego": [],
         "aConvenir": false
       },
       "pokemon": {
         "pokemon": "bulbasaur",
-        "ball": { "item": "ultra-ball", "nombre": "Ultra Ball" },
-        "aura": null,
+        "ball": "ultra-ball",
+        "auras": [],
+        "addons": ["bulbasaur-addon-1"],
+        "heldX": null,
+        "heldY": null,
+        "mega": null,
         "boost": 20,
         "starLevel": 0,
         "nickname": null,
         "memorySlots": null,
         "memorias": [],
-        "helds": [],
-        "addon": { "id": "bulbasaur-addon-1", "nombre": "Nombre del addon" },
         "nextBoostChance": null,
         "entrenamiento": [],
-        "precioNpc": { "tipo": "pokedolares", "cantidad": 2500 }
+        "precioNpc": {
+          "tipo": "pokedolares",
+          "cantidad": 2500
+        }
       },
       "borrador": true
     },
@@ -77,28 +106,44 @@
       "estado": "publicado",
       "precio": {
         "real": null,
-        "juego": [{ "tipo": "pokedolares", "cantidad": 320000000 }],
+        "juego": [
+          {
+            "tipo": "pokedolares",
+            "cantidad": 320000000
+          }
+        ],
         "aConvenir": false
       },
       "pokemon": {
         "pokemon": "shiny-gyarados",
-        "ball": { "item": null, "nombre": "Ball de ejemplo" },
-        "aura": "premier",
+        "ball": null,
+        "auras": ["premier"],
+        "addons": [],
+        "heldX": null,
+        "heldY": "helds-ejemplo-2",
+        "mega": null,
         "boost": 35,
         "starLevel": 3,
         "nickname": "Marea",
         "memorySlots": null,
         "memorias": [],
-        "helds": [
-          { "item": "helds-ejemplo-2", "nombre": "Item de ejemplo 2", "tier": 5 },
-          { "item": null, "nombre": "Held de ejemplo", "tier": 3 }
-        ],
-        "addon": null,
         "nextBoostChance": "12.25",
         "entrenamiento": [
-          { "habilidad": "Attack", "nivel": 22, "progreso": "65" },
-          { "habilidad": "Defense", "nivel": 20, "progreso": null },
-          { "habilidad": "HP", "nivel": null, "progreso": "30" }
+          {
+            "habilidad": "Attack",
+            "nivel": 22,
+            "progreso": "65"
+          },
+          {
+            "habilidad": "Defense",
+            "nivel": 20,
+            "progreso": null
+          },
+          {
+            "habilidad": "HP",
+            "nivel": null,
+            "progreso": "30"
+          }
         ],
         "precioNpc": null
       },
@@ -112,18 +157,24 @@
       "publicado": "2026-09-17T14:00:00Z",
       "expira": "2030-12-31T12:00:00Z",
       "estado": "publicado",
-      "precio": { "real": null, "juego": [], "aConvenir": true },
+      "precio": {
+        "real": null,
+        "juego": [],
+        "aConvenir": true
+      },
       "pokemon": {
         "pokemon": "lucario",
         "ball": null,
-        "aura": null,
+        "auras": [],
+        "addons": [],
+        "heldX": null,
+        "heldY": null,
+        "mega": null,
         "boost": 5,
         "starLevel": null,
         "nickname": null,
         "memorySlots": null,
         "memorias": [],
-        "helds": [],
-        "addon": null,
         "nextBoostChance": null,
         "entrenamiento": [],
         "precioNpc": null
@@ -139,23 +190,34 @@
       "expira": "2030-12-31T12:00:00Z",
       "estado": "reservado",
       "precio": {
-        "real": { "moneda": "MXN", "importe": "950" },
+        "real": {
+          "moneda": "MXN",
+          "importe": "950"
+        },
         "juego": [],
         "aConvenir": false
       },
       "pokemon": {
         "pokemon": "dragonite",
-        "ball": { "item": "alliance-ball", "nombre": "Alliance Ball" },
-        "aura": null,
+        "ball": "alliance-ball",
+        "auras": [],
+        "addons": [],
+        "heldX": null,
+        "heldY": null,
+        "mega": null,
         "boost": 10,
         "starLevel": 2,
         "nickname": null,
         "memorySlots": null,
         "memorias": [],
-        "helds": [],
-        "addon": null,
         "nextBoostChance": null,
-        "entrenamiento": [{ "habilidad": "Evasion", "nivel": 3, "progreso": "0" }],
+        "entrenamiento": [
+          {
+            "habilidad": "Evasion",
+            "nivel": 3,
+            "progreso": "0"
+          }
+        ],
         "precioNpc": null
       },
       "borrador": true
@@ -170,10 +232,18 @@
       "estado": "publicado",
       "precio": {
         "real": null,
-        "juego": [{ "tipo": "pokedolares", "cantidad": 4500000 }],
+        "juego": [
+          {
+            "tipo": "pokedolares",
+            "cantidad": 4500000
+          }
+        ],
         "aConvenir": false
       },
-      "item": { "item": "fire-stone", "nombre": "Fire Stone", "cantidad": 40 },
+      "item": {
+        "item": "fire-stone",
+        "cantidad": 40
+      },
       "borrador": true
     },
     {
@@ -187,12 +257,21 @@
       "precio": {
         "real": null,
         "juego": [
-          { "tipo": "diamonds", "cantidad": 25 },
-          { "tipo": "pokedolares", "cantidad": 9000000 }
+          {
+            "tipo": "diamonds",
+            "cantidad": 25
+          },
+          {
+            "tipo": "pokedolares",
+            "cantidad": 9000000
+          }
         ],
         "aConvenir": false
       },
-      "item": { "item": "alliance-ball", "nombre": "Alliance Ball", "cantidad": 250 },
+      "item": {
+        "item": "alliance-ball",
+        "cantidad": 250
+      },
       "borrador": true
     },
     {
@@ -204,11 +283,22 @@
       "expira": "2030-12-31T12:00:00Z",
       "estado": "publicado",
       "precio": {
-        "real": { "moneda": "BRL", "importe": "35" },
-        "juego": [{ "tipo": "diamonds", "cantidad": 60 }],
+        "real": {
+          "moneda": "BRL",
+          "importe": "35"
+        },
+        "juego": [
+          {
+            "tipo": "diamonds",
+            "cantidad": 60
+          }
+        ],
         "aConvenir": false
       },
-      "item": { "item": null, "nombre": "Item declarado de ejemplo", "cantidad": 1500 },
+      "item": {
+        "item": "general-items-ejemplo-1",
+        "cantidad": 1500
+      },
       "borrador": true
     },
     {
@@ -220,8 +310,16 @@
       "expira": "2030-12-31T12:00:00Z",
       "estado": "publicado",
       "precio": {
-        "real": { "moneda": "USD", "importe": "48" },
-        "juego": [{ "tipo": "pokedolares", "cantidad": 480000000 }],
+        "real": {
+          "moneda": "USD",
+          "importe": "48"
+        },
+        "juego": [
+          {
+            "tipo": "pokedolares",
+            "cantidad": 480000000
+          }
+        ],
         "aConvenir": false
       },
       "cantidad": 1200,
@@ -236,7 +334,10 @@
       "expira": "2030-12-31T12:00:00Z",
       "estado": "publicado",
       "precio": {
-        "real": { "moneda": "BRL", "importe": "25" },
+        "real": {
+          "moneda": "BRL",
+          "importe": "25"
+        },
         "juego": [],
         "aConvenir": false
       },
@@ -252,8 +353,16 @@
       "expira": "2030-12-31T12:00:00Z",
       "estado": "publicado",
       "precio": {
-        "real": { "moneda": "MXN", "importe": "260" },
-        "juego": [{ "tipo": "diamonds", "cantidad": 90 }],
+        "real": {
+          "moneda": "MXN",
+          "importe": "260"
+        },
+        "juego": [
+          {
+            "tipo": "diamonds",
+            "cantidad": 90
+          }
+        ],
         "aConvenir": false
       },
       "cantidad": 75000000,
@@ -268,7 +377,10 @@
       "expira": "2030-12-31T12:00:00Z",
       "estado": "publicado",
       "precio": {
-        "real": { "moneda": "USD", "importe": "4" },
+        "real": {
+          "moneda": "USD",
+          "importe": "4"
+        },
         "juego": [],
         "aConvenir": false
       },
@@ -284,21 +396,31 @@
       "expira": "2026-09-03T13:00:00Z",
       "estado": "expirado",
       "precio": {
-        "real": { "moneda": "BRL", "importe": "70" },
-        "juego": [{ "tipo": "pokedolares", "cantidad": 60000000 }],
+        "real": {
+          "moneda": "BRL",
+          "importe": "70"
+        },
+        "juego": [
+          {
+            "tipo": "pokedolares",
+            "cantidad": 60000000
+          }
+        ],
         "aConvenir": false
       },
       "pokemon": {
         "pokemon": "snorlax",
         "ball": null,
-        "aura": null,
+        "auras": [],
+        "addons": [],
+        "heldX": null,
+        "heldY": null,
+        "mega": null,
         "boost": 15,
         "starLevel": null,
         "nickname": "Siesta",
         "memorySlots": null,
         "memorias": [],
-        "helds": [],
-        "addon": null,
         "nextBoostChance": null,
         "entrenamiento": [],
         "precioNpc": null
@@ -314,21 +436,26 @@
       "expira": "2026-09-11T19:20:00Z",
       "estado": "publicado",
       "precio": {
-        "real": { "moneda": "USD", "importe": "22" },
+        "real": {
+          "moneda": "USD",
+          "importe": "22"
+        },
         "juego": [],
         "aConvenir": false
       },
       "pokemon": {
         "pokemon": "gengar",
-        "ball": { "item": "ultra-ball", "nombre": "Ultra Ball" },
-        "aura": null,
+        "ball": "ultra-ball",
+        "auras": [],
+        "addons": [],
+        "heldX": null,
+        "heldY": null,
+        "mega": null,
         "boost": 25,
         "starLevel": null,
         "nickname": null,
         "memorySlots": null,
         "memorias": [],
-        "helds": [],
-        "addon": null,
         "nextBoostChance": null,
         "entrenamiento": [],
         "precioNpc": null
@@ -344,21 +471,26 @@
       "expira": "2026-09-16T16:00:00Z",
       "estado": "completado",
       "precio": {
-        "real": { "moneda": "MXN", "importe": "1400.75" },
+        "real": {
+          "moneda": "MXN",
+          "importe": "1400.75"
+        },
         "juego": [],
         "aConvenir": false
       },
       "pokemon": {
         "pokemon": "shiny-kingdra",
         "ball": null,
-        "aura": "premier",
+        "auras": ["premier"],
+        "addons": [],
+        "heldX": null,
+        "heldY": null,
+        "mega": null,
         "boost": 30,
         "starLevel": 4,
         "nickname": null,
         "memorySlots": null,
         "memorias": [],
-        "helds": [],
-        "addon": null,
         "nextBoostChance": null,
         "entrenamiento": [],
         "precioNpc": null
@@ -374,21 +506,26 @@
       "expira": "2026-09-24T08:30:00Z",
       "estado": "retirado",
       "precio": {
-        "real": { "moneda": "BRL", "importe": "30" },
+        "real": {
+          "moneda": "BRL",
+          "importe": "30"
+        },
         "juego": [],
         "aConvenir": false
       },
       "pokemon": {
         "pokemon": "umbreon",
         "ball": null,
-        "aura": null,
+        "auras": [],
+        "addons": [],
+        "heldX": null,
+        "heldY": null,
+        "mega": null,
         "boost": 0,
         "starLevel": 0,
         "nickname": null,
         "memorySlots": null,
         "memorias": [],
-        "helds": [],
-        "addon": null,
         "nextBoostChance": null,
         "entrenamiento": [],
         "precioNpc": null

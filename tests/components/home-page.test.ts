@@ -205,7 +205,13 @@ describe('PZ-06: «{a} normales» and «{b} Shiny» of the Pokédex bar (8.2 ste
   it.each(LOCALES)('%s: the totals of each Variante are the registry’s', (l) => {
     const data = buildPokedexData(l);
     const rows = decodePokedex(data);
-    const config = pokedexConfig(`/${l}/pokedex/datos.json`, pokedexIds(rows, data.refs.elementos));
+    const sortLabels = { numero: '', nombre: '', tier: '', requisito: '' };
+    const config = pokedexConfig(
+      `/${l}/pokedex/datos.json`,
+      pokedexIds(rows, data.refs.elementos),
+      l,
+      sortLabels,
+    );
     const cases: [string, number][] = [
       ['', getPokemon().length],
       ['?variante=normal', getPokemon().filter((record) => record.variante === 'normal').length],

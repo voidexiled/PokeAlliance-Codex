@@ -78,6 +78,18 @@
     --tt-muted: #9aa0a8;
     --tt-hint: #8a91a0;
     --tt-shiny: #4a9eff;
+    --tier-ultimate: #ff6b6b;
+    --tier-mythic: #f0abfc;
+    --tier-legendary: #fbbf24;
+    --tier-ultra-rare: #c4b5fd;
+    --tier-super-rare: #7dd3fc;
+    --tier-t1: #f7f7f7;
+    --tier-t2: #e2e3e5;
+    --tier-t3: #cecfd2;
+    --tier-t4: #b8babe;
+    --tier-t5: #a6a8ad;
+    --tier-t6: #95989d;
+    --tier-t7: #85888e;
 
     /* Espaciado */
     --space-2: 2px;

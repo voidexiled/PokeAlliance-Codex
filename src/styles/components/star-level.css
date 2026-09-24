@@ -1,0 +1,65 @@
+/* StarLevel (spec 16.3.4). Per-component sheet (§13.6): StarLevel.tsx imports it. The CSS star
+   stands in for the client star sprites until they are registered. */
+
+@layer properties, theme, base, components, utilities;
+
+@layer components {
+  .ac-star-level {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-6);
+  }
+
+  .ac-star-level__label {
+    color: var(--text-secondary);
+    font: 600 13px/16px var(--font-sans); /* sin token: pixel-exact game slot geometry */
+  }
+
+  .ac-star-level__stars {
+    display: inline-flex;
+    gap: var(--space-2);
+  }
+
+  .ac-star-level__star {
+    display: grid;
+    place-items: center;
+    width: 36px; /* sin token: pixel-exact game slot geometry */
+    height: 36px; /* sin token: pixel-exact game slot geometry */
+    padding: 0;
+    border: 0;
+    border-radius: var(--radius-6);
+    background: transparent;
+    cursor: pointer;
+  }
+  .ac-star-level__star:hover {
+    background: var(--bg-tertiary);
+  }
+
+  .ac-star-level__css {
+    width: 24px; /* sin token: pixel-exact game slot geometry */
+    height: 24px; /* sin token: pixel-exact game slot geometry */
+    background: var(--bg-quaternary);
+    clip-path: polygon(
+      50% 0,
+      61% 35%,
+      98% 35%,
+      68% 57%,
+      79% 91%,
+      50% 70%,
+      21% 91%,
+      32% 57%,
+      2% 35%,
+      39% 35%
+    );
+  }
+  .ac-star-level__star[data-on] .ac-star-level__css {
+    background: linear-gradient(180deg, var(--amber), var(--amber) 70%, var(--selected));
+  }
+
+  @media (pointer: coarse) {
+    .ac-star-level__star {
+      width: var(--size-touch);
+      height: var(--size-touch);
+    }
+  }
+}

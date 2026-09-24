@@ -70,6 +70,11 @@
           "type": "array",
           "description": "ids de content/pokemon.json que usan el movimiento.",
           "items": { "$ref": "#/$defs/slug" }
+        },
+        "alcance": {
+          "type": ["string", "null"],
+          "description": "Opcional (§16.2.2). Etiqueta del Pokédex del juego: \"area\" (aoe), \"objetivo\" (target) o \"pasivo\" (passive). null si no se conoce; usado por el importador para elegir elementoMoveset y por la ficha para marcar los movimientos de área.",
+          "enum": ["area", "objetivo", "pasivo", null]
         }
       }
     }

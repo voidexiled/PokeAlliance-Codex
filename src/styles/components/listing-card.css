@@ -37,3 +37,14 @@
   font-variant-numeric: tabular-nums;
   @apply type-body-strong;
 }
+
+/* EquipmentStrip (spec 16.4.5): the equipment of a listed Pokémon, 32 px slots 4 apart in the
+   order of the game, wrapping on narrow cards. */
+.ac-equipment-strip {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-4);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}

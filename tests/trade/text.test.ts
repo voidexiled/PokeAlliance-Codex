@@ -79,20 +79,23 @@ const NAMES: ListingTextNames = {
   addon: (id) => ADDONS[id],
   aura: (id) => AURAS[id],
   mundo: (id) => MUNDOS[id],
+  heldTier: (id) => ({ 'x-attack': 5, 'x-lucky': 3 })[id],
 };
 
 function unidad(pokemon: string, declared: Partial<UnidadPokemon> = {}): UnidadPokemon {
   return {
     pokemon,
     ball: null,
-    aura: null,
+    auras: [],
+    addons: [],
+    heldX: null,
+    heldY: null,
+    mega: null,
     boost: null,
     starLevel: null,
     nickname: null,
     memorySlots: null,
     memorias: [],
-    helds: [],
-    addon: null,
     nextBoostChance: null,
     entrenamiento: [],
     precioNpc: null,
@@ -114,15 +117,13 @@ const EXAMPLE: ListingTextInput = {
   mundo: 'sun',
   pokemon: unidad('shiny-ditto', {
     nickname: 'S U S A N O O',
-    ball: { item: 'premier-ball', nombre: 'Premier Ball' },
-    aura: 'premier',
+    ball: 'premier-ball',
+    auras: ['premier'],
     boost: 20,
     memorySlots: 6,
     memorias: ['charizard', 'gengar', null, null, null, null],
-    helds: [
-      { item: 'x-attack', nombre: 'X-Attack', tier: 5 },
-      { item: 'x-lucky', nombre: 'X-Lucky', tier: 3 },
-    ],
+    heldX: 'x-attack',
+    heldY: 'x-lucky',
     entrenamiento: [{ habilidad: 'Attack', nivel: 16, progreso: '53' }],
   }),
   precio: precio({
@@ -188,10 +189,10 @@ describe('listingText (CA-9.12)', () => {
       tipo: 'pokemon',
       mundo: 'sun',
       pokemon: unidad('bulbasaur', {
-        ball: { item: null, nombre: 'Bola casera' },
+        ball: 'premier-ball',
         starLevel: 5,
         precioNpc: { tipo: 'pokedolares', cantidad: 2_500 },
-        addon: { id: 'bulbasaur-addon-1', nombre: 'addon de prueba' },
+        addons: ['bulbasaur-addon-1'],
         nextBoostChance: '12.5',
         entrenamiento: [
           { habilidad: 'Evasion', nivel: 1_200, progreso: null },
@@ -204,7 +205,7 @@ describe('listingText (CA-9.12)', () => {
     expect(text(full, 'es')).toBe(
       [
         'Vendo: Bulbasaur',
-        'Ball: Bola casera',
+        'Ball: Premier Ball',
         'Star Level: 5',
         'NPC Price: 2.500',
         'Addon: Addon de prueba',
@@ -263,7 +264,7 @@ describe('listingText (CA-9.12)', () => {
   it('writes the quantity of an items listing on its own line, and the title without it', () => {
     const items: ListingTextInput = {
       tipo: 'items',
-      item: { item: 'fire-stone', nombre: 'fire stone', cantidad: 1_500 },
+      item: { item: 'fire-stone', cantidad: 1_500 },
       mundo: 'sun',
       precio: precio({ real: { moneda: 'MXN', importe: '1800' } }),
     };

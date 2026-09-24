@@ -249,6 +249,82 @@ describe('U4: invalid values fall back to the default', () => {
   });
 });
 
+// §16.4.1: multi-value list filters (comma-separated in the URL, OR within a filter, AND
+// across filters), plus the alias a renamed parameter keeps reading (§16.4.2).
+const multiDex: ListConfig<Row> = {
+  ...dex,
+  filters: [
+    {
+      key: 'tipo',
+      values: ELEMENTS,
+      multi: true,
+      aliasKeys: ['elemento'],
+      test: (row, value) => row.elements.includes(value),
+    },
+    { key: 'tier', values: TIERS, multi: true, test: (row, value) => row.tier === value },
+  ],
+};
+
+describe('§16.4.1: multi-value list filters', () => {
+  it('parses and re-serialises a comma-separated value in canonical order', () => {
+    const read = parseListState(multiDex, '?tipo=fire,water');
+    expect(read.filters).toEqual({ tipo: 'fire,water' });
+    expect(serializeListState(multiDex, read)).toBe('tipo=fire%2Cwater');
+  });
+
+  it('drops invalid ids and duplicates, keeping first-seen order', () => {
+    expect(parseListState(multiDex, '?tipo=water,bogus,fire,water').filters).toEqual({
+      tipo: 'water,fire',
+    });
+  });
+
+  it('drops the filter entirely when nothing in the list is valid', () => {
+    expect(parseListState(multiDex, '?tipo=bogus,also-bogus').filters).toEqual({});
+  });
+
+  it('matches a row with any one of the values (OR within the filter)', () => {
+    const rows = [
+      { ...ROWS[0], elements: ['fire'] },
+      { ...ROWS[1], elements: ['water'] },
+      { ...ROWS[2], elements: ['grass'] },
+    ];
+    const shown = applyListState(multiDex, rows, parseListState(multiDex, '?tipo=fire,water'));
+    expect(shown.items.map((row) => row.elements)).toEqual([['fire'], ['water']]);
+  });
+
+  it('combines two filters with AND across them', () => {
+    const rows = [
+      { ...ROWS[0], elements: ['fire'], tier: 't1' },
+      { ...ROWS[1], elements: ['fire'], tier: 't2' },
+      { ...ROWS[2], elements: ['water'], tier: 't1' },
+    ];
+    const shown = applyListState(
+      multiDex,
+      rows,
+      parseListState(multiDex, '?tipo=fire,water&tier=t1'),
+    );
+    expect(shown.items).toEqual([rows[0], rows[2]]);
+  });
+
+  it('still reads the old parameter name as the new one (§16.4.2)', () => {
+    expect(parseListState(multiDex, '?elemento=fire,water').filters).toEqual({
+      tipo: 'fire,water',
+    });
+    // The current name wins when both are present.
+    expect(parseListState(multiDex, '?tipo=grass&elemento=fire').filters).toEqual({
+      tipo: 'grass',
+    });
+  });
+
+  it('the pending script (PR4) flags a URL with any multi-filter value, aliased or not', () => {
+    const script = pendingScript(multiDex, 1);
+    expect(runPending(script, '').pending).toBe(false);
+    expect(runPending(script, '?tipo=fire').pending).toBe(true);
+    expect(runPending(script, '?elemento=fire').pending).toBe(true);
+    expect(runPending(script, '?tier=t1,t2').pending).toBe(true);
+  });
+});
+
 describe('U5: the search', () => {
   it('matches every fragment, split on spaces and commas, without case or accents', () => {
     const find = (q: string) =>

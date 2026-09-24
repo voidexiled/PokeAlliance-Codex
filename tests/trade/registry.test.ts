@@ -36,8 +36,6 @@ import {
   CANTIDAD_MAX,
   ESTADOS_ANUNCIO,
   HABILIDADES,
-  HELD_TIER_MAX,
-  HELDS_MAX,
   MEMORY_SLOTS_MAX,
   MONEDAS_JUEGO,
   MONEDAS_REALES,
@@ -247,7 +245,7 @@ describe('with COMERCIO_DEMO', () => {
 describe('the fixture of the visual build (14.5)', () => {
   const pokemonListing = anuncios[POKEMON];
   const itemsListing = anuncios[ITEMS];
-  /** A listing the board draws and no listing may hold: three held items. */
+  /** A listing the board draws and no listing may hold: the held items of M14. */
   const unholdable = withValue(
     { ...pokemonListing, id: 'tablero-otro' },
     ['pokemon', 'helds'],
@@ -315,14 +313,14 @@ describe('the model of 9.4 (src/lib/trade/types.ts)', () => {
     expect(unit.starLevel.maximum).toBe(STAR_LEVEL_MAX);
     expect(unit.memorySlots.maximum).toBe(MEMORY_SLOTS_MAX);
     expect(unit.memorias.maxItems).toBe(MEMORY_SLOTS_MAX);
-    expect(unit.helds.maxItems).toBe(HELDS_MAX);
+    expect(unit.auras.maxItems).toBe(32);
+    expect(unit.addons.maxItems).toBe(32);
     expect(unit.entrenamiento.maxItems).toBe(HABILIDADES.length);
-    expect(defs.heldDeclarado.properties.tier.maximum).toBe(HELD_TIER_MAX);
+    expect(Object.keys(defs.itemAnunciado.properties)).toEqual(['item', 'cantidad']);
     expect(defs.entrenamiento.properties.nivel.maximum).toBe(NIVEL_ENTRENAMIENTO_MAX);
     expect(defs.cantidad.maximum).toBe(CANTIDAD_MAX);
     expect(CANTIDAD_MAX).toBeLessThan(Number.MAX_SAFE_INTEGER);
-    // Q8 and Q9 keep their defaults until the owner answers.
-    expect(HELD_TIER_MAX).toBe(99);
+    // Q9 keeps its default until the owner answers.
     expect([...MONEDAS_REALES]).toEqual(['BRL', 'USD', 'MXN']);
   });
 
@@ -486,20 +484,14 @@ describe('the JSON Schema and its Zod mirror', () => {
       ['Star Level 6', listing(POKEMON, ['pokemon', 'starLevel'], STAR_LEVEL_MAX + 1)],
       ['Memory Slots 7', listing(DITTO, ['pokemon', 'memorySlots'], MEMORY_SLOTS_MAX + 1)],
       [
-        'three held items',
-        listing(
-          POKEMON,
-          ['pokemon', 'helds'],
-          [1, 2, 3].map((tier) => ({ item: null, nombre: 'X', tier })),
-        ),
+        'the declared held items of M14',
+        listing(POKEMON, ['pokemon', 'helds'], [{ item: null, nombre: 'X', tier: 1 }]),
       ],
+      ['a declared Ball name', listing(POKEMON, ['pokemon', 'ball'], { item: null, nombre: 'X' })],
+      ['a held X that is no id', listing(POKEMON, ['pokemon', 'heldX'], 'X Attack')],
       [
-        'a held item of tier 100',
-        listing(POKEMON, ['pokemon', 'helds'], [{ item: null, nombre: 'X', tier: 100 }]),
-      ],
-      [
-        'a held item of tier 0',
-        listing(POKEMON, ['pokemon', 'helds'], [{ item: null, nombre: 'X', tier: 0 }]),
+        'a declared item name',
+        listing(ITEMS, ['item'], { item: 'fire-stone', nombre: 'Fire Stone', cantidad: 1 }),
       ],
       ['a nickname of 41 characters', listing(POKEMON, ['pokemon', 'nickname'], 'x'.repeat(41))],
       ['a nickname with an outer space', listing(POKEMON, ['pokemon', 'nickname'], ' Nube')],
@@ -609,9 +601,7 @@ describe('the minimum content of the demo registry (9.4)', () => {
           unit.memorias.some((id) => id !== null),
       ),
     ).toBe(true);
-    expect(
-      pokemon.some((unit) => unit.helds.length === HELDS_MAX && unit.entrenamiento.length > 0),
-    ).toBe(true);
+    expect(pokemon.some((unit) => unit.heldX !== null && unit.entrenamiento.length > 0)).toBe(true);
     expect(
       anuncios.some((anuncio) => anuncio.precio.real !== null && anuncio.precio.juego.length === 2),
     ).toBe(true);
@@ -741,11 +731,11 @@ describe('pnpm content:check on content/comercio/', () => {
         { tipo: 'diamonds', cantidad: 2 },
       ];
       data.anuncios[ITEMS].publicado = '2026-02-30T10:00:00Z';
-      data.anuncios[ITEMS].item = { item: 'no-existe', nombre: 'Fire Stone', cantidad: 1 };
+      data.anuncios[ITEMS].item = { item: 'no-existe', cantidad: 1 };
       const ditto = unit(DITTO);
       ditto.memorias = ditto.memorias.slice(1);
-      ditto.ball = { item: 'fire-stone', nombre: 'Fire Stone' };
-      ditto.aura = 'aura-inexistente';
+      ditto.ball = 'fire-stone';
+      ditto.auras = ['aura-inexistente'];
       ditto.entrenamiento = [
         { habilidad: 'HP', nivel: 1, progreso: null },
         { habilidad: 'HP', nivel: null, progreso: null },
@@ -757,9 +747,8 @@ describe('pnpm content:check on content/comercio/', () => {
       const plain = unit(other);
       plain.memorySlots = 2;
       plain.memorias = ['missingno', null];
-      plain.ball = { item: null, nombre: 'PREMIER BALL' };
-      plain.helds = [{ item: 'helds-ejemplo-1', nombre: 'Otro nombre', tier: 1 }];
-      plain.addon = { id: 'bulbasaur-addon-1', nombre: 'Nombre del addon' };
+      plain.heldX = 'fire-stone';
+      plain.addons = ['bulbasaur-addon-1'];
       plain.pokemon = plain.pokemon === 'bulbasaur' ? 'ivysaur' : plain.pokemon;
       data.anuncios.push({ ...data.anuncios[ITEMS], borrador: true });
     });
@@ -819,16 +808,15 @@ describe('pnpm content:check on content/comercio/', () => {
       /anuncios\.json · anuncios\[\d+\]\.publicado · "2026-02-30T10:00:00Z" no es un día del calendario/,
       /anuncios\.json · anuncios\[\d+\]\.item\.item · "no-existe" no existe en content\/items\//,
       /anuncios\.json · anuncios\[\d+\]\.pokemon\.memorias · memorias tiene \d+ entradas y Memory Slots es \d+/,
-      /anuncios\.json · anuncios\[\d+\]\.pokemon\.ball\.item · "fire-stone" es de la categoría "stones" y una Ball es de "poke-balls"/,
-      /anuncios\.json · anuncios\[\d+\]\.pokemon\.aura · "aura-inexistente" no existe en content\/auras\.json/,
+      /anuncios\.json · anuncios\[\d+\]\.pokemon\.ball · "fire-stone" es de la categoría "stones" y una Ball es de "poke-balls"/,
+      /anuncios\.json · anuncios\[\d+\]\.pokemon\.auras\[0\] · "aura-inexistente" no existe en content\/auras\.json/,
       /anuncios\.json · anuncios\[\d+\]\.pokemon\.entrenamiento\[1\]\.habilidad · habilidad repetida: "HP"/,
       /anuncios\.json · anuncios\[\d+\]\.pokemon\.entrenamiento\[1\] · una habilidad declarada lleva su nivel, su progreso o los dos/,
       /anuncios\.json · anuncios\[\d+\]\.pokemon\.memorySlots · Memory Slots solo va con Ditto y Shiny Ditto/,
       /anuncios\.json · anuncios\[\d+\]\.pokemon\.memorias · las memorias solo van con Ditto y Shiny Ditto/,
       /anuncios\.json · anuncios\[\d+\]\.pokemon\.memorias\[0\] · "missingno" no existe en content\/pokemon\.json/,
-      /anuncios\.json · anuncios\[\d+\]\.pokemon\.ball\.item · "PREMIER BALL" es el item "premier-ball" del registro/,
-      /anuncios\.json · anuncios\[\d+\]\.pokemon\.helds\[0\]\.nombre · el nombre no es el del item "helds-ejemplo-1"/,
-      /anuncios\.json · anuncios\[\d+\]\.pokemon\.addon\.id · "bulbasaur-addon-1" no es un addon de/,
+      /anuncios\.json · anuncios\[\d+\]\.pokemon\.heldX · "fire-stone" /,
+      /anuncios\.json · anuncios\[\d+\]\.pokemon\.addons\[0\] · "bulbasaur-addon-1" no es un addon de/,
       /vendedores\.json · vendedores\[0\]\.borrador · un registro de Comercio lleva "borrador": true/,
       /vendedores\.json · vendedores\[\d+\]\.id · id repetido/,
       /vendedores\.json · vendedores\[0\]\.canales\[1\] · canal repetido: "discord"/,

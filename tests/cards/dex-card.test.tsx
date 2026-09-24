@@ -18,6 +18,7 @@ const labels: DexCardLabels = {
   requirement: es.ui.tooltip.requirement,
   level: es.ui.tooltip.level,
   tier: es.ui.tooltip.tier,
+  moveset: es.pokedex.moveset,
   role: es.ui.tooltip.role,
   shiny: es.ui.shiny,
 };

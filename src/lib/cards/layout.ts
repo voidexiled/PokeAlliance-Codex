@@ -222,9 +222,9 @@ function priceRows(listings: readonly ListingLayoutInput[]): ListingPriceRow[] {
 // ---------------------------------------------------------------------- Pokédex entry
 
 /** Fact keys of a Pokédex card: Requisito, Tier, Rol, Variante (DS:DexCard, §8.2). */
-export type DexKey = 'requirement' | 'tier' | 'role' | 'variant';
+export type DexKey = 'requirement' | 'tier' | 'role' | 'variant' | 'moveset';
 /** The Pokédex facts in display order. */
-export const DEX_KEYS: readonly DexKey[] = ['requirement', 'tier', 'role', 'variant'];
+export const DEX_KEYS: readonly DexKey[] = ['requirement', 'tier', 'role', 'variant', 'moveset'];
 
 /** Zones of a Pokédex card after its facts, in anatomy order: element chips, drops. */
 export type DexZone = 'elements' | 'drops';
@@ -246,6 +246,8 @@ export interface DexLayoutInput {
   tier?: unknown;
   role?: unknown;
   variant?: unknown;
+  /** `elementoMoveset` (§16.4.2): the «Moveset» fact, only when an entry has it. */
+  moveset?: unknown;
   /** Element chips; the zone exists when one entry of the grid has at least one. */
   elements?: readonly unknown[] | null;
   /** Drops of the registry; the zone exists when one entry of the grid has at least one (8.2). */
@@ -262,12 +264,14 @@ export function dexValues<Entry extends DexLayoutInput>(
   tier: Entry['tier'];
   role: Entry['role'];
   variant: Entry['variant'];
+  moveset: Entry['moveset'];
 } {
   return {
     requirement: entry.level,
     tier: entry.tier,
     role: entry.role,
     variant: entry.variant,
+    moveset: entry.moveset,
   };
 }
 

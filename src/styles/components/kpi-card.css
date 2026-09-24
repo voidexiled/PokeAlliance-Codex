@@ -1,4 +1,11 @@
-/* KpiCard (spec 7.2.6, 7.6.2; CARD_GRID_SYSTEM §6.6; DS:KpiCard), ported from the
+/* Per-component sheet (§13.6): imported by the components that draw it, not by global.css. */
+
+@layer properties, theme, base, components, utilities;
+
+@reference '../theme.css';
+
+@layer components {
+  /* KpiCard (spec 7.2.6, 7.6.2; CARD_GRID_SYSTEM §6.6; DS:KpiCard), ported from the
    `.ac-kpi-card` block of the design system's components/bundle.css. global.css imports
    this file with layer(components).
 
@@ -14,46 +21,47 @@
    Here it is `type-body` with the line height of its parent (`leading-[inherit]`), the same
    cascade in the terms of spec 3.7. */
 
-.ac-kpi-card {
-  grid-row: span 3;
-  display: grid;
-  grid-template-rows: subgrid;
-  row-gap: var(--space-8);
-  min-width: 0;
-  padding: var(--space-16);
-  border: 1px solid var(--border-secondary);
-  border-radius: var(--radius-11);
-  background: var(--bg-primary);
-  color: var(--text-primary);
-}
-
-.ac-kpi-card__label {
-  margin: 0;
-  color: var(--text-secondary);
-  @apply type-body;
-}
-
-.ac-kpi-card__value {
-  margin: 0;
-  font-variant-numeric: tabular-nums;
-  @apply type-figure;
-}
-
-.ac-kpi-card__of {
-  color: var(--text-tertiary);
-  @apply type-body leading-[inherit];
-}
-
-.ac-kpi-card__comparison {
-  margin: 0;
-  color: var(--text-tertiary);
-  font-variant-numeric: tabular-nums;
-  @apply type-ui;
-}
-
-@supports not (grid-template-rows: subgrid) {
   .ac-kpi-card {
-    display: flex;
-    flex-direction: column;
+    grid-row: span 3;
+    display: grid;
+    grid-template-rows: subgrid;
+    row-gap: var(--space-8);
+    min-width: 0;
+    padding: var(--space-16);
+    border: 1px solid var(--border-secondary);
+    border-radius: var(--radius-11);
+    background: var(--bg-primary);
+    color: var(--text-primary);
+  }
+
+  .ac-kpi-card__label {
+    margin: 0;
+    color: var(--text-secondary);
+    @apply type-body;
+  }
+
+  .ac-kpi-card__value {
+    margin: 0;
+    font-variant-numeric: tabular-nums;
+    @apply type-figure;
+  }
+
+  .ac-kpi-card__of {
+    color: var(--text-tertiary);
+    @apply type-body leading-[inherit];
+  }
+
+  .ac-kpi-card__comparison {
+    margin: 0;
+    color: var(--text-tertiary);
+    font-variant-numeric: tabular-nums;
+    @apply type-ui;
+  }
+
+  @supports not (grid-template-rows: subgrid) {
+    .ac-kpi-card {
+      display: flex;
+      flex-direction: column;
+    }
   }
 }

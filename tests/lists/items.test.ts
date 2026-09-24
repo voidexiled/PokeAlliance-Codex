@@ -9,6 +9,7 @@ import {
   ALL_CATEGORY,
   ITEMS_FIELDS,
   ITEMS_PAGE_SIZE,
+  ITEMS_PROPS_ROWS,
   decodeItems,
   decodeItemsRefs,
   itemPanel,
@@ -108,10 +109,10 @@ describe('datos.json (PR5)', () => {
 describe('the first page of each item page (8.5, WD1)', () => {
   const data = buildItemsData('es');
 
-  it('«Todo» prints the first 24 items of the Market and counts them all', () => {
+  it('«Todo» prints the first items of the Market (ITEMS_PROPS_ROWS) and counts them all', () => {
     const first = itemsFirstPage(data, ALL_CATEGORY);
     expect(first.total).toBe(getItems().length);
-    expect(first.rows.map((row) => row.id)).toEqual(marketOrder().slice(0, ITEMS_PAGE_SIZE));
+    expect(first.rows.map((row) => row.id)).toEqual(marketOrder().slice(0, ITEMS_PROPS_ROWS));
     expect(first.data.filas).toHaveLength(first.rows.length);
     expect(decodeItems(first.data)).toEqual(first.rows);
     expect(first.data.refs).toEqual(refsOf(first.rows, data.refs));
@@ -122,7 +123,7 @@ describe('the first page of each item page (8.5, WD1)', () => {
       const first = itemsFirstPage(data, category);
       const ids = getItems(category).map((item) => item.id);
       expect(first.total, category).toBe(ids.length);
-      expect(first.rows.map((row) => row.id)).toEqual(ids.slice(0, ITEMS_PAGE_SIZE));
+      expect(first.rows.map((row) => row.id)).toEqual(ids.slice(0, ITEMS_PROPS_ROWS));
     }
   });
 
@@ -160,8 +161,8 @@ describe('the category navigation (8.5 step 3)', () => {
 });
 
 describe('the items list (8.0.6)', () => {
-  // A list of its own, so the page cut and the groups are measured past 24 rows whatever
-  // the registry holds: 30 rows spread over three categories, in the Market order.
+  // A list of its own, so the page cut and the groups are measured past 96 rows whatever
+  // the registry holds: 102 rows spread over three categories, in the Market order.
   const row = (id: string, categoria: string): ItemsRow => ({
     id,
     nombre: id,
@@ -175,20 +176,22 @@ describe('the items list (8.0.6)', () => {
   });
   const [a, b, c] = CATEGORY_IDS;
   const rows = [
-    ...Array.from({ length: 20 }, (_, index) => row(`a-${index}`, a)),
+    ...Array.from({ length: 92 }, (_, index) => row(`a-${index}`, a)),
     ...Array.from({ length: 6 }, (_, index) => row(`b-${index}`, b)),
     ...Array.from({ length: 4 }, (_, index) => row(`c-${index}`, c)),
   ];
   const all = itemsConfig('/es/items/datos.json', ALL_CATEGORY, CATEGORY_IDS);
   const one = itemsConfig('/es/items/datos.json', a, CATEGORY_IDS);
 
-  it('has 24 rows a page, one order, no filter, and the anchor of H7', () => {
+  it('has 96 rows a page, one order, no filter, and the anchor of H7', () => {
     for (const config of [all, one]) {
       expect(config.id).toBe('items');
-      expect(config.pageSize).toBe(24);
+      expect(config.pageSize).toBe(96);
       expect(config.sorts).toHaveLength(1);
       expect(config.filters).toEqual([]);
       expect(config.anchorId?.(rows[0])).toBe('item-a-0');
+      expect(config.defaultView).toBe('slots');
+      expect(config.views).toEqual(['slots', 'list']);
       expect(config.dataUrl).toBe('/es/items/datos.json');
     }
   });
@@ -196,9 +199,9 @@ describe('the items list (8.0.6)', () => {
   it('only «Todo» groups, by category, cutting the page first (CGS 2.1)', () => {
     expect(one.groupBy).toBeUndefined();
     const first = applyListState(all, rows, parseListState(all, ''));
-    expect(first.items.map((item) => item.id)).toEqual(rows.slice(0, 24).map((item) => item.id));
+    expect(first.items.map((item) => item.id)).toEqual(rows.slice(0, 96).map((item) => item.id));
     expect(first.groups.map((group) => [group.key, group.items.length])).toEqual([
-      [a, 20],
+      [a, 92],
       [b, 4],
     ]);
     const second = applyListState(all, rows, parseListState(all, '?page=2'));
@@ -206,7 +209,18 @@ describe('the items list (8.0.6)', () => {
       [b, 2],
       [c, 4],
     ]);
-    expect(second.pageCount).toBe(pageCountOf(24, rows.length));
+    expect(second.pageCount).toBe(pageCountOf(96, rows.length));
+  });
+
+  it('offers Ranuras and Lista only: a «cards» view falls back to Ranuras (16.4.1)', () => {
+    expect(parseListState(all, '?view=cards').view).toBe('slots');
+    expect(parseListState(all, '', 'cards').view).toBe('slots');
+    expect(parseListState(all, '?view=list').view).toBe('list');
+  });
+
+  it('«Buscar ítem» filters by name (16.4.1)', () => {
+    const page = applyListState(all, rows, parseListState(all, '?q=c-3'));
+    expect(page.items.map((item) => item.id)).toEqual(['c-3']);
   });
 
   it('keeps the order the build wrote on every state (V5)', () => {
@@ -216,7 +230,7 @@ describe('the items list (8.0.6)', () => {
 
   it('PR4: the inline script of each page stays under 1 KB', () => {
     for (const config of [all, one]) {
-      const script = pendingScript(config, pageCountOf(24, rows.length));
+      const script = pendingScript(config, pageCountOf(96, rows.length));
       expect(new TextEncoder().encode(script).length).toBeLessThan(1024);
     }
   });

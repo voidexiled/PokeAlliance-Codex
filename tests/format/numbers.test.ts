@@ -846,10 +846,10 @@ describe('the figures of the other money components (§13.3)', () => {
       }),
     );
     expect(two).toContain('<p class="ac-held-strip__label">Held Items: 2</p>');
-    // 7.5.5: the first column opens from its left edge, the second from its right one.
+    // 16.4.5: the equipment slots let the tooltip place itself.
     expect([...two.matchAll(/data-ac-tt-align="(\w+)"/g)].map(([, align]) => align)).toEqual([
-      'start',
-      'end',
+      'auto',
+      'auto',
     ]);
 
     const none = markup(createElement(HeldStrip, { ...strip, items: [] }));

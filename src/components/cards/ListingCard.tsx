@@ -18,8 +18,9 @@ import { ChipRow } from '@/components/money/ChipRow';
 import type { ChipRowItem, ChipRowLabels } from '@/components/money/ChipRow';
 import { DiamondsAmount } from '@/components/money/DiamondsAmount';
 import type { DiamondsLink } from '@/components/money/DiamondsAmount';
-import { HeldStrip } from '@/components/money/HeldStrip';
-import type { HeldStripItem, HeldStripLabels } from '@/components/money/HeldStrip';
+import { EquipmentStrip } from '@/components/money/EquipmentStrip';
+import type { EquipmentStripItem } from '@/components/money/EquipmentStrip';
+import type { HeldStripLabels } from '@/components/money/HeldStrip';
 import { PokedolaresAmount } from '@/components/money/PokedolaresAmount';
 import { PriceOptions } from '@/components/money/PriceOptions';
 import type { PriceOption } from '@/components/money/PriceOptions';
@@ -30,6 +31,7 @@ import type { TrainingMeterLabels } from '@/components/money/TrainingMeter';
 import type { Locale } from '@/i18n/config';
 import { trackCount } from '@/lib/cards/layout';
 import type { ListingKey, ListingLayout, ListingType } from '@/lib/cards/layout';
+import { fill } from '@/i18n/messages/types';
 import { formatInteger } from '@/lib/format/numbers';
 import { present } from '@/lib/format/unknown';
 import type { TipData } from '@/lib/game/tips';
@@ -177,8 +179,11 @@ export interface ListingCardListing {
   reserved?: boolean;
   /** Facts by key; an unknown value is `null` or absent. */
   facts?: Readonly<Partial<Record<ListingKey, ListingFactValue>>> | null;
-  /** Held items of a Pokémon (HeldStrip). */
-  helds?: readonly HeldStripItem[] | null;
+  /**
+   * Equipment of a Pokémon (16.4.5): ball, auras, addons, held X, held Y and Mega Stone as 32 px
+   * slots (EquipmentStrip). The name stays `helds`: the card layout reads it for its zone.
+   */
+  helds?: readonly EquipmentStripItem[] | null;
   /** Training shown on the card, or `null`: «—». */
   train?: ListingCardTraining | null;
   /** Real-money price, written by `formatRealMoney` («R$ 90»), or `null`. */
@@ -215,6 +220,8 @@ export interface ListingCardLabels {
    * phase B passes it; without it no card carries the tag.
    */
   realMoney?: string;
+  /** «Equipo» / «Equipment»: the accessible name of the equipment row (16.4.5). */
+  equipment?: string;
   /** `ui.money`: Held Items, Entrenamiento, the score and the «+N» of the channels. */
   money: HeldStripLabels & TrainingMeterLabels & RatingLabels & ChipRowLabels;
 }
@@ -530,14 +537,15 @@ export function ListingCard({
       {layout.keys.length > 0 ? <FactList rows={layout.keys.map(fact)} /> : null}
       {layout.zones.includes('held') ? (
         <Zone name="held">
-          <HeldStrip
+          <EquipmentStrip
             items={listing.helds ?? []}
-            labels={labels.money}
+            label={
+              labels.equipment ??
+              fill(labels.money.heldItems, { n: String(listing.helds?.length ?? 0) })
+            }
             locale={locale}
             hint={hint}
-            shinyLabel={labels.shiny}
             orLabel={orLabel}
-            columns={2}
           />
         </Zone>
       ) : null}

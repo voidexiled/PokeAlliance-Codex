@@ -85,6 +85,43 @@
         "steel"
       ]
     },
+    "heldTier": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 8,
+      "description": "HELD_TIER_MAX = 8 (§16.2.3, respuesta del propietario: «pon que 8»)."
+    },
+    "held": {
+      "type": "object",
+      "description": "Obligatorio para categoria \"helds\" (§16.2.3): cada tier de un efecto es su propio ítem, como en el juego.",
+      "required": ["ranura", "efecto", "tier"],
+      "additionalProperties": false,
+      "properties": {
+        "ranura": {
+          "enum": ["x", "y"],
+          "description": "Ranura del held en el juego."
+        },
+        "efecto": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Nombre canónico del efecto, sin el tier (por ejemplo \"X-Attack\")."
+        },
+        "tier": { "$ref": "#/$defs/heldTier" }
+      }
+    },
+    "mega": {
+      "type": "object",
+      "description": "Opcional en cualquier categoría (§16.2.3): marca una Mega Stone.",
+      "required": ["pokemon"],
+      "additionalProperties": false,
+      "properties": {
+        "pokemon": {
+          "type": "array",
+          "description": "ids de content/pokemon.json; lista vacía si no se sabe cuál. pnpm content:check comprueba que existan.",
+          "items": { "$ref": "#/$defs/slug" }
+        }
+      }
+    },
     "texto": {
       "type": "object",
       "description": "El mismo texto en los dos idiomas del sitio: { \"es\": \"…\", \"en\": \"…\" }.",
@@ -161,8 +198,12 @@
         "borrador": {
           "type": "boolean",
           "description": "true en registros de relleno. Se pueden ocultar en producción con OCULTAR_BORRADORES=1."
-        }
-      }
+        },
+        "held": { "$ref": "#/$defs/held" },
+        "mega": { "$ref": "#/$defs/mega" }
+      },
+      "if": { "properties": { "categoria": { "const": "helds" } } },
+      "then": { "required": ["held"] }
     }
   }
 }

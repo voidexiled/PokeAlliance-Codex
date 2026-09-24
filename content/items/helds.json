@@ -12,6 +12,11 @@
         "vende": null,
         "compra": null
       },
+      "held": {
+        "ranura": "x",
+        "efecto": "X-Attack",
+        "tier": 1
+      },
       "borrador": true
     },
     {
@@ -24,6 +29,11 @@
       "precioNpc": {
         "vende": null,
         "compra": null
+      },
+      "held": {
+        "ranura": "y",
+        "efecto": "X-Defense",
+        "tier": 1
       },
       "borrador": true
     }

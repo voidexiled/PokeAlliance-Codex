@@ -7,7 +7,6 @@ import { CardGrid } from '@/components/cards/CardGrid';
 import { CardGroup } from '@/components/cards/CardGroup';
 import { ListingCard, SellerPresence } from '@/components/cards/ListingCard';
 import type {
-  ListingCardEntity,
   ListingCardLabels,
   ListingCardListing,
   ListingFactValue,
@@ -21,7 +20,12 @@ import { Chip } from '@/components/content/Chip';
 import { EmptyState } from '@/components/content/EmptyState';
 import { Button } from '@/components/controls/Button';
 import { Checkbox } from '@/components/controls/Checkbox';
+import { ChipChoice } from '@/components/controls/ChipChoice';
 import { FilterBar } from '@/components/controls/FilterBar';
+import { ItemPicker, PokemonPicker, type PokemonFilterLabels } from '@/components/pickers/pickers';
+import type { PickerLabels } from '@/lib/pickers/labels';
+import { itemOptions, pokemonOptions } from '@/lib/pickers/options';
+import { portraitSprite } from '@/lib/trade/pickers';
 import { RangeField } from '@/components/controls/RangeField';
 import type { RangeFieldValue } from '@/components/controls/RangeField';
 import { Select } from '@/components/controls/Select';
@@ -101,20 +105,18 @@ import {
   SIMBOLOS_MONEDA,
   TIPOS_ACTIVO,
   channelLabel,
+  equipmentOf,
   inGameFirst,
   isListed,
   sellerReputation,
 } from '@/lib/trade/types';
 import type {
-  AddonDeclarado,
   Anuncio,
-  BallDeclarada,
   ChannelLabels,
   EntrenamientoDeclarado,
   EstadoAnuncio,
   EstadoPresencia,
-  HeldDeclarado,
-  ItemDeclarado,
+  ItemAnunciado,
   MonedaReal,
   OpcionJuego,
   Precio,
@@ -268,7 +270,7 @@ export interface TradeRow {
   busqueda: string;
   precio: Precio;
   pokemon: UnidadPokemon | null;
-  item: ItemDeclarado | null;
+  item: ItemAnunciado | null;
   /** The amount of a Diamonds or Pokédólares listing, in base units (R5). */
   cantidad: number | null;
 }
@@ -307,6 +309,8 @@ export interface TradeItemRef {
   dropDe: string[];
   /** The one Pokémon that drops it, when it is one: the entity of «Drop de». */
   dropper: string | null;
+  /** Tier of a held item (16.2.3): the mini badge of its slot; `null` for any other item. */
+  heldTier: number | null;
 }
 
 /** An element of content/elementos.json in the language of the file (8.0.5). */
@@ -342,8 +346,8 @@ export interface TradeRefs {
   items: Record<string, TradeItemRef>;
   elementos: Record<string, TradeElementRef>;
   auras: Record<string, TradeAuraRef>;
-  /** Addon names of content/outfits.json by id: the search reads them (9.5.2). */
-  addons: Record<string, string>;
+  /** Addons of content/outfits.json by id: their slot and the search read them (9.5.2, 16.4.5). */
+  addons: Record<string, TradeAuraRef>;
   /** World names by id. */
   mundos: Record<string, string>;
   vendedores: Record<string, TradeSellerRef>;
@@ -669,25 +673,24 @@ const OPTION_FIELDS = fieldList<OpcionJuego>()(['tipo', 'cantidad']);
 const UNIT_FIELDS = fieldList<UnidadPokemon>()([
   'pokemon',
   'ball',
-  'aura',
+  'auras',
+  'addons',
+  'heldX',
+  'heldY',
+  'mega',
   'boost',
   'starLevel',
   'nickname',
   'memorySlots',
   'memorias',
-  'helds',
-  'addon',
   'nextBoostChance',
   'entrenamiento',
   'precioNpc',
 ]);
-const BALL_FIELDS = fieldList<BallDeclarada>()(['item', 'nombre']);
-const HELD_FIELDS = fieldList<HeldDeclarado>()(['item', 'nombre', 'tier']);
-const ADDON_FIELDS = fieldList<AddonDeclarado>()(['id', 'nombre']);
 const TRAINING_FIELDS = fieldList<EntrenamientoDeclarado>()(['habilidad', 'nivel', 'progreso']);
 /** A declared NPC Price: `['unsellable', null]` or `['pokedolares', amount]`. */
 const NPC_FIELDS = ['tipo', 'cantidad'] as const;
-const ITEM_FIELDS = fieldList<ItemDeclarado>()(['item', 'nombre', 'cantidad']);
+const ITEM_FIELDS = fieldList<ItemAnunciado>()(['item', 'cantidad']);
 
 type WithId<T> = T & { id: string };
 
@@ -713,6 +716,7 @@ const ITEM_REF_FIELDS = fieldList<WithId<TradeItemRef>>()([
   'uso',
   'dropDe',
   'dropper',
+  'heldTier',
 ]);
 const NPC_PRICE_FIELDS = fieldList<TradeItemRef['precioNpc']>()(['vende', 'compra']);
 const ELEMENT_REF_FIELDS = fieldList<WithId<TradeElementRef>>()([
@@ -764,9 +768,6 @@ function packUnit(unit: UnidadPokemon): unknown[] {
   return pack(
     {
       ...unit,
-      ball: unit.ball && pack(unit.ball, BALL_FIELDS),
-      helds: unit.helds.map((held) => pack(held, HELD_FIELDS)),
-      addon: unit.addon && pack(unit.addon, ADDON_FIELDS),
       entrenamiento: unit.entrenamiento.map((entry) => pack(entry, TRAINING_FIELDS)),
       precioNpc: unit.precioNpc && pack(unit.precioNpc, NPC_FIELDS),
     },
@@ -810,7 +811,10 @@ export function encodeTradeData({ rows, refs }: TradeRecords): TradeData {
         ...aura,
         icono: packSprite(aura.icono),
       })),
-      addons: Object.entries(refs.addons),
+      addons: table(refs.addons, AURA_REF_FIELDS, (addon) => ({
+        ...addon,
+        icono: packSprite(addon.icono),
+      })),
       mundos: Object.entries(refs.mundos),
       vendedores: table(refs.vendedores, SELLER_REF_FIELDS),
     },
@@ -890,18 +894,13 @@ function readUnit(value: unknown): UnidadPokemon | null {
   if (!isText(unit.pokemon)) return fail('pokemon');
   return {
     ...trusted<UnidadPokemon>(unit),
-    ball:
-      unit.ball === null ? null : trusted<BallDeclarada>(unpack(unit.ball, BALL_FIELDS, 'ball')),
+    ball: isText(unit.ball) ? unit.ball : null,
+    auras: listOf(unit.auras, (id) => (isText(id) ? id : fail('auras')), 'auras'),
+    addons: listOf(unit.addons, (id) => (isText(id) ? id : fail('addons')), 'addons'),
+    heldX: isText(unit.heldX) ? unit.heldX : null,
+    heldY: isText(unit.heldY) ? unit.heldY : null,
+    mega: isText(unit.mega) ? unit.mega : null,
     memorias: listOf(unit.memorias, (id) => (isText(id) ? id : null), 'memorias'),
-    helds: listOf(
-      unit.helds,
-      (held) => trusted<HeldDeclarado>(unpack(held, HELD_FIELDS, 'helds')),
-      'helds',
-    ),
-    addon:
-      unit.addon === null
-        ? null
-        : trusted<AddonDeclarado>(unpack(unit.addon, ADDON_FIELDS, 'addon')),
     entrenamiento: listOf(
       unit.entrenamiento,
       (entry) => trusted<EntrenamientoDeclarado>(unpack(entry, TRAINING_FIELDS, 'entrenamiento')),
@@ -941,7 +940,7 @@ function readRow(fila: unknown, columns: readonly (readonly [string, number])[])
     item:
       item === null || item === undefined
         ? null
-        : trusted<ItemDeclarado>(unpack(item, ITEM_FIELDS, 'item')),
+        : trusted<ItemAnunciado>(unpack(item, ITEM_FIELDS, 'item')),
     cantidad: typeof cantidad === 'number' ? cantidad : null,
   };
 }
@@ -991,7 +990,10 @@ function readRefs(value: unknown): TradeRefs {
       ...trusted<TradeAuraRef>(ref),
       icono: readSprite(ref.icono, 'refs.auras'),
     })),
-    addons: readTable(value.addons, NAME_FIELDS, 'refs.addons', readName),
+    addons: readTable(value.addons, AURA_REF_FIELDS, 'refs.addons', (ref) => ({
+      ...trusted<TradeAuraRef>(ref),
+      icono: readSprite(ref.icono, 'refs.addons'),
+    })),
     mundos: readTable(value.mundos, NAME_FIELDS, 'refs.mundos', readName),
     vendedores: readTable(value.vendedores, SELLER_REF_FIELDS, 'refs.vendedores', (ref) => ({
       ...trusted<TradeSellerRef>(ref),
@@ -1009,10 +1011,11 @@ function refNames(refs: TradeRefs): ListingNames {
   return {
     pokemon: lookup(refs.pokemon, (ref) => ref.nombre),
     item: lookup(refs.items, (ref) => ref.nombre),
-    addon: lookup(refs.addons, (nombre) => nombre),
+    addon: lookup(refs.addons, (ref) => ref.nombre),
     aura: lookup(refs.auras, (ref) => ref.nombre),
     mundo: lookup(refs.mundos, (nombre) => nombre),
     vendedor: lookup(refs.vendedores, (ref) => ref.nombre),
+    heldTier: (id: string) => (Object.hasOwn(refs.items, id) ? refs.items[id].heldTier : undefined),
   };
 }
 
@@ -1104,6 +1107,12 @@ const SKILL_ORDER = new Map<string, number>(HABILIDADES.map((skill, index) => [s
  * memories (9.6). The title and the search text come from the names of `refs`, as
  * `decodeTradeData` writes them in the browser.
  */
+/** Tier of a held item (16.2.3), read from its `held` block once the registry has it. */
+function heldTierOf(item: object): number | null {
+  const held = (item as { held?: { tier?: unknown } | null }).held;
+  return typeof held?.tier === 'number' ? held.tier : null;
+}
+
 export function tradeRecords(
   anuncios: readonly Anuncio[],
   catalog: TradeCatalog,
@@ -1156,10 +1165,9 @@ export function tradeRecords(
     if (unit !== null) {
       pokemonIds.add(unit.pokemon);
       for (const id of unit.memorias) if (id !== null) pokemonIds.add(id);
-      if (unit.ball?.item) itemIds.add(unit.ball.item);
-      for (const held of unit.helds) if (held.item !== null) itemIds.add(held.item);
-      if (unit.aura !== null) auraIds.add(unit.aura);
-      if (unit.addon?.id) addonIds.add(unit.addon.id);
+      for (const id of [unit.ball, unit.heldX, unit.heldY, unit.mega]) if (id) itemIds.add(id);
+      for (const id of unit.auras) auraIds.add(id);
+      for (const id of unit.addons) addonIds.add(id);
     }
     if (listing.item?.item) itemIds.add(listing.item.item);
   }
@@ -1186,6 +1194,7 @@ export function tradeRecords(
       uso: item.uso?.[locale] ?? null,
       dropDe: droppers.map((record) => record.nombre),
       dropper,
+      heldTier: heldTierOf(item),
     };
   }
 
@@ -1226,10 +1235,10 @@ export function tradeRecords(
     if (aura !== undefined) auras[id] = { nombre: aura.nombre, icono: sprite(aura.icono) };
   }
 
-  const addons: Record<string, string> = {};
+  const addons: Record<string, TradeAuraRef> = {};
   for (const id of addonIds) {
     const addon = addonById.get(id);
-    if (addon !== undefined) addons[id] = addon.nombre;
+    if (addon !== undefined) addons[id] = { nombre: addon.nombre, icono: sprite(addon.sprite) };
   }
 
   const mundos: Record<string, string> = {};
@@ -1394,6 +1403,19 @@ export function tradeConfig({
     filters: [
       { key: 'tipo', values: TIPOS_ACTIVO, test: (row, value) => row.tipo === value },
       { key: 'mundo', values: worlds, test: (row, value) => row.mundo === value },
+      // 16.4.6: «Pokémon» and «Ítem», several ids each: `?pokemon=charizard,shiny-charizard`.
+      {
+        key: 'pokemon',
+        values: Object.keys(refs.pokemon),
+        multi: true,
+        test: (row, value) => row.pokemon?.pokemon === value,
+      },
+      {
+        key: 'item',
+        values: Object.keys(refs.items),
+        multi: true,
+        test: (row, value) => row.item?.item === value,
+      },
       // A listing «A convenir» has no price in any currency: only «Todas» shows it (9.5.4).
       {
         key: 'moneda',
@@ -1539,21 +1561,6 @@ export function pokemonPanel(id: string, ref: TradePokemonRef, context: TradeCon
   return pokemonTip({ id, ...ref, elementos }, locale, context.ui.tooltip);
 }
 
-/**
- * An entity a listing declares (a Ball, 9.4): the registry's name, sprite and panel when the
- * declared name matched a record; otherwise the declared name as text, with neither panel nor
- * sprite (R2).
- */
-function declaredEntity(
-  id: string | null,
-  nombre: string,
-  context: TradeContext,
-): ListingCardEntity | string {
-  const ref = itemRef(id, context);
-  if (ref === null || id === null) return nombre;
-  return { name: ref.nombre, sprite: ref.sprite, tip: itemPanel(id, ref, context) };
-}
-
 /** «Drop de» of an item (7.5.3): its one Pokémon with its page and panel, «{n} Pokémon», or nothing. */
 function droppedBy(ref: TradeItemRef, context: TradeContext): ListingFactValue {
   if (ref.dropDe.length === 0) return null;
@@ -1593,8 +1600,6 @@ function listingFacts(
       requirement: levelText(pokemon, context),
       tier: tierText(pokemon),
       elements,
-      ball: unit.ball === null ? null : declaredEntity(unit.ball.item, unit.ball.nombre, context),
-      aura: auraRef(unit.aura, context)?.nombre ?? null,
       boost: unit.boost === null ? null : formatSigned(unit.boost, locale),
       nickname: unit.nickname,
       memorySlots: unit.memorySlots,
@@ -1622,29 +1627,40 @@ function listingFacts(
   return { quantity: row.cantidad };
 }
 
-/** A panel with nothing below its title: its mention stays text (R2, `HeldStrip`). */
-function bareTip(name: string): TipData {
+/** The panel of an aura or an addon: its name over its sprite (16.4.5). */
+function refTip(kind: 'aura' | 'addon', id: string, ref: TradeAuraRef): TipData {
   return {
-    key: `item:${name}`,
-    title: name,
+    key: `${kind}:${id}`,
+    title: ref.nombre,
     width: 300,
-    head: { type: 'sprite', sprite: null },
+    head: { type: 'sprite', sprite: ref.icono },
     rows: [],
   };
 }
 
-/** The held items of a Pokémon (9.5.8): «X-Attack T5», each with its panel when it has one. */
-function heldItems(unit: UnidadPokemon, context: TradeContext): ListingCardListing['helds'] {
-  return unit.helds.map((held) => {
-    const ref = itemRef(held.item, context);
-    const name = ref?.nombre ?? held.nombre;
-    return {
-      name,
-      tier: formatTier(held.tier),
-      sprite: ref?.sprite ?? null,
-      // R2: a declared name without a registry match opens nothing.
-      tip: ref !== null && held.item !== null ? itemPanel(held.item, ref, context) : bareTip(name),
-    };
+/**
+ * The equipment of a Pokémon (16.4.5): ball, auras, addons, held X, held Y and Mega Stone as
+ * slots, in the order of the game. An id the refs do not hold is left out.
+ */
+function equipmentItems(unit: UnidadPokemon, context: TradeContext): ListingCardListing['helds'] {
+  return equipmentOf(unit).flatMap(({ kind, id }) => {
+    if (kind === 'aura' || kind === 'addon') {
+      const table = kind === 'aura' ? context.refs.auras : context.refs.addons;
+      if (!Object.hasOwn(table, id)) return [];
+      const ref = table[id];
+      return [{ id, name: ref.nombre, sprite: ref.icono, tip: refTip(kind, id, ref) }];
+    }
+    const ref = itemRef(id, context);
+    if (ref === null) return [];
+    return [
+      {
+        id,
+        name: ref.nombre,
+        sprite: ref.sprite,
+        tip: itemPanel(id, ref, context),
+        tier: ref.heldTier,
+      },
+    ];
   });
 }
 
@@ -1752,7 +1768,7 @@ export function listingCard(
     posted: { datetime: row.publicado, text: posted },
     reserved: row.estado === 'reservado',
     facts: listingFacts(row, context),
-    helds: row.pokemon === null ? null : heldItems(row.pokemon, context),
+    helds: row.pokemon === null ? null : equipmentItems(row.pokemon, context),
     train: first === undefined ? null : trainingOf(first),
     fiat: fiatText(row.precio, locale),
     game: gameOptions(row.precio),
@@ -1820,15 +1836,18 @@ export function listingTip(
     const elements = (pokemon?.elementos ?? []).flatMap((id) =>
       Object.hasOwn(refs.elementos, id) ? [refs.elementos[id].nombre] : [],
     );
-    const ball =
-      unit.ball === null ? null : (itemRef(unit.ball.item, context)?.nombre ?? unit.ball.nombre);
+    const ball = itemRef(unit.ball, context)?.nombre ?? null;
+    const auras = unit.auras.flatMap((id) => auraRef(id, context)?.nombre ?? []);
+    const addons = unit.addons.flatMap((id) =>
+      Object.hasOwn(refs.addons, id) ? [refs.addons[id].nombre] : [],
+    );
     const npc = unit.precioNpc;
     push(keys.requirement, levelText(pokemon, context));
     push(keys.tier, tierText(pokemon));
     // Elements read as one value in a panel: «Fuego / Volador» (8.0.5).
     push(keys.elements, tipText(elements.join(' / ')));
     push(keys.ball, tipText(ball));
-    push(keys.aura, auraRef(unit.aura, context)?.nombre ?? null);
+    push(keys.aura, tipText(auras.join(', ')));
     push(keys.boost, unit.boost === null ? null : formatSigned(unit.boost, locale));
     push(keys.nickname, tipText(nickname));
     push(
@@ -1841,21 +1860,21 @@ export function listingTip(
       npc === null ? null : npc.tipo === 'unsellable' ? labels.unsellable : { pd: npc.cantidad },
     );
     if (sheet !== undefined) {
-      push(sheet.addon, tipText(unit.addon?.nombre));
+      push(sheet.addon, tipText(addons.join(', ')));
       push(sheet.nextBoostChance, chanceText(unit.nextBoostChance, locale));
     }
 
-    if (unit.helds.length > 0) {
+    const helds = [unit.heldX, unit.heldY, unit.mega].flatMap((id) => {
+      const ref = itemRef(id, context);
+      if (ref === null) return [];
+      const name = ref.heldTier === null ? ref.nombre : `${ref.nombre} ${formatTier(ref.heldTier)}`;
+      return [{ name, sprite: ref.sprite }];
+    });
+    if (helds.length > 0) {
       sections.push({
         kind: 'held',
-        label: fill(ui.money.heldItems, { n: formatInteger(unit.helds.length, locale) }),
-        items: unit.helds.map((held) => {
-          const ref = itemRef(held.item, context);
-          return {
-            name: `${ref?.nombre ?? held.nombre} ${formatTier(held.tier)}`,
-            sprite: ref?.sprite ?? null,
-          };
-        }),
+        label: fill(ui.money.heldItems, { n: formatInteger(helds.length, locale) }),
+        items: helds,
       });
     }
     // «Entrenamiento: N» with every skill declared, in the order of `Habilidad` (9.5.9). The
@@ -1930,7 +1949,7 @@ export function listingTip(
 
   let head: TipHead;
   if (row.tipo === 'pokemon') {
-    const aura = auraRef(unit?.aura ?? null, context);
+    const aura = auraRef(unit?.auras[0] ?? null, context);
     head = {
       type: 'art',
       src: resolvePokemonImage(pokemon?.imagen),
@@ -2100,6 +2119,19 @@ function loadDeferred(): Promise<void> {
 
 // -------------------------------------------------------------------------------- root
 
+/** The texts of the «Pokémon» and «Ítem» pickers of the list (16.4.6, DP1). */
+export interface TradeListPickerLabels {
+  picker: PickerLabels;
+  filters: PokemonFilterLabels;
+  /** «Pokémon», «Ítem», «Categoría». */
+  pokemon: string;
+  item: string;
+  category: string;
+  /** «Elegir Pokémon», «Elegir ítem». */
+  choosePokemon: string;
+  chooseItem: string;
+}
+
 export interface TradeListRootProps {
   /** `market`: `/{l}/comercio/` (9.5). `seller`: the «Anuncios» of a profile (9.8). */
   variant: 'market' | 'seller';
@@ -2131,6 +2163,8 @@ export interface TradeListRootProps {
   paginationLabel?: string;
   /** `tradeUi(messages.ui)` of the page's locale. */
   ui: TradeUi;
+  /** The «Pokémon» and «Ítem» filters (16.4.6); without them the list has neither. */
+  pickers?: TradeListPickerLabels | null;
   labels: TradeListLabels;
 }
 
@@ -2149,6 +2183,7 @@ export function TradeListRoot({
   paginationLabel,
   ui,
   labels,
+  pickers = null,
 }: TradeListRootProps) {
   const market = variant === 'market';
   const { now, hydrated } = useClock(Date.parse(builtAt));
@@ -2323,10 +2358,69 @@ export function TradeListRoot({
         : { value: type, label: labels.types[type], sprite };
     }),
   ];
-  const worldOptions: SelectOption[] = [
-    { value: '', label: labels.allWorlds },
-    ...worlds.map(([id, name]) => ({ value: id, label: name })),
-  ];
+  // 16.4.6: the options of the pickers are the Pokémon and the items the rows name.
+  const allRows = loaded?.rows ?? first.rows;
+  const pokemonChoices = useMemo(
+    () =>
+      pokemonOptions(
+        Object.entries(refs.pokemon)
+          .filter(([id]) => allRows.some((row) => row.pokemon?.pokemon === id))
+          .map(([id, ref]) => ({
+            id,
+            name: ref.nombre,
+            number: null,
+            types: [...ref.elementos],
+            elementoMoveset: null,
+            tier: ref.tier,
+            shiny: ref.variante === 'shiny',
+            generation: ref.generacion,
+            sprite: portraitSprite(ref.imagen),
+            tip: pokemonPanel(id, ref, context),
+          })),
+      ),
+    [refs, allRows, context],
+  );
+  const itemChoices = useMemo(
+    () =>
+      itemOptions(
+        Object.entries(refs.items)
+          .filter(([id]) => allRows.some((row) => row.item?.item === id))
+          .map(([id, ref]) => ({
+            id,
+            name: ref.nombre,
+            categoria: ref.categoria,
+            sprite: ref.sprite,
+            tip: itemPanel(id, ref, context),
+          })),
+      ),
+    [refs, allRows, context],
+  );
+  const categoryNames = useMemo(
+    () =>
+      Object.fromEntries(
+        Object.values(refs.items).flatMap((ref) =>
+          ref.nombreCategoria === null ? [] : [[ref.categoria, ref.nombreCategoria]],
+        ),
+      ),
+    [refs],
+  );
+  const elementChoices = useMemo(
+    () => Object.entries(refs.elementos).map(([id, ref]) => ({ id, name: ref.nombre })),
+    [refs],
+  );
+  const idsOf = (value: string | undefined) => (value ? value.split(',') : []);
+  const pickerBase =
+    pickers === null
+      ? null
+      : {
+          locale,
+          labels: pickers.picker,
+          hint: ui.pinHint,
+          shinyLabel: ui.shiny,
+          orLabel: ui.or,
+          multiple: true,
+          optional: true,
+        };
   const currencyOptions: SelectOption[] = [
     { value: '', label: labels.allCurrencies },
     ...TRADE_CURRENCIES.map((id) => ({ value: id, label: currencyName(id, ui) })),
@@ -2361,12 +2455,39 @@ export function TradeListRoot({
         }}
       />
       <FilterBar>
+        {pickers !== null && pickerBase !== null && pokemonChoices.length > 1 ? (
+          <PokemonPicker
+            {...pickerBase}
+            name="pokemon"
+            label={pickers.pokemon}
+            placeholder={pickers.choosePokemon}
+            options={pokemonChoices}
+            value={idsOf(filters.pokemon)}
+            elements={elementChoices}
+            filterLabels={pickers.filters}
+            onChange={(ids) => controller.setFilter('pokemon', ids.join(',') || null)}
+          />
+        ) : null}
+        {pickers !== null && pickerBase !== null && itemChoices.length > 1 ? (
+          <ItemPicker
+            {...pickerBase}
+            name="item"
+            label={pickers.item}
+            placeholder={pickers.chooseItem}
+            options={itemChoices}
+            value={idsOf(filters.item)}
+            categoryLabel={pickers.category}
+            categoryNames={categoryNames}
+            onChange={(ids) => controller.setFilter('item', ids.join(',') || null)}
+          />
+        ) : null}
         {worlds.length > 1 ? (
-          <Select
+          <ChipChoice
             label={labels.world}
-            options={worldOptions}
-            value={filters.mundo ?? ''}
-            onChange={(value) => controller.setFilter('mundo', value || null)}
+            multiple={false}
+            options={worlds.map(([id, name]) => ({ value: id, label: name }))}
+            value={filters.mundo ? [filters.mundo] : []}
+            onChange={(ids) => controller.setFilter('mundo', ids[0] ?? null)}
           />
         ) : null}
         <Select

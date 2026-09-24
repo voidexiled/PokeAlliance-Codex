@@ -12,7 +12,12 @@
         "vende": null,
         "compra": null
       },
-      "borrador": true
+      "borrador": true,
+      "held": {
+        "ranura": "x",
+        "efecto": "X-Attack",
+        "tier": 1
+      }
     },
     {
       "id": "helds-ejemplo-2",
@@ -25,7 +30,12 @@
         "vende": null,
         "compra": null
       },
-      "borrador": true
+      "borrador": true,
+      "held": {
+        "ranura": "y",
+        "efecto": "X-Defense",
+        "tier": 1
+      }
     }
   ]
 }

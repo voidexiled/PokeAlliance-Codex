@@ -44,6 +44,8 @@ export interface ViewToggleProps {
   labels: ViewToggleLabels;
   /** Group name: `ui.views.label`, or the name of a second list on the page. */
   ariaLabel: string;
+  /** The views offered, in this order; the three when absent (§16.4.1). */
+  options?: readonly EntityView[];
   /** Id of the group; generated when absent. */
   id?: string;
   /** Utilities added by the caller, after the component's own classes (3.8). */
@@ -60,14 +62,11 @@ export function ViewToggle({
   onChange,
   labels,
   ariaLabel,
+  options: offered = ENTITY_VIEWS,
   id,
   className,
 }: ViewToggleProps) {
-  const options = [
-    { value: 'cards', label: labels.cards },
-    { value: 'slots', label: labels.slots },
-    { value: 'list', label: labels.list },
-  ];
+  const options = offered.map((view) => ({ value: view, label: labels[view] }));
   return (
     <ToggleGroup
       label={ariaLabel}

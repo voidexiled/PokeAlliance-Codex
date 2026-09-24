@@ -1,6 +1,7 @@
 import type { Locale } from '@/i18n/config';
 import type { SpriteData } from '@/lib/sprites/resolve';
 import type { PokemonRecord } from '@/lib/content/types';
+import { compareTierRank } from '@/lib/content/tier-rank';
 import { UNKNOWN } from '@/lib/format/unknown';
 import type { ListConfig } from '@/lib/lists/state';
 
@@ -12,13 +13,14 @@ import type { ListConfig } from '@/lib/lists/state';
 // island, reads the rows back and builds the configuration. Nothing here imports the
 // registry, Zod or a component, so what the island takes from it is only what it runs.
 //
-// State (8.0.6): 12 rows a page; the filters `gen`, `tier`, `elemento` and `variante`, in
-// that URL order (U1), whose values are registry ids (U3) the page passes in `PokedexIds`;
-// one order, the Pokémon order of 8.0.5 in which the build writes the rows, so no
-// `SortSelect` (V6); groups by generation,
-// which only the Slots view draws (8.0.6: «generación, solo en Slots»), with a last «—»
-// group for the variants without one (8.2). No `text`: a name is searched with Ctrl + K
-// (E3, A22), so the list has no `q`.
+// State (8.0.6, §16.4.2): 12 rows a page; the filters `gen`, `tier`, `tipo` (old name
+// `elemento`), `moveset` and `variante`, in that URL order (U1), each of several values
+// joined with commas (`multi`: OR within a filter, AND between them), whose values are
+// registry ids (U3) the page passes in `PokedexIds`; four orders for `SortSelect` —
+// «Número» (the order of 8.0.5 the build writes the rows in), «Nombre», «Tier (mejor
+// primero)» and «Requisito»; groups by generation, which only the Slots view draws, with a
+// last «—» group for the variants without one (8.2). No `text`: a name is searched with
+// Ctrl + K (E3, A22), so the list has no `q`.
 
 /** Rows per page of the Pokédex (8.0.6). */
 export const POKEDEX_PAGE_SIZE = 12;
@@ -40,6 +42,7 @@ export const POKEDEX_FIELDS = [
   'elementos',
   'imagen',
   'drops',
+  'elementoMoveset',
 ] as const satisfies readonly (keyof PokemonRecord)[];
 
 type PokedexField = (typeof POKEDEX_FIELDS)[number];
@@ -53,6 +56,9 @@ type PokedexField = (typeof POKEDEX_FIELDS)[number];
 export type PokedexRow = Pick<PokemonRecord, Exclude<PokedexField, 'drops'>> & {
   drops: readonly string[] | null;
 };
+
+/** `elementoMoveset` (§16.2.2), the element of a Pokémon's hunting moveset; `null` = «—». */
+export type PokedexMoveset = PokedexRow['elementoMoveset'];
 
 /**
  * An element of `content/elementos.json` as `datos.json` carries it in `refs` (PR5): the
@@ -120,6 +126,12 @@ export interface PokedexIds {
    * «Elemento» and the names of the «Elementos» row of a Pokémon panel.
    */
   elements: readonly PokedexOption[];
+  /**
+   * §16.2.2: the elements at least one record's `elementoMoveset` names, in the order of
+   * `elements`. Empty while the importer has not written the field, so «Tipo de moveset»
+   * has fewer than two options and the filter chips do not draw it (C-R5).
+   */
+  movesets: readonly PokedexOption[];
   /** The variants present: `normal`, then `shiny`. */
   variants: readonly string[];
 }
@@ -158,6 +170,7 @@ const SHAPES: Record<PokedexField, string> = {
   elementos: 'l',
   imagen: 's?',
   drops: 'l?',
+  elementoMoveset: 's?',
 };
 
 function fits(value: unknown, shape: string): boolean {
@@ -245,25 +258,65 @@ function optionIds(options: readonly PokedexOption[]): string[] {
   return options.map(([id]) => id);
 }
 
+/** «Tier (mejor primero)»: the one order of §16.2.1 (`compareTierRank`), ties by Pokédex order. */
+function tierRankCompare(a: PokedexRow, b: PokedexRow): number {
+  return compareTierRank(a.tier, b.tier);
+}
+
+/** «Requisito»: the level to obtain it ascending, unknown last. */
+function requisitoCompare(a: PokedexRow, b: PokedexRow): number {
+  if (a.nivel === b.nivel) return 0;
+  if (a.nivel === null) return 1;
+  if (b.nivel === null) return -1;
+  return a.nivel - b.nivel;
+}
+
 /**
- * The one order of the list (8.0.6): the order the rows already have. Every row reaches the
- * island in the order of 8.0.5 (`pokedexOrder`, applied by the build), filtering keeps it and
- * the sort is stable, so the island never sorts 910 rows again on a change of state.
+ * «Número», the default order: the order the rows already have. Every row reaches the island
+ * in the order of 8.0.5 (`pokedexOrder`, applied by the build), filtering keeps it and the
+ * sort is stable, so the island never sorts 910 rows again for it.
  */
 function keepOrder(): number {
   return 0;
 }
 
+/** The four orders of §16.4.2, in `SortSelect`'s order; `numero` is the default. */
+export const POKEDEX_SORTS = ['numero', 'nombre', 'tier', 'requisito'] as const;
+export type PokedexSortId = (typeof POKEDEX_SORTS)[number];
+
 /**
- * The configuration of the `pokedex` list (8.0.6). The island memoises it; the tests build it
- * over the registry, so the filters and the inline script of PR4 are the page's.
+ * `SortSelect`'s option texts (DP1), one per `POKEDEX_SORTS` id, in the page's language —
+ * the island builds this from `messages.pokedex.sort` the way `TradeListRoot` builds
+ * `labels.sorts` from `messages.trade.list.sort` (see `sorts` in src/lib/trade/sort.ts).
  */
-export function pokedexConfig(dataUrl: string, ids: PokedexIds): ListConfig<PokedexRow> {
+export type PokedexSortLabels = Record<PokedexSortId, string>;
+
+/**
+ * The configuration of the `pokedex` list (§16.4.2). The island memoises it; the tests
+ * build it over the registry, so the filters and the inline script of PR4 are the page's.
+ * `locale` only orders «Nombre» (Requisito and Tier need no collator); the island passes
+ * the page's.
+ */
+export function pokedexConfig(
+  dataUrl: string,
+  ids: PokedexIds,
+  locale: Locale,
+  sortLabels: PokedexSortLabels,
+): ListConfig<PokedexRow> {
+  const collator = new Intl.Collator(locale);
   return {
     id: 'pokedex',
     pageSize: POKEDEX_PAGE_SIZE,
-    // One order, so no `SortSelect` shows its label (V6, 8.0.6).
-    sorts: [{ id: 'numero', label: '', compare: keepOrder }],
+    sorts: [
+      { id: 'numero', label: sortLabels.numero, compare: keepOrder },
+      {
+        id: 'nombre',
+        label: sortLabels.nombre,
+        compare: (a, b) => collator.compare(a.nombre, b.nombre),
+      },
+      { id: 'tier', label: sortLabels.tier, compare: tierRankCompare },
+      { id: 'requisito', label: sortLabels.requisito, compare: requisitoCompare },
+    ],
     filters: [
       // The generations the registry has, as the other filters take their ids from it: a
       // generation no record has would leave «Generación» with no option to show, so U4
@@ -271,20 +324,37 @@ export function pokedexConfig(dataUrl: string, ids: PokedexIds): ListConfig<Poke
       {
         key: 'gen',
         values: ids.generations,
+        multi: true,
         test: (row, value) => row.generacion === Number(value),
       },
       {
         key: 'tier',
         values: optionIds(ids.tiers),
+        multi: true,
         test: (row, value) => tierId(row.tier) === value,
       },
-      // A Pokémon matches when the element is one of its own (8.2).
+      // A Pokémon matches when the element is one of its own (8.2). `elemento` is the
+      // parameter's old name (§16.4.2): a URL still written with it keeps working.
       {
-        key: 'elemento',
+        key: 'tipo',
         values: optionIds(ids.elements),
+        multi: true,
+        aliasKeys: ['elemento'],
         test: (row, value) => row.elementos.includes(value),
       },
-      { key: 'variante', values: ids.variants, test: (row, value) => row.variante === value },
+      // Hidden by the filter chips (C-R5) while `ids.movesets` has fewer than two options.
+      {
+        key: 'moveset',
+        values: optionIds(ids.movesets),
+        multi: true,
+        test: (row, value) => row.elementoMoveset === value,
+      },
+      {
+        key: 'variante',
+        values: ids.variants,
+        multi: true,
+        test: (row, value) => row.variante === value,
+      },
     ],
     groupBy: generationGroup,
     groupOrder: ids.generations,

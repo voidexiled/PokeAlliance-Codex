@@ -1,7 +1,4 @@
-import type { CSSProperties, ReactNode } from 'react';
-
-import { NestedEntity } from '@/components/game/NestedEntity';
-import { Sprite } from '@/components/game/Sprite';
+import { EquipmentStrip } from './EquipmentStrip';
 import type { SpriteProps } from '@/components/game/Sprite';
 import type { Locale } from '@/i18n/config';
 import { fill } from '@/i18n/messages/types';
@@ -68,100 +65,16 @@ export interface HeldStripProps {
   className?: string;
 }
 
-/** R2: a panel with nothing to show below its title is not a tooltip. */
-function hasContent(tip: TipData): boolean {
-  return tip.rows.length > 0 || Boolean(tip.sections?.length) || Boolean(tip.market?.length);
-}
-
-const COLUMNS = 2;
-
-export function HeldStrip({
-  items,
-  labels,
-  locale,
-  hint,
-  shinyLabel,
-  orLabel,
-  columns = COLUMNS,
-  className,
-}: HeldStripProps) {
-  const cols = Math.max(1, Math.trunc(columns));
-  // The column count is data of the call, so it travels as a local `--ac-*` property
-  // (C-R2, 3.7); the stylesheet's own 2 needs none.
-  const listStyle =
-    cols === COLUMNS ? undefined : ({ '--ac-held-strip-columns': String(cols) } as CSSProperties);
-
+/**
+ * Since 16.4.5 the held items are drawn by `EquipmentStrip`: 32 px slots without names, each with
+ * its tooltip and its tier as the mini badge. `columns` and `shinyLabel` are kept for old callers.
+ */
+export function HeldStrip({ items, labels, locale, hint, orLabel, className }: HeldStripProps) {
+  const label = fill(labels.heldItems, { n: formatInteger(items.length, locale) });
   return (
     <div className={className ? `ac-held-strip ${className}` : 'ac-held-strip'}>
-      <p className="ac-held-strip__label">
-        {fill(labels.heldItems, { n: formatInteger(items.length, locale) })}
-      </p>
-      {items.length > 0 ? (
-        <ul className="ac-held-strip__list" style={listStyle}>
-          {items.map((item, index) => {
-            const name = item.tier ? `${item.name} ${item.tier}` : item.name;
-            const content: ReactNode = (
-              <>
-                <span className="ac-held-strip__slot" aria-hidden="true">
-                  {item.sprite ? (
-                    <Sprite {...item.sprite} alt="" />
-                  ) : (
-                    <span className="ac-held-strip__missing" />
-                  )}
-                </span>
-                <span className="ac-held-strip__name">
-                  {item.name}
-                  {item.tier ? (
-                    <>
-                      {' '}
-                      <span className="ac-held-strip__tier">{item.tier}</span>
-                    </>
-                  ) : null}
-                </span>
-              </>
-            );
-
-            let trigger: ReactNode;
-            if (hasContent(item.tip)) {
-              trigger = (
-                <NestedEntity
-                  tip={item.tip}
-                  href={item.href}
-                  variant="plain"
-                  block
-                  placement="up"
-                  // 7.5.5: the first half of the columns opens from its left edge, the rest
-                  // from its right one.
-                  align={index % cols < cols / 2 ? 'start' : 'end'}
-                  ariaLabel={name}
-                  locale={locale}
-                  hint={hint}
-                  shinyLabel={shinyLabel}
-                  orLabel={orLabel}
-                  className="ac-held-strip__link"
-                >
-                  {content}
-                </NestedEntity>
-              );
-            } else if (item.href !== undefined) {
-              trigger = (
-                <a className="ac-held-strip__link" href={item.href} aria-label={name}>
-                  {content}
-                </a>
-              );
-            } else {
-              trigger = <span className="ac-held-strip__link">{content}</span>;
-            }
-
-            return (
-              // The held items are the Pokémon's fixed sequence: position is identity.
-              <li key={index} className="ac-held-strip__item">
-                {trigger}
-              </li>
-            );
-          })}
-        </ul>
-      ) : null}
+      <p className="ac-held-strip__label">{label}</p>
+      <EquipmentStrip items={items} label={label} locale={locale} hint={hint} orLabel={orLabel} />
     </div>
   );
 }

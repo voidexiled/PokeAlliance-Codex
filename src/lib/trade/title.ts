@@ -30,6 +30,8 @@ export interface ListingNames {
   mundo: (id: string) => string | null | undefined;
   /** `nombre` of a seller by handle. */
   vendedor: (handle: string) => string | null | undefined;
+  /** Tier of a held item of content/items/ (16.2.3); without it a held shows no tier. */
+  heldTier?: (id: string) => number | null | undefined;
 }
 
 /** The two forms of a title (9.4). */
@@ -49,17 +51,15 @@ export function knownAmount(value: number | null | undefined): number | null {
 }
 
 /**
- * The declared name of an entity, or the registry's when the declared one matched it (9.4):
- * the registry writes the game's name as the client does (13.4).
+ * The registry's name of an entity id (16.2.5): the registry writes the game's name as the client
+ * does (13.4). An id without a record has no name.
  */
 export function entityName(
   id: string | null,
-  declared: string,
   lookup: (id: string) => string | null | undefined,
 ): string | null {
   const known = id === null ? null : lookup(id);
-  if (present(known)) return known as string;
-  return present(declared) ? declared : null;
+  return present(known) ? (known as string) : null;
 }
 
 /**
@@ -99,7 +99,7 @@ export function listingTitle(
     texto = present(name) ? (name as string) : null;
   } else if (anuncio.tipo === 'items') {
     const item = anuncio.item;
-    texto = item === undefined ? null : entityName(item.item, item.nombre, names.item);
+    texto = item === undefined ? null : entityName(item.item, names.item);
   } else {
     const units = knownAmount(anuncio.cantidad);
     if (units !== null && anuncio.tipo === 'diamonds') texto = formatDiamonds(units, locale);

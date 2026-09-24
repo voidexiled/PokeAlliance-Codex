@@ -87,10 +87,12 @@ afterEach(() => {
 });
 
 describe('planBeat', () => {
-  it('is due without a known beat and after about a minute', () => {
+  it('is due without a known beat and after about one interval', () => {
     expect(planBeat({ now: T0, lastBeatAt: null, lastInputAt: null }).send).toBe(true);
     expect(planBeat({ now: T0, lastBeatAt: T0 - 30_000, lastInputAt: null }).send).toBe(false);
-    expect(planBeat({ now: T0, lastBeatAt: T0 - 56_000, lastInputAt: null }).send).toBe(true);
+    expect(
+      planBeat({ now: T0, lastBeatAt: T0 - (BEAT_INTERVAL_MS - 4_000), lastInputAt: null }).send,
+    ).toBe(true);
     // A beat in the future: the clock went back.
     expect(planBeat({ now: T0, lastBeatAt: T0 + 600_000, lastInputAt: null }).send).toBe(true);
   });
@@ -117,6 +119,7 @@ describe('beat request', () => {
       apikey: CONFIG.anonKey,
       Authorization: 'Bearer token-1',
       'Content-Type': 'application/json',
+      Prefer: 'return=minimal',
     });
     expect(init.credentials).toBe('omit');
     expect(init.keepalive).toBe(true);
@@ -194,7 +197,7 @@ describe('startPresence', () => {
     storeSession();
     storage.setItem(
       PRESENCE_SHARED_KEY,
-      JSON.stringify({ userId: USER, beatAt: T0 - 70_000, inputAt: T0 - 2_000 }),
+      JSON.stringify({ userId: USER, beatAt: T0 - 130_000, inputAt: T0 - 2_000 }),
     );
     const stop = startPresence();
     await vi.advanceTimersByTimeAsync(0);

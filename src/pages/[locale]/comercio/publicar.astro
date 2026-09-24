@@ -32,7 +32,11 @@ import {
   getOutfits,
   getSpriteRegistry,
 } from '@/lib/content/registry';
+import { fill } from '@/i18n/messages/types';
+import { formatInteger } from '@/lib/format/numbers';
 import { diamondsTip } from '@/lib/game/tips';
+import { DISCORD_EDAD_MIN_DIAS, EVIDENCIA_DIAS } from '@/lib/trade/limits';
+import { comercioPublico } from '@/lib/trade/registry';
 import { buildNav } from '@/lib/nav/groups';
 import { spriteOrNull } from '@/lib/sprites/resolve';
 
@@ -44,6 +48,7 @@ import {
   type ListingFormSprites,
 } from '@/components/trade/ListingForm';
 import { AgeGate } from '@/components/trade/AgeGate';
+import { realMoneyConsentLabels } from '@/components/trade/RealMoneyConsent';
 import PageLayout from '@/layouts/PageLayout.astro';
 
 export const prerender = true;
@@ -60,7 +65,7 @@ const alternates = Object.fromEntries(
   locales.map((option) => [option, getAlternatePath(path, option)]),
 ) as Record<Locale, string>;
 
-const { trade, ui } = dictionaries[locale];
+const { trade, ui, picker, shell } = dictionaries[locale];
 // 9.7.7: the lines of the copied text. `listingText` calls «Next Boost chance» `nextBoostChance`.
 const { nextBoost, ...copyLines } = trade.copy;
 
@@ -99,7 +104,11 @@ const addons: Record<string, ListingFormAddon[]> = Object.fromEntries(
     .filter((outfit) => outfit.addons.length > 0)
     .map((outfit) => [
       outfit.pokemon,
-      outfit.addons.map((addon) => ({ id: addon.id, nombre: addon.nombre })),
+      outfit.addons.map((addon) => ({
+        id: addon.id,
+        nombre: addon.nombre,
+        icono: spriteOrNull(registry, addon.sprite),
+      })),
     ]),
 );
 
@@ -167,13 +176,73 @@ const form: ListingFormProps = {
     addOption: trade.form.addOption,
     negotiable: trade.listing.negotiable,
     world: trade.world,
-    copy: trade.form.copy,
+    copy: trade.composer.copyDiscord,
     copied: trade.form.copied,
     copyFailed: trade.form.copyFailed,
     copyText: trade.form.copyText,
     preview: trade.form.preview,
     errors: trade.form.errors,
   },
+  // 16.3: the texts of the pickers and controls. «Pokémon», «Ball», «Held X», «Held Y» and
+  // «Mega Stone» are game terms (13.4).
+  pickers: {
+    picker: {
+      search: picker.search,
+      results: picker.resultsCount.other,
+      selectedCount: picker.chosenCount.other,
+      done: picker.done,
+      clear: picker.remove,
+      removeItem: picker.removeItem,
+      clearFilters: picker.clearFilters,
+      none: picker.none,
+      noMatches: picker.noMatches,
+      close: ui.close,
+    },
+    filters: {
+      tier: picker.filters.tier,
+      tipo: picker.filters.type,
+      moveset: picker.filters.movesetType,
+      variante: picker.filters.variant,
+      normal: ui.cards.normal,
+      generacion: picker.filters.generation,
+    },
+    category: ui.tooltip.category,
+    assetQuestion: trade.composer.assetQuestion,
+    choosePokemon: fill(picker.choose, { entity: 'Pokémon' }),
+    chooseBall: fill(picker.choose, { entity: 'Ball' }),
+    chooseItem: fill(picker.choose, { entity: trade.typeNames.items }),
+    chooseHeld: fill(picker.choose, { entity: 'Held Item' }),
+    chooseMega: fill(picker.choose, { entity: 'Mega Stone' }),
+    heldX: 'Held X',
+    heldY: 'Held Y',
+    mega: 'Mega Stone',
+    addons: trade.detail.addon,
+    auras: trade.listing.keys.aura,
+    star: trade.review.star.other,
+  },
+  // 16.4.4 step 6: «Publicar anuncio» only with COMERCIO_PUBLICO.
+  publish: comercioPublico()
+    ? {
+        publish: trade.composer.publish,
+        published: trade.composer.published,
+        view: trade.composer.view,
+        signInLine: trade.composer.signInToPublish,
+        signIn: shell.account.signIn,
+        contact: {
+          account: trade.requirements.account,
+          adultsOnly: trade.adultsOnly,
+          discord: trade.requirements.discord,
+          discordAge: fill(trade.requirements.discordAge, {
+            days: formatInteger(DISCORD_EDAD_MIN_DIAS, locale),
+          }),
+          suspendedUntil: trade.suspension.until,
+          suspended: trade.suspension.indefinite,
+          goToAccount: trade.requirements.goToAccount,
+        },
+        consent: realMoneyConsentLabels(trade, formatInteger(EVIDENCIA_DIAS, locale)),
+        close: ui.close,
+      }
+    : null,
   preview: {
     card: { ...trade.listing, reserved: trade.states.reservado },
     now: trade.now,

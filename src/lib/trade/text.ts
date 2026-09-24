@@ -38,6 +38,8 @@ export interface ListingTextLabels {
   addon: string;
   nextBoostChance: string;
   heldItems: string;
+  /** «Mega Stone»; the canonical game term when absent. */
+  mega?: string;
   /** «Entrenamiento» / «Training». */
   training: string;
   dittoMemory: string;
@@ -95,7 +97,10 @@ function realMoneyText(real: PrecioReal, locale: Locale): string | null {
 }
 
 /** The registry names the text reads; phase A has no seller (9.7.6). */
-export type ListingTextNames = Pick<ListingNames, 'pokemon' | 'item' | 'addon' | 'aura' | 'mundo'>;
+export type ListingTextNames = Pick<
+  ListingNames,
+  'pokemon' | 'item' | 'addon' | 'aura' | 'mundo' | 'heldTier'
+>;
 
 /** «Vendo: …»: the title of 9.4, with the exact amount of Pokédólares (E12). */
 function sellingTitle(anuncio: ListingTextInput, locale: Locale, names: ListingTextNames): string {
@@ -108,6 +113,14 @@ function sellingTitle(anuncio: ListingTextInput, locale: Locale, names: ListingT
 
 type AddLine = (label: string, value: string | null | undefined) => void;
 
+/** The registry names of a list of ids, joined; ids without a record are left out. */
+function namesOf(
+  ids: readonly string[],
+  lookup: (id: string) => string | null | undefined,
+): string {
+  return ids.flatMap((id) => (present(lookup(id)) ? [lookup(id) as string] : [])).join(', ');
+}
+
 /** The declared Pokémon, in the order of its sheet (9.6): rows first, then the sections. */
 function pokemonLines(
   unit: UnidadPokemon,
@@ -117,10 +130,8 @@ function pokemonLines(
   add: AddLine,
 ): void {
   add(labels.nickname, unit.nickname);
-  if (unit.ball !== null) {
-    add(labels.ball, entityName(unit.ball.item, unit.ball.nombre, names.item));
-  }
-  if (unit.aura !== null) add(labels.aura, names.aura(unit.aura));
+  add(labels.ball, entityName(unit.ball, names.item));
+  add(labels.aura, namesOf(unit.auras, names.aura));
   if (unit.boost !== null) add(labels.boost, formatSigned(unit.boost, locale));
   if (unit.memorySlots !== null) add(labels.memorySlots, formatInteger(unit.memorySlots, locale));
   if (unit.starLevel !== null) add(labels.starLevel, formatInteger(unit.starLevel, locale));
@@ -130,16 +141,17 @@ function pokemonLines(
     const units = knownAmount(npc.cantidad);
     if (units !== null) add(labels.npcPrice, pokedolaresFigure(units, locale));
   }
-  if (unit.addon !== null) {
-    add(labels.addon, entityName(unit.addon.id, unit.addon.nombre, names.addon));
-  }
+  add(labels.addon, namesOf(unit.addons, names.addon));
   add(labels.nextBoostChance, percentText(unit.nextBoostChance, locale));
 
-  const helds = unit.helds.flatMap((held) => {
-    const name = entityName(held.item, held.nombre, names.item);
-    return name === null ? [] : [`${name} ${formatTier(held.tier)}`];
+  const helds = [unit.heldX, unit.heldY].flatMap((id) => {
+    const name = entityName(id, names.item);
+    if (name === null || id === null) return [];
+    const tier = names.heldTier?.(id);
+    return [typeof tier === 'number' ? `${name} ${formatTier(tier)}` : name];
   });
   add(labels.heldItems, helds.join(', '));
+  add(labels.mega ?? 'Mega Stone', entityName(unit.mega, names.item));
 
   const training = unit.entrenamiento
     .slice()

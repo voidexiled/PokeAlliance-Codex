@@ -1,0 +1,150 @@
+/* EntitySlot sizes, states and corner marks (spec 16.3.1) and the sprite form of ShinyMark
+   (16.3.5). Per-component sheet (§13.6): EntitySlot.tsx and ShinyMark.tsx import it; the frame
+   itself stays in entity-slot.css of the shared sheet. */
+
+@layer properties, theme, base, components, utilities;
+
+@layer components {
+  .ac-entity-slot {
+    --slot-accent: var(--selected);
+    border-radius: var(--radius-4);
+    background: var(--bg-primary);
+    user-select: none;
+  }
+
+  .ac-entity-slot:hover {
+    border-color: var(--border-primary);
+  }
+
+  .ac-entity-slot--32 {
+    width: var(--size-cell);
+    height: var(--size-cell);
+  }
+  .ac-entity-slot--48 {
+    width: 48px; /* sin token: pixel-exact game slot geometry */
+    height: 48px; /* sin token: pixel-exact game slot geometry */
+  }
+  .ac-entity-slot--56 {
+    width: 56px; /* sin token: pixel-exact game slot geometry */
+    height: 56px; /* sin token: pixel-exact game slot geometry */
+  }
+  .ac-entity-slot--64 {
+    width: 64px; /* sin token: pixel-exact game slot geometry */
+    height: 64px; /* sin token: pixel-exact game slot geometry */
+  }
+
+  /* Chosen: the accent frame and an inner glow, as the chosen slot of the game. */
+  .ac-entity-slot--selected,
+  .ac-entity-slot--selected:hover {
+    border-color: var(--slot-accent);
+    background: radial-gradient(circle at 50% 60%, var(--bg-tertiary), var(--bg-primary) 72%);
+    box-shadow:
+      inset 0 0 0 1px var(--slot-accent),
+      inset 0 0 10px var(--bg-tertiary);
+  }
+
+  /* Not available: dimmed sprite and the padlock in the centre. */
+  .ac-entity-slot--unavailable > :not(.ac-entity-slot__lock) {
+    opacity: 0.35;
+    filter: grayscale(1);
+  }
+  .ac-entity-slot__lock {
+    display: none;
+  }
+  .ac-entity-slot--unavailable .ac-entity-slot__lock {
+    position: absolute;
+    right: 3px; /* sin token: pixel-exact game slot geometry */
+    bottom: 3px; /* sin token: pixel-exact game slot geometry */
+    display: block;
+    width: 10px; /* sin token: pixel-exact game slot geometry */
+    height: 8px; /* sin token: pixel-exact game slot geometry */
+    border-radius: 1px;
+    background: var(--text-tertiary);
+  }
+  .ac-entity-slot--unavailable .ac-entity-slot__lock::before {
+    position: absolute;
+    left: 2px;
+    bottom: 7px; /* sin token: pixel-exact game slot geometry */
+    width: 6px; /* sin token: pixel-exact game slot geometry */
+    height: 5px; /* sin token: pixel-exact game slot geometry */
+    border: 2px solid var(--text-tertiary);
+    border-bottom: 0;
+    border-radius: 3px 3px 0 0; /* sin token: pixel-exact game slot geometry */
+    content: '';
+  }
+
+  /* Mini tier badge, top left. */
+  .ac-entity-slot__tier {
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    display: flex;
+  }
+
+  /* Check, top right: an accent disc with a white tick. */
+  .ac-entity-slot__check {
+    position: absolute;
+    top: 2px;
+    right: 2px;
+    width: 14px; /* sin token: pixel-exact game slot geometry */
+    height: 14px; /* sin token: pixel-exact game slot geometry */
+    border-radius: var(--radius-full);
+    background: var(--slot-accent);
+    box-shadow: 0 0 0 1px var(--bg-primary);
+  }
+  .ac-entity-slot__check::after {
+    position: absolute;
+    top: 3px; /* sin token: pixel-exact game slot geometry */
+    left: 5px; /* sin token: pixel-exact game slot geometry */
+    width: 3px; /* sin token: pixel-exact game slot geometry */
+    height: 6px; /* sin token: pixel-exact game slot geometry */
+    border: solid var(--white);
+    border-width: 0 2px 2px 0;
+    transform: rotate(45deg);
+    content: '';
+  }
+
+  /* The «none» slot: a struck circle while the client's none_background is not registered. */
+  .ac-entity-slot--none {
+    border-style: dashed;
+  }
+  .ac-entity-slot__none {
+    position: relative;
+    width: 45%;
+    height: 45%;
+    border: 2px solid var(--text-quinary);
+    border-radius: var(--radius-full);
+  }
+  .ac-entity-slot__none::after {
+    position: absolute;
+    top: 50%;
+    left: -2px; /* sin token: pixel-exact game slot geometry */
+    right: -2px; /* sin token: pixel-exact game slot geometry */
+    height: 2px;
+    background: var(--text-quinary);
+    transform: rotate(-45deg);
+    content: '';
+  }
+
+  /* ShinyMark from the client icon: its natural size, pixel-crisp. */
+  .ac-shiny-mark--sprite {
+    width: auto;
+    height: auto;
+  }
+  .ac-shiny-mark__icon {
+    display: block;
+    image-rendering: pixelated;
+  }
+  .ac-entity-slot .ac-shiny-mark--slot {
+    top: 2px;
+    right: 2px;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .ac-entity-slot {
+      transition:
+        border-color var(--duration-fast) var(--ease-standard),
+        box-shadow var(--duration-fast) var(--ease-standard);
+    }
+  }
+}

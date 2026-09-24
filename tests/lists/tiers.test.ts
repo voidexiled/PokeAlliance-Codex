@@ -5,7 +5,7 @@
 // (X4), so a change of `content/` changes it (S19).
 import { describe, expect, it } from 'vitest';
 
-import { decodePokedex, tierId, type PokedexRow } from '@/components/pokedex/config';
+import { decodePokedex, type PokedexRow } from '@/components/pokedex/config';
 import {
   TIERS_PAGE_SIZE,
   compareTiers,
@@ -15,23 +15,23 @@ import {
   tiersRows,
 } from '@/components/tiers/config';
 import { getPokemon } from '@/lib/content/repository';
+import { tierRank } from '@/lib/content/tier-rank';
 import { applyListState, pageCountOf, parseListState, pendingScript } from '@/lib/lists/state';
 import { buildPokedexData, pokedexIds } from '../../src/pages/[locale]/pokedex/datos.json';
 
 const data = buildPokedexData('es');
 const all = decodePokedex(data);
 const rows = tiersRows(all);
-const { generations, elements, variants } = pokedexIds(rows, data.refs.elementos);
-const config = tiersConfig('/es/pokedex/datos.json', { generations, elements, variants });
+const { generations, elements, movesets, variants } = pokedexIds(rows, data.refs.elementos);
+const config = tiersConfig(
+  '/es/pokedex/datos.json',
+  { generations, elements, movesets, variants },
+  'es',
+);
 
-/** 8.8 step 5: the special tiers in the order of `$defs.tierEspecial`, after T1…T7. */
-const SPECIAL = ['super-rare', 'ultra-rare', 'legendary', 'mythic', 'ultimate'];
-
-/** Where a tier goes: its number, then the special ones in their order, then any other. */
+/** §16.2.1: best first, ULTIMATE … T7. */
 function rank(row: PokedexRow): number {
-  if (typeof row.tier === 'number') return row.tier;
-  const special = SPECIAL.indexOf(tierId(row.tier) ?? '');
-  return special < 0 ? 10_000 : 1_000 + special;
+  return tierRank(row.tier);
 }
 
 describe('the rows of the Tier list (8.8 steps 4 and 5)', () => {
@@ -40,7 +40,7 @@ describe('the rows of the Tier list (8.8 steps 4 and 5)', () => {
     expect(rows.every((row) => row.tier !== null)).toBe(true);
   });
 
-  it('orders by tier, T1…T7 and then the special ones, and by 8.0.5 inside a tier', () => {
+  it('orders by tier, best first (ULTIMATE … T7), and by 8.0.5 inside a tier', () => {
     const ranks = rows.map(rank);
     expect(ranks).toEqual([...ranks].sort((a, b) => a - b));
     // `datos.json` writes the rows in the order of 8.0.5 (tests/lists/pokedex.test.ts), and
@@ -55,7 +55,7 @@ describe('the rows of the Tier list (8.8 steps 4 and 5)', () => {
   });
 
   it('TL1: counts every variant with a tier, and page 1 is the first tier while it fills it', () => {
-    const page = applyListState(config, rows, parseListState(config, ''));
+    const page = applyListState(config, rows, parseListState(config, '?view=cards'));
     expect(page.total).toBe(rows.length);
     expect(page.pageCount).toBe(pageCountOf(TIERS_PAGE_SIZE, rows.length));
     expect(page.items.map((row) => row.id)).toEqual(
@@ -70,6 +70,15 @@ describe('the rows of the Tier list (8.8 steps 4 and 5)', () => {
 });
 
 describe('the tiers list (8.0.6)', () => {
+  it('«Ranuras» is the default and shows the whole filtered list, one group per tier (16.4.3)', () => {
+    expect(config.defaultView).toBe('slots');
+    const page = applyListState(config, rows, parseListState(config, ''));
+    expect(page.pageCount).toBe(1);
+    expect(page.items).toHaveLength(rows.length);
+    const keys = page.groups.map((group) => group.key);
+    expect(new Set(keys).size).toBe(keys.length);
+  });
+
   it('has 48 rows a page, one order, the anchor of H7 and the Pokédex data', () => {
     expect(config.id).toBe('tiers');
     expect(config.pageSize).toBe(48);
@@ -79,7 +88,12 @@ describe('the tiers list (8.0.6)', () => {
   });
 
   it('filters by generation, element and variant, never by tier (8.8 step 3)', () => {
-    expect(config.filters.map((filter) => filter.key)).toEqual(['gen', 'elemento', 'variante']);
+    expect(config.filters.map((filter) => filter.key)).toEqual([
+      'gen',
+      'tipo',
+      'moveset',
+      'variante',
+    ]);
     expect(parseListState(config, '?tier=t1').filters).toEqual({});
   });
 

@@ -1,20 +1,20 @@
+import '@/styles/components/inventory.css';
+
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import type { ReactNode } from 'react';
 
-import { CardGrid } from '@/components/cards/CardGrid';
-import { CardGroup } from '@/components/cards/CardGroup';
-import { LootCard } from '@/components/cards/LootCard';
 import type { LootCardDrop, LootCardEntity } from '@/components/cards/LootCard';
-import type * as SlotsModule from '@/components/cards/SlotsPanel';
 import type * as RowModule from '@/components/cards/ListRow';
 import type * as TableModule from '@/components/content/DataTable';
 import type { DataTableColumn } from '@/components/content/DataTable';
 import { EmptyState } from '@/components/content/EmptyState';
+import { TextField } from '@/components/controls/TextField';
 import { ToggleGroup } from '@/components/controls/ToggleGroup';
 import { ElementChip } from '@/components/game/ElementChip';
 import type { ElementChipEntry } from '@/components/game/ElementChip';
-import type * as SlotModule from '@/components/game/EntitySlot';
+import { EntitySlot } from '@/components/game/EntitySlot';
 import { NestedEntity } from '@/components/game/NestedEntity';
+import { Sprite } from '@/components/game/Sprite';
 import { SpriteStage } from '@/components/game/SpriteStage';
 import {
   ALL_CATEGORY,
@@ -41,59 +41,24 @@ import { fill, isPluralMessage, plural } from '@/i18n/messages/types';
 import { lootKeys } from '@/lib/cards/layout';
 import type { LootKey } from '@/lib/cards/layout';
 import { formatInteger } from '@/lib/format/numbers';
-import type * as TipsModule from '@/lib/game/tips';
-import type { TipData } from '@/lib/game/tips';
+import { elementTip, itemTip, pokemonTip } from '@/lib/game/tips';
 import type { EntityView, ListPage } from '@/lib/lists/state';
 
-// ItemsRoot (spec 7.3, 7.7, 8.0.6, 8.5): the island of the `items` list, on `/{l}/items/`
-// («Todo») and on each `/{l}/items/c/{categoria}/`. It owns what 7.7.1 leaves to a list root —
-// the category navigation, the three views and the texts of the results bar — and hands the
-// rest to `useListState` and `EntityList`. The `ListConfig`, the shape of the data, its decoder
-// and the panel builders live in ./config.ts, which the build shares.
+// ItemsRoot (spec 7.3, 7.7, 8.5, 16.4.1): the island of the `items` list, on `/{l}/items/`
+// («Todo») and on each `/{l}/items/c/{categoria}/`. The page draws the breadcrumb, the h1 and
+// the category navigation (`ItemsNavigation`, handed over as `children`); the island draws the
+// «Buscar ítem» field, the results bar, the active view and the pagination (96 a page).
 //
-// Template B (8.0.2): the page draws the breadcrumb and the h1; the island draws, 16 apart, the
-// category navigation (in the place of the FilterBar), the results bar — `Count` «{n} ítems»
-// and `ViewToggle` — the active view and `Pagination align="center"` (8.5 steps 3 to 6).
-//
-// Category navigation (8.5 step 3, 7.2.8): `ItemsNavigation`, at the end of this file, is the
-// `ToggleGroup variant="tab"` with `href` options — the pestaña enlace, a `nav` named
-// «Categorías del Market» / «Market categories» with the 14 entries of the registry in its
-// order, each one a link with its `icono` at 1x and its name, that wraps. The page's own entry
-// carries `aria-current="page"` and the «Actual» state of 5.2, never the amber selection nor
-// `aria-pressed` (T9, IT6). The page renders it and hands it over as `children`, which this
-// root places among the controls of the list, 16 above the results bar like the type tabs of
-// `Lienzo:Comercio`: the same links on every page of the list, which nothing of the state
-// changes, so they are HTML that works before the island hydrates and no weight in its props.
-//
-// Data (PR5). The page prerenders the first page of the default state and the props carry
-// only its rows, in the shape of `/{l}/items/datos.json`, with the part of `refs` they name.
-// When the list is longer than one page the island asks for that file as it hydrates; a
-// category page keeps the rows of its category. A row holds the registry values (§3.13); the
-// labels are not in it, they arrive by props (DP1).
-//
-// Views (7.7.4, 8.5 step 5):
-//   - Cards: `LootCard` in `CardGrid family="loot"` with the keys of the union (7.6.3) in the
-//     order Drop de, Elemento, Uso, Precio NPC, Precio de tienda (Q12). In «Todo» one
-//     `CardGroup` (h2) per category of the page, in the Market order, with its icon of 32, its
-//     name and its count on this page, and card titles `h3`; each group is its own grid with
-//     its own keys (7.6.3). In a category the grid has no groups and its titles are `h2`
-//     (7.6.2). The title is text (items have no page, §15) and the card opens nothing
-//     (7.5.10, IT4): the triggers are the element chip and the one Pokémon of «Drop de».
-//   - Slots: in «Todo» `SlotsPanel layout="side"` with one label column per category; in a
-//     category one list. `EntitySlot` of 40 (44 on a coarse pointer), a `<button>` that opens
-//     the item panel.
-//   - Lista: `DataTable` with its caption and the columns Sprite · Ítem · (in «Todo»)
-//     Categoría · the keys of the union; one `ListRow variant="drops"` per item whose name is
-//     the button that opens the item panel.
-//   Every view gives each item the anchor `item-{id}` (H7): the article, the slot and the row.
-//
-// Panels (7.5.3). The item panel is `itemTip` with the same rows in every category. The props
-// bring the element chips and the one-Pokémon «Drop de» of the first page with their panels,
-// built in the build (DP3): that is all the prerendered page and the hydration draw. Everything
-// else — the Slots and Lista components, the tooltip builders and the panels of the other
-// pages' rows — is the deferred part of the island (see below).
+// Views (16.4.1): only «Ranuras» (default) and «Lista»; a stored or linked «cards» view falls
+// back to Ranuras (`itemsConfig`).
+//   - Ranuras is the game inventory: a dark panel with packed `EntitySlot` of 48, 2 apart, no
+//     cards; in «Todo» one inventory block per Market category, headed by its icon and name.
+//     Each slot is the sprite only and opens the item's game tooltip (`itemTip`).
+//   - Lista: `DataTable` with Sprite · Ítem · (in «Todo») Categoría · the keys of the union.
+//     Its table and row components are the deferred part of the island (13.6).
+// Every view gives each item the anchor `item-{id}` (H7).
 
-/** Cards and slots from this index on load their sprite lazily (7.4.2). */
+/** Slots and rows from this index on load their sprite lazily (7.4.2). */
 const EAGER_ART = 4;
 
 /** The keys of the Lista view after Sprite, Ítem and Categoría, in the order of 8.5. */
@@ -120,6 +85,10 @@ export interface ItemsListLabels {
   item: string;
   /** «{n} Pokémon»: «Drop de» of an item that more than one Pokémon drops. */
   droppedByCount: MessageLeaf;
+  /** «Buscar ítem» / «Search item»: the live search field of the page (16.4.1). */
+  search: string;
+  /** What the inventory says when «Buscar ítem» finds nothing. */
+  noResults: string;
 }
 
 export interface ItemsRootProps {
@@ -172,26 +141,12 @@ function counted(template: MessageLeaf, n: number, locale: Locale): string {
   return fill(chosen, { n: formatInteger(n, locale) });
 }
 
-// --------------------------------------------------------------------- the deferred part
-//
-// Cards is the view the pages prerender and hydrate, so its pieces are part of the island.
-// The rest is only drawn when the state asks for it, and loads as deferred chunks of 13.6
-// (`import()`), which keeps the initial JS of the pages within their budget: the Slots and
-// Lista components, and the tooltip builders that the item panel of those two views and the
-// panels of an element or a Pokémon the props did not bring need. The modules are the ones the
-// Pokédex already loads the same way, not a copy. They are asked for as soon as the island is
-// idle after hydrating, so a switch finds them ready, and at once when the state of the URL or
-// the saved view needs them (PR4): until they are here the root is not `ready`, so it keeps
-// `data-ac-pending` and nothing of the default state shows. A chunk that does not load is the
-// data error of PR5.
+// The deferred part (13.6): the Lista table and its rows load only when that view is drawn,
+// and are asked for once the island is idle so a switch finds them ready.
 
 interface Deferred {
-  SlotsPanel: typeof SlotsModule.SlotsPanel;
-  SlotsPanelItem: typeof SlotsModule.SlotsPanelItem;
-  EntitySlot: typeof SlotModule.EntitySlot;
   DataTable: typeof TableModule.DataTable;
   ListRow: typeof RowModule.ListRow;
-  tips: Pick<typeof TipsModule, 'elementTip' | 'itemTip' | 'pokemonTip'>;
 }
 
 let deferred: Deferred | undefined;
@@ -199,24 +154,13 @@ let request: Promise<void> | undefined;
 
 function loadDeferred(): Promise<void> {
   request ??= Promise.all([
-    import('@/components/cards/SlotsPanel'),
-    import('@/components/game/EntitySlot'),
     import('@/components/content/DataTable'),
     import('@/components/cards/ListRow'),
-    import('@/lib/game/tips'),
   ]).then(
-    ([slots, slot, table, row, tips]) => {
-      deferred = {
-        SlotsPanel: slots.SlotsPanel,
-        SlotsPanelItem: slots.SlotsPanelItem,
-        EntitySlot: slot.EntitySlot,
-        DataTable: table.DataTable,
-        ListRow: row.ListRow,
-        tips,
-      };
+    ([table, row]) => {
+      deferred = { DataTable: table.DataTable, ListRow: row.ListRow };
     },
     (error: unknown) => {
-      // A chunk that failed is asked for again the next time the state needs it.
       request = undefined;
       throw error;
     },
@@ -269,41 +213,27 @@ export function ItemsRoot({
   );
   const items = useMemo(() => decodeItems(data), [data]);
   const controller = useListState(config, { items, total, decode, path });
-  const shown = controller.page.items;
   const view = controller.page.state.view;
 
-  // Elements and «Drop de». The props bring those of the first page with their panels; every
-  // other one is built from `refs` with the same function once the deferred part is here.
-  const later = deferred;
+  // Elements and «Drop de»: the props bring those of the first page; every other one is
+  // built from `refs` with the same builders.
   const [chips, entities] = useMemo(() => {
     const own = new Map(elements.map((element) => [element.id, element]));
     const one = new Map(Object.entries(droppers));
-    if (later !== undefined) {
-      for (const [id, ref] of Object.entries(refs.elementos))
-        if (!own.has(id))
-          own.set(id, elementChip(id, ref, locale, ui.tooltip, later.tips.elementTip));
-      for (const [id, ref] of Object.entries(refs.pokemon))
-        if (!one.has(id))
-          one.set(id, dropperEntity(id, ref, locale, ui.tooltip, later.tips.pokemonTip));
-    }
+    for (const [id, ref] of Object.entries(refs.elementos))
+      if (!own.has(id)) own.set(id, elementChip(id, ref, locale, ui.tooltip, elementTip));
+    for (const [id, ref] of Object.entries(refs.pokemon))
+      if (!one.has(id)) one.set(id, dropperEntity(id, ref, locale, ui.tooltip, pokemonTip));
     return [own, one] as const;
-  }, [elements, droppers, refs, later, locale, ui.tooltip]);
+  }, [elements, droppers, refs, locale, ui.tooltip]);
 
   /** The one Pokémon that drops a row's item, when it is only one. */
   const onlyDropper = (row: ItemsRow): string | undefined =>
     row.dropDe?.length === 1 ? row.dropDe[0] : undefined;
 
-  // Whether the state needs the deferred part (see above), and whether it is here.
-  const absent =
-    later === undefined &&
-    (view !== 'cards' ||
-      shown.some((row) => {
-        const one = onlyDropper(row);
-        return (
-          (row.elemento !== null && !chips.has(row.elemento)) ||
-          (one !== undefined && !entities.has(one))
-        );
-      }));
+  // Whether the Lista needs its deferred part, and whether it is here.
+  const later = deferred;
+  const absent = later === undefined && view === 'list';
   const [, setArrived] = useState(0);
   const [broken, setBroken] = useState(false);
   useEffect(() => {
@@ -367,8 +297,8 @@ export function ItemsRoot({
   });
 
   /** The item panel of a slot and of a Lista name (7.5.3); only with the deferred part here. */
-  const panelOf = (row: ItemsRow, tips: Deferred['tips']): TipData =>
-    itemPanel(row, refs, categoryName(row.categoria), locale, ui.tooltip, tips.itemTip);
+  const panelOf = (row: ItemsRow) =>
+    itemPanel(row, refs, categoryName(row.categoria), locale, ui.tooltip, itemTip);
 
   // ------------------------------------------------------------------------------ views
   let position = 0;
@@ -378,52 +308,45 @@ export function ItemsRoot({
     return index >= EAGER_ART ? ('lazy' as const) : undefined;
   };
 
-  const grid = (rows: readonly ItemsRow[], headingLevel?: 2) => {
-    const cards = rows.map(lootEntry);
-    const keys = lootKeys(cards);
-    return (
-      <CardGrid family="loot" headingLevel={headingLevel}>
-        {rows.map((row, index) => (
-          <LootCard
-            key={row.id}
-            id={anchor(row)}
-            drop={cards[index] ?? lootEntry(row)}
-            keys={keys}
-            labels={ui.tooltip}
-            locale={locale}
-            hint={ui.pinHint}
-            loading={lazy()}
-          />
+  const slotsView = (page: ListPage<ItemsRow>): ReactNode => {
+    const grid = (rows: readonly ItemsRow[]) => (
+      <ul className="ac-inventory__grid">
+        {rows.map((row) => (
+          <li key={row.id} id={anchor(row)}>
+            <EntitySlot
+              size={48}
+              name={row.nombre}
+              sprite={row.sprite ? { ...row.sprite, loading: lazy() } : null}
+              tip={panelOf(row)}
+              locale={locale}
+              hint={ui.pinHint}
+            />
+          </li>
         ))}
-      </CardGrid>
+      </ul>
     );
-  };
-
-  const slotsView = (page: ListPage<ItemsRow>, parts: Deferred): ReactNode => {
-    const { SlotsPanel, SlotsPanelItem, EntitySlot } = parts;
-    const slot = (row: ItemsRow) => (
-      <SlotsPanelItem key={row.id} id={anchor(row)}>
-        <EntitySlot
-          size={40}
-          name={row.nombre}
-          sprite={row.sprite ? { ...row.sprite, loading: lazy() } : null}
-          tip={panelOf(row, parts.tips)}
-          locale={locale}
-          hint={ui.pinHint}
-        />
-      </SlotsPanelItem>
-    );
-    if (!grouped) return <SlotsPanel label={title}>{page.items.map(slot)}</SlotsPanel>;
+    if (!grouped) {
+      return (
+        <div className="ac-inventory" role="group" aria-label={title}>
+          {grid(page.items)}
+        </div>
+      );
+    }
     return (
-      <SlotsPanel
-        label={title}
-        layout="side"
-        groups={page.groups.map((group) => ({
-          key: group.key,
-          label: categoryName(group.key) ?? group.key,
-          children: group.items.map(slot),
-        }))}
-      />
+      <div className="ac-inventory">
+        {page.groups.map((group) => {
+          const entry = categoryById.get(group.key);
+          return (
+            <section key={group.key} className="ac-inventory__block">
+              <h2 className="ac-inventory__head">
+                {entry?.icono ? <Sprite {...entry.icono} cell alt="" /> : null}
+                {entry?.nombre ?? group.key}
+              </h2>
+              {grid(group.items)}
+            </section>
+          );
+        })}
+      </div>
     );
   };
 
@@ -499,7 +422,7 @@ export function ItemsRoot({
                 />
               }
               name={row.nombre}
-              tip={panelOf(row, parts.tips)}
+              tip={panelOf(row)}
               hint={ui.pinHint}
               locale={locale}
               cells={grouped ? [categoryName(row.categoria), ...values] : values}
@@ -511,25 +434,9 @@ export function ItemsRoot({
   };
 
   const views: Record<EntityView, (page: ListPage<ItemsRow>) => ReactNode> = {
-    cards: (page) =>
-      grouped
-        ? page.groups.map((group) => {
-            const entry = categoryById.get(group.key);
-            return (
-              <CardGroup
-                key={group.key}
-                label={entry?.nombre ?? group.key}
-                count={group.items.length}
-                sprite={entry?.icono ?? null}
-                level={2}
-                locale={locale}
-              >
-                {grid(group.items)}
-              </CardGroup>
-            );
-          })
-        : grid(page.items, 2),
-    slots: (page) => (later === undefined ? null : slotsView(page, later)),
+    // Cards is not offered here (16.4.1); `itemsConfig` never lets the state name it.
+    cards: slotsView,
+    slots: slotsView,
     list: (page) => (later === undefined ? null : listView(page, later)),
   };
 
@@ -541,10 +448,22 @@ export function ItemsRoot({
       controller={list}
       labels={listLabels}
       count={(n) => counted(labels.count, n, locale)}
-      // No filter, and the pages render the island only with items (8.5): nothing to say.
-      empty={() => null}
+      empty={() => <EmptyState>{labels.noResults}</EmptyState>}
       views={views}
-      controls={children}
+      controls={
+        <>
+          {children}
+          <TextField
+            variant="search"
+            label={labels.search}
+            labelHidden
+            placeholder={labels.search}
+            value={controller.query}
+            onChange={(value) => controller.setQuery(value)}
+            inputProps={{ autoComplete: 'off', spellCheck: false, enterKeyHint: 'search' }}
+          />
+        </>
+      }
       paginationAlign="center"
     />
   );

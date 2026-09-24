@@ -46,6 +46,7 @@ import {
 import { getPokemon } from '@/lib/content/repository';
 import { formatDate } from '@/lib/format/dates';
 import { buildNav } from '@/lib/nav/groups';
+import { COMERCIO_CACHE_CONTROL } from '@/lib/trade/limits';
 import { comercioPublico, getAnuncio, getVendedores } from '@/lib/trade/registry';
 import { loadVendedor } from '@/lib/trade/source';
 import { sortListings } from '@/lib/trade/sort';
@@ -95,6 +96,8 @@ export function getStaticPaths() {
 const dictionaries: Record<Locale, Messages> = { es, en };
 
 const locale = getLocale(Astro.params.locale);
+// Egress (9.16.4): shared CDN cache; the HTML holds nothing personal (the islands ask for it).
+Astro.response.headers.set('Cache-Control', COMERCIO_CACHE_CONTROL);
 // Phase A reads the sample registry, phase B the database (src/lib/trade/source.ts, 9.3).
 const { vendedor: seller, anuncios: sellerListings } = await loadVendedor(
   Astro.params.handle ?? '',

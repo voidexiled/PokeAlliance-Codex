@@ -101,6 +101,11 @@ export const movesFileSchema = z.strictObject({
       cooldownSegundos: z.number().min(0).nullable(),
       modo: optionalText,
       pokemon: z.array(slug),
+      /**
+       * Optional (§16.2.2): "area" (aoe), "objetivo" (target) o "pasivo" (passive), etiquetas
+       * del Pokédex del juego. null si no se conoce.
+       */
+      alcance: oneOf(movesJsonSchema.$defs.movimiento.properties.alcance.enum).optional(),
     }),
   ),
 });

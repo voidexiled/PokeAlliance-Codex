@@ -42,13 +42,16 @@ function pokemonTerms(unit: UnidadPokemon, names: ListingNames): Term[] {
     const nickname = unit.nickname as string;
     terms.push(nickname, nickname.replace(/\s+/g, ''));
   }
-  if (unit.ball !== null) terms.push(entityName(unit.ball.item, unit.ball.nombre, names.item));
-  if (unit.aura !== null) terms.push(names.aura(unit.aura));
-  for (const held of unit.helds) {
-    const name = entityName(held.item, held.nombre, names.item);
-    if (name !== null) terms.push(`${name} t${held.tier}`);
+  terms.push(entityName(unit.ball, names.item));
+  for (const id of unit.auras) terms.push(names.aura(id));
+  for (const id of [unit.heldX, unit.heldY]) {
+    const name = entityName(id, names.item);
+    if (name === null || id === null) continue;
+    const tier = names.heldTier?.(id);
+    terms.push(typeof tier === 'number' ? `${name} t${tier}` : name);
   }
-  if (unit.addon !== null) terms.push(entityName(unit.addon.id, unit.addon.nombre, names.addon));
+  terms.push(entityName(unit.mega, names.item));
+  for (const id of unit.addons) terms.push(names.addon(id));
   for (const id of unit.memorias) {
     if (id !== null) terms.push(names.pokemon(id));
   }
@@ -106,7 +109,7 @@ export function searchText(
   if (anuncio.tipo === 'items' && anuncio.item !== undefined) {
     const item = anuncio.item;
     const quantity = knownAmount(item.cantidad);
-    terms.push(entityName(item.item, item.nombre, names.item));
+    terms.push(entityName(item.item, names.item));
     if (quantity !== null) terms.push(`×${quantity}`, `×${formatInteger(quantity, locale)}`);
   }
   const units = knownAmount(anuncio.cantidad);

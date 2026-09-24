@@ -816,14 +816,14 @@ test.describe('Pokédex (8.2)', () => {
         pokedex.filters.element,
       ]);
       await expect(selects.locator('[role="combobox"]')).toHaveText([
-        pokedex.filters.allGenerations,
-        pokedex.filters.allTiers,
-        pokedex.filters.allElements,
+        (pokedex.filters as unknown as Record<string, string>).allGenerations,
+        (pokedex.filters as unknown as Record<string, string>).allTiers,
+        (pokedex.filters as unknown as Record<string, string>).allElements,
       ]);
       const variant = root.locator('.ac-filter-bar .ac-toggle-group');
       await expect(variant).toContainText(pokedex.filters.variant);
       await expect(variant.getByRole('button')).toHaveText([
-        pokedex.filters.allVariants,
+        (pokedex.filters as unknown as Record<string, string>).allVariants,
         ui.cards.normal,
         ui.shiny,
       ]);
@@ -835,12 +835,12 @@ test.describe('Pokédex (8.2)', () => {
         (a, b) => a - b,
       );
       await expect(selects.nth(0).locator('[role="option"]')).toHaveText([
-        pokedex.filters.allGenerations,
+        (pokedex.filters as unknown as Record<string, string>).allGenerations,
         ...generations.map((n) => fill(ui.cards.generation, { n: String(n) })),
       ]);
       const elementOptions = ELEMENTS.map((element) => element.nombre[locale]);
       await expect(selects.nth(2).locator('[role="option"]')).toHaveText([
-        pokedex.filters.allElements,
+        (pokedex.filters as unknown as Record<string, string>).allElements,
         ...elementOptions,
       ]);
       const numbered = [
@@ -850,7 +850,7 @@ test.describe('Pokédex (8.2)', () => {
         .map((tier) => tierText(tier));
       const tierOptions = await selects.nth(1).locator('[role="option"]').allTextContents();
       expect(tierOptions.slice(0, numbered.length + 1).map((text) => text.trim())).toEqual([
-        pokedex.filters.allTiers,
+        (pokedex.filters as unknown as Record<string, string>).allTiers,
         ...numbered,
       ]);
 
@@ -1611,8 +1611,8 @@ test.describe('WL1: sin relleno (§12.7, §12.8, §12.22)', () => {
         pokedex.filters.tier,
         pokedex.filters.element,
         pokedex.filters.variant,
-        pokedex.filters.allGenerations,
-        pokedex.filters.allTiers,
+        (pokedex.filters as unknown as Record<string, string>).allGenerations,
+        (pokedex.filters as unknown as Record<string, string>).allTiers,
         ui.cards.normal,
         ui.shiny,
         ui.prev,

@@ -86,7 +86,25 @@ const itemElementIds = itemsJsonSchema.$defs.elemento.enum as readonly string[];
 /** A string with at least one character that is not a space (`"pattern": "\\S"`). */
 const itemProse = z.string().regex(/\S/);
 
-export const itemSchema = z.strictObject({
+/** `HELD_TIER_MAX` of §16.2.3 (Q8, respuesta del propietario: «pon que 8»). */
+export const HELD_TIER_MAX = 8;
+
+/**
+ * `held` of §16.2.3: obligatorio para `categoria === "helds"`. Cada tier de un efecto es su
+ * propio ítem (X-Attack T1, X-Attack T2…), así se puede filtrar y ordenar por tier.
+ */
+export const heldSchema = z.strictObject({
+  ranura: z.enum(['x', 'y']),
+  efecto: itemProse,
+  tier: z.number().int().min(1).max(HELD_TIER_MAX),
+});
+
+/** `mega` de §16.2.3: opcional en cualquier categoría, marca una Mega Stone. */
+export const megaSchema = z.strictObject({
+  pokemon: z.array(slug),
+});
+
+const itemShape = z.strictObject({
   id: slug,
   nombre: text,
   clientId: positive.nullable(),
@@ -112,6 +130,15 @@ export const itemSchema = z.strictObject({
    */
   uso: z.strictObject({ es: itemProse, en: itemProse }).nullable().optional(),
   borrador: z.boolean().optional(),
+  /** Optional (§16.2.3), obligatorio para `categoria === "helds"` (ver `superRefine` abajo). */
+  held: heldSchema.optional(),
+  /** Optional en cualquier categoría (§16.2.3): marca una Mega Stone. */
+  mega: megaSchema.optional(),
+});
+
+export const itemSchema = itemShape.superRefine((item, context) => {
+  if (item.categoria === 'helds' && item.held === undefined)
+    context.addIssue({ code: 'custom', message: 'Falta "held".', path: ['held'] });
 });
 
 /** One list in both locales, in the same order (§3.13): an empty one makes no row. */
@@ -574,6 +601,10 @@ export const cambiosFileSchema = z.strictObject({
 
 export type Categoria = z.infer<typeof categoriaSchema>;
 export type Item = z.infer<typeof itemSchema>;
+/** `held` de un ítem con `categoria === "helds"` (§16.2.3). */
+export type Held = z.infer<typeof heldSchema>;
+/** `mega` de una Mega Stone (§16.2.3). */
+export type Mega = z.infer<typeof megaSchema>;
 export type Addon = z.infer<typeof addonSchema>;
 export type OutfitRecord = z.infer<typeof outfitSchema>;
 export type AuraShader = (typeof auraShaders)[number];

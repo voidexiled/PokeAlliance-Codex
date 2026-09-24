@@ -1,17 +1,16 @@
-import { useCallback, useEffect, useMemo, useState } from 'react';
-import type { ReactNode } from 'react';
+import '@/styles/components/tier-badge.css';
+import '@/styles/components/tier-rows.css';
+
+import { Suspense, lazy, useCallback, useEffect, useMemo, useState } from 'react';
+import type { CSSProperties, ReactNode } from 'react';
 
 import { CardGrid } from '@/components/cards/CardGrid';
 import { CardGroup } from '@/components/cards/CardGroup';
 import { DexCard } from '@/components/cards/DexCard';
 import type { DexCardDrop, DexCardEntry, DexCardLabels } from '@/components/cards/DexCard';
 import { EmptyState } from '@/components/content/EmptyState';
-import { FilterBar } from '@/components/controls/FilterBar';
-import { Select } from '@/components/controls/Select';
-import type { SelectOption } from '@/components/controls/Select';
-import { ToggleGroup } from '@/components/controls/ToggleGroup';
-import type { ToggleGroupOption } from '@/components/controls/ToggleGroup';
 import type { ElementChipEntry } from '@/components/game/ElementChip';
+import { EntitySlot } from '@/components/game/EntitySlot';
 import { EntityList } from '@/components/lists/EntityList';
 import type { EntityListLabels } from '@/components/lists/EntityList';
 import { useListState } from '@/components/lists/useListState';
@@ -19,8 +18,8 @@ import type { ListController } from '@/components/lists/useListState';
 import {
   decodePokedex,
   decodeRefs,
+  tierId,
   type PokedexData,
-  type PokedexOption,
   type PokedexRow,
   type PokedexRows,
 } from '@/components/pokedex/config';
@@ -61,9 +60,11 @@ import type { SpriteData } from '@/lib/sprites/resolve';
 // whose element has Stone or Fragment becomes its trigger (R2). The static chip and the
 // trigger have the same geometry (element-chip.css), so nothing moves.
 //
-// Filters (8.8 step 3): `FilterBar layout="fill"` with «Generación», «Elemento» and the
-// toggle group «Variante» of the Pokédex, with no «Tier»: the groups are the tiers. A filter
-// with fewer than two values narrows nothing and is not drawn (C-R5).
+// Filters (§16.4.3): the chips of the Pokédex (../pokedex/PokedexFilters.tsx) without «Tier»:
+// the rows are the tiers. A filter with fewer than two values is not drawn (C-R5).
+//
+// «Ranuras» (default, §16.4.3) is the classic tier list: one row per tier, best first, and
+// every filtered Pokémon with no pages; Cards and Lista keep 48 a page.
 //
 // Views (7.7.4, 8.8 step 5). The page is cut first and grouped by tier after (CGS 2.1):
 //   - Cards: one `CardGroup level={2}` per tier of the page, titled with `formatTier` and
@@ -172,15 +173,13 @@ function counted(template: MessageLeaf, n: number, locale: Locale): string {
   return fill(chosen, { n: formatInteger(n, locale) });
 }
 
-/** The first option, which leaves the filter open («Todas», «Todos»), then the registry's. */
-function selectOptions(all: string, options: readonly PokedexOption[]): SelectOption[] {
-  return [{ value: '', label: all }, ...options.map(([value, label]) => ({ value, label }))];
-}
-
 /** The title of a tier group: the tier of its rows, which all share it (8.8). */
 function groupTitle(rows: readonly PokedexRow[]): string {
   return formatTier(rows[0]?.tier);
 }
+
+/** The filter chips (§16.4.2), a chunk of their own that the server still renders (13.6). */
+const PokedexFilters = lazy(() => import('@/components/pokedex/PokedexFilters'));
 
 // --------------------------------------------------------------------- the deferred part
 //
@@ -230,7 +229,7 @@ export function TiersRoot({
     setRefs({ ...decodeRefs(json), rows });
     return tiersRows(rows);
   }, []);
-  const config = useMemo(() => tiersConfig(dataUrl, ids), [dataUrl, ids]);
+  const config = useMemo(() => tiersConfig(dataUrl, ids, locale), [dataUrl, ids, locale]);
   const items = useMemo(() => tiersRows(decodePokedex(data)), [data]);
   const controller = useListState(config, { items, total, decode, path });
   const page = controller.page;
@@ -266,13 +265,14 @@ export function TiersRoot({
   // Whether the state needs the deferred part (see above), and whether it is here.
   const absent =
     later === undefined &&
-    (view !== 'cards' ||
+    (view === 'list' ||
       page.total === 0 ||
-      shown.some(
-        (row) =>
-          row.elementos.some((id) => !byId.has(id) && refs?.elementos[id]) ||
-          row.drops?.some((id) => !byItem.has(id) && refs?.items[id]),
-      ));
+      (view === 'cards' &&
+        shown.some(
+          (row) =>
+            row.elementos.some((id) => !byId.has(id) && refs?.elementos[id]) ||
+            row.drops?.some((id) => !byItem.has(id) && refs?.items[id]),
+        )));
   const [, setLoaded] = useState(0);
   const [broken, setBroken] = useState(false);
   useEffect(() => {
@@ -339,48 +339,24 @@ export function TiersRoot({
     requirement: ui.tooltip.requirement,
     level: ui.tooltip.level,
     tier: ui.tooltip.tier,
+    moveset: pokedex.moveset,
     role: ui.tooltip.role,
     shiny: ui.shiny,
   };
 
   // ------------------------------------------------------------------------------ filters
   const text = pokedex.filters;
-  const variantOptions: ToggleGroupOption[] = [
-    { value: '', label: text.allVariants },
-    ...ids.variants.map((variant): ToggleGroupOption =>
-      variant === 'shiny'
-        ? { value: variant, label: ui.shiny, sprite: 'shiny' }
-        : { value: variant, label: ui.cards.normal },
-    ),
-  ];
-  const select = (key: string, label: string, all: string, options: readonly PokedexOption[]) =>
-    options.length > 1 ? (
-      <Select
-        label={label}
-        options={selectOptions(all, options)}
-        value={filters[key] ?? ''}
-        onChange={(value) => controller.setFilter(key, value || null)}
-      />
-    ) : null;
+  // §16.4.2 and §16.4.3: the chips of the Pokédex, several values each, without «Tier».
   const controls = (
-    <FilterBar layout="fill">
-      {select(
-        'gen',
-        text.generation,
-        text.allGenerations,
-        ids.generations.map((n): PokedexOption => [n, fill(ui.cards.generation, { n })]),
-      )}
-      {select('elemento', text.element, text.allElements, ids.elements)}
-      {ids.variants.length > 1 ? (
-        <ToggleGroup
-          label={text.variant}
-          labelHidden={false}
-          options={variantOptions}
-          value={filters.variante ?? ''}
-          onChange={(value) => controller.setFilter('variante', value || null)}
-        />
-      ) : null}
-    </FilterBar>
+    <Suspense fallback={null}>
+      <PokedexFilters
+        ids={ids}
+        filters={filters}
+        onChange={controller.setFilter}
+        text={text}
+        normalLabel={ui.cards.normal}
+      />
+    </Suspense>
   );
 
   const lazy = (index: number) => (index >= EAGER_ART ? 'lazy' : undefined);
@@ -429,9 +405,64 @@ export function TiersRoot({
     ));
   };
 
+  // §16.4.3: the classic tier list, one row per tier best first, the label cell in the colour
+  // of its `TierBadge` and the Pokémon slots flowing right. Every filtered row, no pages; the
+  // art from the fifth slot on loads lazily. The Pokémon panel comes with the deferred part.
+  const tierRows = (current: ListPage<PokedexRow>): ReactNode => {
+    let position = 0;
+    return (
+      <div className="ac-tier-rows">
+        {current.groups.map((group) => {
+          const tier = group.items[0]?.tier ?? null;
+          const key = tierId(tier) ?? group.key;
+          const cell = { '--tier-c': `var(--tier-${key})` } as CSSProperties;
+          return (
+            <section
+              key={group.key}
+              className="ac-tier-rows__row"
+              aria-label={groupTitle(group.items)}
+            >
+              <div className="ac-tier-rows__label" style={cell}>
+                <span className={`ac-tier-badge ac-tier-badge--${key}`}>
+                  {groupTitle(group.items)}
+                </span>
+              </div>
+              <ul className="ac-tier-rows__slots">
+                {group.items.map((row) => {
+                  const source = resolvePokemonImage(row.imagen);
+                  const index = position;
+                  position += 1;
+                  return (
+                    <li key={row.id} id={anchor(row)}>
+                      <EntitySlot
+                        size={56}
+                        name={row.nombre}
+                        sprite={
+                          source === null
+                            ? null
+                            : { src: source, smooth: true, loading: lazy(index) }
+                        }
+                        tip={later?.tipOf(row, context)}
+                        shiny={row.variante === 'shiny'}
+                        href={`/${locale}/pokedex/${row.id}/`}
+                        locale={locale}
+                        hint={ui.pinHint}
+                        shinyLabel={ui.shiny}
+                      />
+                    </li>
+                  );
+                })}
+              </ul>
+            </section>
+          );
+        })}
+      </div>
+    );
+  };
+
   const views: Record<EntityView, (current: ListPage<PokedexRow>) => ReactNode> = {
     cards,
-    slots: (current) => later?.pokedexSlots(current, context) ?? null,
+    slots: tierRows,
     list: (current) => later?.pokedexList(current, context) ?? null,
   };
 

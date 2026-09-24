@@ -27,29 +27,17 @@
       },
       "pokemon": {
         "pokemon": "shiny-ditto",
-        "ball": {
-          "item": "premier-ball",
-          "nombre": "Premier Ball"
-        },
-        "aura": "premier",
+        "ball": "premier-ball",
+        "auras": ["premier"],
+        "addons": [],
+        "heldX": null,
+        "heldY": null,
+        "mega": null,
         "boost": 20,
         "starLevel": 0,
         "nickname": "S U S A N O O",
         "memorySlots": 6,
         "memorias": [null, null, null, null, null, null],
-        "helds": [
-          {
-            "item": null,
-            "nombre": "X-Attack",
-            "tier": 5
-          },
-          {
-            "item": null,
-            "nombre": "X-Lucky",
-            "tier": 3
-          }
-        ],
-        "addon": null,
         "nextBoostChance": null,
         "entrenamiento": [
           {
@@ -86,24 +74,17 @@
       },
       "pokemon": {
         "pokemon": "shiny-hitmontop",
-        "ball": {
-          "item": "ultra-ball",
-          "nombre": "Ultra Ball"
-        },
-        "aura": null,
+        "ball": "ultra-ball",
+        "auras": [],
+        "addons": [],
+        "heldX": null,
+        "heldY": null,
+        "mega": null,
         "boost": 35,
         "starLevel": 2,
         "nickname": null,
         "memorySlots": null,
         "memorias": [],
-        "helds": [
-          {
-            "item": null,
-            "nombre": "X-Attack",
-            "tier": 4
-          }
-        ],
-        "addon": null,
         "nextBoostChance": null,
         "entrenamiento": [],
         "precioNpc": null
@@ -129,7 +110,6 @@
       },
       "item": {
         "item": "fire-stone",
-        "nombre": "Fire Stone",
         "cantidad": 25
       }
     },
@@ -193,7 +173,6 @@
       },
       "item": {
         "item": "alliance-ball",
-        "nombre": "Alliance Ball",
         "cantidad": 100
       }
     },
@@ -224,34 +203,17 @@
       },
       "pokemon": {
         "pokemon": "shiny-charizard",
-        "ball": {
-          "item": "ultra-ball",
-          "nombre": "Ultra Ball"
-        },
-        "aura": "alliance",
+        "ball": "ultra-ball",
+        "auras": ["alliance"],
+        "addons": [],
+        "heldX": null,
+        "heldY": null,
+        "mega": null,
         "boost": 50,
         "starLevel": 2,
         "nickname": "A M A T E R A S U  O M I K A M I",
         "memorySlots": 6,
         "memorias": [null, null, null, null, null, null],
-        "helds": [
-          {
-            "item": null,
-            "nombre": "X-Attack",
-            "tier": 5
-          },
-          {
-            "item": null,
-            "nombre": "X-Lucky",
-            "tier": 4
-          },
-          {
-            "item": null,
-            "nombre": "X-Boost",
-            "tier": 3
-          }
-        ],
-        "addon": null,
         "nextBoostChance": null,
         "entrenamiento": [
           {
@@ -281,18 +243,17 @@
       },
       "pokemon": {
         "pokemon": "pikachu",
-        "ball": {
-          "item": "ultra-ball",
-          "nombre": "Ultra Ball"
-        },
-        "aura": null,
+        "ball": "ultra-ball",
+        "auras": [],
+        "addons": [],
+        "heldX": null,
+        "heldY": null,
+        "mega": null,
         "boost": null,
         "starLevel": null,
         "nickname": null,
         "memorySlots": null,
         "memorias": [],
-        "helds": [],
-        "addon": null,
         "nextBoostChance": null,
         "entrenamiento": [],
         "precioNpc": null
@@ -320,8 +281,7 @@
         "aConvenir": false
       },
       "item": {
-        "item": null,
-        "nombre": "Enhanced Normal Stone",
+        "item": "general-items-ejemplo-1",
         "cantidad": 12
       }
     },

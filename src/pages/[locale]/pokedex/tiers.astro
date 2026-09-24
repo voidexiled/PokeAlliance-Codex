@@ -47,11 +47,11 @@ import { FactLine, FactLines, type FactLineData } from '@/components/content/Fac
 import { PageTitle } from '@/components/layout/PageTitle';
 import { Section } from '@/components/layout/Section';
 import { POKEDEX_FIELDS, decodePokedex } from '@/components/pokedex/config';
-import { TIERS_PAGE_SIZE, tierIcons, tiersRows } from '@/components/tiers/config';
+import { TIERS_PROPS_ROWS, tierIcons, tiersRows } from '@/components/tiers/config';
 import { TiersRoot } from '@/components/tiers/TiersRoot';
 import PageLayout from '@/layouts/PageLayout.astro';
 
-import { buildPokedexData, pokedexDrops, pokedexIds } from './datos.json.ts';
+import { buildPokedexData, pokedexIds } from './datos.json.ts';
 
 export const prerender = true;
 
@@ -82,16 +82,20 @@ const messages = dictionaries[locale];
 const data = buildPokedexData(locale);
 const records = decodePokedex(data);
 const rows = tiersRows(records);
-const firstRows = rows.slice(0, TIERS_PAGE_SIZE);
+const firstRows = rows.slice(0, TIERS_PROPS_ROWS);
 // The values of the filters are the ones of the rows of this list, the variants with a
 // tier: a generation or a variant that only rows without a tier have is not an option (U4).
 // The tiers themselves are not a filter here (8.8 step 3), so `TiersIds` leaves them out.
-const { generations, elements, variants } = pokedexIds(rows, data.refs.elementos);
-const ids = { generations, elements, variants };
+const { generations, elements, movesets, variants } = pokedexIds(rows, data.refs.elementos);
+const ids = { generations, elements, movesets, variants };
 const first = {
   v: data.v,
   campos: data.campos,
-  filas: firstRows.map((row) => POKEDEX_FIELDS.map((field) => row[field])),
+  // §16.4.3: «Ranuras» draws no drops, so the props leave them out (TiersRoot takes them from
+  // `datos.json` as it hydrates): the props stay within the 20 KB of §13.6.
+  filas: firstRows.map((row) =>
+    POKEDEX_FIELDS.map((field) => (field === 'drops' ? null : row[field])),
+  ),
 };
 const description = fill(messages.tiers.description, {
   n: formatInteger(rows.length, locale),
@@ -144,7 +148,7 @@ const rotations = getRotations().map((record) => {
     total={rows.length}
     ids={ids}
     icons={tierIcons(firstRows, data.refs.elementos)}
-    drops={pokedexDrops(firstRows, records, data.refs.items, locale, messages.ui.tooltip)}
+    drops={{}}
     title={title}
     ui={messages.ui}
     pokedex={messages.pokedex}

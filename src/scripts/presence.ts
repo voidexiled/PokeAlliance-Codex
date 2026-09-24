@@ -1,5 +1,5 @@
 // The heartbeat of the online status (spec 9.15.6, 9.16.4). While an account is signed in and any
-// tab of the site is open, a beat reaches `trade_heartbeat(activo)` every 60 s, where `activo` says
+// tab of the site is visible, a beat reaches `trade_heartbeat(activo)` every 120 s, where `activo` says
 // whether there was keyboard or pointer input since the previous beat. What the others see is
 // computed by the database (`trade_effective_presence`: «Desconectado» after 10 minutes without a
 // beat, «Ausente» after 6 hours without input); this script only reports.
@@ -150,6 +150,8 @@ export async function postHeartbeat(
         apikey: config.anonKey,
         Authorization: `Bearer ${accessToken}`,
         'Content-Type': 'application/json',
+        // Egress (9.16.4): the function returns no body.
+        Prefer: 'return=minimal',
       },
       body: JSON.stringify({ [HEARTBEAT_ARG]: active }),
       credentials: 'omit',
@@ -249,7 +251,8 @@ export function startPresence(): () => void {
   };
 
   async function tick(): Promise<void> {
-    if (busy) return;
+    // Egress (9.16.4): a hidden tab never beats; `visibilitychange` resumes it.
+    if (busy || document.visibilityState === 'hidden') return;
     const session = readStoredSession();
     if (session === null) {
       stop();

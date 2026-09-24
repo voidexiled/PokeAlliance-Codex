@@ -31,6 +31,7 @@ import { getAlternatePath, getLocale, locales, type Locale } from '@/i18n/config
 import type { Messages } from '@/i18n/messages/en';
 import { en } from '@/i18n/messages/en';
 import { es } from '@/i18n/messages/es';
+import { fill } from '@/i18n/messages/types';
 import {
   getAuras,
   getCategorias,
@@ -43,6 +44,7 @@ import {
 } from '@/lib/content/registry';
 import { getPokemon } from '@/lib/content/repository';
 import { buildNav } from '@/lib/nav/groups';
+import { COMERCIO_CACHE_CONTROL } from '@/lib/trade/limits';
 import { spriteOrNull } from '@/lib/sprites/resolve';
 import { comercioPublico } from '@/lib/trade/registry';
 import { loadListado } from '@/lib/trade/source';
@@ -76,12 +78,42 @@ export function getStaticPaths() {
 const dictionaries: Record<Locale, Messages> = { es, en };
 
 const locale = getLocale(Astro.params.locale);
+// Egress (9.16.4): shared CDN cache; the HTML holds nothing personal (the islands ask for it).
+Astro.response.headers.set('Cache-Control', COMERCIO_CACHE_CONTROL);
 const path = Astro.url.pathname;
 const alternates = Object.fromEntries(
   locales.map((option) => [option, getAlternatePath(path, option)]),
 ) as Record<Locale, string>;
 const messages = dictionaries[locale];
-const { ui, trade } = messages;
+const { ui, trade, picker } = messages;
+// 16.4.6: the «Pokémon» and «Ítem» filters. «Pokémon» is a game term (13.4).
+const pickers = {
+  picker: {
+    search: picker.search,
+    results: picker.resultsCount.other,
+    selectedCount: picker.chosenCount.other,
+    done: picker.done,
+    clear: picker.remove,
+    removeItem: picker.removeItem,
+    clearFilters: picker.clearFilters,
+    none: picker.none,
+    noMatches: picker.noMatches,
+    close: ui.close,
+  },
+  filters: {
+    tier: picker.filters.tier,
+    tipo: picker.filters.type,
+    moveset: picker.filters.movesetType,
+    variante: picker.filters.variant,
+    normal: ui.cards.normal,
+    generacion: picker.filters.generation,
+  },
+  pokemon: trade.types.pokemon,
+  item: trade.typeNames.items,
+  category: ui.tooltip.category,
+  choosePokemon: fill(picker.choose, { entity: 'Pokémon' }),
+  chooseItem: fill(picker.choose, { entity: trade.typeNames.items }),
+};
 
 // 8.0.4: «Comunidad › Comercio». The group has no index page, so its crumb is text.
 const group = buildNav(locale, path).groups.find((entry) => entry.id === 'comunidad');
@@ -168,6 +200,7 @@ const create = createElement(Button, { href: publishHref(locale), children: trad
         diamonds={tradeDiamonds(getMonedaDiamantes(), locale)}
         caption={trade.list.caption}
         ui={tradeUi(ui)}
+        pickers={pickers}
         labels={tradeLabels(messages, publico)}
       />
     ) : (

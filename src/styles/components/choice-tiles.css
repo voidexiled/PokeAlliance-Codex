@@ -1,0 +1,64 @@
+/* ChoiceTiles (spec 16.3.4). Per-component sheet (§13.6): ChoiceTiles.tsx imports it. */
+
+@layer properties, theme, base, components, utilities;
+
+@layer components {
+  .ac-choice-tiles {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-6);
+  }
+
+  .ac-choice-tiles__label {
+    color: var(--text-secondary);
+    font: 600 13px/16px var(--font-sans); /* sin token: pixel-exact game slot geometry */
+  }
+
+  .ac-choice-tiles__grid {
+    display: grid;
+    grid-template-columns: repeat(
+      auto-fit,
+      minmax(128px, 1fr)
+    ); /* sin token: pixel-exact game slot geometry */
+    gap: var(--space-8);
+  }
+
+  .ac-choice-tiles__tile {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-8);
+    padding: var(--space-12) var(--space-8);
+    border: 1px solid var(--border-secondary);
+    border-radius: var(--radius-8);
+    background: var(--bg-secondary);
+    color: var(--text-secondary);
+    cursor: pointer;
+  }
+  .ac-choice-tiles__tile:hover {
+    border-color: var(--border-primary);
+    color: var(--text-primary);
+  }
+  .ac-choice-tiles__tile[aria-checked='true'] {
+    border-color: var(--selected);
+    background: var(--bg-tertiary);
+    box-shadow: inset 0 0 0 1px var(--selected);
+    color: var(--text-primary);
+  }
+
+  .ac-choice-tiles__art {
+    display: grid;
+    place-items: center;
+    width: 56px; /* sin token: pixel-exact game slot geometry */
+    height: 56px; /* sin token: pixel-exact game slot geometry */
+    border: 1px solid var(--border-secondary);
+    border-radius: var(--radius-4);
+    background: var(--bg-primary);
+    image-rendering: pixelated;
+  }
+
+  .ac-choice-tiles__name {
+    font: 600 14px/18px var(--font-sans); /* sin token: pixel-exact game slot geometry */
+    text-align: center;
+  }
+}

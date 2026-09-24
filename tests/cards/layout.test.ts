@@ -215,7 +215,7 @@ describe('dexLayout (spec 7.6.3, §8.2)', () => {
   });
 
   it('keeps the four facts in their order when the page has them', () => {
-    expect(DEX_KEYS).toEqual(['requirement', 'tier', 'role', 'variant']);
+    expect(DEX_KEYS).toEqual(['requirement', 'tier', 'role', 'variant', 'moveset']);
     expect(dexLayout([entry({ role: null }), entry({ tier: null })]).keys).toEqual([
       'requirement',
       'tier',

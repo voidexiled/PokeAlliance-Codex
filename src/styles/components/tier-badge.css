@@ -1,0 +1,68 @@
+/* TierBadge (spec 16.3.6). Per-component sheet (§13.6): TierBadge.tsx imports it. The --tier-*
+   colours come from src/design/tokens.json. Every colour is the text of the pill over its own tint of --bg-secondary and passes AA (4.5:1). */
+
+@layer properties, theme, base, components, utilities;
+
+@layer components {
+  .ac-tier-badge {
+    --tier-c: var(--text-tertiary);
+    display: inline-flex;
+    flex: none;
+    align-items: center;
+    height: 20px; /* sin token: pixel-exact game slot geometry */
+    padding: 0 var(--space-6);
+    border: 1px solid var(--tier-c);
+    border-radius: var(--radius-4);
+    background: var(--bg-secondary);
+    color: var(--tier-c);
+    font: 700 12px/1 var(--font-sans); /* sin token: pixel-exact game slot geometry */
+    white-space: nowrap;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .ac-tier-badge--ultimate {
+    --tier-c: var(--tier-ultimate);
+    background: linear-gradient(135deg, var(--bg-tertiary), var(--bg-secondary));
+  }
+  .ac-tier-badge--mythic {
+    --tier-c: var(--tier-mythic);
+  }
+  .ac-tier-badge--legendary {
+    --tier-c: var(--tier-legendary);
+  }
+  .ac-tier-badge--ultra-rare {
+    --tier-c: var(--tier-ultra-rare);
+  }
+  .ac-tier-badge--super-rare {
+    --tier-c: var(--tier-super-rare);
+  }
+  .ac-tier-badge--t1 {
+    --tier-c: var(--tier-t1);
+  }
+  .ac-tier-badge--t2 {
+    --tier-c: var(--tier-t2);
+  }
+  .ac-tier-badge--t3 {
+    --tier-c: var(--tier-t3);
+  }
+  .ac-tier-badge--t4 {
+    --tier-c: var(--tier-t4);
+  }
+  .ac-tier-badge--t5 {
+    --tier-c: var(--tier-t5);
+  }
+  .ac-tier-badge--t6 {
+    --tier-c: var(--tier-t6);
+  }
+  .ac-tier-badge--t7 {
+    --tier-c: var(--tier-t7);
+  }
+
+  /* The corner mark of a slot: 14 high, the short form, opaque so it reads over a sprite. */
+  .ac-tier-badge--mini {
+    height: 14px; /* sin token: pixel-exact game slot geometry */
+    padding: 0 3px; /* sin token: pixel-exact game slot geometry */
+    border-radius: var(--radius-2);
+    background: var(--bg-primary);
+  }
+}

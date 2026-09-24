@@ -499,8 +499,10 @@ export function checkContent(root) {
     });
 
   const itemIds = new Map();
-  /** @type {Map<string, { nombre: unknown, categoria: string }>} item id -> its name and the file it is in. */
+  /** @type {Map<string, { nombre: unknown, categoria: string, held?: unknown, mega?: unknown }>} item id -> its name and the file it is in. */
   const itemRecords = new Map();
+  /** @type {Array<{ file: string, at: string, pokemon: unknown[] }>} `mega.pokemon` of every item with one (§16.2.3), checked once Pokémon ids are known. */
+  const megaChecks = [];
   /** @type {Map<string, { file: string, at: string }>} element id -> the first item that names it. */
   const itemElements = new Map();
   // The `moneda` object of content/items/diamantes.json (spec 3.13): its two lists name the same
@@ -558,7 +560,7 @@ export function checkContent(root) {
           error(file, `id repetido: "${item.id}" (también en ${itemIds.get(item.id)})`, `${at}.id`);
         else {
           itemIds.set(item.id, rel(file));
-          itemRecords.set(item.id, { nombre: item.nombre, categoria: name });
+          itemRecords.set(item.id, { nombre: item.nombre, categoria: name, held: item.held, mega: item.mega });
         }
       }
       if (text(item.categoria) && item.categoria !== name)
@@ -568,6 +570,9 @@ export function checkContent(root) {
           `${at}.categoria`,
         );
       requireSprite(file, item.sprite, `${at}.sprite`);
+      // Mega Stone (§16.2.3): its `pokemon` ids are checked once content/pokemon.json is read.
+      if (isObject(item.mega) && Array.isArray(item.mega.pokemon))
+        megaChecks.push({ file, at: `${at}.mega.pokemon`, pokemon: item.mega.pokemon });
       // «Elemento» (spec 3.13, 8.5): its name is checked once the elements are read.
       const elemento = text(item.elemento);
       if (elemento && !itemElements.has(elemento))
@@ -624,6 +629,13 @@ export function checkContent(root) {
   const pokemonIds = contentRecords.pokemon
     ? new Set(contentRecords.pokemon.filter(isObject).map((record) => record.id))
     : null;
+  // Mega Stone (§16.2.3): every id of `mega.pokemon` must exist in content/pokemon.json.
+  if (pokemonIds)
+    for (const { file, at, pokemon } of megaChecks)
+      pokemon.forEach((id, index) => {
+        if (text(id) && !pokemonIds.has(id))
+          error(file, `"${id}" no existe en content/pokemon.json`, `${at}[${index}]`);
+      });
   const movesFile = path.join(contentDir, 'moves.json');
   contentRecords.moves?.forEach((move, index) => {
     if (!isObject(move) || !Array.isArray(move.pokemon)) return;
@@ -1555,42 +1567,33 @@ export function checkContent(root) {
       return isObject(outfit) && Array.isArray(outfit.addons) ? outfit.addons.filter(isObject) : [];
     };
     /**
-     * A declared item, Ball or held item (9.4): with an id, the id exists in its category and the
-     * declared name is its registry name, without case or accents; with `null`, no item of that
-     * category has the declared name, or the record would have stored its id.
+     * An equipment id chosen in a picker (16.2.5): it exists in content/items/ and, for a slot,
+     * is of the category of that slot.
      */
-    const checkDeclared = (at, declared, categoria, what) => {
-      if (!itemsKnown || !isObject(declared) || typeof declared.nombre !== 'string') return;
-      if (text(declared.item)) {
-        const record = itemRecords.get(declared.item);
-        if (!record)
-          error(anunciosFile, `"${declared.item}" no existe en content/items/`, `${at}.item`);
-        else if (categoria !== null && record.categoria !== categoria)
-          error(
-            anunciosFile,
-            `"${declared.item}" es de la categoría "${record.categoria}" y ${what} es de "${categoria}"`,
-            `${at}.item`,
-          );
-        else if (typeof record.nombre === 'string' && fold(record.nombre) !== fold(declared.nombre))
-          error(
-            anunciosFile,
-            `el nombre no es el del item "${declared.item}", "${record.nombre}"`,
-            `${at}.nombre`,
-          );
-        return;
+    const checkItemId = (at, id, categoria, what) => {
+      if (!itemsKnown || !text(id)) return null;
+      const record = itemRecords.get(id);
+      if (!record) {
+        error(anunciosFile, `"${id}" no existe en content/items/`, at);
+        return null;
       }
-      const same = [...itemRecords].find(
-        ([, record]) =>
-          (categoria === null || record.categoria === categoria) &&
-          typeof record.nombre === 'string' &&
-          fold(record.nombre) === fold(declared.nombre),
-      );
-      if (same)
+      if (categoria !== null && record.categoria !== categoria) {
         error(
           anunciosFile,
-          `"${declared.nombre}" es el item "${same[0]}" del registro: guarda su id en "item"`,
-          `${at}.item`,
+          `"${id}" es de la categoría "${record.categoria}" y ${what} es de "${categoria}"`,
+          at,
         );
+        return null;
+      }
+      return record;
+    };
+    /** Reports repeated ids of a list (auras, addons). */
+    const checkUnique = (list, at) => {
+      const seen = new Set();
+      list.forEach((id, i) => {
+        if (seen.has(id)) error(anunciosFile, `id repetido: "${id}"`, `${at}[${i}]`);
+        seen.add(id);
+      });
     };
 
     /** @type {Map<string, number>} handle -> index in vendedores. */
@@ -1665,7 +1668,10 @@ export function checkContent(root) {
           );
       }
 
-      if (anuncio.tipo === 'items') checkDeclared(`${at}.item`, anuncio.item, null, 'el item');
+      if (anuncio.tipo === 'items' && isObject(anuncio.item)) {
+        if (!text(anuncio.item.item)) error(anunciosFile, 'falta el item', `${at}.item.item`);
+        else checkItemId(`${at}.item.item`, anuncio.item.item, null, 'el item');
+      }
       if (anuncio.tipo !== 'pokemon' || !isObject(anuncio.pokemon)) return;
       const unit = anuncio.pokemon;
       const where = `${at}.pokemon`;
@@ -1675,46 +1681,36 @@ export function checkContent(root) {
           `"${unit.pokemon}" no existe en content/pokemon.json`,
           `${where}.pokemon`,
         );
-      if (auraIds && text(unit.aura) && !auraIds.has(unit.aura))
-        error(anunciosFile, `"${unit.aura}" no existe en content/auras.json`, `${where}.aura`);
-      checkDeclared(`${where}.ball`, unit.ball, 'poke-balls', 'una Ball');
-      if (Array.isArray(unit.helds))
-        unit.helds.forEach((held, heldIndex) =>
-          checkDeclared(`${where}.helds[${heldIndex}]`, held, 'helds', 'un held item'),
-        );
-
-      // The addon is one of this Pokémon's in content/outfits.json (9.7.2).
-      if (isObject(unit.addon) && typeof unit.addon.nombre === 'string' && text(unit.pokemon)) {
+      checkItemId(`${where}.ball`, unit.ball, 'poke-balls', 'una Ball');
+      for (const slot of ['x', 'y']) {
+        const key = slot === 'x' ? 'heldX' : 'heldY';
+        const record = checkItemId(`${where}.${key}`, unit[key], null, 'un held');
+        if (record && (!isObject(record.held) || record.held.ranura !== slot))
+          error(anunciosFile, `"${unit[key]}" no es un held de la ranura ${slot.toUpperCase()}`, `${where}.${key}`);
+      }
+      const mega = checkItemId(`${where}.mega`, unit.mega, null, 'una Mega Stone');
+      if (mega && !isObject(mega.mega))
+        error(anunciosFile, `"${unit.mega}" no es una Mega Stone`, `${where}.mega`);
+      const unitAuras = Array.isArray(unit.auras) ? unit.auras.filter(text) : [];
+      checkUnique(unitAuras, `${where}.auras`);
+      if (auraIds)
+        unitAuras.forEach((id, i) => {
+          if (!auraIds.has(id))
+            error(anunciosFile, `"${id}" no existe en content/auras.json`, `${where}.auras[${i}]`);
+        });
+      // The addons are this Pokémon's in content/outfits.json (9.7.2).
+      const unitAddons = Array.isArray(unit.addons) ? unit.addons.filter(text) : [];
+      checkUnique(unitAddons, `${where}.addons`);
+      if (text(unit.pokemon)) {
         const addons = addonsOf(unit.pokemon);
-        if (text(unit.addon.id)) {
-          const addon = addons.find((entry) => entry.id === unit.addon.id);
-          if (!addon)
+        unitAddons.forEach((id, i) => {
+          if (!addons.some((entry) => entry.id === id))
             error(
               anunciosFile,
-              `"${unit.addon.id}" no es un addon de "${unit.pokemon}" en content/outfits.json`,
-              `${where}.addon.id`,
+              `"${id}" no es un addon de "${unit.pokemon}" en content/outfits.json`,
+              `${where}.addons[${i}]`,
             );
-          else if (
-            typeof addon.nombre === 'string' &&
-            fold(addon.nombre) !== fold(unit.addon.nombre)
-          )
-            error(
-              anunciosFile,
-              `el nombre no es el del addon "${addon.id}", "${addon.nombre}"`,
-              `${where}.addon.nombre`,
-            );
-        } else {
-          const same = addons.find(
-            (entry) =>
-              typeof entry.nombre === 'string' && fold(entry.nombre) === fold(unit.addon.nombre),
-          );
-          if (same)
-            error(
-              anunciosFile,
-              `"${unit.addon.nombre}" es el addon "${same.id}" de content/outfits.json: guarda su id en "id"`,
-              `${where}.addon.id`,
-            );
-        }
+        });
       }
 
       // Ditto Memory (9.7.2): Memory Slots and the memories are only for Ditto and Shiny Ditto,

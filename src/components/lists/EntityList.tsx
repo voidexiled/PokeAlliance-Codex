@@ -223,6 +223,7 @@ export function EntityList<T>({
             labels={labels.views}
             ariaLabel={viewLabel ?? labels.views.label}
             value={state.view}
+            options={config.views}
             onChange={(next) => controller.setView(next)}
           />
         </div>

@@ -74,6 +74,29 @@ Las categorías no se añaden: son las del Market. «Todo» es virtual (`"virtua
 
 El código lee la lista de categorías del esquema; no hay que tocarlo.
 
+### Held items y Mega Stones (§16.2.3)
+
+Cada item de `content/items/helds.json` (`categoria: "helds"`) necesita `held`: en el juego cada tier de un efecto es su propio item (X-Attack T1, X-Attack T2…), así se puede filtrar y ordenar por tier.
+
+```json
+{
+  "id": "x-attack-t1",
+  "nombre": "X-Attack",
+  "clientId": null,
+  "categoria": "helds",
+  "sprite": "items/helds/x-attack-t1",
+  "apilable": true,
+  "precioNpc": { "vende": null, "compra": null },
+  "held": { "ranura": "x", "efecto": "X-Attack", "tier": 1 }
+}
+```
+
+- `held.ranura` es `"x"` o `"y"`, la ranura del held en el juego.
+- `held.efecto` es el nombre canónico del efecto, sin el tier (`"X-Attack"`, no `"X-Attack T1"`).
+- `held.tier` es un entero de 1 a 8 (`HELD_TIER_MAX`). Sin `held`, `pnpm content:check` refusa el registro: es obligatorio para `categoria: "helds"`.
+- Un item de **cualquier** categoría puede llevar `mega`, que lo marca como Mega Stone: `"mega": { "pokemon": ["charizard"] }`. `pokemon` son `id` de `content/pokemon.json`; deja `[]` si no sabes cuál Pokémon la usa. `pnpm content:check` comprueba que cada `id` exista.
+- `src/lib/content/registry.ts` tiene `getHeldsBySlot("x" | "y")` (la matriz de `HeldPicker`) y `getMegaStones(pokemonId?)` (las Mega Stones de un Pokémon primero).
+
 ### Dónde se compran y en qué se usan los Diamonds
 
 `content/items/diamantes.json` lleva, además de sus items, el objeto `moneda`: dónde se compran los Diamonds y en qué se usan, una lista por idioma. Son las filas «Se compran en» y «Se usan en» del panel de los Diamonds y de un anuncio de Diamonds en Comercio.
@@ -206,14 +229,16 @@ En `content/auras.json`:
   "id": "alliance",
   "nombre": "Alliance",
   "shader": "outfit_alliance",
-  "icono": "ui/balls/alliance-ball"
+  "icono": "ui/auras/alliance"
 }
 ```
 
 - `shader` es el shader del cliente que reproduce la vista previa: `outfit_alliance` o `outfit_rainbow`. Otro shader necesita código nuevo en `src/components/wiki/OutfitPreview.tsx`.
-- `icono` es la clave del sprite del botón.
+- `icono` es la clave del sprite del anillo del aura (§16.2.4, `AuraPicker`), en `ui/auras/<id>`.
 
-Cada aura aparece como un botón en la vista previa de outfits de la Pokédex. Un aura con `"borrador": true` también aparece, salvo en un build con `OCULTAR_BORRADORES=1`.
+Cada aura aparece como un botón en la vista previa de outfits de la Pokédex y como ranura de `AuraPicker` (§16.3.3, formulario de Comercio y filtros). Un aura con `"borrador": true` también aparece, salvo en un build con `OCULTAR_BORRADORES=1`.
+
+Las siete auras del cliente ya están en `content/auras.json`: Premier, Alliance, Christmas 2024, Halloween 2025, Solo Leveling, Digimon Red Aura y Killua God Speed. El cliente no trae iconos de aura (se ven en el juego como un anillo con el sombreador del aura); mientras no llegue el icono real de cada una, usa el anillo genérico en `ui/auras/<id>` marcado `"borrador": true`. Para poner el icono real: sustituye el PNG en `public/sprites/ui/auras/<id>.png` (32×32) y quita `"borrador"` de esa aura en `content/auras.json`.
 
 ## Destacados y mundos del Inicio
 
@@ -294,9 +319,13 @@ Estos archivos siguen las mismas reglas comunes; VS Code muestra qué va en cada
   - `evolucion`: las evoluciones que salen de este Pokémon, `[{ "a": "charmeleon", "nivel": 16, "items": [{ "item": "fire-stone", "cantidad": 1 }] }]`. `a` es el `id` del Pokémon al que evoluciona; la cadena no puede volver a un Pokémon anterior. La primera etapa es la que ningún registro nombra en `a`.
   - `habilidades`: nombres del juego, sin traducir (`["Fly", "Strength"]`).
   - `donde`: `{ "hunts": [], "linkedTasks": [], "equiposNpc": [] }`, cada lista de `{ "texto": "…" }`. Con `"ref": { "tipo": "pokemon" | "item" | "sistema" | "actividad", "id": "…" }` el texto abre el tooltip de esa entidad; la referencia tiene que existir.
-  - `elementoMoveset`: `id` de un elemento o `null` (columna «Moveset» de la Tier list de la ficha).
+  - `elementoMoveset`: `id` de un elemento o `null` (columna «Moveset» de la Tier list de la ficha, filtro «Tipo de moveset» de la Pokédex y de `PokemonPicker`, §16.2.2). Un valor escrito a mano no se pisa sin la orden del propietario: `pnpm content:roster` nunca lo toca solo.
 - `content/elementos.json`: los 18 elementos en un orden fijo que el esquema comprueba. `icono` es una clave de `sprites.json` o `null` (el chip se muestra solo con el nombre); `stone` y `fragment` son `id` de items o `null`.
-- `content/moves.json`: `pokemon` lleva ids de `content/pokemon.json`; `elemento` es el `id` del elemento (`"normal"`, `"fire"`…), no su nombre, o `null`.
+- `content/moves.json`: `pokemon` lleva ids de `content/pokemon.json`; `elemento` es el `id` del elemento (`"normal"`, `"fire"`…), no su nombre, o `null`. `alcance` (§16.2.2) es opcional: `"area"`, `"objetivo"` o `"pasivo"`, las etiquetas aoe / target / passive del Pokédex del juego, o `null` si no se conoce. El importador usa `alcance` para calcular `elementoMoveset`: cuenta primero los movimientos de área por elemento (gana el que más tiene); sin movimientos de área, cuenta todos los de daño; un empate lo gana el elemento que también sea uno de los tipos del Pokémon, o si no, el primero en el orden de movimientos del juego.
+
+### Jerarquía de tiers (§16.2.1)
+
+Del mejor al peor: **ULTIMATE, Mythic, Legendary, Ultra Rare, Super Rare, T1, T2, T3, T4, T5, T6, T7.** `$defs.tierEspecial` de `content/schemas/pokemon.schema.json` los guarda de menor a mayor (Super Rare → ULTIMATE); `src/lib/content/tier-rank.ts` (equipo UI) lee esa lista para `tierRank`, `compareTierRank` y el orden de la Tier list, del filtro «Tier» y de `PokemonPicker`. Un tier especial nuevo se añade solo en el `enum` de `tierEspecial`, en su posición en la jerarquía; el código no lo repite en ningún otro archivo.
 - `content/map/floors.json` lo escribe `node scripts/map/extract-otmm-preview.mjs <archivo .otmm>`. `ancho` y `alto` son el tamaño real de la imagen del piso.
 
 ## Comprobar los cambios

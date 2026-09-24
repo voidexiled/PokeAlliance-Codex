@@ -1,3 +1,4 @@
+import '@/styles/components/kpi-card.css';
 import type { HTMLAttributes, ReactNode } from 'react';
 
 // KpiCard (spec 7.2.6, 7.6.2; CARD_GRID_SYSTEM §6.6; DS:KpiCard): a figure of the Guild

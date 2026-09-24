@@ -58,7 +58,7 @@ import { formatDate } from '@/lib/format/dates';
 import { formatInteger, formatRealMoney } from '@/lib/format/numbers';
 import { diamondsTip } from '@/lib/game/tips';
 import { buildNav } from '@/lib/nav/groups';
-import { DISCORD_EDAD_MIN_DIAS, EVIDENCIA_DIAS } from '@/lib/trade/limits';
+import { COMERCIO_CACHE_CONTROL, DISCORD_EDAD_MIN_DIAS, EVIDENCIA_DIAS } from '@/lib/trade/limits';
 import { comercioPublico, getAnuncios } from '@/lib/trade/registry';
 import { loadAnuncio } from '@/lib/trade/source';
 import { hasPublicDetail, sellerReputation, visibleStatus } from '@/lib/trade/types';
@@ -108,6 +108,8 @@ export function getStaticPaths() {
 const dictionaries: Record<Locale, Messages> = { es, en };
 
 const locale = getLocale(Astro.params.locale);
+// Egress (9.16.4): shared CDN cache; the HTML holds nothing personal (the islands ask for it).
+Astro.response.headers.set('Cache-Control', COMERCIO_CACHE_CONTROL);
 // Phase A reads the sample registry, phase B the database (src/lib/trade/source.ts, 9.3).
 const { anuncio, vendedores } = await loadAnuncio(Astro.params.id ?? '');
 // 9.4: a withdrawn listing, or one this build does not have, is not a page.

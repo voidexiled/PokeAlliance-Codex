@@ -6,21 +6,35 @@
   "type": "object",
   "additionalProperties": false,
   "properties": {
-    "$schema": { "type": "string" },
+    "$schema": {
+      "type": "string"
+    },
     "anuncios": {
       "type": "array",
       "description": "Anuncios de venta, en cualquier orden. El id no se repite.",
-      "items": { "$ref": "#/$defs/anuncio" }
+      "items": {
+        "$ref": "#/$defs/anuncio"
+      }
     },
     "vendedores": {
       "type": "array",
       "description": "Vendedores con sus canales de contacto y sus reseñas. El id (handle) no se repite.",
-      "items": { "$ref": "#/$defs/vendedor" }
+      "items": {
+        "$ref": "#/$defs/vendedor"
+      }
     }
   },
-  "if": { "required": ["anuncios"] },
-  "then": { "not": { "required": ["vendedores"] } },
-  "else": { "required": ["vendedores"] },
+  "if": {
+    "required": ["anuncios"]
+  },
+  "then": {
+    "not": {
+      "required": ["vendedores"]
+    }
+  },
+  "else": {
+    "required": ["vendedores"]
+  },
   "$defs": {
     "slug": {
       "type": "string",
@@ -58,11 +72,6 @@
       "pattern": "^(?=.{1,40}$)\\S(?:.*\\S)?$",
       "description": "Texto de 1 a 40 caracteres, sin espacios al principio ni al final. Los espacios de dentro se conservan."
     },
-    "nombreItem": {
-      "type": "string",
-      "pattern": "^(?=.{1,80}$)\\S(?:.*\\S)?$",
-      "description": "Nombre de 1 a 80 caracteres, sin espacios al principio ni al final."
-    },
     "nombreVendedor": {
       "type": "string",
       "pattern": "^(?=.{1,32}$)\\S(?:.*\\S)?$",
@@ -89,8 +98,12 @@
       "required": ["tipo", "cantidad"],
       "additionalProperties": false,
       "properties": {
-        "tipo": { "enum": ["pokedolares", "diamonds"] },
-        "cantidad": { "$ref": "#/$defs/cantidad" }
+        "tipo": {
+          "enum": ["pokedolares", "diamonds"]
+        },
+        "cantidad": {
+          "$ref": "#/$defs/cantidad"
+        }
       }
     },
     "precioReal": {
@@ -102,7 +115,9 @@
           "description": "BRL se muestra «R$», USD «US$» y MXN «MX$». La lista es la constante MONEDAS_REALES de src/lib/trade/types.ts.",
           "enum": ["BRL", "USD", "MXN"]
         },
-        "importe": { "$ref": "#/$defs/importe" }
+        "importe": {
+          "$ref": "#/$defs/importe"
+        }
       }
     },
     "precio": {
@@ -113,80 +128,58 @@
       "properties": {
         "real": {
           "type": ["object", "null"],
-          "if": { "type": "object" },
-          "then": { "$ref": "#/$defs/precioReal" }
+          "if": {
+            "type": "object"
+          },
+          "then": {
+            "$ref": "#/$defs/precioReal"
+          }
         },
         "juego": {
           "type": "array",
           "maxItems": 2,
-          "items": { "$ref": "#/$defs/opcionJuego" }
+          "items": {
+            "$ref": "#/$defs/opcionJuego"
+          }
         },
-        "aConvenir": { "type": "boolean" }
+        "aConvenir": {
+          "type": "boolean"
+        }
       },
       "if": {
-        "properties": { "aConvenir": { "const": true } },
+        "properties": {
+          "aConvenir": {
+            "const": true
+          }
+        },
         "required": ["aConvenir"]
       },
       "then": {
         "properties": {
-          "real": { "type": "null" },
-          "juego": { "maxItems": 0 }
+          "real": {
+            "type": "null"
+          },
+          "juego": {
+            "maxItems": 0
+          }
         }
       },
       "else": {
         "if": {
-          "properties": { "real": { "type": "null" } },
+          "properties": {
+            "real": {
+              "type": "null"
+            }
+          },
           "required": ["real"]
         },
-        "then": { "properties": { "juego": { "minItems": 1 } } }
-      }
-    },
-    "ballDeclarada": {
-      "type": "object",
-      "description": "Ball declarada. item es el id de content/items/poke-balls.json si el nombre coincide con él sin mayúsculas ni acentos; si no, null.",
-      "required": ["item", "nombre"],
-      "additionalProperties": false,
-      "properties": {
-        "item": {
-          "type": ["string", "null"],
-          "if": { "type": "string" },
-          "then": { "$ref": "#/$defs/slug" }
-        },
-        "nombre": { "$ref": "#/$defs/nombreDeclarado" }
-      }
-    },
-    "heldDeclarado": {
-      "type": "object",
-      "description": "Held item declarado. item es el id de content/items/helds.json si el nombre coincide con él; si no, null.",
-      "required": ["item", "nombre", "tier"],
-      "additionalProperties": false,
-      "properties": {
-        "item": {
-          "type": ["string", "null"],
-          "if": { "type": "string" },
-          "then": { "$ref": "#/$defs/slug" }
-        },
-        "nombre": { "$ref": "#/$defs/nombreDeclarado" },
-        "tier": {
-          "type": "integer",
-          "minimum": 1,
-          "maximum": 99,
-          "description": "De 1 a 99: es un límite del campo, no un dato del juego."
+        "then": {
+          "properties": {
+            "juego": {
+              "minItems": 1
+            }
+          }
         }
-      }
-    },
-    "addonDeclarado": {
-      "type": "object",
-      "description": "Addon del Pokémon: id es un addon de ese Pokémon en content/outfits.json.",
-      "required": ["id", "nombre"],
-      "additionalProperties": false,
-      "properties": {
-        "id": {
-          "type": ["string", "null"],
-          "if": { "type": "string" },
-          "then": { "$ref": "#/$defs/slug" }
-        },
-        "nombre": { "$ref": "#/$defs/nombreItem" }
       }
     },
     "entrenamiento": {
@@ -208,11 +201,19 @@
             "Evasion"
           ]
         },
-        "nivel": { "type": ["integer", "null"], "minimum": 0, "maximum": 999999 },
+        "nivel": {
+          "type": ["integer", "null"],
+          "minimum": 0,
+          "maximum": 999999
+        },
         "progreso": {
           "type": ["string", "null"],
-          "if": { "type": "string" },
-          "then": { "$ref": "#/$defs/porcentaje" }
+          "if": {
+            "type": "string"
+          },
+          "then": {
+            "$ref": "#/$defs/porcentaje"
+          }
         }
       }
     },
@@ -222,30 +223,46 @@
       "required": ["tipo"],
       "additionalProperties": false,
       "properties": {
-        "tipo": { "enum": ["unsellable", "pokedolares"] },
-        "cantidad": { "$ref": "#/$defs/cantidad" }
+        "tipo": {
+          "enum": ["unsellable", "pokedolares"]
+        },
+        "cantidad": {
+          "$ref": "#/$defs/cantidad"
+        }
       },
       "if": {
-        "properties": { "tipo": { "const": "pokedolares" } },
+        "properties": {
+          "tipo": {
+            "const": "pokedolares"
+          }
+        },
         "required": ["tipo"]
       },
-      "then": { "required": ["cantidad"] },
-      "else": { "properties": { "cantidad": false } }
+      "then": {
+        "required": ["cantidad"]
+      },
+      "else": {
+        "properties": {
+          "cantidad": false
+        }
+      }
     },
     "unidadPokemon": {
       "type": "object",
-      "description": "El Pokémon que se vende, con lo que declara el vendedor. Requisito, Tier y Elementos no se guardan: salen de content/pokemon.json. null es «no declarado».",
+      "description": "El Pokémon que se vende (§16.2.5). Todo el equipo son ids del registro, elegidos en un selector. Requisito, Tier, Elementos y el tier de un held no se guardan: salen de content/. null es «no declarado».",
       "required": [
         "pokemon",
         "ball",
-        "aura",
+        "auras",
+        "addons",
+        "heldX",
+        "heldY",
+        "mega",
         "boost",
         "starLevel",
         "nickname",
         "memorySlots",
         "memorias",
-        "helds",
-        "addon",
         "nextBoostChance",
         "entrenamiento",
         "precioNpc"
@@ -257,22 +274,79 @@
           "description": "id de content/pokemon.json."
         },
         "ball": {
-          "type": ["object", "null"],
-          "if": { "type": "object" },
-          "then": { "$ref": "#/$defs/ballDeclarada" }
-        },
-        "aura": {
           "type": ["string", "null"],
-          "description": "id de content/auras.json.",
-          "if": { "type": "string" },
-          "then": { "$ref": "#/$defs/slug" }
+          "description": "id de un ítem de content/items/poke-balls.json.",
+          "if": {
+            "type": "string"
+          },
+          "then": {
+            "$ref": "#/$defs/slug"
+          }
         },
-        "boost": { "type": ["integer", "null"], "minimum": 0, "maximum": 50 },
-        "starLevel": { "type": ["integer", "null"], "minimum": 0, "maximum": 5 },
+        "auras": {
+          "type": "array",
+          "maxItems": 32,
+          "description": "ids de content/auras.json, sin repetir. Sin repetir: lo comprueban content:check y el mirror de Zod.",
+          "items": {
+            "$ref": "#/$defs/slug"
+          }
+        },
+        "addons": {
+          "type": "array",
+          "maxItems": 32,
+          "description": "ids de addons de ese Pokémon en content/outfits.json, sin repetir. Sin repetir: lo comprueban content:check y el mirror de Zod.",
+          "items": {
+            "$ref": "#/$defs/slug"
+          }
+        },
+        "heldX": {
+          "type": ["string", "null"],
+          "description": "id de un ítem con held.ranura = \"x\".",
+          "if": {
+            "type": "string"
+          },
+          "then": {
+            "$ref": "#/$defs/slug"
+          }
+        },
+        "heldY": {
+          "type": ["string", "null"],
+          "description": "id de un ítem con held.ranura = \"y\".",
+          "if": {
+            "type": "string"
+          },
+          "then": {
+            "$ref": "#/$defs/slug"
+          }
+        },
+        "mega": {
+          "type": ["string", "null"],
+          "description": "id de un ítem con mega.",
+          "if": {
+            "type": "string"
+          },
+          "then": {
+            "$ref": "#/$defs/slug"
+          }
+        },
+        "boost": {
+          "type": ["integer", "null"],
+          "minimum": 0,
+          "maximum": 50
+        },
+        "starLevel": {
+          "type": ["integer", "null"],
+          "minimum": 0,
+          "maximum": 5
+        },
         "nickname": {
           "type": ["string", "null"],
-          "if": { "type": "string" },
-          "then": { "$ref": "#/$defs/nombreDeclarado" }
+          "if": {
+            "type": "string"
+          },
+          "then": {
+            "$ref": "#/$defs/nombreDeclarado"
+          }
         },
         "memorySlots": {
           "type": ["integer", "null"],
@@ -286,50 +360,39 @@
           "description": "Una entrada por Memory Slot: id de content/pokemon.json o null si el slot está vacío. Sin Memory Slots, vacía.",
           "items": {
             "type": ["string", "null"],
-            "if": { "type": "string" },
-            "then": { "$ref": "#/$defs/slug" }
+            "if": {
+              "type": "string"
+            },
+            "then": {
+              "$ref": "#/$defs/slug"
+            }
           }
-        },
-        "helds": {
-          "type": "array",
-          "maxItems": 2,
-          "items": { "$ref": "#/$defs/heldDeclarado" }
-        },
-        "addon": {
-          "type": ["object", "null"],
-          "if": { "type": "object" },
-          "then": { "$ref": "#/$defs/addonDeclarado" }
         },
         "nextBoostChance": {
           "type": ["string", "null"],
-          "if": { "type": "string" },
-          "then": { "$ref": "#/$defs/porcentaje" }
+          "if": {
+            "type": "string"
+          },
+          "then": {
+            "$ref": "#/$defs/porcentaje"
+          }
         },
         "entrenamiento": {
           "type": "array",
           "maxItems": 8,
-          "items": { "$ref": "#/$defs/entrenamiento" }
+          "items": {
+            "$ref": "#/$defs/entrenamiento"
+          }
         },
         "precioNpc": {
           "type": ["object", "null"],
-          "if": { "type": "object" },
-          "then": { "$ref": "#/$defs/precioNpc" }
+          "if": {
+            "type": "object"
+          },
+          "then": {
+            "$ref": "#/$defs/precioNpc"
+          }
         }
-      }
-    },
-    "itemDeclarado": {
-      "type": "object",
-      "description": "El item que se vende. item es el id de content/items/ si el nombre coincide con él sin mayúsculas ni acentos; si no, null y el sitio lo muestra como texto.",
-      "required": ["item", "nombre", "cantidad"],
-      "additionalProperties": false,
-      "properties": {
-        "item": {
-          "type": ["string", "null"],
-          "if": { "type": "string" },
-          "then": { "$ref": "#/$defs/slug" }
-        },
-        "nombre": { "$ref": "#/$defs/nombreItem" },
-        "cantidad": { "$ref": "#/$defs/cantidad" }
       }
     },
     "anuncio": {
@@ -354,7 +417,9 @@
           "$ref": "#/$defs/slug",
           "description": "id de content/mundos.json."
         },
-        "publicado": { "$ref": "#/$defs/instante" },
+        "publicado": {
+          "$ref": "#/$defs/instante"
+        },
         "expira": {
           "$ref": "#/$defs/instante",
           "description": "Posterior a publicado. Un anuncio publicado o reservado cuyo expira ya pasó se ve como expirado."
@@ -362,9 +427,15 @@
         "estado": {
           "enum": ["publicado", "reservado", "completado", "expirado", "retirado"]
         },
-        "precio": { "$ref": "#/$defs/precio" },
-        "pokemon": { "$ref": "#/$defs/unidadPokemon" },
-        "item": { "$ref": "#/$defs/itemDeclarado" },
+        "precio": {
+          "$ref": "#/$defs/precio"
+        },
+        "pokemon": {
+          "$ref": "#/$defs/unidadPokemon"
+        },
+        "item": {
+          "$ref": "#/$defs/itemAnunciado"
+        },
         "cantidad": {
           "$ref": "#/$defs/cantidad",
           "description": "Diamonds o Pokédólares que se venden, en unidades base."
@@ -377,32 +448,53 @@
       "allOf": [
         {
           "if": {
-            "properties": { "tipo": { "const": "pokemon" } },
+            "properties": {
+              "tipo": {
+                "const": "pokemon"
+              }
+            },
             "required": ["tipo"]
           },
           "then": {
             "required": ["pokemon"],
-            "properties": { "item": false, "cantidad": false }
+            "properties": {
+              "item": false,
+              "cantidad": false
+            }
           }
         },
         {
           "if": {
-            "properties": { "tipo": { "const": "items" } },
+            "properties": {
+              "tipo": {
+                "const": "items"
+              }
+            },
             "required": ["tipo"]
           },
           "then": {
             "required": ["item"],
-            "properties": { "pokemon": false, "cantidad": false }
+            "properties": {
+              "pokemon": false,
+              "cantidad": false
+            }
           }
         },
         {
           "if": {
-            "properties": { "tipo": { "enum": ["diamonds", "pokedolares"] } },
+            "properties": {
+              "tipo": {
+                "enum": ["diamonds", "pokedolares"]
+              }
+            },
             "required": ["tipo"]
           },
           "then": {
             "required": ["cantidad"],
-            "properties": { "pokemon": false, "item": false }
+            "properties": {
+              "pokemon": false,
+              "item": false
+            }
           }
         }
       ]
@@ -413,30 +505,64 @@
       "required": ["tipo", "etiqueta"],
       "additionalProperties": false,
       "properties": {
-        "tipo": { "enum": ["correo", "telefono", "discord", "twitch", "google", "otra"] },
-        "etiqueta": { "type": ["string", "null"] }
+        "tipo": {
+          "enum": ["correo", "telefono", "discord", "twitch", "google", "otra"]
+        },
+        "etiqueta": {
+          "type": ["string", "null"]
+        }
       },
       "allOf": [
         {
           "if": {
-            "properties": { "tipo": { "const": "telefono" } },
+            "properties": {
+              "tipo": {
+                "const": "telefono"
+              }
+            },
             "required": ["tipo"]
           },
-          "then": { "properties": { "etiqueta": { "$ref": "#/$defs/codigoPais" } } }
+          "then": {
+            "properties": {
+              "etiqueta": {
+                "$ref": "#/$defs/codigoPais"
+              }
+            }
+          }
         },
         {
           "if": {
-            "properties": { "tipo": { "const": "otra" } },
+            "properties": {
+              "tipo": {
+                "const": "otra"
+              }
+            },
             "required": ["tipo"]
           },
-          "then": { "properties": { "etiqueta": { "$ref": "#/$defs/plataforma" } } }
+          "then": {
+            "properties": {
+              "etiqueta": {
+                "$ref": "#/$defs/plataforma"
+              }
+            }
+          }
         },
         {
           "if": {
-            "properties": { "tipo": { "enum": ["correo", "discord", "twitch", "google"] } },
+            "properties": {
+              "tipo": {
+                "enum": ["correo", "discord", "twitch", "google"]
+              }
+            },
             "required": ["tipo"]
           },
-          "then": { "properties": { "etiqueta": { "type": "null" } } }
+          "then": {
+            "properties": {
+              "etiqueta": {
+                "type": "null"
+              }
+            }
+          }
         }
       ]
     },
@@ -446,13 +572,23 @@
       "required": ["puntuacion", "comentario", "fecha", "anuncio", "comprador"],
       "additionalProperties": false,
       "properties": {
-        "puntuacion": { "type": "integer", "minimum": 1, "maximum": 5 },
+        "puntuacion": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 5
+        },
         "comentario": {
           "type": ["string", "null"],
-          "if": { "type": "string" },
-          "then": { "$ref": "#/$defs/comentario" }
+          "if": {
+            "type": "string"
+          },
+          "then": {
+            "$ref": "#/$defs/comentario"
+          }
         },
-        "fecha": { "$ref": "#/$defs/instante" },
+        "fecha": {
+          "$ref": "#/$defs/instante"
+        },
         "anuncio": {
           "$ref": "#/$defs/slug",
           "description": "id del anuncio de la operación, en content/comercio/anuncios.json."
@@ -473,12 +609,18 @@
           "$ref": "#/$defs/handle",
           "description": "Handle del vendedor y ruta de su perfil."
         },
-        "nombre": { "$ref": "#/$defs/nombreVendedor" },
+        "nombre": {
+          "$ref": "#/$defs/nombreVendedor"
+        },
         "desde": {
           "type": ["string", "null"],
           "description": "Desde cuándo tiene cuenta. null si no se conoce.",
-          "if": { "type": "string" },
-          "then": { "$ref": "#/$defs/instante" }
+          "if": {
+            "type": "string"
+          },
+          "then": {
+            "$ref": "#/$defs/instante"
+          }
         },
         "presencia": {
           "description": "Estado en línea fijo del vendedor de ejemplo: en el juego, ausente o desconectado.",
@@ -487,15 +629,33 @@
         "canales": {
           "type": "array",
           "description": "Un canal por tipo; otra plataforma, una vez por nombre.",
-          "items": { "$ref": "#/$defs/canal" }
+          "items": {
+            "$ref": "#/$defs/canal"
+          }
         },
         "resenas": {
           "type": "array",
-          "items": { "$ref": "#/$defs/resena" }
+          "items": {
+            "$ref": "#/$defs/resena"
+          }
         },
         "borrador": {
           "const": true,
           "description": "Todo registro de Comercio de la fase A lleva \"borrador\": true."
+        }
+      }
+    },
+    "itemAnunciado": {
+      "type": "object",
+      "description": "El ítem que se vende: id de content/items/ y cantidad, sin nombre declarado.",
+      "required": ["item", "cantidad"],
+      "additionalProperties": false,
+      "properties": {
+        "item": {
+          "$ref": "#/$defs/slug"
+        },
+        "cantidad": {
+          "$ref": "#/$defs/cantidad"
         }
       }
     }

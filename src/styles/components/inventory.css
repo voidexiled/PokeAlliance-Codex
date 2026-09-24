@@ -1,0 +1,36 @@
+/* The items inventory (spec 16.4.1): the game's inventory panel, slots of 48 packed 2 apart.
+   Per-component sheet (§13.6): ItemsRoot.tsx imports it. */
+
+@layer properties, theme, base, components, utilities;
+
+@layer components {
+  .ac-inventory {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-16);
+    padding: var(--space-12);
+    border-radius: var(--radius-8);
+    background: var(--tt-panel-deep);
+    color: var(--tt-value);
+  }
+
+  .ac-inventory__head {
+    display: flex;
+    align-items: center;
+    gap: var(--space-8);
+    margin: 0 0 var(--space-8);
+    font: inherit;
+    font-weight: 600;
+    color: var(--tt-label);
+    text-shadow: var(--text-shadow-game);
+  }
+
+  .ac-inventory__grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+}

@@ -1,0 +1,459 @@
+/* EntityPicker and the inline slot pickers (spec 16.3.2, 16.3.3). Per-component sheet (§13.6):
+   EntityPicker.tsx and InlineSlotPicker.tsx import it. The panel is a game window: the
+   tooltip's deep panel colour, a 1 px frame and a hard shadow; below 768 it is a bottom sheet. */
+
+@layer properties, theme, base, components, utilities;
+
+@layer components {
+  .ac-picker {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-6);
+    min-width: 0;
+  }
+
+  .ac-picker__label {
+    color: var(--text-secondary);
+    font: 600 13px/16px var(--font-sans); /* sin token: pixel-exact game slot geometry */
+  }
+
+  .ac-picker__field {
+    position: relative;
+    display: flex;
+    min-width: 0;
+  }
+
+  .ac-picker__trigger {
+    display: flex;
+    flex: 1;
+    align-items: center;
+    gap: var(--space-8);
+    min-width: 0;
+    min-height: 48px; /* sin token: pixel-exact game slot geometry */
+    padding: var(--space-4) 64px var(--space-4) var(--space-4); /* sin token: pixel-exact game slot geometry */
+    border: 1px solid var(--border-primary);
+    border-radius: var(--radius-8);
+    background: var(--bg-secondary);
+    color: var(--text-primary);
+    text-align: left;
+    cursor: pointer;
+  }
+
+  .ac-picker__trigger:hover {
+    border-color: var(--text-quinary);
+  }
+  .ac-picker__trigger[aria-expanded='true'] {
+    border-color: var(--selected);
+  }
+  .ac-picker__trigger:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  .ac-picker__slot-empty {
+    border: 1px dashed var(--border-primary);
+    background: transparent;
+  }
+
+  .ac-picker__placeholder {
+    color: var(--text-tertiary);
+    font: 500 14px/20px var(--font-sans); /* sin token: pixel-exact game slot geometry */
+  }
+  .ac-picker__value {
+    overflow: hidden;
+    color: var(--text-secondary);
+    font: 500 14px/20px var(--font-sans); /* sin token: pixel-exact game slot geometry */
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .ac-picker__row {
+    display: flex;
+    align-items: center;
+    gap: var(--space-4);
+    min-width: 0;
+    overflow: hidden;
+  }
+  .ac-picker__more {
+    padding: 0 var(--space-4);
+    color: var(--text-tertiary);
+    font: 600 13px/1 var(--font-sans); /* sin token: pixel-exact game slot geometry */
+  }
+
+  .ac-picker__chevron {
+    position: absolute;
+    right: 16px; /* sin token: pixel-exact game slot geometry */
+    top: 50%;
+    width: 7px; /* sin token: pixel-exact game slot geometry */
+    height: 7px; /* sin token: pixel-exact game slot geometry */
+    border: solid var(--text-tertiary);
+    border-width: 0 2px 2px 0;
+    transform: translateY(-70%) rotate(45deg);
+    pointer-events: none;
+  }
+
+  .ac-picker__clear,
+  .ac-picker__close {
+    position: relative;
+    display: grid;
+    flex: none;
+    place-items: center;
+    width: 32px; /* sin token: pixel-exact game slot geometry */
+    height: 32px; /* sin token: pixel-exact game slot geometry */
+    border: 0;
+    border-radius: var(--radius-6);
+    background: transparent;
+    color: var(--text-tertiary);
+    cursor: pointer;
+  }
+  .ac-picker__clear {
+    position: absolute;
+    right: 32px; /* sin token: pixel-exact game slot geometry */
+    top: 50%;
+    transform: translateY(-50%);
+  }
+  .ac-picker__clear:hover,
+  .ac-picker__close:hover {
+    background: var(--bg-tertiary);
+    color: var(--text-primary);
+  }
+  .ac-picker__clear > span,
+  .ac-picker__close > span {
+    position: relative;
+    width: 12px; /* sin token: pixel-exact game slot geometry */
+    height: 12px; /* sin token: pixel-exact game slot geometry */
+  }
+  .ac-picker__clear > span::before,
+  .ac-picker__clear > span::after,
+  .ac-picker__close > span::before,
+  .ac-picker__close > span::after,
+  .ac-picker__tray-x::before,
+  .ac-picker__tray-x::after {
+    position: absolute;
+    top: 5px; /* sin token: pixel-exact game slot geometry */
+    left: 0;
+    width: 12px; /* sin token: pixel-exact game slot geometry */
+    height: 2px;
+    border-radius: 1px;
+    background: currentColor;
+    transform: rotate(45deg);
+    content: '';
+  }
+  .ac-picker__clear > span::after,
+  .ac-picker__close > span::after,
+  .ac-picker__tray-x::after {
+    transform: rotate(-45deg);
+  }
+
+  /* Panel */
+  .ac-picker__scrim {
+    display: none;
+  }
+
+  .ac-picker__panel {
+    position: fixed;
+    z-index: var(--z-listbox);
+    display: flex;
+    flex-direction: column;
+    width: min(720px, calc(100vw - 16px)); /* sin token: pixel-exact game slot geometry */
+    min-width: min(640px, calc(100vw - 16px)); /* sin token: pixel-exact game slot geometry */
+    height: 480px; /* sin token: pixel-exact game slot geometry */
+    max-height: 480px; /* sin token: pixel-exact game slot geometry */
+    overflow: hidden;
+    border: 1px solid var(--tt-divider);
+    border-radius: var(--radius-8);
+    background: var(--tt-panel-deep);
+    box-shadow:
+      0 0 0 1px var(--black),
+      0 16px 40px var(--black);
+  }
+
+  .ac-picker__panel--loading {
+    background: linear-gradient(var(--tt-panel), var(--tt-panel-deep));
+  }
+
+  .ac-picker__head {
+    display: flex;
+    flex: none;
+    align-items: center;
+    gap: var(--space-8);
+    padding: var(--space-8);
+    border-bottom: 1px solid var(--tt-divider);
+    background: var(--tt-panel);
+  }
+
+  .ac-picker__search {
+    flex: 1;
+    min-width: 0;
+    height: 36px; /* sin token: pixel-exact game slot geometry */
+    padding: 0 var(--space-10);
+    border: 1px solid var(--border-primary);
+    border-radius: var(--radius-6);
+    background: var(--bg-primary);
+    color: var(--text-primary);
+    font: 500 14px/20px var(--font-sans); /* sin token: pixel-exact game slot geometry */
+  }
+  .ac-picker__search:focus {
+    border-color: var(--selected);
+    outline: none;
+  }
+
+  .ac-picker__count {
+    flex: none;
+    color: var(--tt-muted);
+    font: 500 12px/1 var(--font-sans); /* sin token: pixel-exact game slot geometry */
+    font-variant-numeric: tabular-nums;
+  }
+
+  .ac-picker__filters {
+    display: flex;
+    flex: none;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    gap: var(--space-8) var(--space-16);
+    max-height: 132px; /* sin token: pixel-exact game slot geometry */
+    overflow-y: auto;
+    padding: var(--space-8);
+    border-bottom: 1px solid var(--tt-divider);
+  }
+
+  .ac-picker__link {
+    padding: var(--space-4) 0;
+    border: 0;
+    background: none;
+    color: var(--link);
+    font: 500 13px/16px var(--font-sans); /* sin token: pixel-exact game slot geometry */
+    cursor: pointer;
+  }
+  .ac-picker__link:hover {
+    text-decoration: underline;
+  }
+
+  .ac-picker__tray {
+    display: flex;
+    flex: none;
+    align-items: center;
+    gap: var(--space-8);
+    padding: var(--space-6) var(--space-8);
+    border-bottom: 1px solid var(--tt-divider);
+    background: var(--tt-panel-deep);
+  }
+  .ac-picker__tray-count {
+    flex: none;
+    color: var(--tt-label);
+    font: 600 12px/1 var(--font-sans); /* sin token: pixel-exact game slot geometry */
+  }
+  .ac-picker__tray-slots {
+    display: flex;
+    flex: 1;
+    gap: var(--space-4);
+    min-width: 0;
+    min-height: 40px; /* sin token: pixel-exact game slot geometry */
+    margin: 0;
+    padding: 0;
+    overflow-x: auto;
+    list-style: none;
+  }
+  .ac-picker__tray-slot {
+    cursor: pointer;
+  }
+  .ac-picker__tray-x {
+    position: absolute;
+    top: 2px;
+    right: 2px;
+    width: 12px; /* sin token: pixel-exact game slot geometry */
+    height: 12px; /* sin token: pixel-exact game slot geometry */
+    color: var(--text-secondary);
+    opacity: 0;
+  }
+  .ac-picker__tray-slot:hover .ac-picker__tray-x,
+  .ac-picker__tray-slot:focus-visible .ac-picker__tray-x {
+    opacity: 1;
+  }
+
+  .ac-picker__done {
+    flex: none;
+    height: 32px; /* sin token: pixel-exact game slot geometry */
+    padding: 0 var(--space-12);
+    border: 1px solid var(--selected);
+    border-radius: var(--radius-6);
+    background: var(--selected);
+    color: var(--black);
+    font: 700 13px/1 var(--font-sans); /* sin token: pixel-exact game slot geometry */
+    cursor: pointer;
+  }
+
+  .ac-picker__body {
+    display: flex;
+    flex: 1;
+    min-height: 0;
+  }
+
+  .ac-picker__scroll {
+    flex: 1;
+    min-width: 0;
+    overflow-y: auto;
+    padding: var(--space-8);
+    overscroll-behavior: contain;
+  }
+
+  .ac-picker__grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, 48px); /* sin token: pixel-exact game slot geometry */
+    gap: 4px; /* sin token: pixel-exact game slot geometry */
+    outline: none;
+  }
+
+  .ac-picker__matrix {
+    display: grid;
+    align-items: center;
+    gap: 4px; /* sin token: pixel-exact game slot geometry */
+    width: max-content;
+    outline: none;
+  }
+  .ac-picker__matrix-head {
+    color: var(--tt-muted);
+    font: 700 11px/1 var(--font-sans); /* sin token: pixel-exact game slot geometry */
+    text-align: center;
+  }
+  .ac-picker__matrix-row {
+    padding-right: var(--space-8);
+    color: var(--tt-value);
+    font: 600 13px/16px var(--font-sans); /* sin token: pixel-exact game slot geometry */
+    white-space: nowrap;
+  }
+  .ac-picker__hole {
+    width: 48px; /* sin token: pixel-exact game slot geometry */
+    height: 48px; /* sin token: pixel-exact game slot geometry */
+    border-radius: var(--radius-4);
+    box-shadow: var(--inset-tt-empty);
+    opacity: 0.4;
+  }
+
+  .ac-picker__option {
+    display: flex;
+    border-radius: var(--radius-4);
+    cursor: pointer;
+  }
+  .ac-picker__option[aria-disabled='true'] {
+    cursor: not-allowed;
+  }
+  .ac-picker__option:hover .ac-entity-slot {
+    border-color: var(--text-quinary);
+  }
+  .ac-picker__grid:focus-visible .ac-picker__option[data-active],
+  .ac-picker__matrix:focus-visible .ac-picker__option[data-active],
+  .ac-slot-grid:focus-visible .ac-picker__option[data-active] {
+    outline: 2px solid var(--ring);
+    outline-offset: 1px;
+  }
+
+  .ac-picker__sentinel {
+    height: 1px;
+  }
+
+  .ac-picker__skeleton {
+    height: 100%;
+    min-height: 200px; /* sin token: pixel-exact game slot geometry */
+    border-radius: var(--radius-4);
+    background: repeating-linear-gradient(
+      90deg,
+      var(--bg-primary) 0 48px,
+      transparent 48px 52px
+    ); /* sin token: pixel-exact game slot geometry */
+    opacity: 0.5;
+  }
+
+  .ac-picker__empty {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-8);
+    padding: var(--space-32) var(--space-16);
+    color: var(--tt-muted);
+    font: 500 14px/20px var(--font-sans); /* sin token: pixel-exact game slot geometry */
+  }
+  .ac-picker__empty p {
+    margin: 0;
+  }
+
+  .ac-picker__detail {
+    display: none;
+    flex: none;
+    width: var(--size-tt);
+    overflow-y: auto;
+    border-left: 1px solid var(--tt-divider);
+    background: var(--tt-panel);
+  }
+
+  @media (width >= 80rem) {
+    .ac-picker__panel {
+      width: min(960px, calc(100vw - 16px)); /* sin token: pixel-exact game slot geometry */
+    }
+    .ac-picker__detail {
+      display: block;
+    }
+  }
+
+  /* Bottom sheet: the same content at full screen, over a scrim. */
+  @media (width < 48rem) {
+    .ac-picker__scrim {
+      position: fixed;
+      inset: 0;
+      z-index: var(--z-scrim);
+      display: block;
+      background: var(--overlay);
+    }
+    .ac-picker__panel {
+      inset: auto 0 0 0;
+      z-index: var(--z-sheet);
+      width: 100%;
+      min-width: 0;
+      height: 92dvh; /* sin token: pixel-exact game slot geometry */
+      max-height: 92dvh; /* sin token: pixel-exact game slot geometry */
+      border-radius: var(--radius-12) var(--radius-12) 0 0;
+    }
+    .ac-picker__body {
+      flex-direction: column;
+    }
+    .ac-picker__detail:not(:empty) {
+      display: block;
+      width: auto;
+      max-height: 34%;
+      border-top: 1px solid var(--tt-divider);
+      border-left: 0;
+    }
+    .ac-picker__search {
+      height: var(--size-touch);
+    }
+  }
+
+  @media (48rem <= width < 80rem) {
+    .ac-picker__body {
+      flex-direction: column;
+    }
+    .ac-picker__detail:not(:empty) {
+      display: block;
+      width: auto;
+      max-height: 38%;
+      border-top: 1px solid var(--tt-divider);
+      border-left: 0;
+    }
+  }
+
+  /* Inline slot grid (AuraPicker, AddonPicker), like the «Auras» panel of the game. */
+  .ac-slot-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-6);
+    outline: none;
+  }
+  .ac-slot-grid__detail:not(:empty) {
+    max-width: var(--size-tt);
+    overflow: hidden;
+    border: 1px solid var(--tt-divider);
+    border-radius: var(--radius-8);
+    background: var(--tt-panel);
+  }
+}

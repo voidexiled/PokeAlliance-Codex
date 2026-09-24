@@ -1,3 +1,4 @@
+import '@/styles/components/loot-card.css';
 import type { HTMLAttributes, ReactNode } from 'react';
 
 import { Card, Head, Title } from '@/components/cards/Card';

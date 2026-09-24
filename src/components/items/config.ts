@@ -30,7 +30,13 @@ import type { SpriteData } from '@/lib/sprites/resolve';
 // sends a reader (`/{l}/items/c/{categoria}/?page={p}#item-{id}`).
 
 /** Rows per page of an item list (8.0.6). */
-export const ITEMS_PAGE_SIZE = 24;
+export const ITEMS_PAGE_SIZE = 96;
+
+/**
+ * Rows the prerendered page and its props carry (13.6: props within 20 KB). A longer list takes
+ * the rest of its first page from `datos.json` as the island hydrates (PR5).
+ */
+export const ITEMS_PROPS_ROWS = 28;
 
 /** The virtual category of content/items/categorias.json: `/{l}/items/` (8.5). */
 export const ALL_CATEGORY = 'todo';
@@ -49,6 +55,8 @@ export const ITEMS_FIELDS = [
   'elemento',
   'uso',
   'dropDe',
+  'held',
+  'mega',
 ] as const;
 
 type ItemsField = (typeof ITEMS_FIELDS)[number];
@@ -77,6 +85,10 @@ export interface ItemsRow {
   elemento: string | null;
   uso: string | null;
   dropDe: readonly string[] | null;
+  /** `held` of a held item (16.2.3): its slot, effect and tier. */
+  held?: { ranura: 'x' | 'y'; efecto: string; tier: number } | null;
+  /** `mega` of a Mega Stone (16.2.3): the Pokémon ids it evolves. */
+  mega?: { pokemon: readonly string[] } | null;
 }
 
 /** The rows of the list: the part of `datos.json` the island decodes (PR5). */
@@ -154,12 +166,15 @@ const SHAPES: Record<ItemsField, string> = {
   elemento: 's?',
   uso: 's?',
   dropDe: 'l?',
+  held: 'o?',
+  mega: 'o?',
 };
 
 function fits(value: unknown, shape: string): boolean {
-  if (value === null) return shape.endsWith('?');
+  if (value === null || (value === undefined && shape === 'o?')) return shape.endsWith('?');
   if (typeof value === 'string') return shape[0] === 's' && value !== '';
   if (typeof value === 'number') return shape[0] === 'i' && Number.isInteger(value) && value >= 0;
+  if (shape[0] === 'o') return typeof value === 'object' && !Array.isArray(value);
   if (Array.isArray(value)) {
     return shape[0] === 'l' && value.every((entry) => typeof entry === 'string');
   }
@@ -185,7 +200,13 @@ export function decodeItems(data: unknown): ItemsRow[] {
   return filas.map((fila) => {
     const row: Partial<Record<ItemsField, unknown>> = {};
     for (const [field, index] of columns) {
-      const value = Array.isArray(fila) && index >= 0 ? fila[index] : undefined;
+      const value = !Array.isArray(fila)
+        ? undefined
+        : index >= 0
+          ? fila[index]
+          : SHAPES[field] === 'o?'
+            ? null
+            : undefined;
       if (!fits(value, SHAPES[field])) throw new Error(`items/datos.json: bad «${field}»`);
       row[field] = value;
     }
@@ -346,6 +367,11 @@ export function itemsConfig(
     // One order, so no `SortSelect` shows its label (V6, 8.0.6).
     sorts: [{ id: 'mercado', label: '', compare: keepOrder }],
     filters: [],
+    // «Buscar ítem» (§16.4.1): the name, live.
+    text: (row: ItemsRow) => row.nombre,
+    // Ranuras (the game inventory) and Lista; a stored or linked «cards» falls back to Ranuras.
+    defaultView: 'slots',
+    views: ['slots', 'list'],
     ...(grouped ? { groupBy: (row: ItemsRow) => row.categoria, groupOrder: categories } : {}),
     anchorId: (row) => `item-${row.id}`,
     dataUrl,
