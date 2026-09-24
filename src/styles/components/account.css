@@ -29,6 +29,17 @@
     min-width: 0;
   }
 
+  /* Cuenta-panel and Cuenta-acceso: the panel starts 16 under the crumbs (12 on a phone), not
+     the 48 of the main column's gap, so a card sits 64 under the header. */
+  .ac-page-layout__main > astro-island > .ac-account {
+    margin-top: calc(var(--space-16) - var(--space-48));
+  }
+  @media (width < 48rem) {
+    .ac-page-layout__main > astro-island > .ac-account {
+      margin-top: calc(var(--space-12) - var(--space-48));
+    }
+  }
+
   .ac-account-form {
     display: flex;
     flex-direction: column;
@@ -64,48 +75,6 @@
     @apply type-h3;
   }
 
-  /* The steps of the registration (9.15.1): one line that wraps, each number in a disc. The
-     current step is primary with the `selected` border; a done one has its disc filled. */
-  .ac-account-steps {
-    display: flex;
-    flex-wrap: wrap;
-    gap: var(--space-8) var(--space-16);
-    margin: 0;
-    padding: 0;
-    list-style: none;
-  }
-
-  .ac-account-steps__item {
-    display: inline-flex;
-    align-items: center;
-    gap: var(--space-8);
-    color: var(--text-tertiary);
-    @apply type-ui-strong;
-  }
-
-  .ac-account-steps__item[aria-current='step'] {
-    color: var(--text-primary);
-  }
-
-  .ac-account-steps__number {
-    display: inline-grid;
-    place-items: center;
-    min-width: 24px; /* sin token: disco del número del paso */
-    height: 24px; /* sin token: disco del número del paso */
-    padding: 0 var(--space-4);
-    border: 1px solid var(--border-primary);
-    border-radius: var(--radius-full);
-    font-variant-numeric: tabular-nums;
-  }
-
-  .ac-account-steps__item[aria-current='step'] .ac-account-steps__number {
-    border-color: var(--selected);
-  }
-
-  .ac-account-steps__item--done .ac-account-steps__number {
-    background: var(--bg-tertiary);
-  }
-
   .ac-account-field {
     min-width: 0;
   }
@@ -123,13 +92,6 @@
     height: 0;
     margin-top: calc(-1 * var(--space-16));
     overflow: hidden;
-  }
-
-  /* The non-affiliation line of 9.15.2, discreet under the terms. */
-  .ac-account-legal {
-    margin: 0;
-    color: var(--text-tertiary);
-    @apply type-ui;
   }
 
   .ac-account-help {

@@ -9,11 +9,11 @@
    - The slot keeps its size in the three states (CLS 0): 192 wide in the end group, the width
      of the chip and of the language selector beside it, and 44 in the compact group, like the
      lens and the menu button. What it holds sits at its end.
-   - The avatar is the linked identity's picture or the initial on a `bg-quaternary` disc. Its
-     badge sits on the lower right corner with a ring of the header's background: the status dot
-     («En el juego» in the colour of success, «Ausente» in `amber`, «Desconectado» in
-     `text-quinary`, 9.15.6, as the dot of Comercio in trade-presence.css), or the «!» of an
-     unfinished registration in `amber`. */
+   - The avatar is the linked identity's picture or the initial on a `bg-tertiary` disc. Its
+     badge sits on a corner with a ring of the header's background: the status dot, on the lower
+     right, is the colour of success («En el juego»), `amber` («Ausente») or `text-quaternary`
+     («Desconectado», 9.15.6, as the dot of Comercio in trade-presence.css). An unfinished
+     registration draws the bigger «!» mark instead, in `amber`, on the upper right corner. */
 
 .ac-account-entry {
   position: relative;
@@ -35,7 +35,7 @@
   width: 28px; /* sin token: el avatar de 9.16.1 */
   height: 28px; /* sin token: el avatar de 9.16.1 */
   border-radius: var(--radius-full);
-  background: var(--bg-quaternary);
+  background: var(--bg-tertiary);
 }
 
 .ac-account-entry__avatar > img {
@@ -45,27 +45,39 @@
   object-fit: cover;
 }
 
+/* The status dot: a small filled circle on the lower right corner of the avatar. */
 .ac-account-entry__badge {
   position: absolute;
-  right: -4px; /* sin token: la marca asoma de la esquina del avatar */
-  bottom: -4px; /* sin token: la marca asoma de la esquina del avatar */
+  right: -2px; /* sin token: el punto de estado de 9.16.1 */
+  bottom: -2px; /* sin token: el punto de estado de 9.16.1 */
   display: grid;
   place-items: center;
-  width: var(--space-16);
-  height: var(--space-16);
+  width: 10px; /* sin token: el punto de estado de 9.16.1 */
+  height: 10px; /* sin token: el punto de estado de 9.16.1 */
   border: 2px solid var(--bg-primary);
   border-radius: var(--radius-full);
-  background: var(--text-quinary);
-  color: var(--black);
+  background: var(--text-quaternary);
 }
 
 [data-presence='en_juego'] .ac-account-entry__badge {
-  background: var(--success, var(--text-secondary));
+  background: var(--success);
 }
 
-[data-presence='ausente'] .ac-account-entry__badge,
-[data-unfinished] .ac-account-entry__badge {
+[data-presence='ausente'] .ac-account-entry__badge {
   background: var(--amber);
+}
+
+/* An unfinished registration replaces the dot with the bigger «!» mark, on the
+   upper right corner instead of the lower one (9.16.1). */
+[data-unfinished] .ac-account-entry__badge {
+  top: -5px; /* sin token: la marca «!» de 9.16.1 */
+  right: -6px; /* sin token: la marca «!» de 9.16.1 */
+  bottom: auto;
+  width: 14px; /* sin token: la marca «!» de 9.16.1 */
+  height: 14px; /* sin token: la marca «!» de 9.16.1 */
+  background: var(--amber);
+  color: var(--black);
+  @apply type-ui-strong;
 }
 
 .ac-account-entry__name {

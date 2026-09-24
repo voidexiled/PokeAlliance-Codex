@@ -5,6 +5,9 @@
 // tests/i18n/messages.test.ts checks that every entry still exists in `es.ts`,
 // so this list cannot hide a key that was deleted from the dictionary.
 export const dynamicKeys = [
+  // The account page's section nav reads `panel.groups[group]` by the group id (panel/model.ts):
+  // no file spells `.cuenta`.
+  'account.panel.groups.cuenta',
   // The list controller of spec §7.7 reads `messages.ui.views[view]` by the view
   // id (§13.2). `ViewToggle` itself spells `labels.cards`, `labels.slots` and
   // `labels.list`, so these three entries only matter once that controller reads

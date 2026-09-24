@@ -29,6 +29,12 @@
   --color-ring: var(--ring);
   --color-selected: var(--selected);
   --color-amber: var(--amber);
+  --color-success: var(--success);
+  --color-discord: var(--discord);
+  --color-google-surface: var(--google-surface);
+  --color-google-border: var(--google-border);
+  --color-google-text: var(--google-text);
+  --color-twitch: var(--twitch);
   --color-banner: var(--banner);
   --color-inactive-row: var(--inactive-row);
   --color-overlay: var(--overlay);

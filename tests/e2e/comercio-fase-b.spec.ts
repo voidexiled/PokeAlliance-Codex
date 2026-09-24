@@ -239,16 +239,14 @@ test('registration, contact, confirmations, reviews, report, moderation and «Mi
   await page.getByLabel(account.access.email, { exact: true }).fill(emails.buyer);
   await page.getByLabel(account.access.password, { exact: true }).fill(password);
   await page.locator('form.ac-account-form button[type="submit"]').click();
-  await expect(
-    page.getByText(fill(account.register.codeSent, { email: emails.buyer })),
-  ).toBeVisible();
+  await expect(page.getByText(account.auth.codeSentTo)).toBeVisible();
   await page
     .getByLabel(account.register.code, { exact: true })
     .fill(await mailedCode(emails.buyer));
   await page.getByRole('button', { name: account.register.verify, exact: true }).click();
 
   // Step 2: Discord, older than 60 days (simulated), then the page reads the account again.
-  await expect(page.getByText(account.register.identityText)).toBeVisible();
+  await expect(page.getByText(account.auth.identityText)).toBeVisible();
   const { data: users } = await admin().auth.admin.listUsers({ perPage: 1000 });
   const buyerId = users.users.find((user) => user.email === emails.buyer)?.id;
   expect(buyerId).toBeDefined();
@@ -268,7 +266,7 @@ test('registration, contact, confirmations, reviews, report, moderation and «Mi
     .getByRole('main')
     .getByRole('button', { name: account.register.finish, exact: true })
     .click();
-  await expect(page.getByText(account.register.done, { exact: true })).toBeVisible();
+  await expect(page.getByText(account.auth.doneTitle, { exact: true })).toBeVisible();
 
   // The header chip with the account's status dot.
   const chip = entry(page).locator('[data-ac-account-chip]');

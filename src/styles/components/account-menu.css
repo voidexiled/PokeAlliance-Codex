@@ -14,8 +14,9 @@
      window minus its 16 margins.
    - The head: the 28 avatar and, beside it, the username in 700, «{jugador} · {mundo}» and the
      status with its dot in `text-secondary`.
-   - «Estado»: its label in the caps of the design system's small titles, then the three statuses,
-     each with its dot and the check of the chosen one.
+   - «Estado»: its label in the caps of the design system's small titles, then the three statuses
+     in a row, each a bordered cell with its dot above the label; the chosen one takes the
+     `selected` border and ring of ToggleGroup instead of a check mark.
    - Separators are 1 px `border-secondary` lines; an error line under the items only while it has
      a text. */
 
@@ -120,15 +121,42 @@
     cursor: progress;
   }
 
-  .ac-account-menu__check {
-    display: block;
-    flex: none;
-    margin-left: auto;
-    visibility: hidden;
+  /* «Estado» (9.16.2): three columns, the dot above its label; the chosen one takes the
+     `selected` border and its ring instead of a check mark, as ToggleGroup does. */
+  .ac-account-menu__presence-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: var(--space-4);
   }
 
-  .ac-account-menu__item[aria-checked='true'] > .ac-account-menu__check {
-    visibility: visible;
+  .ac-account-menu__presence-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-8);
+    height: 52px; /* sin token: alto del selector de estado de 9.16.2 */
+    margin: 0;
+    padding: 0 var(--space-2);
+    border: 1px solid var(--border-primary);
+    border-radius: var(--radius-8);
+    background: transparent;
+    color: var(--text-primary);
+    font-family: var(--font-sans);
+    text-align: center;
+    cursor: pointer;
+    @apply type-ui-strong;
+  }
+
+  .ac-account-menu__presence-item:hover,
+  .ac-account-menu__presence-item:focus-visible {
+    background: var(--bg-quaternary);
+  }
+
+  .ac-account-menu__presence-item[aria-checked='true'] {
+    border-color: var(--selected);
+    box-shadow: var(--ring-selected);
+    background: transparent;
   }
 
   /* The dot of a status, in the colours of the chip's (account-entry.css) and Comercio's. */
@@ -138,7 +166,7 @@
     height: var(--space-6);
     flex: none;
     border-radius: var(--radius-full);
-    background: var(--text-quinary);
+    background: var(--text-quaternary);
   }
 
   .ac-account-menu__line[data-presence] {
@@ -153,7 +181,7 @@
 
   [data-ac-presence='en_juego'] > .ac-account-menu__dot,
   .ac-account-menu__line[data-presence='en_juego']::before {
-    background: var(--success, var(--text-secondary));
+    background: var(--success);
   }
 
   [data-ac-presence='ausente'] > .ac-account-menu__dot,
@@ -177,7 +205,8 @@
     display: none;
   }
 
-  /* With a coarse pointer an item grows from 40 to 44 (13.7), as the language list does. */
+  /* With a coarse pointer an item grows from 40 to 44 (13.7), as the language list does; the
+     52 tall presence buttons already clear that minimum. */
   @media (pointer: coarse) {
     .ac-account-menu__item {
       padding-top: var(--space-12);
@@ -186,8 +215,17 @@
   }
 
   @media (prefers-reduced-motion: no-preference) {
-    .ac-account-menu__item {
+    .ac-account-menu__item,
+    .ac-account-menu__presence-item {
       transition: background-color var(--duration-fast) var(--ease-standard);
+    }
+  }
+
+  /* Forced colors (5.2): the mode drops the ring's second pixel, so the chosen status becomes
+     a 2 px border in the system Highlight colour, as ToggleGroup does. */
+  @media (forced-colors: active) {
+    .ac-account-menu__presence-item[aria-checked='true'] {
+      border: 2px solid Highlight;
     }
   }
 }

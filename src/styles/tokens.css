@@ -66,6 +66,12 @@
     --ring: #444ce7;
     --selected: #d97706;
     --amber: #f59e0b;
+    --success: #22c55e;
+    --discord: #5865f2;
+    --google-surface: #131314;
+    --google-border: #8e918f;
+    --google-text: #e3e3e3;
+    --twitch: #9146ff;
     --banner: #991b1b;
     --inactive-row: rgba(153, 27, 27, 0.18);
     --overlay: #000000cc;
@@ -196,5 +202,6 @@
     --duration-sheet: 500ms;
     --duration-pulse: 2s;
     --duration-bounce: 5s;
+    --duration-spin: 800ms;
   }
 }

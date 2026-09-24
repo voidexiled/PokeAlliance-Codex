@@ -1,9 +1,11 @@
 ---
-// Cuenta (spec 9.9 with the owner decisions of 9.15 and 9.16, 10.4; template H of 8.0.2):
-// `/{l}/cuenta/`, the registration of 9.15.1 and the sections «Acceso», «Verificación»,
-// «Perfil», «Canales de contacto» (COMERCIO_PUBLICO), «Guilds» and «Eliminar cuenta». It is what
-// opens account mode for Guild and Comercio. `noindex` (9.3, 13.5), and no crumbs: «Cuenta»
-// belongs to no group of the menu (8.0.4, 9.3).
+// Cuenta (spec 9.9 with the owner decisions of 9.15 and 9.16, 10.4; Cuenta-panel.dc.html):
+// `/{l}/cuenta/`, the access and registration flow of 9.15.1 and, for a complete account, the
+// structured page — the header card, the section nav (Cuenta: Resumen, Perfil, Conexiones,
+// Seguridad; Comercio: Canales de contacto, Estado en línea; Guild: Guilds; «Eliminar cuenta»)
+// and one section at a time. It is what opens account mode for Guild and Comercio. `noindex`
+// (9.3, 13.5); the crumbs are «Inicio › Cuenta» and the h1 is for assistive tech only: the
+// island's cards carry the visible headings.
 //
 // Render (9.3): the prerendered frame and the island, which reads the session once hydrated. The
 // route exists only when getSupabasePublicConfig() is not null: without Supabase variables
@@ -31,10 +33,11 @@ import { telefonoObligatorio } from '@/lib/trade/limits';
 import { comercioPublico } from '@/lib/trade/registry';
 
 import { AccountPanel, type AccountConfig } from '@/components/account/AccountPanel';
-import { PageTitle } from '@/components/layout/PageTitle';
 import PageLayout from '@/layouts/PageLayout.astro';
 
 import '@/styles/components/account.css';
+import '@/styles/components/account-panel.css';
+import '@/styles/components/auth.css';
 
 export const prerender = true;
 
@@ -73,6 +76,7 @@ const alternates = Object.fromEntries(
 ) as Record<Locale, string>;
 
 const { account, trade, ui } = dictionaries[locale];
+// The island never reads `account.description` (the page's meta): it stays out of the props (13.6).
 const worlds = getMundos(locale).map((world) => ({ id: world.id, nombre: world.nombre }));
 const captchaSiteKey = text(variables.turnstile);
 const config: AccountConfig = {
@@ -102,14 +106,15 @@ const tradeTexts = {
   title={account.title}
   description={account.description}
   alternates={alternates}
+  breadcrumb={[{ label: account.title }]}
   noindex
 >
-  <PageTitle title={account.title} />
+  <h1 class="sr-only">{account.title}</h1>
   <AccountPanel
     client:load
     locale={locale}
     worlds={worlds}
-    messages={account}
+    messages={{ ...account, description: '' }}
     trade={tradeTexts}
     ui={{ close: ui.close, dismiss: ui.dismiss }}
     config={config}

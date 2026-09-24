@@ -1,0 +1,54 @@
+---
+// Restablecer contraseña (spec 9.9 «¿Olvidaste tu contraseña?», Cuenta-acceso 3):
+// `/{l}/cuenta/restablecer/`, where the recovery mail lands (`resetPasswordForEmail` with this
+// `redirectTo`). One centred card: «Elige una contraseña nueva» with the recovery session, or
+// «Ese enlace venció o ya se usó» with «Pedir otro enlace» (the «¿Olvidaste tu contraseña?» card
+// of /{l}/cuenta/#recuperar). `noindex` (9.3, 13.5), no crumbs, and the card title is the h1.
+//
+// Render (9.3): the prerendered frame and the island, which reads the session once hydrated. The
+// route exists only when getSupabasePublicConfig() is not null, like /{l}/cuenta/.
+import { getAlternatePath, getLocale, locales, type Locale } from '@/i18n/config';
+import type { Messages } from '@/i18n/messages/en';
+import { en } from '@/i18n/messages/en';
+import { es } from '@/i18n/messages/es';
+import { getSupabasePublicConfig } from '@/lib/supabase/env';
+
+import { ResetPasswordPanel } from '@/components/account/auth/ResetPassword';
+import { authTexts } from '@/components/account/auth/texts';
+import PageLayout from '@/layouts/PageLayout.astro';
+
+import '@/styles/components/auth.css';
+
+export const prerender = true;
+
+export function getStaticPaths() {
+  if (getSupabasePublicConfig() === null) return [];
+  return locales.map((locale) => ({ params: { locale } }));
+}
+
+const dictionaries: Record<Locale, Messages> = { es, en };
+
+const locale = getLocale(Astro.params.locale);
+const path = Astro.url.pathname;
+const alternates = Object.fromEntries(
+  locales.map((option) => [option, getAlternatePath(path, option)]),
+) as Record<Locale, string>;
+
+const { account, ui } = dictionaries[locale];
+const texts = authTexts(account);
+---
+
+<PageLayout
+  locale={locale}
+  title={texts.resetTitle}
+  description={account.description}
+  alternates={alternates}
+  noindex
+>
+  <ResetPasswordPanel
+    client:load
+    locale={locale}
+    messages={account}
+    ui={{ close: ui.close, dismiss: ui.dismiss }}
+  />
+</PageLayout>

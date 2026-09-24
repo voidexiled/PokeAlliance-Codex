@@ -19,15 +19,18 @@ import { Notice } from '@/components/content/Notice';
 import { Button } from '@/components/controls/Button';
 import { Checkbox } from '@/components/controls/Checkbox';
 import { TextField, fieldId } from '@/components/controls/TextField';
+import { Glyph } from '@/components/icons/Glyph';
 import { Section } from '@/components/layout/Section';
-import { ContactChip } from '@/components/money/ContactChip';
 
 import type { AccountMessages, AccountTradeTexts, UiLabels } from './AccountPanel';
+import { LetterTile, ProviderTile } from './panel/brand';
+import type { AccountPanelTexts } from './panel/texts';
 import { Field, dialCodeOf, focusField, invalidProps } from './RegistrationSteps';
 
-// «Canales de contacto» of `/{l}/cuenta/` (spec 9.9, 9.15.1), only with COMERCIO_PUBLICO: one row
-// per channel with its `ContactChip`, its value (only the account sees it here), «Verificado» or
-// «Pendiente» and, once verified, «Mostrar en mis anuncios».
+// «Canales de contacto» of `/{l}/cuenta/` (spec 9.9, 9.15.1; Cuenta-panel.dc.html), only with
+// COMERCIO_PUBLICO: one row per channel with its mark (the provider's, or a letter), its label,
+// its value (only the account sees it here), «Verificado» or «Pendiente» and, once verified,
+// «Mostrar en mis anuncios». The last row opens «Añadir otra plataforma».
 //
 // - Email and phone come verified from the account; Discord, Google and Twitch from the linked
 //   identities, which `trade_sync_oauth_channels` turns into channels when the section opens
@@ -72,12 +75,45 @@ export interface ChannelsPanelProps {
   client: SupabaseClient;
   locale: Locale;
   messages: AccountMessages;
+  panel: AccountPanelTexts;
   labels: AccountTradeTexts['channels'];
   ui: UiLabels;
+  /** A channel was added, removed or shown: the page reads the channels again. */
+  onChanged: () => void;
 }
 
-export function ChannelsPanel({ client, locale, messages, labels, ui }: ChannelsPanelProps) {
+/** The mark of a channel: the provider's, «@» for the email, «#» for the phone, else a letter. */
+function ChannelTile({ channel }: { channel: TradeChannel }) {
+  switch (channel.kind) {
+    case 'discord':
+    case 'google':
+    case 'twitch':
+      return <ProviderTile provider={channel.kind} size="md" />;
+    case 'email':
+      return <LetterTile letter="@" size="md" />;
+    case 'phone':
+      return <LetterTile letter="#" size="md" />;
+    default:
+      return (
+        <LetterTile
+          letter={(Array.from(channel.platform ?? '')[0] ?? '?').toLocaleUpperCase()}
+          size="md"
+        />
+      );
+  }
+}
+
+export function ChannelsPanel({
+  client,
+  locale,
+  messages,
+  panel,
+  labels,
+  ui,
+  onChanged,
+}: ChannelsPanelProps) {
   const text = messages.channels;
+  const [adding, setAdding] = useState(false);
   const [channels, setChannels] = useState<TradeChannel[] | undefined>(undefined);
   const [loadError, setLoadError] = useState<unknown>(null);
   const [version, setVersion] = useState(0);
@@ -134,10 +170,12 @@ export function ChannelsPanel({ client, locale, messages, labels, ui }: Channels
           value: channel.value,
           shared,
         }),
-      () =>
+      () => {
         setChannels((current) =>
           current?.map((row) => (row.id === channel.id ? { ...row, shared } : row)),
-        ),
+        );
+        onChanged();
+      },
     );
   }
 
@@ -157,79 +195,116 @@ export function ChannelsPanel({ client, locale, messages, labels, ui }: Channels
   }
 
   function remove(channel: TradeChannel) {
-    void run(() => deleteChannel(client, channel.id), reload);
+    void run(
+      () => deleteChannel(client, channel.id),
+      () => {
+        reload();
+        onChanged();
+      },
+    );
   }
 
   return (
-    <Section id="canales" title={text.title}>
+    <Section id="cuenta-canales" title={panel.sections.canales}>
+      <p className="ac-panel-intro">{panel.channelsIntro}</p>
       {loadError !== null ? (
         <Notice open onClose={() => setLoadError(null)} closeLabel={ui.dismiss}>
           {mapSupabaseError(loadError, locale)} <Button onClick={reload}>{messages.retry}</Button>
         </Notice>
       ) : null}
-      <div aria-busy={channels === undefined && loadError === null ? 'true' : undefined}>
-        {channels !== undefined && channels.length > 0 ? (
-          <ul className="ac-account-channels">
-            {channels.map((channel) => {
-              const code = codes[channel.id];
-              return (
-                <li key={channel.id} className="ac-account-channel">
-                  <div className="ac-account-channel__head">
-                    <ContactChip
-                      label={channelLabel(channel, labels)}
-                      verified={channel.verified}
-                    />
-                    <span className="ac-account-channel__value">{channel.value}</span>
-                    <span className="ac-account-channel__state">
-                      {channel.verified ? text.verified : text.pending}
-                    </span>
-                  </div>
-                  {channel.verified ? (
-                    <Checkbox
-                      label={text.show}
-                      checked={channel.shared}
-                      onChange={(checked) => share(channel, checked)}
-                      disabled={pending}
-                    />
-                  ) : null}
-                  {channel.kind === 'other' ? (
-                    <div className="ac-account-row">
-                      {channel.verified ? null : (
-                        <Button onClick={() => void newCode(channel)} disabled={pending}>
-                          {text.requestCode}
-                        </Button>
-                      )}
-                      <Button onClick={() => remove(channel)} disabled={pending}>
-                        {text.remove}
-                      </Button>
-                    </div>
-                  ) : null}
-                  {code !== undefined && !channel.verified ? (
-                    <p className="ac-account-line">
-                      {fill(text.codeLine, { platform: channel.platform ?? '', code })}
-                    </p>
-                  ) : null}
-                </li>
-              );
-            })}
-          </ul>
-        ) : null}
-      </div>
       {notice !== null ? (
         <Notice open onClose={() => setNotice(null)} closeLabel={ui.dismiss}>
           {notice}
         </Notice>
       ) : null}
-      <OtherPlatformForm
-        client={client}
-        locale={locale}
-        messages={messages}
-        ui={ui}
-        onAdded={(id, code) => {
-          if (code !== null) setCodes((current) => ({ ...current, [id]: code }));
-          reload();
-        }}
-      />
+      <ul
+        className="ac-panel-list"
+        aria-busy={channels === undefined && loadError === null ? 'true' : undefined}
+      >
+        {(channels ?? []).map((channel) => {
+          const code = codes[channel.id];
+          const label = channelLabel(channel, labels);
+          return (
+            <li key={channel.id} className="ac-panel-channel">
+              <ChannelTile channel={channel} />
+              <div className="ac-panel-channel__text">
+                <span className="ac-panel-channel__name">{label}</span>
+                <span className="ac-panel-channel__line">
+                  <span className="ac-panel-channel__value">{channel.value}</span>
+                  <span className="ac-panel-sep" aria-hidden="true">
+                    ·
+                  </span>
+                  {channel.verified ? (
+                    <span className="ac-panel-ok ac-panel-ok--quiet">
+                      <span className="ac-panel-ok__mark">
+                        <Glyph name="check" size={12} />
+                      </span>
+                      {text.verified}
+                    </span>
+                  ) : (
+                    <span>{text.pending}</span>
+                  )}
+                </span>
+                {code !== undefined && !channel.verified ? (
+                  <p className="ac-panel-channel__code">
+                    {fill(text.codeLine, { platform: channel.platform ?? '', code })}
+                  </p>
+                ) : null}
+                {channel.kind === 'other' && !channel.verified ? (
+                  <div className="ac-panel-channel__more">
+                    <Button onClick={() => void newCode(channel)} disabled={pending}>
+                      {text.requestCode}
+                    </Button>
+                  </div>
+                ) : null}
+              </div>
+              <div className="ac-panel-channel__action">
+                {channel.verified ? (
+                  <Checkbox
+                    label={text.show}
+                    checked={channel.shared}
+                    onChange={(checked) => share(channel, checked)}
+                    disabled={pending}
+                  />
+                ) : null}
+                {channel.kind === 'other' ? (
+                  <Button
+                    onClick={() => remove(channel)}
+                    disabled={pending}
+                    aria-label={`${text.remove} ${label}`}
+                  >
+                    {text.remove}
+                  </Button>
+                ) : null}
+              </div>
+            </li>
+          );
+        })}
+        <li className="ac-panel-channel ac-panel-channel--footer">
+          <Button
+            aria-expanded={adding}
+            aria-controls="cuenta-canales-otra"
+            onClick={() => setAdding((value) => !value)}
+          >
+            {text.addOther}
+          </Button>
+          <p className="ac-panel-setting__help">{panel.channelsFooter}</p>
+        </li>
+      </ul>
+      {adding ? (
+        <OtherPlatformForm
+          client={client}
+          locale={locale}
+          messages={messages}
+          ui={ui}
+          onAdded={(id, code) => {
+            if (code !== null) setCodes((current) => ({ ...current, [id]: code }));
+            setAdding(false);
+            reload();
+            onChanged();
+          }}
+        />
+      ) : null}
     </Section>
   );
 }
@@ -306,8 +381,13 @@ function OtherPlatformForm({ client, locale, messages, ui, onAdded }: OtherPlatf
   }
 
   return (
-    <form className="ac-account-form" onSubmit={submit} noValidate>
-      <h3 className="ac-account-subtitle">{text.addOther}</h3>
+    <form
+      id="cuenta-canales-otra"
+      className="ac-account-form ac-panel-box"
+      aria-label={text.addOther}
+      onSubmit={submit}
+      noValidate
+    >
       <Field id={ids.platform} error={errors.platform}>
         <TextField
           id={ids.platform}

@@ -185,20 +185,21 @@ const menuItem = 'ac-account-menu__item';
                 <p class="ac-account-menu__label" aria-hidden="true">
                   {texts.status}
                 </p>
-                {ESTADOS_PRESENCIA.map((state) => (
-                  <button
-                    type="button"
-                    class={menuItem}
-                    role="menuitemradio"
-                    aria-checked="false"
-                    tabindex="-1"
-                    data-ac-presence={state}
-                  >
-                    <span class="ac-account-menu__dot" aria-hidden="true" />
-                    {texts.presence[state]}
-                    <Glyph name="check" size={16} className="ac-account-menu__check" />
-                  </button>
-                ))}
+                <div class="ac-account-menu__presence-grid">
+                  {ESTADOS_PRESENCIA.map((state) => (
+                    <button
+                      type="button"
+                      class="ac-account-menu__presence-item"
+                      role="menuitemradio"
+                      aria-checked="false"
+                      tabindex="-1"
+                      data-ac-presence={state}
+                    >
+                      <span class="ac-account-menu__dot" aria-hidden="true" />
+                      {texts.presence[state]}
+                    </button>
+                  ))}
+                </div>
               </div>
             )}
             {comercio && <div class="ac-account-menu__sep" role="separator" />}

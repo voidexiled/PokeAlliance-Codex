@@ -106,7 +106,8 @@ const RUTAS_PRESUPUESTO = [
   [/^herramientas\/guild\/$/, 'guild'],
   [/^herramientas\/$/, 'contenido'],
   [/^comercio\/(?:.*\/)?$/, 'comercio'],
-  [/^cuenta\/(?:perfil\/)?$/, 'comercio'], // /{l}/cuenta/ and «Mi perfil» (§9.9, §9.16.3)
+  // /{l}/cuenta/, «Mi perfil» and the new password of a recovery link (§9.9, §9.16.3)
+  [/^cuenta\/(?:perfil\/|restablecer\/)?$/, 'comercio'],
 ];
 
 /**

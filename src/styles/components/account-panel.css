@@ -1,0 +1,1139 @@
+/* The structured account page (Cuenta-panel.dc.html and Cuenta-panel-movil.dc.html): the island
+   of src/components/account/panel/ on src/pages/[locale]/cuenta/index.astro, for a complete
+   account.
+
+   Per-page stylesheet (D-018, 13.6): only this page draws these blocks, so global.css does not
+   import it; the page imports it. It repeats the layer order of global.css before its block.
+
+   - From 48rem (`.ac-panel--wide`, the island reads the same query) the nav is a sticky 208
+     column beside the header card and the section; below it the page is the card over grouped
+     rows, and a section fills the view under «‹ Cuenta».
+   - Cards, lists and boxes: 1 px `border-secondary`, radius 12, `bg-secondary`; rows 1 px apart.
+   - Success (`--success`) marks what is done: a linked identity, a met requirement, «En el
+     juego». The provider colours are the brand tokens `--discord` and `--google-*`; until the
+     tokens exist each falls back to the nearest token of the site.
+   - Settings rows are label | body from 48rem, stacked below. */
+
+@reference '../theme.css';
+
+@layer properties, theme, base, components, utilities;
+
+@layer components {
+  .ac-account-busy {
+    min-height: var(--size-control);
+  }
+
+  /* ------------------------------------------------------------------ frame */
+
+  .ac-panel {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-24);
+    min-width: 0;
+  }
+
+  .ac-panel--wide {
+    display: grid;
+    grid-template-columns: var(--layout-sidebar) minmax(0, 1fr);
+    align-items: start;
+    gap: var(--space-32) var(--layout-gap);
+  }
+
+  .ac-panel--wide > .ac-panel-nav {
+    position: sticky;
+    top: calc(var(--layout-header) + var(--space-32));
+    grid-row: 1 / span 2;
+    grid-column: 1;
+  }
+
+  .ac-panel--wide > .ac-panel-card,
+  .ac-panel--wide > .ac-panel__main {
+    grid-column: 2;
+  }
+
+  .ac-panel__main {
+    min-width: 0;
+  }
+
+  .ac-panel__main:focus {
+    outline: none;
+  }
+
+  .ac-panel-sep {
+    color: var(--text-quinary);
+  }
+
+  /* ------------------------------------------------------------------ header card */
+
+  .ac-panel-card {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-16);
+    padding: var(--space-16);
+    border: 1px solid var(--border-secondary);
+    border-radius: var(--radius-12);
+    background: var(--bg-secondary);
+    min-width: 0;
+  }
+
+  .ac-panel--wide > .ac-panel-card {
+    flex-direction: row;
+    align-items: center;
+    gap: var(--space-20);
+    padding: var(--space-20) var(--space-24);
+  }
+
+  .ac-panel-card__who {
+    display: flex;
+    flex: 1;
+    align-items: center;
+    gap: var(--space-16);
+    min-width: 0;
+  }
+
+  .ac-panel--wide .ac-panel-card__who {
+    gap: var(--space-20);
+  }
+
+  .ac-panel-avatar {
+    position: relative;
+    display: flex;
+    flex: none;
+    align-items: center;
+    justify-content: center;
+    width: 56px; /* sin token: avatar de la tarjeta en el teléfono */
+    height: 56px; /* sin token: avatar de la tarjeta en el teléfono */
+    border-radius: var(--radius-full);
+    background: var(--bg-tertiary);
+    color: var(--text-primary);
+    @apply type-h2;
+  }
+
+  .ac-panel--wide .ac-panel-avatar {
+    width: var(--size-art);
+    height: var(--size-art);
+  }
+
+  .ac-panel-avatar__image {
+    width: 100%;
+    height: 100%;
+    border-radius: var(--radius-full);
+    object-fit: cover;
+  }
+
+  .ac-panel-avatar__dot {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    width: var(--space-16);
+    height: var(--space-16);
+    border: 3px solid var(--bg-secondary); /* sin token: aro del punto sobre el avatar */
+    border-radius: var(--radius-full);
+    background: var(--text-quaternary);
+  }
+
+  .ac-panel-card__text {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+    min-width: 0;
+  }
+
+  .ac-panel-card__name {
+    margin: 0;
+    color: var(--text-primary);
+    overflow-wrap: anywhere;
+    @apply type-h2;
+  }
+
+  .ac-panel-card__player {
+    margin: 0;
+    color: var(--text-secondary);
+    @apply type-body;
+  }
+
+  .ac-panel-card__meta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-4) var(--space-8);
+    margin: var(--space-2) 0 0;
+    color: var(--text-tertiary);
+    @apply type-ui;
+  }
+
+  .ac-panel-card__meta-item {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-8);
+  }
+
+  /* «Mi perfil →»: the bordered button, full width and 44 tall on a phone. */
+  .ac-panel-link-button {
+    display: inline-flex;
+    flex: none;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-8);
+    height: var(--size-touch);
+    padding: 0 var(--space-16);
+    border: 1px solid var(--border-primary);
+    border-radius: var(--radius-11);
+    color: var(--text-primary);
+    text-decoration: none;
+    white-space: nowrap;
+    @apply type-body-strong;
+  }
+
+  .ac-panel--wide .ac-panel-link-button {
+    height: var(--size-control);
+  }
+
+  .ac-panel-link-button:hover {
+    background: var(--bg-tertiary);
+  }
+
+  /* The online status: a 6 px dot and its label (9.15.6). */
+  .ac-panel-presence {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-6);
+    white-space: nowrap;
+  }
+
+  .ac-panel-presence__dot {
+    width: var(--space-6);
+    height: var(--space-6);
+    flex: none;
+    border-radius: var(--radius-full);
+    background: var(--text-quaternary);
+  }
+
+  .ac-panel-toggle .ac-panel-presence__dot {
+    width: var(--space-8);
+    height: var(--space-8);
+  }
+
+  [data-presence='en_juego'] > .ac-panel-presence__dot,
+  .ac-panel-avatar__dot[data-presence='en_juego'] {
+    background: var(--success, var(--text-secondary));
+  }
+
+  [data-presence='ausente'] > .ac-panel-presence__dot,
+  .ac-panel-avatar__dot[data-presence='ausente'] {
+    background: var(--amber);
+  }
+
+  /* ------------------------------------------------------------------ section nav */
+
+  .ac-panel-nav {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-12);
+    @apply type-ui;
+  }
+
+  .ac-panel-nav__title {
+    margin: 0;
+    padding: var(--space-8) 0 var(--space-6) var(--space-12);
+    color: var(--text-tertiary);
+    @apply type-ui-strong;
+  }
+
+  .ac-panel-nav__list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .ac-panel-nav__link {
+    display: flex;
+    align-items: center;
+    padding: var(--space-8) var(--space-8) var(--space-8) var(--space-12);
+    border-radius: var(--radius-8);
+    color: var(--text-primary);
+    text-decoration: none;
+  }
+
+  .ac-panel-nav__link:hover {
+    background: var(--bg-secondary);
+  }
+
+  .ac-panel-nav__link[aria-current='page'] {
+    background: var(--bg-tertiary);
+    @apply type-ui-strong;
+  }
+
+  .ac-panel-nav__rule {
+    height: 1px;
+    margin: var(--space-4) 0;
+    background: var(--border-secondary);
+  }
+
+  /* The phone index: groups of rows with their short value and a chevron. */
+  .ac-panel-index {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-20);
+  }
+
+  .ac-panel-index__title {
+    margin: 0;
+    padding: 0 0 var(--space-8) var(--space-4);
+    color: var(--text-tertiary);
+    @apply type-ui-strong;
+  }
+
+  .ac-panel-index__list,
+  .ac-panel-list {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    border: 1px solid var(--border-secondary);
+    border-radius: var(--radius-12);
+    background: var(--bg-secondary);
+    overflow: hidden;
+  }
+
+  .ac-panel-index__list > li + li,
+  .ac-panel-list > li + li {
+    border-top: 1px solid var(--border-secondary);
+  }
+
+  .ac-panel-index__row {
+    display: flex;
+    align-items: center;
+    gap: var(--space-12);
+    min-height: 52px; /* sin token: fila del índice de la cuenta en el teléfono */
+    padding: 0 var(--space-12) 0 var(--space-16);
+    color: var(--text-primary);
+    text-decoration: none;
+  }
+
+  .ac-panel-index__row:hover {
+    background: var(--bg-tertiary);
+  }
+
+  .ac-panel-index__label {
+    flex: 1;
+    min-width: 0;
+    @apply type-body;
+  }
+
+  .ac-panel-index__value {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-6);
+    color: var(--text-tertiary);
+    white-space: nowrap;
+    @apply type-ui;
+  }
+
+  .ac-panel-index__chevron {
+    display: flex;
+    color: var(--text-quaternary);
+  }
+
+  .ac-panel-back {
+    display: inline-flex;
+    align-self: flex-start;
+    align-items: center;
+    gap: var(--space-6);
+    height: var(--size-touch);
+    margin: 0 0 0 -10px; /* sin token: alinea el chevron con el borde de la columna */
+    padding: 0 var(--space-12) 0 var(--space-6);
+    border-radius: var(--radius-11);
+    color: var(--text-secondary);
+    text-decoration: none;
+    @apply type-field;
+  }
+
+  .ac-panel-back:hover {
+    background: var(--bg-secondary);
+  }
+
+  .ac-panel-back__glyph {
+    display: flex;
+    transform: rotate(180deg);
+  }
+
+  /* ------------------------------------------------------------------ shared pieces */
+
+  .ac-panel-intro {
+    margin: 0;
+    color: var(--text-secondary);
+    text-align: start;
+    @apply type-body;
+  }
+
+  .ac-panel-box {
+    display: flex;
+    flex-direction: column;
+    padding: var(--space-16) var(--space-20);
+    border: 1px solid var(--border-secondary);
+    border-radius: var(--radius-12);
+    background: var(--bg-secondary);
+    min-width: 0;
+  }
+
+  .ac-panel-box__title {
+    margin: 0;
+    color: var(--text-primary);
+    @apply type-h3;
+  }
+
+  .ac-panel-ok {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-6);
+    margin: 0;
+    color: var(--text-primary);
+    @apply type-body;
+  }
+
+  .ac-panel-ok--quiet {
+    gap: var(--space-4);
+    color: var(--text-secondary);
+    @apply type-ui;
+  }
+
+  .ac-panel-ok__mark {
+    display: inline-flex;
+    color: var(--success, var(--text-secondary));
+  }
+
+  .ac-panel-muted {
+    margin: 0;
+    color: var(--text-tertiary);
+    @apply type-body;
+  }
+
+  .ac-panel-arrow {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-4);
+    color: var(--link);
+    text-decoration: none;
+    white-space: nowrap;
+    @apply type-ui;
+  }
+
+  .ac-panel-arrow:hover {
+    text-decoration: underline;
+  }
+
+  .ac-panel-footnote {
+    margin: 0;
+    color: var(--text-tertiary);
+    text-align: start;
+    @apply type-ui;
+  }
+
+  .ac-panel-footnote > .ac-panel-arrow {
+    vertical-align: bottom;
+  }
+
+  /* Provider and letter tiles: 20, 24, 32 or 40 px, radius 6 (8 at 40). */
+  .ac-panel-tile {
+    display: flex;
+    flex: none;
+    align-items: center;
+    justify-content: center;
+    border-radius: var(--radius-6);
+    background: var(--bg-tertiary);
+    color: var(--text-secondary);
+    @apply type-ui-strong;
+  }
+
+  .ac-panel-tile--xs {
+    width: 20px; /* sin token: marca del proveedor en el índice del teléfono */
+    height: 20px; /* sin token: marca del proveedor en el índice del teléfono */
+  }
+
+  .ac-panel-tile--sm {
+    width: var(--size-chip);
+    height: var(--size-chip);
+  }
+
+  .ac-panel-tile--md {
+    width: var(--size-cell);
+    height: var(--size-cell);
+  }
+
+  .ac-panel-tile--lg {
+    width: var(--size-control);
+    height: var(--size-control);
+    border-radius: var(--radius-8);
+  }
+
+  .ac-panel-tile--discord {
+    background: var(--discord, var(--ring));
+  }
+
+  .ac-panel-tile--google {
+    background: var(--white);
+  }
+
+  .ac-panel-tile__logo {
+    display: block;
+    width: 55%;
+    height: auto;
+  }
+
+  .ac-panel-tile--discord > .ac-panel-tile__logo {
+    width: 58%;
+  }
+
+  .ac-panel-tile--google > .ac-panel-tile__logo {
+    width: 50%;
+  }
+
+  /* Brand and danger buttons: the 40 px button of the system with their own fills. */
+  .ac-panel-button {
+    display: inline-flex;
+    flex: none;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-10);
+    height: var(--size-control);
+    padding: 0 var(--space-16);
+    border: 0;
+    border-radius: var(--radius-11);
+    font-family: var(--font-sans);
+    white-space: nowrap;
+    cursor: pointer;
+    @apply type-body-strong;
+  }
+
+  .ac-panel-button:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+
+  .ac-panel-button--discord {
+    background: var(--discord, var(--ring));
+    color: var(--white);
+  }
+
+  .ac-panel-button--google {
+    padding: 0 var(--space-16) 0 var(--space-12);
+    border: 1px solid var(--google-border, var(--border-primary));
+    background: var(--google-surface, var(--bg-primary));
+    color: var(--google-text, var(--text-primary));
+  }
+
+  .ac-panel-button--danger {
+    background: var(--banner);
+    color: var(--white);
+  }
+
+  .ac-panel-button__logo {
+    display: block;
+    flex: none;
+    width: 18px; /* sin token: la G de Google en su botón */
+    height: auto;
+  }
+
+  .ac-panel-button__logo--discord {
+    width: 20px; /* sin token: la marca de Discord en su botón */
+  }
+
+  @media (pointer: coarse) {
+    .ac-panel-button {
+      height: var(--size-touch);
+    }
+  }
+
+  .ac-panel-chevron {
+    display: inline-flex;
+    color: var(--text-tertiary);
+  }
+
+  .ac-panel-chevron--open {
+    transform: rotate(180deg);
+  }
+
+  /* ------------------------------------------------------------------ «Resumen» */
+
+  .ac-panel-reqs__head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-8) var(--space-16);
+  }
+
+  .ac-panel-reqs__list {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--space-16) var(--space-24);
+    margin: var(--space-16) 0 0;
+    padding: var(--space-16) 0 0;
+    border-top: 1px solid var(--border-secondary);
+    list-style: none;
+  }
+
+  .ac-panel-req {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--space-10);
+    min-width: 0;
+  }
+
+  .ac-panel-req__mark {
+    display: flex;
+    flex: none;
+    align-items: center;
+    justify-content: center;
+    width: var(--space-16);
+    height: 22px; /* sin token: la altura de la línea de 14/22 */
+    color: var(--success, var(--text-secondary));
+  }
+
+  .ac-panel-req__ring {
+    width: var(--space-10);
+    height: var(--space-10);
+    border: 2px solid var(--text-quaternary);
+    border-radius: var(--radius-full);
+  }
+
+  .ac-panel-req__text {
+    min-width: 0;
+  }
+
+  .ac-panel-req__title {
+    margin: 0;
+    color: var(--text-primary);
+    @apply type-body;
+  }
+
+  .ac-panel-req__detail {
+    margin: 0;
+    color: var(--text-tertiary);
+    @apply type-ui;
+  }
+
+  .ac-panel-cards {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--space-16);
+  }
+
+  .ac-panel-mini {
+    gap: var(--space-12);
+  }
+
+  .ac-panel-mini__list {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .ac-panel-mini__row {
+    display: flex;
+    align-items: center;
+    gap: var(--space-10);
+    min-height: var(--size-cell);
+  }
+
+  .ac-panel-mini__name {
+    flex: 1;
+    min-width: 0;
+    color: var(--text-primary);
+    overflow-wrap: anywhere;
+    @apply type-field;
+  }
+
+  .ac-panel-mini__value {
+    color: var(--text-tertiary);
+    white-space: nowrap;
+    @apply type-ui;
+  }
+
+  .ac-panel-mini__value--on {
+    color: var(--text-secondary);
+  }
+
+  .ac-panel-mini__state {
+    margin: 0;
+    color: var(--text-primary);
+    @apply type-body-strong;
+  }
+
+  .ac-panel-mini__help {
+    margin: var(--space-4) 0 0;
+    color: var(--text-tertiary);
+    @apply type-ui;
+  }
+
+  .ac-panel-mini > .ac-panel-arrow {
+    align-self: flex-start;
+    margin-top: auto;
+    padding-top: var(--space-4);
+  }
+
+  /* ------------------------------------------------------------------ «Conexiones» */
+
+  .ac-panel-conn {
+    display: grid;
+    grid-template-columns: var(--size-control) minmax(0, 1fr);
+    align-items: center;
+    gap: var(--space-12) var(--space-12);
+    padding: var(--space-16);
+  }
+
+  .ac-panel-conn__text {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+    min-width: 0;
+  }
+
+  .ac-panel-conn__head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 0 var(--space-8);
+    margin: 0;
+  }
+
+  .ac-panel-conn__name {
+    color: var(--text-primary);
+    @apply type-body-strong;
+  }
+
+  .ac-panel-conn__role {
+    color: var(--text-tertiary);
+    @apply type-ui;
+  }
+
+  .ac-panel-conn__status {
+    display: flex;
+    align-items: center;
+    gap: var(--space-6);
+    margin: 0;
+    color: var(--text-tertiary);
+    overflow-wrap: anywhere;
+    @apply type-body;
+  }
+
+  .ac-panel-conn__status--on {
+    color: var(--text-primary);
+  }
+
+  .ac-panel-conn__detail {
+    margin: 0;
+    color: var(--text-tertiary);
+    @apply type-ui;
+  }
+
+  .ac-panel-conn__action {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: var(--space-6);
+    grid-column: 1 / -1;
+  }
+
+  .ac-panel-conn__action > .ac-button,
+  .ac-panel-conn__action > .ac-panel-button {
+    height: var(--size-touch);
+  }
+
+  .ac-panel-conn__note {
+    margin: 0;
+    color: var(--text-quaternary);
+    @apply type-ui;
+  }
+
+  /* ------------------------------------------------------------------ «Seguridad» */
+
+  .ac-panel-setting {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--space-8) var(--space-16);
+    padding: var(--space-16);
+  }
+
+  .ac-panel-setting__label {
+    margin: 0;
+    color: var(--text-primary);
+    @apply type-body-strong;
+  }
+
+  .ac-panel-setting__body {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+    min-width: 0;
+  }
+
+  .ac-panel-setting__value {
+    margin: 0;
+    color: var(--text-primary);
+    overflow-wrap: anywhere;
+    @apply type-body;
+  }
+
+  .ac-panel-setting__help {
+    margin: var(--space-6) 0 0;
+    color: var(--text-tertiary);
+    text-align: start;
+    @apply type-ui;
+  }
+
+  .ac-panel-setting__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-8);
+  }
+
+  .ac-panel-password {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--space-8);
+    min-width: 0;
+  }
+
+  .ac-panel-password__row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    gap: var(--space-8);
+    align-self: stretch;
+  }
+
+  .ac-panel-password__row > .ac-text-field {
+    flex: 1 1 240px; /* sin token: ancho base del campo de contraseña */
+    min-width: 0;
+  }
+
+  .ac-panel-password__row > .ac-button {
+    margin-top: var(--space-24);
+  }
+
+  /* «Perfil»: the profile form of the flow inside the section's box. */
+  .ac-panel-form {
+    gap: var(--space-16);
+  }
+
+  /* ------------------------------------------------------------------ «Estado en línea» */
+
+  .ac-panel-toggles {
+    display: flex;
+    gap: var(--space-8);
+  }
+
+  .ac-panel-toggle {
+    display: inline-flex;
+    flex: 1;
+    align-items: center;
+    justify-content: center;
+    height: var(--size-control);
+    padding: 0 var(--space-12);
+    border: 1px solid var(--border-primary);
+    border-radius: var(--radius-8);
+    background: transparent;
+    color: var(--text-primary);
+    font-family: var(--font-sans);
+    white-space: nowrap;
+    cursor: pointer;
+    @apply type-ui-strong;
+  }
+
+  .ac-panel-toggle:hover:not([aria-pressed='true']) {
+    background: var(--bg-tertiary);
+  }
+
+  .ac-panel-toggle[aria-pressed='true'] {
+    border-color: var(--selected);
+    box-shadow: var(--ring-selected);
+  }
+
+  .ac-panel-toggles__help {
+    margin-top: var(--space-12);
+  }
+
+  /* ------------------------------------------------------------------ «Canales de contacto» */
+
+  .ac-panel-channel {
+    display: grid;
+    grid-template-columns: var(--size-cell) minmax(0, 1fr);
+    align-items: start;
+    gap: var(--space-8) var(--space-12);
+    padding: var(--space-16);
+  }
+
+  .ac-panel-channel__text {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+  }
+
+  .ac-panel-channel__name {
+    color: var(--text-primary);
+    @apply type-body-strong;
+  }
+
+  .ac-panel-channel__line {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-6);
+    color: var(--text-tertiary);
+    @apply type-ui;
+  }
+
+  .ac-panel-channel__value {
+    min-width: 0;
+    overflow-wrap: anywhere;
+  }
+
+  .ac-panel-channel__code {
+    margin: var(--space-6) 0 0;
+    color: var(--helper);
+    @apply type-ui;
+  }
+
+  .ac-panel-channel__more {
+    margin-top: var(--space-8);
+  }
+
+  .ac-panel-channel__action {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-8);
+    min-height: var(--size-cell);
+    grid-column: 2;
+  }
+
+  .ac-panel-channel--footer {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--space-8);
+  }
+
+  .ac-panel-channel--footer > .ac-panel-setting__help {
+    margin: 0;
+  }
+
+  /* ------------------------------------------------------------------ «Guilds» */
+
+  .ac-panel-invite {
+    flex-flow: row wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-12) var(--space-16);
+  }
+
+  .ac-panel-guild__empty,
+  .ac-panel-guild--create {
+    padding: var(--space-16);
+    color: var(--text-tertiary);
+    @apply type-body;
+  }
+
+  .ac-panel-guild__head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-16);
+    padding: var(--space-16);
+  }
+
+  .ac-panel-guild__who {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+  }
+
+  .ac-panel-guild__name {
+    margin: 0;
+    color: var(--text-primary);
+    overflow-wrap: anywhere;
+    @apply type-body-strong;
+  }
+
+  .ac-panel-guild__meta {
+    margin: 0;
+    color: var(--text-tertiary);
+    @apply type-ui;
+  }
+
+  .ac-panel-guild__manage {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-12);
+    padding: var(--space-16);
+    border-top: 1px solid var(--border-secondary);
+    background: var(--bg-primary);
+  }
+
+  .ac-panel-guild__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-8);
+  }
+
+  .ac-panel-guild__accounts {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .ac-panel-guild__account {
+    display: flex;
+    align-items: center;
+    gap: var(--space-12);
+    min-height: var(--size-control);
+  }
+
+  .ac-panel-guild__account + .ac-panel-guild__account {
+    border-top: 1px solid var(--border-secondary);
+  }
+
+  .ac-panel-guild__account-name {
+    flex: 1;
+    min-width: 0;
+    color: var(--text-primary);
+    overflow-wrap: anywhere;
+    @apply type-field;
+  }
+
+  .ac-panel-guild__account-role {
+    color: var(--text-tertiary);
+    white-space: nowrap;
+    @apply type-ui;
+  }
+
+  .ac-panel-guild__delete {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-12) var(--space-16);
+    padding-top: var(--space-12);
+    border-top: 1px solid var(--border-secondary);
+  }
+
+  .ac-panel-guild__delete > .ac-panel-setting__help {
+    flex: 1 1 240px; /* sin token: ancho base del aviso de «Eliminar guild» */
+    margin: 0;
+  }
+
+  /* ------------------------------------------------------------------ «Eliminar cuenta» */
+
+  .ac-panel-danger {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: var(--space-12);
+    padding: var(--space-16);
+    border: 1px solid var(--banner);
+    border-radius: var(--radius-12);
+    background: var(--bg-secondary);
+  }
+
+  .ac-panel-danger__text {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+    color: var(--text-secondary);
+    @apply type-ui;
+  }
+
+  .ac-panel-danger__text > p {
+    margin: 0;
+  }
+
+  /* ------------------------------------------------------------------ from 48rem */
+
+  @media (width >= 48rem) {
+    .ac-panel-reqs__list {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .ac-panel-cards {
+      grid-auto-columns: minmax(0, 1fr);
+      grid-auto-flow: column;
+    }
+
+    .ac-panel-conn {
+      grid-template-columns: var(--size-control) minmax(0, 1fr) auto;
+      gap: 0 var(--space-16);
+      padding: var(--space-16) var(--space-20);
+    }
+
+    .ac-panel-conn__action {
+      align-items: flex-end;
+      grid-column: auto;
+    }
+
+    .ac-panel-conn__action > .ac-button,
+    .ac-panel-conn__action > .ac-panel-button {
+      height: var(--size-control);
+    }
+
+    .ac-panel-conn__note {
+      text-align: end;
+    }
+
+    .ac-panel-setting {
+      grid-template-columns: 176px minmax(0, 1fr); /* sin token: columna de la etiqueta */
+      padding: var(--space-16) var(--space-20);
+    }
+
+    .ac-panel-toggles {
+      flex-wrap: wrap;
+    }
+
+    .ac-panel-toggle {
+      flex: none;
+    }
+
+    .ac-panel-channel {
+      grid-template-columns: var(--size-cell) minmax(0, 1fr) auto;
+      padding: var(--space-16) var(--space-20);
+    }
+
+    .ac-panel-channel__action {
+      grid-column: auto;
+    }
+
+    .ac-panel-channel--footer {
+      flex-direction: row;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .ac-panel-guild__head,
+    .ac-panel-guild__manage,
+    .ac-panel-guild__empty,
+    .ac-panel-guild--create {
+      padding: var(--space-16) var(--space-20);
+    }
+
+    .ac-panel-danger {
+      flex-direction: row;
+      align-items: center;
+      justify-content: space-between;
+      gap: var(--space-24);
+      padding: var(--space-16) var(--space-20);
+    }
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .ac-panel-nav__link,
+    .ac-panel-index__row,
+    .ac-panel-toggle,
+    .ac-panel-link-button {
+      transition: background-color var(--duration-fast) var(--ease-standard);
+    }
+  }
+}
