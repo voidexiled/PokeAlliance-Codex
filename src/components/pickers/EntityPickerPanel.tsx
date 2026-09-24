@@ -286,7 +286,7 @@ export default function EntityPickerPanel({
             size={slotSize}
             none={option.id === NONE_ID}
             shiny={option.shiny}
-            art={option.tip.head.type === 'art'}
+            art={option.tip?.head.type === 'art'}
             check={multiple && selected}
           />
         </span>
@@ -419,7 +419,7 @@ export default function EntityPickerPanel({
                         locale={locale}
                         size={40}
                         shiny={option.shiny}
-                        art={option.tip.head.type === 'art'}
+                        art={option.tip?.head.type === 'art'}
                       />
                       <span className="ac-picker__tray-x" aria-hidden="true" />
                     </button>

@@ -173,7 +173,7 @@ export function EntityPicker(props: EntityPickerProps) {
             locale={locale}
             size={40}
             shiny={option.shiny}
-            art={option.tip.head.type === 'art'}
+            art={option.tip?.head.type === 'art'}
           />
         </span>
         {text(option.name, false)}
@@ -190,7 +190,7 @@ export function EntityPicker(props: EntityPickerProps) {
               locale={locale}
               size={40}
               shiny={option.shiny}
-              art={option.tip.head.type === 'art'}
+              art={option.tip?.head.type === 'art'}
             />
           </span>
         ))}
