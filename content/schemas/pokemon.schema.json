@@ -79,9 +79,15 @@
           "type": ["number", "null"],
           "minimum": 0,
           "maximum": 100,
-          "description": "Opcional. Probabilidad en %, la que enseña el Pokédex del juego (chance / 1000). null si no se conoce."
+          "description": "Opcional. Probabilidad en %, la que enseña el Pokédex del juego (chance / 1000). null si no se conoce o si el juego la oculta (muyRaro)."
+        },
+        "muyRaro": {
+          "const": true,
+          "description": "Opcional. true si el Pokédex del juego enseña «Muy Raro»: el servidor oculta la probabilidad real (menor que 1 %). Va con probabilidad null."
         }
-      }
+      },
+      "if": { "required": ["muyRaro"] },
+      "then": { "properties": { "probabilidad": { "type": "null" } } }
     },
     "listaDrops": {
       "type": "array",

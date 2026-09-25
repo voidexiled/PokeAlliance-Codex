@@ -262,7 +262,10 @@ describe('JSON Schemas and their Zod mirror', () => {
               ...pokemon,
               drops: [{ item: 'fire-stone', cantidad: { min: 2, max: 3 }, probabilidad: 40 }],
               dropsPorZona: {
-                wildscape: [{ item: 'fire-stone', cantidad: null, probabilidad: null }],
+                wildscape: [
+                  { item: 'fire-stone', cantidad: null, probabilidad: null },
+                  { item: 'water-stone', cantidad: null, probabilidad: null, muyRaro: true },
+                ],
                 primal: [],
               },
               movimientos: [
@@ -444,6 +447,27 @@ describe('JSON Schemas and their Zod mirror', () => {
         {
           pokemon: [
             { ...pokemon, drops: [{ item: 'fire-stone', cantidad: null, probabilidad: 101 }] },
+          ],
+        },
+      ],
+      [
+        'pokemon',
+        pokemonFileSchema,
+        {
+          pokemon: [
+            {
+              ...pokemon,
+              drops: [{ item: 'fire-stone', cantidad: null, probabilidad: 0.99, muyRaro: true }],
+            },
+          ],
+        },
+      ],
+      [
+        'pokemon',
+        pokemonFileSchema,
+        {
+          pokemon: [
+            { ...pokemon, drops: [{ item: 'fire-stone', cantidad: null, muyRaro: false }] },
           ],
         },
       ],

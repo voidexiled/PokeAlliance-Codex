@@ -41,14 +41,21 @@ const enlaceDato = z.strictObject({ texto: text, ref: ref.optional() });
 // `cantidad.max ≥ min`, the references and the cycles of `evolucion` are checked by
 // `pnpm content:check` (§3.13), which reads every file at once; the mirror keeps to the
 // JSON Schema.
-const drop = z.strictObject({
-  item: slug,
-  cantidad: z
-    .strictObject({ min: z.number().int().min(1), max: z.number().int().min(1) })
-    .nullable(),
-  /** Optional: the % the game's Pokédex shows (`chance / 1000`); `null` while unknown. */
-  probabilidad: z.number().min(0).max(100).nullable().optional(),
-});
+const drop = z
+  .strictObject({
+    item: slug,
+    cantidad: z
+      .strictObject({ min: z.number().int().min(1), max: z.number().int().min(1) })
+      .nullable(),
+    /** Optional: the % the game's Pokédex shows (`chance / 1000`); `null` while unknown. */
+    probabilidad: z.number().min(0).max(100).nullable().optional(),
+    /** Optional: the game shows «Muy Raro» and hides the real rate; `probabilidad` is `null`. */
+    muyRaro: z.literal(true).optional(),
+  })
+  .refine((value) => value.muyRaro !== true || value.probabilidad == null, {
+    message: 'Un drop con "muyRaro" lleva "probabilidad": null.',
+    path: ['probabilidad'],
+  });
 
 /**
  * `textoJuego`: a text of the game in the language or languages it exists in, one at least.

@@ -101,6 +101,19 @@ export function slugify(value) {
 
 const lower = (value) => String(value).trim().toLowerCase();
 const same = (a, b) => JSON.stringify(a) === JSON.stringify(b);
+
+/**
+ * The client's `chance` (out of 100000) as a drop's `probabilidad` (%). The server hides every
+ * rate under 1%: the client receives exactly 990 and shows «Muy Raro», so 990 is stored as
+ * `probabilidad: null` with `muyRaro: true`, never as a real 0.99%. A chance of 0 or a missing
+ * one is unknown (`null`).
+ */
+export const HIDDEN_RARE_CHANCE = 990;
+export function dropChance(chance) {
+  if (chance === HIDDEN_RARE_CHANCE) return { probabilidad: null, muyRaro: true };
+  if (typeof chance !== 'number' || chance <= 0) return { probabilidad: null };
+  return { probabilidad: chance / 1000 };
+}
 const isMissing = (value) => value === undefined || value === null;
 
 /** The most repeated value of a list (by JSON), the first one seen on a tie. */
@@ -798,11 +811,7 @@ export function applyExport(types, content, options = {}) {
         }
         const min = Math.max(drop.countMin ?? 1, 1);
         const max = Math.max(drop.countMax ?? min, min);
-        list.push({
-          item: id,
-          cantidad: { min, max },
-          probabilidad: typeof drop.chance === 'number' ? drop.chance / 1000 : null,
-        });
+        list.push({ item: id, cantidad: { min, max }, ...dropChance(drop.chance) });
       }
       return list;
     };

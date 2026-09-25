@@ -41,7 +41,28 @@ export interface ItemLootRow {
   pokemon: PokemonRecord;
   zone: LootZone;
   probabilidad: number | null;
+  /** The game shows «Muy Raro» (a hidden rate under 1%); `probabilidad` is then `null`. */
+  muyRaro: boolean;
   cantidad: { min: number; max: number } | null;
+}
+
+/**
+ * Where a drop's chance goes in an order by chance: 0 a known %, 1 «Muy raro», 2 unknown.
+ * Every known % comes before «Muy raro» and unknown comes last, in either direction.
+ */
+export function chanceTier(drop: { probabilidad?: number | null; muyRaro?: boolean }): 0 | 1 | 2 {
+  if (typeof drop.probabilidad === 'number') return 0;
+  return drop.muyRaro === true ? 1 : 2;
+}
+
+/** Highest known chance first, then «Muy raro», then unknown (a stable sort keeps ties). */
+export function compareChance(
+  a: { probabilidad?: number | null; muyRaro?: boolean },
+  b: { probabilidad?: number | null; muyRaro?: boolean },
+): number {
+  const tier = chanceTier(a) - chanceTier(b);
+  if (tier !== 0) return tier;
+  return (b.probabilidad ?? 0) - (a.probabilidad ?? 0);
 }
 
 /** Every Pokémon and zone that drops `itemId`, in the order of `pokemon`, then of the zones. */
@@ -55,6 +76,7 @@ export function itemLoot(itemId: string, pokemon: readonly PokemonRecord[]): Ite
         pokemon: record,
         zone,
         probabilidad: drop.probabilidad ?? null,
+        muyRaro: drop.muyRaro === true,
         cantidad: drop.cantidad,
       });
     }

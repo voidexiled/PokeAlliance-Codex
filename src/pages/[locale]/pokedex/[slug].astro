@@ -389,6 +389,8 @@ interface LootRow {
   sprite: SpriteData | null;
   tip: TipData;
   chance: number | null;
+  /** The game shows «Muy Raro»: a hidden rate under 1%, with `chance` null. */
+  veryRare: boolean;
   quantity: string;
 }
 const lootZones = lootZonesOf(record).map(({ zone, drops }) => ({
@@ -404,12 +406,15 @@ const lootZones = lootZonesOf(record).map(({ zone, drops }) => ({
         sprite: found.sprite,
         tip: itemTipOf(found.item, found.sprite),
         chance: drop.probabilidad ?? null,
+        veryRare: drop.muyRaro === true,
         quantity: amount(drop.cantidad),
       },
     ];
   }),
 }));
-const lootHasChance = lootZones.some((zone) => zone.rows.some((row) => row.chance !== null));
+const lootHasChance = lootZones.some((zone) =>
+  zone.rows.some((row) => row.chance !== null || row.veryRare),
+);
 
 // ------------------------------------------------------------------------------ Ubicaciones
 
@@ -971,7 +976,14 @@ const description =
                           {lootHasChance && (
                             <td class="ac-num ac-entity-table__chance">
                               {row.chance === null ? (
-                                UNKNOWN
+                                row.veryRare ? (
+                                  <span class="ac-entity-chance">
+                                    {copy.chanceVeryRare}
+                                    <span class="ac-entity-chance__bar" aria-hidden="true" />
+                                  </span>
+                                ) : (
+                                  UNKNOWN
+                                )
                               ) : (
                                 <span class="ac-entity-chance">
                                   {formatPercent(row.chance, locale)}

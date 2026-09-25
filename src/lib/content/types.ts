@@ -20,6 +20,8 @@ export type PokemonDrop = {
   cantidad: { min: number; max: number } | null;
   /** The % the game's Pokédex shows; `null` while unknown. */
   probabilidad?: number | null;
+  /** The game shows «Muy Raro» and hides the rate (under 1%); `probabilidad` is then `null`. */
+  muyRaro?: boolean;
 };
 
 /** A text of the game in the language or languages it exists in, one at least. */

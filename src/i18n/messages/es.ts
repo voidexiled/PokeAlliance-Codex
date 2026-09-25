@@ -438,6 +438,7 @@ export const es = {
     lootEmpty: 'Sin drops en {zone}.',
     columnItem: 'Ítem',
     columnChance: 'Probabilidad',
+    chanceVeryRare: 'Muy raro',
     columnQuantity: 'Cantidad',
     // Evoluciones: the hidden text of each connector and the requirement chip.
     evolvesWith: 'Evoluciona con:',
@@ -531,6 +532,7 @@ export const es = {
     columnPokemon: 'Pokémon',
     columnZone: 'Zona',
     columnChance: 'Probabilidad',
+    chanceVeryRare: 'Muy raro',
     columnQuantity: 'Cantidad',
     sortBy: 'Ordenar por {column}',
     market: 'Mercado',

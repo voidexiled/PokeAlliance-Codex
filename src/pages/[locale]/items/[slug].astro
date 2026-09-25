@@ -31,6 +31,8 @@ import { fill, plural } from '@/i18n/messages/types';
 import {
   LOOT_ZONE_NAMES,
   LOOT_ZONES,
+  chanceTier,
+  compareChance,
   itemLoot,
   itemUses,
   lootZonesOf,
@@ -215,7 +217,7 @@ const megaPokemon = (item.mega?.pokemon ?? [])
 const loot = itemLoot(item.id, allPokemon);
 const lootZones = LOOT_ZONES.filter((zone) => loot.some((row) => row.zone === zone));
 const lootPokemon = new Set(loot.map((row) => row.pokemon.id)).size;
-const lootHasChance = loot.some((row) => row.probabilidad !== null);
+const lootHasChance = loot.some((row) => row.probabilidad !== null || row.muyRaro);
 const obtencion = item.obtencion ?? {};
 const shops = obtencion.tiendas ?? [];
 const pass = obtencion.pase ?? [];
@@ -473,65 +475,71 @@ const pageDescription = fill(copy.description, { name: pageName, category: categ
                     </tr>
                   </thead>
                   <tbody>
-                    {[...loot]
-                      .sort((a, b) => (b.probabilidad ?? -1) - (a.probabilidad ?? -1))
-                      .map((row) => {
-                        const source = resolvePokemonImage(row.pokemon.imagen);
-                        return (
-                          <tr
-                            data-zone={row.zone}
-                            data-pokemon={row.pokemon.nombre}
-                            data-chance={row.probabilidad ?? -1}
-                          >
-                            <th scope="row">
-                              {/* No panel and a bare portrait per row: a stone drops from
+                    {[...loot].sort(compareChance).map((row) => {
+                      const source = resolvePokemonImage(row.pokemon.imagen);
+                      return (
+                        <tr
+                          data-zone={row.zone}
+                          data-pokemon={row.pokemon.nombre}
+                          data-chance={row.probabilidad ?? ''}
+                          data-chance-tier={chanceTier(row)}
+                        >
+                          <th scope="row">
+                            {/* No panel and a bare portrait per row: a stone drops from
                                   100+ Pokémon in three zones, and a panel is ~2.5 KB of HTML
                                   (§13.6, 450 KB). The name is the link. */}
-                              <span class="ac-entity-move">
-                                <span class={entitySlotClasses(32)} aria-hidden="true">
-                                  {source !== null && (
-                                    <img
-                                      class:list={[
-                                        'ac-sprite ac-sprite--smooth',
-                                        { 'ac-shiny-glow': row.pokemon.variante === SHINY },
-                                      ]}
-                                      src={source}
-                                      width="24"
-                                      height="24"
-                                      alt=""
-                                      loading="lazy"
-                                      decoding="async"
-                                    />
-                                  )}
-                                </span>
-                                <a href={pokemonHref(row.pokemon.id)}>{row.pokemon.nombre}</a>
-                              </span>
-                            </th>
-                            <td>{LOOT_ZONE_NAMES[row.zone]}</td>
-                            {lootHasChance && (
-                              <td class="ac-num">
-                                {row.probabilidad === null ? (
-                                  UNKNOWN
-                                ) : (
-                                  <span class="ac-entity-chance">
-                                    <span class="ac-entity-chance__bar" aria-hidden="true">
-                                      <span style={`inline-size: ${row.probabilidad}%`} />
-                                    </span>
-                                    {formatPercent(row.probabilidad, locale)}
-                                  </span>
+                            <span class="ac-entity-move">
+                              <span class={entitySlotClasses(32)} aria-hidden="true">
+                                {source !== null && (
+                                  <img
+                                    class:list={[
+                                      'ac-sprite ac-sprite--smooth',
+                                      { 'ac-shiny-glow': row.pokemon.variante === SHINY },
+                                    ]}
+                                    src={source}
+                                    width="24"
+                                    height="24"
+                                    alt=""
+                                    loading="lazy"
+                                    decoding="async"
+                                  />
                                 )}
-                              </td>
-                            )}
+                              </span>
+                              <a href={pokemonHref(row.pokemon.id)}>{row.pokemon.nombre}</a>
+                            </span>
+                          </th>
+                          <td>{LOOT_ZONE_NAMES[row.zone]}</td>
+                          {lootHasChance && (
                             <td class="ac-num">
-                              {row.cantidad === null
-                                ? UNKNOWN
-                                : row.cantidad.min === row.cantidad.max
-                                  ? formatInteger(row.cantidad.min, locale)
-                                  : `${formatInteger(row.cantidad.min, locale)}–${formatInteger(row.cantidad.max, locale)}`}
+                              {row.probabilidad === null ? (
+                                row.muyRaro ? (
+                                  <span class="ac-entity-chance">
+                                    <span class="ac-entity-chance__bar" aria-hidden="true" />
+                                    {copy.chanceVeryRare}
+                                  </span>
+                                ) : (
+                                  UNKNOWN
+                                )
+                              ) : (
+                                <span class="ac-entity-chance">
+                                  <span class="ac-entity-chance__bar" aria-hidden="true">
+                                    <span style={`inline-size: ${row.probabilidad}%`} />
+                                  </span>
+                                  {formatPercent(row.probabilidad, locale)}
+                                </span>
+                              )}
                             </td>
-                          </tr>
-                        );
-                      })}
+                          )}
+                          <td class="ac-num">
+                            {row.cantidad === null
+                              ? UNKNOWN
+                              : row.cantidad.min === row.cantidad.max
+                                ? formatInteger(row.cantidad.min, locale)
+                                : `${formatInteger(row.cantidad.min, locale)}–${formatInteger(row.cantidad.max, locale)}`}
+                          </td>
+                        </tr>
+                      );
+                    })}
                   </tbody>
                 </table>
               </div>
@@ -912,7 +920,11 @@ const pageDescription = fill(copy.description, { name: pageName, category: categ
           other.setAttribute('aria-sort', 'none');
         header.setAttribute('aria-sort', descending ? 'descending' : 'ascending');
         const value = (row: HTMLTableRowElement) => row.dataset[key] ?? '';
+        // By chance, every known % comes first in the chosen direction, then «Muy raro», then
+        // «—» (`data-chance-tier` 0, 1, 2), whichever the direction.
+        const tier = (row: HTMLTableRowElement) => Number(row.dataset.chanceTier ?? 2);
         const rows = [...body.rows].sort((a, b) => {
+          if (key === 'chance' && tier(a) !== tier(b)) return tier(a) - tier(b);
           const x = value(a);
           const y = value(b);
           const order =

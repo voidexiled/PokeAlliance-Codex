@@ -5,6 +5,7 @@ import { describe, expect, it } from 'vitest';
 
 import {
   applyExport,
+  dropChance,
   evolutionTargets,
   inspectDescription,
   inspectPrice,
@@ -109,6 +110,14 @@ function content(extra: { pokemon?: Rec[]; items?: Record<string, Rec[]> } = {})
 }
 
 describe('datamine helpers', () => {
+  it('stores the hidden «Muy Raro» chance (990) as unknown with the flag, and 0 as unknown', () => {
+    expect(dropChance(33000)).toEqual({ probabilidad: 33 });
+    expect(dropChance(100000)).toEqual({ probabilidad: 100 });
+    expect(dropChance(990)).toEqual({ probabilidad: null, muyRaro: true });
+    expect(dropChance(0)).toEqual({ probabilidad: null });
+    expect(dropChance(undefined)).toEqual({ probabilidad: null });
+  });
+
   it('parses held titles, inspection prices and descriptions', () => {
     expect(parseHeld('X-Attack (Tier: 3)')).toEqual({ ranura: 'x', efecto: 'X-Attack', tier: 3 });
     expect(parseHeld('Venusaurite')).toBeNull();

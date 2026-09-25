@@ -2,6 +2,8 @@ import { describe, expect, it } from 'vitest';
 
 import {
   effectivenessRows,
+  chanceTier,
+  compareChance,
   itemLoot,
   itemUses,
   lootZonesOf,
@@ -76,6 +78,27 @@ describe('item-sources', () => {
       ['fixture-a', 'wildscape', 100],
     ]);
     expect(itemLoot('missing', [withLoot])).toEqual([]);
+  });
+
+  it('orders by chance: known % high to low, then «Muy raro», then unknown', () => {
+    const rows = [
+      { id: 'unknown', probabilidad: null },
+      { id: 'rare', probabilidad: null, muyRaro: true },
+      { id: 'low', probabilidad: 1.5 },
+      { id: 'high', probabilidad: 40 },
+    ];
+    expect([...rows].sort(compareChance).map((row) => row.id)).toEqual([
+      'high',
+      'low',
+      'rare',
+      'unknown',
+    ]);
+    expect(rows.map(chanceTier)).toEqual([2, 1, 0, 0]);
+    const rare: PokemonRecord = {
+      ...target,
+      drops: [{ item: 'seed', cantidad: null, probabilidad: null, muyRaro: true }],
+    };
+    expect(itemLoot('seed', [rare])[0]).toMatchObject({ probabilidad: null, muyRaro: true });
   });
 
   it('derives the uses: evolutions, recipes and element parts', () => {
