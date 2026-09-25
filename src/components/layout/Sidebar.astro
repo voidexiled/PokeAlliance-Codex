@@ -34,8 +34,13 @@
 //
 // Scroll position between pages (5.7): the inline script below the nav restores
 // `scrollTop` before the first paint and saves it on `pagehide`. It only acts on
-// the column — inside the sheet it returns at once, because the sheet is built
-// again on every page and there it is the dialog that scrolls.
+// the column — inside the sheet it skips it, because the sheet is built again on
+// every page and there it is the dialog that scrolls.
+//
+// Open groups between pages: the server opens only the group of the current page,
+// so a group the reader had opened closed again on the next page. The same script
+// remembers every group the reader opens or closes (both instances share it) and
+// applies it before the first paint; the group of the current page always opens.
 import type { Locale } from '@/i18n/config';
 import type { SidebarLink, SidebarNav } from '@/lib/nav/groups';
 import type { Messages } from '@/i18n/messages/en';
@@ -138,7 +143,12 @@ function snap(item: SidebarLink): string | undefined {
             </ul>
           </div>
         ) : (
-          <details class="ac-sidebar__group" open={group.open}>
+          <details
+            class="ac-sidebar__group"
+            open={group.open}
+            data-group={group.id}
+            data-current={group.open ? '' : undefined}
+          >
             <summary class="ac-sidebar__toggle">
               {group.label}
               <Glyph
@@ -179,9 +189,37 @@ function snap(item: SidebarLink): string | undefined {
   // data): then the sidebar simply starts at the top.
   (function () {
     const nav = document.currentScript && document.currentScript.previousElementSibling;
+    if (!nav) return;
+    // Groups the reader opened or closed, by id, kept for the whole visit.
+    const GRUPOS = 'ac:sidebar-grupos';
+    let abiertos = {};
+    try {
+      abiertos = JSON.parse(sessionStorage.getItem(GRUPOS) || '{}') || {};
+    } catch {
+      abiertos = {};
+    }
+    nav.querySelectorAll('details[data-group]').forEach(function (grupo) {
+      const id = grupo.getAttribute('data-group');
+      if (!grupo.hasAttribute('data-current') && typeof abiertos[id] === 'boolean') {
+        grupo.open = abiertos[id];
+      }
+      // `toggle` also fires for the state the page loads with; only a change is the reader's.
+      let previo = grupo.open;
+      grupo.addEventListener('toggle', function () {
+        if (grupo.open === previo) return;
+        previo = grupo.open;
+        try {
+          const actual = JSON.parse(sessionStorage.getItem(GRUPOS) || '{}') || {};
+          actual[id] = grupo.open;
+          sessionStorage.setItem(GRUPOS, JSON.stringify(actual));
+        } catch {
+          // No storage: the groups start as the server paints them.
+        }
+      });
+    });
     // Only the column keeps a position. The sheet is built again on every page, and it
     // is the dialog that scrolls there, not the nav.
-    if (!nav || nav.classList.contains('ac-sidebar--touch')) return;
+    if (nav.classList.contains('ac-sidebar--touch')) return;
     const CLAVE = 'ac:sidebar';
     try {
       const guardado = sessionStorage.getItem(CLAVE);
