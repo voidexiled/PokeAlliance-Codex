@@ -98,8 +98,8 @@
       "additionalProperties": false,
       "properties": {
         "ranura": {
-          "enum": ["x", "y"],
-          "description": "Ranura del held en el juego."
+          "enum": ["x", "y", null],
+          "description": "Ranura del held en el juego. null si el juego no la dice (el «Held Item (Tier: n)» que da un held al azar): ese ítem no aparece en los selectores de held X ni Y."
         },
         "efecto": {
           "type": "string",
@@ -331,6 +331,10 @@
             "consumable",
             "foods",
             "furnitures",
+            "boosters",
+            "diamond-utilities",
+            "packages",
+            "toys",
             "otros"
           ]
         },

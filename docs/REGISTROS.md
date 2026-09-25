@@ -6,7 +6,7 @@ Guía para editar a mano los datos del juego que usa el sitio: categorías e ite
 
 | Archivo                          | Contiene                                                            |
 | -------------------------------- | ------------------------------------------------------------------- |
-| `content/items/categorias.json`  | Las 14 categorías del Market, en el orden del cliente               |
+| `content/items/categorias.json`  | Las categorías del Market, en el orden del cliente, y las del sitio |
 | `content/items/<categoria>.json` | Los items de una categoría (`stones.json`, `poke-balls.json`…)      |
 | `content/outfits.json`           | El outfit de cada Pokémon y sus addons                              |
 | `content/auras.json`             | Las auras de la vista previa de outfits                             |
@@ -66,11 +66,20 @@ Cada archivo empieza con `"$schema"`. VS Code lo usa para autocompletar los camp
 
 - `mercado` (opcional) dice si el item se vende en el mercado del juego. `true` lo escribe `pnpm content:datamine` cuando el item está en el catálogo del Market o en algún anuncio: la página muestra «Comercializable en el mercado». Para un item que **no** se puede vender, escribe tú `"mercado": false`: la página muestra «No vendible» y el importador nunca lo cambia. `null` o sin el campo: la página no dice nada. El importador nunca escribe `false`.
 
-Las categorías no se añaden: son las del Market, más «Otros». «Todo» es virtual (`"virtual": true`) y reúne los items de las demás; no tiene archivo.
+Las categorías son las del Market, luego cuatro propias del sitio (decisión del propietario 2026-09-25) y al final «Otros». «Todo» es virtual (`"virtual": true`) y reúne los items de las demás; no tiene archivo. Las del sitio no existen en el Market del juego:
 
-**«Otros»** (`content/items/otros.json`, decisión del propietario 2026-09-25) guarda los items que el juego nombra fuera del catálogo del Market (loot, evoluciones, crafteo, tiendas, pase, calendario, tasks) y que aún no tienen categoría. Para recolocar uno, mueve su objeto a `content/items/<categoria>.json` y cambia `categoria`; **no cambies su `id`** (no depende de la categoría: es el nombre del juego en kebab-case, con el `clientId` detrás si dos items se llaman igual). Si lo mueves a `helds`, añade `held`. El importador no vuelve a tocar `categoria`, `sprite` ni `nombre` de un item que ya existe.
+| `id`                | Nombre            | Qué guarda                                                                                                           |
+| ------------------- | ----------------- | -------------------------------------------------------------------------------------------------------------------- |
+| `boosters`          | Boosters          | Aumentos temporales: XP, captura, shiny, drop, Pokélog, Prey Wildcard                                                |
+| `diamond-utilities` | Diamond Utilities | Servicios de cuenta y personaje de la Diamond Shop: World Migration Ticket, Player Change Sex, Bless, Moving Ticket… |
+| `packages`          | Packages          | Paquetes y cajas que dan otros ítems: Founder Packages, Jirachi Package, Prime Boxes, Shard Boxes…                   |
+| `toys`              | Toys              | Juguetes de las Toy Box (y las propias Toy Box)                                                                      |
 
-`content/schemas/categorias.schema.json` fija las 14 categorías del Market y «otros», y su orden, posición por posición. Si en `categorias.json` cambias el orden, borras una categoría o añades otra, `pnpm content:check` y el build fallan. Si el juego algún día cambia el Market:
+Su icono es el sprite del cliente de un ítem de la categoría (`items/cliente/<id>`).
+
+**«Otros»** (`content/items/otros.json`, decisión del propietario 2026-09-25) guarda los items que el juego nombra fuera del catálogo del Market (loot, evoluciones, crafteo, tiendas, pase, calendario, tasks) y que aún no tienen categoría. Para recolocar uno, mueve su objeto a `content/items/<categoria>.json` y cambia `categoria`; **no cambies su `id`** (no depende de la categoría: es el nombre del juego en kebab-case, con el `clientId` detrás si dos items se llaman igual). Si lo mueves a `helds`, añade `held` (`ranura: null` si el juego no dice la ranura, como el «Held Item (Tier: n)» que da un held al azar). El importador no vuelve a tocar `categoria`, `sprite` ni `nombre` de un item que ya existe.
+
+`content/schemas/categorias.schema.json` fija las categorías del Market, las del sitio y «otros», y su orden, posición por posición. Si en `categorias.json` cambias el orden, borras una categoría o añades otra, `pnpm content:check` y el build fallan. Si el juego algún día cambia el Market:
 
 1. Cambia la lista `prefixItems` de `content/schemas/categorias.schema.json` (`id`, `orden` y `virtual` de cada posición).
 2. Cambia la lista `categoria` de `content/schemas/items.schema.json`: son las mismas categorías sin «todo», en el mismo orden. `pnpm content:check` avisa si no coinciden.
@@ -95,7 +104,7 @@ Cada item de `content/items/helds.json` (`categoria: "helds"`) necesita `held`: 
 }
 ```
 
-- `held.ranura` es `"x"` o `"y"`, la ranura del held en el juego.
+- `held.ranura` es `"x"` o `"y"`, la ranura del held en el juego, o `null` si el juego no la dice (ese held no sale en los selectores de X ni de Y).
 - `held.efecto` es el nombre canónico del efecto, sin el tier (`"X-Attack"`, no `"X-Attack T1"`).
 - `held.tier` es un entero de 1 a 8 (`HELD_TIER_MAX`). Sin `held`, `pnpm content:check` refusa el registro: es obligatorio para `categoria: "helds"`.
 - Un item de **cualquier** categoría puede llevar `mega`, que lo marca como Mega Stone: `"mega": { "pokemon": ["charizard"] }`. `pokemon` son `id` de `content/pokemon.json`; deja `[]` si no sabes cuál Pokémon la usa. `pnpm content:check` comprueba que cada `id` exista.
@@ -389,7 +398,7 @@ Revisa todos los archivos y muestra un resumen por archivo con el número de reg
 
 - que cada archivo de `content/` y `sprites.json` cumple su esquema y empieza con `"$schema"`;
 - que los `id` no se repiten (en los marcadores, el número; en los pisos, `z`);
-- que están las 14 categorías del Market en su orden, que cada categoría real tiene su archivo y que cada item está en el archivo de su categoría;
+- que están las categorías del Market, las del sitio y «Otros» en su orden, que cada categoría real tiene su archivo y que cada item está en el archivo de su categoría;
 - que cada `sprite` e `icono` existe en `sprites.json`, y cada outfit tiene su `outfits/<outfitId>`;
 - que cada imagen existe y mide exactamente `frame × frames`, y que la imagen de cada piso mide `ancho × alto`;
 - que `umbrales` y `duracionMs` tienen un valor por frame y que los umbrales van de menor a mayor;

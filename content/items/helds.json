@@ -2079,6 +2079,96 @@
       "descripcion": {
         "en": "Grants your Pokémon 100% chance to activate the Rage ability."
       }
+    },
+    {
+      "id": "held-item-tier-1",
+      "nombre": "Held Item (Tier: 1)",
+      "clientId": 30851,
+      "categoria": "helds",
+      "sprite": "items/cliente/30851",
+      "apilable": true,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      },
+      "held": {
+        "ranura": null,
+        "efecto": "Held Item",
+        "tier": 1
+      },
+      "descripcion": {
+        "en": "You can use this item to receive a random Held Tier 1."
+      },
+      "obtencion": {
+        "tiendas": [
+          {
+            "tienda": "Daily Shop",
+            "precio": 1,
+            "moneda": "Daily Points",
+            "cantidad": 1
+          }
+        ]
+      }
+    },
+    {
+      "id": "held-item-tier-2",
+      "nombre": "Held Item (Tier: 2)",
+      "clientId": 30852,
+      "categoria": "helds",
+      "sprite": "items/cliente/30852",
+      "apilable": true,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      },
+      "held": {
+        "ranura": null,
+        "efecto": "Held Item",
+        "tier": 2
+      },
+      "descripcion": {
+        "en": "You can use this item to receive a random Held Tier 2."
+      },
+      "obtencion": {
+        "tiendas": [
+          {
+            "tienda": "Daily Shop",
+            "precio": 5,
+            "moneda": "Daily Points",
+            "cantidad": 1
+          }
+        ]
+      }
+    },
+    {
+      "id": "held-item-tier-3",
+      "nombre": "Held Item (Tier: 3)",
+      "clientId": 30853,
+      "categoria": "helds",
+      "sprite": "items/cliente/30853",
+      "apilable": true,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      },
+      "held": {
+        "ranura": null,
+        "efecto": "Held Item",
+        "tier": 3
+      },
+      "descripcion": {
+        "en": "You can use this item to receive a random Held Tier 3."
+      },
+      "obtencion": {
+        "tiendas": [
+          {
+            "tienda": "Daily Shop",
+            "precio": 10,
+            "moneda": "Daily Points",
+            "cantidad": 1
+          }
+        ]
+      }
     }
   ]
 }

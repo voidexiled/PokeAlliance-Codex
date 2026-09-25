@@ -1,4 +1,74 @@
 {
   "$schema": "../schemas/items.schema.json",
-  "items": []
+  "items": [
+    {
+      "id": "upgraded-duelist-radar",
+      "nombre": "upgraded duelist radar",
+      "clientId": 47869,
+      "categoria": "utilities",
+      "sprite": "items/cliente/47869",
+      "apilable": false,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      },
+      "obtencion": {
+        "tiendas": [
+          {
+            "tienda": "Diamond Shop",
+            "precio": 30,
+            "moneda": "Diamonds",
+            "cantidad": 1
+          }
+        ]
+      }
+    },
+    {
+      "id": "duelist-brotherhood-panel",
+      "nombre": "Duelist Brotherhood Panel",
+      "clientId": 48197,
+      "categoria": "utilities",
+      "sprite": "items/cliente/48197",
+      "apilable": false,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      },
+      "descripcion": {
+        "en": "You can accept contracts wherever you are."
+      },
+      "obtencion": {
+        "tiendas": [
+          {
+            "tienda": "Diamond Shop",
+            "precio": 50,
+            "moneda": "Diamonds",
+            "cantidad": 1
+          }
+        ]
+      }
+    },
+    {
+      "id": "duelist-radar",
+      "nombre": "duelist radar",
+      "clientId": 15500,
+      "categoria": "utilities",
+      "sprite": "items/cliente/15500",
+      "apilable": false,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      },
+      "obtencion": {
+        "tiendas": [
+          {
+            "tienda": "Diamond Shop",
+            "precio": 25,
+            "moneda": "Diamonds",
+            "cantidad": 1
+          }
+        ]
+      }
+    }
+  ]
 }

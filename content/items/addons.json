@@ -1,4 +1,155 @@
 {
   "$schema": "../schemas/items.schema.json",
-  "items": []
+  "items": [
+    {
+      "id": "twitch-costume",
+      "nombre": "Twitch Costume",
+      "clientId": 48172,
+      "categoria": "addons",
+      "sprite": "items/cliente/48172",
+      "apilable": false,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      },
+      "descripcion": {
+        "en": "Addon for Shiny Blastoise. Rarity: Twitch Shop."
+      },
+      "obtencion": {
+        "tiendas": [
+          {
+            "tienda": "Twitch Shop",
+            "precio": 50000,
+            "moneda": "Twitch Points",
+            "cantidad": 1
+          }
+        ]
+      }
+    },
+    {
+      "id": "mahoraga-costume",
+      "nombre": "Mahoraga Costume",
+      "clientId": 48850,
+      "categoria": "addons",
+      "sprite": "items/cliente/48850",
+      "apilable": false,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      },
+      "descripcion": {
+        "en": "Addon for Shiny Machamp. Rarity: Game Pass"
+      },
+      "obtencion": {
+        "tiendas": [
+          {
+            "tienda": "Game Pass Shop",
+            "precio": 50,
+            "moneda": "Pass Points",
+            "cantidad": 1
+          }
+        ]
+      }
+    },
+    {
+      "id": "the-nurse-costume",
+      "nombre": "The Nurse Costume",
+      "clientId": 49104,
+      "categoria": "addons",
+      "sprite": "items/cliente/49104",
+      "apilable": false,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      },
+      "descripcion": {
+        "en": "Addon for Shiny Misdreavus. Rarity: Game Pass"
+      },
+      "obtencion": {
+        "tiendas": [
+          {
+            "tienda": "Game Pass Shop",
+            "precio": 50,
+            "moneda": "Pass Points",
+            "cantidad": 1
+          }
+        ]
+      }
+    },
+    {
+      "id": "floral-eclipse-costume",
+      "nombre": "Floral Eclipse Costume",
+      "clientId": 49105,
+      "categoria": "addons",
+      "sprite": "items/cliente/49105",
+      "apilable": false,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      },
+      "descripcion": {
+        "en": "Addon for Shiny Florges. Rarity: Game Pass"
+      },
+      "obtencion": {
+        "tiendas": [
+          {
+            "tienda": "Game Pass Shop",
+            "precio": 50,
+            "moneda": "Pass Points",
+            "cantidad": 1
+          }
+        ]
+      }
+    },
+    {
+      "id": "it-s-certainly-not-tangrowth",
+      "nombre": "It's certainly not Tangrowth",
+      "clientId": 49106,
+      "categoria": "addons",
+      "sprite": "items/cliente/49106",
+      "apilable": false,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      },
+      "descripcion": {
+        "en": "Addon for Shiny Tangrowth. Rarity: Game Pass"
+      },
+      "obtencion": {
+        "tiendas": [
+          {
+            "tienda": "Game Pass Shop",
+            "precio": 50,
+            "moneda": "Pass Points",
+            "cantidad": 1
+          }
+        ]
+      }
+    },
+    {
+      "id": "eerie-performer-costume",
+      "nombre": "Eerie Performer Costume",
+      "clientId": 49107,
+      "categoria": "addons",
+      "sprite": "items/cliente/49107",
+      "apilable": false,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      },
+      "descripcion": {
+        "en": "Addon for Shiny Misdreavus. Rarity: Game Pass"
+      },
+      "obtencion": {
+        "tiendas": [
+          {
+            "tienda": "Game Pass Shop",
+            "precio": 50,
+            "moneda": "Pass Points",
+            "cantidad": 1
+          }
+        ]
+      }
+    }
+  ]
 }

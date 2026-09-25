@@ -23,8 +23,8 @@ const archivoPattern = /^[a-z0-9]+(?:-[a-z0-9]+)*(?:\/[a-z0-9]+(?:-[a-z0-9]+)*)*
 const routePattern = /^\/(?:[a-z0-9]+(?:-[a-z0-9]+)*\/)*$/;
 
 /**
- * The 14 Market categories in client order, read from categorias.schema.json
- * (the only place that lists them). "todo" is virtual.
+ * The 14 Market categories in client order, then the site's own categories and «otros», read
+ * from categorias.schema.json (the only place that lists them). "todo" is virtual.
  */
 export const marketCategories = categoriasJsonSchema.properties.categorias.prefixItems.map(
   (entry, orden) => ({
@@ -95,7 +95,8 @@ export const HELD_TIER_MAX = 8;
  * propio ítem (X-Attack T1, X-Attack T2…), así se puede filtrar y ordenar por tier.
  */
 export const heldSchema = z.strictObject({
-  ranura: z.enum(['x', 'y']),
+  /** null when the game does not say it (a «Held Item (Tier: n)» that gives a random held). */
+  ranura: z.enum(['x', 'y']).nullable(),
   efecto: itemProse,
   tier: z.number().int().min(1).max(HELD_TIER_MAX),
 });

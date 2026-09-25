@@ -1,4 +1,75 @@
 {
   "$schema": "../schemas/items.schema.json",
-  "items": []
+  "items": [
+    {
+      "id": "dna-chain",
+      "nombre": "DNA Chain",
+      "clientId": 42356,
+      "categoria": "general-items",
+      "sprite": "items/cliente/42356",
+      "apilable": true,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      },
+      "descripcion": {
+        "en": "Used to create Shiny Ditto."
+      },
+      "obtencion": {
+        "tiendas": [
+          {
+            "tienda": "Diamond Shop",
+            "precio": 150,
+            "moneda": "Diamonds",
+            "cantidad": 1
+          }
+        ]
+      }
+    },
+    {
+      "id": "twitch-backpack",
+      "nombre": "Twitch Backpack",
+      "clientId": 37672,
+      "categoria": "general-items",
+      "sprite": "items/cliente/37672",
+      "apilable": false,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      },
+      "obtencion": {
+        "tiendas": [
+          {
+            "tienda": "Twitch Shop",
+            "precio": 30000,
+            "moneda": "Twitch Points",
+            "cantidad": 1
+          }
+        ]
+      }
+    },
+    {
+      "id": "salamence-backpack",
+      "nombre": "Salamence Backpack",
+      "clientId": 50382,
+      "categoria": "general-items",
+      "sprite": "items/cliente/50382",
+      "apilable": false,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      },
+      "mercado": true,
+      "obtencion": {
+        "pase": [
+          {
+            "temporada": null,
+            "nivel": 20,
+            "pista": "premium",
+            "cantidad": 1
+          }
+        ]
+      }
+    }
+  ]
 }

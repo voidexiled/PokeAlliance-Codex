@@ -129,13 +129,49 @@
       "orden": 13
     },
     {
+      "id": "boosters",
+      "nombre": {
+        "es": "Boosters",
+        "en": "Boosters"
+      },
+      "icono": "items/cliente/23312",
+      "orden": 14
+    },
+    {
+      "id": "diamond-utilities",
+      "nombre": {
+        "es": "Diamond Utilities",
+        "en": "Diamond Utilities"
+      },
+      "icono": "items/cliente/39090",
+      "orden": 15
+    },
+    {
+      "id": "packages",
+      "nombre": {
+        "es": "Packages",
+        "en": "Packages"
+      },
+      "icono": "items/cliente/50394",
+      "orden": 16
+    },
+    {
+      "id": "toys",
+      "nombre": {
+        "es": "Toys",
+        "en": "Toys"
+      },
+      "icono": "items/cliente/29365",
+      "orden": 17
+    },
+    {
       "id": "otros",
       "nombre": {
         "es": "Otros",
         "en": "Other"
       },
       "icono": "ui/categorias/otros",
-      "orden": 14
+      "orden": 18
     }
   ]
 }

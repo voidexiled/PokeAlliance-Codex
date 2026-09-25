@@ -92,7 +92,7 @@ export interface ItemsRow {
   uso: string | null;
   dropDe: readonly string[] | number | null;
   /** `held` of a held item (16.2.3): its slot, effect and tier. */
-  held?: { ranura: 'x' | 'y'; efecto: string; tier: number } | null;
+  held?: { ranura: 'x' | 'y' | null; efecto: string; tier: number } | null;
   /** `mega` of a Mega Stone (16.2.3): the Pokémon ids it evolves. */
   mega?: { pokemon: readonly string[] } | null;
 }
@@ -141,17 +141,21 @@ export interface ItemsData extends ItemsRows {
   };
 }
 
-/** A real Market category as the island shows it: its name and its 32 px icon (8.5). */
+/**
+ * A real category as the island names it (8.5): its id and its name, which the group headings of
+ * «Todo» and the item panels show. Its icon is only drawn by the category navigation, which the
+ * page renders (`ItemsTab`), so it stays out of the props (§13.6).
+ */
 export interface ItemsCategory {
   id: string;
   /** `nombre` of content/items/categorias.json in the page's language. */
   nombre: string;
-  /** `icono` resolved by the adapter (DP2); `null` leaves the cell empty. */
-  icono: SpriteData | null;
 }
 
-/** A tab of the category navigation (8.5 step 3): «Todo» and the 13 categories. */
+/** A tab of the category navigation (8.5 step 3): «Todo» and the real categories. */
 export interface ItemsTab extends ItemsCategory {
+  /** `icono` resolved by the adapter (DP2); `null` leaves the cell empty. */
+  icono: SpriteData | null;
   /** `/es/items/` for «Todo», `/es/items/c/{id}/` for a category. */
   href: string;
 }

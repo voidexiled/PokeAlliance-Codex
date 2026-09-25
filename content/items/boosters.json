@@ -1,0 +1,471 @@
+{
+  "$schema": "../schemas/items.schema.json",
+  "items": [
+    {
+      "id": "pokelog-booster",
+      "nombre": "Pokélog Booster",
+      "clientId": 49518,
+      "categoria": "boosters",
+      "sprite": "items/cliente/49518",
+      "apilable": true,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      },
+      "mercado": true,
+      "descripcion": {
+        "en": "Doubles your Pokélog progress for 1 hour. Each defeated creature counts twice."
+      },
+      "obtencion": {
+        "tiendas": [
+          {
+            "tienda": "Diamond Shop",
+            "precio": 3,
+            "moneda": "Diamonds",
+            "cantidad": 1
+          },
+          {
+            "tienda": "Diamond Shop",
+            "precio": 13,
+            "moneda": "Diamonds",
+            "cantidad": 5
+          },
+          {
+            "tienda": "Diamond Shop",
+            "precio": 25,
+            "moneda": "Diamonds",
+            "cantidad": 10
+          }
+        ],
+        "pase": [
+          {
+            "temporada": null,
+            "nivel": 42,
+            "pista": "gratis",
+            "cantidad": 2
+          }
+        ]
+      }
+    },
+    {
+      "id": "minor-xp-boost",
+      "nombre": "Minor XP Boost",
+      "clientId": 23312,
+      "categoria": "boosters",
+      "sprite": "items/cliente/23312",
+      "apilable": true,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      },
+      "descripcion": {
+        "en": "Increases the experience gained by 100%. Duration: 1 hour."
+      },
+      "obtencion": {
+        "tiendas": [
+          {
+            "tienda": "Diamond Shop",
+            "precio": 2,
+            "moneda": "Diamonds",
+            "cantidad": 1
+          },
+          {
+            "tienda": "Twitch Shop",
+            "precio": 5000,
+            "moneda": "Twitch Points",
+            "cantidad": 3
+          },
+          {
+            "tienda": "Game Pass Shop",
+            "precio": 5,
+            "moneda": "Pass Points",
+            "cantidad": 1
+          }
+        ],
+        "calendario": [
+          {
+            "mes": 9,
+            "dia": 4,
+            "trasDia21": false,
+            "calendario": "premium",
+            "cantidad": 3
+          },
+          {
+            "mes": 9,
+            "dia": 12,
+            "trasDia21": false,
+            "calendario": "premium",
+            "cantidad": 5
+          },
+          {
+            "mes": 9,
+            "dia": 17,
+            "trasDia21": false,
+            "calendario": "premium",
+            "cantidad": 5
+          }
+        ]
+      }
+    },
+    {
+      "id": "prey-wildcard",
+      "nombre": "Prey Wildcard",
+      "clientId": 47864,
+      "categoria": "boosters",
+      "sprite": "items/cliente/47864",
+      "apilable": true,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      },
+      "mercado": true,
+      "obtencion": {
+        "tiendas": [
+          {
+            "tienda": "Diamond Shop",
+            "precio": 10,
+            "moneda": "Diamonds",
+            "cantidad": 30
+          }
+        ],
+        "pase": [
+          {
+            "temporada": null,
+            "nivel": 5,
+            "pista": "gratis",
+            "cantidad": 3
+          },
+          {
+            "temporada": null,
+            "nivel": 46,
+            "pista": "gratis",
+            "cantidad": 3
+          },
+          {
+            "temporada": null,
+            "nivel": 5,
+            "pista": "premium",
+            "cantidad": 10
+          },
+          {
+            "temporada": null,
+            "nivel": 46,
+            "pista": "premium",
+            "cantidad": 10
+          }
+        ],
+        "calendario": [
+          {
+            "mes": 9,
+            "dia": 5,
+            "trasDia21": false,
+            "calendario": "gratis",
+            "cantidad": 3
+          },
+          {
+            "mes": 9,
+            "dia": 13,
+            "trasDia21": false,
+            "calendario": "gratis",
+            "cantidad": 3
+          },
+          {
+            "mes": 9,
+            "dia": 19,
+            "trasDia21": false,
+            "calendario": "gratis",
+            "cantidad": 3
+          },
+          {
+            "mes": 9,
+            "dia": 2,
+            "trasDia21": false,
+            "calendario": "premium",
+            "cantidad": 5
+          },
+          {
+            "mes": 9,
+            "dia": 13,
+            "trasDia21": false,
+            "calendario": "premium",
+            "cantidad": 5
+          }
+        ]
+      }
+    },
+    {
+      "id": "twitch-charm",
+      "nombre": "Twitch Charm",
+      "clientId": 47865,
+      "categoria": "boosters",
+      "sprite": "items/cliente/47865",
+      "apilable": true,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      },
+      "descripcion": {
+        "en": "A shimmering globe infused with Twitch energy. Increases the encounter with shinies Pokémon in 180% during 1 hour."
+      },
+      "obtencion": {
+        "tiendas": [
+          {
+            "tienda": "Twitch Shop",
+            "precio": 5500,
+            "moneda": "Twitch Points",
+            "cantidad": 3
+          }
+        ]
+      }
+    },
+    {
+      "id": "log-pose",
+      "nombre": "Log Pose",
+      "clientId": 48961,
+      "categoria": "boosters",
+      "sprite": "items/cliente/48961",
+      "apilable": true,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      },
+      "descripcion": {
+        "en": "Increases the appearance of shiny Pokémon by 200% for 1 hour."
+      },
+      "obtencion": {
+        "tiendas": [
+          {
+            "tienda": "Game Pass Shop",
+            "precio": 5,
+            "moneda": "Pass Points",
+            "cantidad": 1
+          }
+        ],
+        "pase": [
+          {
+            "temporada": null,
+            "nivel": 17,
+            "pista": "gratis",
+            "cantidad": 2
+          },
+          {
+            "temporada": null,
+            "nivel": 27,
+            "pista": "gratis",
+            "cantidad": 2
+          },
+          {
+            "temporada": null,
+            "nivel": 37,
+            "pista": "gratis",
+            "cantidad": 1
+          },
+          {
+            "temporada": null,
+            "nivel": 44,
+            "pista": "gratis",
+            "cantidad": 1
+          },
+          {
+            "temporada": null,
+            "nivel": 50,
+            "pista": "gratis",
+            "cantidad": 6
+          },
+          {
+            "temporada": null,
+            "nivel": 17,
+            "pista": "premium",
+            "cantidad": 5
+          },
+          {
+            "temporada": null,
+            "nivel": 27,
+            "pista": "premium",
+            "cantidad": 4
+          },
+          {
+            "temporada": null,
+            "nivel": 30,
+            "pista": "premium",
+            "cantidad": 8
+          },
+          {
+            "temporada": null,
+            "nivel": 37,
+            "pista": "premium",
+            "cantidad": 3
+          },
+          {
+            "temporada": null,
+            "nivel": 44,
+            "pista": "premium",
+            "cantidad": 3
+          },
+          {
+            "temporada": null,
+            "nivel": 48,
+            "pista": "premium",
+            "cantidad": 5
+          }
+        ]
+      }
+    },
+    {
+      "id": "experience-guide-vol-1",
+      "nombre": "Experience Guide Vol. 1",
+      "clientId": 38740,
+      "categoria": "boosters",
+      "sprite": "items/cliente/38740",
+      "apilable": true,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      },
+      "descripcion": {
+        "en": "A completely guide on how to extract the most from your hunts. Increases the EXP earned by 100% during 30 minutes."
+      },
+      "obtencion": {
+        "tiendas": [
+          {
+            "tienda": "Daily Shop",
+            "precio": 50,
+            "moneda": "Daily Points",
+            "cantidad": 1
+          }
+        ],
+        "calendario": [
+          {
+            "mes": 9,
+            "dia": 4,
+            "trasDia21": false,
+            "calendario": "gratis",
+            "cantidad": 1
+          },
+          {
+            "mes": 9,
+            "dia": 12,
+            "trasDia21": false,
+            "calendario": "gratis",
+            "cantidad": 3
+          },
+          {
+            "mes": 9,
+            "dia": 17,
+            "trasDia21": false,
+            "calendario": "gratis",
+            "cantidad": 3
+          },
+          {
+            "mes": 9,
+            "dia": 1,
+            "trasDia21": false,
+            "calendario": "premium",
+            "cantidad": 4
+          }
+        ]
+      }
+    },
+    {
+      "id": "orange-rose",
+      "nombre": "Orange Rose",
+      "clientId": 42283,
+      "categoria": "boosters",
+      "sprite": "items/cliente/42283",
+      "apilable": true,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      },
+      "descripcion": {
+        "en": "Increases the chance of catching Shiny Pokémon by 200% for 2 minutes."
+      },
+      "obtencion": {
+        "tiendas": [
+          {
+            "tienda": "Daily Shop",
+            "precio": 25,
+            "moneda": "Daily Points",
+            "cantidad": 1
+          }
+        ],
+        "pase": [
+          {
+            "temporada": null,
+            "nivel": 11,
+            "pista": "gratis",
+            "cantidad": 1
+          },
+          {
+            "temporada": null,
+            "nivel": 11,
+            "pista": "premium",
+            "cantidad": 5
+          }
+        ]
+      }
+    },
+    {
+      "id": "purple-rose",
+      "nombre": "Purple Rose",
+      "clientId": 42285,
+      "categoria": "boosters",
+      "sprite": "items/cliente/42285",
+      "apilable": true,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      },
+      "descripcion": {
+        "en": "Increases the EXP earned by 100% during 30 minutes."
+      },
+      "obtencion": {
+        "pase": [
+          {
+            "temporada": null,
+            "nivel": 1,
+            "pista": "gratis",
+            "cantidad": 1
+          },
+          {
+            "temporada": null,
+            "nivel": 1,
+            "pista": "premium",
+            "cantidad": 5
+          }
+        ]
+      }
+    },
+    {
+      "id": "blue-rose",
+      "nombre": "Blue Rose",
+      "clientId": 42282,
+      "categoria": "boosters",
+      "sprite": "items/cliente/42282",
+      "apilable": true,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      },
+      "descripcion": {
+        "en": "Increases the drop chance of all Pokémon by 30% for 15 minutes."
+      },
+      "obtencion": {
+        "pase": [
+          {
+            "temporada": null,
+            "nivel": 38,
+            "pista": "gratis",
+            "cantidad": 1
+          },
+          {
+            "temporada": null,
+            "nivel": 38,
+            "pista": "premium",
+            "cantidad": 5
+          }
+        ]
+      }
+    }
+  ]
+}

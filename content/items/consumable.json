@@ -1,4 +1,192 @@
 {
   "$schema": "../schemas/items.schema.json",
-  "items": []
+  "items": [
+    {
+      "id": "energy-foil",
+      "nombre": "Energy Foil",
+      "clientId": 48348,
+      "categoria": "consumable",
+      "sprite": "items/cliente/48348",
+      "apilable": true,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      },
+      "obtencion": {
+        "tiendas": [
+          {
+            "tienda": "Diamond Shop",
+            "precio": 10,
+            "moneda": "Diamonds",
+            "cantidad": 30
+          }
+        ]
+      }
+    },
+    {
+      "id": "sweet-scent",
+      "nombre": "Sweet Scent",
+      "clientId": 45231,
+      "categoria": "consumable",
+      "sprite": "items/cliente/45231",
+      "apilable": true,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      },
+      "descripcion": {
+        "en": "Turns passive Pokémon aggressive for 30 minutes."
+      },
+      "obtencion": {
+        "tiendas": [
+          {
+            "tienda": "Diamond Shop",
+            "precio": 5,
+            "moneda": "Diamonds",
+            "cantidad": 10
+          }
+        ],
+        "pase": [
+          {
+            "temporada": null,
+            "nivel": 13,
+            "pista": "gratis",
+            "cantidad": 3
+          }
+        ]
+      }
+    },
+    {
+      "id": "guardian-elixir",
+      "nombre": "Guardian Elixir",
+      "clientId": 23284,
+      "categoria": "consumable",
+      "sprite": "items/cliente/23284",
+      "apilable": true,
+      "precioNpc": {
+        "vende": null,
+        "compra": 100000
+      },
+      "descripcion": {
+        "en": "A potent potion that renders your Pokémon immune to all adverse effects. Infused with ancient protective magic, it offers unwavering defense when it matters most. Duration: 1 hour."
+      },
+      "obtencion": {
+        "tiendas": [
+          {
+            "tienda": "Twitch Shop",
+            "precio": 500,
+            "moneda": "Twitch Points",
+            "cantidad": 1
+          }
+        ],
+        "pase": [
+          {
+            "temporada": null,
+            "nivel": 25,
+            "pista": "gratis",
+            "cantidad": 1
+          },
+          {
+            "temporada": null,
+            "nivel": 32,
+            "pista": "gratis",
+            "cantidad": 1
+          },
+          {
+            "temporada": null,
+            "nivel": 48,
+            "pista": "gratis",
+            "cantidad": 2
+          },
+          {
+            "temporada": null,
+            "nivel": 25,
+            "pista": "premium",
+            "cantidad": 3
+          },
+          {
+            "temporada": null,
+            "nivel": 32,
+            "pista": "premium",
+            "cantidad": 3
+          }
+        ]
+      }
+    },
+    {
+      "id": "max-revive",
+      "nombre": "Max Revive",
+      "clientId": 3077,
+      "categoria": "consumable",
+      "sprite": "items/cliente/3077",
+      "apilable": true,
+      "precioNpc": {
+        "vende": null,
+        "compra": 600
+      },
+      "descripcion": {
+        "en": "A medicine that revives a fainted Pokémon. Or fully restores the Pokémon HP and CD. (Players level 220+)"
+      },
+      "obtencion": {
+        "pase": [
+          {
+            "temporada": null,
+            "nivel": 19,
+            "pista": "gratis",
+            "cantidad": 1000
+          },
+          {
+            "temporada": null,
+            "nivel": 34,
+            "pista": "gratis",
+            "cantidad": 1000
+          },
+          {
+            "temporada": null,
+            "nivel": 39,
+            "pista": "gratis",
+            "cantidad": 1000
+          }
+        ]
+      }
+    },
+    {
+      "id": "revive",
+      "nombre": "Revive",
+      "clientId": 3156,
+      "categoria": "consumable",
+      "sprite": "items/cliente/3156",
+      "apilable": true,
+      "precioNpc": {
+        "vende": null,
+        "compra": 300
+      },
+      "descripcion": {
+        "en": "A medicine that revives a fainted Pokémon. Or fully restores the Pokémon HP and CD. (Players level 220-)"
+      },
+      "obtencion": {
+        "calendario": [
+          {
+            "mes": 9,
+            "dia": 2,
+            "trasDia21": false,
+            "calendario": "gratis",
+            "cantidad": 400
+          }
+        ],
+        "tareas": [
+          {
+            "tipo": "linked-task",
+            "nombre": "Ratpack Rumble",
+            "cantidad": 1
+          },
+          {
+            "tipo": "linked-task",
+            "nombre": "Uprooted Menace",
+            "cantidad": 10
+          }
+        ]
+      }
+    }
+  ]
 }

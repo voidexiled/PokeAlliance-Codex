@@ -291,7 +291,7 @@ describe('ItemsRoot: the inventory of an item (8.5, 16.4.1)', () => {
           refs: { elementos: {}, pokemon: {} },
         }}
         total={1}
-        categories={[{ id: 'stones', nombre: 'Stones', icono: null }]}
+        categories={[{ id: 'stones', nombre: 'Stones' }]}
         elements={[]}
         droppers={{}}
         title="Stones"

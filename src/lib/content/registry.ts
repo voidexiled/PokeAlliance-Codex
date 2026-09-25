@@ -173,7 +173,7 @@ const cambiosModules = import.meta.glob<unknown>('@content/cambios.json', {
 const cambios =
   parseOptional(cambiosFileSchema, cambiosModules, 'content/cambios.json')?.cambios ?? [];
 
-/** The 14 Market categories in client order, "Todo" first. */
+/** The 14 Market categories in client order («Todo» first), the site's own ones and «Otros». */
 export function getCategorias(): Categoria[] {
   return categorias;
 }
@@ -194,7 +194,8 @@ export function getItem(id: string): Item | undefined {
 /**
  * Helds of one slot (§16.2.3, `HeldPicker`): items with `categoria === "helds"` and
  * `held.ranura` equal to `ranura`, in the order of the file. Every item of `categoria`
- * `"helds"` has `held` (the schema requires it), so no extra filter is needed.
+ * `"helds"` has `held` (the schema requires it); a held whose slot the game does not say
+ * (`ranura: null`) is in neither slot.
  */
 export function getHeldsBySlot(ranura: 'x' | 'y'): Item[] {
   return getItems('helds').filter((item) => item.held?.ranura === ranura);

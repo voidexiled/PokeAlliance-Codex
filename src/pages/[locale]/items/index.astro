@@ -61,8 +61,11 @@ const title = group.label;
 const messages = dictionaries[locale];
 const copy = messages.items;
 const tabs = itemTabs(locale);
-// The 13 real categories in the Market order: the groups of «Todo» and their headings.
-const categories = tabs.filter((tab) => tab.id !== ALL_CATEGORY);
+// The real categories in the registry order: the groups of «Todo» and their headings. The island
+// only names them, so it takes their id and name (its props budget, §13.6).
+const categories = tabs
+  .filter((tab) => tab.id !== ALL_CATEGORY)
+  .map(({ id, nombre }) => ({ id, nombre }));
 const first = itemsFirstPage(buildItemsData(locale), ALL_CATEGORY);
 const labels: ItemsListLabels = {
   count: copy.count,

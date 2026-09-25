@@ -1,0 +1,51 @@
+{
+  "$schema": "../schemas/items.schema.json",
+  "items": [
+    {
+      "id": "kanto-toy-box",
+      "nombre": "Kanto toy box",
+      "clientId": 29365,
+      "categoria": "toys",
+      "sprite": "items/cliente/29365",
+      "apilable": true,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      },
+      "mercado": true,
+      "obtencion": {
+        "tiendas": [
+          {
+            "tienda": "Diamond Shop",
+            "precio": 1,
+            "moneda": "Diamonds",
+            "cantidad": 10
+          }
+        ]
+      }
+    },
+    {
+      "id": "johto-toy-box-10x",
+      "nombre": "Johto Toy Box (10x)",
+      "clientId": 29366,
+      "categoria": "toys",
+      "sprite": "items/cliente/29366",
+      "apilable": true,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      },
+      "mercado": true,
+      "obtencion": {
+        "tiendas": [
+          {
+            "tienda": "Diamond Shop",
+            "precio": 1,
+            "moneda": "Diamonds",
+            "cantidad": 10
+          }
+        ]
+      }
+    }
+  ]
+}

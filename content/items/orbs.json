@@ -1,4 +1,931 @@
 {
   "$schema": "../schemas/items.schema.json",
-  "items": []
+  "items": [
+    {
+      "id": "simple-normal-orb",
+      "nombre": "Simple Normal Orb",
+      "clientId": 36851,
+      "categoria": "orbs",
+      "sprite": "items/cliente/36851",
+      "apilable": true,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      },
+      "mercado": true
+    },
+    {
+      "id": "mythic-normal-orb",
+      "nombre": "Mythic Normal Orb",
+      "clientId": 36853,
+      "categoria": "orbs",
+      "sprite": "items/cliente/36853",
+      "apilable": true,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      },
+      "mercado": true
+    },
+    {
+      "id": "arcane-normal-orb",
+      "nombre": "Arcane Normal Orb",
+      "clientId": 36852,
+      "categoria": "orbs",
+      "sprite": "items/cliente/36852",
+      "apilable": true,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      },
+      "mercado": true
+    },
+    {
+      "id": "celestial-normal-orb",
+      "nombre": "Celestial Normal Orb",
+      "clientId": 36854,
+      "categoria": "orbs",
+      "sprite": "items/cliente/36854",
+      "apilable": true,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      }
+    },
+    {
+      "id": "simple-fire-orb",
+      "nombre": "Simple Fire Orb",
+      "clientId": 36831,
+      "categoria": "orbs",
+      "sprite": "items/cliente/36831",
+      "apilable": true,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      },
+      "mercado": true
+    },
+    {
+      "id": "mythic-fire-orb",
+      "nombre": "Mythic Fire Orb",
+      "clientId": 36833,
+      "categoria": "orbs",
+      "sprite": "items/cliente/36833",
+      "apilable": true,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      },
+      "mercado": true
+    },
+    {
+      "id": "arcane-fire-orb",
+      "nombre": "Arcane Fire Orb",
+      "clientId": 36832,
+      "categoria": "orbs",
+      "sprite": "items/cliente/36832",
+      "apilable": true,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      },
+      "mercado": true
+    },
+    {
+      "id": "celestial-fire-orb",
+      "nombre": "Celestial Fire Orb",
+      "clientId": 36834,
+      "categoria": "orbs",
+      "sprite": "items/cliente/36834",
+      "apilable": true,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      },
+      "mercado": true
+    },
+    {
+      "id": "simple-water-orb",
+      "nombre": "Simple Water Orb",
+      "clientId": 36787,
+      "categoria": "orbs",
+      "sprite": "items/cliente/36787",
+      "apilable": true,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      },
+      "mercado": true
+    },
+    {
+      "id": "mythic-water-orb",
+      "nombre": "Mythic Water Orb",
+      "clientId": 36789,
+      "categoria": "orbs",
+      "sprite": "items/cliente/36789",
+      "apilable": true,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      },
+      "mercado": true
+    },
+    {
+      "id": "arcane-water-orb",
+      "nombre": "Arcane Water Orb",
+      "clientId": 36788,
+      "categoria": "orbs",
+      "sprite": "items/cliente/36788",
+      "apilable": true,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      },
+      "mercado": true
+    },
+    {
+      "id": "celestial-water-orb",
+      "nombre": "Celestial Water Orb",
+      "clientId": 36790,
+      "categoria": "orbs",
+      "sprite": "items/cliente/36790",
+      "apilable": true,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      },
+      "mercado": true
+    },
+    {
+      "id": "simple-grass-orb",
+      "nombre": "Simple Grass Orb",
+      "clientId": 36799,
+      "categoria": "orbs",
+      "sprite": "items/cliente/36799",
+      "apilable": true,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      },
+      "mercado": true
+    },
+    {
+      "id": "mythic-grass-orb",
+      "nombre": "Mythic Grass Orb",
+      "clientId": 36801,
+      "categoria": "orbs",
+      "sprite": "items/cliente/36801",
+      "apilable": true,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      },
+      "mercado": true
+    },
+    {
+      "id": "arcane-grass-orb",
+      "nombre": "Arcane Grass Orb",
+      "clientId": 36800,
+      "categoria": "orbs",
+      "sprite": "items/cliente/36800",
+      "apilable": true,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      },
+      "mercado": true
+    },
+    {
+      "id": "celestial-grass-orb",
+      "nombre": "Celestial Grass Orb",
+      "clientId": 36802,
+      "categoria": "orbs",
+      "sprite": "items/cliente/36802",
+      "apilable": true,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      }
+    },
+    {
+      "id": "simple-electric-orb",
+      "nombre": "Simple Electric Orb",
+      "clientId": 36807,
+      "categoria": "orbs",
+      "sprite": "items/cliente/36807",
+      "apilable": true,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      },
+      "mercado": true
+    },
+    {
+      "id": "mythic-electric-orb",
+      "nombre": "Mythic Electric Orb",
+      "clientId": 36809,
+      "categoria": "orbs",
+      "sprite": "items/cliente/36809",
+      "apilable": true,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      },
+      "mercado": true
+    },
+    {
+      "id": "arcane-electric-orb",
+      "nombre": "Arcane Electric Orb",
+      "clientId": 36808,
+      "categoria": "orbs",
+      "sprite": "items/cliente/36808",
+      "apilable": true,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      },
+      "mercado": true
+    },
+    {
+      "id": "celestial-electric-orb",
+      "nombre": "Celestial Electric Orb",
+      "clientId": 36810,
+      "categoria": "orbs",
+      "sprite": "items/cliente/36810",
+      "apilable": true,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      }
+    },
+    {
+      "id": "simple-ice-orb",
+      "nombre": "Simple Ice Orb",
+      "clientId": 36811,
+      "categoria": "orbs",
+      "sprite": "items/cliente/36811",
+      "apilable": true,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      },
+      "mercado": true
+    },
+    {
+      "id": "mythic-ice-orb",
+      "nombre": "Mythic Ice Orb",
+      "clientId": 36813,
+      "categoria": "orbs",
+      "sprite": "items/cliente/36813",
+      "apilable": true,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      },
+      "mercado": true
+    },
+    {
+      "id": "arcane-ice-orb",
+      "nombre": "Arcane Ice Orb",
+      "clientId": 36812,
+      "categoria": "orbs",
+      "sprite": "items/cliente/36812",
+      "apilable": true,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      },
+      "mercado": true
+    },
+    {
+      "id": "celestial-ice-orb",
+      "nombre": "Celestial Ice Orb",
+      "clientId": 36814,
+      "categoria": "orbs",
+      "sprite": "items/cliente/36814",
+      "apilable": true,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      },
+      "mercado": true
+    },
+    {
+      "id": "simple-fighting-orb",
+      "nombre": "Simple Fighting Orb",
+      "clientId": 36823,
+      "categoria": "orbs",
+      "sprite": "items/cliente/36823",
+      "apilable": true,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      },
+      "mercado": true
+    },
+    {
+      "id": "mythic-fighting-orb",
+      "nombre": "Mythic Fighting Orb",
+      "clientId": 36825,
+      "categoria": "orbs",
+      "sprite": "items/cliente/36825",
+      "apilable": true,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      },
+      "mercado": true
+    },
+    {
+      "id": "arcane-fighting-orb",
+      "nombre": "Arcane Fighting Orb",
+      "clientId": 36824,
+      "categoria": "orbs",
+      "sprite": "items/cliente/36824",
+      "apilable": true,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      },
+      "mercado": true
+    },
+    {
+      "id": "celestial-fighting-orb",
+      "nombre": "Celestial Fighting Orb",
+      "clientId": 36826,
+      "categoria": "orbs",
+      "sprite": "items/cliente/36826",
+      "apilable": true,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      },
+      "mercado": true
+    },
+    {
+      "id": "simple-poison-orb",
+      "nombre": "Simple Poison Orb",
+      "clientId": 36819,
+      "categoria": "orbs",
+      "sprite": "items/cliente/36819",
+      "apilable": true,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      },
+      "mercado": true
+    },
+    {
+      "id": "mythic-poison-orb",
+      "nombre": "Mythic Poison Orb",
+      "clientId": 36821,
+      "categoria": "orbs",
+      "sprite": "items/cliente/36821",
+      "apilable": true,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      },
+      "mercado": true
+    },
+    {
+      "id": "arcane-poison-orb",
+      "nombre": "Arcane Poison Orb",
+      "clientId": 36820,
+      "categoria": "orbs",
+      "sprite": "items/cliente/36820",
+      "apilable": true,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      },
+      "mercado": true
+    },
+    {
+      "id": "celestial-poison-orb",
+      "nombre": "Celestial Poison Orb",
+      "clientId": 36822,
+      "categoria": "orbs",
+      "sprite": "items/cliente/36822",
+      "apilable": true,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      }
+    },
+    {
+      "id": "simple-ground-orb",
+      "nombre": "Simple Ground Orb",
+      "clientId": 36815,
+      "categoria": "orbs",
+      "sprite": "items/cliente/36815",
+      "apilable": true,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      },
+      "mercado": true
+    },
+    {
+      "id": "mythic-ground-orb",
+      "nombre": "Mythic Ground Orb",
+      "clientId": 36817,
+      "categoria": "orbs",
+      "sprite": "items/cliente/36817",
+      "apilable": true,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      },
+      "mercado": true
+    },
+    {
+      "id": "arcane-ground-orb",
+      "nombre": "Arcane Ground Orb",
+      "clientId": 36816,
+      "categoria": "orbs",
+      "sprite": "items/cliente/36816",
+      "apilable": true,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      },
+      "mercado": true
+    },
+    {
+      "id": "celestial-ground-orb",
+      "nombre": "Celestial Ground Orb",
+      "clientId": 36818,
+      "categoria": "orbs",
+      "sprite": "items/cliente/36818",
+      "apilable": true,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      }
+    },
+    {
+      "id": "simple-flying-orb",
+      "nombre": "Simple Flying Orb",
+      "clientId": 36855,
+      "categoria": "orbs",
+      "sprite": "items/cliente/36855",
+      "apilable": true,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      },
+      "mercado": true
+    },
+    {
+      "id": "mythic-flying-orb",
+      "nombre": "Mythic Flying Orb",
+      "clientId": 36857,
+      "categoria": "orbs",
+      "sprite": "items/cliente/36857",
+      "apilable": true,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      },
+      "mercado": true
+    },
+    {
+      "id": "arcane-flying-orb",
+      "nombre": "Arcane Flying Orb",
+      "clientId": 36856,
+      "categoria": "orbs",
+      "sprite": "items/cliente/36856",
+      "apilable": true,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      },
+      "mercado": true
+    },
+    {
+      "id": "celestial-flying-orb",
+      "nombre": "Celestial Flying Orb",
+      "clientId": 36858,
+      "categoria": "orbs",
+      "sprite": "items/cliente/36858",
+      "apilable": true,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      }
+    },
+    {
+      "id": "simple-psychic-orb",
+      "nombre": "Simple Psychic Orb",
+      "clientId": 36795,
+      "categoria": "orbs",
+      "sprite": "items/cliente/36795",
+      "apilable": true,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      },
+      "mercado": true
+    },
+    {
+      "id": "mythic-psychic-orb",
+      "nombre": "Mythic Psychic Orb",
+      "clientId": 36797,
+      "categoria": "orbs",
+      "sprite": "items/cliente/36797",
+      "apilable": true,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      },
+      "mercado": true
+    },
+    {
+      "id": "arcane-psychic-orb",
+      "nombre": "Arcane Psychic Orb",
+      "clientId": 36796,
+      "categoria": "orbs",
+      "sprite": "items/cliente/36796",
+      "apilable": true,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      },
+      "mercado": true
+    },
+    {
+      "id": "celestial-psychic-orb",
+      "nombre": "Celestial Psychic Orb",
+      "clientId": 36798,
+      "categoria": "orbs",
+      "sprite": "items/cliente/36798",
+      "apilable": true,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      }
+    },
+    {
+      "id": "simple-bug-orb",
+      "nombre": "Simple Bug Orb",
+      "clientId": 36827,
+      "categoria": "orbs",
+      "sprite": "items/cliente/36827",
+      "apilable": true,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      },
+      "mercado": true
+    },
+    {
+      "id": "mythic-bug-orb",
+      "nombre": "Mythic Bug Orb",
+      "clientId": 36829,
+      "categoria": "orbs",
+      "sprite": "items/cliente/36829",
+      "apilable": true,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      },
+      "mercado": true
+    },
+    {
+      "id": "arcane-bug-orb",
+      "nombre": "Arcane Bug Orb",
+      "clientId": 36828,
+      "categoria": "orbs",
+      "sprite": "items/cliente/36828",
+      "apilable": true,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      },
+      "mercado": true
+    },
+    {
+      "id": "celestial-bug-orb",
+      "nombre": "Celestial Bug Orb",
+      "clientId": 36830,
+      "categoria": "orbs",
+      "sprite": "items/cliente/36830",
+      "apilable": true,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      }
+    },
+    {
+      "id": "simple-rock-orb",
+      "nombre": "Simple Rock Orb",
+      "clientId": 36843,
+      "categoria": "orbs",
+      "sprite": "items/cliente/36843",
+      "apilable": true,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      },
+      "mercado": true
+    },
+    {
+      "id": "mythic-rock-orb",
+      "nombre": "Mythic Rock Orb",
+      "clientId": 36845,
+      "categoria": "orbs",
+      "sprite": "items/cliente/36845",
+      "apilable": true,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      },
+      "mercado": true
+    },
+    {
+      "id": "arcane-rock-orb",
+      "nombre": "Arcane Rock Orb",
+      "clientId": 36844,
+      "categoria": "orbs",
+      "sprite": "items/cliente/36844",
+      "apilable": true,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      },
+      "mercado": true
+    },
+    {
+      "id": "celestial-rock-orb",
+      "nombre": "Celestial Rock Orb",
+      "clientId": 36846,
+      "categoria": "orbs",
+      "sprite": "items/cliente/36846",
+      "apilable": true,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      },
+      "mercado": true
+    },
+    {
+      "id": "simple-ghost-orb",
+      "nombre": "Simple Ghost Orb",
+      "clientId": 36803,
+      "categoria": "orbs",
+      "sprite": "items/cliente/36803",
+      "apilable": true,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      },
+      "mercado": true
+    },
+    {
+      "id": "mythic-ghost-orb",
+      "nombre": "Mythic Ghost Orb",
+      "clientId": 36805,
+      "categoria": "orbs",
+      "sprite": "items/cliente/36805",
+      "apilable": true,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      },
+      "mercado": true
+    },
+    {
+      "id": "arcane-ghost-orb",
+      "nombre": "Arcane Ghost Orb",
+      "clientId": 36804,
+      "categoria": "orbs",
+      "sprite": "items/cliente/36804",
+      "apilable": true,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      },
+      "mercado": true
+    },
+    {
+      "id": "celestial-ghost-orb",
+      "nombre": "Celestial Ghost Orb",
+      "clientId": 36806,
+      "categoria": "orbs",
+      "sprite": "items/cliente/36806",
+      "apilable": true,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      }
+    },
+    {
+      "id": "simple-dragon-orb",
+      "nombre": "Simple Dragon Orb",
+      "clientId": 36847,
+      "categoria": "orbs",
+      "sprite": "items/cliente/36847",
+      "apilable": true,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      },
+      "mercado": true
+    },
+    {
+      "id": "mythic-dragon-orb",
+      "nombre": "Mythic Dragon Orb",
+      "clientId": 36849,
+      "categoria": "orbs",
+      "sprite": "items/cliente/36849",
+      "apilable": true,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      },
+      "mercado": true
+    },
+    {
+      "id": "arcane-dragon-orb",
+      "nombre": "Arcane Dragon Orb",
+      "clientId": 36848,
+      "categoria": "orbs",
+      "sprite": "items/cliente/36848",
+      "apilable": true,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      },
+      "mercado": true
+    },
+    {
+      "id": "celestial-dragon-orb",
+      "nombre": "Celestial Dragon Orb",
+      "clientId": 36850,
+      "categoria": "orbs",
+      "sprite": "items/cliente/36850",
+      "apilable": true,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      }
+    },
+    {
+      "id": "simple-fairy-orb",
+      "nombre": "Simple Fairy Orb",
+      "clientId": 36835,
+      "categoria": "orbs",
+      "sprite": "items/cliente/36835",
+      "apilable": true,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      },
+      "mercado": true
+    },
+    {
+      "id": "mythic-fairy-orb",
+      "nombre": "Mythic Fairy Orb",
+      "clientId": 36837,
+      "categoria": "orbs",
+      "sprite": "items/cliente/36837",
+      "apilable": true,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      },
+      "mercado": true
+    },
+    {
+      "id": "arcane-fairy-orb",
+      "nombre": "Arcane Fairy Orb",
+      "clientId": 36836,
+      "categoria": "orbs",
+      "sprite": "items/cliente/36836",
+      "apilable": true,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      },
+      "mercado": true
+    },
+    {
+      "id": "celestial-fairy-orb",
+      "nombre": "Celestial Fairy Orb",
+      "clientId": 36838,
+      "categoria": "orbs",
+      "sprite": "items/cliente/36838",
+      "apilable": true,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      },
+      "mercado": true
+    },
+    {
+      "id": "simple-dark-orb",
+      "nombre": "Simple Dark Orb",
+      "clientId": 36791,
+      "categoria": "orbs",
+      "sprite": "items/cliente/36791",
+      "apilable": true,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      },
+      "mercado": true
+    },
+    {
+      "id": "mythic-dark-orb",
+      "nombre": "Mythic Dark Orb",
+      "clientId": 36793,
+      "categoria": "orbs",
+      "sprite": "items/cliente/36793",
+      "apilable": true,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      },
+      "mercado": true
+    },
+    {
+      "id": "arcane-dark-orb",
+      "nombre": "Arcane Dark Orb",
+      "clientId": 36792,
+      "categoria": "orbs",
+      "sprite": "items/cliente/36792",
+      "apilable": true,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      },
+      "mercado": true
+    },
+    {
+      "id": "celestial-dark-orb",
+      "nombre": "Celestial Dark Orb",
+      "clientId": 36794,
+      "categoria": "orbs",
+      "sprite": "items/cliente/36794",
+      "apilable": true,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      },
+      "mercado": true
+    },
+    {
+      "id": "simple-metal-orb",
+      "nombre": "Simple Metal Orb",
+      "clientId": 36839,
+      "categoria": "orbs",
+      "sprite": "items/cliente/36839",
+      "apilable": true,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      },
+      "mercado": true
+    },
+    {
+      "id": "mythic-metal-orb",
+      "nombre": "Mythic Metal Orb",
+      "clientId": 36841,
+      "categoria": "orbs",
+      "sprite": "items/cliente/36841",
+      "apilable": true,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      },
+      "mercado": true
+    },
+    {
+      "id": "arcane-metal-orb",
+      "nombre": "Arcane Metal Orb",
+      "clientId": 36840,
+      "categoria": "orbs",
+      "sprite": "items/cliente/36840",
+      "apilable": true,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      },
+      "mercado": true
+    },
+    {
+      "id": "celestial-metal-orb",
+      "nombre": "Celestial Metal Orb",
+      "clientId": 36842,
+      "categoria": "orbs",
+      "sprite": "items/cliente/36842",
+      "apilable": true,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      },
+      "mercado": true
+    }
+  ]
 }

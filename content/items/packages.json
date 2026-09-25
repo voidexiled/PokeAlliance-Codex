@@ -1,0 +1,731 @@
+{
+  "$schema": "../schemas/items.schema.json",
+  "items": [
+    {
+      "id": "titan-groudon-founder-package",
+      "nombre": "Titan Groudon Founder Package",
+      "clientId": 50394,
+      "categoria": "packages",
+      "sprite": "items/cliente/50394",
+      "apilable": true,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      },
+      "descripcion": {
+        "en": "A package that celebrates the beginning of a new server Titan. Thank you for being with us!"
+      },
+      "obtencion": {
+        "tiendas": [
+          {
+            "tienda": "Diamond Shop",
+            "precio": 150,
+            "moneda": "Diamonds",
+            "cantidad": 1
+          }
+        ]
+      }
+    },
+    {
+      "id": "titan-kyogre-founder-package",
+      "nombre": "Titan Kyogre Founder Package",
+      "clientId": 50395,
+      "categoria": "packages",
+      "sprite": "items/cliente/50395",
+      "apilable": true,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      },
+      "descripcion": {
+        "en": "A package that celebrates the beginning of a new server Titan. Thank you for being with us!"
+      },
+      "obtencion": {
+        "tiendas": [
+          {
+            "tienda": "Diamond Shop",
+            "precio": 150,
+            "moneda": "Diamonds",
+            "cantidad": 1
+          }
+        ]
+      }
+    },
+    {
+      "id": "prime-golden-box",
+      "nombre": "Prime Golden Box",
+      "clientId": 28459,
+      "categoria": "packages",
+      "sprite": "items/cliente/28459",
+      "apilable": false,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      },
+      "descripcion": {
+        "en": "Contains several items that will help on the journey."
+      },
+      "obtencion": {
+        "tiendas": [
+          {
+            "tienda": "Diamond Shop",
+            "precio": 25,
+            "moneda": "Diamonds",
+            "cantidad": 1
+          }
+        ]
+      }
+    },
+    {
+      "id": "prime-silver-box",
+      "nombre": "Prime Silver Box",
+      "clientId": 28466,
+      "categoria": "packages",
+      "sprite": "items/cliente/28466",
+      "apilable": false,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      },
+      "descripcion": {
+        "en": "Contains several items that will help on the journey."
+      },
+      "obtencion": {
+        "tiendas": [
+          {
+            "tienda": "Diamond Shop",
+            "precio": 10,
+            "moneda": "Diamonds",
+            "cantidad": 1
+          }
+        ]
+      }
+    },
+    {
+      "id": "jirachi-package",
+      "nombre": "Jirachi Package",
+      "clientId": 45590,
+      "categoria": "packages",
+      "sprite": "items/cliente/45590",
+      "apilable": false,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      },
+      "descripcion": {
+        "en": "Unleash the magic of wishes with the Jirachi Box! This exclusive box is filled with unique cosmetics inspired by Jirachi—the legendary, wish-granting Pokémon."
+      },
+      "obtencion": {
+        "tiendas": [
+          {
+            "tienda": "Diamond Shop",
+            "precio": 40,
+            "moneda": "Diamonds",
+            "cantidad": 1
+          }
+        ]
+      }
+    },
+    {
+      "id": "shiny-jirachi-package",
+      "nombre": "Shiny Jirachi Package",
+      "clientId": 45591,
+      "categoria": "packages",
+      "sprite": "items/cliente/45591",
+      "apilable": false,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      },
+      "descripcion": {
+        "en": "Unleash the magic of wishes with the Jirachi Box! This exclusive box is filled with unique cosmetics inspired by Shiny Jirachi—the legendary, wish-granting Pokémon."
+      },
+      "obtencion": {
+        "tiendas": [
+          {
+            "tienda": "Diamond Shop",
+            "precio": 60,
+            "moneda": "Diamonds",
+            "cantidad": 1
+          }
+        ]
+      }
+    },
+    {
+      "id": "reward-box",
+      "nombre": "Reward Box",
+      "clientId": 21419,
+      "categoria": "packages",
+      "sprite": "items/cliente/21419",
+      "apilable": false,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      },
+      "obtencion": {
+        "tiendas": [
+          {
+            "tienda": "Diamond Shop",
+            "precio": 0,
+            "moneda": "Diamonds",
+            "cantidad": 1
+          }
+        ]
+      }
+    },
+    {
+      "id": "special-pokeball-box",
+      "nombre": "Special Pokéball Box",
+      "clientId": 32012,
+      "categoria": "packages",
+      "sprite": "items/cliente/32012",
+      "apilable": true,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      },
+      "obtencion": {
+        "tiendas": [
+          {
+            "tienda": "Diamond Shop",
+            "precio": 3,
+            "moneda": "Diamonds",
+            "cantidad": 1
+          }
+        ],
+        "calendario": [
+          {
+            "mes": 9,
+            "dia": 5,
+            "trasDia21": false,
+            "calendario": "premium",
+            "cantidad": 1
+          },
+          {
+            "mes": 9,
+            "dia": 10,
+            "trasDia21": false,
+            "calendario": "premium",
+            "cantidad": 1
+          },
+          {
+            "mes": 9,
+            "dia": 19,
+            "trasDia21": false,
+            "calendario": "premium",
+            "cantidad": 2
+          }
+        ]
+      }
+    },
+    {
+      "id": "medal-box",
+      "nombre": "Medal Box",
+      "clientId": 48196,
+      "categoria": "packages",
+      "sprite": "items/cliente/48196",
+      "apilable": true,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      },
+      "mercado": true,
+      "descripcion": {
+        "en": "Random Box"
+      },
+      "obtencion": {
+        "tiendas": [
+          {
+            "tienda": "Diamond Shop",
+            "precio": 50,
+            "moneda": "Diamonds",
+            "cantidad": 40
+          }
+        ],
+        "pase": [
+          {
+            "temporada": null,
+            "nivel": 39,
+            "pista": "premium",
+            "cantidad": 15
+          }
+        ]
+      }
+    },
+    {
+      "id": "food-box",
+      "nombre": "Food Box",
+      "clientId": 48195,
+      "categoria": "packages",
+      "sprite": "items/cliente/48195",
+      "apilable": true,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      },
+      "descripcion": {
+        "en": "Random Food"
+      },
+      "obtencion": {
+        "tiendas": [
+          {
+            "tienda": "Diamond Shop",
+            "precio": 8,
+            "moneda": "Diamonds",
+            "cantidad": 10
+          }
+        ]
+      }
+    },
+    {
+      "id": "bug-shard-box",
+      "nombre": "Bug Shard Box",
+      "clientId": 48125,
+      "categoria": "packages",
+      "sprite": "items/cliente/48125",
+      "apilable": true,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      },
+      "descripcion": {
+        "en": "Opening this Bug Shard Box will grant you a random Bug type Shard for a non‑Legendary Pokémon. Legendary and higher‑tier Shards are excluded. Use it to unlock hidden Dens and face exclusive challenges!"
+      },
+      "obtencion": {
+        "tiendas": [
+          {
+            "tienda": "Diamond Shop",
+            "precio": 6,
+            "moneda": "Diamonds",
+            "cantidad": 10
+          }
+        ]
+      }
+    },
+    {
+      "id": "dark-shard-box",
+      "nombre": "Dark Shard Box",
+      "clientId": 48126,
+      "categoria": "packages",
+      "sprite": "items/cliente/48126",
+      "apilable": true,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      },
+      "descripcion": {
+        "en": "Opening this Dark Shard Box will grant you a random Dark type Shard for a non‑Legendary Pokémon. Legendary and higher‑tier Shards are excluded. Use it to unlock hidden Dens and face exclusive challenges!"
+      },
+      "obtencion": {
+        "tiendas": [
+          {
+            "tienda": "Diamond Shop",
+            "precio": 6,
+            "moneda": "Diamonds",
+            "cantidad": 10
+          }
+        ]
+      }
+    },
+    {
+      "id": "dragon-shard-box",
+      "nombre": "Dragon Shard Box",
+      "clientId": 48127,
+      "categoria": "packages",
+      "sprite": "items/cliente/48127",
+      "apilable": true,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      },
+      "descripcion": {
+        "en": "Opening this Dragon Shard Box will grant you a random Dragon type Shard for a non‑Legendary Pokémon. Legendary and higher‑tier Shards are excluded. Use it to unlock hidden Dens and face exclusive challenges!"
+      },
+      "obtencion": {
+        "tiendas": [
+          {
+            "tienda": "Diamond Shop",
+            "precio": 6,
+            "moneda": "Diamonds",
+            "cantidad": 10
+          }
+        ]
+      }
+    },
+    {
+      "id": "electric-shard-box",
+      "nombre": "Electric Shard Box",
+      "clientId": 48128,
+      "categoria": "packages",
+      "sprite": "items/cliente/48128",
+      "apilable": true,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      },
+      "descripcion": {
+        "en": "Opening this Electric Shard Box will grant you a random Electric type Shard for a non‑Legendary Pokémon. Legendary and higher‑tier Shards are excluded. Use it to unlock hidden Dens and face exclusive challenges!"
+      },
+      "obtencion": {
+        "tiendas": [
+          {
+            "tienda": "Diamond Shop",
+            "precio": 6,
+            "moneda": "Diamonds",
+            "cantidad": 10
+          }
+        ]
+      }
+    },
+    {
+      "id": "fairy-shard-box",
+      "nombre": "Fairy Shard Box",
+      "clientId": 48129,
+      "categoria": "packages",
+      "sprite": "items/cliente/48129",
+      "apilable": true,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      },
+      "descripcion": {
+        "en": "Opening this Fairy Shard Box will grant you a random Fairy type Shard for a non‑Legendary Pokémon. Legendary and higher‑tier Shards are excluded. Use it to unlock hidden Dens and face exclusive challenges!"
+      },
+      "obtencion": {
+        "tiendas": [
+          {
+            "tienda": "Diamond Shop",
+            "precio": 6,
+            "moneda": "Diamonds",
+            "cantidad": 10
+          }
+        ]
+      }
+    },
+    {
+      "id": "fighting-shard-box",
+      "nombre": "Fighting Shard Box",
+      "clientId": 48130,
+      "categoria": "packages",
+      "sprite": "items/cliente/48130",
+      "apilable": true,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      },
+      "descripcion": {
+        "en": "Opening this Fighting Shard Box will grant you a random Fighting type Shard for a non‑Legendary Pokémon. Legendary and higher‑tier Shards are excluded. Use it to unlock hidden Dens and face exclusive challenges!"
+      },
+      "obtencion": {
+        "tiendas": [
+          {
+            "tienda": "Diamond Shop",
+            "precio": 6,
+            "moneda": "Diamonds",
+            "cantidad": 10
+          }
+        ]
+      }
+    },
+    {
+      "id": "fire-shard-box",
+      "nombre": "Fire Shard Box",
+      "clientId": 48131,
+      "categoria": "packages",
+      "sprite": "items/cliente/48131",
+      "apilable": true,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      },
+      "descripcion": {
+        "en": "Opening this Fire Shard Box will grant you a random Fire type Shard for a non‑Legendary Pokémon. Legendary and higher‑tier Shards are excluded. Use it to unlock hidden Dens and face exclusive challenges!"
+      },
+      "obtencion": {
+        "tiendas": [
+          {
+            "tienda": "Diamond Shop",
+            "precio": 6,
+            "moneda": "Diamonds",
+            "cantidad": 10
+          }
+        ]
+      }
+    },
+    {
+      "id": "flying-shard-box",
+      "nombre": "Flying Shard Box",
+      "clientId": 48132,
+      "categoria": "packages",
+      "sprite": "items/cliente/48132",
+      "apilable": true,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      },
+      "descripcion": {
+        "en": "Opening this Flying Shard Box will grant you a random Flying type Shard for a non‑Legendary Pokémon. Legendary and higher‑tier Shards are excluded. Use it to unlock hidden Dens and face exclusive challenges!"
+      },
+      "obtencion": {
+        "tiendas": [
+          {
+            "tienda": "Diamond Shop",
+            "precio": 6,
+            "moneda": "Diamonds",
+            "cantidad": 10
+          }
+        ]
+      }
+    },
+    {
+      "id": "ghost-shard-box",
+      "nombre": "Ghost Shard Box",
+      "clientId": 48133,
+      "categoria": "packages",
+      "sprite": "items/cliente/48133",
+      "apilable": true,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      },
+      "descripcion": {
+        "en": "Opening this Ghost Shard Box will grant you a random Ghost type Shard for a non‑Legendary Pokémon. Legendary and higher‑tier Shards are excluded. Use it to unlock hidden Dens and face exclusive challenges!"
+      },
+      "obtencion": {
+        "tiendas": [
+          {
+            "tienda": "Diamond Shop",
+            "precio": 6,
+            "moneda": "Diamonds",
+            "cantidad": 10
+          }
+        ]
+      }
+    },
+    {
+      "id": "grass-shard-box",
+      "nombre": "Grass Shard Box",
+      "clientId": 48134,
+      "categoria": "packages",
+      "sprite": "items/cliente/48134",
+      "apilable": true,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      },
+      "descripcion": {
+        "en": "Opening this Grass Shard Box will grant you a random Grass type Shard for a non‑Legendary Pokémon. Legendary and higher‑tier Shards are excluded. Use it to unlock hidden Dens and face exclusive challenges!"
+      },
+      "obtencion": {
+        "tiendas": [
+          {
+            "tienda": "Diamond Shop",
+            "precio": 6,
+            "moneda": "Diamonds",
+            "cantidad": 10
+          }
+        ]
+      }
+    },
+    {
+      "id": "ground-shard-box",
+      "nombre": "Ground Shard Box",
+      "clientId": 48135,
+      "categoria": "packages",
+      "sprite": "items/cliente/48135",
+      "apilable": true,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      },
+      "descripcion": {
+        "en": "Opening this Ground Shard Box will grant you a random Ground type Shard for a non‑Legendary Pokémon. Legendary and higher‑tier Shards are excluded. Use it to unlock hidden Dens and face exclusive challenges!"
+      },
+      "obtencion": {
+        "tiendas": [
+          {
+            "tienda": "Diamond Shop",
+            "precio": 6,
+            "moneda": "Diamonds",
+            "cantidad": 10
+          }
+        ]
+      }
+    },
+    {
+      "id": "ice-shard-box",
+      "nombre": "Ice Shard Box",
+      "clientId": 48136,
+      "categoria": "packages",
+      "sprite": "items/cliente/48136",
+      "apilable": true,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      },
+      "descripcion": {
+        "en": "Opening this Ice Shard Box will grant you a random Ice type Shard for a non‑Legendary Pokémon. Legendary and higher‑tier Shards are excluded. Use it to unlock hidden Dens and face exclusive challenges!"
+      },
+      "obtencion": {
+        "tiendas": [
+          {
+            "tienda": "Diamond Shop",
+            "precio": 6,
+            "moneda": "Diamonds",
+            "cantidad": 10
+          }
+        ]
+      }
+    },
+    {
+      "id": "normal-shard-box",
+      "nombre": "Normal Shard Box",
+      "clientId": 48137,
+      "categoria": "packages",
+      "sprite": "items/cliente/48137",
+      "apilable": true,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      },
+      "descripcion": {
+        "en": "Opening this Normal Shard Box will grant you a random Normal type Shard for a non‑Legendary Pokémon. Legendary and higher‑tier Shards are excluded. Use it to unlock hidden Dens and face exclusive challenges!"
+      },
+      "obtencion": {
+        "tiendas": [
+          {
+            "tienda": "Diamond Shop",
+            "precio": 6,
+            "moneda": "Diamonds",
+            "cantidad": 10
+          }
+        ]
+      }
+    },
+    {
+      "id": "poison-shard-box",
+      "nombre": "Poison Shard Box",
+      "clientId": 48138,
+      "categoria": "packages",
+      "sprite": "items/cliente/48138",
+      "apilable": true,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      },
+      "descripcion": {
+        "en": "Opening this Poison Shard Box will grant you a random Poison type Shard for a non‑Legendary Pokémon. Legendary and higher‑tier Shards are excluded. Use it to unlock hidden Dens and face exclusive challenges!"
+      },
+      "obtencion": {
+        "tiendas": [
+          {
+            "tienda": "Diamond Shop",
+            "precio": 6,
+            "moneda": "Diamonds",
+            "cantidad": 10
+          }
+        ]
+      }
+    },
+    {
+      "id": "psychic-shard-box",
+      "nombre": "Psychic Shard Box",
+      "clientId": 48139,
+      "categoria": "packages",
+      "sprite": "items/cliente/48139",
+      "apilable": true,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      },
+      "descripcion": {
+        "en": "Opening this Psychic Shard Box will grant you a random Psychic type Shard for a non‑Legendary Pokémon. Legendary and higher‑tier Shards are excluded. Use it to unlock hidden Dens and face exclusive challenges!"
+      },
+      "obtencion": {
+        "tiendas": [
+          {
+            "tienda": "Diamond Shop",
+            "precio": 6,
+            "moneda": "Diamonds",
+            "cantidad": 10
+          }
+        ]
+      }
+    },
+    {
+      "id": "rock-shard-box",
+      "nombre": "Rock Shard Box",
+      "clientId": 48140,
+      "categoria": "packages",
+      "sprite": "items/cliente/48140",
+      "apilable": true,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      },
+      "descripcion": {
+        "en": "Opening this Rock Shard Box will grant you a random Rock type Shard for a non‑Legendary Pokémon. Legendary and higher‑tier Shards are excluded. Use it to unlock hidden Dens and face exclusive challenges!"
+      },
+      "obtencion": {
+        "tiendas": [
+          {
+            "tienda": "Diamond Shop",
+            "precio": 6,
+            "moneda": "Diamonds",
+            "cantidad": 10
+          }
+        ]
+      }
+    },
+    {
+      "id": "steel-shard-box",
+      "nombre": "Steel Shard Box",
+      "clientId": 48141,
+      "categoria": "packages",
+      "sprite": "items/cliente/48141",
+      "apilable": true,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      },
+      "descripcion": {
+        "en": "Opening this Steel Shard Box will grant you a random Steel type Shard for a non‑Legendary Pokémon. Legendary and higher‑tier Shards are excluded. Use it to unlock hidden Dens and face exclusive challenges!"
+      },
+      "obtencion": {
+        "tiendas": [
+          {
+            "tienda": "Diamond Shop",
+            "precio": 6,
+            "moneda": "Diamonds",
+            "cantidad": 10
+          }
+        ]
+      }
+    },
+    {
+      "id": "water-shard-box",
+      "nombre": "Water Shard Box",
+      "clientId": 48142,
+      "categoria": "packages",
+      "sprite": "items/cliente/48142",
+      "apilable": true,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      },
+      "descripcion": {
+        "en": "Opening this Water Shard Box will grant you a random Water type Shard for a non‑Legendary Pokémon. Legendary and higher‑tier Shards are excluded. Use it to unlock hidden Dens and face exclusive challenges!"
+      },
+      "obtencion": {
+        "tiendas": [
+          {
+            "tienda": "Diamond Shop",
+            "precio": 6,
+            "moneda": "Diamonds",
+            "cantidad": 10
+          }
+        ]
+      }
+    }
+  ]
+}

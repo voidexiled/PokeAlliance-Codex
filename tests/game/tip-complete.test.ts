@@ -101,14 +101,16 @@ describe('item panels (server)', () => {
     }
   });
 
-  it('every held item has its game text, slot and tier', () => {
+  it('every held item has its game text, slot (when the game says it) and tier', () => {
     const labels = UI.es.tooltip;
     const helds = getItems('helds');
     expect(helds.length).toBeGreaterThan(90);
     for (const held of helds) {
       const tip = serverItemTip(held.id);
       expect(tip.text?.value, held.id).toBeTruthy();
-      expect(valueOf(tip, labels.slot), held.id).toMatch(/^[XY]$/);
+      // «Held Item (Tier: n)» gives a random held: the game does not say its slot.
+      if (held.held?.ranura === null) expect(valueOf(tip, labels.slot), held.id).toBeUndefined();
+      else expect(valueOf(tip, labels.slot), held.id).toMatch(/^[XY]$/);
       expect(valueOf(tip, labels.tier), held.id).toBe(String(held.held?.tier));
     }
   });

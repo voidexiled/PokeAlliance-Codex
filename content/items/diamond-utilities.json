@@ -1,0 +1,215 @@
+{
+  "$schema": "../schemas/items.schema.json",
+  "items": [
+    {
+      "id": "world-migration-ticket",
+      "nombre": "World Migration Ticket",
+      "clientId": 39090,
+      "categoria": "diamond-utilities",
+      "sprite": "items/cliente/39090",
+      "apilable": true,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      },
+      "mercado": true,
+      "descripcion": {
+        "en": "A ticket that grants its owner the right to migrate to a different world."
+      },
+      "obtencion": {
+        "tiendas": [
+          {
+            "tienda": "Diamond Shop",
+            "precio": 10,
+            "moneda": "Diamonds",
+            "cantidad": 1
+          }
+        ]
+      }
+    },
+    {
+      "id": "player-change-sex",
+      "nombre": "Player Change Sex",
+      "clientId": 42486,
+      "categoria": "diamond-utilities",
+      "sprite": "items/cliente/42486",
+      "apilable": false,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      },
+      "descripcion": {
+        "en": "When used, it changes the character's gender to the opposite."
+      },
+      "obtencion": {
+        "tiendas": [
+          {
+            "tienda": "Diamond Shop",
+            "precio": 3,
+            "moneda": "Diamonds",
+            "cantidad": 1
+          }
+        ]
+      }
+    },
+    {
+      "id": "bless",
+      "nombre": "Bless",
+      "clientId": 37800,
+      "categoria": "diamond-utilities",
+      "sprite": "items/cliente/37800",
+      "apilable": false,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      },
+      "obtencion": {
+        "tiendas": [
+          {
+            "tienda": "Diamond Shop",
+            "precio": 2,
+            "moneda": "Diamonds",
+            "cantidad": 1
+          }
+        ]
+      }
+    },
+    {
+      "id": "bless-plus",
+      "nombre": "Bless Plus",
+      "clientId": 37801,
+      "categoria": "diamond-utilities",
+      "sprite": "items/cliente/37801",
+      "apilable": false,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      },
+      "obtencion": {
+        "tiendas": [
+          {
+            "tienda": "Diamond Shop",
+            "precio": 5,
+            "moneda": "Diamonds",
+            "cantidad": 1
+          }
+        ],
+        "pase": [
+          {
+            "temporada": null,
+            "nivel": 13,
+            "pista": "premium",
+            "cantidad": 2
+          }
+        ]
+      }
+    },
+    {
+      "id": "moving-ticket",
+      "nombre": "Moving Ticket",
+      "clientId": 37875,
+      "categoria": "diamond-utilities",
+      "sprite": "items/cliente/37875",
+      "apilable": false,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      },
+      "descripcion": {
+        "en": "A one-time ticket to change the owner's hometown."
+      },
+      "obtencion": {
+        "tiendas": [
+          {
+            "tienda": "Diamond Shop",
+            "precio": 2,
+            "moneda": "Diamonds",
+            "cantidad": 1
+          }
+        ]
+      }
+    },
+    {
+      "id": "guild-daily-ticket",
+      "nombre": "guild daily ticket",
+      "clientId": 28380,
+      "categoria": "diamond-utilities",
+      "sprite": "items/cliente/28380",
+      "apilable": true,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      },
+      "descripcion": {
+        "en": "Use this ticket on guild panel to reset your guild dailies."
+      },
+      "obtencion": {
+        "tiendas": [
+          {
+            "tienda": "Diamond Shop",
+            "precio": 1,
+            "moneda": "Diamonds",
+            "cantidad": 1
+          },
+          {
+            "tienda": "Online Shop",
+            "precio": 250,
+            "moneda": "Online Points",
+            "cantidad": 1
+          }
+        ],
+        "pase": [
+          {
+            "temporada": null,
+            "nivel": 7,
+            "pista": "gratis",
+            "cantidad": 1
+          },
+          {
+            "temporada": null,
+            "nivel": 7,
+            "pista": "premium",
+            "cantidad": 2
+          }
+        ],
+        "calendario": [
+          {
+            "mes": 9,
+            "dia": 15,
+            "trasDia21": false,
+            "calendario": "gratis",
+            "cantidad": 1
+          },
+          {
+            "mes": 9,
+            "dia": 20,
+            "trasDia21": false,
+            "calendario": "gratis",
+            "cantidad": 1
+          },
+          {
+            "mes": 9,
+            "dia": 21,
+            "trasDia21": false,
+            "calendario": "gratis",
+            "cantidad": 1
+          },
+          {
+            "mes": 9,
+            "dia": 18,
+            "trasDia21": false,
+            "calendario": "premium",
+            "cantidad": 3
+          },
+          {
+            "mes": 9,
+            "dia": 20,
+            "trasDia21": false,
+            "calendario": "premium",
+            "cantidad": 3
+          }
+        ]
+      }
+    }
+  ]
+}

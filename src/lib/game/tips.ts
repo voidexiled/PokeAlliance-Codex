@@ -432,7 +432,7 @@ export type ItemTipFacts = {
   /** `descripcion`: the game's inspection text (what the item does), in the languages it has. */
   descripcion?: Partial<Record<Locale, string>> | null;
   /** `held` of a held item (16.2.3): its slot and tier; the effect is in `descripcion`. */
-  held?: { ranura: 'x' | 'y'; tier: number } | null;
+  held?: { ranura: 'x' | 'y' | null; tier: number } | null;
   /** The names of the Pokémon a Mega Stone evolves (`mega.pokemon`). */
   megaDe?: readonly string[] | null;
   /**
@@ -644,7 +644,7 @@ export function itemTip(item: ItemTipRecord, locale: Locale, labels: TipLabels):
     ...(description === null ? {} : { text: description }),
     rows: tipRows([
       [labels.category, text(item.nombreCategoria, locale)],
-      [labels.slot ?? '', item.held ? item.held.ranura.toUpperCase() : null],
+      [labels.slot ?? '', item.held?.ranura ? item.held.ranura.toUpperCase() : null],
       [labels.tier, item.held ? formatInteger(item.held.tier, locale) : null],
       [labels.megaOf ?? '', { list: [...(item.megaDe ?? [])] }],
       [labels.evolves ?? '', pokemonList(item.evoluciona, locale, labels)],

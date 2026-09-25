@@ -27,6 +27,11 @@ export const ARTE_EN_MARCO: Readonly<Record<string, number>> = {
   'ui/indice/sistemas': 24,
   'outfits/138': 24,
   'ui/nav/destacados': 30,
+  // Icons of the site's own item categories (content/items/categorias.json): client item tiles.
+  'items/cliente/23312': 24,
+  'items/cliente/39090': 30,
+  'items/cliente/50394': 31,
+  'items/cliente/29365': 31,
 };
 
 /**

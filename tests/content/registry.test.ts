@@ -55,7 +55,7 @@ const readJson = (file: string) => JSON.parse(readFileSync(path.join(repoRoot, f
 const jsonSchema = (name: string) => readJson(`content/schemas/${name}.schema.json`);
 
 describe('registry loaders', () => {
-  it('lists the 14 Market categories in client order, then «Otros»', () => {
+  it('lists the 14 Market categories in client order, the site categories, then «Otros»', () => {
     const categorias = getCategorias();
     expect(categorias.map((categoria) => categoria.nombre.es)).toEqual([
       'Todo',
@@ -72,13 +72,17 @@ describe('registry loaders', () => {
       'Consumable',
       'Foods',
       'Furnitures',
+      'Boosters',
+      'Diamond Utilities',
+      'Packages',
+      'Toys',
       'Otros',
     ]);
     expect(categorias[0]).toMatchObject({ id: 'todo', virtual: true });
   });
 
   it('loads items per category and "todo" as every category', () => {
-    expect(getItems('stones')).toHaveLength(37);
+    expect(getItems('stones')).toHaveLength(265);
     expect(
       getItems('stones')
         .slice(0, 5)
@@ -666,7 +670,7 @@ describe('pnpm content:check', () => {
     expect(result.errors).toEqual([]);
     expect(result.summary.find((row) => row.file === 'content/items/stones.json')).toEqual({
       file: 'content/items/stones.json',
-      registros: '37 items',
+      registros: '265 items',
       borradores: 0,
     });
     expect(formatReport(result)).toMatch(/Resultado: sin errores/);
@@ -935,7 +939,7 @@ describe('pnpm content:check', () => {
     ]);
   });
 
-  it('keeps the 14 Market categories, «Otros» and their order', () => {
+  it('keeps the 14 Market categories, the site categories, «Otros» and their order', () => {
     let root = copyRepo();
     edit(root, 'content/items/categorias.json', (data: { categorias: { orden: number }[] }) => {
       [data.categorias[1].orden, data.categorias[2].orden] = [
@@ -955,7 +959,7 @@ describe('pnpm content:check', () => {
     // otros.json stays (its items are the loot of content/pokemon.json): the file then has no
     // category, which is reported as well.
     expect(lines(checkContent(root).errors)).toContainEqual(
-      expect.stringMatching(/categorias\.json · categorias · necesita al menos 15 elemento/),
+      expect.stringMatching(/categorias\.json · categorias · necesita al menos 19 elemento/),
     );
 
     root = copyRepo();

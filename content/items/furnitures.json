@@ -1,4 +1,2311 @@
 {
   "$schema": "../schemas/items.schema.json",
-  "items": []
+  "items": [
+    {
+      "id": "latias-bathtub",
+      "nombre": "latias bathtub",
+      "clientId": 49581,
+      "categoria": "furnitures",
+      "sprite": "items/cliente/49581",
+      "apilable": false,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      },
+      "obtencion": {
+        "tiendas": [
+          {
+            "tienda": "Diamond Shop",
+            "precio": 20,
+            "moneda": "Diamonds",
+            "cantidad": 1
+          }
+        ]
+      }
+    },
+    {
+      "id": "latias-bathtub-49580",
+      "nombre": "latias bathtub",
+      "clientId": 49580,
+      "categoria": "furnitures",
+      "sprite": "items/cliente/49580",
+      "apilable": false,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      },
+      "obtencion": {
+        "tiendas": [
+          {
+            "tienda": "Diamond Shop",
+            "precio": 20,
+            "moneda": "Diamonds",
+            "cantidad": 1
+          }
+        ]
+      }
+    },
+    {
+      "id": "pikachu-and-buneary-doll",
+      "nombre": "Pikachu and Buneary Doll",
+      "clientId": 49033,
+      "categoria": "furnitures",
+      "sprite": "items/cliente/49033",
+      "apilable": false,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      },
+      "obtencion": {
+        "tiendas": [
+          {
+            "tienda": "Diamond Shop",
+            "precio": 20,
+            "moneda": "Diamonds",
+            "cantidad": 1
+          }
+        ]
+      }
+    },
+    {
+      "id": "punching-bag-package",
+      "nombre": "Punching Bag Package",
+      "clientId": 48575,
+      "categoria": "furnitures",
+      "sprite": "items/cliente/48575",
+      "apilable": false,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      },
+      "obtencion": {
+        "tiendas": [
+          {
+            "tienda": "Diamond Shop",
+            "precio": 15,
+            "moneda": "Diamonds",
+            "cantidad": 1
+          }
+        ]
+      }
+    },
+    {
+      "id": "punching-bag-package-48579",
+      "nombre": "Punching Bag Package",
+      "clientId": 48579,
+      "categoria": "furnitures",
+      "sprite": "items/cliente/48579",
+      "apilable": false,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      },
+      "obtencion": {
+        "tiendas": [
+          {
+            "tienda": "Diamond Shop",
+            "precio": 15,
+            "moneda": "Diamonds",
+            "cantidad": 1
+          }
+        ]
+      }
+    },
+    {
+      "id": "punching-bag-package-48583",
+      "nombre": "Punching Bag Package",
+      "clientId": 48583,
+      "categoria": "furnitures",
+      "sprite": "items/cliente/48583",
+      "apilable": false,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      },
+      "obtencion": {
+        "tiendas": [
+          {
+            "tienda": "Diamond Shop",
+            "precio": 15,
+            "moneda": "Diamonds",
+            "cantidad": 1
+          }
+        ]
+      }
+    },
+    {
+      "id": "punching-bag-package-48587",
+      "nombre": "Punching Bag Package",
+      "clientId": 48587,
+      "categoria": "furnitures",
+      "sprite": "items/cliente/48587",
+      "apilable": false,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      },
+      "obtencion": {
+        "tiendas": [
+          {
+            "tienda": "Diamond Shop",
+            "precio": 15,
+            "moneda": "Diamonds",
+            "cantidad": 1
+          }
+        ]
+      }
+    },
+    {
+      "id": "punching-bag-premium-charger",
+      "nombre": "Punching Bag Premium Charger",
+      "clientId": 48407,
+      "categoria": "furnitures",
+      "sprite": "items/cliente/48407",
+      "apilable": true,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      },
+      "mercado": true,
+      "obtencion": {
+        "tiendas": [
+          {
+            "tienda": "Diamond Shop",
+            "precio": 10,
+            "moneda": "Diamonds",
+            "cantidad": 10
+          }
+        ],
+        "pase": [
+          {
+            "temporada": null,
+            "nivel": 19,
+            "pista": "premium",
+            "cantidad": 5
+          },
+          {
+            "temporada": null,
+            "nivel": 34,
+            "pista": "premium",
+            "cantidad": 5
+          }
+        ]
+      }
+    },
+    {
+      "id": "punching-bag-package-48395",
+      "nombre": "Punching Bag Package",
+      "clientId": 48395,
+      "categoria": "furnitures",
+      "sprite": "items/cliente/48395",
+      "apilable": false,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      },
+      "obtencion": {
+        "tiendas": [
+          {
+            "tienda": "Diamond Shop",
+            "precio": 15,
+            "moneda": "Diamonds",
+            "cantidad": 1
+          }
+        ]
+      }
+    },
+    {
+      "id": "closed-gryffindor-carpet",
+      "nombre": "closed Gryffindor Carpet",
+      "clientId": 48610,
+      "categoria": "furnitures",
+      "sprite": "items/cliente/48610",
+      "apilable": false,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      },
+      "obtencion": {
+        "tiendas": [
+          {
+            "tienda": "Diamond Shop",
+            "precio": 2,
+            "moneda": "Diamonds",
+            "cantidad": 4
+          }
+        ]
+      }
+    },
+    {
+      "id": "closed-gryffindor-carpet-48612",
+      "nombre": "closed Gryffindor Carpet",
+      "clientId": 48612,
+      "categoria": "furnitures",
+      "sprite": "items/cliente/48612",
+      "apilable": false,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      },
+      "obtencion": {
+        "tiendas": [
+          {
+            "tienda": "Diamond Shop",
+            "precio": 2,
+            "moneda": "Diamonds",
+            "cantidad": 4
+          }
+        ]
+      }
+    },
+    {
+      "id": "closed-gryffindor-carpet-48634",
+      "nombre": "closed Gryffindor Carpet",
+      "clientId": 48634,
+      "categoria": "furnitures",
+      "sprite": "items/cliente/48634",
+      "apilable": false,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      },
+      "obtencion": {
+        "tiendas": [
+          {
+            "tienda": "Diamond Shop",
+            "precio": 2,
+            "moneda": "Diamonds",
+            "cantidad": 4
+          }
+        ]
+      }
+    },
+    {
+      "id": "closed-slytherin-carpet",
+      "nombre": "closed Slytherin Carpet",
+      "clientId": 48618,
+      "categoria": "furnitures",
+      "sprite": "items/cliente/48618",
+      "apilable": false,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      },
+      "obtencion": {
+        "tiendas": [
+          {
+            "tienda": "Diamond Shop",
+            "precio": 2,
+            "moneda": "Diamonds",
+            "cantidad": 4
+          }
+        ]
+      }
+    },
+    {
+      "id": "closed-slytherin-carpet-48620",
+      "nombre": "closed Slytherin Carpet",
+      "clientId": 48620,
+      "categoria": "furnitures",
+      "sprite": "items/cliente/48620",
+      "apilable": false,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      },
+      "obtencion": {
+        "tiendas": [
+          {
+            "tienda": "Diamond Shop",
+            "precio": 2,
+            "moneda": "Diamonds",
+            "cantidad": 4
+          }
+        ]
+      }
+    },
+    {
+      "id": "closed-slytherin-carpet-48638",
+      "nombre": "closed Slytherin Carpet",
+      "clientId": 48638,
+      "categoria": "furnitures",
+      "sprite": "items/cliente/48638",
+      "apilable": false,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      },
+      "obtencion": {
+        "tiendas": [
+          {
+            "tienda": "Diamond Shop",
+            "precio": 2,
+            "moneda": "Diamonds",
+            "cantidad": 4
+          }
+        ]
+      }
+    },
+    {
+      "id": "closed-hufflepuff-carpet",
+      "nombre": "closed Hufflepuff Carpet",
+      "clientId": 48614,
+      "categoria": "furnitures",
+      "sprite": "items/cliente/48614",
+      "apilable": false,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      },
+      "obtencion": {
+        "tiendas": [
+          {
+            "tienda": "Diamond Shop",
+            "precio": 2,
+            "moneda": "Diamonds",
+            "cantidad": 4
+          }
+        ]
+      }
+    },
+    {
+      "id": "closed-hufflepuff-carpet-48616",
+      "nombre": "closed Hufflepuff Carpet",
+      "clientId": 48616,
+      "categoria": "furnitures",
+      "sprite": "items/cliente/48616",
+      "apilable": false,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      },
+      "obtencion": {
+        "tiendas": [
+          {
+            "tienda": "Diamond Shop",
+            "precio": 2,
+            "moneda": "Diamonds",
+            "cantidad": 4
+          }
+        ]
+      }
+    },
+    {
+      "id": "closed-hufflepuff-carpet-48636",
+      "nombre": "closed Hufflepuff Carpet",
+      "clientId": 48636,
+      "categoria": "furnitures",
+      "sprite": "items/cliente/48636",
+      "apilable": false,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      },
+      "obtencion": {
+        "tiendas": [
+          {
+            "tienda": "Diamond Shop",
+            "precio": 2,
+            "moneda": "Diamonds",
+            "cantidad": 4
+          }
+        ]
+      }
+    },
+    {
+      "id": "closed-ravenclaw-carpet",
+      "nombre": "closed Ravenclaw Carpet",
+      "clientId": 48622,
+      "categoria": "furnitures",
+      "sprite": "items/cliente/48622",
+      "apilable": false,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      },
+      "obtencion": {
+        "tiendas": [
+          {
+            "tienda": "Diamond Shop",
+            "precio": 2,
+            "moneda": "Diamonds",
+            "cantidad": 4
+          }
+        ]
+      }
+    },
+    {
+      "id": "closed-ravenclaw-carpet-48624",
+      "nombre": "closed Ravenclaw Carpet",
+      "clientId": 48624,
+      "categoria": "furnitures",
+      "sprite": "items/cliente/48624",
+      "apilable": false,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      },
+      "obtencion": {
+        "tiendas": [
+          {
+            "tienda": "Diamond Shop",
+            "precio": 2,
+            "moneda": "Diamonds",
+            "cantidad": 4
+          }
+        ]
+      }
+    },
+    {
+      "id": "closed-ravenclaw-carpet-48640",
+      "nombre": "closed Ravenclaw Carpet",
+      "clientId": 48640,
+      "categoria": "furnitures",
+      "sprite": "items/cliente/48640",
+      "apilable": false,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      },
+      "obtencion": {
+        "tiendas": [
+          {
+            "tienda": "Diamond Shop",
+            "precio": 2,
+            "moneda": "Diamonds",
+            "cantidad": 4
+          }
+        ]
+      }
+    },
+    {
+      "id": "hogwarts-tapestry",
+      "nombre": "Hogwarts tapestry",
+      "clientId": 48594,
+      "categoria": "furnitures",
+      "sprite": "items/cliente/48594",
+      "apilable": false,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      },
+      "obtencion": {
+        "tiendas": [
+          {
+            "tienda": "Diamond Shop",
+            "precio": 2,
+            "moneda": "Diamonds",
+            "cantidad": 2
+          }
+        ]
+      }
+    },
+    {
+      "id": "hogwarts-tapestry-48598",
+      "nombre": "Hogwarts tapestry",
+      "clientId": 48598,
+      "categoria": "furnitures",
+      "sprite": "items/cliente/48598",
+      "apilable": false,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      },
+      "obtencion": {
+        "tiendas": [
+          {
+            "tienda": "Diamond Shop",
+            "precio": 2,
+            "moneda": "Diamonds",
+            "cantidad": 2
+          }
+        ]
+      }
+    },
+    {
+      "id": "hogwarts-tapestry-48590",
+      "nombre": "Hogwarts tapestry",
+      "clientId": 48590,
+      "categoria": "furnitures",
+      "sprite": "items/cliente/48590",
+      "apilable": false,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      },
+      "obtencion": {
+        "tiendas": [
+          {
+            "tienda": "Diamond Shop",
+            "precio": 2,
+            "moneda": "Diamonds",
+            "cantidad": 2
+          }
+        ]
+      }
+    },
+    {
+      "id": "hogwarts-tapestry-48595",
+      "nombre": "Hogwarts tapestry",
+      "clientId": 48595,
+      "categoria": "furnitures",
+      "sprite": "items/cliente/48595",
+      "apilable": false,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      },
+      "obtencion": {
+        "tiendas": [
+          {
+            "tienda": "Diamond Shop",
+            "precio": 2,
+            "moneda": "Diamonds",
+            "cantidad": 2
+          }
+        ]
+      }
+    },
+    {
+      "id": "hogwarts-tapestry-48599",
+      "nombre": "Hogwarts tapestry",
+      "clientId": 48599,
+      "categoria": "furnitures",
+      "sprite": "items/cliente/48599",
+      "apilable": false,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      },
+      "obtencion": {
+        "tiendas": [
+          {
+            "tienda": "Diamond Shop",
+            "precio": 2,
+            "moneda": "Diamonds",
+            "cantidad": 2
+          }
+        ]
+      }
+    },
+    {
+      "id": "hogwarts-tapestry-48591",
+      "nombre": "Hogwarts tapestry",
+      "clientId": 48591,
+      "categoria": "furnitures",
+      "sprite": "items/cliente/48591",
+      "apilable": false,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      },
+      "obtencion": {
+        "tiendas": [
+          {
+            "tienda": "Diamond Shop",
+            "precio": 2,
+            "moneda": "Diamonds",
+            "cantidad": 2
+          }
+        ]
+      }
+    },
+    {
+      "id": "hogwarts-tapestry-48593",
+      "nombre": "Hogwarts tapestry",
+      "clientId": 48593,
+      "categoria": "furnitures",
+      "sprite": "items/cliente/48593",
+      "apilable": false,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      },
+      "obtencion": {
+        "tiendas": [
+          {
+            "tienda": "Diamond Shop",
+            "precio": 2,
+            "moneda": "Diamonds",
+            "cantidad": 2
+          }
+        ]
+      }
+    },
+    {
+      "id": "hogwarts-tapestry-48597",
+      "nombre": "Hogwarts tapestry",
+      "clientId": 48597,
+      "categoria": "furnitures",
+      "sprite": "items/cliente/48597",
+      "apilable": false,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      },
+      "obtencion": {
+        "tiendas": [
+          {
+            "tienda": "Diamond Shop",
+            "precio": 2,
+            "moneda": "Diamonds",
+            "cantidad": 2
+          }
+        ]
+      }
+    },
+    {
+      "id": "hogwarts-tapestry-48589",
+      "nombre": "Hogwarts tapestry",
+      "clientId": 48589,
+      "categoria": "furnitures",
+      "sprite": "items/cliente/48589",
+      "apilable": false,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      },
+      "obtencion": {
+        "tiendas": [
+          {
+            "tienda": "Diamond Shop",
+            "precio": 2,
+            "moneda": "Diamonds",
+            "cantidad": 2
+          }
+        ]
+      }
+    },
+    {
+      "id": "hogwarts-tapestry-48596",
+      "nombre": "Hogwarts tapestry",
+      "clientId": 48596,
+      "categoria": "furnitures",
+      "sprite": "items/cliente/48596",
+      "apilable": false,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      },
+      "obtencion": {
+        "tiendas": [
+          {
+            "tienda": "Diamond Shop",
+            "precio": 2,
+            "moneda": "Diamonds",
+            "cantidad": 2
+          }
+        ]
+      }
+    },
+    {
+      "id": "hogwarts-tapestry-48600",
+      "nombre": "Hogwarts tapestry",
+      "clientId": 48600,
+      "categoria": "furnitures",
+      "sprite": "items/cliente/48600",
+      "apilable": false,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      },
+      "obtencion": {
+        "tiendas": [
+          {
+            "tienda": "Diamond Shop",
+            "precio": 2,
+            "moneda": "Diamonds",
+            "cantidad": 2
+          }
+        ]
+      }
+    },
+    {
+      "id": "hogwarts-tapestry-48592",
+      "nombre": "Hogwarts tapestry",
+      "clientId": 48592,
+      "categoria": "furnitures",
+      "sprite": "items/cliente/48592",
+      "apilable": false,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      },
+      "obtencion": {
+        "tiendas": [
+          {
+            "tienda": "Diamond Shop",
+            "precio": 2,
+            "moneda": "Diamonds",
+            "cantidad": 2
+          }
+        ]
+      }
+    },
+    {
+      "id": "builder-kit",
+      "nombre": "builder kit",
+      "clientId": 17488,
+      "categoria": "furnitures",
+      "sprite": "items/cliente/17488",
+      "apilable": false,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      },
+      "descripcion": {
+        "en": "Allows the player to change the floor of his house. This item can only be used once."
+      },
+      "obtencion": {
+        "tiendas": [
+          {
+            "tienda": "Diamond Shop",
+            "precio": 20,
+            "moneda": "Diamonds",
+            "cantidad": 1
+          }
+        ]
+      }
+    },
+    {
+      "id": "treadmill",
+      "nombre": "treadmill",
+      "clientId": 16231,
+      "categoria": "furnitures",
+      "sprite": "items/cliente/16231",
+      "apilable": false,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      },
+      "obtencion": {
+        "tiendas": [
+          {
+            "tienda": "Diamond Shop",
+            "precio": 10,
+            "moneda": "Diamonds",
+            "cantidad": 1
+          }
+        ]
+      }
+    },
+    {
+      "id": "classic-poke-ball-holder",
+      "nombre": "classic Poké Ball holder",
+      "clientId": 18591,
+      "categoria": "furnitures",
+      "sprite": "items/cliente/18591",
+      "apilable": false,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      },
+      "obtencion": {
+        "tiendas": [
+          {
+            "tienda": "Diamond Shop",
+            "precio": 20,
+            "moneda": "Diamonds",
+            "cantidad": 1
+          }
+        ]
+      }
+    },
+    {
+      "id": "boost-machine",
+      "nombre": "Boost Machine",
+      "clientId": 40236,
+      "categoria": "furnitures",
+      "sprite": "items/cliente/40236",
+      "apilable": false,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      },
+      "obtencion": {
+        "tiendas": [
+          {
+            "tienda": "Diamond Shop",
+            "precio": 50,
+            "moneda": "Diamonds",
+            "cantidad": 1
+          }
+        ]
+      }
+    },
+    {
+      "id": "reddish-stash-packaged",
+      "nombre": "Reddish Stash packaged",
+      "clientId": 48310,
+      "categoria": "furnitures",
+      "sprite": "items/cliente/48310",
+      "apilable": false,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      },
+      "obtencion": {
+        "tiendas": [
+          {
+            "tienda": "Diamond Shop",
+            "precio": 50,
+            "moneda": "Diamonds",
+            "cantidad": 1
+          }
+        ]
+      }
+    },
+    {
+      "id": "small-reddish-stash-packaged",
+      "nombre": "small reddish Stash packaged",
+      "clientId": 48312,
+      "categoria": "furnitures",
+      "sprite": "items/cliente/48312",
+      "apilable": false,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      },
+      "obtencion": {
+        "tiendas": [
+          {
+            "tienda": "Diamond Shop",
+            "precio": 50,
+            "moneda": "Diamonds",
+            "cantidad": 1
+          }
+        ]
+      }
+    },
+    {
+      "id": "blue-stash-packaged",
+      "nombre": "Blue Stash packaged",
+      "clientId": 48311,
+      "categoria": "furnitures",
+      "sprite": "items/cliente/48311",
+      "apilable": false,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      },
+      "obtencion": {
+        "tiendas": [
+          {
+            "tienda": "Diamond Shop",
+            "precio": 50,
+            "moneda": "Diamonds",
+            "cantidad": 1
+          }
+        ]
+      }
+    },
+    {
+      "id": "depot-stash",
+      "nombre": "Depot Stash",
+      "clientId": 47867,
+      "categoria": "furnitures",
+      "sprite": "items/cliente/47867",
+      "apilable": false,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      },
+      "obtencion": {
+        "tiendas": [
+          {
+            "tienda": "Diamond Shop",
+            "precio": 50,
+            "moneda": "Diamonds",
+            "cantidad": 1
+          }
+        ]
+      }
+    },
+    {
+      "id": "market-packaged",
+      "nombre": "Market Packaged",
+      "clientId": 17600,
+      "categoria": "furnitures",
+      "sprite": "items/cliente/17600",
+      "apilable": false,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      },
+      "obtencion": {
+        "tiendas": [
+          {
+            "tienda": "Diamond Shop",
+            "precio": 50,
+            "moneda": "Diamonds",
+            "cantidad": 1
+          }
+        ]
+      }
+    },
+    {
+      "id": "hd-tron-tv",
+      "nombre": "HD tron TV",
+      "clientId": 16855,
+      "categoria": "furnitures",
+      "sprite": "items/cliente/16855",
+      "apilable": false,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      },
+      "obtencion": {
+        "tiendas": [
+          {
+            "tienda": "Diamond Shop",
+            "precio": 20,
+            "moneda": "Diamonds",
+            "cantidad": 1
+          }
+        ]
+      }
+    },
+    {
+      "id": "aggron-locker",
+      "nombre": "Aggron Locker",
+      "clientId": 17881,
+      "categoria": "furnitures",
+      "sprite": "items/cliente/17881",
+      "apilable": false,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      },
+      "obtencion": {
+        "tiendas": [
+          {
+            "tienda": "Diamond Shop",
+            "precio": 20,
+            "moneda": "Diamonds",
+            "cantidad": 1
+          }
+        ]
+      }
+    },
+    {
+      "id": "absol-locker",
+      "nombre": "Absol Locker",
+      "clientId": 17882,
+      "categoria": "furnitures",
+      "sprite": "items/cliente/17882",
+      "apilable": false,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      },
+      "obtencion": {
+        "tiendas": [
+          {
+            "tienda": "Diamond Shop",
+            "precio": 20,
+            "moneda": "Diamonds",
+            "cantidad": 1
+          }
+        ]
+      }
+    },
+    {
+      "id": "sceptile-locker",
+      "nombre": "Sceptile Locker",
+      "clientId": 17883,
+      "categoria": "furnitures",
+      "sprite": "items/cliente/17883",
+      "apilable": false,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      },
+      "obtencion": {
+        "tiendas": [
+          {
+            "tienda": "Diamond Shop",
+            "precio": 20,
+            "moneda": "Diamonds",
+            "cantidad": 1
+          }
+        ]
+      }
+    },
+    {
+      "id": "gardevoir-locker",
+      "nombre": "Gardevoir Locker",
+      "clientId": 17885,
+      "categoria": "furnitures",
+      "sprite": "items/cliente/17885",
+      "apilable": false,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      },
+      "obtencion": {
+        "tiendas": [
+          {
+            "tienda": "Diamond Shop",
+            "precio": 20,
+            "moneda": "Diamonds",
+            "cantidad": 1
+          }
+        ]
+      }
+    },
+    {
+      "id": "electivire-locker",
+      "nombre": "Electivire Locker",
+      "clientId": 17886,
+      "categoria": "furnitures",
+      "sprite": "items/cliente/17886",
+      "apilable": false,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      },
+      "obtencion": {
+        "tiendas": [
+          {
+            "tienda": "Diamond Shop",
+            "precio": 20,
+            "moneda": "Diamonds",
+            "cantidad": 1
+          }
+        ]
+      }
+    },
+    {
+      "id": "feraligatr-locker",
+      "nombre": "Feraligatr Locker",
+      "clientId": 17887,
+      "categoria": "furnitures",
+      "sprite": "items/cliente/17887",
+      "apilable": false,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      },
+      "obtencion": {
+        "tiendas": [
+          {
+            "tienda": "Diamond Shop",
+            "precio": 20,
+            "moneda": "Diamonds",
+            "cantidad": 1
+          }
+        ]
+      }
+    },
+    {
+      "id": "infernape-locker",
+      "nombre": "Infernape Locker",
+      "clientId": 17888,
+      "categoria": "furnitures",
+      "sprite": "items/cliente/17888",
+      "apilable": false,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      },
+      "obtencion": {
+        "tiendas": [
+          {
+            "tienda": "Diamond Shop",
+            "precio": 20,
+            "moneda": "Diamonds",
+            "cantidad": 1
+          }
+        ]
+      }
+    },
+    {
+      "id": "dragonair-locker",
+      "nombre": "Dragonair Locker",
+      "clientId": 17889,
+      "categoria": "furnitures",
+      "sprite": "items/cliente/17889",
+      "apilable": false,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      },
+      "obtencion": {
+        "tiendas": [
+          {
+            "tienda": "Diamond Shop",
+            "precio": 20,
+            "moneda": "Diamonds",
+            "cantidad": 1
+          }
+        ]
+      }
+    },
+    {
+      "id": "flareon-locker",
+      "nombre": "Flareon Locker",
+      "clientId": 21626,
+      "categoria": "furnitures",
+      "sprite": "items/cliente/21626",
+      "apilable": false,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      },
+      "obtencion": {
+        "tiendas": [
+          {
+            "tienda": "Diamond Shop",
+            "precio": 20,
+            "moneda": "Diamonds",
+            "cantidad": 1
+          }
+        ]
+      }
+    },
+    {
+      "id": "jolteon-locker",
+      "nombre": "Jolteon Locker",
+      "clientId": 21629,
+      "categoria": "furnitures",
+      "sprite": "items/cliente/21629",
+      "apilable": false,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      },
+      "obtencion": {
+        "tiendas": [
+          {
+            "tienda": "Diamond Shop",
+            "precio": 20,
+            "moneda": "Diamonds",
+            "cantidad": 1
+          }
+        ]
+      }
+    },
+    {
+      "id": "vaporeon-locker",
+      "nombre": "Vaporeon Locker",
+      "clientId": 21627,
+      "categoria": "furnitures",
+      "sprite": "items/cliente/21627",
+      "apilable": false,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      },
+      "obtencion": {
+        "tiendas": [
+          {
+            "tienda": "Diamond Shop",
+            "precio": 20,
+            "moneda": "Diamonds",
+            "cantidad": 1
+          }
+        ]
+      }
+    },
+    {
+      "id": "kangaskhan-locker",
+      "nombre": "Kangaskhan Locker",
+      "clientId": 17880,
+      "categoria": "furnitures",
+      "sprite": "items/cliente/17880",
+      "apilable": false,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      },
+      "obtencion": {
+        "tiendas": [
+          {
+            "tienda": "Diamond Shop",
+            "precio": 20,
+            "moneda": "Diamonds",
+            "cantidad": 1
+          }
+        ]
+      }
+    },
+    {
+      "id": "rhydon-locker",
+      "nombre": "Rhydon Locker",
+      "clientId": 17884,
+      "categoria": "furnitures",
+      "sprite": "items/cliente/17884",
+      "apilable": false,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      },
+      "obtencion": {
+        "tiendas": [
+          {
+            "tienda": "Diamond Shop",
+            "precio": 20,
+            "moneda": "Diamonds",
+            "cantidad": 1
+          }
+        ]
+      }
+    },
+    {
+      "id": "closed-wonka-s-carpet",
+      "nombre": "closed Wonka's Carpet",
+      "clientId": 47167,
+      "categoria": "furnitures",
+      "sprite": "items/cliente/47167",
+      "apilable": false,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      },
+      "obtencion": {
+        "tiendas": [
+          {
+            "tienda": "Diamond Shop",
+            "precio": 2,
+            "moneda": "Diamonds",
+            "cantidad": 4
+          }
+        ]
+      }
+    },
+    {
+      "id": "closed-wonka-s-carpet-47169",
+      "nombre": "closed Wonka's Carpet",
+      "clientId": 47169,
+      "categoria": "furnitures",
+      "sprite": "items/cliente/47169",
+      "apilable": false,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      },
+      "obtencion": {
+        "tiendas": [
+          {
+            "tienda": "Diamond Shop",
+            "precio": 2,
+            "moneda": "Diamonds",
+            "cantidad": 4
+          }
+        ]
+      }
+    },
+    {
+      "id": "closed-wonka-s-carpet-47171",
+      "nombre": "closed Wonka's Carpet",
+      "clientId": 47171,
+      "categoria": "furnitures",
+      "sprite": "items/cliente/47171",
+      "apilable": false,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      },
+      "obtencion": {
+        "tiendas": [
+          {
+            "tienda": "Diamond Shop",
+            "precio": 2,
+            "moneda": "Diamonds",
+            "cantidad": 4
+          }
+        ]
+      }
+    },
+    {
+      "id": "black-and-red-chair",
+      "nombre": "black and red chair",
+      "clientId": 38137,
+      "categoria": "furnitures",
+      "sprite": "items/cliente/38137",
+      "apilable": false,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      },
+      "obtencion": {
+        "tiendas": [
+          {
+            "tienda": "Diamond Shop",
+            "precio": 2,
+            "moneda": "Diamonds",
+            "cantidad": 4
+          }
+        ]
+      }
+    },
+    {
+      "id": "black-and-blue-chair",
+      "nombre": "black and blue chair",
+      "clientId": 38141,
+      "categoria": "furnitures",
+      "sprite": "items/cliente/38141",
+      "apilable": false,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      },
+      "obtencion": {
+        "tiendas": [
+          {
+            "tienda": "Diamond Shop",
+            "precio": 2,
+            "moneda": "Diamonds",
+            "cantidad": 4
+          }
+        ]
+      }
+    },
+    {
+      "id": "black-and-green-chair",
+      "nombre": "black and green chair",
+      "clientId": 38145,
+      "categoria": "furnitures",
+      "sprite": "items/cliente/38145",
+      "apilable": false,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      },
+      "obtencion": {
+        "tiendas": [
+          {
+            "tienda": "Diamond Shop",
+            "precio": 2,
+            "moneda": "Diamonds",
+            "cantidad": 4
+          }
+        ]
+      }
+    },
+    {
+      "id": "black-and-yellow-chair",
+      "nombre": "black and yellow chair",
+      "clientId": 38149,
+      "categoria": "furnitures",
+      "sprite": "items/cliente/38149",
+      "apilable": false,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      },
+      "obtencion": {
+        "tiendas": [
+          {
+            "tienda": "Diamond Shop",
+            "precio": 2,
+            "moneda": "Diamonds",
+            "cantidad": 4
+          }
+        ]
+      }
+    },
+    {
+      "id": "black-and-pink-chair",
+      "nombre": "black and pink chair",
+      "clientId": 38153,
+      "categoria": "furnitures",
+      "sprite": "items/cliente/38153",
+      "apilable": false,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      },
+      "obtencion": {
+        "tiendas": [
+          {
+            "tienda": "Diamond Shop",
+            "precio": 2,
+            "moneda": "Diamonds",
+            "cantidad": 4
+          }
+        ]
+      }
+    },
+    {
+      "id": "black-and-purple-chair",
+      "nombre": "black and purple chair",
+      "clientId": 38157,
+      "categoria": "furnitures",
+      "sprite": "items/cliente/38157",
+      "apilable": false,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      },
+      "obtencion": {
+        "tiendas": [
+          {
+            "tienda": "Diamond Shop",
+            "precio": 2,
+            "moneda": "Diamonds",
+            "cantidad": 4
+          }
+        ]
+      }
+    },
+    {
+      "id": "black-and-cyan-chair",
+      "nombre": "black and cyan chair",
+      "clientId": 38161,
+      "categoria": "furnitures",
+      "sprite": "items/cliente/38161",
+      "apilable": false,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      },
+      "obtencion": {
+        "tiendas": [
+          {
+            "tienda": "Diamond Shop",
+            "precio": 2,
+            "moneda": "Diamonds",
+            "cantidad": 4
+          }
+        ]
+      }
+    },
+    {
+      "id": "black-and-white-chair",
+      "nombre": "black and white chair",
+      "clientId": 38165,
+      "categoria": "furnitures",
+      "sprite": "items/cliente/38165",
+      "apilable": false,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      },
+      "obtencion": {
+        "tiendas": [
+          {
+            "tienda": "Diamond Shop",
+            "precio": 2,
+            "moneda": "Diamonds",
+            "cantidad": 4
+          }
+        ]
+      }
+    },
+    {
+      "id": "red-glass-table",
+      "nombre": "red glass table",
+      "clientId": 38167,
+      "categoria": "furnitures",
+      "sprite": "items/cliente/38167",
+      "apilable": false,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      },
+      "obtencion": {
+        "tiendas": [
+          {
+            "tienda": "Diamond Shop",
+            "precio": 1,
+            "moneda": "Diamonds",
+            "cantidad": 1
+          }
+        ]
+      }
+    },
+    {
+      "id": "blue-glass-table",
+      "nombre": "blue glass table",
+      "clientId": 38169,
+      "categoria": "furnitures",
+      "sprite": "items/cliente/38169",
+      "apilable": false,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      },
+      "obtencion": {
+        "tiendas": [
+          {
+            "tienda": "Diamond Shop",
+            "precio": 1,
+            "moneda": "Diamonds",
+            "cantidad": 1
+          }
+        ]
+      }
+    },
+    {
+      "id": "green-glass-table",
+      "nombre": "green glass table",
+      "clientId": 38171,
+      "categoria": "furnitures",
+      "sprite": "items/cliente/38171",
+      "apilable": false,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      },
+      "obtencion": {
+        "tiendas": [
+          {
+            "tienda": "Diamond Shop",
+            "precio": 1,
+            "moneda": "Diamonds",
+            "cantidad": 1
+          }
+        ]
+      }
+    },
+    {
+      "id": "yellow-glass-table",
+      "nombre": "yellow glass table",
+      "clientId": 38173,
+      "categoria": "furnitures",
+      "sprite": "items/cliente/38173",
+      "apilable": false,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      },
+      "obtencion": {
+        "tiendas": [
+          {
+            "tienda": "Diamond Shop",
+            "precio": 1,
+            "moneda": "Diamonds",
+            "cantidad": 1
+          }
+        ]
+      }
+    },
+    {
+      "id": "pink-glass-table",
+      "nombre": "pink glass table",
+      "clientId": 38175,
+      "categoria": "furnitures",
+      "sprite": "items/cliente/38175",
+      "apilable": false,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      },
+      "obtencion": {
+        "tiendas": [
+          {
+            "tienda": "Diamond Shop",
+            "precio": 1,
+            "moneda": "Diamonds",
+            "cantidad": 1
+          }
+        ]
+      }
+    },
+    {
+      "id": "purple-glass-table",
+      "nombre": "purple glass table",
+      "clientId": 38177,
+      "categoria": "furnitures",
+      "sprite": "items/cliente/38177",
+      "apilable": false,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      },
+      "obtencion": {
+        "tiendas": [
+          {
+            "tienda": "Diamond Shop",
+            "precio": 1,
+            "moneda": "Diamonds",
+            "cantidad": 1
+          }
+        ]
+      }
+    },
+    {
+      "id": "gray-glass-table",
+      "nombre": "gray glass table",
+      "clientId": 38179,
+      "categoria": "furnitures",
+      "sprite": "items/cliente/38179",
+      "apilable": false,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      },
+      "obtencion": {
+        "tiendas": [
+          {
+            "tienda": "Diamond Shop",
+            "precio": 1,
+            "moneda": "Diamonds",
+            "cantidad": 1
+          }
+        ]
+      }
+    },
+    {
+      "id": "black-glass-table",
+      "nombre": "black glass table",
+      "clientId": 38181,
+      "categoria": "furnitures",
+      "sprite": "items/cliente/38181",
+      "apilable": false,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      },
+      "obtencion": {
+        "tiendas": [
+          {
+            "tienda": "Diamond Shop",
+            "precio": 1,
+            "moneda": "Diamonds",
+            "cantidad": 1
+          }
+        ]
+      }
+    },
+    {
+      "id": "dark-red-balcony",
+      "nombre": "dark red balcony",
+      "clientId": 38183,
+      "categoria": "furnitures",
+      "sprite": "items/cliente/38183",
+      "apilable": false,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      },
+      "obtencion": {
+        "tiendas": [
+          {
+            "tienda": "Diamond Shop",
+            "precio": 2,
+            "moneda": "Diamonds",
+            "cantidad": 3
+          }
+        ]
+      }
+    },
+    {
+      "id": "dark-blue-balcony",
+      "nombre": "dark blue balcony",
+      "clientId": 38184,
+      "categoria": "furnitures",
+      "sprite": "items/cliente/38184",
+      "apilable": false,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      },
+      "obtencion": {
+        "tiendas": [
+          {
+            "tienda": "Diamond Shop",
+            "precio": 2,
+            "moneda": "Diamonds",
+            "cantidad": 3
+          }
+        ]
+      }
+    },
+    {
+      "id": "dark-green-balcony",
+      "nombre": "dark green balcony",
+      "clientId": 38185,
+      "categoria": "furnitures",
+      "sprite": "items/cliente/38185",
+      "apilable": false,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      },
+      "obtencion": {
+        "tiendas": [
+          {
+            "tienda": "Diamond Shop",
+            "precio": 2,
+            "moneda": "Diamonds",
+            "cantidad": 3
+          }
+        ]
+      }
+    },
+    {
+      "id": "dark-yellow-balcony",
+      "nombre": "dark yellow balcony",
+      "clientId": 38186,
+      "categoria": "furnitures",
+      "sprite": "items/cliente/38186",
+      "apilable": false,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      },
+      "obtencion": {
+        "tiendas": [
+          {
+            "tienda": "Diamond Shop",
+            "precio": 2,
+            "moneda": "Diamonds",
+            "cantidad": 3
+          }
+        ]
+      }
+    },
+    {
+      "id": "dark-pink-balcony",
+      "nombre": "dark pink balcony",
+      "clientId": 38187,
+      "categoria": "furnitures",
+      "sprite": "items/cliente/38187",
+      "apilable": false,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      },
+      "obtencion": {
+        "tiendas": [
+          {
+            "tienda": "Diamond Shop",
+            "precio": 2,
+            "moneda": "Diamonds",
+            "cantidad": 3
+          }
+        ]
+      }
+    },
+    {
+      "id": "dark-purple-balcony",
+      "nombre": "dark purple balcony",
+      "clientId": 38188,
+      "categoria": "furnitures",
+      "sprite": "items/cliente/38188",
+      "apilable": false,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      },
+      "obtencion": {
+        "tiendas": [
+          {
+            "tienda": "Diamond Shop",
+            "precio": 2,
+            "moneda": "Diamonds",
+            "cantidad": 3
+          }
+        ]
+      }
+    },
+    {
+      "id": "dark-cyan-balcony",
+      "nombre": "dark cyan balcony",
+      "clientId": 38189,
+      "categoria": "furnitures",
+      "sprite": "items/cliente/38189",
+      "apilable": false,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      },
+      "obtencion": {
+        "tiendas": [
+          {
+            "tienda": "Diamond Shop",
+            "precio": 2,
+            "moneda": "Diamonds",
+            "cantidad": 3
+          }
+        ]
+      }
+    },
+    {
+      "id": "dark-white-balcony",
+      "nombre": "dark white balcony",
+      "clientId": 38190,
+      "categoria": "furnitures",
+      "sprite": "items/cliente/38190",
+      "apilable": false,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      },
+      "obtencion": {
+        "tiendas": [
+          {
+            "tienda": "Diamond Shop",
+            "precio": 2,
+            "moneda": "Diamonds",
+            "cantidad": 3
+          }
+        ]
+      }
+    },
+    {
+      "id": "neon-red-balcony",
+      "nombre": "neon red balcony",
+      "clientId": 38191,
+      "categoria": "furnitures",
+      "sprite": "items/cliente/38191",
+      "apilable": false,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      },
+      "obtencion": {
+        "tiendas": [
+          {
+            "tienda": "Diamond Shop",
+            "precio": 2,
+            "moneda": "Diamonds",
+            "cantidad": 3
+          }
+        ]
+      }
+    },
+    {
+      "id": "neon-blue-balcony",
+      "nombre": "neon blue balcony",
+      "clientId": 38192,
+      "categoria": "furnitures",
+      "sprite": "items/cliente/38192",
+      "apilable": false,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      },
+      "obtencion": {
+        "tiendas": [
+          {
+            "tienda": "Diamond Shop",
+            "precio": 2,
+            "moneda": "Diamonds",
+            "cantidad": 3
+          }
+        ]
+      }
+    },
+    {
+      "id": "neon-green-balcony",
+      "nombre": "neon green balcony",
+      "clientId": 38193,
+      "categoria": "furnitures",
+      "sprite": "items/cliente/38193",
+      "apilable": false,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      },
+      "obtencion": {
+        "tiendas": [
+          {
+            "tienda": "Diamond Shop",
+            "precio": 2,
+            "moneda": "Diamonds",
+            "cantidad": 3
+          }
+        ]
+      }
+    },
+    {
+      "id": "neon-yellow-balcony",
+      "nombre": "neon yellow balcony",
+      "clientId": 38194,
+      "categoria": "furnitures",
+      "sprite": "items/cliente/38194",
+      "apilable": false,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      },
+      "obtencion": {
+        "tiendas": [
+          {
+            "tienda": "Diamond Shop",
+            "precio": 2,
+            "moneda": "Diamonds",
+            "cantidad": 3
+          }
+        ]
+      }
+    },
+    {
+      "id": "neon-pink-balcony",
+      "nombre": "neon pink balcony",
+      "clientId": 38195,
+      "categoria": "furnitures",
+      "sprite": "items/cliente/38195",
+      "apilable": false,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      },
+      "obtencion": {
+        "tiendas": [
+          {
+            "tienda": "Diamond Shop",
+            "precio": 2,
+            "moneda": "Diamonds",
+            "cantidad": 3
+          }
+        ]
+      }
+    },
+    {
+      "id": "neon-purple-balcony",
+      "nombre": "neon purple balcony",
+      "clientId": 38196,
+      "categoria": "furnitures",
+      "sprite": "items/cliente/38196",
+      "apilable": false,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      },
+      "obtencion": {
+        "tiendas": [
+          {
+            "tienda": "Diamond Shop",
+            "precio": 2,
+            "moneda": "Diamonds",
+            "cantidad": 3
+          }
+        ]
+      }
+    },
+    {
+      "id": "neon-cyan-balcony",
+      "nombre": "neon cyan balcony",
+      "clientId": 38197,
+      "categoria": "furnitures",
+      "sprite": "items/cliente/38197",
+      "apilable": false,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      },
+      "obtencion": {
+        "tiendas": [
+          {
+            "tienda": "Diamond Shop",
+            "precio": 2,
+            "moneda": "Diamonds",
+            "cantidad": 3
+          }
+        ]
+      }
+    },
+    {
+      "id": "modern-black-tapestry",
+      "nombre": "modern black tapestry",
+      "clientId": 38125,
+      "categoria": "furnitures",
+      "sprite": "items/cliente/38125",
+      "apilable": false,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      },
+      "obtencion": {
+        "tiendas": [
+          {
+            "tienda": "Diamond Shop",
+            "precio": 1,
+            "moneda": "Diamonds",
+            "cantidad": 4
+          }
+        ]
+      }
+    },
+    {
+      "id": "modern-red-tapestry",
+      "nombre": "modern red tapestry",
+      "clientId": 38126,
+      "categoria": "furnitures",
+      "sprite": "items/cliente/38126",
+      "apilable": false,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      },
+      "obtencion": {
+        "tiendas": [
+          {
+            "tienda": "Diamond Shop",
+            "precio": 1,
+            "moneda": "Diamonds",
+            "cantidad": 4
+          }
+        ]
+      }
+    },
+    {
+      "id": "modern-blue-tapestry",
+      "nombre": "modern blue tapestry",
+      "clientId": 38127,
+      "categoria": "furnitures",
+      "sprite": "items/cliente/38127",
+      "apilable": false,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      },
+      "obtencion": {
+        "tiendas": [
+          {
+            "tienda": "Diamond Shop",
+            "precio": 1,
+            "moneda": "Diamonds",
+            "cantidad": 4
+          }
+        ]
+      }
+    },
+    {
+      "id": "modern-green-tapestry",
+      "nombre": "modern green tapestry",
+      "clientId": 38128,
+      "categoria": "furnitures",
+      "sprite": "items/cliente/38128",
+      "apilable": false,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      },
+      "obtencion": {
+        "tiendas": [
+          {
+            "tienda": "Diamond Shop",
+            "precio": 1,
+            "moneda": "Diamonds",
+            "cantidad": 4
+          }
+        ]
+      }
+    },
+    {
+      "id": "modern-pink-tapestry",
+      "nombre": "modern pink tapestry",
+      "clientId": 38129,
+      "categoria": "furnitures",
+      "sprite": "items/cliente/38129",
+      "apilable": false,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      },
+      "obtencion": {
+        "tiendas": [
+          {
+            "tienda": "Diamond Shop",
+            "precio": 1,
+            "moneda": "Diamonds",
+            "cantidad": 4
+          }
+        ]
+      }
+    },
+    {
+      "id": "modern-purple-tapestry",
+      "nombre": "modern purple tapestry",
+      "clientId": 38130,
+      "categoria": "furnitures",
+      "sprite": "items/cliente/38130",
+      "apilable": false,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      },
+      "obtencion": {
+        "tiendas": [
+          {
+            "tienda": "Diamond Shop",
+            "precio": 1,
+            "moneda": "Diamonds",
+            "cantidad": 4
+          }
+        ]
+      }
+    },
+    {
+      "id": "modern-cyan-tapestry",
+      "nombre": "modern cyan tapestry",
+      "clientId": 38131,
+      "categoria": "furnitures",
+      "sprite": "items/cliente/38131",
+      "apilable": false,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      },
+      "obtencion": {
+        "tiendas": [
+          {
+            "tienda": "Diamond Shop",
+            "precio": 1,
+            "moneda": "Diamonds",
+            "cantidad": 4
+          }
+        ]
+      }
+    },
+    {
+      "id": "red-heart-tapestry",
+      "nombre": "red heart tapestry",
+      "clientId": 38132,
+      "categoria": "furnitures",
+      "sprite": "items/cliente/38132",
+      "apilable": false,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      },
+      "obtencion": {
+        "tiendas": [
+          {
+            "tienda": "Diamond Shop",
+            "precio": 1,
+            "moneda": "Diamonds",
+            "cantidad": 4
+          }
+        ]
+      }
+    },
+    {
+      "id": "pink-heart-tapestry",
+      "nombre": "pink heart tapestry",
+      "clientId": 38133,
+      "categoria": "furnitures",
+      "sprite": "items/cliente/38133",
+      "apilable": false,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      },
+      "obtencion": {
+        "tiendas": [
+          {
+            "tienda": "Diamond Shop",
+            "precio": 1,
+            "moneda": "Diamonds",
+            "cantidad": 4
+          }
+        ]
+      }
+    },
+    {
+      "id": "purple-heart-tapestry",
+      "nombre": "purple heart tapestry",
+      "clientId": 38134,
+      "categoria": "furnitures",
+      "sprite": "items/cliente/38134",
+      "apilable": false,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      },
+      "obtencion": {
+        "tiendas": [
+          {
+            "tienda": "Diamond Shop",
+            "precio": 1,
+            "moneda": "Diamonds",
+            "cantidad": 4
+          }
+        ]
+      }
+    },
+    {
+      "id": "twitch-flag",
+      "nombre": "Twitch flag",
+      "clientId": 23277,
+      "categoria": "furnitures",
+      "sprite": "items/cliente/23277",
+      "apilable": true,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      },
+      "obtencion": {
+        "tiendas": [
+          {
+            "tienda": "Twitch Shop",
+            "precio": 100,
+            "moneda": "Twitch Points",
+            "cantidad": 1
+          }
+        ]
+      }
+    },
+    {
+      "id": "salamence-treadmill",
+      "nombre": "Salamence Treadmill",
+      "clientId": 50478,
+      "categoria": "furnitures",
+      "sprite": "items/cliente/50478",
+      "apilable": false,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      },
+      "obtencion": {
+        "pase": [
+          {
+            "temporada": null,
+            "nivel": 40,
+            "pista": "premium",
+            "cantidad": 1
+          }
+        ]
+      }
+    },
+    {
+      "id": "salamence-stash-package",
+      "nombre": "Salamence Stash Package",
+      "clientId": 50480,
+      "categoria": "furnitures",
+      "sprite": "items/cliente/50480",
+      "apilable": false,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      },
+      "obtencion": {
+        "pase": [
+          {
+            "temporada": null,
+            "nivel": 45,
+            "pista": "premium",
+            "cantidad": 1
+          }
+        ]
+      }
+    },
+    {
+      "id": "salamence-pedestal",
+      "nombre": "Salamence Pedestal",
+      "clientId": 50481,
+      "categoria": "furnitures",
+      "sprite": "items/cliente/50481",
+      "apilable": false,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      },
+      "obtencion": {
+        "pase": [
+          {
+            "temporada": null,
+            "nivel": 50,
+            "pista": "premium",
+            "cantidad": 1
+          }
+        ]
+      }
+    }
+  ]
 }
