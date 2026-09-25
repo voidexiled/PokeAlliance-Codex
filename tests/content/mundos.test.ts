@@ -15,6 +15,7 @@ import { getMundos, sortMundos } from '@/lib/content/registry';
 import { mundosFileSchema, type Mundo } from '@/lib/content/registry-schema';
 import { checkContent } from '../../scripts/content/lib/check-content.mjs';
 import { validateSchema } from '../../scripts/content/lib/json-schema.mjs';
+import { copyPublicForCheck } from './public-copy';
 
 const repoRoot = fileURLToPath(new URL('../../', import.meta.url));
 const readJson = (file: string) => JSON.parse(readFileSync(path.join(repoRoot, file), 'utf8'));
@@ -123,10 +124,7 @@ describe('pnpm content:check on content/mundos.json', () => {
       recursive: true,
       filter: (source) => path.relative(comercio, source).startsWith('..'),
     });
-    for (const folder of [['sprites'], ['data', 'map', 'otmm']])
-      cpSync(path.join(repoRoot, 'public', ...folder), path.join(root, 'public', ...folder), {
-        recursive: true,
-      });
+    copyPublicForCheck(repoRoot, root);
     return root;
   }
   const writeMundos = (root: string, data: unknown) =>

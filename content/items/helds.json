@@ -42,7 +42,7 @@
       "nombre": "Y-Ghost (Tier: 3)",
       "clientId": 12544,
       "categoria": "helds",
-      "sprite": "ui/comercio/item",
+      "sprite": "items/cliente/12544",
       "apilable": null,
       "precioNpc": {
         "vende": null,
@@ -63,7 +63,7 @@
       "nombre": "X-Attack (Tier: 1)",
       "clientId": 12362,
       "categoria": "helds",
-      "sprite": "ui/comercio/item",
+      "sprite": "items/cliente/12362",
       "apilable": null,
       "precioNpc": {
         "vende": null,
@@ -84,7 +84,7 @@
       "nombre": "X-Attack (Tier: 2)",
       "clientId": 12387,
       "categoria": "helds",
-      "sprite": "ui/comercio/item",
+      "sprite": "items/cliente/12387",
       "apilable": null,
       "precioNpc": {
         "vende": null,
@@ -105,7 +105,7 @@
       "nombre": "X-Attack (Tier: 3)",
       "clientId": 12412,
       "categoria": "helds",
-      "sprite": "ui/comercio/item",
+      "sprite": "items/cliente/12412",
       "apilable": null,
       "precioNpc": {
         "vende": null,
@@ -126,7 +126,7 @@
       "nombre": "X-Attack (Tier: 4)",
       "clientId": 12437,
       "categoria": "helds",
-      "sprite": "ui/comercio/item",
+      "sprite": "items/cliente/12437",
       "apilable": null,
       "precioNpc": {
         "vende": null,
@@ -147,7 +147,7 @@
       "nombre": "X-Attack (Tier: 5)",
       "clientId": 12462,
       "categoria": "helds",
-      "sprite": "ui/comercio/item",
+      "sprite": "items/cliente/12462",
       "apilable": null,
       "precioNpc": {
         "vende": null,
@@ -168,7 +168,7 @@
       "nombre": "X-Attack (Tier: 6)",
       "clientId": 12487,
       "categoria": "helds",
-      "sprite": "ui/comercio/item",
+      "sprite": "items/cliente/12487",
       "apilable": null,
       "precioNpc": {
         "vende": null,
@@ -189,7 +189,7 @@
       "nombre": "X-Attack (Tier: 7)",
       "clientId": 12512,
       "categoria": "helds",
-      "sprite": "ui/comercio/item",
+      "sprite": "items/cliente/12512",
       "apilable": null,
       "precioNpc": {
         "vende": null,
@@ -210,7 +210,7 @@
       "nombre": "X-Lucky (Tier: 1)",
       "clientId": 12373,
       "categoria": "helds",
-      "sprite": "ui/comercio/item",
+      "sprite": "items/cliente/12373",
       "apilable": null,
       "precioNpc": {
         "vende": null,
@@ -231,7 +231,7 @@
       "nombre": "X-Lucky (Tier: 2)",
       "clientId": 12398,
       "categoria": "helds",
-      "sprite": "ui/comercio/item",
+      "sprite": "items/cliente/12398",
       "apilable": null,
       "precioNpc": {
         "vende": null,
@@ -252,7 +252,7 @@
       "nombre": "X-Lucky (Tier: 3)",
       "clientId": 12423,
       "categoria": "helds",
-      "sprite": "ui/comercio/item",
+      "sprite": "items/cliente/12423",
       "apilable": null,
       "precioNpc": {
         "vende": null,
@@ -273,7 +273,7 @@
       "nombre": "X-Lucky (Tier: 4)",
       "clientId": 12448,
       "categoria": "helds",
-      "sprite": "ui/comercio/item",
+      "sprite": "items/cliente/12448",
       "apilable": null,
       "precioNpc": {
         "vende": null,
@@ -294,7 +294,7 @@
       "nombre": "X-Lucky (Tier: 5)",
       "clientId": 12473,
       "categoria": "helds",
-      "sprite": "ui/comercio/item",
+      "sprite": "items/cliente/12473",
       "apilable": null,
       "precioNpc": {
         "vende": null,
@@ -315,7 +315,7 @@
       "nombre": "X-Lucky (Tier: 6)",
       "clientId": 12498,
       "categoria": "helds",
-      "sprite": "ui/comercio/item",
+      "sprite": "items/cliente/12498",
       "apilable": null,
       "precioNpc": {
         "vende": null,
@@ -336,7 +336,7 @@
       "nombre": "X-Lucky (Tier: 7)",
       "clientId": 12523,
       "categoria": "helds",
-      "sprite": "ui/comercio/item",
+      "sprite": "items/cliente/12523",
       "apilable": null,
       "precioNpc": {
         "vende": null,
@@ -357,7 +357,7 @@
       "nombre": "X-Defense (Tier: 1)",
       "clientId": 12361,
       "categoria": "helds",
-      "sprite": "ui/comercio/item",
+      "sprite": "items/cliente/12361",
       "apilable": null,
       "precioNpc": {
         "vende": null,
@@ -378,7 +378,7 @@
       "nombre": "X-Defense (Tier: 2)",
       "clientId": 12386,
       "categoria": "helds",
-      "sprite": "ui/comercio/item",
+      "sprite": "items/cliente/12386",
       "apilable": null,
       "precioNpc": {
         "vende": null,
@@ -399,7 +399,7 @@
       "nombre": "X-Defense (Tier: 3)",
       "clientId": 12411,
       "categoria": "helds",
-      "sprite": "ui/comercio/item",
+      "sprite": "items/cliente/12411",
       "apilable": null,
       "precioNpc": {
         "vende": null,
@@ -420,7 +420,7 @@
       "nombre": "X-Defense (Tier: 4)",
       "clientId": 12436,
       "categoria": "helds",
-      "sprite": "ui/comercio/item",
+      "sprite": "items/cliente/12436",
       "apilable": null,
       "precioNpc": {
         "vende": null,
@@ -441,7 +441,7 @@
       "nombre": "X-Defense (Tier: 5)",
       "clientId": 12461,
       "categoria": "helds",
-      "sprite": "ui/comercio/item",
+      "sprite": "items/cliente/12461",
       "apilable": null,
       "precioNpc": {
         "vende": null,
@@ -462,7 +462,7 @@
       "nombre": "X-Defense (Tier: 6)",
       "clientId": 12486,
       "categoria": "helds",
-      "sprite": "ui/comercio/item",
+      "sprite": "items/cliente/12486",
       "apilable": null,
       "precioNpc": {
         "vende": null,
@@ -483,7 +483,7 @@
       "nombre": "X-Defense (Tier: 7)",
       "clientId": 12511,
       "categoria": "helds",
-      "sprite": "ui/comercio/item",
+      "sprite": "items/cliente/12511",
       "apilable": null,
       "precioNpc": {
         "vende": null,
@@ -504,7 +504,7 @@
       "nombre": "Y-Teleport (Tier: 1)",
       "clientId": 12366,
       "categoria": "helds",
-      "sprite": "ui/comercio/item",
+      "sprite": "items/cliente/12366",
       "apilable": null,
       "precioNpc": {
         "vende": null,
@@ -525,7 +525,7 @@
       "nombre": "Y-Teleport (Tier: 2)",
       "clientId": 12391,
       "categoria": "helds",
-      "sprite": "ui/comercio/item",
+      "sprite": "items/cliente/12391",
       "apilable": null,
       "precioNpc": {
         "vende": null,
@@ -546,7 +546,7 @@
       "nombre": "Y-Teleport (Tier: 3)",
       "clientId": 12416,
       "categoria": "helds",
-      "sprite": "ui/comercio/item",
+      "sprite": "items/cliente/12416",
       "apilable": null,
       "precioNpc": {
         "vende": null,
@@ -567,7 +567,7 @@
       "nombre": "Y-Teleport (Tier: 4)",
       "clientId": 12441,
       "categoria": "helds",
-      "sprite": "ui/comercio/item",
+      "sprite": "items/cliente/12441",
       "apilable": null,
       "precioNpc": {
         "vende": null,
@@ -588,7 +588,7 @@
       "nombre": "Y-Teleport (Tier: 5)",
       "clientId": 12466,
       "categoria": "helds",
-      "sprite": "ui/comercio/item",
+      "sprite": "items/cliente/12466",
       "apilable": null,
       "precioNpc": {
         "vende": null,
@@ -609,7 +609,7 @@
       "nombre": "Y-Teleport (Tier: 6)",
       "clientId": 12491,
       "categoria": "helds",
-      "sprite": "ui/comercio/item",
+      "sprite": "items/cliente/12491",
       "apilable": null,
       "precioNpc": {
         "vende": null,
@@ -630,7 +630,7 @@
       "nombre": "Y-Teleport (Tier: 7)",
       "clientId": 12516,
       "categoria": "helds",
-      "sprite": "ui/comercio/item",
+      "sprite": "items/cliente/12516",
       "apilable": null,
       "precioNpc": {
         "vende": null,
@@ -651,7 +651,7 @@
       "nombre": "X-Critical (Tier: 1)",
       "clientId": 12383,
       "categoria": "helds",
-      "sprite": "ui/comercio/item",
+      "sprite": "items/cliente/12383",
       "apilable": null,
       "precioNpc": {
         "vende": null,
@@ -672,7 +672,7 @@
       "nombre": "X-Critical (Tier: 2)",
       "clientId": 12408,
       "categoria": "helds",
-      "sprite": "ui/comercio/item",
+      "sprite": "items/cliente/12408",
       "apilable": null,
       "precioNpc": {
         "vende": null,
@@ -693,7 +693,7 @@
       "nombre": "X-Critical (Tier: 3)",
       "clientId": 12433,
       "categoria": "helds",
-      "sprite": "ui/comercio/item",
+      "sprite": "items/cliente/12433",
       "apilable": null,
       "precioNpc": {
         "vende": null,
@@ -714,7 +714,7 @@
       "nombre": "X-Critical (Tier: 4)",
       "clientId": 12458,
       "categoria": "helds",
-      "sprite": "ui/comercio/item",
+      "sprite": "items/cliente/12458",
       "apilable": null,
       "precioNpc": {
         "vende": null,
@@ -735,7 +735,7 @@
       "nombre": "X-Critical (Tier: 5)",
       "clientId": 12483,
       "categoria": "helds",
-      "sprite": "ui/comercio/item",
+      "sprite": "items/cliente/12483",
       "apilable": null,
       "precioNpc": {
         "vende": null,
@@ -756,7 +756,7 @@
       "nombre": "X-Critical (Tier: 6)",
       "clientId": 12508,
       "categoria": "helds",
-      "sprite": "ui/comercio/item",
+      "sprite": "items/cliente/12508",
       "apilable": null,
       "precioNpc": {
         "vende": null,
@@ -777,7 +777,7 @@
       "nombre": "X-Critical (Tier: 7)",
       "clientId": 12533,
       "categoria": "helds",
-      "sprite": "ui/comercio/item",
+      "sprite": "items/cliente/12533",
       "apilable": null,
       "precioNpc": {
         "vende": null,
@@ -798,7 +798,7 @@
       "nombre": "X-Experience (Tier: 1)",
       "clientId": 12363,
       "categoria": "helds",
-      "sprite": "ui/comercio/item",
+      "sprite": "items/cliente/12363",
       "apilable": null,
       "precioNpc": {
         "vende": null,
@@ -819,7 +819,7 @@
       "nombre": "X-Experience (Tier: 2)",
       "clientId": 12388,
       "categoria": "helds",
-      "sprite": "ui/comercio/item",
+      "sprite": "items/cliente/12388",
       "apilable": null,
       "precioNpc": {
         "vende": null,
@@ -840,7 +840,7 @@
       "nombre": "X-Experience (Tier: 3)",
       "clientId": 12413,
       "categoria": "helds",
-      "sprite": "ui/comercio/item",
+      "sprite": "items/cliente/12413",
       "apilable": null,
       "precioNpc": {
         "vende": null,
@@ -861,7 +861,7 @@
       "nombre": "X-Experience (Tier: 4)",
       "clientId": 12438,
       "categoria": "helds",
-      "sprite": "ui/comercio/item",
+      "sprite": "items/cliente/12438",
       "apilable": null,
       "precioNpc": {
         "vende": null,
@@ -882,7 +882,7 @@
       "nombre": "X-Experience (Tier: 5)",
       "clientId": 12463,
       "categoria": "helds",
-      "sprite": "ui/comercio/item",
+      "sprite": "items/cliente/12463",
       "apilable": null,
       "precioNpc": {
         "vende": null,
@@ -903,7 +903,7 @@
       "nombre": "X-Experience (Tier: 6)",
       "clientId": 12488,
       "categoria": "helds",
-      "sprite": "ui/comercio/item",
+      "sprite": "items/cliente/12488",
       "apilable": null,
       "precioNpc": {
         "vende": null,
@@ -924,7 +924,7 @@
       "nombre": "X-Experience (Tier: 7)",
       "clientId": 12513,
       "categoria": "helds",
-      "sprite": "ui/comercio/item",
+      "sprite": "items/cliente/12513",
       "apilable": null,
       "precioNpc": {
         "vende": null,
@@ -945,7 +945,7 @@
       "nombre": "Y-Cure (Tier: 1)",
       "clientId": 12371,
       "categoria": "helds",
-      "sprite": "ui/comercio/item",
+      "sprite": "items/cliente/12371",
       "apilable": null,
       "precioNpc": {
         "vende": null,
@@ -966,7 +966,7 @@
       "nombre": "Y-Cure (Tier: 2)",
       "clientId": 12396,
       "categoria": "helds",
-      "sprite": "ui/comercio/item",
+      "sprite": "items/cliente/12396",
       "apilable": null,
       "precioNpc": {
         "vende": null,
@@ -987,7 +987,7 @@
       "nombre": "Y-Cure (Tier: 3)",
       "clientId": 12421,
       "categoria": "helds",
-      "sprite": "ui/comercio/item",
+      "sprite": "items/cliente/12421",
       "apilable": null,
       "precioNpc": {
         "vende": null,
@@ -1008,7 +1008,7 @@
       "nombre": "Y-Cure (Tier: 4)",
       "clientId": 12446,
       "categoria": "helds",
-      "sprite": "ui/comercio/item",
+      "sprite": "items/cliente/12446",
       "apilable": null,
       "precioNpc": {
         "vende": null,
@@ -1029,7 +1029,7 @@
       "nombre": "Y-Cure (Tier: 5)",
       "clientId": 12471,
       "categoria": "helds",
-      "sprite": "ui/comercio/item",
+      "sprite": "items/cliente/12471",
       "apilable": null,
       "precioNpc": {
         "vende": null,
@@ -1050,7 +1050,7 @@
       "nombre": "Y-Cure (Tier: 6)",
       "clientId": 12496,
       "categoria": "helds",
-      "sprite": "ui/comercio/item",
+      "sprite": "items/cliente/12496",
       "apilable": null,
       "precioNpc": {
         "vende": null,
@@ -1071,7 +1071,7 @@
       "nombre": "Y-Cure (Tier: 7)",
       "clientId": 12521,
       "categoria": "helds",
-      "sprite": "ui/comercio/item",
+      "sprite": "items/cliente/12521",
       "apilable": null,
       "precioNpc": {
         "vende": null,
@@ -1092,7 +1092,7 @@
       "nombre": "X-Boost (Tier: 1)",
       "clientId": 12372,
       "categoria": "helds",
-      "sprite": "ui/comercio/item",
+      "sprite": "items/cliente/12372",
       "apilable": null,
       "precioNpc": {
         "vende": null,
@@ -1113,7 +1113,7 @@
       "nombre": "X-Boost (Tier: 2)",
       "clientId": 12397,
       "categoria": "helds",
-      "sprite": "ui/comercio/item",
+      "sprite": "items/cliente/12397",
       "apilable": null,
       "precioNpc": {
         "vende": null,
@@ -1134,7 +1134,7 @@
       "nombre": "X-Boost (Tier: 3)",
       "clientId": 12422,
       "categoria": "helds",
-      "sprite": "ui/comercio/item",
+      "sprite": "items/cliente/12422",
       "apilable": null,
       "precioNpc": {
         "vende": null,
@@ -1155,7 +1155,7 @@
       "nombre": "X-Boost (Tier: 4)",
       "clientId": 12447,
       "categoria": "helds",
-      "sprite": "ui/comercio/item",
+      "sprite": "items/cliente/12447",
       "apilable": null,
       "precioNpc": {
         "vende": null,
@@ -1176,7 +1176,7 @@
       "nombre": "X-Boost (Tier: 5)",
       "clientId": 12472,
       "categoria": "helds",
-      "sprite": "ui/comercio/item",
+      "sprite": "items/cliente/12472",
       "apilable": null,
       "precioNpc": {
         "vende": null,
@@ -1197,7 +1197,7 @@
       "nombre": "X-Boost (Tier: 6)",
       "clientId": 12497,
       "categoria": "helds",
-      "sprite": "ui/comercio/item",
+      "sprite": "items/cliente/12497",
       "apilable": null,
       "precioNpc": {
         "vende": null,
@@ -1218,7 +1218,7 @@
       "nombre": "X-Boost (Tier: 7)",
       "clientId": 12522,
       "categoria": "helds",
-      "sprite": "ui/comercio/item",
+      "sprite": "items/cliente/12522",
       "apilable": null,
       "precioNpc": {
         "vende": null,
@@ -1239,7 +1239,7 @@
       "nombre": "Y-Wing (Tier: 1)",
       "clientId": 12378,
       "categoria": "helds",
-      "sprite": "ui/comercio/item",
+      "sprite": "items/cliente/12378",
       "apilable": null,
       "precioNpc": {
         "vende": null,
@@ -1260,7 +1260,7 @@
       "nombre": "Y-Wing (Tier: 2)",
       "clientId": 12403,
       "categoria": "helds",
-      "sprite": "ui/comercio/item",
+      "sprite": "items/cliente/12403",
       "apilable": null,
       "precioNpc": {
         "vende": null,
@@ -1281,7 +1281,7 @@
       "nombre": "Y-Wing (Tier: 3)",
       "clientId": 12428,
       "categoria": "helds",
-      "sprite": "ui/comercio/item",
+      "sprite": "items/cliente/12428",
       "apilable": null,
       "precioNpc": {
         "vende": null,
@@ -1302,7 +1302,7 @@
       "nombre": "Y-Wing (Tier: 4)",
       "clientId": 12453,
       "categoria": "helds",
-      "sprite": "ui/comercio/item",
+      "sprite": "items/cliente/12453",
       "apilable": null,
       "precioNpc": {
         "vende": null,
@@ -1323,7 +1323,7 @@
       "nombre": "Y-Wing (Tier: 5)",
       "clientId": 12478,
       "categoria": "helds",
-      "sprite": "ui/comercio/item",
+      "sprite": "items/cliente/12478",
       "apilable": null,
       "precioNpc": {
         "vende": null,
@@ -1344,7 +1344,7 @@
       "nombre": "Y-Wing (Tier: 6)",
       "clientId": 12503,
       "categoria": "helds",
-      "sprite": "ui/comercio/item",
+      "sprite": "items/cliente/12503",
       "apilable": null,
       "precioNpc": {
         "vende": null,
@@ -1365,7 +1365,7 @@
       "nombre": "Y-Wing (Tier: 7)",
       "clientId": 12528,
       "categoria": "helds",
-      "sprite": "ui/comercio/item",
+      "sprite": "items/cliente/12528",
       "apilable": null,
       "precioNpc": {
         "vende": null,
@@ -1386,7 +1386,7 @@
       "nombre": "X-Haste (Tier: 1)",
       "clientId": 12360,
       "categoria": "helds",
-      "sprite": "ui/comercio/item",
+      "sprite": "items/cliente/12360",
       "apilable": null,
       "precioNpc": {
         "vende": null,
@@ -1407,7 +1407,7 @@
       "nombre": "X-Haste (Tier: 2)",
       "clientId": 12385,
       "categoria": "helds",
-      "sprite": "ui/comercio/item",
+      "sprite": "items/cliente/12385",
       "apilable": null,
       "precioNpc": {
         "vende": null,
@@ -1428,7 +1428,7 @@
       "nombre": "X-Haste (Tier: 3)",
       "clientId": 12410,
       "categoria": "helds",
-      "sprite": "ui/comercio/item",
+      "sprite": "items/cliente/12410",
       "apilable": null,
       "precioNpc": {
         "vende": null,
@@ -1449,7 +1449,7 @@
       "nombre": "X-Haste (Tier: 4)",
       "clientId": 12435,
       "categoria": "helds",
-      "sprite": "ui/comercio/item",
+      "sprite": "items/cliente/12435",
       "apilable": null,
       "precioNpc": {
         "vende": null,
@@ -1470,7 +1470,7 @@
       "nombre": "X-Haste (Tier: 5)",
       "clientId": 12460,
       "categoria": "helds",
-      "sprite": "ui/comercio/item",
+      "sprite": "items/cliente/12460",
       "apilable": null,
       "precioNpc": {
         "vende": null,
@@ -1491,7 +1491,7 @@
       "nombre": "X-Haste (Tier: 6)",
       "clientId": 12485,
       "categoria": "helds",
-      "sprite": "ui/comercio/item",
+      "sprite": "items/cliente/12485",
       "apilable": null,
       "precioNpc": {
         "vende": null,
@@ -1512,7 +1512,7 @@
       "nombre": "X-Haste (Tier: 7)",
       "clientId": 12510,
       "categoria": "helds",
-      "sprite": "ui/comercio/item",
+      "sprite": "items/cliente/12510",
       "apilable": null,
       "precioNpc": {
         "vende": null,
@@ -1533,7 +1533,7 @@
       "nombre": "X-Agility (Tier: 1)",
       "clientId": 12382,
       "categoria": "helds",
-      "sprite": "ui/comercio/item",
+      "sprite": "items/cliente/12382",
       "apilable": null,
       "precioNpc": {
         "vende": null,
@@ -1554,7 +1554,7 @@
       "nombre": "X-Agility (Tier: 2)",
       "clientId": 12407,
       "categoria": "helds",
-      "sprite": "ui/comercio/item",
+      "sprite": "items/cliente/12407",
       "apilable": null,
       "precioNpc": {
         "vende": null,
@@ -1575,7 +1575,7 @@
       "nombre": "X-Agility (Tier: 3)",
       "clientId": 12432,
       "categoria": "helds",
-      "sprite": "ui/comercio/item",
+      "sprite": "items/cliente/12432",
       "apilable": null,
       "precioNpc": {
         "vende": null,
@@ -1596,7 +1596,7 @@
       "nombre": "X-Agility (Tier: 4)",
       "clientId": 12457,
       "categoria": "helds",
-      "sprite": "ui/comercio/item",
+      "sprite": "items/cliente/12457",
       "apilable": null,
       "precioNpc": {
         "vende": null,
@@ -1617,7 +1617,7 @@
       "nombre": "X-Agility (Tier: 5)",
       "clientId": 12482,
       "categoria": "helds",
-      "sprite": "ui/comercio/item",
+      "sprite": "items/cliente/12482",
       "apilable": null,
       "precioNpc": {
         "vende": null,
@@ -1638,7 +1638,7 @@
       "nombre": "X-Agility (Tier: 6)",
       "clientId": 12507,
       "categoria": "helds",
-      "sprite": "ui/comercio/item",
+      "sprite": "items/cliente/12507",
       "apilable": null,
       "precioNpc": {
         "vende": null,
@@ -1659,7 +1659,7 @@
       "nombre": "X-Agility (Tier: 7)",
       "clientId": 12532,
       "categoria": "helds",
-      "sprite": "ui/comercio/item",
+      "sprite": "items/cliente/12532",
       "apilable": null,
       "precioNpc": {
         "vende": null,
@@ -1680,7 +1680,7 @@
       "nombre": "X-Harden (Tier: 1)",
       "clientId": 12381,
       "categoria": "helds",
-      "sprite": "ui/comercio/item",
+      "sprite": "items/cliente/12381",
       "apilable": null,
       "precioNpc": {
         "vende": null,
@@ -1701,7 +1701,7 @@
       "nombre": "X-Harden (Tier: 2)",
       "clientId": 12406,
       "categoria": "helds",
-      "sprite": "ui/comercio/item",
+      "sprite": "items/cliente/12406",
       "apilable": null,
       "precioNpc": {
         "vende": null,
@@ -1722,7 +1722,7 @@
       "nombre": "X-Harden (Tier: 3)",
       "clientId": 12431,
       "categoria": "helds",
-      "sprite": "ui/comercio/item",
+      "sprite": "items/cliente/12431",
       "apilable": null,
       "precioNpc": {
         "vende": null,
@@ -1743,7 +1743,7 @@
       "nombre": "X-Harden (Tier: 4)",
       "clientId": 12456,
       "categoria": "helds",
-      "sprite": "ui/comercio/item",
+      "sprite": "items/cliente/12456",
       "apilable": null,
       "precioNpc": {
         "vende": null,
@@ -1764,7 +1764,7 @@
       "nombre": "X-Harden (Tier: 5)",
       "clientId": 12481,
       "categoria": "helds",
-      "sprite": "ui/comercio/item",
+      "sprite": "items/cliente/12481",
       "apilable": null,
       "precioNpc": {
         "vende": null,
@@ -1785,7 +1785,7 @@
       "nombre": "X-Harden (Tier: 6)",
       "clientId": 12506,
       "categoria": "helds",
-      "sprite": "ui/comercio/item",
+      "sprite": "items/cliente/12506",
       "apilable": null,
       "precioNpc": {
         "vende": null,
@@ -1806,7 +1806,7 @@
       "nombre": "X-Harden (Tier: 7)",
       "clientId": 12531,
       "categoria": "helds",
-      "sprite": "ui/comercio/item",
+      "sprite": "items/cliente/12531",
       "apilable": null,
       "precioNpc": {
         "vende": null,
@@ -1827,7 +1827,7 @@
       "nombre": "X-Strafe (Tier: 1)",
       "clientId": 12376,
       "categoria": "helds",
-      "sprite": "ui/comercio/item",
+      "sprite": "items/cliente/12376",
       "apilable": null,
       "precioNpc": {
         "vende": null,
@@ -1848,7 +1848,7 @@
       "nombre": "X-Strafe (Tier: 2)",
       "clientId": 12401,
       "categoria": "helds",
-      "sprite": "ui/comercio/item",
+      "sprite": "items/cliente/12401",
       "apilable": null,
       "precioNpc": {
         "vende": null,
@@ -1869,7 +1869,7 @@
       "nombre": "X-Strafe (Tier: 3)",
       "clientId": 12426,
       "categoria": "helds",
-      "sprite": "ui/comercio/item",
+      "sprite": "items/cliente/12426",
       "apilable": null,
       "precioNpc": {
         "vende": null,
@@ -1890,7 +1890,7 @@
       "nombre": "X-Strafe (Tier: 4)",
       "clientId": 12451,
       "categoria": "helds",
-      "sprite": "ui/comercio/item",
+      "sprite": "items/cliente/12451",
       "apilable": null,
       "precioNpc": {
         "vende": null,
@@ -1911,7 +1911,7 @@
       "nombre": "X-Strafe (Tier: 5)",
       "clientId": 12476,
       "categoria": "helds",
-      "sprite": "ui/comercio/item",
+      "sprite": "items/cliente/12476",
       "apilable": null,
       "precioNpc": {
         "vende": null,
@@ -1932,7 +1932,7 @@
       "nombre": "X-Strafe (Tier: 6)",
       "clientId": 12501,
       "categoria": "helds",
-      "sprite": "ui/comercio/item",
+      "sprite": "items/cliente/12501",
       "apilable": null,
       "precioNpc": {
         "vende": null,
@@ -1953,7 +1953,7 @@
       "nombre": "X-Strafe (Tier: 7)",
       "clientId": 12526,
       "categoria": "helds",
-      "sprite": "ui/comercio/item",
+      "sprite": "items/cliente/12526",
       "apilable": null,
       "precioNpc": {
         "vende": null,
@@ -1974,7 +1974,7 @@
       "nombre": "X-Rage (Tier: 1)",
       "clientId": 12370,
       "categoria": "helds",
-      "sprite": "ui/comercio/item",
+      "sprite": "items/cliente/12370",
       "apilable": null,
       "precioNpc": {
         "vende": null,
@@ -1995,7 +1995,7 @@
       "nombre": "X-Rage (Tier: 2)",
       "clientId": 12395,
       "categoria": "helds",
-      "sprite": "ui/comercio/item",
+      "sprite": "items/cliente/12395",
       "apilable": null,
       "precioNpc": {
         "vende": null,
@@ -2016,7 +2016,7 @@
       "nombre": "X-Rage (Tier: 3)",
       "clientId": 12420,
       "categoria": "helds",
-      "sprite": "ui/comercio/item",
+      "sprite": "items/cliente/12420",
       "apilable": null,
       "precioNpc": {
         "vende": null,
@@ -2037,7 +2037,7 @@
       "nombre": "X-Rage (Tier: 4)",
       "clientId": 12445,
       "categoria": "helds",
-      "sprite": "ui/comercio/item",
+      "sprite": "items/cliente/12445",
       "apilable": null,
       "precioNpc": {
         "vende": null,
@@ -2058,7 +2058,7 @@
       "nombre": "X-Rage (Tier: 5)",
       "clientId": 12470,
       "categoria": "helds",
-      "sprite": "ui/comercio/item",
+      "sprite": "items/cliente/12470",
       "apilable": null,
       "precioNpc": {
         "vende": null,
@@ -2079,7 +2079,7 @@
       "nombre": "X-Rage (Tier: 6)",
       "clientId": 12495,
       "categoria": "helds",
-      "sprite": "ui/comercio/item",
+      "sprite": "items/cliente/12495",
       "apilable": null,
       "precioNpc": {
         "vende": null,
@@ -2100,7 +2100,7 @@
       "nombre": "X-Rage (Tier: 7)",
       "clientId": 12520,
       "categoria": "helds",
-      "sprite": "ui/comercio/item",
+      "sprite": "items/cliente/12520",
       "apilable": null,
       "precioNpc": {
         "vende": null,

@@ -459,13 +459,45 @@ export function resolveSprite(
 export const ITEM_PLACEHOLDER_SPRITE = 'ui/comercio/item';
 
 /**
- * An item's sprite as the list files carry it (items and Pokédex `datos.json`, their props):
+ * An item's sprite as the list files and their props carry it (items and Pokédex `datos.json`):
  * `null` for the placeholder, so the list draws the missing-sprite mark of an item with no sprite
- * yet (R7) and the files do not repeat the same sprite a thousand times (§13.6, 400 KB).
+ * yet (R7); the client id alone (`3070`) for the 32 × 32 client sprite
+ * `items/cliente/<clientId>` of scripts/assets/extract-game-sprites.mjs, which
+ * `expandListSprite` turns back into the sprite; the sprite itself otherwise. A thousand items
+ * written in full would take the files past their 400 KB and the first pages past their 20 KB
+ * of props (§13.6).
  */
+export type ListSprite = SpriteData | number | null;
+
+const CLIENT_ITEM_PREFIX = `${SPRITES_BASE_URL}items/cliente/`;
+
 export function listItemSprite(
   registry: SpriteRegistry,
   key: string | null | undefined,
-): SpriteData | null {
-  return key === ITEM_PLACEHOLDER_SPRITE ? null : spriteOrNull(registry, key);
+): ListSprite {
+  if (key === ITEM_PLACEHOLDER_SPRITE) return null;
+  const data = spriteOrNull(registry, key);
+  if (data === null || !data.src.startsWith(CLIENT_ITEM_PREFIX)) return data;
+  const clientId = data.src.slice(CLIENT_ITEM_PREFIX.length).replace(/\.png$/, '');
+  const plain =
+    /^\d+$/.test(clientId) &&
+    data.mode === 'estatico' &&
+    data.frames === 1 &&
+    data.size[0] === CELL &&
+    data.size[1] === CELL &&
+    data.scale === undefined &&
+    data.smooth === undefined;
+  return plain ? Number(clientId) : data;
+}
+
+/** The sprite of a `ListSprite`: a client id becomes its `items/cliente/<clientId>` sprite. */
+export function expandListSprite(value: ListSprite | undefined): SpriteData | null {
+  if (value === undefined || value === null) return null;
+  if (typeof value !== 'number') return value;
+  return {
+    src: spriteUrl(`items/cliente/${value}.png`),
+    size: [CELL, CELL],
+    frames: 1,
+    mode: 'estatico',
+  };
 }

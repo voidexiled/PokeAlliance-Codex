@@ -26,6 +26,7 @@ import { destacadosFileSchema } from '@/lib/content/registry-schema';
 import { getPokemon, getQuests } from '@/lib/content/repository';
 import { checkContent } from '../../scripts/content/lib/check-content.mjs';
 import { validateSchema } from '../../scripts/content/lib/json-schema.mjs';
+import { copyPublicForCheck } from './public-copy';
 
 type Json = Record<string, unknown>;
 type Entry = { etiqueta: { es: string; en: string }; ruta: string; sprite: string | null } & Json;
@@ -143,10 +144,7 @@ describe('pnpm content:check on content/destacados.json', () => {
   function copyRepo() {
     const root = path.join(scratch, `repo-${Math.random().toString(36).slice(2)}`);
     cpSync(path.join(repoRoot, 'content'), path.join(root, 'content'), { recursive: true });
-    for (const folder of [['sprites'], ['data', 'map', 'otmm']])
-      cpSync(path.join(repoRoot, 'public', ...folder), path.join(root, 'public', ...folder), {
-        recursive: true,
-      });
+    copyPublicForCheck(repoRoot, root);
     return root;
   }
   /** Empty page files under src/pages/[locale]/ of a copy: the pages its build writes. */

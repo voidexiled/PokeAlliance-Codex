@@ -16,6 +16,7 @@ import { tierIds, tiersFileSchema, type TierRecord } from '@/lib/content/registr
 import { tierInfo, visibleTiers } from '@/lib/content/tiers';
 import { checkContent } from '../../scripts/content/lib/check-content.mjs';
 import { validateSchema } from '../../scripts/content/lib/json-schema.mjs';
+import { copyPublicForCheck } from './public-copy';
 
 const repoRoot = fileURLToPath(new URL('../../', import.meta.url));
 const readJson = (file: string) => JSON.parse(readFileSync(path.join(repoRoot, file), 'utf8'));
@@ -192,10 +193,7 @@ describe('pnpm content:check on content/tiers.json', () => {
   function copyRepo() {
     const root = path.join(scratch, `repo-${Math.random().toString(36).slice(2)}`);
     cpSync(path.join(repoRoot, 'content'), path.join(root, 'content'), { recursive: true });
-    for (const folder of [['sprites'], ['data', 'map', 'otmm']])
-      cpSync(path.join(repoRoot, 'public', ...folder), path.join(root, 'public', ...folder), {
-        recursive: true,
-      });
+    copyPublicForCheck(repoRoot, root);
     return root;
   }
   const lines = (entries: { file: string; path?: string; message: string }[]) =>

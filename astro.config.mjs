@@ -141,6 +141,7 @@ function visualNoindexModule() {
 
 const MONEY_SPRITES_MODULE_ID = 'virtual:ac-money-sprites';
 const UI_SPRITES_MODULE_ID = 'virtual:ac-ui-sprites';
+const PICKER_SPRITES_MODULE_ID = 'virtual:ac-picker-sprites';
 
 /**
  * The cuts of the sprite registry the islands read, by module: the fixed keys the money
@@ -151,6 +152,10 @@ const UI_SPRITES_MODULE_ID = 'virtual:ac-ui-sprites';
 const SPRITE_CUTS = {
   [MONEY_SPRITES_MODULE_ID]: ['ui/pokedolares', 'ui/diamond'],
   [UI_SPRITES_MODULE_ID]: ['ui/shiny', 'ui/pokemon-desconocido', 'ui/none'],
+  // The icons src/lib/pickers/sprites.ts draws in filters and pickers: a key ending in `/`
+  // takes every entry under it. The registry also holds the thousands of item and outfit
+  // sprites of scripts/assets/extract-game-sprites.mjs, which no island may carry.
+  [PICKER_SPRITES_MODULE_ID]: ['ui/elementos/', 'ui/categorias/', 'ui/estrellas/'],
 };
 
 const spriteRegistryFile = fileURLToPath(new URL('./public/sprites/sprites.json', import.meta.url));
@@ -182,8 +187,10 @@ function moneySpritesModule() {
         readFileSync(spriteRegistryFile, 'utf8').replace(/^\uFEFF/, ''),
       );
       const keys = SPRITE_CUTS[/** @type {keyof typeof SPRITE_CUTS} */ (id.slice(1))];
-      const entries = keys
-        .filter((key) => Object.hasOwn(sprites, key))
+      const entries = Object.keys(sprites)
+        .filter((key) =>
+          keys.some((cut) => (cut.endsWith('/') ? key.startsWith(cut) : key === cut)),
+        )
         .map((key) => [key, sprites[key]]);
       return `export default ${JSON.stringify(Object.fromEntries(entries))};`;
     },

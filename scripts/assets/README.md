@@ -9,6 +9,25 @@ Scripts para sacar sprites y datos de outfits de los archivos `things` (`.dat` /
 | `lib/otclient-things.mjs`                  | Lector de DAT/SPR/OTML/OTFI, compositor de frames y codificador PNG compartidos.                                                                                                        | No escribe.                                                                                                                                                                         |
 | `lib/sprite-registry.mjs`                  | Render de los frames idle y actualización de `sprites.json`, compartidos por `--registrar` y `extract-outfit-preview.mjs`.                                                              | `public/sprites/` (solo cuando lo llama uno de los dos).                                                                                                                            |
 
+## Sprites de items y Pokémon: `extract-game-sprites.mjs`
+
+Pone el sprite real del juego a cada item y a cada Pokémon del sitio. Se vuelve a ejecutar después de cada actualización del cliente.
+
+```powershell
+$cliente = "C:\Users\jalom\Documents\pka_datamine\decrypted\2026-09-23_17-38-39"
+$datamine = "C:\Users\jalom\AppData\Roaming\PokeAlliance\PokeAllianceV3\datamine"
+node scripts/assets/extract-game-sprites.mjs --client $cliente --datamine $datamine --dry-run
+node scripts/assets/extract-game-sprites.mjs --client $cliente --datamine $datamine
+python scripts/assets/pokemon-thumbs.py "$cliente\data\images\pokemons"   # si dice que hay retratos nuevos
+pnpm content:check
+```
+
+- **Items**: cada item de `content/items/*.json` con `clientId` y un sprite de relleno (`ui/comercio/item` o un sprite `borrador`) pasa a `items/cliente/<clientId>` (`public/sprites/items/cliente/<clientId>.png`): el primer frame tal como lo dibuja el inventario (patrón 0, es decir, el de una sola unidad si es apilable; fase 0; todas las capas; el cuadrado visible `exactSize`). Un sprite que pusiste tú no se toca.
+- **Pokémon**: cada Pokémon sin registro en `content/outfits.json` recibe el `lookType` de la exportación (cyclopedia y, para las formas que no lista, el que dan las demás exportaciones con el mismo nombre; y la tabla `VERIFIED_OUTFITS` del script, comprobada a ojo contra el retrato del cliente). Su frame sur se registra como `outfits/<id>` con un solo archivo, `outfits/<id>/sur.png`. Si el cliente lo anima estando quieto (`animateAlways`), el archivo es la tira de sus fases con `modo: animacion` y 1000/fases ms por frame. Un outfit que registraste con sus cuatro direcciones se queda como está. Un shiny cuya única fuente es el outfit de su forma normal se queda sin outfit.
+- **Retratos**: un Pokémon con `imagen: null` recibe el retrato de `data/images/pokemons` (`NNN.png`, `NNN.1.png` si es shiny, y las formas de `FORM_PORTRAITS`) cuando ningún otro registro lo usa.
+- Al volver a ejecutarlo, regenera los sprites que son suyos (`items/cliente/*` y las entradas `outfits/<id>` de un archivo) y retira los que ya nadie usa. Solo escribe en `public/sprites/` y `content/`; nunca en el cliente, y rechaza archivos `PKA1`.
+- Las listas no repiten el sprite completo: `datos.json` y las props llevan solo el `clientId` de un sprite `items/cliente/*` de 32 × 32 (`listItemSprite` / `expandListSprite`, §13.6).
+
 ## Seguridad y derechos
 
 - Solo lectura sobre el cliente: los scripts nunca modifican, ejecutan ni descifran archivos del juego.

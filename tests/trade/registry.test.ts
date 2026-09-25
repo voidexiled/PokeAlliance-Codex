@@ -54,6 +54,7 @@ import {
 } from '@/lib/trade/types';
 import { checkContent } from '../../scripts/content/lib/check-content.mjs';
 import { validateSchema } from '../../scripts/content/lib/json-schema.mjs';
+import { copyPublicForCheck } from '../content/public-copy';
 
 const repoRoot = fileURLToPath(new URL('../../', import.meta.url));
 const readJson = (file: string) => JSON.parse(readFileSync(path.join(repoRoot, file), 'utf8'));
@@ -668,10 +669,7 @@ describe('pnpm content:check on content/comercio/', () => {
   function copyRepo(): string {
     const root = folder();
     cpSync(path.join(repoRoot, 'content'), path.join(root, 'content'), { recursive: true });
-    for (const segments of [['sprites'], ['data', 'map', 'otmm']])
-      cpSync(path.join(repoRoot, 'public', ...segments), path.join(root, 'public', ...segments), {
-        recursive: true,
-      });
+    copyPublicForCheck(repoRoot, root);
     return root;
   }
   const edit = <T>(root: string, file: string, change: (data: T) => void) => {
@@ -903,14 +901,7 @@ describe('the `moneda` object of content/items/diamantes.json (3.13)', () => {
   it('is refused by pnpm content:check anywhere else, with amounts or with uneven languages', () => {
     const root = folder();
     cpSync(path.join(repoRoot, 'content'), path.join(root, 'content'), { recursive: true });
-    cpSync(path.join(repoRoot, 'public', 'sprites'), path.join(root, 'public', 'sprites'), {
-      recursive: true,
-    });
-    cpSync(
-      path.join(repoRoot, 'public', 'data', 'map', 'otmm'),
-      path.join(root, 'public', 'data', 'map', 'otmm'),
-      { recursive: true },
-    );
+    copyPublicForCheck(repoRoot, root);
     const write = (file: string, change: (data: Record<string, unknown>) => void) => {
       const target = path.join(root, 'content', 'items', file);
       const data = JSON.parse(readFileSync(target, 'utf8'));

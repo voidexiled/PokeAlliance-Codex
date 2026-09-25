@@ -33,6 +33,5096 @@
       "pokemon": "squirtle",
       "outfitId": 8,
       "addons": []
+    },
+    {
+      "pokemon": "shiny-bulbasaur",
+      "outfitId": 504,
+      "addons": []
+    },
+    {
+      "pokemon": "ivysaur",
+      "outfitId": 3,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-ivysaur",
+      "outfitId": 505,
+      "addons": []
+    },
+    {
+      "pokemon": "venusaur",
+      "outfitId": 4,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-venusaur",
+      "outfitId": 506,
+      "addons": []
+    },
+    {
+      "pokemon": "mega-venusaur",
+      "outfitId": 2783,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-charmander",
+      "outfitId": 507,
+      "addons": []
+    },
+    {
+      "pokemon": "charmeleon",
+      "outfitId": 6,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-charmeleon",
+      "outfitId": 508,
+      "addons": []
+    },
+    {
+      "pokemon": "mega-charizard-x",
+      "outfitId": 2784,
+      "addons": []
+    },
+    {
+      "pokemon": "mega-charizard-y",
+      "outfitId": 2785,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-squirtle",
+      "outfitId": 510,
+      "addons": []
+    },
+    {
+      "pokemon": "wartortle",
+      "outfitId": 9,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-wartortle",
+      "outfitId": 511,
+      "addons": []
+    },
+    {
+      "pokemon": "blastoise",
+      "outfitId": 10,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-blastoise",
+      "outfitId": 512,
+      "addons": []
+    },
+    {
+      "pokemon": "mega-blastoise",
+      "outfitId": 2786,
+      "addons": []
+    },
+    {
+      "pokemon": "caterpie",
+      "outfitId": 11,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-caterpie",
+      "outfitId": 513,
+      "addons": []
+    },
+    {
+      "pokemon": "metapod",
+      "outfitId": 12,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-metapod",
+      "outfitId": 514,
+      "addons": []
+    },
+    {
+      "pokemon": "butterfree",
+      "outfitId": 13,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-butterfree",
+      "outfitId": 515,
+      "addons": []
+    },
+    {
+      "pokemon": "weedle",
+      "outfitId": 14,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-weedle",
+      "outfitId": 516,
+      "addons": []
+    },
+    {
+      "pokemon": "kakuna",
+      "outfitId": 15,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-kakuna",
+      "outfitId": 517,
+      "addons": []
+    },
+    {
+      "pokemon": "beedrill",
+      "outfitId": 16,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-beedrill",
+      "outfitId": 518,
+      "addons": []
+    },
+    {
+      "pokemon": "pidgey",
+      "outfitId": 17,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-pidgey",
+      "outfitId": 519,
+      "addons": []
+    },
+    {
+      "pokemon": "pidgeotto",
+      "outfitId": 18,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-pidgeotto",
+      "outfitId": 520,
+      "addons": []
+    },
+    {
+      "pokemon": "pidgeot",
+      "outfitId": 19,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-pidgeot",
+      "outfitId": 521,
+      "addons": []
+    },
+    {
+      "pokemon": "mega-pidgeot",
+      "outfitId": 2814,
+      "addons": []
+    },
+    {
+      "pokemon": "rattata",
+      "outfitId": 20,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-rattata",
+      "outfitId": 522,
+      "addons": []
+    },
+    {
+      "pokemon": "raticate",
+      "outfitId": 21,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-raticate",
+      "outfitId": 523,
+      "addons": []
+    },
+    {
+      "pokemon": "spearow",
+      "outfitId": 22,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-spearow",
+      "outfitId": 524,
+      "addons": []
+    },
+    {
+      "pokemon": "fearow",
+      "outfitId": 23,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-fearow",
+      "outfitId": 525,
+      "addons": []
+    },
+    {
+      "pokemon": "ekans",
+      "outfitId": 24,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-ekans",
+      "outfitId": 526,
+      "addons": []
+    },
+    {
+      "pokemon": "arbok",
+      "outfitId": 25,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-arbok",
+      "outfitId": 527,
+      "addons": []
+    },
+    {
+      "pokemon": "pikachu",
+      "outfitId": 26,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-pikachu",
+      "outfitId": 528,
+      "addons": []
+    },
+    {
+      "pokemon": "raichu",
+      "outfitId": 27,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-raichu",
+      "outfitId": 529,
+      "addons": []
+    },
+    {
+      "pokemon": "sandshrew",
+      "outfitId": 28,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-sandshrew",
+      "outfitId": 530,
+      "addons": []
+    },
+    {
+      "pokemon": "sandslash",
+      "outfitId": 29,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-sandslash",
+      "outfitId": 531,
+      "addons": []
+    },
+    {
+      "pokemon": "nidoran-female",
+      "outfitId": 30,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-nidoran-female",
+      "outfitId": 532,
+      "addons": []
+    },
+    {
+      "pokemon": "nidorina",
+      "outfitId": 31,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-nidorina",
+      "outfitId": 533,
+      "addons": []
+    },
+    {
+      "pokemon": "nidoqueen",
+      "outfitId": 32,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-nidoqueen",
+      "outfitId": 534,
+      "addons": []
+    },
+    {
+      "pokemon": "nidoran-male",
+      "outfitId": 33,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-nidoran-male",
+      "outfitId": 535,
+      "addons": []
+    },
+    {
+      "pokemon": "nidorino",
+      "outfitId": 34,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-nidorino",
+      "outfitId": 536,
+      "addons": []
+    },
+    {
+      "pokemon": "nidoking",
+      "outfitId": 35,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-nidoking",
+      "outfitId": 537,
+      "addons": []
+    },
+    {
+      "pokemon": "clefairy",
+      "outfitId": 36,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-clefairy",
+      "outfitId": 538,
+      "addons": []
+    },
+    {
+      "pokemon": "clefable",
+      "outfitId": 37,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-clefable",
+      "outfitId": 539,
+      "addons": []
+    },
+    {
+      "pokemon": "mega-clefable",
+      "outfitId": 3388,
+      "addons": []
+    },
+    {
+      "pokemon": "vulpix",
+      "outfitId": 38,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-vulpix",
+      "outfitId": 540,
+      "addons": []
+    },
+    {
+      "pokemon": "ninetales",
+      "outfitId": 39,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-ninetales",
+      "outfitId": 541,
+      "addons": []
+    },
+    {
+      "pokemon": "jigglypuff",
+      "outfitId": 40,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-jigglypuff",
+      "outfitId": 542,
+      "addons": []
+    },
+    {
+      "pokemon": "wigglytuff",
+      "outfitId": 41,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-wigglytuff",
+      "outfitId": 543,
+      "addons": []
+    },
+    {
+      "pokemon": "zubat",
+      "outfitId": 42,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-zubat",
+      "outfitId": 544,
+      "addons": []
+    },
+    {
+      "pokemon": "golbat",
+      "outfitId": 43,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-golbat",
+      "outfitId": 545,
+      "addons": []
+    },
+    {
+      "pokemon": "oddish",
+      "outfitId": 44,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-oddish",
+      "outfitId": 546,
+      "addons": []
+    },
+    {
+      "pokemon": "gloom",
+      "outfitId": 45,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-gloom",
+      "outfitId": 547,
+      "addons": []
+    },
+    {
+      "pokemon": "vileplume",
+      "outfitId": 46,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-vileplume",
+      "outfitId": 548,
+      "addons": []
+    },
+    {
+      "pokemon": "paras",
+      "outfitId": 47,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-paras",
+      "outfitId": 549,
+      "addons": []
+    },
+    {
+      "pokemon": "parasect",
+      "outfitId": 48,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-parasect",
+      "outfitId": 550,
+      "addons": []
+    },
+    {
+      "pokemon": "venonat",
+      "outfitId": 49,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-venonat",
+      "outfitId": 551,
+      "addons": []
+    },
+    {
+      "pokemon": "venomoth",
+      "outfitId": 50,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-venomoth",
+      "outfitId": 552,
+      "addons": []
+    },
+    {
+      "pokemon": "diglett",
+      "outfitId": 51,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-diglett",
+      "outfitId": 553,
+      "addons": []
+    },
+    {
+      "pokemon": "dugtrio",
+      "outfitId": 52,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-dugtrio",
+      "outfitId": 554,
+      "addons": []
+    },
+    {
+      "pokemon": "meowth",
+      "outfitId": 53,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-meowth",
+      "outfitId": 555,
+      "addons": []
+    },
+    {
+      "pokemon": "persian",
+      "outfitId": 54,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-persian",
+      "outfitId": 556,
+      "addons": []
+    },
+    {
+      "pokemon": "psyduck",
+      "outfitId": 55,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-psyduck",
+      "outfitId": 557,
+      "addons": []
+    },
+    {
+      "pokemon": "golduck",
+      "outfitId": 56,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-golduck",
+      "outfitId": 558,
+      "addons": []
+    },
+    {
+      "pokemon": "mankey",
+      "outfitId": 57,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-mankey",
+      "outfitId": 559,
+      "addons": []
+    },
+    {
+      "pokemon": "primeape",
+      "outfitId": 58,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-primeape",
+      "outfitId": 560,
+      "addons": []
+    },
+    {
+      "pokemon": "growlithe",
+      "outfitId": 59,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-growlithe",
+      "outfitId": 561,
+      "addons": []
+    },
+    {
+      "pokemon": "arcanine",
+      "outfitId": 60,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-arcanine",
+      "outfitId": 562,
+      "addons": []
+    },
+    {
+      "pokemon": "poliwag",
+      "outfitId": 61,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-poliwag",
+      "outfitId": 563,
+      "addons": []
+    },
+    {
+      "pokemon": "poliwhirl",
+      "outfitId": 62,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-poliwhirl",
+      "outfitId": 564,
+      "addons": []
+    },
+    {
+      "pokemon": "poliwrath",
+      "outfitId": 63,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-poliwrath",
+      "outfitId": 565,
+      "addons": []
+    },
+    {
+      "pokemon": "abra",
+      "outfitId": 64,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-abra",
+      "outfitId": 566,
+      "addons": []
+    },
+    {
+      "pokemon": "kadabra",
+      "outfitId": 65,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-kadabra",
+      "outfitId": 567,
+      "addons": []
+    },
+    {
+      "pokemon": "alakazam",
+      "outfitId": 66,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-alakazam",
+      "outfitId": 568,
+      "addons": []
+    },
+    {
+      "pokemon": "mega-alakazam",
+      "outfitId": 2787,
+      "addons": []
+    },
+    {
+      "pokemon": "machop",
+      "outfitId": 67,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-machop",
+      "outfitId": 569,
+      "addons": []
+    },
+    {
+      "pokemon": "machoke",
+      "outfitId": 68,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-machoke",
+      "outfitId": 570,
+      "addons": []
+    },
+    {
+      "pokemon": "machamp",
+      "outfitId": 69,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-machamp",
+      "outfitId": 571,
+      "addons": []
+    },
+    {
+      "pokemon": "bellsprout",
+      "outfitId": 70,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-bellsprout",
+      "outfitId": 572,
+      "addons": []
+    },
+    {
+      "pokemon": "weepinbell",
+      "outfitId": 71,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-weepinbell",
+      "outfitId": 573,
+      "addons": []
+    },
+    {
+      "pokemon": "victreebel",
+      "outfitId": 72,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-victreebel",
+      "outfitId": 574,
+      "addons": []
+    },
+    {
+      "pokemon": "tentacool",
+      "outfitId": 73,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-tentacool",
+      "outfitId": 575,
+      "addons": []
+    },
+    {
+      "pokemon": "tentacruel",
+      "outfitId": 74,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-tentacruel",
+      "outfitId": 576,
+      "addons": []
+    },
+    {
+      "pokemon": "geodude",
+      "outfitId": 75,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-geodude",
+      "outfitId": 577,
+      "addons": []
+    },
+    {
+      "pokemon": "graveler",
+      "outfitId": 76,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-graveler",
+      "outfitId": 578,
+      "addons": []
+    },
+    {
+      "pokemon": "golem",
+      "outfitId": 77,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-golem",
+      "outfitId": 579,
+      "addons": []
+    },
+    {
+      "pokemon": "ponyta",
+      "outfitId": 78,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-ponyta",
+      "outfitId": 580,
+      "addons": []
+    },
+    {
+      "pokemon": "rapidash",
+      "outfitId": 79,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-rapidash",
+      "outfitId": 581,
+      "addons": []
+    },
+    {
+      "pokemon": "slowpoke",
+      "outfitId": 80,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-slowpoke",
+      "outfitId": 582,
+      "addons": []
+    },
+    {
+      "pokemon": "slowbro",
+      "outfitId": 81,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-slowbro",
+      "outfitId": 583,
+      "addons": []
+    },
+    {
+      "pokemon": "magnemite",
+      "outfitId": 82,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-magnemite",
+      "outfitId": 584,
+      "addons": []
+    },
+    {
+      "pokemon": "magneton",
+      "outfitId": 83,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-magneton",
+      "outfitId": 585,
+      "addons": []
+    },
+    {
+      "pokemon": "farfetch-d",
+      "outfitId": 84,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-farfetch-d",
+      "outfitId": 586,
+      "addons": []
+    },
+    {
+      "pokemon": "doduo",
+      "outfitId": 85,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-doduo",
+      "outfitId": 587,
+      "addons": []
+    },
+    {
+      "pokemon": "dodrio",
+      "outfitId": 86,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-dodrio",
+      "outfitId": 588,
+      "addons": []
+    },
+    {
+      "pokemon": "seel",
+      "outfitId": 87,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-seel",
+      "outfitId": 589,
+      "addons": []
+    },
+    {
+      "pokemon": "dewgong",
+      "outfitId": 88,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-dewgong",
+      "outfitId": 590,
+      "addons": []
+    },
+    {
+      "pokemon": "grimer",
+      "outfitId": 89,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-grimer",
+      "outfitId": 591,
+      "addons": []
+    },
+    {
+      "pokemon": "muk",
+      "outfitId": 90,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-muk",
+      "outfitId": 592,
+      "addons": []
+    },
+    {
+      "pokemon": "shellder",
+      "outfitId": 91,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-shellder",
+      "outfitId": 593,
+      "addons": []
+    },
+    {
+      "pokemon": "cloyster",
+      "outfitId": 92,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-cloyster",
+      "outfitId": 594,
+      "addons": []
+    },
+    {
+      "pokemon": "gastly",
+      "outfitId": 93,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-gastly",
+      "outfitId": 595,
+      "addons": []
+    },
+    {
+      "pokemon": "haunter",
+      "outfitId": 94,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-haunter",
+      "outfitId": 596,
+      "addons": []
+    },
+    {
+      "pokemon": "gengar",
+      "outfitId": 95,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-gengar",
+      "outfitId": 597,
+      "addons": []
+    },
+    {
+      "pokemon": "mega-gengar",
+      "outfitId": 2788,
+      "addons": []
+    },
+    {
+      "pokemon": "onix",
+      "outfitId": 96,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-onix",
+      "outfitId": 598,
+      "addons": []
+    },
+    {
+      "pokemon": "drowzee",
+      "outfitId": 97,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-drowzee",
+      "outfitId": 599,
+      "addons": []
+    },
+    {
+      "pokemon": "hypno",
+      "outfitId": 98,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-hypno",
+      "outfitId": 600,
+      "addons": []
+    },
+    {
+      "pokemon": "krabby",
+      "outfitId": 99,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-krabby",
+      "outfitId": 601,
+      "addons": []
+    },
+    {
+      "pokemon": "kingler",
+      "outfitId": 100,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-kingler",
+      "outfitId": 602,
+      "addons": []
+    },
+    {
+      "pokemon": "voltorb",
+      "outfitId": 101,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-voltorb",
+      "outfitId": 603,
+      "addons": []
+    },
+    {
+      "pokemon": "electrode",
+      "outfitId": 102,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-electrode",
+      "outfitId": 604,
+      "addons": []
+    },
+    {
+      "pokemon": "exeggcute",
+      "outfitId": 103,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-exeggcute",
+      "outfitId": 605,
+      "addons": []
+    },
+    {
+      "pokemon": "exeggutor",
+      "outfitId": 104,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-exeggutor",
+      "outfitId": 606,
+      "addons": []
+    },
+    {
+      "pokemon": "cubone",
+      "outfitId": 105,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-cubone",
+      "outfitId": 607,
+      "addons": []
+    },
+    {
+      "pokemon": "marowak",
+      "outfitId": 106,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-marowak",
+      "outfitId": 608,
+      "addons": []
+    },
+    {
+      "pokemon": "hitmonlee",
+      "outfitId": 107,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-hitmonlee",
+      "outfitId": 609,
+      "addons": []
+    },
+    {
+      "pokemon": "hitmonchan",
+      "outfitId": 108,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-hitmonchan",
+      "outfitId": 610,
+      "addons": []
+    },
+    {
+      "pokemon": "lickitung",
+      "outfitId": 109,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-lickitung",
+      "outfitId": 611,
+      "addons": []
+    },
+    {
+      "pokemon": "koffing",
+      "outfitId": 110,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-koffing",
+      "outfitId": 612,
+      "addons": []
+    },
+    {
+      "pokemon": "weezing",
+      "outfitId": 111,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-weezing",
+      "outfitId": 613,
+      "addons": []
+    },
+    {
+      "pokemon": "rhyhorn",
+      "outfitId": 112,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-rhyhorn",
+      "outfitId": 614,
+      "addons": []
+    },
+    {
+      "pokemon": "rhydon",
+      "outfitId": 113,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-rhydon",
+      "outfitId": 615,
+      "addons": []
+    },
+    {
+      "pokemon": "chansey",
+      "outfitId": 114,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-chansey",
+      "outfitId": 616,
+      "addons": []
+    },
+    {
+      "pokemon": "tangela",
+      "outfitId": 115,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-tangela",
+      "outfitId": 617,
+      "addons": []
+    },
+    {
+      "pokemon": "kangaskhan",
+      "outfitId": 116,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-kangaskhan",
+      "outfitId": 618,
+      "addons": []
+    },
+    {
+      "pokemon": "mega-kangaskhan",
+      "outfitId": 2789,
+      "addons": []
+    },
+    {
+      "pokemon": "horsea",
+      "outfitId": 117,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-horsea",
+      "outfitId": 619,
+      "addons": []
+    },
+    {
+      "pokemon": "seadra",
+      "outfitId": 118,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-seadra",
+      "outfitId": 620,
+      "addons": []
+    },
+    {
+      "pokemon": "goldeen",
+      "outfitId": 119,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-goldeen",
+      "outfitId": 621,
+      "addons": []
+    },
+    {
+      "pokemon": "seaking",
+      "outfitId": 120,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-seaking",
+      "outfitId": 622,
+      "addons": []
+    },
+    {
+      "pokemon": "staryu",
+      "outfitId": 121,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-staryu",
+      "outfitId": 623,
+      "addons": []
+    },
+    {
+      "pokemon": "starmie",
+      "outfitId": 122,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-starmie",
+      "outfitId": 624,
+      "addons": []
+    },
+    {
+      "pokemon": "mr-mime",
+      "outfitId": 123,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-mr-mime",
+      "outfitId": 625,
+      "addons": []
+    },
+    {
+      "pokemon": "scyther",
+      "outfitId": 124,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-scyther",
+      "outfitId": 626,
+      "addons": []
+    },
+    {
+      "pokemon": "jynx",
+      "outfitId": 125,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-jynx",
+      "outfitId": 627,
+      "addons": []
+    },
+    {
+      "pokemon": "electabuzz",
+      "outfitId": 126,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-electabuzz",
+      "outfitId": 628,
+      "addons": []
+    },
+    {
+      "pokemon": "magmar",
+      "outfitId": 127,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-magmar",
+      "outfitId": 629,
+      "addons": []
+    },
+    {
+      "pokemon": "pinsir",
+      "outfitId": 128,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-pinsir",
+      "outfitId": 630,
+      "addons": []
+    },
+    {
+      "pokemon": "tauros",
+      "outfitId": 129,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-tauros",
+      "outfitId": 631,
+      "addons": []
+    },
+    {
+      "pokemon": "magikarp",
+      "outfitId": 130,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-magikarp",
+      "outfitId": 632,
+      "addons": []
+    },
+    {
+      "pokemon": "gyarados",
+      "outfitId": 131,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-gyarados",
+      "outfitId": 633,
+      "addons": []
+    },
+    {
+      "pokemon": "mega-gyarados",
+      "outfitId": 2791,
+      "addons": []
+    },
+    {
+      "pokemon": "lapras",
+      "outfitId": 132,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-lapras",
+      "outfitId": 634,
+      "addons": []
+    },
+    {
+      "pokemon": "ditto",
+      "outfitId": 133,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-ditto",
+      "outfitId": 635,
+      "addons": []
+    },
+    {
+      "pokemon": "eevee",
+      "outfitId": 134,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-eevee",
+      "outfitId": 636,
+      "addons": []
+    },
+    {
+      "pokemon": "vaporeon",
+      "outfitId": 135,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-vaporeon",
+      "outfitId": 637,
+      "addons": []
+    },
+    {
+      "pokemon": "jolteon",
+      "outfitId": 136,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-jolteon",
+      "outfitId": 638,
+      "addons": []
+    },
+    {
+      "pokemon": "flareon",
+      "outfitId": 137,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-flareon",
+      "outfitId": 639,
+      "addons": []
+    },
+    {
+      "pokemon": "porygon",
+      "outfitId": 138,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-porygon",
+      "outfitId": 640,
+      "addons": []
+    },
+    {
+      "pokemon": "omanyte",
+      "outfitId": 139,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-omanyte",
+      "outfitId": 641,
+      "addons": []
+    },
+    {
+      "pokemon": "omastar",
+      "outfitId": 140,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-omastar",
+      "outfitId": 642,
+      "addons": []
+    },
+    {
+      "pokemon": "kabuto",
+      "outfitId": 141,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-kabuto",
+      "outfitId": 643,
+      "addons": []
+    },
+    {
+      "pokemon": "kabutops",
+      "outfitId": 142,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-kabutops",
+      "outfitId": 644,
+      "addons": []
+    },
+    {
+      "pokemon": "aerodactyl",
+      "outfitId": 143,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-aerodactyl",
+      "outfitId": 645,
+      "addons": []
+    },
+    {
+      "pokemon": "mega-aerodactyl",
+      "outfitId": 2792,
+      "addons": []
+    },
+    {
+      "pokemon": "snorlax",
+      "outfitId": 144,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-snorlax",
+      "outfitId": 646,
+      "addons": []
+    },
+    {
+      "pokemon": "articuno",
+      "outfitId": 145,
+      "addons": []
+    },
+    {
+      "pokemon": "zapdos",
+      "outfitId": 146,
+      "addons": []
+    },
+    {
+      "pokemon": "moltres",
+      "outfitId": 147,
+      "addons": []
+    },
+    {
+      "pokemon": "dratini",
+      "outfitId": 148,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-dratini",
+      "outfitId": 650,
+      "addons": []
+    },
+    {
+      "pokemon": "dragonair",
+      "outfitId": 149,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-dragonair",
+      "outfitId": 651,
+      "addons": []
+    },
+    {
+      "pokemon": "dragonite",
+      "outfitId": 150,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-dragonite",
+      "outfitId": 652,
+      "addons": []
+    },
+    {
+      "pokemon": "mewtwo",
+      "outfitId": 151,
+      "addons": []
+    },
+    {
+      "pokemon": "mew",
+      "outfitId": 152,
+      "addons": []
+    },
+    {
+      "pokemon": "chikorita",
+      "outfitId": 247,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-chikorita",
+      "outfitId": 655,
+      "addons": []
+    },
+    {
+      "pokemon": "bayleef",
+      "outfitId": 248,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-bayleef",
+      "outfitId": 656,
+      "addons": []
+    },
+    {
+      "pokemon": "meganium",
+      "outfitId": 249,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-meganium",
+      "outfitId": 657,
+      "addons": []
+    },
+    {
+      "pokemon": "cyndaquil",
+      "outfitId": 250,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-cyndaquil",
+      "outfitId": 658,
+      "addons": []
+    },
+    {
+      "pokemon": "quilava",
+      "outfitId": 251,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-quilava",
+      "outfitId": 659,
+      "addons": []
+    },
+    {
+      "pokemon": "typhlosion",
+      "outfitId": 252,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-typhlosion",
+      "outfitId": 660,
+      "addons": []
+    },
+    {
+      "pokemon": "totodile",
+      "outfitId": 253,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-totodile",
+      "outfitId": 661,
+      "addons": []
+    },
+    {
+      "pokemon": "croconaw",
+      "outfitId": 254,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-croconaw",
+      "outfitId": 662,
+      "addons": []
+    },
+    {
+      "pokemon": "feraligatr",
+      "outfitId": 255,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-feraligatr",
+      "outfitId": 663,
+      "addons": []
+    },
+    {
+      "pokemon": "sentret",
+      "outfitId": 256,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-sentret",
+      "outfitId": 664,
+      "addons": []
+    },
+    {
+      "pokemon": "furret",
+      "outfitId": 257,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-furret",
+      "outfitId": 665,
+      "addons": []
+    },
+    {
+      "pokemon": "hoothoot",
+      "outfitId": 258,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-hoothoot",
+      "outfitId": 666,
+      "addons": []
+    },
+    {
+      "pokemon": "noctowl",
+      "outfitId": 259,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-noctowl",
+      "outfitId": 667,
+      "addons": []
+    },
+    {
+      "pokemon": "ledyba",
+      "outfitId": 260,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-ledyba",
+      "outfitId": 668,
+      "addons": []
+    },
+    {
+      "pokemon": "ledian",
+      "outfitId": 261,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-ledian",
+      "outfitId": 669,
+      "addons": []
+    },
+    {
+      "pokemon": "spinarak",
+      "outfitId": 262,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-spinarak",
+      "outfitId": 670,
+      "addons": []
+    },
+    {
+      "pokemon": "ariados",
+      "outfitId": 263,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-ariados",
+      "outfitId": 671,
+      "addons": []
+    },
+    {
+      "pokemon": "crobat",
+      "outfitId": 264,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-crobat",
+      "outfitId": 672,
+      "addons": []
+    },
+    {
+      "pokemon": "chinchou",
+      "outfitId": 265,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-chinchou",
+      "outfitId": 673,
+      "addons": []
+    },
+    {
+      "pokemon": "lanturn",
+      "outfitId": 266,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-lanturn",
+      "outfitId": 674,
+      "addons": []
+    },
+    {
+      "pokemon": "pichu",
+      "outfitId": 267,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-pichu",
+      "outfitId": 675,
+      "addons": []
+    },
+    {
+      "pokemon": "cleffa",
+      "outfitId": 268,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-cleffa",
+      "outfitId": 676,
+      "addons": []
+    },
+    {
+      "pokemon": "igglybuff",
+      "outfitId": 269,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-igglybuff",
+      "outfitId": 677,
+      "addons": []
+    },
+    {
+      "pokemon": "togepi",
+      "outfitId": 270,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-togepi",
+      "outfitId": 678,
+      "addons": []
+    },
+    {
+      "pokemon": "togetic",
+      "outfitId": 271,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-togetic",
+      "outfitId": 679,
+      "addons": []
+    },
+    {
+      "pokemon": "natu",
+      "outfitId": 272,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-natu",
+      "outfitId": 680,
+      "addons": []
+    },
+    {
+      "pokemon": "xatu",
+      "outfitId": 273,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-xatu",
+      "outfitId": 681,
+      "addons": []
+    },
+    {
+      "pokemon": "mareep",
+      "outfitId": 274,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-mareep",
+      "outfitId": 682,
+      "addons": []
+    },
+    {
+      "pokemon": "flaaffy",
+      "outfitId": 275,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-flaaffy",
+      "outfitId": 683,
+      "addons": []
+    },
+    {
+      "pokemon": "ampharos",
+      "outfitId": 276,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-ampharos",
+      "outfitId": 684,
+      "addons": []
+    },
+    {
+      "pokemon": "mega-ampharos",
+      "outfitId": 2795,
+      "addons": []
+    },
+    {
+      "pokemon": "bellossom",
+      "outfitId": 277,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-bellossom",
+      "outfitId": 685,
+      "addons": []
+    },
+    {
+      "pokemon": "marill",
+      "outfitId": 278,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-marill",
+      "outfitId": 686,
+      "addons": []
+    },
+    {
+      "pokemon": "azumarill",
+      "outfitId": 279,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-azumarill",
+      "outfitId": 687,
+      "addons": []
+    },
+    {
+      "pokemon": "sudowoodo",
+      "outfitId": 280,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-sudowoodo",
+      "outfitId": 688,
+      "addons": []
+    },
+    {
+      "pokemon": "politoed",
+      "outfitId": 281,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-politoed",
+      "outfitId": 689,
+      "addons": []
+    },
+    {
+      "pokemon": "hoppip",
+      "outfitId": 282,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-hoppip",
+      "outfitId": 690,
+      "addons": []
+    },
+    {
+      "pokemon": "skiploom",
+      "outfitId": 283,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-skiploom",
+      "outfitId": 691,
+      "addons": []
+    },
+    {
+      "pokemon": "jumpluff",
+      "outfitId": 284,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-jumpluff",
+      "outfitId": 692,
+      "addons": []
+    },
+    {
+      "pokemon": "aipom",
+      "outfitId": 285,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-aipom",
+      "outfitId": 693,
+      "addons": []
+    },
+    {
+      "pokemon": "sunkern",
+      "outfitId": 286,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-sunkern",
+      "outfitId": 694,
+      "addons": []
+    },
+    {
+      "pokemon": "sunflora",
+      "outfitId": 287,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-sunflora",
+      "outfitId": 695,
+      "addons": []
+    },
+    {
+      "pokemon": "yanma",
+      "outfitId": 288,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-yanma",
+      "outfitId": 696,
+      "addons": []
+    },
+    {
+      "pokemon": "wooper",
+      "outfitId": 289,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-wooper",
+      "outfitId": 697,
+      "addons": []
+    },
+    {
+      "pokemon": "quagsire",
+      "outfitId": 290,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-quagsire",
+      "outfitId": 698,
+      "addons": []
+    },
+    {
+      "pokemon": "espeon",
+      "outfitId": 291,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-espeon",
+      "outfitId": 699,
+      "addons": []
+    },
+    {
+      "pokemon": "umbreon",
+      "outfitId": 292,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-umbreon",
+      "outfitId": 700,
+      "addons": []
+    },
+    {
+      "pokemon": "murkrow",
+      "outfitId": 293,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-murkrow",
+      "outfitId": 701,
+      "addons": []
+    },
+    {
+      "pokemon": "slowking",
+      "outfitId": 294,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-slowking",
+      "outfitId": 702,
+      "addons": []
+    },
+    {
+      "pokemon": "misdreavus",
+      "outfitId": 295,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-misdreavus",
+      "outfitId": 703,
+      "addons": []
+    },
+    {
+      "pokemon": "unown",
+      "outfitId": 296,
+      "addons": []
+    },
+    {
+      "pokemon": "unown-a",
+      "outfitId": 296,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-unown",
+      "outfitId": 704,
+      "addons": []
+    },
+    {
+      "pokemon": "wobbuffet",
+      "outfitId": 323,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-wobbuffet",
+      "outfitId": 731,
+      "addons": []
+    },
+    {
+      "pokemon": "girafarig",
+      "outfitId": 324,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-girafarig",
+      "outfitId": 732,
+      "addons": []
+    },
+    {
+      "pokemon": "pineco",
+      "outfitId": 325,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-pineco",
+      "outfitId": 733,
+      "addons": []
+    },
+    {
+      "pokemon": "forretress",
+      "outfitId": 326,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-forretress",
+      "outfitId": 734,
+      "addons": []
+    },
+    {
+      "pokemon": "dunsparce",
+      "outfitId": 327,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-dunsparce",
+      "outfitId": 735,
+      "addons": []
+    },
+    {
+      "pokemon": "gligar",
+      "outfitId": 328,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-gligar",
+      "outfitId": 736,
+      "addons": []
+    },
+    {
+      "pokemon": "steelix",
+      "outfitId": 329,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-steelix",
+      "outfitId": 737,
+      "addons": []
+    },
+    {
+      "pokemon": "mega-steelix",
+      "outfitId": 2815,
+      "addons": []
+    },
+    {
+      "pokemon": "snubbull",
+      "outfitId": 330,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-snubbull",
+      "outfitId": 738,
+      "addons": []
+    },
+    {
+      "pokemon": "granbull",
+      "outfitId": 331,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-granbull",
+      "outfitId": 739,
+      "addons": []
+    },
+    {
+      "pokemon": "qwilfish",
+      "outfitId": 332,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-qwilfish",
+      "outfitId": 740,
+      "addons": []
+    },
+    {
+      "pokemon": "scizor",
+      "outfitId": 333,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-scizor",
+      "outfitId": 741,
+      "addons": []
+    },
+    {
+      "pokemon": "mega-scizor",
+      "outfitId": 2796,
+      "addons": []
+    },
+    {
+      "pokemon": "shuckle",
+      "outfitId": 334,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-shuckle",
+      "outfitId": 742,
+      "addons": []
+    },
+    {
+      "pokemon": "heracross",
+      "outfitId": 335,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-heracross",
+      "outfitId": 743,
+      "addons": []
+    },
+    {
+      "pokemon": "mega-heracross",
+      "outfitId": 2797,
+      "addons": []
+    },
+    {
+      "pokemon": "sneasel",
+      "outfitId": 336,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-sneasel",
+      "outfitId": 744,
+      "addons": []
+    },
+    {
+      "pokemon": "teddiursa",
+      "outfitId": 337,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-teddiursa",
+      "outfitId": 745,
+      "addons": []
+    },
+    {
+      "pokemon": "ursaring",
+      "outfitId": 338,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-ursaring",
+      "outfitId": 746,
+      "addons": []
+    },
+    {
+      "pokemon": "slugma",
+      "outfitId": 339,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-slugma",
+      "outfitId": 747,
+      "addons": []
+    },
+    {
+      "pokemon": "magcargo",
+      "outfitId": 340,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-magcargo",
+      "outfitId": 748,
+      "addons": []
+    },
+    {
+      "pokemon": "swinub",
+      "outfitId": 341,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-swinub",
+      "outfitId": 749,
+      "addons": []
+    },
+    {
+      "pokemon": "piloswine",
+      "outfitId": 342,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-piloswine",
+      "outfitId": 750,
+      "addons": []
+    },
+    {
+      "pokemon": "corsola",
+      "outfitId": 343,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-corsola",
+      "outfitId": 751,
+      "addons": []
+    },
+    {
+      "pokemon": "remoraid",
+      "outfitId": 344,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-remoraid",
+      "outfitId": 752,
+      "addons": []
+    },
+    {
+      "pokemon": "octillery",
+      "outfitId": 345,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-octillery",
+      "outfitId": 753,
+      "addons": []
+    },
+    {
+      "pokemon": "delibird",
+      "outfitId": 346,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-delibird",
+      "outfitId": 754,
+      "addons": []
+    },
+    {
+      "pokemon": "mantine",
+      "outfitId": 347,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-mantine",
+      "outfitId": 755,
+      "addons": []
+    },
+    {
+      "pokemon": "skarmory",
+      "outfitId": 348,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-skarmory",
+      "outfitId": 756,
+      "addons": []
+    },
+    {
+      "pokemon": "houndour",
+      "outfitId": 349,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-houndour",
+      "outfitId": 757,
+      "addons": []
+    },
+    {
+      "pokemon": "houndoom",
+      "outfitId": 350,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-houndoom",
+      "outfitId": 758,
+      "addons": []
+    },
+    {
+      "pokemon": "mega-houndoom",
+      "outfitId": 2798,
+      "addons": []
+    },
+    {
+      "pokemon": "kingdra",
+      "outfitId": 351,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-kingdra",
+      "outfitId": 759,
+      "addons": []
+    },
+    {
+      "pokemon": "phanpy",
+      "outfitId": 352,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-phanpy",
+      "outfitId": 760,
+      "addons": []
+    },
+    {
+      "pokemon": "donphan",
+      "outfitId": 353,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-donphan",
+      "outfitId": 761,
+      "addons": []
+    },
+    {
+      "pokemon": "porygon2",
+      "outfitId": 354,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-porygon2",
+      "outfitId": 762,
+      "addons": []
+    },
+    {
+      "pokemon": "stantler",
+      "outfitId": 355,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-stantler",
+      "outfitId": 763,
+      "addons": []
+    },
+    {
+      "pokemon": "smeargle",
+      "outfitId": 356,
+      "addons": []
+    },
+    {
+      "pokemon": "smeargle-bug",
+      "outfitId": 356,
+      "addons": []
+    },
+    {
+      "pokemon": "smeargle-dark",
+      "outfitId": 356,
+      "addons": []
+    },
+    {
+      "pokemon": "smeargle-dragon",
+      "outfitId": 356,
+      "addons": []
+    },
+    {
+      "pokemon": "smeargle-electric",
+      "outfitId": 356,
+      "addons": []
+    },
+    {
+      "pokemon": "smeargle-fairy",
+      "outfitId": 356,
+      "addons": []
+    },
+    {
+      "pokemon": "smeargle-fighting",
+      "outfitId": 356,
+      "addons": []
+    },
+    {
+      "pokemon": "smeargle-fire",
+      "outfitId": 356,
+      "addons": []
+    },
+    {
+      "pokemon": "smeargle-flying",
+      "outfitId": 356,
+      "addons": []
+    },
+    {
+      "pokemon": "smeargle-ghost",
+      "outfitId": 356,
+      "addons": []
+    },
+    {
+      "pokemon": "smeargle-grass",
+      "outfitId": 356,
+      "addons": []
+    },
+    {
+      "pokemon": "smeargle-ground",
+      "outfitId": 356,
+      "addons": []
+    },
+    {
+      "pokemon": "smeargle-ice",
+      "outfitId": 356,
+      "addons": []
+    },
+    {
+      "pokemon": "smeargle-normal",
+      "outfitId": 356,
+      "addons": []
+    },
+    {
+      "pokemon": "smeargle-poison",
+      "outfitId": 356,
+      "addons": []
+    },
+    {
+      "pokemon": "smeargle-psychic",
+      "outfitId": 356,
+      "addons": []
+    },
+    {
+      "pokemon": "smeargle-rock",
+      "outfitId": 356,
+      "addons": []
+    },
+    {
+      "pokemon": "smeargle-steel",
+      "outfitId": 356,
+      "addons": []
+    },
+    {
+      "pokemon": "smeargle-water",
+      "outfitId": 356,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-smeargle",
+      "outfitId": 764,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-smeargle-bug",
+      "outfitId": 764,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-smeargle-dark",
+      "outfitId": 764,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-smeargle-dragon",
+      "outfitId": 764,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-smeargle-electric",
+      "outfitId": 764,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-smeargle-fairy",
+      "outfitId": 764,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-smeargle-fighting",
+      "outfitId": 764,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-smeargle-fire",
+      "outfitId": 764,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-smeargle-flying",
+      "outfitId": 764,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-smeargle-ghost",
+      "outfitId": 764,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-smeargle-grass",
+      "outfitId": 764,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-smeargle-ground",
+      "outfitId": 764,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-smeargle-ice",
+      "outfitId": 764,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-smeargle-normal",
+      "outfitId": 764,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-smeargle-poison",
+      "outfitId": 764,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-smeargle-psychic",
+      "outfitId": 764,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-smeargle-rock",
+      "outfitId": 764,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-smeargle-steel",
+      "outfitId": 764,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-smeargle-water",
+      "outfitId": 764,
+      "addons": []
+    },
+    {
+      "pokemon": "tyrogue",
+      "outfitId": 357,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-tyrogue",
+      "outfitId": 765,
+      "addons": []
+    },
+    {
+      "pokemon": "hitmontop",
+      "outfitId": 358,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-hitmontop",
+      "outfitId": 766,
+      "addons": []
+    },
+    {
+      "pokemon": "smoochum",
+      "outfitId": 359,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-smoochum",
+      "outfitId": 767,
+      "addons": []
+    },
+    {
+      "pokemon": "elekid",
+      "outfitId": 360,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-elekid",
+      "outfitId": 768,
+      "addons": []
+    },
+    {
+      "pokemon": "magby",
+      "outfitId": 361,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-magby",
+      "outfitId": 769,
+      "addons": []
+    },
+    {
+      "pokemon": "miltank",
+      "outfitId": 362,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-miltank",
+      "outfitId": 770,
+      "addons": []
+    },
+    {
+      "pokemon": "blissey",
+      "outfitId": 363,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-blissey",
+      "outfitId": 771,
+      "addons": []
+    },
+    {
+      "pokemon": "raikou",
+      "outfitId": 364,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-raikou",
+      "outfitId": 772,
+      "addons": []
+    },
+    {
+      "pokemon": "entei",
+      "outfitId": 365,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-entei",
+      "outfitId": 773,
+      "addons": []
+    },
+    {
+      "pokemon": "suicune",
+      "outfitId": 366,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-suicune",
+      "outfitId": 774,
+      "addons": []
+    },
+    {
+      "pokemon": "larvitar",
+      "outfitId": 367,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-larvitar",
+      "outfitId": 775,
+      "addons": []
+    },
+    {
+      "pokemon": "pupitar",
+      "outfitId": 368,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-pupitar",
+      "outfitId": 776,
+      "addons": []
+    },
+    {
+      "pokemon": "tyranitar",
+      "outfitId": 369,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-tyranitar",
+      "outfitId": 777,
+      "addons": []
+    },
+    {
+      "pokemon": "mega-tyranitar",
+      "outfitId": 2799,
+      "addons": []
+    },
+    {
+      "pokemon": "lugia",
+      "outfitId": 370,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-lugia",
+      "outfitId": 778,
+      "addons": []
+    },
+    {
+      "pokemon": "ho-oh",
+      "outfitId": 371,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-ho-oh",
+      "outfitId": 779,
+      "addons": []
+    },
+    {
+      "pokemon": "celebi",
+      "outfitId": 372,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-celebi",
+      "outfitId": 780,
+      "addons": []
+    },
+    {
+      "pokemon": "treecko",
+      "outfitId": 1710,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-treecko",
+      "outfitId": 1851,
+      "addons": []
+    },
+    {
+      "pokemon": "grovyle",
+      "outfitId": 1711,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-grovyle",
+      "outfitId": 1852,
+      "addons": []
+    },
+    {
+      "pokemon": "sceptile",
+      "outfitId": 1712,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-sceptile",
+      "outfitId": 1853,
+      "addons": []
+    },
+    {
+      "pokemon": "mega-sceptile",
+      "outfitId": 2816,
+      "addons": []
+    },
+    {
+      "pokemon": "torchic",
+      "outfitId": 1713,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-torchic",
+      "outfitId": 1854,
+      "addons": []
+    },
+    {
+      "pokemon": "combusken",
+      "outfitId": 1714,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-combusken",
+      "outfitId": 1855,
+      "addons": []
+    },
+    {
+      "pokemon": "blaziken",
+      "outfitId": 1715,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-blaziken",
+      "outfitId": 1856,
+      "addons": []
+    },
+    {
+      "pokemon": "mega-blaziken",
+      "outfitId": 2800,
+      "addons": []
+    },
+    {
+      "pokemon": "mudkip",
+      "outfitId": 1716,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-mudkip",
+      "outfitId": 1857,
+      "addons": []
+    },
+    {
+      "pokemon": "marshtomp",
+      "outfitId": 1717,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-marshtomp",
+      "outfitId": 1858,
+      "addons": []
+    },
+    {
+      "pokemon": "swampert",
+      "outfitId": 1718,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-swampert",
+      "outfitId": 1859,
+      "addons": []
+    },
+    {
+      "pokemon": "mega-swampert",
+      "outfitId": 2817,
+      "addons": []
+    },
+    {
+      "pokemon": "poochyena",
+      "outfitId": 1719,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-poochyena",
+      "outfitId": 1860,
+      "addons": []
+    },
+    {
+      "pokemon": "mightyena",
+      "outfitId": 1720,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-mightyena",
+      "outfitId": 1861,
+      "addons": []
+    },
+    {
+      "pokemon": "zigzagoon",
+      "outfitId": 1721,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-zigzagoon",
+      "outfitId": 1862,
+      "addons": []
+    },
+    {
+      "pokemon": "linoone",
+      "outfitId": 1722,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-linoone",
+      "outfitId": 1863,
+      "addons": []
+    },
+    {
+      "pokemon": "wurmple",
+      "outfitId": 1723,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-wurmple",
+      "outfitId": 1864,
+      "addons": []
+    },
+    {
+      "pokemon": "silcoon",
+      "outfitId": 1724,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-silcoon",
+      "outfitId": 1865,
+      "addons": []
+    },
+    {
+      "pokemon": "beautifly",
+      "outfitId": 1725,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-beautifly",
+      "outfitId": 1866,
+      "addons": []
+    },
+    {
+      "pokemon": "cascoon",
+      "outfitId": 1726,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-cascoon",
+      "outfitId": 1867,
+      "addons": []
+    },
+    {
+      "pokemon": "dustox",
+      "outfitId": 1727,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-dustox",
+      "outfitId": 1868,
+      "addons": []
+    },
+    {
+      "pokemon": "lotad",
+      "outfitId": 1728,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-lotad",
+      "outfitId": 1869,
+      "addons": []
+    },
+    {
+      "pokemon": "lombre",
+      "outfitId": 1729,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-lombre",
+      "outfitId": 1870,
+      "addons": []
+    },
+    {
+      "pokemon": "ludicolo",
+      "outfitId": 1730,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-ludicolo",
+      "outfitId": 1871,
+      "addons": []
+    },
+    {
+      "pokemon": "seedot",
+      "outfitId": 1731,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-seedot",
+      "outfitId": 1872,
+      "addons": []
+    },
+    {
+      "pokemon": "nuzleaf",
+      "outfitId": 1732,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-nuzleaf",
+      "outfitId": 1873,
+      "addons": []
+    },
+    {
+      "pokemon": "shiftry",
+      "outfitId": 1733,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-shiftry",
+      "outfitId": 1874,
+      "addons": []
+    },
+    {
+      "pokemon": "taillow",
+      "outfitId": 1734,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-taillow",
+      "outfitId": 1875,
+      "addons": []
+    },
+    {
+      "pokemon": "swellow",
+      "outfitId": 1735,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-swellow",
+      "outfitId": 1876,
+      "addons": []
+    },
+    {
+      "pokemon": "wingull",
+      "outfitId": 1736,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-wingull",
+      "outfitId": 1877,
+      "addons": []
+    },
+    {
+      "pokemon": "pelipper",
+      "outfitId": 1737,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-pelipper",
+      "outfitId": 1878,
+      "addons": []
+    },
+    {
+      "pokemon": "ralts",
+      "outfitId": 1738,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-ralts",
+      "outfitId": 1879,
+      "addons": []
+    },
+    {
+      "pokemon": "kirlia",
+      "outfitId": 1739,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-kirlia",
+      "outfitId": 1880,
+      "addons": []
+    },
+    {
+      "pokemon": "gardevoir",
+      "outfitId": 1740,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-gardevoir",
+      "outfitId": 1881,
+      "addons": []
+    },
+    {
+      "pokemon": "mega-gardevoir",
+      "outfitId": 2801,
+      "addons": []
+    },
+    {
+      "pokemon": "surskit",
+      "outfitId": 1741,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-surskit",
+      "outfitId": 1882,
+      "addons": []
+    },
+    {
+      "pokemon": "masquerain",
+      "outfitId": 1742,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-masquerain",
+      "outfitId": 1883,
+      "addons": []
+    },
+    {
+      "pokemon": "shroomish",
+      "outfitId": 1743,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-shroomish",
+      "outfitId": 1884,
+      "addons": []
+    },
+    {
+      "pokemon": "breloom",
+      "outfitId": 1744,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-breloom",
+      "outfitId": 1885,
+      "addons": []
+    },
+    {
+      "pokemon": "slakoth",
+      "outfitId": 1745,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-slakoth",
+      "outfitId": 1886,
+      "addons": []
+    },
+    {
+      "pokemon": "vigoroth",
+      "outfitId": 1746,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-vigoroth",
+      "outfitId": 1887,
+      "addons": []
+    },
+    {
+      "pokemon": "slaking",
+      "outfitId": 1747,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-slaking",
+      "outfitId": 1888,
+      "addons": []
+    },
+    {
+      "pokemon": "nincada",
+      "outfitId": 1748,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-nincada",
+      "outfitId": 1889,
+      "addons": []
+    },
+    {
+      "pokemon": "ninjask",
+      "outfitId": 1749,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-ninjask",
+      "outfitId": 1890,
+      "addons": []
+    },
+    {
+      "pokemon": "shedinja",
+      "outfitId": 1750,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-shedinja",
+      "outfitId": 1891,
+      "addons": []
+    },
+    {
+      "pokemon": "whismur",
+      "outfitId": 1751,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-whismur",
+      "outfitId": 1892,
+      "addons": []
+    },
+    {
+      "pokemon": "loudred",
+      "outfitId": 1752,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-loudred",
+      "outfitId": 1893,
+      "addons": []
+    },
+    {
+      "pokemon": "exploud",
+      "outfitId": 1753,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-exploud",
+      "outfitId": 1894,
+      "addons": []
+    },
+    {
+      "pokemon": "makuhita",
+      "outfitId": 1754,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-makuhita",
+      "outfitId": 1895,
+      "addons": []
+    },
+    {
+      "pokemon": "hariyama",
+      "outfitId": 1755,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-hariyama",
+      "outfitId": 1896,
+      "addons": []
+    },
+    {
+      "pokemon": "azurill",
+      "outfitId": 1756,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-azurill",
+      "outfitId": 1897,
+      "addons": []
+    },
+    {
+      "pokemon": "nosepass",
+      "outfitId": 1757,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-nosepass",
+      "outfitId": 1898,
+      "addons": []
+    },
+    {
+      "pokemon": "skitty",
+      "outfitId": 1758,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-skitty",
+      "outfitId": 1899,
+      "addons": []
+    },
+    {
+      "pokemon": "delcatty",
+      "outfitId": 1759,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-delcatty",
+      "outfitId": 1900,
+      "addons": []
+    },
+    {
+      "pokemon": "sableye",
+      "outfitId": 1760,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-sableye",
+      "outfitId": 1901,
+      "addons": []
+    },
+    {
+      "pokemon": "mega-sableye",
+      "outfitId": 2818,
+      "addons": []
+    },
+    {
+      "pokemon": "mawile",
+      "outfitId": 1761,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-mawile",
+      "outfitId": 1902,
+      "addons": []
+    },
+    {
+      "pokemon": "mega-mawile",
+      "outfitId": 2802,
+      "addons": []
+    },
+    {
+      "pokemon": "aron",
+      "outfitId": 1762,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-aron",
+      "outfitId": 1903,
+      "addons": []
+    },
+    {
+      "pokemon": "lairon",
+      "outfitId": 1763,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-lairon",
+      "outfitId": 1904,
+      "addons": []
+    },
+    {
+      "pokemon": "aggron",
+      "outfitId": 1764,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-aggron",
+      "outfitId": 1905,
+      "addons": []
+    },
+    {
+      "pokemon": "mega-aggron",
+      "outfitId": 2803,
+      "addons": []
+    },
+    {
+      "pokemon": "meditite",
+      "outfitId": 1765,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-meditite",
+      "outfitId": 1906,
+      "addons": []
+    },
+    {
+      "pokemon": "medicham",
+      "outfitId": 1766,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-medicham",
+      "outfitId": 1907,
+      "addons": []
+    },
+    {
+      "pokemon": "mega-medicham",
+      "outfitId": 2804,
+      "addons": []
+    },
+    {
+      "pokemon": "electrike",
+      "outfitId": 1767,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-electrike",
+      "outfitId": 1908,
+      "addons": []
+    },
+    {
+      "pokemon": "manectric",
+      "outfitId": 1768,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-manectric",
+      "outfitId": 1909,
+      "addons": []
+    },
+    {
+      "pokemon": "mega-manectric",
+      "outfitId": 2805,
+      "addons": []
+    },
+    {
+      "pokemon": "plusle",
+      "outfitId": 1769,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-plusle",
+      "outfitId": 1910,
+      "addons": []
+    },
+    {
+      "pokemon": "minun",
+      "outfitId": 1770,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-minun",
+      "outfitId": 1911,
+      "addons": []
+    },
+    {
+      "pokemon": "volbeat",
+      "outfitId": 1771,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-volbeat",
+      "outfitId": 1912,
+      "addons": []
+    },
+    {
+      "pokemon": "illumise",
+      "outfitId": 1772,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-illumise",
+      "outfitId": 1913,
+      "addons": []
+    },
+    {
+      "pokemon": "roselia",
+      "outfitId": 1773,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-roselia",
+      "outfitId": 1914,
+      "addons": []
+    },
+    {
+      "pokemon": "gulpin",
+      "outfitId": 1774,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-gulpin",
+      "outfitId": 1915,
+      "addons": []
+    },
+    {
+      "pokemon": "swalot",
+      "outfitId": 1775,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-swalot",
+      "outfitId": 1916,
+      "addons": []
+    },
+    {
+      "pokemon": "carvanha",
+      "outfitId": 1776,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-carvanha",
+      "outfitId": 1917,
+      "addons": []
+    },
+    {
+      "pokemon": "sharpedo",
+      "outfitId": 1777,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-sharpedo",
+      "outfitId": 1918,
+      "addons": []
+    },
+    {
+      "pokemon": "wailmer",
+      "outfitId": 1778,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-wailmer",
+      "outfitId": 1919,
+      "addons": []
+    },
+    {
+      "pokemon": "wailord",
+      "outfitId": 1779,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-wailord",
+      "outfitId": 1920,
+      "addons": []
+    },
+    {
+      "pokemon": "numel",
+      "outfitId": 1780,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-numel",
+      "outfitId": 1921,
+      "addons": []
+    },
+    {
+      "pokemon": "camerupt",
+      "outfitId": 1781,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-camerupt",
+      "outfitId": 1922,
+      "addons": []
+    },
+    {
+      "pokemon": "torkoal",
+      "outfitId": 1782,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-torkoal",
+      "outfitId": 1923,
+      "addons": []
+    },
+    {
+      "pokemon": "spoink",
+      "outfitId": 1783,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-spoink",
+      "outfitId": 1924,
+      "addons": []
+    },
+    {
+      "pokemon": "grumpig",
+      "outfitId": 1784,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-grumpig",
+      "outfitId": 1925,
+      "addons": []
+    },
+    {
+      "pokemon": "spinda",
+      "outfitId": 1785,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-spinda",
+      "outfitId": 1926,
+      "addons": []
+    },
+    {
+      "pokemon": "trapinch",
+      "outfitId": 1786,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-trapinch",
+      "outfitId": 1927,
+      "addons": []
+    },
+    {
+      "pokemon": "vibrava",
+      "outfitId": 1787,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-vibrava",
+      "outfitId": 1928,
+      "addons": []
+    },
+    {
+      "pokemon": "flygon",
+      "outfitId": 1788,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-flygon",
+      "outfitId": 1929,
+      "addons": []
+    },
+    {
+      "pokemon": "cacnea",
+      "outfitId": 1789,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-cacnea",
+      "outfitId": 1930,
+      "addons": []
+    },
+    {
+      "pokemon": "cacturne",
+      "outfitId": 1790,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-cacturne",
+      "outfitId": 1931,
+      "addons": []
+    },
+    {
+      "pokemon": "swablu",
+      "outfitId": 1791,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-swablu",
+      "outfitId": 1932,
+      "addons": []
+    },
+    {
+      "pokemon": "altaria",
+      "outfitId": 1792,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-altaria",
+      "outfitId": 1933,
+      "addons": []
+    },
+    {
+      "pokemon": "mega-altaria",
+      "outfitId": 2821,
+      "addons": []
+    },
+    {
+      "pokemon": "zangoose",
+      "outfitId": 1793,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-zangoose",
+      "outfitId": 1934,
+      "addons": []
+    },
+    {
+      "pokemon": "seviper",
+      "outfitId": 1794,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-seviper",
+      "outfitId": 1935,
+      "addons": []
+    },
+    {
+      "pokemon": "lunatone",
+      "outfitId": 1795,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-lunatone",
+      "outfitId": 1936,
+      "addons": []
+    },
+    {
+      "pokemon": "solrock",
+      "outfitId": 1796,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-solrock",
+      "outfitId": 1937,
+      "addons": []
+    },
+    {
+      "pokemon": "barboach",
+      "outfitId": 1797,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-barboach",
+      "outfitId": 1938,
+      "addons": []
+    },
+    {
+      "pokemon": "whiscash",
+      "outfitId": 1798,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-whiscash",
+      "outfitId": 1939,
+      "addons": []
+    },
+    {
+      "pokemon": "corphish",
+      "outfitId": 1799,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-corphish",
+      "outfitId": 1940,
+      "addons": []
+    },
+    {
+      "pokemon": "crawdaunt",
+      "outfitId": 1800,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-crawdaunt",
+      "outfitId": 1941,
+      "addons": []
+    },
+    {
+      "pokemon": "baltoy",
+      "outfitId": 1801,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-baltoy",
+      "outfitId": 1942,
+      "addons": []
+    },
+    {
+      "pokemon": "claydol",
+      "outfitId": 1802,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-claydol",
+      "outfitId": 1943,
+      "addons": []
+    },
+    {
+      "pokemon": "lileep",
+      "outfitId": 1803,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-lileep",
+      "outfitId": 1944,
+      "addons": []
+    },
+    {
+      "pokemon": "cradily",
+      "outfitId": 1804,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-cradily",
+      "outfitId": 1945,
+      "addons": []
+    },
+    {
+      "pokemon": "anorith",
+      "outfitId": 1805,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-anorith",
+      "outfitId": 1946,
+      "addons": []
+    },
+    {
+      "pokemon": "armaldo",
+      "outfitId": 1806,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-armaldo",
+      "outfitId": 1947,
+      "addons": []
+    },
+    {
+      "pokemon": "feebas",
+      "outfitId": 1807,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-feebas",
+      "outfitId": 1948,
+      "addons": []
+    },
+    {
+      "pokemon": "milotic",
+      "outfitId": 1808,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-milotic",
+      "outfitId": 1949,
+      "addons": []
+    },
+    {
+      "pokemon": "castform",
+      "outfitId": 1809,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-castform",
+      "outfitId": 1950,
+      "addons": []
+    },
+    {
+      "pokemon": "castform-fire",
+      "outfitId": 1810,
+      "addons": []
+    },
+    {
+      "pokemon": "castform-electric",
+      "outfitId": 1811,
+      "addons": []
+    },
+    {
+      "pokemon": "castform-ice",
+      "outfitId": 1812,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-castform-fire",
+      "outfitId": 1961,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-castform-electric",
+      "outfitId": 1963,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-castform-ice",
+      "outfitId": 1962,
+      "addons": []
+    },
+    {
+      "pokemon": "kecleon",
+      "outfitId": 1813,
+      "addons": []
+    },
+    {
+      "pokemon": "shuppet",
+      "outfitId": 1814,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-shuppet",
+      "outfitId": 1951,
+      "addons": []
+    },
+    {
+      "pokemon": "banette",
+      "outfitId": 1815,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-banette",
+      "outfitId": 1952,
+      "addons": []
+    },
+    {
+      "pokemon": "mega-banette",
+      "outfitId": 2806,
+      "addons": []
+    },
+    {
+      "pokemon": "duskull",
+      "outfitId": 1816,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-duskull",
+      "outfitId": 1953,
+      "addons": []
+    },
+    {
+      "pokemon": "dusclops",
+      "outfitId": 1817,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-dusclops",
+      "outfitId": 1954,
+      "addons": []
+    },
+    {
+      "pokemon": "tropius",
+      "outfitId": 1818,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-tropius",
+      "outfitId": 1955,
+      "addons": []
+    },
+    {
+      "pokemon": "chimecho",
+      "outfitId": 1819,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-chimecho",
+      "outfitId": 1956,
+      "addons": []
+    },
+    {
+      "pokemon": "absol",
+      "outfitId": 1820,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-absol",
+      "outfitId": 1957,
+      "addons": []
+    },
+    {
+      "pokemon": "mega-absol",
+      "outfitId": 2807,
+      "addons": []
+    },
+    {
+      "pokemon": "wynaut",
+      "outfitId": 1821,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-wynaut",
+      "outfitId": 1958,
+      "addons": []
+    },
+    {
+      "pokemon": "snorunt",
+      "outfitId": 1822,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-snorunt",
+      "outfitId": 1959,
+      "addons": []
+    },
+    {
+      "pokemon": "glalie",
+      "outfitId": 1823,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-glalie",
+      "outfitId": 1960,
+      "addons": []
+    },
+    {
+      "pokemon": "mega-glalie",
+      "outfitId": 2822,
+      "addons": []
+    },
+    {
+      "pokemon": "spheal",
+      "outfitId": 1824,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-spheal",
+      "outfitId": 1965,
+      "addons": []
+    },
+    {
+      "pokemon": "sealeo",
+      "outfitId": 1825,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-sealeo",
+      "outfitId": 1966,
+      "addons": []
+    },
+    {
+      "pokemon": "walrein",
+      "outfitId": 1826,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-walrein",
+      "outfitId": 1967,
+      "addons": []
+    },
+    {
+      "pokemon": "clamperl",
+      "outfitId": 1827,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-clamperl",
+      "outfitId": 1968,
+      "addons": []
+    },
+    {
+      "pokemon": "huntail",
+      "outfitId": 1828,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-huntail",
+      "outfitId": 1969,
+      "addons": []
+    },
+    {
+      "pokemon": "gorebyss",
+      "outfitId": 1829,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-gorebyss",
+      "outfitId": 1970,
+      "addons": []
+    },
+    {
+      "pokemon": "relicanth",
+      "outfitId": 1830,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-relicanth",
+      "outfitId": 1971,
+      "addons": []
+    },
+    {
+      "pokemon": "luvdisc",
+      "outfitId": 1831,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-luvdisc",
+      "outfitId": 1972,
+      "addons": []
+    },
+    {
+      "pokemon": "bagon",
+      "outfitId": 1832,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-bagon",
+      "outfitId": 1973,
+      "addons": []
+    },
+    {
+      "pokemon": "shelgon",
+      "outfitId": 1833,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-shelgon",
+      "outfitId": 1974,
+      "addons": []
+    },
+    {
+      "pokemon": "salamence",
+      "outfitId": 1834,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-salamence",
+      "outfitId": 1975,
+      "addons": []
+    },
+    {
+      "pokemon": "mega-salamence",
+      "outfitId": 2823,
+      "addons": []
+    },
+    {
+      "pokemon": "beldum",
+      "outfitId": 1835,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-beldum",
+      "outfitId": 1976,
+      "addons": []
+    },
+    {
+      "pokemon": "metang",
+      "outfitId": 1836,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-metang",
+      "outfitId": 1977,
+      "addons": []
+    },
+    {
+      "pokemon": "metagross",
+      "outfitId": 1837,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-metagross",
+      "outfitId": 1978,
+      "addons": []
+    },
+    {
+      "pokemon": "mega-metagross",
+      "outfitId": 2824,
+      "addons": []
+    },
+    {
+      "pokemon": "regirock",
+      "outfitId": 1838,
+      "addons": []
+    },
+    {
+      "pokemon": "regice",
+      "outfitId": 1839,
+      "addons": []
+    },
+    {
+      "pokemon": "registeel",
+      "outfitId": 1840,
+      "addons": []
+    },
+    {
+      "pokemon": "latias",
+      "outfitId": 1841,
+      "addons": []
+    },
+    {
+      "pokemon": "latios",
+      "outfitId": 1842,
+      "addons": []
+    },
+    {
+      "pokemon": "kyogre",
+      "outfitId": 1843,
+      "addons": []
+    },
+    {
+      "pokemon": "groudon",
+      "outfitId": 1844,
+      "addons": []
+    },
+    {
+      "pokemon": "rayquaza",
+      "outfitId": 1692,
+      "addons": []
+    },
+    {
+      "pokemon": "jirachi",
+      "outfitId": 1846,
+      "addons": []
+    },
+    {
+      "pokemon": "deoxys",
+      "outfitId": 1845,
+      "addons": []
+    },
+    {
+      "pokemon": "turtwig",
+      "outfitId": 1992,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-turtwig",
+      "outfitId": 2114,
+      "addons": []
+    },
+    {
+      "pokemon": "grotle",
+      "outfitId": 1993,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-grotle",
+      "outfitId": 2115,
+      "addons": []
+    },
+    {
+      "pokemon": "torterra",
+      "outfitId": 1994,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-torterra",
+      "outfitId": 2116,
+      "addons": []
+    },
+    {
+      "pokemon": "chimchar",
+      "outfitId": 1995,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-chimchar",
+      "outfitId": 2117,
+      "addons": []
+    },
+    {
+      "pokemon": "monferno",
+      "outfitId": 1996,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-monferno",
+      "outfitId": 2118,
+      "addons": []
+    },
+    {
+      "pokemon": "infernape",
+      "outfitId": 1997,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-infernape",
+      "outfitId": 2119,
+      "addons": []
+    },
+    {
+      "pokemon": "piplup",
+      "outfitId": 1998,
+      "addons": []
+    },
+    {
+      "pokemon": "prinplup",
+      "outfitId": 1999,
+      "addons": []
+    },
+    {
+      "pokemon": "empoleon",
+      "outfitId": 2000,
+      "addons": []
+    },
+    {
+      "pokemon": "starly",
+      "outfitId": 2001,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-starly",
+      "outfitId": 2123,
+      "addons": []
+    },
+    {
+      "pokemon": "staravia",
+      "outfitId": 2002,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-staravia",
+      "outfitId": 2124,
+      "addons": []
+    },
+    {
+      "pokemon": "staraptor",
+      "outfitId": 2003,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-staraptor",
+      "outfitId": 2125,
+      "addons": []
+    },
+    {
+      "pokemon": "bidoof",
+      "outfitId": 2004,
+      "addons": []
+    },
+    {
+      "pokemon": "bibarel",
+      "outfitId": 2005,
+      "addons": []
+    },
+    {
+      "pokemon": "kricketot",
+      "outfitId": 2006,
+      "addons": []
+    },
+    {
+      "pokemon": "kricketune",
+      "outfitId": 2007,
+      "addons": []
+    },
+    {
+      "pokemon": "shinx",
+      "outfitId": 2008,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-shinx",
+      "outfitId": 2130,
+      "addons": []
+    },
+    {
+      "pokemon": "luxio",
+      "outfitId": 2009,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-luxio",
+      "outfitId": 2131,
+      "addons": []
+    },
+    {
+      "pokemon": "luxray",
+      "outfitId": 2010,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-luxray",
+      "outfitId": 2132,
+      "addons": []
+    },
+    {
+      "pokemon": "budew",
+      "outfitId": 2011,
+      "addons": []
+    },
+    {
+      "pokemon": "roserade",
+      "outfitId": 2012,
+      "addons": []
+    },
+    {
+      "pokemon": "cranidos",
+      "outfitId": 2013,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-cranidos",
+      "outfitId": 2135,
+      "addons": []
+    },
+    {
+      "pokemon": "rampardos",
+      "outfitId": 2014,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-rampardos",
+      "outfitId": 2136,
+      "addons": []
+    },
+    {
+      "pokemon": "shieldon",
+      "outfitId": 2015,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-shieldon",
+      "outfitId": 2137,
+      "addons": []
+    },
+    {
+      "pokemon": "bastiodon",
+      "outfitId": 2016,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-bastiodon",
+      "outfitId": 2138,
+      "addons": []
+    },
+    {
+      "pokemon": "burmy",
+      "outfitId": 2017,
+      "addons": []
+    },
+    {
+      "pokemon": "wormadam",
+      "outfitId": 2018,
+      "addons": []
+    },
+    {
+      "pokemon": "mothim",
+      "outfitId": 2019,
+      "addons": []
+    },
+    {
+      "pokemon": "combee",
+      "outfitId": 2020,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-combee",
+      "outfitId": 2142,
+      "addons": []
+    },
+    {
+      "pokemon": "vespiquen",
+      "outfitId": 2021,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-vespiquen",
+      "outfitId": 2143,
+      "addons": []
+    },
+    {
+      "pokemon": "pachirisu",
+      "outfitId": 2022,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-pachirisu",
+      "outfitId": 2144,
+      "addons": []
+    },
+    {
+      "pokemon": "buizel",
+      "outfitId": 2023,
+      "addons": []
+    },
+    {
+      "pokemon": "floatzel",
+      "outfitId": 2024,
+      "addons": []
+    },
+    {
+      "pokemon": "cherubi",
+      "outfitId": 2025,
+      "addons": []
+    },
+    {
+      "pokemon": "cherrim",
+      "outfitId": 2026,
+      "addons": []
+    },
+    {
+      "pokemon": "shellos",
+      "outfitId": 2027,
+      "addons": []
+    },
+    {
+      "pokemon": "gastrodon",
+      "outfitId": 2028,
+      "addons": []
+    },
+    {
+      "pokemon": "ambipom",
+      "outfitId": 2029,
+      "addons": []
+    },
+    {
+      "pokemon": "drifloon",
+      "outfitId": 2030,
+      "addons": []
+    },
+    {
+      "pokemon": "drifblim",
+      "outfitId": 2031,
+      "addons": []
+    },
+    {
+      "pokemon": "buneary",
+      "outfitId": 2032,
+      "addons": []
+    },
+    {
+      "pokemon": "lopunny",
+      "outfitId": 2033,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-lopunny",
+      "outfitId": 2155,
+      "addons": []
+    },
+    {
+      "pokemon": "mismagius",
+      "outfitId": 2034,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-mismagius",
+      "outfitId": 2156,
+      "addons": []
+    },
+    {
+      "pokemon": "honchkrow",
+      "outfitId": 2035,
+      "addons": []
+    },
+    {
+      "pokemon": "glameow",
+      "outfitId": 2036,
+      "addons": []
+    },
+    {
+      "pokemon": "purugly",
+      "outfitId": 2037,
+      "addons": []
+    },
+    {
+      "pokemon": "chingling",
+      "outfitId": 2038,
+      "addons": []
+    },
+    {
+      "pokemon": "stunky",
+      "outfitId": 2039,
+      "addons": []
+    },
+    {
+      "pokemon": "skuntank",
+      "outfitId": 2040,
+      "addons": []
+    },
+    {
+      "pokemon": "bronzor",
+      "outfitId": 2041,
+      "addons": []
+    },
+    {
+      "pokemon": "bronzong",
+      "outfitId": 2042,
+      "addons": []
+    },
+    {
+      "pokemon": "mime-jr",
+      "outfitId": 2043,
+      "addons": []
+    },
+    {
+      "pokemon": "happiny",
+      "outfitId": 2044,
+      "addons": []
+    },
+    {
+      "pokemon": "chatot",
+      "outfitId": 2045,
+      "addons": []
+    },
+    {
+      "pokemon": "spiritomb",
+      "outfitId": 2046,
+      "addons": []
+    },
+    {
+      "pokemon": "gible",
+      "outfitId": 2047,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-gible",
+      "outfitId": 2169,
+      "addons": []
+    },
+    {
+      "pokemon": "gabite",
+      "outfitId": 2048,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-gabite",
+      "outfitId": 2170,
+      "addons": []
+    },
+    {
+      "pokemon": "garchomp",
+      "outfitId": 2049,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-garchomp",
+      "outfitId": 2171,
+      "addons": []
+    },
+    {
+      "pokemon": "munchlax",
+      "outfitId": 2050,
+      "addons": []
+    },
+    {
+      "pokemon": "riolu",
+      "outfitId": 2051,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-riolu",
+      "outfitId": 2173,
+      "addons": []
+    },
+    {
+      "pokemon": "lucario",
+      "outfitId": 2052,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-lucario",
+      "outfitId": 2174,
+      "addons": []
+    },
+    {
+      "pokemon": "mega-lucario",
+      "outfitId": 2811,
+      "addons": []
+    },
+    {
+      "pokemon": "hippopotas",
+      "outfitId": 2092,
+      "addons": []
+    },
+    {
+      "pokemon": "hippowdon",
+      "outfitId": 2093,
+      "addons": []
+    },
+    {
+      "pokemon": "skorupi",
+      "outfitId": 2094,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-skorupi",
+      "outfitId": 2216,
+      "addons": []
+    },
+    {
+      "pokemon": "drapion",
+      "outfitId": 2095,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-drapion",
+      "outfitId": 2217,
+      "addons": []
+    },
+    {
+      "pokemon": "croagunk",
+      "outfitId": 2096,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-croagunk",
+      "outfitId": 2218,
+      "addons": []
+    },
+    {
+      "pokemon": "toxicroak",
+      "outfitId": 2097,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-toxicroak",
+      "outfitId": 2219,
+      "addons": []
+    },
+    {
+      "pokemon": "carnivine",
+      "outfitId": 2053,
+      "addons": []
+    },
+    {
+      "pokemon": "finneon",
+      "outfitId": 2054,
+      "addons": []
+    },
+    {
+      "pokemon": "lumineon",
+      "outfitId": 2055,
+      "addons": []
+    },
+    {
+      "pokemon": "mantyke",
+      "outfitId": 2056,
+      "addons": []
+    },
+    {
+      "pokemon": "snover",
+      "outfitId": 2057,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-snover",
+      "outfitId": 2179,
+      "addons": []
+    },
+    {
+      "pokemon": "abomasnow",
+      "outfitId": 2058,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-abomasnow",
+      "outfitId": 2180,
+      "addons": []
+    },
+    {
+      "pokemon": "mega-abomasnow",
+      "outfitId": 2812,
+      "addons": []
+    },
+    {
+      "pokemon": "weavile",
+      "outfitId": 2059,
+      "addons": []
+    },
+    {
+      "pokemon": "magnezone",
+      "outfitId": 2060,
+      "addons": []
+    },
+    {
+      "pokemon": "lickilicky",
+      "outfitId": 2061,
+      "addons": []
+    },
+    {
+      "pokemon": "rhyperior",
+      "outfitId": 2062,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-rhyperior",
+      "outfitId": 2184,
+      "addons": []
+    },
+    {
+      "pokemon": "tangrowth",
+      "outfitId": 2063,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-tangrowth",
+      "outfitId": 2185,
+      "addons": []
+    },
+    {
+      "pokemon": "electivire",
+      "outfitId": 2064,
+      "addons": []
+    },
+    {
+      "pokemon": "magmortar",
+      "outfitId": 2065,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-magmortar",
+      "outfitId": 2201,
+      "addons": []
+    },
+    {
+      "pokemon": "togekiss",
+      "outfitId": 2066,
+      "addons": []
+    },
+    {
+      "pokemon": "yanmega",
+      "outfitId": 2067,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-yanmega",
+      "outfitId": 2189,
+      "addons": []
+    },
+    {
+      "pokemon": "leafeon",
+      "outfitId": 2068,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-leafeon",
+      "outfitId": 2190,
+      "addons": []
+    },
+    {
+      "pokemon": "glaceon",
+      "outfitId": 2069,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-glaceon",
+      "outfitId": 2191,
+      "addons": []
+    },
+    {
+      "pokemon": "gliscor",
+      "outfitId": 2070,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-gliscor",
+      "outfitId": 2192,
+      "addons": []
+    },
+    {
+      "pokemon": "mamoswine",
+      "outfitId": 2071,
+      "addons": []
+    },
+    {
+      "pokemon": "porygon-z",
+      "outfitId": 2072,
+      "addons": []
+    },
+    {
+      "pokemon": "gallade",
+      "outfitId": 2073,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-gallade",
+      "outfitId": 2195,
+      "addons": []
+    },
+    {
+      "pokemon": "probopass",
+      "outfitId": 2074,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-probopass",
+      "outfitId": 2196,
+      "addons": []
+    },
+    {
+      "pokemon": "dusknoir",
+      "outfitId": 3571,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-dusknoir",
+      "outfitId": 3573,
+      "addons": []
+    },
+    {
+      "pokemon": "froslass",
+      "outfitId": 2076,
+      "addons": []
+    },
+    {
+      "pokemon": "rotom",
+      "outfitId": 2077,
+      "addons": []
+    },
+    {
+      "pokemon": "uxie",
+      "outfitId": 2078,
+      "addons": []
+    },
+    {
+      "pokemon": "mesprit",
+      "outfitId": 2079,
+      "addons": []
+    },
+    {
+      "pokemon": "azelf",
+      "outfitId": 2080,
+      "addons": []
+    },
+    {
+      "pokemon": "dialga",
+      "outfitId": 2081,
+      "addons": []
+    },
+    {
+      "pokemon": "palkia",
+      "outfitId": 2082,
+      "addons": []
+    },
+    {
+      "pokemon": "heatran",
+      "outfitId": 2083,
+      "addons": []
+    },
+    {
+      "pokemon": "regigigas",
+      "outfitId": 2084,
+      "addons": []
+    },
+    {
+      "pokemon": "giratina",
+      "outfitId": 2085,
+      "addons": []
+    },
+    {
+      "pokemon": "cresselia",
+      "outfitId": 2086,
+      "addons": []
+    },
+    {
+      "pokemon": "phione",
+      "outfitId": 2087,
+      "addons": []
+    },
+    {
+      "pokemon": "manaphy",
+      "outfitId": 2088,
+      "addons": []
+    },
+    {
+      "pokemon": "darkrai",
+      "outfitId": 2089,
+      "addons": []
+    },
+    {
+      "pokemon": "shaymin",
+      "outfitId": 2090,
+      "addons": []
+    },
+    {
+      "pokemon": "arceus",
+      "outfitId": 2091,
+      "addons": []
+    },
+    {
+      "pokemon": "audino",
+      "outfitId": 3375,
+      "addons": []
+    },
+    {
+      "pokemon": "mega-audino",
+      "outfitId": 3376,
+      "addons": []
+    },
+    {
+      "pokemon": "timburr",
+      "outfitId": 2279,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-timburr",
+      "outfitId": 2445,
+      "addons": []
+    },
+    {
+      "pokemon": "gurdurr",
+      "outfitId": 2280,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-gurdurr",
+      "outfitId": 2446,
+      "addons": []
+    },
+    {
+      "pokemon": "conkeldurr",
+      "outfitId": 2281,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-conkeldurr",
+      "outfitId": 2447,
+      "addons": []
+    },
+    {
+      "pokemon": "scolipede",
+      "outfitId": 3356,
+      "addons": []
+    },
+    {
+      "pokemon": "mega-scolipede",
+      "outfitId": 3357,
+      "addons": []
+    },
+    {
+      "pokemon": "trubbish",
+      "outfitId": 3575,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-trubbish",
+      "outfitId": 3577,
+      "addons": []
+    },
+    {
+      "pokemon": "garbodor",
+      "outfitId": 3576,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-garbodor",
+      "outfitId": 3578,
+      "addons": []
+    },
+    {
+      "pokemon": "druddigon",
+      "outfitId": 2368,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-druddigon",
+      "outfitId": 2539,
+      "addons": []
+    },
+    {
+      "pokemon": "deino",
+      "outfitId": 2380,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-deino",
+      "outfitId": 2551,
+      "addons": []
+    },
+    {
+      "pokemon": "zweilous",
+      "outfitId": 2381,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-zweilous",
+      "outfitId": 2552,
+      "addons": []
+    },
+    {
+      "pokemon": "hydreigon",
+      "outfitId": 2382,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-hydreigon",
+      "outfitId": 2553,
+      "addons": []
+    },
+    {
+      "pokemon": "bunnelby",
+      "outfitId": 2587,
+      "addons": []
+    },
+    {
+      "pokemon": "diggersby",
+      "outfitId": 2588,
+      "addons": []
+    },
+    {
+      "pokemon": "flabebe",
+      "outfitId": 2597,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-flabebe",
+      "outfitId": 2673,
+      "addons": []
+    },
+    {
+      "pokemon": "floette",
+      "outfitId": 2598,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-floette",
+      "outfitId": 2674,
+      "addons": []
+    },
+    {
+      "pokemon": "florges",
+      "outfitId": 2599,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-florges",
+      "outfitId": 2675,
+      "addons": []
+    },
+    {
+      "pokemon": "skiddo",
+      "outfitId": 2600,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-skiddo",
+      "outfitId": 2676,
+      "addons": []
+    },
+    {
+      "pokemon": "gogoat",
+      "outfitId": 2601,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-gogoat",
+      "outfitId": 2677,
+      "addons": []
+    },
+    {
+      "pokemon": "dragalge",
+      "outfitId": 2620,
+      "addons": []
+    },
+    {
+      "pokemon": "mega-dragalge",
+      "outfitId": 3355,
+      "addons": []
+    },
+    {
+      "pokemon": "sylveon",
+      "outfitId": 2629,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-sylveon",
+      "outfitId": 2705,
+      "addons": []
+    },
+    {
+      "pokemon": "mimikyu",
+      "outfitId": 3224,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-mimikyu",
+      "outfitId": 3225,
+      "addons": []
+    },
+    {
+      "pokemon": "sneasler",
+      "outfitId": 1688,
+      "addons": []
+    },
+    {
+      "pokemon": "shiny-sneasler",
+      "outfitId": 1689,
+      "addons": []
     }
   ]
 }

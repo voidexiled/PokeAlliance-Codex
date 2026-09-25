@@ -26,7 +26,7 @@ import { formatInteger } from '@/lib/format/numbers';
 import { tierInfo } from '@/lib/content/tiers';
 import { buildNav } from '@/lib/nav/groups';
 import { PageTitle } from '@/components/layout/PageTitle';
-import { POKEDEX_PAGE_SIZE, decodePokedex } from '@/components/pokedex/config';
+import { POKEDEX_PAGE_SIZE, decodePokedex, dropProp } from '@/components/pokedex/config';
 import { PokedexRoot } from '@/components/pokedex/PokedexRoot';
 import PageLayout from '@/layouts/PageLayout.astro';
 
@@ -65,7 +65,7 @@ const firstRows = decodePokedex(first);
 const firstDrops = Object.fromEntries(
   Object.entries(
     pokedexDrops(firstRows, records, data.refs.items, locale, messages.ui.tooltip),
-  ).map(([id, { name, sprite }]) => [id, sprite ? { name, sprite } : { name }]),
+  ).map(([id, { name, sprite }]) => [id, dropProp({ name, sprite })]),
 );
 const description = fill(messages.pokedex.description, {
   n: formatInteger(records.length, locale),

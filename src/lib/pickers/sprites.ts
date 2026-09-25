@@ -1,12 +1,22 @@
 // Island-safe helpers that turn a sprite registry key into Sprite props, or null while the
 // registry has no entry for it (the caller then draws its CSS fallback).
 import type { SpriteProps } from '@/components/game/Sprite';
-import { getSprite, hasSprite, spriteSrc } from '@/lib/sprites/registry';
+import { getSpriteEntry, spriteUrl } from '@/lib/sprites/resolve';
+import pickerSprites from 'virtual:ac-picker-sprites';
+
+// The registry cut down in the build to the `ui/elementos/`, `ui/categorias/` and
+// `ui/estrellas/` entries (astro.config.mjs): importing src/lib/sprites/registry.ts here would
+// put every item and outfit sprite of the registry in the islands that draw a filter.
 
 export function uiSprite(key: string): SpriteProps | null {
-  if (!hasSprite(key)) return null;
-  const entry = getSprite(key);
-  return { src: spriteSrc(key), size: entry.frame, frames: entry.frames, mode: entry.modo };
+  if (!Object.hasOwn(pickerSprites, key)) return null;
+  const entry = getSpriteEntry(pickerSprites, key);
+  return {
+    src: spriteUrl(entry.archivo),
+    size: entry.frame,
+    frames: entry.frames,
+    mode: entry.modo,
+  };
 }
 
 /** Icon of an element type (`ui/elementos/<id>`). */

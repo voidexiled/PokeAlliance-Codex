@@ -248,7 +248,13 @@ function outfitFrame(id: string): SpriteData | null {
   const outfit = getOutfitForPokemon(id);
   if (outfit === undefined) return null;
   const key = `outfits/${outfit.outfitId}`;
-  return Object.hasOwn(registry, key) ? spriteData(registry, key, { direccion: 'sur' }) : null;
+  if (!Object.hasOwn(registry, key)) return null;
+  // An outfit registered with its four directions draws its south one; one registered by
+  // scripts/assets/extract-game-sprites.mjs has only that frame, as its `archivo`, or the
+  // strip of the idle animation the client plays while the Pokémon stands (`animacion`).
+  const entry = registry[key];
+  if (entry.direcciones) return spriteData(registry, key, { direccion: 'sur' });
+  return spriteData(registry, key, entry.modo === 'animacion' ? { animado: true } : {});
 }
 
 /** A Pokémon of the registry by id, or `null`: a reference that resolves to nothing is skipped. */

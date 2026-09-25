@@ -1,5 +1,6 @@
 import type { Locale } from '@/i18n/config';
-import type { SpriteData } from '@/lib/sprites/resolve';
+import type { DexCardDrop } from '@/components/cards/DexCard';
+import { expandListSprite, type ListSprite, type SpriteData } from '@/lib/sprites/resolve';
 import type { PokemonRecord } from '@/lib/content/types';
 import { compareTierRank } from '@/lib/content/tier-rank';
 import { UNKNOWN } from '@/lib/format/unknown';
@@ -120,9 +121,38 @@ export type PokedexElementRefs = Record<string, PokedexElementRef>;
 export interface PokedexItemRef {
   nombre: string;
   categoria: string;
-  sprite: SpriteData | null;
+  /** As `listItemSprite` writes it: `expandListSprite` gives the sprite. */
+  sprite: ListSprite;
   precioNpc: { vende: number | null; compra: number | null };
   nombreCategoria: string | null;
+}
+
+/**
+ * A drop of the first page as the props carry it (§13.6, the 20 KB of props): `DexCard`'s drop
+ * with the sprite as `listItemSprite` writes it, or, for an item with no sprite or a client
+ * sprite, one text: the name, and after a `|` the client id (`"seed|3070"`). `dropOfProp`
+ * reads both.
+ */
+export type PokedexDropProp = string | PokedexListDrop;
+
+/** `DexCard`'s drop with the sprite as `listItemSprite` writes it. */
+export type PokedexListDrop = Omit<DexCardDrop, 'sprite'> & { sprite?: ListSprite };
+
+/** The props form of a drop (`PokedexDropProp`). */
+export function dropProp(drop: PokedexListDrop): PokedexDropProp {
+  const { name, sprite } = drop;
+  if (Object.keys(drop).some((key) => key !== 'name' && key !== 'sprite')) return drop;
+  if (sprite === undefined || sprite === null) return name;
+  return typeof sprite === 'number' ? `${name}|${sprite}` : drop;
+}
+
+/** A drop of the props as `DexCard` takes it. */
+export function dropOfProp(drop: PokedexDropProp): DexCardDrop {
+  if (typeof drop !== 'string') return { ...drop, sprite: expandListSprite(drop.sprite) };
+  const match = /^(.*)\|(\d+)$/.exec(drop);
+  return match
+    ? { name: match[1] ?? '', sprite: expandListSprite(Number(match[2])) }
+    : { name: drop };
 }
 
 /** The items of `refs`, by id. */

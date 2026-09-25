@@ -26,7 +26,6 @@
 
 import type { APIRoute } from 'astro';
 
-import type { DexCardDrop } from '@/components/cards/DexCard';
 import type { ElementChipEntry } from '@/components/game/ElementChip';
 import {
   POKEDEX_FIELDS,
@@ -38,6 +37,7 @@ import {
   type PokedexElementRef,
   type PokedexIds,
   type TierMeta,
+  type PokedexListDrop,
   type PokedexItemRef,
   type PokedexOption,
   type PokedexRow,
@@ -49,7 +49,7 @@ import type { Elemento } from '@/lib/content/registry-schema';
 import { getPokemon } from '@/lib/content/repository';
 import type { PokemonRecord } from '@/lib/content/types';
 import { elementTip, itemTip, type LocalizedText, type TipLabels } from '@/lib/game/tips';
-import { listItemSprite, spriteOrNull } from '@/lib/sprites/resolve';
+import { expandListSprite, listItemSprite, spriteOrNull } from '@/lib/sprites/resolve';
 
 export const prerender = true;
 
@@ -147,7 +147,7 @@ export function pokedexDrops(
   items: PokedexData['refs']['items'],
   locale: Locale,
   labels: TipLabels,
-): Record<string, DexCardDrop> {
+): Record<string, PokedexListDrop> {
   const ids = new Set(rows.flatMap((row) => row.drops ?? []));
   return Object.fromEntries(
     [...ids].flatMap((id) => {
@@ -156,6 +156,7 @@ export function pokedexDrops(
       const tip = itemTip(
         {
           ...ref,
+          sprite: expandListSprite(ref.sprite),
           id,
           nombreCategoria:
             ref.nombreCategoria === null

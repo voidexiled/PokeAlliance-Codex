@@ -148,7 +148,17 @@ function compile(gl: WebGLRenderingContext, type: number, source: string) {
   return shader;
 }
 
-function prepareAura(canvas: HTMLCanvasElement, image: HTMLImageElement, padding: number) {
+/**
+ * The WebGL outline around one frame of the outfit. `image` may be the strip of an idle
+ * animation (`frameWidth` wide per frame): `draw` takes the frame to outline, and the texture
+ * is only uploaded again when that frame changes.
+ */
+function prepareAura(
+  canvas: HTMLCanvasElement,
+  image: HTMLImageElement,
+  padding: number,
+  frameWidth: number,
+) {
   const gl = canvas.getContext('webgl', { alpha: true, premultipliedAlpha: false });
   if (!gl) throw new Error('WebGL unavailable');
   const vertex = compile(gl, gl.VERTEX_SHADER, vertexSource);
@@ -194,10 +204,29 @@ function prepareAura(canvas: HTMLCanvasElement, image: HTMLImageElement, padding
   const padded = document.createElement('canvas');
   padded.width = canvas.width;
   padded.height = canvas.height;
-  padded.getContext('2d')?.drawImage(image, padding, padding);
-  gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, padded);
+  const context = padded.getContext('2d');
+  let uploaded = -1;
+  const upload = (frame: number) => {
+    if (frame === uploaded) return;
+    uploaded = frame;
+    context?.clearRect(0, 0, padded.width, padded.height);
+    context?.drawImage(
+      image,
+      frame * frameWidth,
+      0,
+      frameWidth,
+      image.naturalHeight,
+      padding,
+      padding,
+      frameWidth,
+      image.naturalHeight,
+    );
+    gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, padded);
+  };
+  upload(0);
   return {
-    draw(time: number, shader: AuraShader) {
+    draw(time: number, shader: AuraShader, frame = 0) {
+      upload(frame);
       gl.uniform1f(gl.getUniformLocation(program, 'u_time'), time);
       gl.uniform1i(gl.getUniformLocation(program, 'u_mode'), shader === 'outfit_alliance' ? 1 : 2);
       gl.clearColor(0, 0, 0, 0);
@@ -212,11 +241,31 @@ function prepareAura(canvas: HTMLCanvasElement, image: HTMLImageElement, padding
   };
 }
 
+/**
+ * The frame an animated `Sprite` shows now, read from its CSS animation, so the outline follows
+ * the idle animation of the outfit frame by frame. 0 without an animation (a static outfit, or
+ * reduced motion, where the sprite rests on its first frame).
+ */
+function shownFrame(stage: HTMLElement | null, durations: readonly number[] | undefined): number {
+  if (!durations || durations.length < 2) return 0;
+  const animation = stage?.querySelector('img')?.getAnimations()[0];
+  const time = animation?.currentTime;
+  if (typeof time !== 'number') return 0;
+  const total = durations.reduce((sum, duration) => sum + duration, 0);
+  let left = time % total;
+  for (let index = 0; index < durations.length; index++) {
+    left -= durations[index] ?? 0;
+    if (left < 0) return index;
+  }
+  return 0;
+}
+
 export function OutfitPreview({ frame, auras, name, labels, locale }: OutfitPreviewProps) {
   const [auraId, setAuraId] = useState<string>(auras[0]?.id ?? NONE);
   const [imageError, setImageError] = useState(false);
   const [auraError, setAuraError] = useState(false);
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const stageRef = useRef<HTMLSpanElement>(null);
 
   // Without WebGL no aura is drawn, whatever was chosen before the failure (D-12).
   const aura = auraError ? undefined : auras.find((candidate) => candidate.id === auraId);
@@ -239,7 +288,7 @@ export function OutfitPreview({ frame, auras, name, labels, locale }: OutfitPrev
       setImageError(false);
       if (shader === null || canvasRef.current === null) return;
       try {
-        renderer = prepareAura(canvasRef.current, image, auraPadding);
+        renderer = prepareAura(canvasRef.current, image, auraPadding, width);
       } catch {
         setAuraError(true);
         return;
@@ -247,7 +296,11 @@ export function OutfitPreview({ frame, auras, name, labels, locale }: OutfitPrev
       const startedAt = performance.now();
       const draw = (now: number) => {
         if (cancelled || renderer === null) return;
-        renderer.draw((now - startedAt) / 1000, shader);
+        renderer.draw(
+          (now - startedAt) / 1000,
+          shader,
+          shownFrame(stageRef.current, frame.durations),
+        );
         // Reduced motion: the first frame stays, still (6.4, FI4).
         if (!reducedMotion) animationId = requestAnimationFrame(draw);
       };
@@ -264,7 +317,7 @@ export function OutfitPreview({ frame, auras, name, labels, locale }: OutfitPrev
       image.onerror = null;
       renderer?.dispose();
     };
-  }, [frame.src, shader]);
+  }, [frame.src, frame.durations, width, shader]);
 
   // The outline travels one native pixel around the frame, drawn at the frame's scale.
   const canvasWidth = width + auraPadding * 2;
@@ -320,7 +373,7 @@ export function OutfitPreview({ frame, auras, name, labels, locale }: OutfitPrev
           // The frame did not load: the missing mark of the 64 cell, and no text (8.3).
           <SpriteStage sprite={null} size={64} framed={false} />
         ) : (
-          <span className="ac-outfit-preview__stage">
+          <span className="ac-outfit-preview__stage" ref={stageRef}>
             <Sprite {...frame} scale={scale} alt={labels.frame.replace('{name}', name)} />
             {shader === null ? null : (
               <canvas

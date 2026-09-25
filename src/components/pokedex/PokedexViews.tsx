@@ -21,6 +21,7 @@ import { formatInteger } from '@/lib/format/numbers';
 import { elementTip, itemTip, pokemonTip } from '@/lib/game/tips';
 import type { LocalizedText, TipData, TipLabels } from '@/lib/game/tips';
 import type { ListPage } from '@/lib/lists/state';
+import { expandListSprite } from '@/lib/sprites/resolve';
 
 // The deferred part of the `pokedex` list (spec 8.2, 7.7.4, 13.6; `Lienzo:Pokedex`): what the
 // island only draws when its state asks for it. Cards is the view the page prerenders and
@@ -125,10 +126,11 @@ export function itemEntry(
   const nombreCategoria =
     ref.nombreCategoria === null ? null : ({ [locale]: ref.nombreCategoria } as LocalizedText);
   const dropDe = rows.filter((row) => row.drops?.includes(id)).map((row) => row.nombre);
+  const sprite = expandListSprite(ref.sprite);
   return {
     name: ref.nombre,
-    sprite: ref.sprite,
-    tip: itemTip({ ...ref, id, nombreCategoria, dropDe }, locale, labels),
+    sprite,
+    tip: itemTip({ ...ref, sprite, id, nombreCategoria, dropDe }, locale, labels),
   };
 }
 

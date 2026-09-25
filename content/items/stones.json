@@ -532,7 +532,7 @@
       "nombre": "Fairy Stone",
       "clientId": 37865,
       "categoria": "stones",
-      "sprite": "ui/comercio/item",
+      "sprite": "items/cliente/37865",
       "apilable": null,
       "precioNpc": {
         "vende": 3000,
@@ -548,7 +548,7 @@
       "nombre": "Ancient Stone",
       "clientId": 37871,
       "categoria": "stones",
-      "sprite": "ui/comercio/item",
+      "sprite": "items/cliente/37871",
       "apilable": null,
       "precioNpc": {
         "vende": 10000,

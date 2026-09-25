@@ -182,6 +182,13 @@ Un sprite puede apuntar a una imagen de otro mientras no tengas la real; márcal
 
 Comercio usa estas claves: `outfits/5`, `items/stones/fire-stone`, `ui/diamond` y `ui/pokedolares` en las pestañas «Pokémon», «Items», «Diamonds» y «Pokédólares», y `ui/comercio/item` para un item que no está en el registro. `ui/comercio/item` es un dibujo de relleno (`borrador`) hasta que vuelques el sprite real. Si en «Crear anuncio» escribes el nombre exacto de un item del Market, se ve su sprite; si es una hoja de cantidad, el frame de la cantidad escrita.
 
+### Sprites sacados del cliente
+
+`node scripts/assets/extract-game-sprites.mjs` (uso en `scripts/assets/README.md`) registra dos tipos de clave que no hace falta escribir a mano:
+
+- `items/cliente/<clientId>`: el sprite de inventario de un item. Lo pone en el `sprite` de los items que aún tienen `ui/comercio/item`. Si quieres otro sprite para un item, escribe tu clave en su `sprite`: el script ya no lo toca.
+- `outfits/<outfitId>` con un solo archivo `outfits/<outfitId>/sur.png`: el Pokémon mirando al sur, quieto. Si el cliente lo anima quieto, es una tira con `modo: animacion`. La página del Pokémon lo dibuja igual que un outfit con cuatro direcciones.
+
 ## Añadir el outfit de un Pokémon y sus addons
 
 En `content/outfits.json`:

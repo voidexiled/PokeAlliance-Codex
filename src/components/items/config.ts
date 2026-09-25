@@ -11,7 +11,7 @@ import type {
   pokemonTip,
 } from '@/lib/game/tips';
 import type { ListConfig } from '@/lib/lists/state';
-import type { SpriteData } from '@/lib/sprites/resolve';
+import { expandListSprite, type SpriteData } from '@/lib/sprites/resolve';
 
 // The `items` list of spec 8.0.6 and 8.5, shared by the build and the island: its
 // `ListConfig`, the shape of `/{l}/items/datos.json` (PR5) and the reading half of that shape.
@@ -206,13 +206,15 @@ export function decodeItems(data: unknown): ItemsRow[] {
   return filas.map((fila) => {
     const row: Partial<Record<ItemsField, unknown>> = {};
     for (const [field, index] of columns) {
-      const value = !Array.isArray(fila)
+      const cell = !Array.isArray(fila)
         ? undefined
         : index >= 0
           ? fila[index]
           : SHAPES[field] === 'o?'
             ? null
             : undefined;
+      // The file writes a client item sprite as its client id (`listItemSprite`).
+      const value = field === 'sprite' && typeof cell === 'number' ? expandListSprite(cell) : cell;
       if (!fits(value, SHAPES[field])) throw new Error(`items/datos.json: bad «${field}»`);
       row[field] = value;
     }

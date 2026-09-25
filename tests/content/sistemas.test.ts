@@ -8,6 +8,7 @@ import { afterAll, describe, expect, it } from 'vitest';
 
 import { checkContent } from '../../scripts/content/lib/check-content.mjs';
 import { validateSchema } from '../../scripts/content/lib/json-schema.mjs';
+import { copyPublicForCheck } from './public-copy';
 
 type Json = Record<string, unknown>;
 
@@ -248,10 +249,7 @@ describe('pnpm content:check on content/sistemas/', () => {
   function copyRepo() {
     const root = path.join(scratch, `repo-${Math.random().toString(36).slice(2)}`);
     cpSync(path.join(repoRoot, 'content'), path.join(root, 'content'), { recursive: true });
-    for (const folder of [['sprites'], ['data', 'map', 'otmm']])
-      cpSync(path.join(repoRoot, 'public', ...folder), path.join(root, 'public', ...folder), {
-        recursive: true,
-      });
+    copyPublicForCheck(repoRoot, root);
     return root;
   }
   const write = (root: string, id: string, record: Json) =>

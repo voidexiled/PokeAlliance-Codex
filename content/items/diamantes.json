@@ -36,7 +36,7 @@
       "nombre": "diamond",
       "clientId": 3028,
       "categoria": "diamantes",
-      "sprite": "ui/comercio/item",
+      "sprite": "items/cliente/3028",
       "apilable": null,
       "precioNpc": {
         "vende": null,

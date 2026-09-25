@@ -19,10 +19,12 @@ import type { ListController } from '@/components/lists/useListState';
 import {
   decodePokedex,
   decodeRefs,
+  dropOfProp,
   pokedexConfig,
   pokedexFilterDefs,
   withVisibleTiers,
   type PokedexData,
+  type PokedexDropProp,
   type PokedexIds,
   type PokedexRow,
   type PokedexRows,
@@ -93,7 +95,7 @@ export interface PokedexRootProps {
    * The items the rows of `data` drop, by id, as the zone «Drops» of `DexCard` takes them,
    * panels included (DP3). The other pages' items come in `refs` (PR5).
    */
-  drops: Readonly<Record<string, DexCardDrop>>;
+  drops: Readonly<Record<string, PokedexDropProp>>;
   /** «Pokédex», the name of the page: the name of the Slots panel. */
   title: string;
   /**
@@ -241,7 +243,9 @@ export function PokedexRoot({
   const names = useMemo(() => new Map(ids.elements), [ids]);
   const [byId, byItem] = useMemo(() => {
     const own = new Map(elements.map((element) => [element.id, element]));
-    const dropped = new Map(Object.entries(drops));
+    const dropped = new Map<string, DexCardDrop>(
+      Object.entries(drops).map(([id, drop]) => [id, dropOfProp(drop)]),
+    );
     if (refs !== null && later !== undefined) {
       for (const [id, ref] of Object.entries(refs.elementos))
         if (!own.has(id)) own.set(id, later.elementEntry(id, ref, locale, ui.tooltip));

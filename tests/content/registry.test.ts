@@ -44,6 +44,7 @@ import {
 } from '@/lib/content/registry-schema';
 import { checkContent, formatReport } from '../../scripts/content/lib/check-content.mjs';
 import { validateSchema } from '../../scripts/content/lib/json-schema.mjs';
+import { copyPublicForCheck } from './public-copy';
 
 // Several cases copy and parse the whole content tree; inside a full `pnpm run ci` on a busy
 // machine one of them passes the default 5 s now and then, while alone they take under 1 s.
@@ -574,10 +575,7 @@ describe('pnpm content:check', () => {
   function copyRepo() {
     const root = path.join(scratch, `repo-${Math.random().toString(36).slice(2)}`);
     cpSync(path.join(repoRoot, 'content'), path.join(root, 'content'), { recursive: true });
-    for (const folder of [['sprites'], ['data', 'map', 'otmm']])
-      cpSync(path.join(repoRoot, 'public', ...folder), path.join(root, 'public', ...folder), {
-        recursive: true,
-      });
+    copyPublicForCheck(repoRoot, root);
     return root;
   }
   const lines = (entries: { file: string; path?: string; message: string }[]) =>

@@ -40,9 +40,9 @@ export function readPngSize(file) {
 
 function listFiles(directory, extension) {
   if (!existsSync(directory)) return [];
-  return readdirSync(directory, { recursive: true })
-    .map((entry) => path.join(directory, String(entry)))
-    .filter((file) => file.toLowerCase().endsWith(extension) && statSync(file).isFile());
+  return readdirSync(directory, { recursive: true, withFileTypes: true })
+    .filter((entry) => entry.isFile() && entry.name.toLowerCase().endsWith(extension))
+    .map((entry) => path.join(entry.parentPath, entry.name));
 }
 
 const toPosix = (file) => file.split(path.sep).join('/');
@@ -428,11 +428,14 @@ export function checkContent(root) {
       if (typeof archivo !== 'string' || archivo === '') return;
       const file = path.join(spritesRoot, ...archivo.split('/'));
       usedImages.add(path.resolve(file));
-      if (!existsSync(file) || !statSync(file).isFile()) {
+      // One open per image, not three calls: the registry holds thousands of client sprites.
+      let size;
+      try {
+        size = readPngSize(file);
+      } catch {
         error(spritesFile, `la imagen public/sprites/${archivo} no existe`, where);
         return;
       }
-      const size = readPngSize(file);
       if (!size) {
         error(spritesFile, `public/sprites/${archivo} no es un PNG válido`, where);
       } else if (width && height && (size.width !== width || size.height !== height)) {
@@ -1351,6 +1354,13 @@ export function checkContent(root) {
     const seenPokemon = new Set();
     const seenAddons = new Set();
     const outfitOwners = new Map();
+    const speciesOf = contentRecords.pokemon
+      ? new Map(
+          contentRecords.pokemon
+            .filter(isObject)
+            .map((record) => [record.id, `${record.numero}:${record.variante === 'shiny'}`]),
+        )
+      : null;
     let addonCount = 0;
     let draftCount = 0;
     outfits.forEach((outfit, index) => {
@@ -1375,10 +1385,27 @@ export function checkContent(root) {
             `el sprite "${key}" no existe; regístralo con pnpm assets:outfits -- --id ${outfit.outfitId} --registrar`,
             `${at}.outfitId`,
           );
-        else if (spritesKnown && !isObject(sprites[key]?.direcciones))
-          error(outfitsFile, `el sprite "${key}" necesita "direcciones"`, `${at}.outfitId`);
+        // Four directions (pnpm assets:outfits --registrar), or only the south idle frame as
+        // `outfits/<id>/sur.png` (scripts/assets/extract-game-sprites.mjs).
+        else if (
+          spritesKnown &&
+          !isObject(sprites[key]?.direcciones) &&
+          sprites[key]?.archivo !== `${key}/sur.png`
+        )
+          error(
+            outfitsFile,
+            `el sprite "${key}" necesita "direcciones" o "archivo": "${key}/sur.png"`,
+            `${at}.outfitId`,
+          );
         const owner = outfitOwners.get(outfit.outfitId);
-        if (owner)
+        // Forms of one Pokédex number and variant share the client's outfit (the Smeargle of
+        // each element, Unown and Unown A): only another Pokémon is a warning. Without a
+        // readable content/pokemon.json there is nothing to compare, and no warning.
+        const sameSpecies =
+          owner !== undefined &&
+          (speciesOf === null ||
+            (speciesOf.has(owner) && speciesOf.get(owner) === speciesOf.get(outfit.pokemon)));
+        if (owner && !sameSpecies)
           warn(
             outfitsFile,
             `el outfit ${outfit.outfitId} también es de "${owner}"`,

@@ -32,7 +32,7 @@
       "nombre": "Bulb",
       "clientId": 35787,
       "categoria": "creature-items",
-      "sprite": "ui/comercio/item",
+      "sprite": "items/cliente/35787",
       "apilable": null,
       "precioNpc": {
         "vende": 40,
@@ -45,7 +45,7 @@
       "nombre": "Leaf",
       "clientId": 35788,
       "categoria": "creature-items",
-      "sprite": "ui/comercio/item",
+      "sprite": "items/cliente/35788",
       "apilable": null,
       "precioNpc": {
         "vende": 100,
@@ -58,7 +58,7 @@
       "nombre": "Red Petal",
       "clientId": 35789,
       "categoria": "creature-items",
-      "sprite": "ui/comercio/item",
+      "sprite": "items/cliente/35789",
       "apilable": null,
       "precioNpc": {
         "vende": 180,
@@ -71,7 +71,7 @@
       "nombre": "Fire Tail",
       "clientId": 35790,
       "categoria": "creature-items",
-      "sprite": "ui/comercio/item",
+      "sprite": "items/cliente/35790",
       "apilable": null,
       "precioNpc": {
         "vende": 45,
@@ -84,7 +84,7 @@
       "nombre": "Lizard Tail",
       "clientId": 35791,
       "categoria": "creature-items",
-      "sprite": "ui/comercio/item",
+      "sprite": "items/cliente/35791",
       "apilable": null,
       "precioNpc": {
         "vende": 105,
@@ -97,7 +97,7 @@
       "nombre": "Fire Wing",
       "clientId": 35792,
       "categoria": "creature-items",
-      "sprite": "ui/comercio/item",
+      "sprite": "items/cliente/35792",
       "apilable": null,
       "precioNpc": {
         "vende": 185,
@@ -110,7 +110,7 @@
       "nombre": "Squirtle Hull",
       "clientId": 35793,
       "categoria": "creature-items",
-      "sprite": "ui/comercio/item",
+      "sprite": "items/cliente/35793",
       "apilable": null,
       "precioNpc": {
         "vende": 40,
@@ -123,7 +123,7 @@
       "nombre": "Wartortle Ear",
       "clientId": 35794,
       "categoria": "creature-items",
-      "sprite": "ui/comercio/item",
+      "sprite": "items/cliente/35794",
       "apilable": null,
       "precioNpc": {
         "vende": 100,
@@ -136,7 +136,7 @@
       "nombre": "Water Cannon",
       "clientId": 35795,
       "categoria": "creature-items",
-      "sprite": "ui/comercio/item",
+      "sprite": "items/cliente/35795",
       "apilable": null,
       "precioNpc": {
         "vende": 180,
@@ -149,7 +149,7 @@
       "nombre": "Caterpie Antenna",
       "clientId": 35796,
       "categoria": "creature-items",
-      "sprite": "ui/comercio/item",
+      "sprite": "items/cliente/35796",
       "apilable": null,
       "precioNpc": {
         "vende": 15,
@@ -162,7 +162,7 @@
       "nombre": "Piece of Cocoon",
       "clientId": 35797,
       "categoria": "creature-items",
-      "sprite": "ui/comercio/item",
+      "sprite": "items/cliente/35797",
       "apilable": null,
       "precioNpc": {
         "vende": 20,
@@ -175,7 +175,7 @@
       "nombre": "Butterfree Wing",
       "clientId": 35798,
       "categoria": "creature-items",
-      "sprite": "ui/comercio/item",
+      "sprite": "items/cliente/35798",
       "apilable": null,
       "precioNpc": {
         "vende": 70,
@@ -188,7 +188,7 @@
       "nombre": "Poison Sting",
       "clientId": 35799,
       "categoria": "creature-items",
-      "sprite": "ui/comercio/item",
+      "sprite": "items/cliente/35799",
       "apilable": null,
       "precioNpc": {
         "vende": 15,
@@ -201,7 +201,7 @@
       "nombre": "Yellow Cocoon",
       "clientId": 35800,
       "categoria": "creature-items",
-      "sprite": "ui/comercio/item",
+      "sprite": "items/cliente/35800",
       "apilable": null,
       "precioNpc": {
         "vende": 25,
@@ -214,7 +214,7 @@
       "nombre": "Bee Sting",
       "clientId": 35801,
       "categoria": "creature-items",
-      "sprite": "ui/comercio/item",
+      "sprite": "items/cliente/35801",
       "apilable": null,
       "precioNpc": {
         "vende": 78,
@@ -227,7 +227,7 @@
       "nombre": "Bird Crest",
       "clientId": 35802,
       "categoria": "creature-items",
-      "sprite": "ui/comercio/item",
+      "sprite": "items/cliente/35802",
       "apilable": null,
       "precioNpc": {
         "vende": 15,
@@ -240,7 +240,7 @@
       "nombre": "Bird Tail",
       "clientId": 35803,
       "categoria": "creature-items",
-      "sprite": "ui/comercio/item",
+      "sprite": "items/cliente/35803",
       "apilable": null,
       "precioNpc": {
         "vende": 45,
@@ -253,7 +253,7 @@
       "nombre": "Big Crest",
       "clientId": 35804,
       "categoria": "creature-items",
-      "sprite": "ui/comercio/item",
+      "sprite": "items/cliente/35804",
       "apilable": null,
       "precioNpc": {
         "vende": 185,
@@ -266,7 +266,7 @@
       "nombre": "Mouse Tail",
       "clientId": 35805,
       "categoria": "creature-items",
-      "sprite": "ui/comercio/item",
+      "sprite": "items/cliente/35805",
       "apilable": null,
       "precioNpc": {
         "vende": 15,
@@ -279,7 +279,7 @@
       "nombre": "Rat Ear",
       "clientId": 35806,
       "categoria": "creature-items",
-      "sprite": "ui/comercio/item",
+      "sprite": "items/cliente/35806",
       "apilable": null,
       "precioNpc": {
         "vende": 70,
@@ -292,7 +292,7 @@
       "nombre": "Bird Wing",
       "clientId": 35807,
       "categoria": "creature-items",
-      "sprite": "ui/comercio/item",
+      "sprite": "items/cliente/35807",
       "apilable": null,
       "precioNpc": {
         "vende": 20,
@@ -305,7 +305,7 @@
       "nombre": "Pointy Beak",
       "clientId": 35808,
       "categoria": "creature-items",
-      "sprite": "ui/comercio/item",
+      "sprite": "items/cliente/35808",
       "apilable": null,
       "precioNpc": {
         "vende": 115,
@@ -318,7 +318,7 @@
       "nombre": "Snake Tail",
       "clientId": 35809,
       "categoria": "creature-items",
-      "sprite": "ui/comercio/item",
+      "sprite": "items/cliente/35809",
       "apilable": null,
       "precioNpc": {
         "vende": 20,
@@ -331,7 +331,7 @@
       "nombre": "Cobra Tail",
       "clientId": 35810,
       "categoria": "creature-items",
-      "sprite": "ui/comercio/item",
+      "sprite": "items/cliente/35810",
       "apilable": null,
       "precioNpc": {
         "vende": 105,
@@ -344,7 +344,7 @@
       "nombre": "Electric Rat Tail",
       "clientId": 35811,
       "categoria": "creature-items",
-      "sprite": "ui/comercio/item",
+      "sprite": "items/cliente/35811",
       "apilable": null,
       "precioNpc": {
         "vende": 115,
@@ -357,7 +357,7 @@
       "nombre": "Electric Ear",
       "clientId": 35812,
       "categoria": "creature-items",
-      "sprite": "ui/comercio/item",
+      "sprite": "items/cliente/35812",
       "apilable": null,
       "precioNpc": {
         "vende": 180,
@@ -370,7 +370,7 @@
       "nombre": "Armadillo Tail",
       "clientId": 35813,
       "categoria": "creature-items",
-      "sprite": "ui/comercio/item",
+      "sprite": "items/cliente/35813",
       "apilable": null,
       "precioNpc": {
         "vende": 40,
@@ -383,7 +383,7 @@
       "nombre": "Armadillo Claw",
       "clientId": 35814,
       "categoria": "creature-items",
-      "sprite": "ui/comercio/item",
+      "sprite": "items/cliente/35814",
       "apilable": null,
       "precioNpc": {
         "vende": 140,
@@ -396,7 +396,7 @@
       "nombre": "Small Blue Ear",
       "clientId": 35815,
       "categoria": "creature-items",
-      "sprite": "ui/comercio/item",
+      "sprite": "items/cliente/35815",
       "apilable": null,
       "precioNpc": {
         "vende": 25,
@@ -409,7 +409,7 @@
       "nombre": "Blue Nido Ear",
       "clientId": 35816,
       "categoria": "creature-items",
-      "sprite": "ui/comercio/item",
+      "sprite": "items/cliente/35816",
       "apilable": null,
       "precioNpc": {
         "vende": 78,
@@ -422,7 +422,7 @@
       "nombre": "Queen Ear",
       "clientId": 35817,
       "categoria": "creature-items",
-      "sprite": "ui/comercio/item",
+      "sprite": "items/cliente/35817",
       "apilable": null,
       "precioNpc": {
         "vende": 185,
@@ -435,7 +435,7 @@
       "nombre": "Small Purple Ear",
       "clientId": 35818,
       "categoria": "creature-items",
-      "sprite": "ui/comercio/item",
+      "sprite": "items/cliente/35818",
       "apilable": null,
       "precioNpc": {
         "vende": 20,
@@ -448,7 +448,7 @@
       "nombre": "Purple Nido Ear",
       "clientId": 35819,
       "categoria": "creature-items",
-      "sprite": "ui/comercio/item",
+      "sprite": "items/cliente/35819",
       "apilable": null,
       "precioNpc": {
         "vende": 70,
@@ -461,7 +461,7 @@
       "nombre": "King Ear",
       "clientId": 35820,
       "categoria": "creature-items",
-      "sprite": "ui/comercio/item",
+      "sprite": "items/cliente/35820",
       "apilable": null,
       "precioNpc": {
         "vende": 180,
@@ -474,7 +474,7 @@
       "nombre": "Moon Topknot",
       "clientId": 35821,
       "categoria": "creature-items",
-      "sprite": "ui/comercio/item",
+      "sprite": "items/cliente/35821",
       "apilable": null,
       "precioNpc": {
         "vende": 100,
@@ -487,7 +487,7 @@
       "nombre": "Pink Wings",
       "clientId": 35822,
       "categoria": "creature-items",
-      "sprite": "ui/comercio/item",
+      "sprite": "items/cliente/35822",
       "apilable": null,
       "precioNpc": {
         "vende": 185,
@@ -500,7 +500,7 @@
       "nombre": "Canine Tail",
       "clientId": 35823,
       "categoria": "creature-items",
-      "sprite": "ui/comercio/item",
+      "sprite": "items/cliente/35823",
       "apilable": null,
       "precioNpc": {
         "vende": 45,
@@ -513,7 +513,7 @@
       "nombre": "Fox Tail",
       "clientId": 35824,
       "categoria": "creature-items",
-      "sprite": "ui/comercio/item",
+      "sprite": "items/cliente/35824",
       "apilable": null,
       "precioNpc": {
         "vende": 180,
@@ -526,7 +526,7 @@
       "nombre": "Microphone",
       "clientId": 35825,
       "categoria": "creature-items",
-      "sprite": "ui/comercio/item",
+      "sprite": "items/cliente/35825",
       "apilable": null,
       "precioNpc": {
         "vende": 105,
@@ -539,7 +539,7 @@
       "nombre": "Wigglytuff Ear",
       "clientId": 35826,
       "categoria": "creature-items",
-      "sprite": "ui/comercio/item",
+      "sprite": "items/cliente/35826",
       "apilable": null,
       "precioNpc": {
         "vende": 185,
@@ -552,7 +552,7 @@
       "nombre": "Bat Wing",
       "clientId": 35827,
       "categoria": "creature-items",
-      "sprite": "ui/comercio/item",
+      "sprite": "items/cliente/35827",
       "apilable": null,
       "precioNpc": {
         "vende": 25,
@@ -565,7 +565,7 @@
       "nombre": "Vampire Wing",
       "clientId": 35828,
       "categoria": "creature-items",
-      "sprite": "ui/comercio/item",
+      "sprite": "items/cliente/35828",
       "apilable": null,
       "precioNpc": {
         "vende": 100,
@@ -578,7 +578,7 @@
       "nombre": "Leaves",
       "clientId": 35829,
       "categoria": "creature-items",
-      "sprite": "ui/comercio/item",
+      "sprite": "items/cliente/35829",
       "apilable": null,
       "precioNpc": {
         "vende": 15,
@@ -591,7 +591,7 @@
       "nombre": "Poison Bulb",
       "clientId": 35830,
       "categoria": "creature-items",
-      "sprite": "ui/comercio/item",
+      "sprite": "items/cliente/35830",
       "apilable": null,
       "precioNpc": {
         "vende": 78,
@@ -604,7 +604,7 @@
       "nombre": "Poison Petal",
       "clientId": 35831,
       "categoria": "creature-items",
-      "sprite": "ui/comercio/item",
+      "sprite": "items/cliente/35831",
       "apilable": null,
       "precioNpc": {
         "vende": 115,
@@ -617,7 +617,7 @@
       "nombre": "Mushroom",
       "clientId": 35832,
       "categoria": "creature-items",
-      "sprite": "ui/comercio/item",
+      "sprite": "items/cliente/35832",
       "apilable": null,
       "precioNpc": {
         "vende": 15,
@@ -630,7 +630,7 @@
       "nombre": "Big Mushroom",
       "clientId": 35833,
       "categoria": "creature-items",
-      "sprite": "ui/comercio/item",
+      "sprite": "items/cliente/35833",
       "apilable": null,
       "precioNpc": {
         "vende": 115,
@@ -643,7 +643,7 @@
       "nombre": "Bug Antenna",
       "clientId": 35834,
       "categoria": "creature-items",
-      "sprite": "ui/comercio/item",
+      "sprite": "items/cliente/35834",
       "apilable": null,
       "precioNpc": {
         "vende": 40,
@@ -656,7 +656,7 @@
       "nombre": "Moth Wing",
       "clientId": 35835,
       "categoria": "creature-items",
-      "sprite": "ui/comercio/item",
+      "sprite": "items/cliente/35835",
       "apilable": null,
       "precioNpc": {
         "vende": 115,
@@ -669,7 +669,7 @@
       "nombre": "Small Handfull of Stones",
       "clientId": 35836,
       "categoria": "creature-items",
-      "sprite": "ui/comercio/item",
+      "sprite": "items/cliente/35836",
       "apilable": null,
       "precioNpc": {
         "vende": 20,
@@ -682,7 +682,7 @@
       "nombre": "Handful of Stones",
       "clientId": 35837,
       "categoria": "creature-items",
-      "sprite": "ui/comercio/item",
+      "sprite": "items/cliente/35837",
       "apilable": null,
       "precioNpc": {
         "vende": 105,
@@ -695,7 +695,7 @@
       "nombre": "Luck Medallion",
       "clientId": 35838,
       "categoria": "creature-items",
-      "sprite": "ui/comercio/item",
+      "sprite": "items/cliente/35838",
       "apilable": null,
       "precioNpc": {
         "vende": 45,
@@ -708,7 +708,7 @@
       "nombre": "Wool Ball",
       "clientId": 35839,
       "categoria": "creature-items",
-      "sprite": "ui/comercio/item",
+      "sprite": "items/cliente/35839",
       "apilable": null,
       "precioNpc": {
         "vende": 115,
@@ -721,7 +721,7 @@
       "nombre": "Duck Beak",
       "clientId": 35840,
       "categoria": "creature-items",
-      "sprite": "ui/comercio/item",
+      "sprite": "items/cliente/35840",
       "apilable": null,
       "precioNpc": {
         "vende": 40,
@@ -734,7 +734,7 @@
       "nombre": "Duck Paw",
       "clientId": 35841,
       "categoria": "creature-items",
-      "sprite": "ui/comercio/item",
+      "sprite": "items/cliente/35841",
       "apilable": null,
       "precioNpc": {
         "vende": 145,
@@ -747,7 +747,7 @@
       "nombre": "Mankey Tail",
       "clientId": 35842,
       "categoria": "creature-items",
-      "sprite": "ui/comercio/item",
+      "sprite": "items/cliente/35842",
       "apilable": null,
       "precioNpc": {
         "vende": 25,
@@ -760,7 +760,7 @@
       "nombre": "Iron Bracelet",
       "clientId": 35843,
       "categoria": "creature-items",
-      "sprite": "ui/comercio/item",
+      "sprite": "items/cliente/35843",
       "apilable": null,
       "precioNpc": {
         "vende": 115,
@@ -773,7 +773,7 @@
       "nombre": "Dog Fur",
       "clientId": 35844,
       "categoria": "creature-items",
-      "sprite": "ui/comercio/item",
+      "sprite": "items/cliente/35844",
       "apilable": null,
       "precioNpc": {
         "vende": 70,
@@ -786,7 +786,7 @@
       "nombre": "Giant Piece of Fur",
       "clientId": 35845,
       "categoria": "creature-items",
-      "sprite": "ui/comercio/item",
+      "sprite": "items/cliente/35845",
       "apilable": null,
       "precioNpc": {
         "vende": 240,
@@ -799,7 +799,7 @@
       "nombre": "Frog Tail",
       "clientId": 35846,
       "categoria": "creature-items",
-      "sprite": "ui/comercio/item",
+      "sprite": "items/cliente/35846",
       "apilable": null,
       "precioNpc": {
         "vende": 15,
@@ -812,7 +812,7 @@
       "nombre": "Small Box Gloves",
       "clientId": 35847,
       "categoria": "creature-items",
-      "sprite": "ui/comercio/item",
+      "sprite": "items/cliente/35847",
       "apilable": null,
       "precioNpc": {
         "vende": 78,
@@ -825,7 +825,7 @@
       "nombre": "Big Fist Gloves",
       "clientId": 35848,
       "categoria": "creature-items",
-      "sprite": "ui/comercio/item",
+      "sprite": "items/cliente/35848",
       "apilable": null,
       "precioNpc": {
         "vende": 180,
@@ -838,7 +838,7 @@
       "nombre": "Psychic Vest",
       "clientId": 35849,
       "categoria": "creature-items",
-      "sprite": "ui/comercio/item",
+      "sprite": "items/cliente/35849",
       "apilable": null,
       "precioNpc": {
         "vende": 20,
@@ -851,7 +851,7 @@
       "nombre": "Psychic Spoon",
       "clientId": 35850,
       "categoria": "creature-items",
-      "sprite": "ui/comercio/item",
+      "sprite": "items/cliente/35850",
       "apilable": null,
       "precioNpc": {
         "vende": 100,
@@ -864,7 +864,7 @@
       "nombre": "Psychic Moustache",
       "clientId": 35851,
       "categoria": "creature-items",
-      "sprite": "ui/comercio/item",
+      "sprite": "items/cliente/35851",
       "apilable": null,
       "precioNpc": {
         "vende": 235,
@@ -877,7 +877,7 @@
       "nombre": "Fighter Hawk",
       "clientId": 35852,
       "categoria": "creature-items",
-      "sprite": "ui/comercio/item",
+      "sprite": "items/cliente/35852",
       "apilable": null,
       "precioNpc": {
         "vende": 45,
@@ -890,7 +890,7 @@
       "nombre": "Fighter Underwear",
       "clientId": 35853,
       "categoria": "creature-items",
-      "sprite": "ui/comercio/item",
+      "sprite": "items/cliente/35853",
       "apilable": null,
       "precioNpc": {
         "vende": 105,
@@ -903,7 +903,7 @@
       "nombre": "Belt of Champion",
       "clientId": 35854,
       "categoria": "creature-items",
-      "sprite": "ui/comercio/item",
+      "sprite": "items/cliente/35854",
       "apilable": null,
       "precioNpc": {
         "vende": 185,
@@ -916,7 +916,7 @@
       "nombre": "Flower Stem",
       "clientId": 35855,
       "categoria": "creature-items",
-      "sprite": "ui/comercio/item",
+      "sprite": "items/cliente/35855",
       "apilable": null,
       "precioNpc": {
         "vende": 15,
@@ -929,7 +929,7 @@
       "nombre": "Weepinbell Leaves",
       "clientId": 35856,
       "categoria": "creature-items",
-      "sprite": "ui/comercio/item",
+      "sprite": "items/cliente/35856",
       "apilable": null,
       "precioNpc": {
         "vende": 70,
@@ -942,7 +942,7 @@
       "nombre": "Victreebell Tail",
       "clientId": 35857,
       "categoria": "creature-items",
-      "sprite": "ui/comercio/item",
+      "sprite": "items/cliente/35857",
       "apilable": null,
       "precioNpc": {
         "vende": 140,
@@ -955,7 +955,7 @@
       "nombre": "Tentacle",
       "clientId": 35858,
       "categoria": "creature-items",
-      "sprite": "ui/comercio/item",
+      "sprite": "items/cliente/35858",
       "apilable": null,
       "precioNpc": {
         "vende": 20,
@@ -968,7 +968,7 @@
       "nombre": "Giant Ruby",
       "clientId": 35859,
       "categoria": "creature-items",
-      "sprite": "ui/comercio/item",
+      "sprite": "items/cliente/35859",
       "apilable": null,
       "precioNpc": {
         "vende": 180,
@@ -981,7 +981,7 @@
       "nombre": "Rock Fist",
       "clientId": 35860,
       "categoria": "creature-items",
-      "sprite": "ui/comercio/item",
+      "sprite": "items/cliente/35860",
       "apilable": null,
       "precioNpc": {
         "vende": 25,
@@ -994,7 +994,7 @@
       "nombre": "Rock Forehead",
       "clientId": 35861,
       "categoria": "creature-items",
-      "sprite": "ui/comercio/item",
+      "sprite": "items/cliente/35861",
       "apilable": null,
       "precioNpc": {
         "vende": 100,
@@ -1007,7 +1007,7 @@
       "nombre": "Stone Rocks",
       "clientId": 35862,
       "categoria": "creature-items",
-      "sprite": "ui/comercio/item",
+      "sprite": "items/cliente/35862",
       "apilable": null,
       "precioNpc": {
         "vende": 185,
@@ -1020,7 +1020,7 @@
       "nombre": "Fire Hair",
       "clientId": 35863,
       "categoria": "creature-items",
-      "sprite": "ui/comercio/item",
+      "sprite": "items/cliente/35863",
       "apilable": null,
       "precioNpc": {
         "vende": 40,
@@ -1033,7 +1033,7 @@
       "nombre": "Fire Hoof",
       "clientId": 35864,
       "categoria": "creature-items",
-      "sprite": "ui/comercio/item",
+      "sprite": "items/cliente/35864",
       "apilable": null,
       "precioNpc": {
         "vende": 240,
@@ -1046,7 +1046,7 @@
       "nombre": "Slowpoke Tail",
       "clientId": 35865,
       "categoria": "creature-items",
-      "sprite": "ui/comercio/item",
+      "sprite": "items/cliente/35865",
       "apilable": null,
       "precioNpc": {
         "vende": 20,
@@ -1059,7 +1059,7 @@
       "nombre": "Slowbro Shell",
       "clientId": 35866,
       "categoria": "creature-items",
-      "sprite": "ui/comercio/item",
+      "sprite": "items/cliente/35866",
       "apilable": null,
       "precioNpc": {
         "vende": 115,
@@ -1072,7 +1072,7 @@
       "nombre": "Electric Screws",
       "clientId": 35867,
       "categoria": "creature-items",
-      "sprite": "ui/comercio/item",
+      "sprite": "items/cliente/35867",
       "apilable": null,
       "precioNpc": {
         "vende": 20,
@@ -1085,7 +1085,7 @@
       "nombre": "Magnet",
       "clientId": 35868,
       "categoria": "creature-items",
-      "sprite": "ui/comercio/item",
+      "sprite": "items/cliente/35868",
       "apilable": null,
       "precioNpc": {
         "vende": 180,
@@ -1098,7 +1098,7 @@
       "nombre": "Farfetch'd Wing",
       "clientId": 35869,
       "categoria": "creature-items",
-      "sprite": "ui/comercio/item",
+      "sprite": "items/cliente/35869",
       "apilable": null,
       "precioNpc": {
         "vende": 115,
@@ -1111,7 +1111,7 @@
       "nombre": "Doduo Fur",
       "clientId": 35870,
       "categoria": "creature-items",
-      "sprite": "ui/comercio/item",
+      "sprite": "items/cliente/35870",
       "apilable": null,
       "precioNpc": {
         "vende": 20,
@@ -1124,7 +1124,7 @@
       "nombre": "Dodrio Feather",
       "clientId": 35871,
       "categoria": "creature-items",
-      "sprite": "ui/comercio/item",
+      "sprite": "items/cliente/35871",
       "apilable": null,
       "precioNpc": {
         "vende": 115,
@@ -1137,7 +1137,7 @@
       "nombre": "Seel Tail",
       "clientId": 35872,
       "categoria": "creature-items",
-      "sprite": "ui/comercio/item",
+      "sprite": "items/cliente/35872",
       "apilable": null,
       "precioNpc": {
         "vende": 45,
@@ -1150,7 +1150,7 @@
       "nombre": "Dewgong Tail",
       "clientId": 35873,
       "categoria": "creature-items",
-      "sprite": "ui/comercio/item",
+      "sprite": "items/cliente/35873",
       "apilable": null,
       "precioNpc": {
         "vende": 120,
@@ -1163,7 +1163,7 @@
       "nombre": "Stinky Gosme",
       "clientId": 35874,
       "categoria": "creature-items",
-      "sprite": "ui/comercio/item",
+      "sprite": "items/cliente/35874",
       "apilable": null,
       "precioNpc": {
         "vende": 20,
@@ -1176,7 +1176,7 @@
       "nombre": "Stinky Hand",
       "clientId": 35875,
       "categoria": "creature-items",
-      "sprite": "ui/comercio/item",
+      "sprite": "items/cliente/35875",
       "apilable": null,
       "precioNpc": {
         "vende": 185,
@@ -1189,7 +1189,7 @@
       "nombre": "Locksmith of Shell",
       "clientId": 35876,
       "categoria": "creature-items",
-      "sprite": "ui/comercio/item",
+      "sprite": "items/cliente/35876",
       "apilable": null,
       "precioNpc": {
         "vende": 20,
@@ -1202,7 +1202,7 @@
       "nombre": "Pieces of Shell",
       "clientId": 35877,
       "categoria": "creature-items",
-      "sprite": "ui/comercio/item",
+      "sprite": "items/cliente/35877",
       "apilable": null,
       "precioNpc": {
         "vende": 125,
@@ -1215,7 +1215,7 @@
       "nombre": "Ghost Bottle",
       "clientId": 35878,
       "categoria": "creature-items",
-      "sprite": "ui/comercio/item",
+      "sprite": "items/cliente/35878",
       "apilable": null,
       "precioNpc": {
         "vende": 20,
@@ -1228,7 +1228,7 @@
       "nombre": "Ghost Claw",
       "clientId": 35879,
       "categoria": "creature-items",
-      "sprite": "ui/comercio/item",
+      "sprite": "items/cliente/35879",
       "apilable": null,
       "precioNpc": {
         "vende": 100,
@@ -1241,7 +1241,7 @@
       "nombre": "Ectoplasm",
       "clientId": 35880,
       "categoria": "creature-items",
-      "sprite": "ui/comercio/item",
+      "sprite": "items/cliente/35880",
       "apilable": null,
       "precioNpc": {
         "vende": 245,
@@ -1254,7 +1254,7 @@
       "nombre": "Onix Tail",
       "clientId": 35881,
       "categoria": "creature-items",
-      "sprite": "ui/comercio/item",
+      "sprite": "items/cliente/35881",
       "apilable": null,
       "precioNpc": {
         "vende": 115,
@@ -1267,7 +1267,7 @@
       "nombre": "Drowzee Trunk",
       "clientId": 35882,
       "categoria": "creature-items",
-      "sprite": "ui/comercio/item",
+      "sprite": "items/cliente/35882",
       "apilable": null,
       "precioNpc": {
         "vende": 78,
@@ -1280,7 +1280,7 @@
       "nombre": "Hypnosis Pendant",
       "clientId": 35883,
       "categoria": "creature-items",
-      "sprite": "ui/comercio/item",
+      "sprite": "items/cliente/35883",
       "apilable": null,
       "precioNpc": {
         "vende": 115,
@@ -1293,7 +1293,7 @@
       "nombre": "Crab Claw",
       "clientId": 35884,
       "categoria": "creature-items",
-      "sprite": "ui/comercio/item",
+      "sprite": "items/cliente/35884",
       "apilable": null,
       "precioNpc": {
         "vende": 20,
@@ -1306,7 +1306,7 @@
       "nombre": "Red Guillotine",
       "clientId": 35885,
       "categoria": "creature-items",
-      "sprite": "ui/comercio/item",
+      "sprite": "items/cliente/35885",
       "apilable": null,
       "precioNpc": {
         "vende": 110,
@@ -1319,7 +1319,7 @@
       "nombre": "Remains of Voltorb",
       "clientId": 35886,
       "categoria": "creature-items",
-      "sprite": "ui/comercio/item",
+      "sprite": "items/cliente/35886",
       "apilable": null,
       "precioNpc": {
         "vende": 20,
@@ -1332,7 +1332,7 @@
       "nombre": "Remains of Electrode",
       "clientId": 35887,
       "categoria": "creature-items",
-      "sprite": "ui/comercio/item",
+      "sprite": "items/cliente/35887",
       "apilable": null,
       "precioNpc": {
         "vende": 100,
@@ -1345,7 +1345,7 @@
       "nombre": "Exeggcute Seed",
       "clientId": 35888,
       "categoria": "creature-items",
-      "sprite": "ui/comercio/item",
+      "sprite": "items/cliente/35888",
       "apilable": null,
       "precioNpc": {
         "vende": 20,
@@ -1358,7 +1358,7 @@
       "nombre": "Coconut Leaves",
       "clientId": 35889,
       "categoria": "creature-items",
-      "sprite": "ui/comercio/item",
+      "sprite": "items/cliente/35889",
       "apilable": null,
       "precioNpc": {
         "vende": 235,
@@ -1371,7 +1371,7 @@
       "nombre": "Cubone Skull",
       "clientId": 35890,
       "categoria": "creature-items",
-      "sprite": "ui/comercio/item",
+      "sprite": "items/cliente/35890",
       "apilable": null,
       "precioNpc": {
         "vende": 40,
@@ -1384,7 +1384,7 @@
       "nombre": "Bone",
       "clientId": 35891,
       "categoria": "creature-items",
-      "sprite": "ui/comercio/item",
+      "sprite": "items/cliente/35891",
       "apilable": null,
       "precioNpc": {
         "vende": 115,
@@ -1397,7 +1397,7 @@
       "nombre": "Kick Machine",
       "clientId": 35892,
       "categoria": "creature-items",
-      "sprite": "ui/comercio/item",
+      "sprite": "items/cliente/35892",
       "apilable": null,
       "precioNpc": {
         "vende": 120,
@@ -1410,7 +1410,7 @@
       "nombre": "Punching Machine",
       "clientId": 35893,
       "categoria": "creature-items",
-      "sprite": "ui/comercio/item",
+      "sprite": "items/cliente/35893",
       "apilable": null,
       "precioNpc": {
         "vende": 125,
@@ -1423,7 +1423,7 @@
       "nombre": "Big Tongue",
       "clientId": 35894,
       "categoria": "creature-items",
-      "sprite": "ui/comercio/item",
+      "sprite": "items/cliente/35894",
       "apilable": null,
       "precioNpc": {
         "vende": 120,
@@ -1436,7 +1436,7 @@
       "nombre": "Poison Pore",
       "clientId": 35895,
       "categoria": "creature-items",
-      "sprite": "ui/comercio/item",
+      "sprite": "items/cliente/35895",
       "apilable": null,
       "precioNpc": {
         "vende": 20,
@@ -1449,7 +1449,7 @@
       "nombre": "Toxic Scale",
       "clientId": 35896,
       "categoria": "creature-items",
-      "sprite": "ui/comercio/item",
+      "sprite": "items/cliente/35896",
       "apilable": null,
       "precioNpc": {
         "vende": 115,
@@ -1462,7 +1462,7 @@
       "nombre": "Hardrock Shell",
       "clientId": 35897,
       "categoria": "creature-items",
-      "sprite": "ui/comercio/item",
+      "sprite": "items/cliente/35897",
       "apilable": null,
       "precioNpc": {
         "vende": 70,
@@ -1475,7 +1475,7 @@
       "nombre": "Horn Drill",
       "clientId": 35898,
       "categoria": "creature-items",
-      "sprite": "ui/comercio/item",
+      "sprite": "items/cliente/35898",
       "apilable": null,
       "precioNpc": {
         "vende": 180,
@@ -1488,7 +1488,7 @@
       "nombre": "Lucky Egg",
       "clientId": 35899,
       "categoria": "creature-items",
-      "sprite": "ui/comercio/item",
+      "sprite": "items/cliente/35899",
       "apilable": null,
       "precioNpc": {
         "vende": 125,
@@ -1501,7 +1501,7 @@
       "nombre": "Vine Hair",
       "clientId": 35900,
       "categoria": "creature-items",
-      "sprite": "ui/comercio/item",
+      "sprite": "items/cliente/35900",
       "apilable": null,
       "precioNpc": {
         "vende": 115,
@@ -1514,7 +1514,7 @@
       "nombre": "Kangaskhan Ear",
       "clientId": 35901,
       "categoria": "creature-items",
-      "sprite": "ui/comercio/item",
+      "sprite": "items/cliente/35901",
       "apilable": null,
       "precioNpc": {
         "vende": 185,
@@ -1527,7 +1527,7 @@
       "nombre": "Horsea Tail",
       "clientId": 35902,
       "categoria": "creature-items",
-      "sprite": "ui/comercio/item",
+      "sprite": "items/cliente/35902",
       "apilable": null,
       "precioNpc": {
         "vende": 20,
@@ -1540,7 +1540,7 @@
       "nombre": "Seadra Fin",
       "clientId": 35903,
       "categoria": "creature-items",
-      "sprite": "ui/comercio/item",
+      "sprite": "items/cliente/35903",
       "apilable": null,
       "precioNpc": {
         "vende": 110,
@@ -1553,7 +1553,7 @@
       "nombre": "Goldeen Tail",
       "clientId": 35904,
       "categoria": "creature-items",
-      "sprite": "ui/comercio/item",
+      "sprite": "items/cliente/35904",
       "apilable": null,
       "precioNpc": {
         "vende": 20,
@@ -1566,7 +1566,7 @@
       "nombre": "Seaking Tail",
       "clientId": 35905,
       "categoria": "creature-items",
-      "sprite": "ui/comercio/item",
+      "sprite": "items/cliente/35905",
       "apilable": null,
       "precioNpc": {
         "vende": 100,
@@ -1579,7 +1579,7 @@
       "nombre": "Star Core",
       "clientId": 35906,
       "categoria": "creature-items",
-      "sprite": "ui/comercio/item",
+      "sprite": "items/cliente/35906",
       "apilable": null,
       "precioNpc": {
         "vende": 45,
@@ -1592,7 +1592,7 @@
       "nombre": "Star Jewel",
       "clientId": 35907,
       "categoria": "creature-items",
-      "sprite": "ui/comercio/item",
+      "sprite": "items/cliente/35907",
       "apilable": null,
       "precioNpc": {
         "vende": 180,
@@ -1605,7 +1605,7 @@
       "nombre": "Mimic Clothes",
       "clientId": 35908,
       "categoria": "creature-items",
-      "sprite": "ui/comercio/item",
+      "sprite": "items/cliente/35908",
       "apilable": null,
       "precioNpc": {
         "vende": 145,
@@ -1618,7 +1618,7 @@
       "nombre": "Scythe",
       "clientId": 35909,
       "categoria": "creature-items",
-      "sprite": "ui/comercio/item",
+      "sprite": "items/cliente/35909",
       "apilable": null,
       "precioNpc": {
         "vende": 240,
@@ -1631,7 +1631,7 @@
       "nombre": "Psychic Wig",
       "clientId": 35910,
       "categoria": "creature-items",
-      "sprite": "ui/comercio/item",
+      "sprite": "items/cliente/35910",
       "apilable": null,
       "precioNpc": {
         "vende": 185,
@@ -1644,7 +1644,7 @@
       "nombre": "Electric Tail",
       "clientId": 35911,
       "categoria": "creature-items",
-      "sprite": "ui/comercio/item",
+      "sprite": "items/cliente/35911",
       "apilable": null,
       "precioNpc": {
         "vende": 245,
@@ -1657,7 +1657,7 @@
       "nombre": "Magma Foot",
       "clientId": 35912,
       "categoria": "creature-items",
-      "sprite": "ui/comercio/item",
+      "sprite": "items/cliente/35912",
       "apilable": null,
       "precioNpc": {
         "vende": 235,
@@ -1670,7 +1670,7 @@
       "nombre": "Pinsir Horn",
       "clientId": 35913,
       "categoria": "creature-items",
-      "sprite": "ui/comercio/item",
+      "sprite": "items/cliente/35913",
       "apilable": null,
       "precioNpc": {
         "vende": 240,
@@ -1683,7 +1683,7 @@
       "nombre": "Bull Tail",
       "clientId": 35914,
       "categoria": "creature-items",
-      "sprite": "ui/comercio/item",
+      "sprite": "items/cliente/35914",
       "apilable": null,
       "precioNpc": {
         "vende": 115,
@@ -1696,7 +1696,7 @@
       "nombre": "Magikarp Fin",
       "clientId": 35915,
       "categoria": "creature-items",
-      "sprite": "ui/comercio/item",
+      "sprite": "items/cliente/35915",
       "apilable": null,
       "precioNpc": {
         "vende": 15,
@@ -1709,7 +1709,7 @@
       "nombre": "Gyarados Tail",
       "clientId": 35916,
       "categoria": "creature-items",
-      "sprite": "ui/comercio/item",
+      "sprite": "items/cliente/35916",
       "apilable": null,
       "precioNpc": {
         "vende": 240,
@@ -1722,7 +1722,7 @@
       "nombre": "Lapras Fin",
       "clientId": 35917,
       "categoria": "creature-items",
-      "sprite": "ui/comercio/item",
+      "sprite": "items/cliente/35917",
       "apilable": null,
       "precioNpc": {
         "vende": 250,
@@ -1735,7 +1735,7 @@
       "nombre": "DNA Gosme",
       "clientId": 35918,
       "categoria": "creature-items",
-      "sprite": "ui/comercio/item",
+      "sprite": "items/cliente/35918",
       "apilable": null,
       "precioNpc": {
         "vende": 150,
@@ -1748,7 +1748,7 @@
       "nombre": "Furry Tail",
       "clientId": 35919,
       "categoria": "creature-items",
-      "sprite": "ui/comercio/item",
+      "sprite": "items/cliente/35919",
       "apilable": null,
       "precioNpc": {
         "vende": 40,
@@ -1761,7 +1761,7 @@
       "nombre": "Aquatic Tail",
       "clientId": 35920,
       "categoria": "creature-items",
-      "sprite": "ui/comercio/item",
+      "sprite": "items/cliente/35920",
       "apilable": null,
       "precioNpc": {
         "vende": 180,
@@ -1774,7 +1774,7 @@
       "nombre": "Electric Collar",
       "clientId": 35921,
       "categoria": "creature-items",
-      "sprite": "ui/comercio/item",
+      "sprite": "items/cliente/35921",
       "apilable": null,
       "precioNpc": {
         "vende": 185,
@@ -1787,7 +1787,7 @@
       "nombre": "Blaze Tail",
       "clientId": 35922,
       "categoria": "creature-items",
-      "sprite": "ui/comercio/item",
+      "sprite": "items/cliente/35922",
       "apilable": null,
       "precioNpc": {
         "vende": 180,
@@ -1800,7 +1800,7 @@
       "nombre": "Virtual Head",
       "clientId": 35923,
       "categoria": "creature-items",
-      "sprite": "ui/comercio/item",
+      "sprite": "items/cliente/35923",
       "apilable": null,
       "precioNpc": {
         "vende": 110,
@@ -1813,7 +1813,7 @@
       "nombre": "Helix Shell",
       "clientId": 35924,
       "categoria": "creature-items",
-      "sprite": "ui/comercio/item",
+      "sprite": "items/cliente/35924",
       "apilable": null,
       "precioNpc": {
         "vende": 45,
@@ -1826,7 +1826,7 @@
       "nombre": "Spike Shell",
       "clientId": 35925,
       "categoria": "creature-items",
-      "sprite": "ui/comercio/item",
+      "sprite": "items/cliente/35925",
       "apilable": null,
       "precioNpc": {
         "vende": 185,
@@ -1839,7 +1839,7 @@
       "nombre": "Dome Shell",
       "clientId": 35926,
       "categoria": "creature-items",
-      "sprite": "ui/comercio/item",
+      "sprite": "items/cliente/35926",
       "apilable": null,
       "precioNpc": {
         "vende": 40,
@@ -1852,7 +1852,7 @@
       "nombre": "Gray Scythe",
       "clientId": 35927,
       "categoria": "creature-items",
-      "sprite": "ui/comercio/item",
+      "sprite": "items/cliente/35927",
       "apilable": null,
       "precioNpc": {
         "vende": 185,
@@ -1865,7 +1865,7 @@
       "nombre": "Ptera Wing",
       "clientId": 35928,
       "categoria": "creature-items",
-      "sprite": "ui/comercio/item",
+      "sprite": "items/cliente/35928",
       "apilable": null,
       "precioNpc": {
         "vende": 240,
@@ -1878,7 +1878,7 @@
       "nombre": "Snorlax Paw",
       "clientId": 35929,
       "categoria": "creature-items",
-      "sprite": "ui/comercio/item",
+      "sprite": "items/cliente/35929",
       "apilable": null,
       "precioNpc": {
         "vende": 245,
@@ -1891,7 +1891,7 @@
       "nombre": "Ice Feather",
       "clientId": 35930,
       "categoria": "creature-items",
-      "sprite": "ui/comercio/item",
+      "sprite": "items/cliente/35930",
       "apilable": null,
       "precioNpc": {
         "vende": 150000,
@@ -1904,7 +1904,7 @@
       "nombre": "Electric Feather",
       "clientId": 35931,
       "categoria": "creature-items",
-      "sprite": "ui/comercio/item",
+      "sprite": "items/cliente/35931",
       "apilable": null,
       "precioNpc": {
         "vende": 150000,
@@ -1917,7 +1917,7 @@
       "nombre": "Flame Feather",
       "clientId": 35932,
       "categoria": "creature-items",
-      "sprite": "ui/comercio/item",
+      "sprite": "items/cliente/35932",
       "apilable": null,
       "precioNpc": {
         "vende": 150000,
@@ -1930,7 +1930,7 @@
       "nombre": "Dratini Ear",
       "clientId": 35933,
       "categoria": "creature-items",
-      "sprite": "ui/comercio/item",
+      "sprite": "items/cliente/35933",
       "apilable": null,
       "precioNpc": {
         "vende": 78,
@@ -1943,7 +1943,7 @@
       "nombre": "Dragonair Tail",
       "clientId": 35934,
       "categoria": "creature-items",
-      "sprite": "ui/comercio/item",
+      "sprite": "items/cliente/35934",
       "apilable": null,
       "precioNpc": {
         "vende": 245,
@@ -1956,7 +1956,7 @@
       "nombre": "Dragonite Tail",
       "clientId": 35935,
       "categoria": "creature-items",
-      "sprite": "ui/comercio/item",
+      "sprite": "items/cliente/35935",
       "apilable": null,
       "precioNpc": {
         "vende": 245,
@@ -1969,7 +1969,7 @@
       "nombre": "Chicory",
       "clientId": 35938,
       "categoria": "creature-items",
-      "sprite": "ui/comercio/item",
+      "sprite": "items/cliente/35938",
       "apilable": null,
       "precioNpc": {
         "vende": 15,
@@ -1982,7 +1982,7 @@
       "nombre": "Big Leaf",
       "clientId": 35939,
       "categoria": "creature-items",
-      "sprite": "ui/comercio/item",
+      "sprite": "items/cliente/35939",
       "apilable": null,
       "precioNpc": {
         "vende": 100,
@@ -1995,7 +1995,7 @@
       "nombre": "Big Petal",
       "clientId": 35940,
       "categoria": "creature-items",
-      "sprite": "ui/comercio/item",
+      "sprite": "items/cliente/35940",
       "apilable": null,
       "precioNpc": {
         "vende": 180,
@@ -2008,7 +2008,7 @@
       "nombre": "Cyndaquil Nose",
       "clientId": 35941,
       "categoria": "creature-items",
-      "sprite": "ui/comercio/item",
+      "sprite": "items/cliente/35941",
       "apilable": null,
       "precioNpc": {
         "vende": 15,
@@ -2021,7 +2021,7 @@
       "nombre": "Quilava Fur",
       "clientId": 35942,
       "categoria": "creature-items",
-      "sprite": "ui/comercio/item",
+      "sprite": "items/cliente/35942",
       "apilable": null,
       "precioNpc": {
         "vende": 105,
@@ -2034,7 +2034,7 @@
       "nombre": "Typhlosion Fur",
       "clientId": 35943,
       "categoria": "creature-items",
-      "sprite": "ui/comercio/item",
+      "sprite": "items/cliente/35943",
       "apilable": null,
       "precioNpc": {
         "vende": 185,
@@ -2047,7 +2047,7 @@
       "nombre": "Totodile Tail",
       "clientId": 35944,
       "categoria": "creature-items",
-      "sprite": "ui/comercio/item",
+      "sprite": "items/cliente/35944",
       "apilable": null,
       "precioNpc": {
         "vende": 15,
@@ -2060,7 +2060,7 @@
       "nombre": "Crocodile Hair",
       "clientId": 35945,
       "categoria": "creature-items",
-      "sprite": "ui/comercio/item",
+      "sprite": "items/cliente/35945",
       "apilable": null,
       "precioNpc": {
         "vende": 100,
@@ -2073,7 +2073,7 @@
       "nombre": "Red Hair",
       "clientId": 35946,
       "categoria": "creature-items",
-      "sprite": "ui/comercio/item",
+      "sprite": "items/cliente/35946",
       "apilable": null,
       "precioNpc": {
         "vende": 180,
@@ -2086,7 +2086,7 @@
       "nombre": "Furry Tail",
       "clientId": 35947,
       "categoria": "creature-items",
-      "sprite": "ui/comercio/item",
+      "sprite": "items/cliente/35947",
       "apilable": null,
       "precioNpc": {
         "vende": 20,
@@ -2099,7 +2099,7 @@
       "nombre": "Furret Tail",
       "clientId": 35948,
       "categoria": "creature-items",
-      "sprite": "ui/comercio/item",
+      "sprite": "items/cliente/35948",
       "apilable": null,
       "precioNpc": {
         "vende": 105,
@@ -2112,7 +2112,7 @@
       "nombre": "Owl Antennas",
       "clientId": 35949,
       "categoria": "creature-items",
-      "sprite": "ui/comercio/item",
+      "sprite": "items/cliente/35949",
       "apilable": null,
       "precioNpc": {
         "vende": 40,
@@ -2125,7 +2125,7 @@
       "nombre": "Owl Crest",
       "clientId": 35950,
       "categoria": "creature-items",
-      "sprite": "ui/comercio/item",
+      "sprite": "items/cliente/35950",
       "apilable": null,
       "precioNpc": {
         "vende": 120,
@@ -2138,7 +2138,7 @@
       "nombre": "Ladybug Wings",
       "clientId": 35951,
       "categoria": "creature-items",
-      "sprite": "ui/comercio/item",
+      "sprite": "items/cliente/35951",
       "apilable": null,
       "precioNpc": {
         "vende": 25,
@@ -2151,7 +2151,7 @@
       "nombre": "Ledian Wings",
       "clientId": 35952,
       "categoria": "creature-items",
-      "sprite": "ui/comercio/item",
+      "sprite": "items/cliente/35952",
       "apilable": null,
       "precioNpc": {
         "vende": 100,
@@ -2164,7 +2164,7 @@
       "nombre": "Spider Legs",
       "clientId": 35953,
       "categoria": "creature-items",
-      "sprite": "ui/comercio/item",
+      "sprite": "items/cliente/35953",
       "apilable": null,
       "precioNpc": {
         "vende": 25,
@@ -2177,7 +2177,7 @@
       "nombre": "Arachnid Legs",
       "clientId": 35954,
       "categoria": "creature-items",
-      "sprite": "ui/comercio/item",
+      "sprite": "items/cliente/35954",
       "apilable": null,
       "precioNpc": {
         "vende": 105,
@@ -2190,7 +2190,7 @@
       "nombre": "Giant Bat Wing",
       "clientId": 35955,
       "categoria": "creature-items",
-      "sprite": "ui/comercio/item",
+      "sprite": "items/cliente/35955",
       "apilable": null,
       "precioNpc": {
         "vende": 185,
@@ -2203,7 +2203,7 @@
       "nombre": "Teardrop Orb",
       "clientId": 35956,
       "categoria": "creature-items",
-      "sprite": "ui/comercio/item",
+      "sprite": "items/cliente/35956",
       "apilable": null,
       "precioNpc": {
         "vende": 20,
@@ -2216,7 +2216,7 @@
       "nombre": "Electric Fish Tail",
       "clientId": 35957,
       "categoria": "creature-items",
-      "sprite": "ui/comercio/item",
+      "sprite": "items/cliente/35957",
       "apilable": null,
       "precioNpc": {
         "vende": 180,
@@ -2229,7 +2229,7 @@
       "nombre": "Pichu Ears",
       "clientId": 35958,
       "categoria": "creature-items",
-      "sprite": "ui/comercio/item",
+      "sprite": "items/cliente/35958",
       "apilable": null,
       "precioNpc": {
         "vende": 45,
@@ -2242,7 +2242,7 @@
       "nombre": "Small Pink Ears",
       "clientId": 35959,
       "categoria": "creature-items",
-      "sprite": "ui/comercio/item",
+      "sprite": "items/cliente/35959",
       "apilable": null,
       "precioNpc": {
         "vende": 40,
@@ -2255,7 +2255,7 @@
       "nombre": "Small Topknot",
       "clientId": 35960,
       "categoria": "creature-items",
-      "sprite": "ui/comercio/item",
+      "sprite": "items/cliente/35960",
       "apilable": null,
       "precioNpc": {
         "vende": 45,
@@ -2268,7 +2268,7 @@
       "nombre": "Baby Egg Shell",
       "clientId": 35961,
       "categoria": "creature-items",
-      "sprite": "ui/comercio/item",
+      "sprite": "items/cliente/35961",
       "apilable": null,
       "precioNpc": {
         "vende": 15,
@@ -2281,7 +2281,7 @@
       "nombre": "Dainty Wing",
       "clientId": 35962,
       "categoria": "creature-items",
-      "sprite": "ui/comercio/item",
+      "sprite": "items/cliente/35962",
       "apilable": null,
       "precioNpc": {
         "vende": 185,
@@ -2294,7 +2294,7 @@
       "nombre": "Natu Wing",
       "clientId": 35963,
       "categoria": "creature-items",
-      "sprite": "ui/comercio/item",
+      "sprite": "items/cliente/35963",
       "apilable": null,
       "precioNpc": {
         "vende": 70,
@@ -2307,7 +2307,7 @@
       "nombre": "Xatu Wing",
       "clientId": 35964,
       "categoria": "creature-items",
-      "sprite": "ui/comercio/item",
+      "sprite": "items/cliente/35964",
       "apilable": null,
       "precioNpc": {
         "vende": 180,
@@ -2320,7 +2320,7 @@
       "nombre": "Yellow Sheep Wool",
       "clientId": 35965,
       "categoria": "creature-items",
-      "sprite": "ui/comercio/item",
+      "sprite": "items/cliente/35965",
       "apilable": null,
       "precioNpc": {
         "vende": 40,
@@ -2333,7 +2333,7 @@
       "nombre": "Soft Wool",
       "clientId": 35966,
       "categoria": "creature-items",
-      "sprite": "ui/comercio/item",
+      "sprite": "items/cliente/35966",
       "apilable": null,
       "precioNpc": {
         "vende": 100,
@@ -2346,7 +2346,7 @@
       "nombre": "Electric Sheep Tail",
       "clientId": 35967,
       "categoria": "creature-items",
-      "sprite": "ui/comercio/item",
+      "sprite": "items/cliente/35967",
       "apilable": null,
       "precioNpc": {
         "vende": 185,
@@ -2359,7 +2359,7 @@
       "nombre": "Small Red Flower",
       "clientId": 35968,
       "categoria": "creature-items",
-      "sprite": "ui/comercio/item",
+      "sprite": "items/cliente/35968",
       "apilable": null,
       "precioNpc": {
         "vende": 115,
@@ -2372,7 +2372,7 @@
       "nombre": "Aquatic Tail",
       "clientId": 35969,
       "categoria": "creature-items",
-      "sprite": "ui/comercio/item",
+      "sprite": "items/cliente/35969",
       "apilable": null,
       "precioNpc": {
         "vende": 45,
@@ -2385,7 +2385,7 @@
       "nombre": "Cute Ears",
       "clientId": 35970,
       "categoria": "creature-items",
-      "sprite": "ui/comercio/item",
+      "sprite": "items/cliente/35970",
       "apilable": null,
       "precioNpc": {
         "vende": 180,
@@ -2398,7 +2398,7 @@
       "nombre": "Branch of Stones",
       "clientId": 35971,
       "categoria": "creature-items",
-      "sprite": "ui/comercio/item",
+      "sprite": "items/cliente/35971",
       "apilable": null,
       "precioNpc": {
         "vende": 245,
@@ -2411,7 +2411,7 @@
       "nombre": "Frog Topknot",
       "clientId": 35972,
       "categoria": "creature-items",
-      "sprite": "ui/comercio/item",
+      "sprite": "items/cliente/35972",
       "apilable": null,
       "precioNpc": {
         "vende": 140,
@@ -2424,7 +2424,7 @@
       "nombre": "Pointy Leaf",
       "clientId": 35973,
       "categoria": "creature-items",
-      "sprite": "ui/comercio/item",
+      "sprite": "items/cliente/35973",
       "apilable": null,
       "precioNpc": {
         "vende": 15,
@@ -2437,7 +2437,7 @@
       "nombre": "Yellow Flower",
       "clientId": 35974,
       "categoria": "creature-items",
-      "sprite": "ui/comercio/item",
+      "sprite": "items/cliente/35974",
       "apilable": null,
       "precioNpc": {
         "vende": 78,
@@ -2450,7 +2450,7 @@
       "nombre": "Dandelion",
       "clientId": 35975,
       "categoria": "creature-items",
-      "sprite": "ui/comercio/item",
+      "sprite": "items/cliente/35975",
       "apilable": null,
       "precioNpc": {
         "vende": 115,
@@ -2463,7 +2463,7 @@
       "nombre": "Aipom Paw",
       "clientId": 35976,
       "categoria": "creature-items",
-      "sprite": "ui/comercio/item",
+      "sprite": "items/cliente/35976",
       "apilable": null,
       "precioNpc": {
         "vende": 105,
@@ -2476,7 +2476,7 @@
       "nombre": "Sun Leaves",
       "clientId": 35977,
       "categoria": "creature-items",
-      "sprite": "ui/comercio/item",
+      "sprite": "items/cliente/35977",
       "apilable": null,
       "precioNpc": {
         "vende": 15,
@@ -2489,7 +2489,7 @@
       "nombre": "Sunflower",
       "clientId": 35978,
       "categoria": "creature-items",
-      "sprite": "ui/comercio/item",
+      "sprite": "items/cliente/35978",
       "apilable": null,
       "precioNpc": {
         "vende": 70,
@@ -2502,7 +2502,7 @@
       "nombre": "Mosquito Tail",
       "clientId": 35979,
       "categoria": "creature-items",
-      "sprite": "ui/comercio/item",
+      "sprite": "items/cliente/35979",
       "apilable": null,
       "precioNpc": {
         "vende": 115,
@@ -2515,7 +2515,7 @@
       "nombre": "Magenta Gill",
       "clientId": 35980,
       "categoria": "creature-items",
-      "sprite": "ui/comercio/item",
+      "sprite": "items/cliente/35980",
       "apilable": null,
       "precioNpc": {
         "vende": 40,
@@ -2528,7 +2528,7 @@
       "nombre": "Amphibian Tail",
       "clientId": 35981,
       "categoria": "creature-items",
-      "sprite": "ui/comercio/item",
+      "sprite": "items/cliente/35981",
       "apilable": null,
       "precioNpc": {
         "vende": 120,
@@ -2541,7 +2541,7 @@
       "nombre": "Psychic Ears",
       "clientId": 35982,
       "categoria": "creature-items",
-      "sprite": "ui/comercio/item",
+      "sprite": "items/cliente/35982",
       "apilable": null,
       "precioNpc": {
         "vende": 185,
@@ -2554,7 +2554,7 @@
       "nombre": "Dark Ears",
       "clientId": 35983,
       "categoria": "creature-items",
-      "sprite": "ui/comercio/item",
+      "sprite": "items/cliente/35983",
       "apilable": null,
       "precioNpc": {
         "vende": 180,
@@ -2567,7 +2567,7 @@
       "nombre": "Yellow Beak",
       "clientId": 35984,
       "categoria": "creature-items",
-      "sprite": "ui/comercio/item",
+      "sprite": "items/cliente/35984",
       "apilable": null,
       "precioNpc": {
         "vende": 115,
@@ -2580,7 +2580,7 @@
       "nombre": "Slowking Necklace",
       "clientId": 35985,
       "categoria": "creature-items",
-      "sprite": "ui/comercio/item",
+      "sprite": "items/cliente/35985",
       "apilable": null,
       "precioNpc": {
         "vende": 245,
@@ -2593,7 +2593,7 @@
       "nombre": "Miss Traces",
       "clientId": 35986,
       "categoria": "creature-items",
-      "sprite": "ui/comercio/item",
+      "sprite": "items/cliente/35986",
       "apilable": null,
       "precioNpc": {
         "vende": 235,
@@ -2606,7 +2606,7 @@
       "nombre": "Alphabetic Eye",
       "clientId": 35987,
       "categoria": "creature-items",
-      "sprite": "ui/comercio/item",
+      "sprite": "items/cliente/35987",
       "apilable": null,
       "precioNpc": {
         "vende": 20,
@@ -2619,7 +2619,7 @@
       "nombre": "Two-Eyed Black Tail",
       "clientId": 35988,
       "categoria": "creature-items",
-      "sprite": "ui/comercio/item",
+      "sprite": "items/cliente/35988",
       "apilable": null,
       "precioNpc": {
         "vende": 245,
@@ -2632,7 +2632,7 @@
       "nombre": "Giraffe Antenna",
       "clientId": 35989,
       "categoria": "creature-items",
-      "sprite": "ui/comercio/item",
+      "sprite": "items/cliente/35989",
       "apilable": null,
       "precioNpc": {
         "vende": 185,
@@ -2645,7 +2645,7 @@
       "nombre": "Pineco Shell",
       "clientId": 35990,
       "categoria": "creature-items",
-      "sprite": "ui/comercio/item",
+      "sprite": "items/cliente/35990",
       "apilable": null,
       "precioNpc": {
         "vende": 20,
@@ -2658,7 +2658,7 @@
       "nombre": "Forretress Shell",
       "clientId": 35991,
       "categoria": "creature-items",
-      "sprite": "ui/comercio/item",
+      "sprite": "items/cliente/35991",
       "apilable": null,
       "precioNpc": {
         "vende": 235,
@@ -2671,7 +2671,7 @@
       "nombre": "Dunsparce Wings",
       "clientId": 35992,
       "categoria": "creature-items",
-      "sprite": "ui/comercio/item",
+      "sprite": "items/cliente/35992",
       "apilable": null,
       "precioNpc": {
         "vende": 78,
@@ -2684,7 +2684,7 @@
       "nombre": "Bat Claw",
       "clientId": 35993,
       "categoria": "creature-items",
-      "sprite": "ui/comercio/item",
+      "sprite": "items/cliente/35993",
       "apilable": null,
       "precioNpc": {
         "vende": 105,
@@ -2697,7 +2697,7 @@
       "nombre": "Steelix Tail",
       "clientId": 35994,
       "categoria": "creature-items",
-      "sprite": "ui/comercio/item",
+      "sprite": "items/cliente/35994",
       "apilable": null,
       "precioNpc": {
         "vende": 245,
@@ -2710,7 +2710,7 @@
       "nombre": "Snubull Ear",
       "clientId": 35995,
       "categoria": "creature-items",
-      "sprite": "ui/comercio/item",
+      "sprite": "items/cliente/35995",
       "apilable": null,
       "precioNpc": {
         "vende": 70,
@@ -2723,7 +2723,7 @@
       "nombre": "Granbull Ear",
       "clientId": 35996,
       "categoria": "creature-items",
-      "sprite": "ui/comercio/item",
+      "sprite": "items/cliente/35996",
       "apilable": null,
       "precioNpc": {
         "vende": 180,
@@ -2736,7 +2736,7 @@
       "nombre": "Puffer Tail",
       "clientId": 35997,
       "categoria": "creature-items",
-      "sprite": "ui/comercio/item",
+      "sprite": "items/cliente/35997",
       "apilable": null,
       "precioNpc": {
         "vende": 115,
@@ -2749,7 +2749,7 @@
       "nombre": "Scizor Claw",
       "clientId": 35998,
       "categoria": "creature-items",
-      "sprite": "ui/comercio/item",
+      "sprite": "items/cliente/35998",
       "apilable": null,
       "precioNpc": {
         "vende": 235,
@@ -2762,7 +2762,7 @@
       "nombre": "Shuckle Shell",
       "clientId": 35999,
       "categoria": "creature-items",
-      "sprite": "ui/comercio/item",
+      "sprite": "items/cliente/35999",
       "apilable": null,
       "precioNpc": {
         "vende": 100,
@@ -2775,7 +2775,7 @@
       "nombre": "Bug Horn",
       "clientId": 36000,
       "categoria": "creature-items",
-      "sprite": "ui/comercio/item",
+      "sprite": "items/cliente/36000",
       "apilable": null,
       "precioNpc": {
         "vende": 245,
@@ -2788,7 +2788,7 @@
       "nombre": "Sneasel Feather",
       "clientId": 36001,
       "categoria": "creature-items",
-      "sprite": "ui/comercio/item",
+      "sprite": "items/cliente/36001",
       "apilable": null,
       "precioNpc": {
         "vende": 115,
@@ -2801,7 +2801,7 @@
       "nombre": "Moon Pendant",
       "clientId": 36002,
       "categoria": "creature-items",
-      "sprite": "ui/comercio/item",
+      "sprite": "items/cliente/36002",
       "apilable": null,
       "precioNpc": {
         "vende": 78,
@@ -2814,7 +2814,7 @@
       "nombre": "Bear Claw",
       "clientId": 36003,
       "categoria": "creature-items",
-      "sprite": "ui/comercio/item",
+      "sprite": "items/cliente/36003",
       "apilable": null,
       "precioNpc": {
         "vende": 200,
@@ -2827,7 +2827,7 @@
       "nombre": "Magma Ears",
       "clientId": 36004,
       "categoria": "creature-items",
-      "sprite": "ui/comercio/item",
+      "sprite": "items/cliente/36004",
       "apilable": null,
       "precioNpc": {
         "vende": 25,
@@ -2840,7 +2840,7 @@
       "nombre": "Magma Shell",
       "clientId": 36005,
       "categoria": "creature-items",
-      "sprite": "ui/comercio/item",
+      "sprite": "items/cliente/36005",
       "apilable": null,
       "precioNpc": {
         "vende": 185,
@@ -2853,7 +2853,7 @@
       "nombre": "Furry Hair",
       "clientId": 36006,
       "categoria": "creature-items",
-      "sprite": "ui/comercio/item",
+      "sprite": "items/cliente/36006",
       "apilable": null,
       "precioNpc": {
         "vende": 20,
@@ -2866,7 +2866,7 @@
       "nombre": "Ice Tusks",
       "clientId": 36007,
       "categoria": "creature-items",
-      "sprite": "ui/comercio/item",
+      "sprite": "items/cliente/36007",
       "apilable": null,
       "precioNpc": {
         "vende": 180,
@@ -2879,7 +2879,7 @@
       "nombre": "Piece of Corsola",
       "clientId": 36008,
       "categoria": "creature-items",
-      "sprite": "ui/comercio/item",
+      "sprite": "items/cliente/36008",
       "apilable": null,
       "precioNpc": {
         "vende": 115,
@@ -2892,7 +2892,7 @@
       "nombre": "Small Blue Fin",
       "clientId": 36009,
       "categoria": "creature-items",
-      "sprite": "ui/comercio/item",
+      "sprite": "items/cliente/36009",
       "apilable": null,
       "precioNpc": {
         "vende": 25,
@@ -2905,7 +2905,7 @@
       "nombre": "Red Tentacle",
       "clientId": 36010,
       "categoria": "creature-items",
-      "sprite": "ui/comercio/item",
+      "sprite": "items/cliente/36010",
       "apilable": null,
       "precioNpc": {
         "vende": 140,
@@ -2918,7 +2918,7 @@
       "nombre": "Gift Tail",
       "clientId": 36011,
       "categoria": "creature-items",
-      "sprite": "ui/comercio/item",
+      "sprite": "items/cliente/36011",
       "apilable": null,
       "precioNpc": {
         "vende": 115,
@@ -2931,7 +2931,7 @@
       "nombre": "Blue Ray Tail",
       "clientId": 36012,
       "categoria": "creature-items",
-      "sprite": "ui/comercio/item",
+      "sprite": "items/cliente/36012",
       "apilable": null,
       "precioNpc": {
         "vende": 235,
@@ -2944,7 +2944,7 @@
       "nombre": "Steel Wing",
       "clientId": 36013,
       "categoria": "creature-items",
-      "sprite": "ui/comercio/item",
+      "sprite": "items/cliente/36013",
       "apilable": null,
       "precioNpc": {
         "vende": 245,
@@ -2957,7 +2957,7 @@
       "nombre": "Back Bone",
       "clientId": 36014,
       "categoria": "creature-items",
-      "sprite": "ui/comercio/item",
+      "sprite": "items/cliente/36014",
       "apilable": null,
       "precioNpc": {
         "vende": 40,
@@ -2970,7 +2970,7 @@
       "nombre": "Dark Canine Horns",
       "clientId": 36015,
       "categoria": "creature-items",
-      "sprite": "ui/comercio/item",
+      "sprite": "items/cliente/36015",
       "apilable": null,
       "precioNpc": {
         "vende": 235,
@@ -2983,7 +2983,7 @@
       "nombre": "Sea Dragon Fin",
       "clientId": 36016,
       "categoria": "creature-items",
-      "sprite": "ui/comercio/item",
+      "sprite": "items/cliente/36016",
       "apilable": null,
       "precioNpc": {
         "vende": 245,
@@ -2996,7 +2996,7 @@
       "nombre": "Small Elephant Ear",
       "clientId": 36017,
       "categoria": "creature-items",
-      "sprite": "ui/comercio/item",
+      "sprite": "items/cliente/36017",
       "apilable": null,
       "precioNpc": {
         "vende": 45,
@@ -3009,7 +3009,7 @@
       "nombre": "Elephant Foot",
       "clientId": 36018,
       "categoria": "creature-items",
-      "sprite": "ui/comercio/item",
+      "sprite": "items/cliente/36018",
       "apilable": null,
       "precioNpc": {
         "vende": 185,
@@ -3022,7 +3022,7 @@
       "nombre": "Dimensional Cube",
       "clientId": 36019,
       "categoria": "creature-items",
-      "sprite": "ui/comercio/item",
+      "sprite": "items/cliente/36019",
       "apilable": null,
       "precioNpc": {
         "vende": 180,
@@ -3035,7 +3035,7 @@
       "nombre": "Reindeer Horns",
       "clientId": 36020,
       "categoria": "creature-items",
-      "sprite": "ui/comercio/item",
+      "sprite": "items/cliente/36020",
       "apilable": null,
       "precioNpc": {
         "vende": 115,
@@ -3048,7 +3048,7 @@
       "nombre": "Smeargle Tail",
       "clientId": 36021,
       "categoria": "creature-items",
-      "sprite": "ui/comercio/item",
+      "sprite": "items/cliente/36021",
       "apilable": null,
       "precioNpc": {
         "vende": 185,
@@ -3061,7 +3061,7 @@
       "nombre": "Fist Bandages",
       "clientId": 36022,
       "categoria": "creature-items",
-      "sprite": "ui/comercio/item",
+      "sprite": "items/cliente/36022",
       "apilable": null,
       "precioNpc": {
         "vende": 125,
@@ -3074,7 +3074,7 @@
       "nombre": "Martial Arts Tail",
       "clientId": 36023,
       "categoria": "creature-items",
-      "sprite": "ui/comercio/item",
+      "sprite": "items/cliente/36023",
       "apilable": null,
       "precioNpc": {
         "vende": 120,
@@ -3087,7 +3087,7 @@
       "nombre": "Baby Hair",
       "clientId": 36024,
       "categoria": "creature-items",
-      "sprite": "ui/comercio/item",
+      "sprite": "items/cliente/36024",
       "apilable": null,
       "precioNpc": {
         "vende": 70,
@@ -3100,7 +3100,7 @@
       "nombre": "Plug Ears",
       "clientId": 36025,
       "categoria": "creature-items",
-      "sprite": "ui/comercio/item",
+      "sprite": "items/cliente/36025",
       "apilable": null,
       "precioNpc": {
         "vende": 78,
@@ -3113,7 +3113,7 @@
       "nombre": "Magma Topknot",
       "clientId": 36026,
       "categoria": "creature-items",
-      "sprite": "ui/comercio/item",
+      "sprite": "items/cliente/36026",
       "apilable": null,
       "precioNpc": {
         "vende": 70,
@@ -3126,7 +3126,7 @@
       "nombre": "Cow Tail",
       "clientId": 36027,
       "categoria": "creature-items",
-      "sprite": "ui/comercio/item",
+      "sprite": "items/cliente/36027",
       "apilable": null,
       "precioNpc": {
         "vende": 180,
@@ -3139,7 +3139,7 @@
       "nombre": "Nurse's Fur",
       "clientId": 36028,
       "categoria": "creature-items",
-      "sprite": "ui/comercio/item",
+      "sprite": "items/cliente/36028",
       "apilable": null,
       "precioNpc": {
         "vende": 235,
@@ -3152,7 +3152,7 @@
       "nombre": "Thunder Tiger Emblem",
       "clientId": 36029,
       "categoria": "creature-items",
-      "sprite": "ui/comercio/item",
+      "sprite": "items/cliente/36029",
       "apilable": null,
       "precioNpc": {
         "vende": 150000,
@@ -3165,7 +3165,7 @@
       "nombre": "Volcano Lion Star",
       "clientId": 36030,
       "categoria": "creature-items",
-      "sprite": "ui/comercio/item",
+      "sprite": "items/cliente/36030",
       "apilable": null,
       "precioNpc": {
         "vende": 150000,
@@ -3178,7 +3178,7 @@
       "nombre": "Aurora Crown",
       "clientId": 36031,
       "categoria": "creature-items",
-      "sprite": "ui/comercio/item",
+      "sprite": "items/cliente/36031",
       "apilable": null,
       "precioNpc": {
         "vende": 150000,
@@ -3191,7 +3191,7 @@
       "nombre": "Larvitar Tail",
       "clientId": 36032,
       "categoria": "creature-items",
-      "sprite": "ui/comercio/item",
+      "sprite": "items/cliente/36032",
       "apilable": null,
       "precioNpc": {
         "vende": 78,
@@ -3204,7 +3204,7 @@
       "nombre": "Rock Plate",
       "clientId": 36033,
       "categoria": "creature-items",
-      "sprite": "ui/comercio/item",
+      "sprite": "items/cliente/36033",
       "apilable": null,
       "precioNpc": {
         "vende": 125,
@@ -3217,7 +3217,7 @@
       "nombre": "Tyranitar Tail",
       "clientId": 36034,
       "categoria": "creature-items",
-      "sprite": "ui/comercio/item",
+      "sprite": "items/cliente/36034",
       "apilable": null,
       "precioNpc": {
         "vende": 235,
@@ -3230,7 +3230,7 @@
       "nombre": "Silver Wing",
       "clientId": 36035,
       "categoria": "creature-items",
-      "sprite": "ui/comercio/item",
+      "sprite": "items/cliente/36035",
       "apilable": null,
       "precioNpc": {
         "vende": 150000,
@@ -3243,7 +3243,7 @@
       "nombre": "Rainbow Wing",
       "clientId": 36036,
       "categoria": "creature-items",
-      "sprite": "ui/comercio/item",
+      "sprite": "items/cliente/36036",
       "apilable": null,
       "precioNpc": {
         "vende": 150000,
@@ -3256,7 +3256,7 @@
       "nombre": "pink fairy bow",
       "clientId": 48316,
       "categoria": "creature-items",
-      "sprite": "ui/comercio/item",
+      "sprite": "items/cliente/48316",
       "apilable": null,
       "precioNpc": {
         "vende": 245,
@@ -3269,7 +3269,7 @@
       "nombre": "mystic petal",
       "clientId": 31388,
       "categoria": "creature-items",
-      "sprite": "ui/comercio/item",
+      "sprite": "items/cliente/31388",
       "apilable": null,
       "precioNpc": {
         "vende": 245,

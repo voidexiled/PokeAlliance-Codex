@@ -12499,7 +12499,7 @@
       "tier": 1,
       "funcion": null,
       "elementos": ["fairy", "flying"],
-      "imagen": null,
+      "imagen": "/pokemon/036.2.png",
       "descripcion": {
         "es": "Rara vez lo ven las personas y se dice que la luna llena lo atrae a jugar en lagos desiertos."
       },
@@ -59908,7 +59908,7 @@
       "tier": 3,
       "funcion": null,
       "elementos": ["electric"],
-      "imagen": null,
+      "imagen": "/pokemon/181.2.png",
       "descripcion": {
         "es": "La luz de su cola puede verse desde el espacio. Por eso siempre se sabe exactamente dónde está, y por eso suele mantener la luz apagada."
       },
@@ -146508,7 +146508,7 @@
       "tier": 4,
       "funcion": null,
       "elementos": ["grass"],
-      "imagen": null,
+      "imagen": "/pokemon/387.1.png",
       "descripcion": {
         "es": "Sin descripción."
       },
@@ -146830,7 +146830,7 @@
       "tier": 3,
       "funcion": null,
       "elementos": ["grass"],
-      "imagen": null,
+      "imagen": "/pokemon/388.1.png",
       "descripcion": {
         "es": "Sin descripción."
       },
@@ -147200,7 +147200,7 @@
       "tier": "Super Rare",
       "funcion": null,
       "elementos": ["grass", "ground"],
-      "imagen": null,
+      "imagen": "/pokemon/389.1.png",
       "descripcion": {
         "es": "Sin descripción."
       },
@@ -147516,7 +147516,7 @@
       "tier": 4,
       "funcion": null,
       "elementos": ["fire"],
-      "imagen": null,
+      "imagen": "/pokemon/390.1.png",
       "descripcion": {
         "es": "Chimchar es ágil y trepa con paso firme. Suele establecer su hogar en acantilados escarpados. Es inmune al frío gracias al fuego que arde en su trasero."
       },
@@ -147864,7 +147864,7 @@
       "tier": 3,
       "funcion": null,
       "elementos": ["fire", "fighting"],
-      "imagen": null,
+      "imagen": "/pokemon/391.1.png",
       "descripcion": {
         "es": "Monferno controla con destreza la intensidad del fuego de su cola para mantener a sus rivales a la distancia ideal. Vive en las copas de los árboles y en rocas escarpadas."
       },
@@ -148223,7 +148223,7 @@
       "tier": "Super Rare",
       "funcion": null,
       "elementos": ["fire", "fighting"],
-      "imagen": null,
+      "imagen": "/pokemon/392.1.png",
       "descripcion": {
         "es": "Infernape practica un arte marcial único que emplea todas sus extremidades. El fuego de su cabeza arde con más intensidad a medida que avanza el combate."
       },
@@ -148624,7 +148624,7 @@
       "tier": null,
       "funcion": null,
       "elementos": ["normal", "flying"],
-      "imagen": null,
+      "imagen": "/pokemon/396.1.png",
       "descripcion": {
         "es": "Sin descripción."
       },
@@ -149010,7 +149010,7 @@
       "tier": null,
       "funcion": null,
       "elementos": ["normal", "flying"],
-      "imagen": null,
+      "imagen": "/pokemon/397.1.png",
       "descripcion": {
         "es": "Sin descripción."
       },
@@ -149461,7 +149461,7 @@
       "tier": "Legendary",
       "funcion": null,
       "elementos": ["normal", "flying"],
-      "imagen": null,
+      "imagen": "/pokemon/398.1.png",
       "descripcion": {
         "es": "Sin descripción."
       },
@@ -149888,7 +149888,7 @@
       "tier": null,
       "funcion": null,
       "elementos": ["electric"],
-      "imagen": null,
+      "imagen": "/pokemon/403.1.png",
       "descripcion": {
         "es": "Sin descripción."
       },
@@ -150198,7 +150198,7 @@
       "tier": null,
       "funcion": null,
       "elementos": ["electric"],
-      "imagen": null,
+      "imagen": "/pokemon/404.1.png",
       "descripcion": {
         "es": "Sin descripción."
       },
@@ -150536,7 +150536,7 @@
       "tier": "Super Rare",
       "funcion": null,
       "elementos": ["electric"],
-      "imagen": null,
+      "imagen": "/pokemon/405.1.png",
       "descripcion": {
         "es": "Sin descripción."
       },
@@ -150854,7 +150854,7 @@
       "tier": 3,
       "funcion": null,
       "elementos": ["rock"],
-      "imagen": null,
+      "imagen": "/pokemon/408.1.png",
       "descripcion": {
         "es": "Sin descripción."
       },
@@ -151194,7 +151194,7 @@
       "tier": "Ultra Rare",
       "funcion": null,
       "elementos": ["rock"],
-      "imagen": null,
+      "imagen": "/pokemon/409.1.png",
       "descripcion": {
         "es": "Sin descripción."
       },
@@ -151555,7 +151555,7 @@
       "tier": null,
       "funcion": null,
       "elementos": ["rock", "steel"],
-      "imagen": null,
+      "imagen": "/pokemon/410.1.png",
       "descripcion": {
         "es": "Sin descripción."
       },
@@ -151931,7 +151931,7 @@
       "tier": "Super Rare",
       "funcion": null,
       "elementos": ["rock", "steel"],
-      "imagen": null,
+      "imagen": "/pokemon/411.1.png",
       "descripcion": {
         "es": "Sin descripción."
       },
@@ -152308,7 +152308,7 @@
       "tier": 4,
       "funcion": null,
       "elementos": ["bug", "flying"],
-      "imagen": null,
+      "imagen": "/pokemon/415.1.png",
       "descripcion": {
         "es": "A Pokemon formed by three others. It busily gathers honey and delivers it to Vespiquen."
       },
@@ -152729,7 +152729,7 @@
       "tier": "Ultra Rare",
       "funcion": null,
       "elementos": ["bug", "flying"],
-      "imagen": null,
+      "imagen": "/pokemon/416.1.png",
       "descripcion": {
         "es": "Sin descripción."
       },
@@ -153103,7 +153103,7 @@
       "tier": "Super Rare",
       "funcion": null,
       "elementos": ["electric"],
-      "imagen": null,
+      "imagen": "/pokemon/417.1.png",
       "descripcion": {
         "es": "Sin descripción."
       },
@@ -153850,7 +153850,7 @@
       "tier": "Ultra Rare",
       "funcion": null,
       "elementos": ["ghost"],
-      "imagen": null,
+      "imagen": "/pokemon/429.1.png",
       "descripcion": {
         "es": "Sin descripción."
       },
@@ -154145,7 +154145,7 @@
       "tier": null,
       "funcion": null,
       "elementos": ["psychic", "fairy"],
-      "imagen": null
+      "imagen": "/pokemon/439.png"
     },
     {
       "id": "happiny",
@@ -154373,7 +154373,7 @@
       "tier": null,
       "funcion": null,
       "elementos": ["dragon", "ground"],
-      "imagen": null,
+      "imagen": "/pokemon/443.1.png",
       "descripcion": {
         "es": "Sin descripción."
       },
@@ -154749,7 +154749,7 @@
       "tier": null,
       "funcion": null,
       "elementos": ["dragon", "ground"],
-      "imagen": null,
+      "imagen": "/pokemon/444.1.png",
       "descripcion": {
         "es": "Sin descripción."
       },
@@ -155125,7 +155125,7 @@
       "tier": "Super Rare",
       "funcion": null,
       "elementos": ["dragon", "ground"],
-      "imagen": null,
+      "imagen": "/pokemon/445.1.png",
       "descripcion": {
         "es": "Sin descripción."
       },
@@ -155464,7 +155464,7 @@
       "tier": 3,
       "funcion": null,
       "elementos": ["fighting"],
-      "imagen": null,
+      "imagen": "/pokemon/447.1.png",
       "descripcion": {
         "es": "Sin descripción."
       },
@@ -155828,7 +155828,7 @@
       "tier": "Legendary",
       "funcion": null,
       "elementos": ["fighting", "steel"],
-      "imagen": null,
+      "imagen": "/pokemon/448.1.png",
       "descripcion": {
         "es": "Sin descripción."
       },
@@ -156076,7 +156076,7 @@
       "tier": "Mythic",
       "funcion": null,
       "elementos": ["fighting", "steel"],
-      "imagen": null,
+      "imagen": "/pokemon/448.2.png",
       "descripcion": {
         "es": "Sin descripción."
       },
@@ -156379,7 +156379,7 @@
       "tier": null,
       "funcion": null,
       "elementos": ["poison", "bug"],
-      "imagen": null,
+      "imagen": "/pokemon/451.1.png",
       "descripcion": {
         "es": "Sin descripción."
       },
@@ -157088,7 +157088,7 @@
       "tier": null,
       "funcion": null,
       "elementos": ["grass", "ice"],
-      "imagen": null,
+      "imagen": "/pokemon/459.1.png",
       "descripcion": {
         "es": "Sin descripción."
       },
@@ -157503,7 +157503,7 @@
       "tier": "Super Rare",
       "funcion": null,
       "elementos": ["grass", "ice"],
-      "imagen": null,
+      "imagen": "/pokemon/460.1.png",
       "descripcion": {
         "es": "Sin descripción."
       },
@@ -157745,7 +157745,7 @@
       "tier": null,
       "funcion": null,
       "elementos": ["grass", "ice"],
-      "imagen": null,
+      "imagen": "/pokemon/460.2.png",
       "descripcion": {
         "es": "Sin descripción."
       },
@@ -158278,7 +158278,7 @@
       "tier": "Legendary",
       "funcion": null,
       "elementos": ["ground", "rock"],
-      "imagen": null,
+      "imagen": "/pokemon/464.1.png",
       "descripcion": {
         "es": "Sin descripción."
       },
@@ -158668,7 +158668,7 @@
       "tier": "Super Rare",
       "funcion": null,
       "elementos": ["grass"],
-      "imagen": null,
+      "imagen": "/pokemon/465.1.png",
       "descripcion": {
         "es": "Sin descripción."
       },
@@ -159357,7 +159357,7 @@
       "tier": "Legendary",
       "funcion": null,
       "elementos": ["bug", "flying"],
-      "imagen": null,
+      "imagen": "/pokemon/469.1.png",
       "descripcion": {
         "es": "Sin descripción."
       },
@@ -159757,7 +159757,7 @@
       "tier": "Legendary",
       "funcion": null,
       "elementos": ["grass"],
-      "imagen": null,
+      "imagen": "/pokemon/470.1.png",
       "descripcion": {
         "es": "Sin descripción."
       },
@@ -160485,7 +160485,7 @@
       "tier": "Super Rare",
       "funcion": null,
       "elementos": ["ground", "flying"],
-      "imagen": null,
+      "imagen": "/pokemon/472.1.png",
       "descripcion": {
         "es": "Sin descripción."
       },
@@ -160939,7 +160939,7 @@
       "tier": "Ultra Rare",
       "funcion": null,
       "elementos": ["psychic", "fighting"],
-      "imagen": null,
+      "imagen": "/pokemon/475.1.png",
       "descripcion": {
         "es": "Sin descripción."
       },
@@ -161635,7 +161635,7 @@
       "tier": "Super Rare",
       "funcion": null,
       "elementos": ["ghost"],
-      "imagen": null,
+      "imagen": "/pokemon/477.1.png",
       "descripcion": {
         "es": "Sin descripción."
       },
@@ -162360,7 +162360,7 @@
       "tier": null,
       "funcion": null,
       "elementos": ["fighting"],
-      "imagen": null,
+      "imagen": "/pokemon/532.png",
       "descripcion": {
         "es": "Sin descripción."
       },
@@ -162503,7 +162503,7 @@
       "tier": null,
       "funcion": null,
       "elementos": ["fighting"],
-      "imagen": null,
+      "imagen": "/pokemon/532.1.png",
       "descripcion": {
         "es": "Sin descripción."
       },
@@ -162666,7 +162666,7 @@
       "tier": null,
       "funcion": null,
       "elementos": ["fighting"],
-      "imagen": null,
+      "imagen": "/pokemon/533.png",
       "descripcion": {
         "es": "Sin descripción."
       },
@@ -162813,7 +162813,7 @@
       "tier": null,
       "funcion": null,
       "elementos": ["fighting"],
-      "imagen": null,
+      "imagen": "/pokemon/533.1.png",
       "descripcion": {
         "es": "Sin descripción."
       },
@@ -162976,7 +162976,7 @@
       "tier": 1,
       "funcion": null,
       "elementos": ["fighting"],
-      "imagen": null,
+      "imagen": "/pokemon/534.png",
       "descripcion": {
         "es": "Sin descripción."
       },
@@ -163123,7 +163123,7 @@
       "tier": "Super Rare",
       "funcion": null,
       "elementos": ["fighting"],
-      "imagen": null,
+      "imagen": "/pokemon/534.1.png",
       "descripcion": {
         "es": "Sin descripción."
       },
@@ -163749,7 +163749,7 @@
       "tier": 6,
       "funcion": null,
       "elementos": ["poison"],
-      "imagen": null,
+      "imagen": "/pokemon/568.png",
       "descripcion": {
         "es": "Sin descripción."
       },
@@ -163868,7 +163868,7 @@
       "tier": 4,
       "funcion": null,
       "elementos": ["poison"],
-      "imagen": null,
+      "imagen": "/pokemon/568.1.png",
       "descripcion": {
         "es": "Sin descripción."
       },
@@ -164031,7 +164031,7 @@
       "tier": 1,
       "funcion": null,
       "elementos": ["poison"],
-      "imagen": null,
+      "imagen": "/pokemon/569.png",
       "descripcion": {
         "es": "Sin descripción."
       },
@@ -164219,7 +164219,7 @@
       "tier": "Legendary",
       "funcion": null,
       "elementos": ["poison"],
-      "imagen": null,
+      "imagen": "/pokemon/569.1.png",
       "descripcion": {
         "es": "Sin descripción."
       },
@@ -166429,7 +166429,7 @@
       "tier": 4,
       "funcion": null,
       "elementos": ["grass"],
-      "imagen": null,
+      "imagen": "/pokemon/672.png",
       "descripcion": {
         "es": "Los Skiddo son muy amigables con la gente. Se sabe que dejan que las personas monten sobre su lomo. Se dice que es uno de los primeros Pokémon que convivió con los humanos."
       },
@@ -166588,7 +166588,7 @@
       "tier": 3,
       "funcion": null,
       "elementos": ["grass"],
-      "imagen": null,
+      "imagen": "/pokemon/672.1.png",
       "descripcion": {
         "es": "Los Skiddo son muy amigables con la gente. Se sabe que dejan que las personas monten sobre su lomo. Se dice que es uno de los primeros Pokémon que convivió con los humanos."
       },
@@ -166779,7 +166779,7 @@
       "tier": 1,
       "funcion": null,
       "elementos": ["grass"],
-      "imagen": null,
+      "imagen": "/pokemon/673.png",
       "descripcion": {
         "es": "Se dice que hace mucho tiempo los jinetes expertos competían en carreras a lomos de Gogoat. Gogoat es capaz de percibir los sentimientos de los demás gracias a los sutiles cambios con que sus jinetes le sujetan los cuernos."
       },
@@ -166926,7 +166926,7 @@
       "tier": "Super Rare",
       "funcion": null,
       "elementos": ["grass"],
-      "imagen": null,
+      "imagen": "/pokemon/673.1.png",
       "descripcion": {
         "es": "Sin descripción."
       },
@@ -168267,7 +168267,7 @@
       "tier": null,
       "funcion": null,
       "elementos": ["fighting", "poison"],
-      "imagen": null,
+      "imagen": "/pokemon/903.png",
       "descripcion": {
         "es": "Sin descripción."
       },
@@ -168348,7 +168348,7 @@
       "tier": null,
       "funcion": null,
       "elementos": ["fighting", "poison"],
-      "imagen": null,
+      "imagen": "/pokemon/903.1.png",
       "descripcion": {
         "es": "Sin descripción."
       },
