@@ -14,6 +14,7 @@ import type { ReactNode } from 'react';
 
 import '@/styles/components/search-results.css';
 
+import { versioned } from '@/lib/assets/version';
 import { CardGrid } from '@/components/cards/CardGrid';
 import { CardGroup } from '@/components/cards/CardGroup';
 import type { DexCardDrop, DexCardEntry, DexCardLabels } from '@/components/cards/DexCard';
@@ -325,7 +326,7 @@ function loadJson<T>(url: string, read: (json: unknown) => Promise<T>): Promise<
   if (jsonValues.has(url)) return Promise.resolve(jsonValues.get(url) as T);
   let request = jsonRequests.get(url) as Promise<T> | undefined;
   if (request === undefined) {
-    request = fetch(url)
+    request = fetch(versioned(url))
       .then((response) => {
         if (!response.ok) throw new Error(`${url}: ${response.status}`);
         return response.json() as Promise<unknown>;

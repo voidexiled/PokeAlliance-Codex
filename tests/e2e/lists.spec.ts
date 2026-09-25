@@ -478,7 +478,7 @@ test.describe('Controlador de listas en /es/pokedex/ (C7-10)', () => {
     page,
   }) => {
     let requests = 0;
-    await page.route('**/es/pokedex/datos.json', (route) => {
+    await page.route('**/es/pokedex/datos.json*', (route) => {
       requests += 1;
       return route.abort();
     });

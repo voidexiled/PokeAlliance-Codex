@@ -1,5 +1,6 @@
 import type { CSSProperties, ReactElement } from 'react';
 
+import { assetSrc } from '@/lib/assets/version';
 import {
   CELL,
   assertRegisteredAnimation,
@@ -118,7 +119,7 @@ export function Sprite({
       <img
         suppressHydrationWarning
         className={classes('ac-sprite', 'ac-sprite--smooth', bounce && 'ac-bounce', className)}
-        src={src}
+        src={assetSrc(src)}
         width={width ?? (cell ? CELL * k : frameWidth * k)}
         height={height ?? (cell ? CELL * k : frameHeight * k)}
         alt={alt}
@@ -166,7 +167,7 @@ export function Sprite({
   const image = (
     <img
       className={classes('ac-sprite', !cell && bounce && 'ac-bounce', !cell && className)}
-      src={src}
+      src={assetSrc(src)}
       width={shownWidth}
       height={shownHeight}
       alt={alt}

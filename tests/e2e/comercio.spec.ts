@@ -987,7 +987,7 @@ async function expectMoney(scope: Locator, locale: Locale, where: string): Promi
   const separator = locale === 'es' ? '.' : ',';
   for (const amount of amounts) {
     expect(amount.sprite, `CA-9.10: the sprite of «${amount.visible}» on ${where}`).toMatch(
-      /\/sprites\/ui\/pokedolares\.png$/,
+      /\/sprites\/ui\/pokedolares\.png(?:\?v=[0-9a-f]+)?$/,
     );
     expect(amount.spriteFirst, `CA-9.10: the sprite goes before «${amount.visible}»`).toBe(true);
     const figure = /^([\d.,]+) /.exec(amount.spoken)?.[1] ?? '';

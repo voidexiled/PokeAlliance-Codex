@@ -20,6 +20,7 @@ import type * as Registry from '@/lib/content/registry';
 import type { Cambio } from '@/lib/content/registry-schema';
 import { getPokemon, getQuests } from '@/lib/content/repository';
 import type { ContentRef } from '@/lib/content/types';
+import { assetSrc } from '@/lib/assets/version';
 import { spriteOrNull } from '@/lib/sprites/resolve';
 
 const state = vi.hoisted(() => ({ cambios: [] as unknown[] }));
@@ -169,7 +170,7 @@ describe('Cambios (8.7)', () => {
     // missing mark while the sprite registry lacks it.
     const fixed = spriteOrNull(getSpriteRegistry(), 'ui/cambios');
     if (fixed === null) expect(main).toContain('ac-missing-sprite');
-    else expect(main).toContain(`src="${fixed.src}"`);
+    else expect(main).toContain(`src="${assetSrc(fixed.src)}"`);
   });
 
   it('CA1: one month has no Toc and keeps the spacer (944)', async () => {

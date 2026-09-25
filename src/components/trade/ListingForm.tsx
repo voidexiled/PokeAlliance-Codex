@@ -48,6 +48,7 @@ import {
   type PokedexRow,
 } from '@/components/pokedex/config';
 import type { Locale } from '@/i18n/config';
+import { versioned } from '@/lib/assets/version';
 import type { Messages } from '@/i18n/messages/en';
 import { fill } from '@/i18n/messages/types';
 import { usePanels } from '@/lib/game/panels';
@@ -891,7 +892,7 @@ function useData<Data>(url: string, read: (json: unknown) => Data): Loaded<Data>
   const [loaded, setLoaded] = useState<Loaded<Data>>({ state: 'loading' });
   useEffect(() => {
     let alive = true;
-    fetch(url)
+    fetch(versioned(url))
       .then((response) => {
         if (!response.ok) throw new Error(`${url}: ${response.status}`);
         return response.json() as Promise<unknown>;

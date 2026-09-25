@@ -585,7 +585,10 @@ test.describe('flows of the site', () => {
       // hydrated.
       await hydrateInView(preview);
       const image = preview.locator('.ac-outfit-preview__stage img');
-      await expect(image).toHaveAttribute('src', `/sprites/outfits/${outfitId}/sur.png`);
+      await expect(image).toHaveAttribute(
+        'src',
+        new RegExp(`^/sprites/outfits/${outfitId}/sur[.]png(?:[?]v=[0-9a-f]+)?$`),
+      );
       await expect
         .poll(() => image.evaluate((node) => (node as HTMLImageElement).naturalWidth))
         .toBe(size);
@@ -611,7 +614,10 @@ test.describe('flows of the site', () => {
       await expect
         .poll(async () => !firstPremier.equals(await preview.locator('canvas').screenshot()))
         .toBe(true);
-      await expect(image).toHaveAttribute('src', `/sprites/outfits/${outfitId}/sur.png`);
+      await expect(image).toHaveAttribute(
+        'src',
+        new RegExp(`^/sprites/outfits/${outfitId}/sur[.]png(?:[?]v=[0-9a-f]+)?$`),
+      );
       await preview.getByRole('button', { name: 'Ninguna', exact: true }).click();
       await expect(preview.locator('canvas')).toHaveCount(0);
     }
@@ -811,7 +817,10 @@ test.describe('flows of the site', () => {
     await page.locator('#lf-pokedolares').fill('50kk');
     const exact = page.locator('.ac-listing-form__exact');
     await expect(exact).toHaveText(formatPokedolaresLabel(50_000_000, 'es'));
-    await expect(exact.locator('img')).toHaveAttribute('src', /\/sprites\/ui\/pokedolares\.png$/);
+    await expect(exact.locator('img')).toHaveAttribute(
+      'src',
+      /\/sprites\/ui\/pokedolares\.png(?:\?v=[0-9a-f]+)?$/,
+    );
     await expect(page.getByRole('button', { name: /^Publicar/ })).toHaveCount(0);
   });
 });

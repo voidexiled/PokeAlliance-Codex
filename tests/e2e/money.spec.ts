@@ -179,7 +179,7 @@ async function readAmounts(
         return squash(copy.textContent) === typeName;
       };
       const strays = [...document.querySelectorAll('img')]
-        .filter((image) => (image.getAttribute('src') ?? '').endsWith(file))
+        .filter((image) => (image.getAttribute('src') ?? '').includes(file))
         .filter((image) => image.closest(sprite) === null && onScreen(image))
         .filter((image) => !labelsType(image))
         .map((image) => squash(image.parentElement?.textContent ?? null) || image.outerHTML);

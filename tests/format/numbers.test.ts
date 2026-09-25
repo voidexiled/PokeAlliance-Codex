@@ -29,6 +29,7 @@ import {
 } from '@/lib/format/numbers';
 import { UNKNOWN } from '@/lib/format/unknown';
 import type { TipData } from '@/lib/game/tips';
+import { assetSrc } from '@/lib/assets/version';
 import { spriteRegistry } from '@/lib/sprites/registry';
 import { spriteUrl } from '@/lib/sprites/resolve';
 
@@ -328,8 +329,9 @@ const CURRENCY: Record<Locale, string> = { es: 'Pokédólares', en: 'Pokédollar
 const DICTIONARIES = { es, en } as const;
 
 /** §7.8, D-013: the two fixed sprite keys of the money, as the adapter resolves them. */
-const POKEDOLARES_SRC = spriteUrl(spriteRegistry['ui/pokedolares'].archivo);
-const DIAMOND_SRC = spriteUrl(spriteRegistry['ui/diamond'].archivo);
+// As the <img> loads them: with the version of public/sprites/ (7.4.1).
+const POKEDOLARES_SRC = assetSrc(spriteUrl(spriteRegistry['ui/pokedolares'].archivo));
+const DIAMOND_SRC = assetSrc(spriteUrl(spriteRegistry['ui/diamond'].archivo));
 const DIAMOND_FRAMES = spriteRegistry['ui/diamond'].frames;
 
 /**

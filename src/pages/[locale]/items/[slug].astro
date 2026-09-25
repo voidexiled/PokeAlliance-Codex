@@ -37,6 +37,7 @@ import {
   itemLoot,
   itemUses,
 } from '@/lib/content/item-sources';
+import { assetSrc } from '@/lib/assets/version';
 import { resolvePokemonImage } from '@/lib/content/pokemon-media';
 import { getCategorias, getElementos, getItems, getSpriteRegistry } from '@/lib/content/registry';
 import type { Item } from '@/lib/content/registry-schema';
@@ -494,7 +495,7 @@ const pageDescription = fill(copy.description, { name: pageName, category: categ
                                       'ac-sprite ac-sprite--smooth',
                                       { 'ac-shiny-glow': row.pokemon.variante === SHINY },
                                     ]}
-                                    src={source}
+                                    src={assetSrc(source)}
                                     width="24"
                                     height="24"
                                     alt=""

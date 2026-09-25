@@ -7,6 +7,7 @@ import { Sprite } from '@/components/game/Sprite';
 import type { SpriteProps } from '@/components/game/Sprite';
 import { SpriteStage } from '@/components/game/SpriteStage';
 import type { Locale } from '@/i18n/config';
+import { assetSrc } from '@/lib/assets/version';
 import type { AuraShader } from '@/lib/content/registry-schema';
 
 // OutfitPreview (spec 8.3 step 3, R18, X11, 12.8 D-11 to D-16; design «Pokemon-pagina»):
@@ -309,7 +310,7 @@ export function OutfitPreview({ frame, auras, name, labels, locale }: OutfitPrev
     image.onerror = () => {
       if (!cancelled) setImageError(true);
     };
-    image.src = frame.src;
+    image.src = assetSrc(frame.src);
     return () => {
       cancelled = true;
       cancelAnimationFrame(animationId);

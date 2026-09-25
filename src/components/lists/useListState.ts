@@ -9,6 +9,7 @@ import {
   useSyncExternalStore,
 } from 'react';
 
+import { versioned } from '@/lib/assets/version';
 import {
   VIEW_STORAGE_PREFIX,
   applyListState,
@@ -293,7 +294,7 @@ export function useListState<T>(
   useEffect(() => {
     if (complete || dataUrl === undefined) return undefined;
     const abort = new AbortController();
-    fetch(dataUrl, { signal: abort.signal })
+    fetch(versioned(dataUrl), { signal: abort.signal })
       .then((response) => {
         if (!response.ok) throw new Error(`${dataUrl}: ${response.status}`);
         return response.json() as Promise<unknown>;

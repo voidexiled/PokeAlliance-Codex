@@ -11,6 +11,7 @@ import sitemap from '@astrojs/sitemap';
 import tailwindcss from '@tailwindcss/vite';
 import vercel from '@astrojs/vercel';
 
+import { folderVersion } from './scripts/lib/asset-versions.mjs';
 import { comercioFases } from './src/integrations/comercio-fases.ts';
 
 // The visual build of spec 14.5. `VISUAL` exists only there: it swaps the
@@ -158,6 +159,22 @@ const SPRITE_CUTS = {
   [PICKER_SPRITES_MODULE_ID]: ['ui/elementos/', 'ui/categorias/', 'ui/estrellas/'],
 };
 
+/**
+ * Spec 7.4.1: the content versions of public/sprites/ and public/pokemon/, which every `<img>`
+ * of a sprite or of a Pokémon's art loads (`?v=`, `assetSrc`) and the data files that name
+ * sprites (`datos.json`, `paneles.json`, `indice.json`) are fetched with, so an image that
+ * changes under the same name is never drawn from a stale copy, nor with the frames of another
+ * version (scripts/lib/asset-versions.mjs, src/lib/assets/version.ts).
+ */
+const assetVersions = {
+  __AC_SPRITES_VERSION__: JSON.stringify(
+    folderVersion(fileURLToPath(new URL('./public/sprites', import.meta.url))),
+  ),
+  __AC_POKEMON_ART_VERSION__: JSON.stringify(
+    folderVersion(fileURLToPath(new URL('./public/pokemon', import.meta.url))),
+  ),
+};
+
 const spriteRegistryFile = fileURLToPath(new URL('./public/sprites/sprites.json', import.meta.url));
 
 /**
@@ -265,7 +282,12 @@ for (const module of LIST_KIT_MODULES) {
 }
 
 /** The modules of `shared` that are files of this repository. */
-const SHARED_MODULES = ['src/lib/search/normalize.ts', 'src/i18n/messages/types.ts'];
+const SHARED_MODULES = [
+  'src/lib/search/normalize.ts',
+  'src/i18n/messages/types.ts',
+  // The asset versions every sprite `<img>` and every fetch of a data file carries (7.4.1).
+  'src/lib/assets/version.ts',
+];
 
 /** A module id with `/` on every system; Rolldown hands them as the file system writes them. */
 const posixId = (/** @type {string} */ id) => id.replaceAll('\\', '/');
@@ -534,6 +556,7 @@ export default defineConfig({
   // Spec 14.3: axe must not audit Astro's own toolbar.
   devToolbar: { enabled: false },
   vite: {
+    define: assetVersions,
     plugins: isVisualBuild
       ? [tailwindcss(), moneySpritesModule(), visualNoindexModule()]
       : [tailwindcss(), moneySpritesModule()],

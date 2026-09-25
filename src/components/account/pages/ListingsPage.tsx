@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import type { ReactNode } from 'react';
 
+import { versioned } from '@/lib/assets/version';
 import { CardGrid } from '@/components/cards/CardGrid';
 import { CardGroup } from '@/components/cards/CardGroup';
 import { ListingCard, type ListingCardListing } from '@/components/cards/ListingCard';
@@ -117,7 +118,7 @@ function useCatalogue(data: ListingsPageData, wanted: boolean) {
     if (!wanted) return undefined;
     let active = true;
     const read = (url: string) =>
-      fetch(url).then((response) => {
+      fetch(versioned(url)).then((response) => {
         if (!response.ok) throw new Error(`${url}: ${response.status}`);
         return response.json() as Promise<unknown>;
       });

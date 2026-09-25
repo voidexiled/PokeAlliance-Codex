@@ -3,6 +3,7 @@ import type { ReactNode } from 'react';
 import type { SupabaseClient } from '@supabase/supabase-js';
 
 import type { Locale } from '@/i18n/config';
+import { versioned } from '@/lib/assets/version';
 import { fill } from '@/i18n/messages/types';
 import { formatDate } from '@/lib/format/dates';
 import { formatInteger } from '@/lib/format/numbers';
@@ -415,7 +416,7 @@ export function toOperationRow(row: TradeTransaction): OperationRow {
 /** The names the titles need, from the search index; only when a row names a Pokémon or item. */
 async function loadNames(locale: Locale): Promise<OperationNames> {
   const { decodeSearchIndex, searchIndexUrl } = await import('@/components/search/config');
-  const response = await fetch(searchIndexUrl(locale));
+  const response = await fetch(versioned(searchIndexUrl(locale)));
   if (!response.ok) throw new Error(`search index: ${response.status}`);
   const entries = decodeSearchIndex(await response.json());
   const pokemon = new Map<string, string>();

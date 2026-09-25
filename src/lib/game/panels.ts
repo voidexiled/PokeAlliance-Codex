@@ -24,6 +24,7 @@
 import { useEffect, useState } from 'react';
 
 import type { Locale } from '@/i18n/config';
+import { versioned } from '@/lib/assets/version';
 import type { TipExtraLabels } from '@/lib/game/tip-labels';
 import type { ItemTipFacts, PokemonTipRecord } from '@/lib/game/tips';
 
@@ -91,7 +92,7 @@ const requests = new Map<string, Promise<PanelsData>>();
 export function loadPanels(url: string): Promise<PanelsData> {
   let request = requests.get(url);
   if (request === undefined) {
-    request = fetch(url)
+    request = fetch(versioned(url))
       .then((response) => {
         if (!response.ok) throw new Error(`paneles.json: ${response.status}`);
         return response.json() as Promise<unknown>;

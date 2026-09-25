@@ -1,6 +1,7 @@
 import '@/styles/components/entity-slot-marks.css';
 
 import { Sprite } from '@/components/game/Sprite';
+import { assetSrc } from '@/lib/assets/version';
 import { pokemonUnknownSize, pokemonUnknownSrc } from '@/lib/content/pokemon-media';
 import { hasUiSprite, uiSpriteEntry, uiSpriteSrc } from '@/lib/sprites/ui-sprites';
 
@@ -58,7 +59,7 @@ export function ShinyMark({ corner, label, className }: ShinyMarkProps) {
       <span className={classes.join(' ')} {...a11y}>
         <img
           className="ac-shiny-mark__icon"
-          src={uiSpriteSrc(SHINY_KEY)}
+          src={assetSrc(uiSpriteSrc(SHINY_KEY))}
           width={width}
           height={height}
           alt=""
@@ -103,7 +104,7 @@ function Unknown({ px, fallback, label }: { px: number; fallback: boolean; label
   return (
     <img
       className={fallback ? 'ac-unknown-art ac-unknown-art--fallback' : 'ac-unknown-art'}
-      src={src}
+      src={assetSrc(src)}
       width={px}
       height={px}
       alt={named ? label : ''}

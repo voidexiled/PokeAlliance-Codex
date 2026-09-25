@@ -96,7 +96,7 @@ describe('EvolutionChain', () => {
     expect(html).toContain('ac-evolution-chain__missing');
     // A one-tile outfit fills the 64 cell at 2x (DS:guias/20).
     expect(html).toMatch(
-      /<img[^>]*src="\/sprites\/outfits\/frame\.png"[^>]*width="64" height="64"/,
+      /<img[^>]*src="\/sprites\/outfits\/frame\.png\?v=[0-9a-f]{8}"[^>]*width="64" height="64"/,
     );
   });
 

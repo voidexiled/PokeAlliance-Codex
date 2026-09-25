@@ -15,6 +15,7 @@
 //   with reduced motion, it rests on frame 0.
 import type { SidebarSprite } from '@/lib/nav/groups';
 import { Sprite } from '@/components/game/Sprite';
+import { assetSrc } from '@/lib/assets/version';
 import { animationName } from '@/lib/sprites/resolve';
 
 interface Props {
@@ -54,7 +55,7 @@ const snap = drawn
     sprite && scaled ? (
       <img
         class="ac-sprite ac-sprite--smooth ac-sidebar__scaled"
-        src={sprite.src}
+        src={assetSrc(sprite.src)}
         width={scaled.width}
         height={scaled.height}
         alt=""

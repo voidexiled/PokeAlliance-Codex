@@ -828,7 +828,7 @@ test.describe('Buscar (8.6)', () => {
     page,
   }) => {
     const { search } = MESSAGES.es;
-    await page.route('**/buscar/indice.json', (route) => route.abort());
+    await page.route('**/buscar/indice.json*', (route) => route.abort());
 
     await page.goto('/es/');
     await paletteReady(page);

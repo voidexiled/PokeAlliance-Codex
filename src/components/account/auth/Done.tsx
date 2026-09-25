@@ -1,6 +1,7 @@
 import { useId } from 'react';
 
 import { fill } from '@/i18n/messages/types';
+import { assetSrc } from '@/lib/assets/version';
 import { registrationSteps } from '@/lib/account/registration';
 import { DISCORD_EDAD_MIN_DIAS } from '@/lib/trade/limits';
 
@@ -56,7 +57,13 @@ export function RegistrationDone({
       title={
         <span className="ac-auth-done">
           {art === null ? null : (
-            <img className="ac-auth-done__art" src={art.src} alt={art.alt} width={96} height={96} />
+            <img
+              className="ac-auth-done__art"
+              src={assetSrc(art.src)}
+              alt={art.alt}
+              width={96}
+              height={96}
+            />
           )}
           {texts.doneTitle}
         </span>

@@ -1,3 +1,4 @@
+import { assetSrc } from '@/lib/assets/version';
 import { MissingSprite } from '@/components/game/SpriteStage';
 import type { Locale } from '@/i18n/config';
 import { formatPokedolares, formatPokedolaresLabel } from '@/lib/format/numbers';
@@ -72,7 +73,7 @@ export function PokedolaresAmount({
         {SPRITE ? (
           <img
             className="ac-pokedolares-amount__img"
-            src={SPRITE.src}
+            src={assetSrc(SPRITE.src)}
             alt=""
             width={SPRITE.size[0]}
             height={SPRITE.size[1]}

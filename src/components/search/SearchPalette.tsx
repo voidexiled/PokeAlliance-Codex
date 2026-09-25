@@ -18,6 +18,7 @@ import {
 } from 'react';
 
 import type { Locale } from '@/i18n/config';
+import { assetSrc, versioned } from '@/lib/assets/version';
 import { fill } from '@/i18n/messages/types';
 import { layout, spacing } from '@/lib/design/shell-tokens';
 import type { SearchEntry, SearchGroup, SearchKind } from '@/lib/search/rank';
@@ -104,7 +105,7 @@ function loadIndex(url: string): Promise<LoadedIndex> {
   if (cache) return Promise.resolve(cache);
   if (!request) {
     request = Promise.all([
-      fetch(url).then((response) => {
+      fetch(versioned(url)).then((response) => {
         if (!response.ok) throw new Error(`${url}: ${response.status}`);
         return response.json() as Promise<unknown>;
       }),
@@ -452,7 +453,7 @@ export function SearchPalette({ locale, messages, glyph }: SearchPaletteProps) {
                       {entry.icon?.smooth ? (
                         <img
                           className="ac-search-palette__art"
-                          src={entry.icon.src}
+                          src={assetSrc(entry.icon.src)}
                           width={entry.icon.width}
                           height={entry.icon.height}
                           alt=""

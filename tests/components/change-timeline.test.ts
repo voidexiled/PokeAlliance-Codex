@@ -158,7 +158,9 @@ describe('ChangeTimeline', () => {
       (match) => match[1] ?? '',
     );
     expect(nodes).toHaveLength(3);
-    expect(nodes[0]).toMatch(/<img[^>]*src="\/sprites\/x\.png"[^>]*width="32"[^>]*height="32"/);
+    expect(nodes[0]).toMatch(
+      /<img[^>]*src="\/sprites\/x\.png\?v=[0-9a-f]{8}"[^>]*width="32"[^>]*height="32"/,
+    );
     expect(nodes[1]).toContain('ac-missing-sprite');
     expect(nodes[2]).toMatch(/<img[^>]*ac-sprite--smooth[^>]*width="20"[^>]*height="16"/);
   });

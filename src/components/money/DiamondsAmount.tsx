@@ -1,5 +1,6 @@
 import type { ReactNode } from 'react';
 
+import { assetSrc } from '@/lib/assets/version';
 import { NestedEntity } from '@/components/game/NestedEntity';
 import type { NestedEntityAlign, NestedEntityPlacement } from '@/components/game/NestedEntity';
 import { Sprite } from '@/components/game/Sprite';
@@ -93,7 +94,7 @@ function diamond(): ReactNode {
     <span className="ac-diamonds-amount__frame">
       <img
         className="ac-diamonds-amount__sheet"
-        src={DIAMOND.src}
+        src={assetSrc(DIAMOND.src)}
         alt=""
         width={width * DIAMOND.frames}
         height={height}
