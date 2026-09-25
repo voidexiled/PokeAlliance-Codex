@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://alliance-codex.local/schemas/categorias.schema.json",
   "title": "Categorías del Market",
-  "description": "Las 14 categorías del Market del juego, en el orden del cliente. El orden y los ids son fijos: el esquema los comprueba posición por posición.",
+  "description": "Las 14 categorías del Market del juego, en el orden del cliente, y «otros» al final: ítems del juego que aún no tienen categoría del Market (el propietario los recoloca a mano). El orden y los ids son fijos: el esquema los comprueba posición por posición.",
   "type": "object",
   "required": ["categorias"],
   "additionalProperties": false,
@@ -10,9 +10,9 @@
     "$schema": { "type": "string" },
     "categorias": {
       "type": "array",
-      "description": "Exactamente estas 14 categorías, en este orden: todo, diamantes, pokemon, poke-balls, stones, helds, orbs, creature-items, general-items, utilities, addons, consumable, foods, furnitures. \"todo\" es virtual (reúne las demás y no tiene archivo).",
-      "minItems": 14,
-      "maxItems": 14,
+      "description": "Exactamente estas 15 categorías, en este orden: todo, diamantes, pokemon, poke-balls, stones, helds, orbs, creature-items, general-items, utilities, addons, consumable, foods, furnitures, otros. \"todo\" es virtual (reúne las demás y no tiene archivo).",
+      "minItems": 15,
+      "maxItems": 15,
       "prefixItems": [
         {
           "$ref": "#/$defs/categoria",
@@ -124,6 +124,14 @@
           "properties": {
             "id": { "const": "furnitures" },
             "orden": { "const": 13 },
+            "virtual": { "const": false }
+          }
+        },
+        {
+          "$ref": "#/$defs/categoria",
+          "properties": {
+            "id": { "const": "otros" },
+            "orden": { "const": 14 },
             "virtual": { "const": false }
           }
         }

@@ -53,9 +53,10 @@ describe('datos.json (PR5)', () => {
 
   it('carries the 18 elements in the order of 8.0.5, named per locale', () => {
     expect(Object.keys(data.refs.elementos)).toEqual(getElementos().map((element) => element.id));
+    const english = buildPokedexData('en');
     for (const element of getElementos()) {
       expect(data.refs.elementos[element.id].nombre).toBe(element.nombre.es);
-      expect(buildPokedexData('en').refs.elementos[element.id].nombre).toBe(element.nombre.en);
+      expect(english.refs.elementos[element.id].nombre).toBe(element.nombre.en);
     }
   });
 

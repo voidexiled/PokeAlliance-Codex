@@ -327,7 +327,7 @@ describe('pnpm content:check on content/sistemas/', () => {
     const text = firstText(record);
     text[1] = { ancla: 'nada', texto: 'nada' };
     text[3] = { ruta: '/es/pokedex/', texto: 'Pokédex' };
-    text[5] = { entidad: { tipo: 'item', id: 'enhanced-normal-stone' } };
+    text[5] = { entidad: { tipo: 'item', id: 'no-such-item' } };
     text[7] = { entidad: { tipo: 'sistema', id: 'nada' } };
     text[12] = ' cuesta 60kk.';
     (firstBlock(record).texto as { en: unknown[] }).en = text.map((piece, index) =>
@@ -357,7 +357,7 @@ describe('pnpm content:check on content/sistemas/', () => {
       /boost\.json · secciones\[3\]\.id · sección repetida: "dos"/,
       /secciones\[0\]\.bloques\[0\]\.texto\.es\[1\]\.ancla · el ancla "#nada" no es una sección de esta página/,
       /secciones\[0\]\.bloques\[0\]\.texto\.es\[3\]\.ruta · la ruta va sin idioma: "\/pokedex\/"/,
-      /secciones\[0\]\.bloques\[0\]\.texto\.es\[5\]\.entidad\.id · "enhanced-normal-stone" no existe en content\/items\//,
+      /secciones\[0\]\.bloques\[0\]\.texto\.es\[5\]\.entidad\.id · "no-such-item" no existe en content\/items\//,
       /secciones\[0\]\.bloques\[0\]\.texto\.es\[7\]\.entidad\.id · "nada" no existe en content\/sistemas\//,
       /secciones\[0\]\.bloques\[0\]\.texto · es y en deben nombrar las mismas entidades, enlaces e importes \(es: .*pd 150000.*; en: .*pd 15000[,;)]/,
       /secciones\[0\]\.bloques\[0\]\.texto\.es\[12\] · importe del juego en texto libre \(«60kk»\)/,

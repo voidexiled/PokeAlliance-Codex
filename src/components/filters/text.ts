@@ -38,7 +38,7 @@ export interface FilterText {
 }
 
 /** The toolbar texts of a page from its dictionaries. */
-export function filterText(ui: Messages['ui']): FilterText {
+export function filterText(ui: Omit<Messages['ui'], 'money'>): FilterText {
   const bar = ui.filterBar;
   return {
     toolbar: bar.label,

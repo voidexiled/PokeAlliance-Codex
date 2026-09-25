@@ -90,10 +90,10 @@ export interface DexCardDrop {
   /** Name of the item: the accessible name of its slot, and the text of its chip. */
   name: string;
   /**
-   * Sprite of the item as the adapter resolves it (DP2). `null`: a named chip in the regular
-   * anatomy, a slot with the missing mark in the compact one.
+   * Sprite of the item as the adapter resolves it (DP2). `null` or missing: a named chip in the
+   * regular anatomy, a slot with the missing mark in the compact one.
    */
-  sprite: SpriteProps | null;
+  sprite?: SpriteProps | null;
   /**
    * Panel of the item, `itemTip` (7.5.3). `null`, missing (the first page of the Pokédex, whose
    * island builds it after hydrating) or nothing below its title: plain text (R2).

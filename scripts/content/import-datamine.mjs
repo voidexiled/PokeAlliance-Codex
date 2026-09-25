@@ -1,14 +1,20 @@
 // Imports the owner's client export (the `run_*` folders of the game_datamine module) into
-// content/: Pokémon (Pokédex detail), moves, and the items of the Market catalog with their
-// inspection text, NPC prices and ways to get them. Rules and shapes: scripts/content/lib/datamine.mjs.
+// content/: every Pokédex entry (a record is created for an entry that has none), moves, the
+// items of the Market catalog and every item the game names elsewhere (in «otros» until the
+// owner moves it), with their inspection text, NPC prices, Market flag and ways to get them.
+// Rules and shapes: scripts/content/lib/datamine.mjs.
 //
 // Usage:
-//   pnpm content:datamine <datamine folder | run folder> [--write] [--sobrescribir campo,campo]
+//   pnpm content:datamine <datamine folder | run folder> [--write] [--conservar campo,campo]
 //                         [--informe archivo.md]
 //
 // Dry run by default: it prints what it would change and writes nothing. --write applies it.
-// A field that already has a value is kept (and listed as a difference) unless --sobrescribir
-// names it. Records are never removed. Running it twice changes nothing the second time.
+// The client is authoritative for game facts (owner decision 2026-09-25): an existing value
+// that differs from the export (tier, nivel, elementos, drops, evolucion, precioNpc…) is
+// replaced, and every replacement is listed. Fields the owner writes (categoria, sprite,
+// borrador, imagen, funcion, generacion, nombre, uso, apilable, mercado, aliases) are never
+// replaced; --conservar adds fields to that list for one run. An unknown value never erases a
+// known one. Records are never removed. Running it twice changes nothing the second time.
 
 import fs from 'node:fs';
 import path from 'node:path';
@@ -26,15 +32,14 @@ const option = (name) => {
   return index === -1 ? null : (args[index + 1] ?? null);
 };
 const write = args.includes('--write');
-const overwrite = new Set((option('--sobrescribir') ?? '').split(',').filter(Boolean));
+const keep = new Set((option('--conservar') ?? '').split(',').filter(Boolean));
 const reportFile = option('--informe');
 const input = args.find(
-  (arg, index) =>
-    !arg.startsWith('--') && !['--sobrescribir', '--informe'].includes(args[index - 1]),
+  (arg, index) => !arg.startsWith('--') && !['--conservar', '--informe'].includes(args[index - 1]),
 );
 if (!input) {
   console.error(
-    'Uso: pnpm content:datamine <carpeta datamine> [--write] [--sobrescribir campo,campo] [--informe archivo.md]',
+    'Uso: pnpm content:datamine <carpeta datamine> [--write] [--conservar campo,campo] [--informe archivo.md]',
   );
   process.exit(1);
 }
@@ -68,10 +73,21 @@ const content = {
   elements,
   quests,
 };
-const report = applyExport(types, content, { overwrite });
+const artDir = path.join(root, 'public', 'pokemon', '128');
+const report = applyExport(types, content, {
+  keep,
+  hasArt: (dex) => fs.existsSync(path.join(artDir, `${dex}.webp`)),
+});
 
 // ------------------------------------------------------------------------------ report
 
+/** A value for the report: a long list or object is summarized. */
+const brief = (value) => {
+  const text = JSON.stringify(value);
+  return text !== undefined && text.length > 120
+    ? `(${Array.isArray(value) ? `lista de ${value.length}` : 'objeto'})`
+    : text;
+};
 const lines = [];
 const out = (line = '') => lines.push(line);
 const list = (title, values, limit = 40) => {
@@ -106,8 +122,11 @@ out(
       .join(', ') || 'ninguno'
   }); campos escritos — ${counts(report.changes.items)}`,
 );
+out(`content/pokemon.json: ${report.createdPokemon.length} registros nuevos`);
 out();
-list('Fichas sin registro en content/pokemon.json (no se crean)', report.unmatchedPokemon);
+list('Registros de Pokémon creados', report.createdPokemon);
+list('Fichas sin registro en content/pokemon.json', report.unmatchedPokemon);
+list('Ítems nombrados sin nombre en la exportación (no se crean)', report.unnamedItems.map(String));
 list('Registros de content/pokemon.json sin ficha en la exportación', report.pokemonWithoutDetail);
 list(
   'Ítems sin registro en content/items/ (sus drops, evoluciones y recetas se omiten)',
@@ -166,10 +185,16 @@ out(
   `role de las fichas: ${[...report.roleValues].map(([v, n]) => `${v} ×${n}`).join(', ')} (0 = sin rol; no hay campo)`,
 );
 list(
-  'Valores existentes que no se tocan (usa --sobrescribir campo)',
+  'Valores existentes reemplazados por los del cliente',
+  report.replaced.map(
+    (d) => `${d.kind} ${d.id} ${d.field}: ${brief(d.current)} → ${brief(d.incoming)}`,
+  ),
+  60,
+);
+list(
+  'Valores del propietario que no se tocan (campos del propietario o --conservar)',
   report.differences.map(
-    (d) =>
-      `${d.kind} ${d.id} ${d.field}: ${JSON.stringify(d.current)} → ${JSON.stringify(d.incoming)}`,
+    (d) => `${d.kind} ${d.id} ${d.field}: ${brief(d.current)} → ${brief(d.incoming)}`,
   ),
   25,
 );
@@ -219,10 +244,15 @@ if (reportFile) {
     ),
   );
   all(
-    'Diferencias',
+    'Reemplazados',
+    report.replaced.map(
+      (d) => `${d.kind} ${d.id} ${d.field}: ${brief(d.current)} → ${brief(d.incoming)}`,
+    ),
+  );
+  all(
+    'Sin tocar (propietario)',
     report.differences.map(
-      (d) =>
-        `${d.kind} ${d.id} ${d.field}: ${JSON.stringify(d.current)} → ${JSON.stringify(d.incoming)}`,
+      (d) => `${d.kind} ${d.id} ${d.field}: ${brief(d.current)} → ${brief(d.incoming)}`,
     ),
   );
   fs.writeFileSync(reportFile, full.join('\n'));

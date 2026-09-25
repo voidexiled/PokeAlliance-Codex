@@ -65,9 +65,13 @@ Cada archivo empieza con `"$schema"`. VS Code lo usa para autocompletar los camp
 - `apilable` es `true`, `false` o `null`.
 - `sprite` es una clave de `public/sprites/sprites.json` (siguiente sección).
 
-Las categorías no se añaden: son las del Market. «Todo» es virtual (`"virtual": true`) y reúne los items de las demás; no tiene archivo.
+- `mercado` (opcional) dice si el item se vende en el mercado del juego. `true` lo escribe `pnpm content:datamine` cuando el item está en el catálogo del Market o en algún anuncio: la página muestra «Comercializable en el mercado». Para un item que **no** se puede vender, escribe tú `"mercado": false`: la página muestra «No vendible» y el importador nunca lo cambia. `null` o sin el campo: la página no dice nada. El importador nunca escribe `false`.
 
-`content/schemas/categorias.schema.json` fija las 14 categorías y su orden, posición por posición. Si en `categorias.json` cambias el orden, borras una categoría o añades otra, `pnpm content:check` y el build fallan. Si el juego algún día cambia el Market:
+Las categorías no se añaden: son las del Market, más «Otros». «Todo» es virtual (`"virtual": true`) y reúne los items de las demás; no tiene archivo.
+
+**«Otros»** (`content/items/otros.json`, decisión del propietario 2026-09-25) guarda los items que el juego nombra fuera del catálogo del Market (loot, evoluciones, crafteo, tiendas, pase, calendario, tasks) y que aún no tienen categoría. Para recolocar uno, mueve su objeto a `content/items/<categoria>.json` y cambia `categoria`; **no cambies su `id`** (no depende de la categoría: es el nombre del juego en kebab-case, con el `clientId` detrás si dos items se llaman igual). Si lo mueves a `helds`, añade `held`. El importador no vuelve a tocar `categoria`, `sprite` ni `nombre` de un item que ya existe.
+
+`content/schemas/categorias.schema.json` fija las 14 categorías del Market y «otros», y su orden, posición por posición. Si en `categorias.json` cambias el orden, borras una categoría o añades otra, `pnpm content:check` y el build fallan. Si el juego algún día cambia el Market:
 
 1. Cambia la lista `prefixItems` de `content/schemas/categorias.schema.json` (`id`, `orden` y `virtual` de cada posición).
 2. Cambia la lista `categoria` de `content/schemas/items.schema.json`: son las mismas categorías sin «todo», en el mismo orden. `pnpm content:check` avisa si no coinciden.
@@ -320,9 +324,17 @@ Estos archivos siguen las mismas reglas comunes; VS Code muestra qué va en cada
   - `evolucion`: las evoluciones que salen de este Pokémon, `[{ "a": "charmeleon", "nivel": 16, "items": [{ "item": "fire-stone", "cantidad": 1 }] }]`. `a` es el `id` del Pokémon al que evoluciona; la cadena no puede volver a un Pokémon anterior. La primera etapa es la que ningún registro nombra en `a`.
   - `habilidades`: nombres del juego, sin traducir (`["Fly", "Strength"]`).
   - `donde`: `{ "hunts": [], "linkedTasks": [], "equiposNpc": [] }`, cada lista de `{ "texto": "…" }`. Con `"ref": { "tipo": "pokemon" | "item" | "sistema" | "actividad", "id": "…" }` el texto abre el tooltip de esa entidad; la referencia tiene que existir.
-  - `elementoMoveset`: `id` de un elemento o `null` (columna «Moveset» de la Tier list de la ficha, filtro «Tipo de moveset» de la Pokédex y de `PokemonPicker`, §16.2.2). Un valor escrito a mano no se pisa sin la orden del propietario: `pnpm content:roster` nunca lo toca solo.
+  - `elementoMoveset`: `id` de un elemento o `null` (columna «Moveset» de la Tier list de la ficha, filtro «Tipo de moveset» de la Pokédex y de `PokemonPicker`, §16.2.2). `pnpm content:roster` nunca lo toca; `pnpm content:datamine` lo calcula de los movimientos del juego y lo actualiza (el cliente manda, ver abajo).
 - `content/elementos.json`: los 18 elementos en un orden fijo que el esquema comprueba. `icono` es una clave de `sprites.json` o `null` (el chip se muestra solo con el nombre); `stone` y `fragment` son `id` de items o `null`.
 - `content/moves.json`: `pokemon` lleva ids de `content/pokemon.json`; `elemento` es el `id` del elemento (`"normal"`, `"fire"`…), no su nombre, o `null`. `alcance` (§16.2.2) es opcional: `"area"`, `"objetivo"` o `"pasivo"`, las etiquetas aoe / target / passive del Pokédex del juego, o `null` si no se conoce. El importador usa `alcance` para calcular `elementoMoveset`: cuenta primero los movimientos de área por elemento (gana el que más tiene); sin movimientos de área, cuenta todos los de daño; un empate lo gana el elemento que también sea uno de los tipos del Pokémon, o si no, el primero en el orden de movimientos del juego.
+
+### Importar la exportación del cliente (`pnpm content:datamine`)
+
+`pnpm content:datamine <carpeta datamine>` lee las carpetas `run_*` de la exportación del cliente (la más reciente gana) y escribe `content/pokemon.json`, `content/moves.json` y `content/items/`. Sin `--write` solo muestra lo que cambiaría; `--informe archivo.md` (fuera de `content/`) guarda la lista completa.
+
+**El cliente manda en los datos del juego** (decisión del propietario 2026-09-25: las actualizaciones llegan primero al cliente). Si un valor ya escrito no coincide con la exportación —`tier`, `nivel`, `elementos`, `numero`, drops, evoluciones, movimientos, `precioNpc`, efectividad, descripciones del juego…—, el importador lo reemplaza y lista cada cambio. No toca nunca los campos del propietario: `categoria` (mueves tú los items de «Otros»), `sprite`, `borrador`, `imagen`, `funcion`, `generacion`, `nombre`, `uso`, `apilable`, `mercado` y los alias, ni el texto editorial. Una descripción del juego solo reemplaza su idioma (`es` de la Pokédex, `en` de la inspección de items) y deja el otro. Un valor desconocido del juego nunca borra uno conocido. `--conservar tier,nivel` protege más campos en una ejecución.
+
+Crea un registro para cada ficha de la Pokédex que no tenga uno (Mega, formas de Castform y Smeargle, shinies…) con `imagen` del arte del cliente solo cuando es el mismo Pokémon (su especie o su shiny); una Mega o una forma de Castform queda en `null` («?») hasta que pongas su arte. Crea en «Otros» los items que el juego nombra y aún no existen. Nunca borra registros.
 
 ### Jerarquía de tiers (§16.2.1)
 

@@ -312,7 +312,7 @@ export const en: Messages = {
     description:
       '{name}, a {category} item in PokeAlliance: how to get it and what it is used for.',
     tradeable: 'Tradeable on the market',
-    notTradeable: 'Not tradeable on the market',
+    notTradeable: 'Not sellable',
     stackable: 'Stackable',
     heldTier: 'Tier',
     heldTiers: '{effect} tiers',

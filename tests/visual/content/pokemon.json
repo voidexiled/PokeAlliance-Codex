@@ -168,7 +168,7 @@
       "generacion": 1,
       "variante": "normal",
       "nivel": 120,
-      "tier": "ULTIMATE",
+      "tier": 1,
       "funcion": "PVE",
       "elementos": ["psychic"],
       "imagen": "/pokemon/150.png"
@@ -204,7 +204,7 @@
       "generacion": 3,
       "variante": "normal",
       "nivel": 60,
-      "tier": "ULTIMATE",
+      "tier": 1,
       "funcion": "PVP",
       "elementos": ["dragon", "flying"],
       "imagen": "/pokemon/384.png"

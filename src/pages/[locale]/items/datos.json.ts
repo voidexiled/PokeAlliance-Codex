@@ -57,7 +57,7 @@ import { getPokemon } from '@/lib/content/repository';
 import type { PokemonRecord } from '@/lib/content/types';
 import { DROPPER_NAMES_MAX } from '@/lib/game/dropper-limit';
 import { elementTip, pokemonTip, type TipLabels } from '@/lib/game/tips';
-import { spriteOrNull } from '@/lib/sprites/resolve';
+import { listItemSprite, spriteOrNull } from '@/lib/sprites/resolve';
 
 export const prerender = true;
 
@@ -142,7 +142,7 @@ export function buildItemsData(locale: Locale): ItemsData {
       id: record.id,
       nombre: record.nombre,
       categoria: record.categoria,
-      sprite: spriteOrNull(registry, record.sprite),
+      sprite: listItemSprite(registry, record.sprite),
       vende: record.precioNpc.vende,
       compra: record.precioNpc.compra,
       elemento,

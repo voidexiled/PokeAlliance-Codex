@@ -54,7 +54,7 @@ const readJson = (file: string) => JSON.parse(readFileSync(path.join(repoRoot, f
 const jsonSchema = (name: string) => readJson(`content/schemas/${name}.schema.json`);
 
 describe('registry loaders', () => {
-  it('lists the 14 Market categories in client order', () => {
+  it('lists the 14 Market categories in client order, then «Otros»', () => {
     const categorias = getCategorias();
     expect(categorias.map((categoria) => categoria.nombre.es)).toEqual([
       'Todo',
@@ -71,6 +71,7 @@ describe('registry loaders', () => {
       'Consumable',
       'Foods',
       'Furnitures',
+      'Otros',
     ]);
     expect(categorias[0]).toMatchObject({ id: 'todo', virtual: true });
   });
@@ -862,7 +863,7 @@ describe('pnpm content:check', () => {
     ]);
   });
 
-  it('keeps the 14 Market categories and their order', () => {
+  it('keeps the 14 Market categories, «Otros» and their order', () => {
     let root = copyRepo();
     edit(root, 'content/items/categorias.json', (data: { categorias: { orden: number }[] }) => {
       [data.categorias[1].orden, data.categorias[2].orden] = [
@@ -879,10 +880,11 @@ describe('pnpm content:check', () => {
     edit(root, 'content/items/categorias.json', (data: { categorias: unknown[] }) => {
       data.categorias.pop();
     });
-    rmSync(path.join(root, 'content', 'items', 'furnitures.json'));
-    expect(lines(checkContent(root).errors)).toEqual([
-      expect.stringMatching(/categorias\.json · categorias · necesita al menos 14 elemento/),
-    ]);
+    // otros.json stays (its items are the loot of content/pokemon.json): the file then has no
+    // category, which is reported as well.
+    expect(lines(checkContent(root).errors)).toContainEqual(
+      expect.stringMatching(/categorias\.json · categorias · necesita al menos 15 elemento/),
+    );
 
     root = copyRepo();
     edit(

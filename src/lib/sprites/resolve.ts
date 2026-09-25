@@ -454,3 +454,18 @@ export function resolveSprite(
     animation,
   };
 }
+
+/** The documented placeholder of an item that has no sprite yet (docs/REGISTROS.md). */
+export const ITEM_PLACEHOLDER_SPRITE = 'ui/comercio/item';
+
+/**
+ * An item's sprite as the list files carry it (items and Pokédex `datos.json`, their props):
+ * `null` for the placeholder, so the list draws the missing-sprite mark of an item with no sprite
+ * yet (R7) and the files do not repeat the same sprite a thousand times (§13.6, 400 KB).
+ */
+export function listItemSprite(
+  registry: SpriteRegistry,
+  key: string | null | undefined,
+): SpriteData | null {
+  return key === ITEM_PLACEHOLDER_SPRITE ? null : spriteOrNull(registry, key);
+}

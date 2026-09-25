@@ -105,7 +105,7 @@ export interface TiersRootProps {
   /** «Tier list», the h1: the name of the Slots panel and the caption of the Lista (8.8). */
   title: string;
   /** `messages.ui` of the page's locale: the components' texts, the card texts in `cards`. */
-  ui: Messages['ui'];
+  ui: Omit<Messages['ui'], 'money'>;
   /**
    * `messages.pokedex` of the page's locale: the texts of 8.2 this list shares (8.8) — the
    * label and first option of each filter, the count by Variante, the empty state and the

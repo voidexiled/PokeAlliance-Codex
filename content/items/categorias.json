@@ -127,6 +127,15 @@
       },
       "icono": "ui/categorias/furnitures",
       "orden": 13
+    },
+    {
+      "id": "otros",
+      "nombre": {
+        "es": "Otros",
+        "en": "Other"
+      },
+      "icono": "ui/categorias/otros",
+      "orden": 14
     }
   ]
 }

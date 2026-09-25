@@ -54,7 +54,6 @@ import { spriteOrNull, type SpriteData } from '@/lib/sprites/resolve';
 
 import { ElementChip, type ElementChipEntry } from '@/components/game/ElementChip';
 import { EntitySlot, EntitySlotFace, entitySlotClasses } from '@/components/game/EntitySlot';
-import { NestedEntity } from '@/components/game/NestedEntity';
 import { Glyph } from '@/components/icons/Glyph';
 import type { TocItem } from '@/components/layout/Toc.astro';
 import { Section } from '@/components/layout/Section';
@@ -838,30 +837,16 @@ const pageDescription = fill(copy.description, { name: pageName, category: categ
                 <tbody>
                   {uses.evolutions.map((evolution) => (
                     <tr>
+                      {/* Plain links, like the loot: an Evolution Stone takes part in 60+
+                          evolutions, and two panels a row are ~5 KB (§13.6, 450 KB). */}
                       <th scope="row">
-                        <NestedEntity
-                          tip={tipOfPokemon(evolution.from)}
-                          href={pokemonHref(evolution.from.id)}
-                          locale={locale}
-                          hint={ui.pinHint}
-                          shinyLabel={ui.shiny}
-                        >
-                          {evolution.from.nombre}
-                        </NestedEntity>
+                        <a href={pokemonHref(evolution.from.id)}>{evolution.from.nombre}</a>
                       </th>
                       <td>
                         {evolution.to === null ? (
                           UNKNOWN
                         ) : (
-                          <NestedEntity
-                            tip={tipOfPokemon(evolution.to)}
-                            href={pokemonHref(evolution.to.id)}
-                            locale={locale}
-                            hint={ui.pinHint}
-                            shinyLabel={ui.shiny}
-                          >
-                            {evolution.to.nombre}
-                          </NestedEntity>
+                          <a href={pokemonHref(evolution.to.id)}>{evolution.to.nombre}</a>
                         )}
                       </td>
                       <td class="ac-num">{formatInteger(evolution.cantidad, locale)}</td>

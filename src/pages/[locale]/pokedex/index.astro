@@ -65,11 +65,15 @@ const firstRows = decodePokedex(first);
 const firstDrops = Object.fromEntries(
   Object.entries(
     pokedexDrops(firstRows, records, data.refs.items, locale, messages.ui.tooltip),
-  ).map(([id, { name, sprite }]) => [id, { name, sprite }]),
+  ).map(([id, { name, sprite }]) => [id, sprite ? { name, sprite } : { name }]),
 );
 const description = fill(messages.pokedex.description, {
   n: formatInteger(records.length, locale),
 });
+// The list islands use no money text: `money` stays out of their props (§13.6, 20 KB).
+const listUi = Object.fromEntries(
+  Object.entries(messages.ui).filter(([key]) => key !== 'money'),
+) as Omit<Messages['ui'], 'money'>;
 ---
 
 <PageLayout
@@ -91,7 +95,7 @@ const description = fill(messages.pokedex.description, {
     elements={pokedexElements(firstRows, locale, messages.ui.tooltip)}
     drops={firstDrops}
     title={title}
-    ui={messages.ui}
+    ui={listUi}
     pokedex={messages.pokedex}
   />
 </PageLayout>

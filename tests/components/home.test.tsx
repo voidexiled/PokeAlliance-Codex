@@ -176,7 +176,7 @@ describe('IndexPanel (7.2.7, 8.1, PZ-04, WD1)', () => {
     expect(html).toMatch(/<span class="ac-index-panel__label" lang="en">Enlace quest<\/span>/);
   });
 
-  it('counts the registries the home lists (WD1): systems, 14 Market pages, 18 elements', async () => {
+  it('counts the registries the home lists (WD1): systems, 15 item pages, 18 elements', async () => {
     const systems = getSistemas().map((record) => link(record.id));
     const categories = getCategorias().map((record) => link(record.id));
     const elements = getElementos().map((record) => link(record.id));
@@ -184,7 +184,7 @@ describe('IndexPanel (7.2.7, 8.1, PZ-04, WD1)', () => {
     expect(countOf(await panel({ links: systems }))?.figure ?? '').toBe(
       systems.length === 0 ? '' : String(systems.length),
     );
-    expect(countOf(await panel({ links: categories }))?.figure).toBe('14');
+    expect(countOf(await panel({ links: categories }))?.figure).toBe('15');
     expect(countOf(await panel({ links: elements }))?.figure).toBe('18');
   });
 });

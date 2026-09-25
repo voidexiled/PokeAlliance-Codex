@@ -234,6 +234,13 @@
       "frames": 1,
       "modo": "estatico"
     },
+    "ui/categorias/otros": {
+      "archivo": "ui/categorias/general-items.png",
+      "frame": [22, 22],
+      "frames": 1,
+      "modo": "estatico",
+      "borrador": true
+    },
     "ui/elementos/normal": {
       "archivo": "ui/elementos/normal.png",
       "frame": [24, 24],

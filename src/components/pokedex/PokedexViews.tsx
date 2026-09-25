@@ -46,7 +46,7 @@ import type { ListPage } from '@/lib/lists/state';
 export interface PokedexViewContext {
   locale: Locale;
   /** `messages.ui` of the page's locale. */
-  ui: Messages['ui'];
+  ui: Omit<Messages['ui'], 'money'>;
   /** `messages.pokedex` of the page's locale: the captions and the column headers. */
   pokedex: Messages['pokedex'];
   /** «Pokédex», the name of the page: the name of the Slots panel. */

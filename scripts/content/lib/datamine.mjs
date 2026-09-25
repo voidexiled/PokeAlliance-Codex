@@ -31,6 +31,8 @@ export const EXPORT_KEYS = {
   calendar_rewards: (r) =>
     r.kind === 'calendar' ? `${r.month}:meta` : `${r.month}:${r.calendar}:${r.slot}`,
   craft_recipes: (r) => `${r.workshopId}:${r.recipeId}`,
+  // Only whether an item was listed on the Market: `readExport` keeps the clientId alone.
+  market_listings: (r) => String(r.clientId),
   quest_rewards: (r) =>
     r.source === 'linked_task'
       ? `linked:${r.taskId}`
@@ -66,7 +68,9 @@ export function readExport(dir) {
         const lines = fs.readFileSync(path.join(run, file), 'utf8').split('\n');
         for (const line of lines) {
           if (!line.trim()) continue;
-          const record = JSON.parse(line);
+          const parsed = JSON.parse(line);
+          // A listing keeps its clientId alone: no price, seller or description is read on.
+          const record = type === 'market_listings' ? { clientId: parsed.clientId } : parsed;
           merged[type].delete(key(record));
           merged[type].set(key(record), record);
         }
@@ -271,6 +275,33 @@ export const CURRENCY_NAMES = {
   pass_points: 'Pass Points',
 };
 
+/**
+ * Fields the owner writes by hand: an existing value is never replaced by the export (owner
+ * decision 2026-09-25). `mercado` is here because the importer only ever writes `true`, and
+ * `false` is the owner's mark.
+ */
+export const OWNER_FIELDS = new Set([
+  'id',
+  'nombre',
+  'categoria',
+  'sprite',
+  'borrador',
+  'imagen',
+  'funcion',
+  'generacion',
+  'uso',
+  'apilable',
+  'mercado',
+  'alias',
+  'aliases',
+]);
+
+/** `textoJuego` fields: the export writes its own language and leaves the other one. */
+const GAME_TEXT_FIELDS = new Set(['descripcion']);
+
+/** Category of the items the game names outside the Market catalog (owner, 2026-09-25). */
+export const OTHER_CATEGORY = 'otros';
+
 /** Sprite of an item the importer creates: the documented placeholder (docs/REGISTROS.md). */
 export const PLACEHOLDER_ITEM_SPRITE = 'ui/comercio/item';
 
@@ -279,11 +310,11 @@ export const PLACEHOLDER_ITEM_SPRITE = 'ui/comercio/item';
 /**
  * Applies an export to the content records, in place. `content` is
  * `{ pokemon: record[], moves: record[], items: { [categoria]: record[] }, elements: string[],
- * quests: record[] }`; `options.overwrite` is a Set of field names that may be replaced even
- * when they already hold a value. Returns the report.
+ * quests: record[] }`. The game's value wins over an existing one for game facts (reported);
+ * `options.keep` is a Set of more fields whose existing values stay. Returns the report.
  */
 export function applyExport(types, content, options = {}) {
-  const overwrite = options.overwrite ?? new Set();
+  const keep = options.keep ?? new Set();
   const elementSet = new Set(content.elements);
   const report = {
     changes: { pokemon: new Map(), moves: new Map(), items: new Map() },
@@ -291,6 +322,7 @@ export function applyExport(types, content, options = {}) {
     unmatchedPokemon: [],
     pokemonWithoutDetail: [],
     differences: [],
+    replaced: [],
     unknownElements: new Map(),
     oddTiers: [],
     mixedMoveset: [],
@@ -308,6 +340,8 @@ export function applyExport(types, content, options = {}) {
     megaStones: [],
     unresolvedRewards: new Map(),
     extraDetailFields: new Set(),
+    unnamedItems: [],
+    createdPokemon: [],
     roleValues: new Map(),
   };
   const bump = (kind, field) =>
@@ -320,18 +354,36 @@ export function applyExport(types, content, options = {}) {
   };
 
   /**
-   * Writes `value` into `record[field]` when the field is missing or null (or in `overwrite`).
-   * A different existing value is kept and reported. Returns true when it wrote.
+   * Whether the export may replace an existing, different value of `field` (owner decision
+   * 2026-09-25: the client is authoritative for game facts). Owner-authored fields and the
+   * fields of `options.keep` are never replaced: the difference is only reported. Every
+   * replacement is reported too.
+   */
+  const mayReplace = (kind, id, field, current, incoming) => {
+    const root = field.split('.')[0];
+    if (OWNER_FIELDS.has(root) || keep.has(root)) {
+      report.differences.push({ kind, id, field, current, incoming });
+      return false;
+    }
+    report.replaced.push({ kind, id, field, current, incoming });
+    return true;
+  };
+
+  /**
+   * Writes `value` into `record[field]`: when the field is missing or null, or when it differs
+   * and `mayReplace` lets the game's value win. A `textoJuego` ({ es } or { en }) only replaces
+   * its own language. Returns true when it wrote.
    */
   const fill = (kind, record, field, value, label = record.id) => {
     if (value === undefined) return false;
     const current = record[field];
-    if (same(current, value)) return false;
-    if (!isMissing(current) && !overwrite.has(field)) {
-      report.differences.push({ kind, id: label, field, current, incoming: value });
-      return false;
-    }
-    record[field] = value;
+    // An unknown (null) never erases a known value.
+    if (value === null && !isMissing(current)) return false;
+    const gameText = GAME_TEXT_FIELDS.has(field) && current !== null && typeof current === 'object';
+    const next = gameText && value !== null ? { ...current, ...value } : value;
+    if (same(current, next)) return false;
+    if (!isMissing(current) && !mayReplace(kind, label, field, current, next)) return false;
+    record[field] = next;
     bump(kind, field);
     return true;
   };
@@ -403,6 +455,72 @@ export function applyExport(types, content, options = {}) {
     report.created.items.push(created);
   }
 
+  // Items the game names outside the Market catalog (loot, evolutions, crafting, shops, the pass,
+  // the calendar, tasks): owner decision 2026-09-25, created in «otros» until the owner moves
+  // them to their category. Their id is the name's slug (the client id on a clash), never the
+  // category, so it survives the move. The name is the inspection title when the client has it.
+  if (options.createItems !== false) {
+    const wanted = new Map();
+    const want = (clientId, name) => {
+      if (!Number.isInteger(clientId) || clientId <= 0 || wanted.has(clientId)) return;
+      wanted.set(clientId, name);
+    };
+    for (const detail of types.pokedex_detail) {
+      for (const zone of detail.loot ?? [])
+        for (const drop of zone.drops ?? []) want(drop.itemId, drop.name);
+      for (const group of detail.stones ?? [])
+        for (const stone of group.stones ?? []) want(stone.itemId, stone.name);
+    }
+    for (const recipe of types.craft_recipes) {
+      want(recipe.clientId, recipe.name);
+      for (const material of recipe.materials ?? []) want(material.clientId, undefined);
+    }
+    for (const shop of types.shop_items) want(shop.clientId, shop.name);
+    for (const reward of types.pass_rewards)
+      if (reward.kind === 'reward') want(reward.clientId, reward.name);
+    for (const reward of types.calendar_rewards)
+      if (reward.kind === 'day' || reward.kind === 'after21') want(reward.clientId, reward.name);
+    for (const task of types.quest_rewards) {
+      for (const reward of task.reward?.items ?? []) want(reward.clientId, undefined);
+      for (const reward of task.rewards ?? []) want(reward.clientId, undefined);
+    }
+    for (const [clientId, referenced] of wanted) {
+      if (itemByClient.has(clientId)) continue;
+      const name = String(inspect.get(clientId)?.title ?? referenced ?? '').trim();
+      if (!name) {
+        report.unnamedItems.push(clientId);
+        continue;
+      }
+      const byName = itemByName.get(lower(name));
+      if (byName && isMissing(byName.clientId)) {
+        byName.clientId = clientId;
+        itemByClient.set(clientId, byName);
+        bump('items', 'clientId');
+        continue;
+      }
+      let id = slugify(name);
+      if (!id || itemIds.has(id)) id = `${id || 'item'}-${clientId}`;
+      itemIds.add(id);
+      const held = parseHeld(name);
+      const created = {
+        id,
+        nombre: name,
+        clientId,
+        categoria: OTHER_CATEGORY,
+        sprite: PLACEHOLDER_ITEM_SPRITE,
+        apilable: null,
+        precioNpc: { vende: null, compra: null },
+        ...(held && held.tier <= 8 ? { held } : {}),
+      };
+      (content.items[OTHER_CATEGORY] ??= []).push(created);
+      indexItem(created);
+      report.created.items.push(created);
+    }
+  }
+  // Seen on the Market: its catalog, or a listing (only the listing's clientId is read).
+  for (const entry of types.market_listings)
+    if (Number.isInteger(entry.clientId)) catalogClients.add(entry.clientId);
+
   /** The content id of an item of the export, by clientId, then by exact name. */
   const itemId = (clientId, name) => {
     const byClient = itemByClient.get(clientId);
@@ -421,8 +539,8 @@ export function applyExport(types, content, options = {}) {
 
   for (const item of allItems()) {
     if (!Number.isInteger(item.clientId)) continue;
-    // Market: true when the Market's catalog lists it. The catalog is not the whole Market (see
-    // the report), so an item outside it is left unknown, never `false`.
+    // Market: true when the Market's catalog or a listing has it. Never `false`: only the owner
+    // marks an item the Market does not take.
     if (catalogClients.has(item.clientId)) fill('items', item, 'mercado', true);
 
     const inspection = inspect.get(item.clientId);
@@ -455,16 +573,11 @@ export function applyExport(types, content, options = {}) {
       ['compra', compra],
     ]) {
       if (value === null || precio[side] === value) continue;
-      if (!isMissing(precio[side]) && !overwrite.has('precioNpc')) {
-        report.differences.push({
-          kind: 'items',
-          id: item.id,
-          field: `precioNpc.${side}`,
-          current: precio[side],
-          incoming: value,
-        });
+      if (
+        !isMissing(precio[side]) &&
+        !mayReplace('items', item.id, `precioNpc.${side}`, precio[side], value)
+      )
         continue;
-      }
       precio[side] = value;
       changed = true;
     }
@@ -481,6 +594,68 @@ export function applyExport(types, content, options = {}) {
     pokemonByName.get(lower(name)) ?? pokemonById.get(slugify(name)) ?? null;
 
   const details = types.pokedex_detail;
+
+  // Every Pokédex entry is a record (owner decision 2026-09-25: Mega forms, Castform and
+  // Smeargle forms, shinies and the missing species are all usable in the game). A new record
+  // follows the existing ones: id = slug of the game name, the Pokédex number, the generation
+  // of the records of the same number, and the client art of its species (`NNN` or `NNN.1` for a
+  // shiny) only where the art is the same Pokémon — a named type form of Smeargle, or a plain
+  // shiny; a Mega or a Castform form has its own look, so `imagen` stays null («?»). The rest
+  // (level, tier, elements…) the import below fills like any other record.
+  if (options.createPokemon !== false) {
+    const hasArt = options.hasArt ?? (() => false);
+    for (const detail of details) {
+      if (findPokemon(detail.name)) continue;
+      const name = String(detail.name);
+      const shiny = /^Shiny /.test(name);
+      const numero = Number.isInteger(detail.id) && detail.id > 0 ? detail.id : null;
+      const kin =
+        numero === null ? [] : content.pokemon.filter((record) => record.numero === numero);
+      const species = (detail.shinyIds ?? [])[0];
+      const base = shiny ? name.replace(/^Shiny /, '') : name;
+      const ownLook =
+        lower(base) === lower(species ?? '') ||
+        /^Smeargle /.test(base) ||
+        kin.some((r) => r.nombre === base);
+      const dex = numero === null ? null : String(numero).padStart(3, '0') + (shiny ? '.1' : '');
+      const imagen =
+        dex !== null && ownLook && !/^Mega /.test(base) && hasArt(dex)
+          ? `/pokemon/${dex}.png`
+          : null;
+      const record = {
+        id: slugify(name),
+        nombre: name,
+        numero,
+        generacion: kin.find((r) => r.generacion !== null)?.generacion ?? null,
+        variante: shiny ? 'shiny' : 'normal',
+        nivel: null,
+        tier: null,
+        funcion: null,
+        elementos: [],
+        imagen,
+      };
+      if (!record.id || pokemonById.has(record.id)) {
+        report.unmatchedPokemon.push(`${name} (#${detail.id}): id ocupado`);
+        continue;
+      }
+      // After the last record of its number, or before the first with a higher one.
+      let at = -1;
+      content.pokemon.forEach((r, index) => {
+        if (numero !== null && r.numero === numero) at = index + 1;
+      });
+      if (at === -1) {
+        const next = content.pokemon.findIndex(
+          (r) => numero !== null && r.numero !== null && r.numero > numero,
+        );
+        at = next === -1 ? content.pokemon.length : next;
+      }
+      content.pokemon.splice(at, 0, record);
+      pokemonByName.set(lower(name), record);
+      pokemonById.set(record.id, record);
+      report.createdPokemon.push(record.id);
+    }
+  }
+
   const matched = [];
   for (const detail of details) {
     const record = findPokemon(detail.name);
@@ -536,15 +711,7 @@ export function applyExport(types, content, options = {}) {
     );
     report.roleValues.set(detail.role, (report.roleValues.get(detail.role) ?? 0) + 1);
 
-    if (isMissing(record.numero)) fill('pokemon', record, 'numero', detail.id);
-    else if (record.numero !== detail.id)
-      report.differences.push({
-        kind: 'pokemon',
-        id: record.id,
-        field: 'numero',
-        current: record.numero,
-        incoming: detail.id,
-      });
+    if (Number.isInteger(detail.id) && detail.id > 0) fill('pokemon', record, 'numero', detail.id);
 
     fill('pokemon', record, 'nivel', detail.level > 0 ? detail.level : null);
 
@@ -556,19 +723,9 @@ export function applyExport(types, content, options = {}) {
       .map((element) => validElement(element))
       .filter(Boolean);
     if (elementos.length > 0) {
-      if ((record.elementos ?? []).length === 0 || overwrite.has('elementos')) {
-        if (!same(record.elementos, elementos)) {
-          record.elementos = elementos;
-          bump('pokemon', 'elementos');
-        }
-      } else if (!same(record.elementos, elementos))
-        report.differences.push({
-          kind: 'pokemon',
-          id: record.id,
-          field: 'elementos',
-          current: record.elementos,
-          incoming: elementos,
-        });
+      // An empty list is «not written yet»: filled without a report.
+      if ((record.elementos ?? []).length === 0) record.elementos = null;
+      fill('pokemon', record, 'elementos', elementos);
     }
 
     const description = String(detail.description ?? '').trim();
@@ -662,16 +819,11 @@ export function applyExport(types, content, options = {}) {
         ['primal', primal],
       ]) {
         if (list === undefined || same(current[zone], list)) continue;
-        if (current[zone] !== undefined && !overwrite.has('dropsPorZona')) {
-          report.differences.push({
-            kind: 'pokemon',
-            id: record.id,
-            field: `dropsPorZona.${zone}`,
-            current: '(lista)',
-            incoming: '(lista)',
-          });
+        if (
+          current[zone] !== undefined &&
+          !mayReplace('pokemon', record.id, `dropsPorZona.${zone}`, '(lista)', '(lista)')
+        )
           continue;
-        }
         next[zone] = list;
         changed = true;
       }
@@ -924,16 +1076,12 @@ export function applyExport(types, content, options = {}) {
     let changed = false;
     for (const [list, entries] of Object.entries(lists)) {
       if (same(current[list], entries)) continue;
-      if (current[list] !== undefined && current[list].length > 0 && !overwrite.has('obtencion')) {
-        report.differences.push({
-          kind: 'items',
-          id: item.id,
-          field: `obtencion.${list}`,
-          current: '(lista)',
-          incoming: '(lista)',
-        });
+      if (
+        current[list] !== undefined &&
+        current[list].length > 0 &&
+        !mayReplace('items', item.id, `obtencion.${list}`, '(lista)', '(lista)')
+      )
         continue;
-      }
       next[list] = entries;
       changed = true;
     }

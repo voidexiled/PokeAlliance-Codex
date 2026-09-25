@@ -132,6 +132,10 @@ const rotations = getRotations().map((record) => {
     lines,
   };
 });
+// The list islands use no money text: `money` stays out of their props (§13.6, 20 KB).
+const listUi = Object.fromEntries(
+  Object.entries(messages.ui).filter(([key]) => key !== 'money'),
+) as Omit<Messages['ui'], 'money'>;
 ---
 
 <PageLayout
@@ -153,7 +157,7 @@ const rotations = getRotations().map((record) => {
     icons={tierIcons(firstRows, data.refs.elementos)}
     drops={{}}
     title={title}
-    ui={messages.ui}
+    ui={listUi}
     pokedex={messages.pokedex}
   />
   {

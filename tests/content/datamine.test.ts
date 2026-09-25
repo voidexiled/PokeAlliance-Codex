@@ -31,6 +31,7 @@ function emptyTypes(): Record<string, Rec[]> {
     calendar_rewards: [],
     craft_recipes: [],
     quest_rewards: [],
+    market_listings: [],
   };
 }
 
@@ -201,7 +202,16 @@ describe('applyExport', () => {
       inmune: [],
     });
     expect(shiny).toMatchObject({ nivel: null, tier: 'Legendary' });
-    expect(report.unmatchedPokemon).toEqual(['Mega Test A (#1)']);
+    expect(report.unmatchedPokemon).toEqual([]);
+    expect(report.createdPokemon).toEqual(['mega-test-a']);
+    // A Mega has its own look: no species art, the «?».
+    expect(data.pokemon.find((entry) => entry.id === 'mega-test-a')).toMatchObject({
+      numero: 1,
+      variante: 'normal',
+      imagen: null,
+      nivel: 20,
+      tier: 5,
+    });
     expect(data.moves.map((entry) => entry.id)).toEqual(['leaf-hit', 'calm']);
     expect(data.moves[1]).toMatchObject({ alcance: 'pasivo', pokemon: ['test-a'] });
   });
@@ -271,7 +281,7 @@ describe('applyExport', () => {
     const data = content({
       pokemon: [pokemon('seed', 'Seed'), pokemon('rose', 'Rose'), pokemon('lily', 'Lily')],
     });
-    const report = applyExport(types, data);
+    const report = applyExport(types, data, { createItems: false });
     expect((data.pokemon[0] as Rec).evolucion).toEqual([
       { a: 'rose', nivel: 50, items: [{ item: 'test-stone', cantidad: 2 }] },
     ]);
@@ -318,32 +328,99 @@ describe('applyExport', () => {
     expect(report.catalogWithoutCategory.map((entry: Rec) => entry.name)).toEqual(['Odd Thing']);
   });
 
-  it('keeps values written by hand and is idempotent', () => {
+  it('lets the client win on game facts, keeps owner fields and the other language, and is idempotent', () => {
     const types = emptyTypes();
     types.market_catalog = [
       { category: 'Creature Items', categoryId: 8, clientId: 100, id: 1, name: 'Test Leaf' },
     ];
-    types.pokedex_detail = [detail('Test A', { moves: [move('Leaf Hit', 'grass', ['aoe'])] })];
+    types.pokedex_detail = [
+      detail('Test A', { level: 0, moves: [move('Leaf Hit', 'grass', ['aoe'])] }),
+    ];
     const data = content({
-      pokemon: [pokemon('test-a', 'Test A', { tier: 'ULTIMATE', descripcion: { en: 'Mine.' } })],
+      pokemon: [
+        pokemon('test-a', 'Test A', {
+          nivel: 30,
+          tier: 'ULTIMATE',
+          funcion: 'PVP',
+          imagen: '/pokemon/001.png',
+          descripcion: { en: 'Mine.' },
+        }),
+      ],
       items: { 'creature-items': [] },
     });
     const first = applyExport(types, data);
-    expect(data.pokemon[0]).toMatchObject({ tier: 'ULTIMATE', descripcion: { en: 'Mine.' } });
-    expect(first.differences.map((entry: Rec) => entry.field)).toEqual(['tier', 'descripcion']);
+    expect(data.pokemon[0]).toMatchObject({
+      tier: 5,
+      // An unknown level (0) never erases a known one; owner fields stay.
+      nivel: 30,
+      funcion: 'PVP',
+      imagen: '/pokemon/001.png',
+      descripcion: { en: 'Mine.', es: 'Texto de prueba.' },
+    });
+    expect(first.replaced.map((entry: Rec) => entry.field)).toEqual(['tier', 'descripcion']);
 
     const snapshot = JSON.stringify(data);
     const second = applyExport(types, data);
     expect(JSON.stringify(data)).toBe(snapshot);
     expect(second.created.items).toEqual([]);
+    expect(second.replaced).toEqual([]);
     expect([...second.changes.pokemon.values()]).toEqual([]);
   });
 
-  it('overwrites a hand value only when asked', () => {
+  it('creates the items the game names outside the catalog in «otros»; a listing marks the Market', () => {
     const types = emptyTypes();
+    types.pokedex_detail = [detail('Test A')];
+    types.items = [
+      {
+        clientId: 100,
+        title: 'test leaf',
+        rows: [{ section: 'header', text: 'You see test leaf.\nPrice: $15.' }],
+      },
+    ];
+    types.market_listings = [{ clientId: 100 }];
+    const data = content();
+    const report = applyExport(types, data);
+    expect(report.created.items.map((item: Rec) => item.id)).toEqual(['test-leaf']);
+    expect(data.items.otros).toEqual([
+      {
+        id: 'test-leaf',
+        nombre: 'test leaf',
+        clientId: 100,
+        categoria: 'otros',
+        sprite: 'ui/comercio/item',
+        apilable: null,
+        precioNpc: { vende: 15, compra: null },
+        mercado: true,
+      },
+    ]);
+    expect((data.pokemon[0] as Rec).drops).toEqual([
+      { item: 'test-leaf', cantidad: { min: 1, max: 2 }, probabilidad: 33 },
+    ]);
+  });
+
+  it('keeps an owner mark and the fields of `keep`', () => {
+    const types = emptyTypes();
+    types.market_catalog = [
+      { category: 'Creature Items', categoryId: 8, clientId: 100, id: 1, name: 'Test Leaf' },
+    ];
     types.pokedex_detail = [detail('Test A', { loot: [] })];
-    const data = content({ pokemon: [pokemon('test-a', 'Test A', { tier: 'ULTIMATE' })] });
-    applyExport(types, data, { overwrite: new Set(['tier']) });
-    expect((data.pokemon[0] as Rec).tier).toBe(5);
+    const leaf = {
+      id: 'test-leaf',
+      nombre: 'Test Leaf',
+      clientId: 100,
+      categoria: 'otros',
+      sprite: 'items/x',
+      apilable: null,
+      precioNpc: { vende: null, compra: null },
+      mercado: false,
+    };
+    const data = content({
+      pokemon: [pokemon('test-a', 'Test A', { tier: 'ULTIMATE' })],
+      items: { otros: [leaf], 'creature-items': [] },
+    });
+    const report = applyExport(types, data, { keep: new Set(['tier']) });
+    expect((data.pokemon[0] as Rec).tier).toBe('ULTIMATE');
+    expect(data.items.otros[0]).toMatchObject({ categoria: 'otros', mercado: false });
+    expect(report.differences.map((entry: Rec) => entry.field)).toEqual(['mercado', 'tier']);
   });
 });

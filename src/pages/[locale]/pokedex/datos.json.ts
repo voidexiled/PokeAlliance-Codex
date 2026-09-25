@@ -49,7 +49,7 @@ import type { Elemento } from '@/lib/content/registry-schema';
 import { getPokemon } from '@/lib/content/repository';
 import type { PokemonRecord } from '@/lib/content/types';
 import { elementTip, itemTip, type LocalizedText, type TipLabels } from '@/lib/game/tips';
-import { spriteOrNull } from '@/lib/sprites/resolve';
+import { listItemSprite, spriteOrNull } from '@/lib/sprites/resolve';
 
 export const prerender = true;
 
@@ -94,7 +94,7 @@ function itemRef(id: string, locale: Locale): PokedexItemRef | null {
   return {
     nombre: item.nombre,
     categoria: item.categoria,
-    sprite: spriteOrNull(getSpriteRegistry(), item.sprite),
+    sprite: listItemSprite(getSpriteRegistry(), item.sprite),
     precioNpc: item.precioNpc,
     nombreCategoria: category?.nombre[locale] ?? null,
   };

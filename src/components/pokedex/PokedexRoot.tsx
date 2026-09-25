@@ -96,8 +96,11 @@ export interface PokedexRootProps {
   drops: Readonly<Record<string, DexCardDrop>>;
   /** «Pokédex», the name of the page: the name of the Slots panel. */
   title: string;
-  /** `messages.ui` of the page's locale: the components' texts, the card texts in `cards`. */
-  ui: Messages['ui'];
+  /**
+   * `messages.ui` of the page's locale: the components' texts, the card texts in `cards`. The
+   * list uses no money text, so the page leaves `money` out of the props (§13.6, 20 KB).
+   */
+  ui: Omit<Messages['ui'], 'money'>;
   /**
    * `messages.pokedex` of the page's locale (8.2): the label and the first option of each
    * filter, the count by Variante, the empty state, and the captions and fixed column headers
