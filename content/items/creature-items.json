@@ -26,6 +26,3256 @@
         "compra": null
       },
       "borrador": true
+    },
+    {
+      "id": "bulb",
+      "nombre": "Bulb",
+      "clientId": 35787,
+      "categoria": "creature-items",
+      "sprite": "ui/comercio/item",
+      "apilable": null,
+      "precioNpc": {
+        "vende": 40,
+        "compra": null
+      },
+      "mercado": true
+    },
+    {
+      "id": "leaf",
+      "nombre": "Leaf",
+      "clientId": 35788,
+      "categoria": "creature-items",
+      "sprite": "ui/comercio/item",
+      "apilable": null,
+      "precioNpc": {
+        "vende": 100,
+        "compra": null
+      },
+      "mercado": true
+    },
+    {
+      "id": "red-petal",
+      "nombre": "Red Petal",
+      "clientId": 35789,
+      "categoria": "creature-items",
+      "sprite": "ui/comercio/item",
+      "apilable": null,
+      "precioNpc": {
+        "vende": 180,
+        "compra": null
+      },
+      "mercado": true
+    },
+    {
+      "id": "fire-tail",
+      "nombre": "Fire Tail",
+      "clientId": 35790,
+      "categoria": "creature-items",
+      "sprite": "ui/comercio/item",
+      "apilable": null,
+      "precioNpc": {
+        "vende": 45,
+        "compra": null
+      },
+      "mercado": true
+    },
+    {
+      "id": "lizard-tail",
+      "nombre": "Lizard Tail",
+      "clientId": 35791,
+      "categoria": "creature-items",
+      "sprite": "ui/comercio/item",
+      "apilable": null,
+      "precioNpc": {
+        "vende": 105,
+        "compra": null
+      },
+      "mercado": true
+    },
+    {
+      "id": "fire-wing",
+      "nombre": "Fire Wing",
+      "clientId": 35792,
+      "categoria": "creature-items",
+      "sprite": "ui/comercio/item",
+      "apilable": null,
+      "precioNpc": {
+        "vende": 185,
+        "compra": null
+      },
+      "mercado": true
+    },
+    {
+      "id": "squirtle-hull",
+      "nombre": "Squirtle Hull",
+      "clientId": 35793,
+      "categoria": "creature-items",
+      "sprite": "ui/comercio/item",
+      "apilable": null,
+      "precioNpc": {
+        "vende": 40,
+        "compra": null
+      },
+      "mercado": true
+    },
+    {
+      "id": "wartortle-ear",
+      "nombre": "Wartortle Ear",
+      "clientId": 35794,
+      "categoria": "creature-items",
+      "sprite": "ui/comercio/item",
+      "apilable": null,
+      "precioNpc": {
+        "vende": 100,
+        "compra": null
+      },
+      "mercado": true
+    },
+    {
+      "id": "water-cannon",
+      "nombre": "Water Cannon",
+      "clientId": 35795,
+      "categoria": "creature-items",
+      "sprite": "ui/comercio/item",
+      "apilable": null,
+      "precioNpc": {
+        "vende": 180,
+        "compra": null
+      },
+      "mercado": true
+    },
+    {
+      "id": "caterpie-antenna",
+      "nombre": "Caterpie Antenna",
+      "clientId": 35796,
+      "categoria": "creature-items",
+      "sprite": "ui/comercio/item",
+      "apilable": null,
+      "precioNpc": {
+        "vende": 15,
+        "compra": null
+      },
+      "mercado": true
+    },
+    {
+      "id": "piece-of-cocoon",
+      "nombre": "Piece of Cocoon",
+      "clientId": 35797,
+      "categoria": "creature-items",
+      "sprite": "ui/comercio/item",
+      "apilable": null,
+      "precioNpc": {
+        "vende": 20,
+        "compra": null
+      },
+      "mercado": true
+    },
+    {
+      "id": "butterfree-wing",
+      "nombre": "Butterfree Wing",
+      "clientId": 35798,
+      "categoria": "creature-items",
+      "sprite": "ui/comercio/item",
+      "apilable": null,
+      "precioNpc": {
+        "vende": 70,
+        "compra": null
+      },
+      "mercado": true
+    },
+    {
+      "id": "poison-sting",
+      "nombre": "Poison Sting",
+      "clientId": 35799,
+      "categoria": "creature-items",
+      "sprite": "ui/comercio/item",
+      "apilable": null,
+      "precioNpc": {
+        "vende": 15,
+        "compra": null
+      },
+      "mercado": true
+    },
+    {
+      "id": "yellow-cocoon",
+      "nombre": "Yellow Cocoon",
+      "clientId": 35800,
+      "categoria": "creature-items",
+      "sprite": "ui/comercio/item",
+      "apilable": null,
+      "precioNpc": {
+        "vende": 25,
+        "compra": null
+      },
+      "mercado": true
+    },
+    {
+      "id": "bee-sting",
+      "nombre": "Bee Sting",
+      "clientId": 35801,
+      "categoria": "creature-items",
+      "sprite": "ui/comercio/item",
+      "apilable": null,
+      "precioNpc": {
+        "vende": 78,
+        "compra": null
+      },
+      "mercado": true
+    },
+    {
+      "id": "bird-crest",
+      "nombre": "Bird Crest",
+      "clientId": 35802,
+      "categoria": "creature-items",
+      "sprite": "ui/comercio/item",
+      "apilable": null,
+      "precioNpc": {
+        "vende": 15,
+        "compra": null
+      },
+      "mercado": true
+    },
+    {
+      "id": "bird-tail",
+      "nombre": "Bird Tail",
+      "clientId": 35803,
+      "categoria": "creature-items",
+      "sprite": "ui/comercio/item",
+      "apilable": null,
+      "precioNpc": {
+        "vende": 45,
+        "compra": null
+      },
+      "mercado": true
+    },
+    {
+      "id": "big-crest",
+      "nombre": "Big Crest",
+      "clientId": 35804,
+      "categoria": "creature-items",
+      "sprite": "ui/comercio/item",
+      "apilable": null,
+      "precioNpc": {
+        "vende": 185,
+        "compra": null
+      },
+      "mercado": true
+    },
+    {
+      "id": "mouse-tail",
+      "nombre": "Mouse Tail",
+      "clientId": 35805,
+      "categoria": "creature-items",
+      "sprite": "ui/comercio/item",
+      "apilable": null,
+      "precioNpc": {
+        "vende": 15,
+        "compra": null
+      },
+      "mercado": true
+    },
+    {
+      "id": "rat-ear",
+      "nombre": "Rat Ear",
+      "clientId": 35806,
+      "categoria": "creature-items",
+      "sprite": "ui/comercio/item",
+      "apilable": null,
+      "precioNpc": {
+        "vende": 70,
+        "compra": null
+      },
+      "mercado": true
+    },
+    {
+      "id": "bird-wing",
+      "nombre": "Bird Wing",
+      "clientId": 35807,
+      "categoria": "creature-items",
+      "sprite": "ui/comercio/item",
+      "apilable": null,
+      "precioNpc": {
+        "vende": 20,
+        "compra": null
+      },
+      "mercado": true
+    },
+    {
+      "id": "pointy-beak",
+      "nombre": "Pointy Beak",
+      "clientId": 35808,
+      "categoria": "creature-items",
+      "sprite": "ui/comercio/item",
+      "apilable": null,
+      "precioNpc": {
+        "vende": 115,
+        "compra": null
+      },
+      "mercado": true
+    },
+    {
+      "id": "snake-tail",
+      "nombre": "Snake Tail",
+      "clientId": 35809,
+      "categoria": "creature-items",
+      "sprite": "ui/comercio/item",
+      "apilable": null,
+      "precioNpc": {
+        "vende": 20,
+        "compra": null
+      },
+      "mercado": true
+    },
+    {
+      "id": "cobra-tail",
+      "nombre": "Cobra Tail",
+      "clientId": 35810,
+      "categoria": "creature-items",
+      "sprite": "ui/comercio/item",
+      "apilable": null,
+      "precioNpc": {
+        "vende": 105,
+        "compra": null
+      },
+      "mercado": true
+    },
+    {
+      "id": "electric-rat-tail",
+      "nombre": "Electric Rat Tail",
+      "clientId": 35811,
+      "categoria": "creature-items",
+      "sprite": "ui/comercio/item",
+      "apilable": null,
+      "precioNpc": {
+        "vende": 115,
+        "compra": null
+      },
+      "mercado": true
+    },
+    {
+      "id": "electric-ear",
+      "nombre": "Electric Ear",
+      "clientId": 35812,
+      "categoria": "creature-items",
+      "sprite": "ui/comercio/item",
+      "apilable": null,
+      "precioNpc": {
+        "vende": 180,
+        "compra": null
+      },
+      "mercado": true
+    },
+    {
+      "id": "armadillo-tail",
+      "nombre": "Armadillo Tail",
+      "clientId": 35813,
+      "categoria": "creature-items",
+      "sprite": "ui/comercio/item",
+      "apilable": null,
+      "precioNpc": {
+        "vende": 40,
+        "compra": null
+      },
+      "mercado": true
+    },
+    {
+      "id": "armadillo-claw",
+      "nombre": "Armadillo Claw",
+      "clientId": 35814,
+      "categoria": "creature-items",
+      "sprite": "ui/comercio/item",
+      "apilable": null,
+      "precioNpc": {
+        "vende": 140,
+        "compra": null
+      },
+      "mercado": true
+    },
+    {
+      "id": "small-blue-ear",
+      "nombre": "Small Blue Ear",
+      "clientId": 35815,
+      "categoria": "creature-items",
+      "sprite": "ui/comercio/item",
+      "apilable": null,
+      "precioNpc": {
+        "vende": 25,
+        "compra": null
+      },
+      "mercado": true
+    },
+    {
+      "id": "blue-nido-ear",
+      "nombre": "Blue Nido Ear",
+      "clientId": 35816,
+      "categoria": "creature-items",
+      "sprite": "ui/comercio/item",
+      "apilable": null,
+      "precioNpc": {
+        "vende": 78,
+        "compra": null
+      },
+      "mercado": true
+    },
+    {
+      "id": "queen-ear",
+      "nombre": "Queen Ear",
+      "clientId": 35817,
+      "categoria": "creature-items",
+      "sprite": "ui/comercio/item",
+      "apilable": null,
+      "precioNpc": {
+        "vende": 185,
+        "compra": null
+      },
+      "mercado": true
+    },
+    {
+      "id": "small-purple-ear",
+      "nombre": "Small Purple Ear",
+      "clientId": 35818,
+      "categoria": "creature-items",
+      "sprite": "ui/comercio/item",
+      "apilable": null,
+      "precioNpc": {
+        "vende": 20,
+        "compra": null
+      },
+      "mercado": true
+    },
+    {
+      "id": "purple-nido-ear",
+      "nombre": "Purple Nido Ear",
+      "clientId": 35819,
+      "categoria": "creature-items",
+      "sprite": "ui/comercio/item",
+      "apilable": null,
+      "precioNpc": {
+        "vende": 70,
+        "compra": null
+      },
+      "mercado": true
+    },
+    {
+      "id": "king-ear",
+      "nombre": "King Ear",
+      "clientId": 35820,
+      "categoria": "creature-items",
+      "sprite": "ui/comercio/item",
+      "apilable": null,
+      "precioNpc": {
+        "vende": 180,
+        "compra": null
+      },
+      "mercado": true
+    },
+    {
+      "id": "moon-topknot",
+      "nombre": "Moon Topknot",
+      "clientId": 35821,
+      "categoria": "creature-items",
+      "sprite": "ui/comercio/item",
+      "apilable": null,
+      "precioNpc": {
+        "vende": 100,
+        "compra": null
+      },
+      "mercado": true
+    },
+    {
+      "id": "pink-wings",
+      "nombre": "Pink Wings",
+      "clientId": 35822,
+      "categoria": "creature-items",
+      "sprite": "ui/comercio/item",
+      "apilable": null,
+      "precioNpc": {
+        "vende": 185,
+        "compra": null
+      },
+      "mercado": true
+    },
+    {
+      "id": "canine-tail",
+      "nombre": "Canine Tail",
+      "clientId": 35823,
+      "categoria": "creature-items",
+      "sprite": "ui/comercio/item",
+      "apilable": null,
+      "precioNpc": {
+        "vende": 45,
+        "compra": null
+      },
+      "mercado": true
+    },
+    {
+      "id": "fox-tail",
+      "nombre": "Fox Tail",
+      "clientId": 35824,
+      "categoria": "creature-items",
+      "sprite": "ui/comercio/item",
+      "apilable": null,
+      "precioNpc": {
+        "vende": 180,
+        "compra": null
+      },
+      "mercado": true
+    },
+    {
+      "id": "microphone",
+      "nombre": "Microphone",
+      "clientId": 35825,
+      "categoria": "creature-items",
+      "sprite": "ui/comercio/item",
+      "apilable": null,
+      "precioNpc": {
+        "vende": 105,
+        "compra": null
+      },
+      "mercado": true
+    },
+    {
+      "id": "wigglytuff-ear",
+      "nombre": "Wigglytuff Ear",
+      "clientId": 35826,
+      "categoria": "creature-items",
+      "sprite": "ui/comercio/item",
+      "apilable": null,
+      "precioNpc": {
+        "vende": 185,
+        "compra": null
+      },
+      "mercado": true
+    },
+    {
+      "id": "bat-wing",
+      "nombre": "Bat Wing",
+      "clientId": 35827,
+      "categoria": "creature-items",
+      "sprite": "ui/comercio/item",
+      "apilable": null,
+      "precioNpc": {
+        "vende": 25,
+        "compra": null
+      },
+      "mercado": true
+    },
+    {
+      "id": "vampire-wing",
+      "nombre": "Vampire Wing",
+      "clientId": 35828,
+      "categoria": "creature-items",
+      "sprite": "ui/comercio/item",
+      "apilable": null,
+      "precioNpc": {
+        "vende": 100,
+        "compra": null
+      },
+      "mercado": true
+    },
+    {
+      "id": "leaves",
+      "nombre": "Leaves",
+      "clientId": 35829,
+      "categoria": "creature-items",
+      "sprite": "ui/comercio/item",
+      "apilable": null,
+      "precioNpc": {
+        "vende": 15,
+        "compra": null
+      },
+      "mercado": true
+    },
+    {
+      "id": "poison-bulb",
+      "nombre": "Poison Bulb",
+      "clientId": 35830,
+      "categoria": "creature-items",
+      "sprite": "ui/comercio/item",
+      "apilable": null,
+      "precioNpc": {
+        "vende": 78,
+        "compra": null
+      },
+      "mercado": true
+    },
+    {
+      "id": "poison-petal",
+      "nombre": "Poison Petal",
+      "clientId": 35831,
+      "categoria": "creature-items",
+      "sprite": "ui/comercio/item",
+      "apilable": null,
+      "precioNpc": {
+        "vende": 115,
+        "compra": null
+      },
+      "mercado": true
+    },
+    {
+      "id": "mushroom",
+      "nombre": "Mushroom",
+      "clientId": 35832,
+      "categoria": "creature-items",
+      "sprite": "ui/comercio/item",
+      "apilable": null,
+      "precioNpc": {
+        "vende": 15,
+        "compra": null
+      },
+      "mercado": true
+    },
+    {
+      "id": "big-mushroom",
+      "nombre": "Big Mushroom",
+      "clientId": 35833,
+      "categoria": "creature-items",
+      "sprite": "ui/comercio/item",
+      "apilable": null,
+      "precioNpc": {
+        "vende": 115,
+        "compra": null
+      },
+      "mercado": true
+    },
+    {
+      "id": "bug-antenna",
+      "nombre": "Bug Antenna",
+      "clientId": 35834,
+      "categoria": "creature-items",
+      "sprite": "ui/comercio/item",
+      "apilable": null,
+      "precioNpc": {
+        "vende": 40,
+        "compra": null
+      },
+      "mercado": true
+    },
+    {
+      "id": "moth-wing",
+      "nombre": "Moth Wing",
+      "clientId": 35835,
+      "categoria": "creature-items",
+      "sprite": "ui/comercio/item",
+      "apilable": null,
+      "precioNpc": {
+        "vende": 115,
+        "compra": null
+      },
+      "mercado": true
+    },
+    {
+      "id": "small-handfull-of-stones",
+      "nombre": "Small Handfull of Stones",
+      "clientId": 35836,
+      "categoria": "creature-items",
+      "sprite": "ui/comercio/item",
+      "apilable": null,
+      "precioNpc": {
+        "vende": 20,
+        "compra": null
+      },
+      "mercado": true
+    },
+    {
+      "id": "handful-of-stones",
+      "nombre": "Handful of Stones",
+      "clientId": 35837,
+      "categoria": "creature-items",
+      "sprite": "ui/comercio/item",
+      "apilable": null,
+      "precioNpc": {
+        "vende": 105,
+        "compra": null
+      },
+      "mercado": true
+    },
+    {
+      "id": "luck-medallion",
+      "nombre": "Luck Medallion",
+      "clientId": 35838,
+      "categoria": "creature-items",
+      "sprite": "ui/comercio/item",
+      "apilable": null,
+      "precioNpc": {
+        "vende": 45,
+        "compra": null
+      },
+      "mercado": true
+    },
+    {
+      "id": "wool-ball",
+      "nombre": "Wool Ball",
+      "clientId": 35839,
+      "categoria": "creature-items",
+      "sprite": "ui/comercio/item",
+      "apilable": null,
+      "precioNpc": {
+        "vende": 115,
+        "compra": null
+      },
+      "mercado": true
+    },
+    {
+      "id": "duck-beak",
+      "nombre": "Duck Beak",
+      "clientId": 35840,
+      "categoria": "creature-items",
+      "sprite": "ui/comercio/item",
+      "apilable": null,
+      "precioNpc": {
+        "vende": 40,
+        "compra": null
+      },
+      "mercado": true
+    },
+    {
+      "id": "duck-paw",
+      "nombre": "Duck Paw",
+      "clientId": 35841,
+      "categoria": "creature-items",
+      "sprite": "ui/comercio/item",
+      "apilable": null,
+      "precioNpc": {
+        "vende": 145,
+        "compra": null
+      },
+      "mercado": true
+    },
+    {
+      "id": "mankey-tail",
+      "nombre": "Mankey Tail",
+      "clientId": 35842,
+      "categoria": "creature-items",
+      "sprite": "ui/comercio/item",
+      "apilable": null,
+      "precioNpc": {
+        "vende": 25,
+        "compra": null
+      },
+      "mercado": true
+    },
+    {
+      "id": "iron-bracelet",
+      "nombre": "Iron Bracelet",
+      "clientId": 35843,
+      "categoria": "creature-items",
+      "sprite": "ui/comercio/item",
+      "apilable": null,
+      "precioNpc": {
+        "vende": 115,
+        "compra": null
+      },
+      "mercado": true
+    },
+    {
+      "id": "dog-fur",
+      "nombre": "Dog Fur",
+      "clientId": 35844,
+      "categoria": "creature-items",
+      "sprite": "ui/comercio/item",
+      "apilable": null,
+      "precioNpc": {
+        "vende": 70,
+        "compra": null
+      },
+      "mercado": true
+    },
+    {
+      "id": "giant-piece-of-fur",
+      "nombre": "Giant Piece of Fur",
+      "clientId": 35845,
+      "categoria": "creature-items",
+      "sprite": "ui/comercio/item",
+      "apilable": null,
+      "precioNpc": {
+        "vende": 240,
+        "compra": null
+      },
+      "mercado": true
+    },
+    {
+      "id": "frog-tail",
+      "nombre": "Frog Tail",
+      "clientId": 35846,
+      "categoria": "creature-items",
+      "sprite": "ui/comercio/item",
+      "apilable": null,
+      "precioNpc": {
+        "vende": 15,
+        "compra": null
+      },
+      "mercado": true
+    },
+    {
+      "id": "small-box-gloves",
+      "nombre": "Small Box Gloves",
+      "clientId": 35847,
+      "categoria": "creature-items",
+      "sprite": "ui/comercio/item",
+      "apilable": null,
+      "precioNpc": {
+        "vende": 78,
+        "compra": null
+      },
+      "mercado": true
+    },
+    {
+      "id": "big-fist-gloves",
+      "nombre": "Big Fist Gloves",
+      "clientId": 35848,
+      "categoria": "creature-items",
+      "sprite": "ui/comercio/item",
+      "apilable": null,
+      "precioNpc": {
+        "vende": 180,
+        "compra": null
+      },
+      "mercado": true
+    },
+    {
+      "id": "psychic-vest",
+      "nombre": "Psychic Vest",
+      "clientId": 35849,
+      "categoria": "creature-items",
+      "sprite": "ui/comercio/item",
+      "apilable": null,
+      "precioNpc": {
+        "vende": 20,
+        "compra": null
+      },
+      "mercado": true
+    },
+    {
+      "id": "psychic-spoon",
+      "nombre": "Psychic Spoon",
+      "clientId": 35850,
+      "categoria": "creature-items",
+      "sprite": "ui/comercio/item",
+      "apilable": null,
+      "precioNpc": {
+        "vende": 100,
+        "compra": null
+      },
+      "mercado": true
+    },
+    {
+      "id": "psychic-moustache",
+      "nombre": "Psychic Moustache",
+      "clientId": 35851,
+      "categoria": "creature-items",
+      "sprite": "ui/comercio/item",
+      "apilable": null,
+      "precioNpc": {
+        "vende": 235,
+        "compra": null
+      },
+      "mercado": true
+    },
+    {
+      "id": "fighter-hawk",
+      "nombre": "Fighter Hawk",
+      "clientId": 35852,
+      "categoria": "creature-items",
+      "sprite": "ui/comercio/item",
+      "apilable": null,
+      "precioNpc": {
+        "vende": 45,
+        "compra": null
+      },
+      "mercado": true
+    },
+    {
+      "id": "fighter-underwear",
+      "nombre": "Fighter Underwear",
+      "clientId": 35853,
+      "categoria": "creature-items",
+      "sprite": "ui/comercio/item",
+      "apilable": null,
+      "precioNpc": {
+        "vende": 105,
+        "compra": null
+      },
+      "mercado": true
+    },
+    {
+      "id": "belt-of-champion",
+      "nombre": "Belt of Champion",
+      "clientId": 35854,
+      "categoria": "creature-items",
+      "sprite": "ui/comercio/item",
+      "apilable": null,
+      "precioNpc": {
+        "vende": 185,
+        "compra": null
+      },
+      "mercado": true
+    },
+    {
+      "id": "flower-stem",
+      "nombre": "Flower Stem",
+      "clientId": 35855,
+      "categoria": "creature-items",
+      "sprite": "ui/comercio/item",
+      "apilable": null,
+      "precioNpc": {
+        "vende": 15,
+        "compra": null
+      },
+      "mercado": true
+    },
+    {
+      "id": "weepinbell-leaves",
+      "nombre": "Weepinbell Leaves",
+      "clientId": 35856,
+      "categoria": "creature-items",
+      "sprite": "ui/comercio/item",
+      "apilable": null,
+      "precioNpc": {
+        "vende": 70,
+        "compra": null
+      },
+      "mercado": true
+    },
+    {
+      "id": "victreebell-tail",
+      "nombre": "Victreebell Tail",
+      "clientId": 35857,
+      "categoria": "creature-items",
+      "sprite": "ui/comercio/item",
+      "apilable": null,
+      "precioNpc": {
+        "vende": 140,
+        "compra": null
+      },
+      "mercado": true
+    },
+    {
+      "id": "tentacle",
+      "nombre": "Tentacle",
+      "clientId": 35858,
+      "categoria": "creature-items",
+      "sprite": "ui/comercio/item",
+      "apilable": null,
+      "precioNpc": {
+        "vende": 20,
+        "compra": null
+      },
+      "mercado": true
+    },
+    {
+      "id": "giant-ruby",
+      "nombre": "Giant Ruby",
+      "clientId": 35859,
+      "categoria": "creature-items",
+      "sprite": "ui/comercio/item",
+      "apilable": null,
+      "precioNpc": {
+        "vende": 180,
+        "compra": null
+      },
+      "mercado": true
+    },
+    {
+      "id": "rock-fist",
+      "nombre": "Rock Fist",
+      "clientId": 35860,
+      "categoria": "creature-items",
+      "sprite": "ui/comercio/item",
+      "apilable": null,
+      "precioNpc": {
+        "vende": 25,
+        "compra": null
+      },
+      "mercado": true
+    },
+    {
+      "id": "rock-forehead",
+      "nombre": "Rock Forehead",
+      "clientId": 35861,
+      "categoria": "creature-items",
+      "sprite": "ui/comercio/item",
+      "apilable": null,
+      "precioNpc": {
+        "vende": 100,
+        "compra": null
+      },
+      "mercado": true
+    },
+    {
+      "id": "stone-rocks",
+      "nombre": "Stone Rocks",
+      "clientId": 35862,
+      "categoria": "creature-items",
+      "sprite": "ui/comercio/item",
+      "apilable": null,
+      "precioNpc": {
+        "vende": 185,
+        "compra": null
+      },
+      "mercado": true
+    },
+    {
+      "id": "fire-hair",
+      "nombre": "Fire Hair",
+      "clientId": 35863,
+      "categoria": "creature-items",
+      "sprite": "ui/comercio/item",
+      "apilable": null,
+      "precioNpc": {
+        "vende": 40,
+        "compra": null
+      },
+      "mercado": true
+    },
+    {
+      "id": "fire-hoof",
+      "nombre": "Fire Hoof",
+      "clientId": 35864,
+      "categoria": "creature-items",
+      "sprite": "ui/comercio/item",
+      "apilable": null,
+      "precioNpc": {
+        "vende": 240,
+        "compra": null
+      },
+      "mercado": true
+    },
+    {
+      "id": "slowpoke-tail",
+      "nombre": "Slowpoke Tail",
+      "clientId": 35865,
+      "categoria": "creature-items",
+      "sprite": "ui/comercio/item",
+      "apilable": null,
+      "precioNpc": {
+        "vende": 20,
+        "compra": null
+      },
+      "mercado": true
+    },
+    {
+      "id": "slowbro-shell",
+      "nombre": "Slowbro Shell",
+      "clientId": 35866,
+      "categoria": "creature-items",
+      "sprite": "ui/comercio/item",
+      "apilable": null,
+      "precioNpc": {
+        "vende": 115,
+        "compra": null
+      },
+      "mercado": true
+    },
+    {
+      "id": "electric-screws",
+      "nombre": "Electric Screws",
+      "clientId": 35867,
+      "categoria": "creature-items",
+      "sprite": "ui/comercio/item",
+      "apilable": null,
+      "precioNpc": {
+        "vende": 20,
+        "compra": null
+      },
+      "mercado": true
+    },
+    {
+      "id": "magnet",
+      "nombre": "Magnet",
+      "clientId": 35868,
+      "categoria": "creature-items",
+      "sprite": "ui/comercio/item",
+      "apilable": null,
+      "precioNpc": {
+        "vende": 180,
+        "compra": null
+      },
+      "mercado": true
+    },
+    {
+      "id": "farfetch-d-wing",
+      "nombre": "Farfetch'd Wing",
+      "clientId": 35869,
+      "categoria": "creature-items",
+      "sprite": "ui/comercio/item",
+      "apilable": null,
+      "precioNpc": {
+        "vende": 115,
+        "compra": null
+      },
+      "mercado": true
+    },
+    {
+      "id": "doduo-fur",
+      "nombre": "Doduo Fur",
+      "clientId": 35870,
+      "categoria": "creature-items",
+      "sprite": "ui/comercio/item",
+      "apilable": null,
+      "precioNpc": {
+        "vende": 20,
+        "compra": null
+      },
+      "mercado": true
+    },
+    {
+      "id": "dodrio-feather",
+      "nombre": "Dodrio Feather",
+      "clientId": 35871,
+      "categoria": "creature-items",
+      "sprite": "ui/comercio/item",
+      "apilable": null,
+      "precioNpc": {
+        "vende": 115,
+        "compra": null
+      },
+      "mercado": true
+    },
+    {
+      "id": "seel-tail",
+      "nombre": "Seel Tail",
+      "clientId": 35872,
+      "categoria": "creature-items",
+      "sprite": "ui/comercio/item",
+      "apilable": null,
+      "precioNpc": {
+        "vende": 45,
+        "compra": null
+      },
+      "mercado": true
+    },
+    {
+      "id": "dewgong-tail",
+      "nombre": "Dewgong Tail",
+      "clientId": 35873,
+      "categoria": "creature-items",
+      "sprite": "ui/comercio/item",
+      "apilable": null,
+      "precioNpc": {
+        "vende": 120,
+        "compra": null
+      },
+      "mercado": true
+    },
+    {
+      "id": "stinky-gosme",
+      "nombre": "Stinky Gosme",
+      "clientId": 35874,
+      "categoria": "creature-items",
+      "sprite": "ui/comercio/item",
+      "apilable": null,
+      "precioNpc": {
+        "vende": 20,
+        "compra": null
+      },
+      "mercado": true
+    },
+    {
+      "id": "stinky-hand",
+      "nombre": "Stinky Hand",
+      "clientId": 35875,
+      "categoria": "creature-items",
+      "sprite": "ui/comercio/item",
+      "apilable": null,
+      "precioNpc": {
+        "vende": 185,
+        "compra": null
+      },
+      "mercado": true
+    },
+    {
+      "id": "locksmith-of-shell",
+      "nombre": "Locksmith of Shell",
+      "clientId": 35876,
+      "categoria": "creature-items",
+      "sprite": "ui/comercio/item",
+      "apilable": null,
+      "precioNpc": {
+        "vende": 20,
+        "compra": null
+      },
+      "mercado": true
+    },
+    {
+      "id": "pieces-of-shell",
+      "nombre": "Pieces of Shell",
+      "clientId": 35877,
+      "categoria": "creature-items",
+      "sprite": "ui/comercio/item",
+      "apilable": null,
+      "precioNpc": {
+        "vende": 125,
+        "compra": null
+      },
+      "mercado": true
+    },
+    {
+      "id": "ghost-bottle",
+      "nombre": "Ghost Bottle",
+      "clientId": 35878,
+      "categoria": "creature-items",
+      "sprite": "ui/comercio/item",
+      "apilable": null,
+      "precioNpc": {
+        "vende": 20,
+        "compra": null
+      },
+      "mercado": true
+    },
+    {
+      "id": "ghost-claw",
+      "nombre": "Ghost Claw",
+      "clientId": 35879,
+      "categoria": "creature-items",
+      "sprite": "ui/comercio/item",
+      "apilable": null,
+      "precioNpc": {
+        "vende": 100,
+        "compra": null
+      },
+      "mercado": true
+    },
+    {
+      "id": "ectoplasm",
+      "nombre": "Ectoplasm",
+      "clientId": 35880,
+      "categoria": "creature-items",
+      "sprite": "ui/comercio/item",
+      "apilable": null,
+      "precioNpc": {
+        "vende": 245,
+        "compra": null
+      },
+      "mercado": true
+    },
+    {
+      "id": "onix-tail",
+      "nombre": "Onix Tail",
+      "clientId": 35881,
+      "categoria": "creature-items",
+      "sprite": "ui/comercio/item",
+      "apilable": null,
+      "precioNpc": {
+        "vende": 115,
+        "compra": null
+      },
+      "mercado": true
+    },
+    {
+      "id": "drowzee-trunk",
+      "nombre": "Drowzee Trunk",
+      "clientId": 35882,
+      "categoria": "creature-items",
+      "sprite": "ui/comercio/item",
+      "apilable": null,
+      "precioNpc": {
+        "vende": 78,
+        "compra": null
+      },
+      "mercado": true
+    },
+    {
+      "id": "hypnosis-pendant",
+      "nombre": "Hypnosis Pendant",
+      "clientId": 35883,
+      "categoria": "creature-items",
+      "sprite": "ui/comercio/item",
+      "apilable": null,
+      "precioNpc": {
+        "vende": 115,
+        "compra": null
+      },
+      "mercado": true
+    },
+    {
+      "id": "crab-claw",
+      "nombre": "Crab Claw",
+      "clientId": 35884,
+      "categoria": "creature-items",
+      "sprite": "ui/comercio/item",
+      "apilable": null,
+      "precioNpc": {
+        "vende": 20,
+        "compra": null
+      },
+      "mercado": true
+    },
+    {
+      "id": "red-guillotine",
+      "nombre": "Red Guillotine",
+      "clientId": 35885,
+      "categoria": "creature-items",
+      "sprite": "ui/comercio/item",
+      "apilable": null,
+      "precioNpc": {
+        "vende": 110,
+        "compra": null
+      },
+      "mercado": true
+    },
+    {
+      "id": "remains-of-voltorb",
+      "nombre": "Remains of Voltorb",
+      "clientId": 35886,
+      "categoria": "creature-items",
+      "sprite": "ui/comercio/item",
+      "apilable": null,
+      "precioNpc": {
+        "vende": 20,
+        "compra": null
+      },
+      "mercado": true
+    },
+    {
+      "id": "remains-of-electrode",
+      "nombre": "Remains of Electrode",
+      "clientId": 35887,
+      "categoria": "creature-items",
+      "sprite": "ui/comercio/item",
+      "apilable": null,
+      "precioNpc": {
+        "vende": 100,
+        "compra": null
+      },
+      "mercado": true
+    },
+    {
+      "id": "exeggcute-seed",
+      "nombre": "Exeggcute Seed",
+      "clientId": 35888,
+      "categoria": "creature-items",
+      "sprite": "ui/comercio/item",
+      "apilable": null,
+      "precioNpc": {
+        "vende": 20,
+        "compra": null
+      },
+      "mercado": true
+    },
+    {
+      "id": "coconut-leaves",
+      "nombre": "Coconut Leaves",
+      "clientId": 35889,
+      "categoria": "creature-items",
+      "sprite": "ui/comercio/item",
+      "apilable": null,
+      "precioNpc": {
+        "vende": 235,
+        "compra": null
+      },
+      "mercado": true
+    },
+    {
+      "id": "cubone-skull",
+      "nombre": "Cubone Skull",
+      "clientId": 35890,
+      "categoria": "creature-items",
+      "sprite": "ui/comercio/item",
+      "apilable": null,
+      "precioNpc": {
+        "vende": 40,
+        "compra": null
+      },
+      "mercado": true
+    },
+    {
+      "id": "bone",
+      "nombre": "Bone",
+      "clientId": 35891,
+      "categoria": "creature-items",
+      "sprite": "ui/comercio/item",
+      "apilable": null,
+      "precioNpc": {
+        "vende": 115,
+        "compra": null
+      },
+      "mercado": true
+    },
+    {
+      "id": "kick-machine",
+      "nombre": "Kick Machine",
+      "clientId": 35892,
+      "categoria": "creature-items",
+      "sprite": "ui/comercio/item",
+      "apilable": null,
+      "precioNpc": {
+        "vende": 120,
+        "compra": null
+      },
+      "mercado": true
+    },
+    {
+      "id": "punching-machine",
+      "nombre": "Punching Machine",
+      "clientId": 35893,
+      "categoria": "creature-items",
+      "sprite": "ui/comercio/item",
+      "apilable": null,
+      "precioNpc": {
+        "vende": 125,
+        "compra": null
+      },
+      "mercado": true
+    },
+    {
+      "id": "big-tongue",
+      "nombre": "Big Tongue",
+      "clientId": 35894,
+      "categoria": "creature-items",
+      "sprite": "ui/comercio/item",
+      "apilable": null,
+      "precioNpc": {
+        "vende": 120,
+        "compra": null
+      },
+      "mercado": true
+    },
+    {
+      "id": "poison-pore",
+      "nombre": "Poison Pore",
+      "clientId": 35895,
+      "categoria": "creature-items",
+      "sprite": "ui/comercio/item",
+      "apilable": null,
+      "precioNpc": {
+        "vende": 20,
+        "compra": null
+      },
+      "mercado": true
+    },
+    {
+      "id": "toxic-scale",
+      "nombre": "Toxic Scale",
+      "clientId": 35896,
+      "categoria": "creature-items",
+      "sprite": "ui/comercio/item",
+      "apilable": null,
+      "precioNpc": {
+        "vende": 115,
+        "compra": null
+      },
+      "mercado": true
+    },
+    {
+      "id": "hardrock-shell",
+      "nombre": "Hardrock Shell",
+      "clientId": 35897,
+      "categoria": "creature-items",
+      "sprite": "ui/comercio/item",
+      "apilable": null,
+      "precioNpc": {
+        "vende": 70,
+        "compra": null
+      },
+      "mercado": true
+    },
+    {
+      "id": "horn-drill",
+      "nombre": "Horn Drill",
+      "clientId": 35898,
+      "categoria": "creature-items",
+      "sprite": "ui/comercio/item",
+      "apilable": null,
+      "precioNpc": {
+        "vende": 180,
+        "compra": null
+      },
+      "mercado": true
+    },
+    {
+      "id": "lucky-egg",
+      "nombre": "Lucky Egg",
+      "clientId": 35899,
+      "categoria": "creature-items",
+      "sprite": "ui/comercio/item",
+      "apilable": null,
+      "precioNpc": {
+        "vende": 125,
+        "compra": null
+      },
+      "mercado": true
+    },
+    {
+      "id": "vine-hair",
+      "nombre": "Vine Hair",
+      "clientId": 35900,
+      "categoria": "creature-items",
+      "sprite": "ui/comercio/item",
+      "apilable": null,
+      "precioNpc": {
+        "vende": 115,
+        "compra": null
+      },
+      "mercado": true
+    },
+    {
+      "id": "kangaskhan-ear",
+      "nombre": "Kangaskhan Ear",
+      "clientId": 35901,
+      "categoria": "creature-items",
+      "sprite": "ui/comercio/item",
+      "apilable": null,
+      "precioNpc": {
+        "vende": 185,
+        "compra": null
+      },
+      "mercado": true
+    },
+    {
+      "id": "horsea-tail",
+      "nombre": "Horsea Tail",
+      "clientId": 35902,
+      "categoria": "creature-items",
+      "sprite": "ui/comercio/item",
+      "apilable": null,
+      "precioNpc": {
+        "vende": 20,
+        "compra": null
+      },
+      "mercado": true
+    },
+    {
+      "id": "seadra-fin",
+      "nombre": "Seadra Fin",
+      "clientId": 35903,
+      "categoria": "creature-items",
+      "sprite": "ui/comercio/item",
+      "apilable": null,
+      "precioNpc": {
+        "vende": 110,
+        "compra": null
+      },
+      "mercado": true
+    },
+    {
+      "id": "goldeen-tail",
+      "nombre": "Goldeen Tail",
+      "clientId": 35904,
+      "categoria": "creature-items",
+      "sprite": "ui/comercio/item",
+      "apilable": null,
+      "precioNpc": {
+        "vende": 20,
+        "compra": null
+      },
+      "mercado": true
+    },
+    {
+      "id": "seaking-tail",
+      "nombre": "Seaking Tail",
+      "clientId": 35905,
+      "categoria": "creature-items",
+      "sprite": "ui/comercio/item",
+      "apilable": null,
+      "precioNpc": {
+        "vende": 100,
+        "compra": null
+      },
+      "mercado": true
+    },
+    {
+      "id": "star-core",
+      "nombre": "Star Core",
+      "clientId": 35906,
+      "categoria": "creature-items",
+      "sprite": "ui/comercio/item",
+      "apilable": null,
+      "precioNpc": {
+        "vende": 45,
+        "compra": null
+      },
+      "mercado": true
+    },
+    {
+      "id": "star-jewel",
+      "nombre": "Star Jewel",
+      "clientId": 35907,
+      "categoria": "creature-items",
+      "sprite": "ui/comercio/item",
+      "apilable": null,
+      "precioNpc": {
+        "vende": 180,
+        "compra": null
+      },
+      "mercado": true
+    },
+    {
+      "id": "mimic-clothes",
+      "nombre": "Mimic Clothes",
+      "clientId": 35908,
+      "categoria": "creature-items",
+      "sprite": "ui/comercio/item",
+      "apilable": null,
+      "precioNpc": {
+        "vende": 145,
+        "compra": null
+      },
+      "mercado": true
+    },
+    {
+      "id": "scythe",
+      "nombre": "Scythe",
+      "clientId": 35909,
+      "categoria": "creature-items",
+      "sprite": "ui/comercio/item",
+      "apilable": null,
+      "precioNpc": {
+        "vende": 240,
+        "compra": null
+      },
+      "mercado": true
+    },
+    {
+      "id": "psychic-wig",
+      "nombre": "Psychic Wig",
+      "clientId": 35910,
+      "categoria": "creature-items",
+      "sprite": "ui/comercio/item",
+      "apilable": null,
+      "precioNpc": {
+        "vende": 185,
+        "compra": null
+      },
+      "mercado": true
+    },
+    {
+      "id": "electric-tail",
+      "nombre": "Electric Tail",
+      "clientId": 35911,
+      "categoria": "creature-items",
+      "sprite": "ui/comercio/item",
+      "apilable": null,
+      "precioNpc": {
+        "vende": 245,
+        "compra": null
+      },
+      "mercado": true
+    },
+    {
+      "id": "magma-foot",
+      "nombre": "Magma Foot",
+      "clientId": 35912,
+      "categoria": "creature-items",
+      "sprite": "ui/comercio/item",
+      "apilable": null,
+      "precioNpc": {
+        "vende": 235,
+        "compra": null
+      },
+      "mercado": true
+    },
+    {
+      "id": "pinsir-horn",
+      "nombre": "Pinsir Horn",
+      "clientId": 35913,
+      "categoria": "creature-items",
+      "sprite": "ui/comercio/item",
+      "apilable": null,
+      "precioNpc": {
+        "vende": 240,
+        "compra": null
+      },
+      "mercado": true
+    },
+    {
+      "id": "bull-tail",
+      "nombre": "Bull Tail",
+      "clientId": 35914,
+      "categoria": "creature-items",
+      "sprite": "ui/comercio/item",
+      "apilable": null,
+      "precioNpc": {
+        "vende": 115,
+        "compra": null
+      },
+      "mercado": true
+    },
+    {
+      "id": "magikarp-fin",
+      "nombre": "Magikarp Fin",
+      "clientId": 35915,
+      "categoria": "creature-items",
+      "sprite": "ui/comercio/item",
+      "apilable": null,
+      "precioNpc": {
+        "vende": 15,
+        "compra": null
+      },
+      "mercado": true
+    },
+    {
+      "id": "gyarados-tail",
+      "nombre": "Gyarados Tail",
+      "clientId": 35916,
+      "categoria": "creature-items",
+      "sprite": "ui/comercio/item",
+      "apilable": null,
+      "precioNpc": {
+        "vende": 240,
+        "compra": null
+      },
+      "mercado": true
+    },
+    {
+      "id": "lapras-fin",
+      "nombre": "Lapras Fin",
+      "clientId": 35917,
+      "categoria": "creature-items",
+      "sprite": "ui/comercio/item",
+      "apilable": null,
+      "precioNpc": {
+        "vende": 250,
+        "compra": null
+      },
+      "mercado": true
+    },
+    {
+      "id": "dna-gosme",
+      "nombre": "DNA Gosme",
+      "clientId": 35918,
+      "categoria": "creature-items",
+      "sprite": "ui/comercio/item",
+      "apilable": null,
+      "precioNpc": {
+        "vende": 150,
+        "compra": null
+      },
+      "mercado": true
+    },
+    {
+      "id": "furry-tail",
+      "nombre": "Furry Tail",
+      "clientId": 35919,
+      "categoria": "creature-items",
+      "sprite": "ui/comercio/item",
+      "apilable": null,
+      "precioNpc": {
+        "vende": 40,
+        "compra": null
+      },
+      "mercado": true
+    },
+    {
+      "id": "aquatic-tail",
+      "nombre": "Aquatic Tail",
+      "clientId": 35920,
+      "categoria": "creature-items",
+      "sprite": "ui/comercio/item",
+      "apilable": null,
+      "precioNpc": {
+        "vende": 180,
+        "compra": null
+      },
+      "mercado": true
+    },
+    {
+      "id": "electric-collar",
+      "nombre": "Electric Collar",
+      "clientId": 35921,
+      "categoria": "creature-items",
+      "sprite": "ui/comercio/item",
+      "apilable": null,
+      "precioNpc": {
+        "vende": 185,
+        "compra": null
+      },
+      "mercado": true
+    },
+    {
+      "id": "blaze-tail",
+      "nombre": "Blaze Tail",
+      "clientId": 35922,
+      "categoria": "creature-items",
+      "sprite": "ui/comercio/item",
+      "apilable": null,
+      "precioNpc": {
+        "vende": 180,
+        "compra": null
+      },
+      "mercado": true
+    },
+    {
+      "id": "virtual-head",
+      "nombre": "Virtual Head",
+      "clientId": 35923,
+      "categoria": "creature-items",
+      "sprite": "ui/comercio/item",
+      "apilable": null,
+      "precioNpc": {
+        "vende": 110,
+        "compra": null
+      },
+      "mercado": true
+    },
+    {
+      "id": "helix-shell",
+      "nombre": "Helix Shell",
+      "clientId": 35924,
+      "categoria": "creature-items",
+      "sprite": "ui/comercio/item",
+      "apilable": null,
+      "precioNpc": {
+        "vende": 45,
+        "compra": null
+      },
+      "mercado": true
+    },
+    {
+      "id": "spike-shell",
+      "nombre": "Spike Shell",
+      "clientId": 35925,
+      "categoria": "creature-items",
+      "sprite": "ui/comercio/item",
+      "apilable": null,
+      "precioNpc": {
+        "vende": 185,
+        "compra": null
+      },
+      "mercado": true
+    },
+    {
+      "id": "dome-shell",
+      "nombre": "Dome Shell",
+      "clientId": 35926,
+      "categoria": "creature-items",
+      "sprite": "ui/comercio/item",
+      "apilable": null,
+      "precioNpc": {
+        "vende": 40,
+        "compra": null
+      },
+      "mercado": true
+    },
+    {
+      "id": "gray-scythe",
+      "nombre": "Gray Scythe",
+      "clientId": 35927,
+      "categoria": "creature-items",
+      "sprite": "ui/comercio/item",
+      "apilable": null,
+      "precioNpc": {
+        "vende": 185,
+        "compra": null
+      },
+      "mercado": true
+    },
+    {
+      "id": "ptera-wing",
+      "nombre": "Ptera Wing",
+      "clientId": 35928,
+      "categoria": "creature-items",
+      "sprite": "ui/comercio/item",
+      "apilable": null,
+      "precioNpc": {
+        "vende": 240,
+        "compra": null
+      },
+      "mercado": true
+    },
+    {
+      "id": "snorlax-paw",
+      "nombre": "Snorlax Paw",
+      "clientId": 35929,
+      "categoria": "creature-items",
+      "sprite": "ui/comercio/item",
+      "apilable": null,
+      "precioNpc": {
+        "vende": 245,
+        "compra": null
+      },
+      "mercado": true
+    },
+    {
+      "id": "ice-feather",
+      "nombre": "Ice Feather",
+      "clientId": 35930,
+      "categoria": "creature-items",
+      "sprite": "ui/comercio/item",
+      "apilable": null,
+      "precioNpc": {
+        "vende": 150000,
+        "compra": null
+      },
+      "mercado": true
+    },
+    {
+      "id": "electric-feather",
+      "nombre": "Electric Feather",
+      "clientId": 35931,
+      "categoria": "creature-items",
+      "sprite": "ui/comercio/item",
+      "apilable": null,
+      "precioNpc": {
+        "vende": 150000,
+        "compra": null
+      },
+      "mercado": true
+    },
+    {
+      "id": "flame-feather",
+      "nombre": "Flame Feather",
+      "clientId": 35932,
+      "categoria": "creature-items",
+      "sprite": "ui/comercio/item",
+      "apilable": null,
+      "precioNpc": {
+        "vende": 150000,
+        "compra": null
+      },
+      "mercado": true
+    },
+    {
+      "id": "dratini-ear",
+      "nombre": "Dratini Ear",
+      "clientId": 35933,
+      "categoria": "creature-items",
+      "sprite": "ui/comercio/item",
+      "apilable": null,
+      "precioNpc": {
+        "vende": 78,
+        "compra": null
+      },
+      "mercado": true
+    },
+    {
+      "id": "dragonair-tail",
+      "nombre": "Dragonair Tail",
+      "clientId": 35934,
+      "categoria": "creature-items",
+      "sprite": "ui/comercio/item",
+      "apilable": null,
+      "precioNpc": {
+        "vende": 245,
+        "compra": null
+      },
+      "mercado": true
+    },
+    {
+      "id": "dragonite-tail",
+      "nombre": "Dragonite Tail",
+      "clientId": 35935,
+      "categoria": "creature-items",
+      "sprite": "ui/comercio/item",
+      "apilable": null,
+      "precioNpc": {
+        "vende": 245,
+        "compra": null
+      },
+      "mercado": true
+    },
+    {
+      "id": "chicory",
+      "nombre": "Chicory",
+      "clientId": 35938,
+      "categoria": "creature-items",
+      "sprite": "ui/comercio/item",
+      "apilable": null,
+      "precioNpc": {
+        "vende": 15,
+        "compra": null
+      },
+      "mercado": true
+    },
+    {
+      "id": "big-leaf",
+      "nombre": "Big Leaf",
+      "clientId": 35939,
+      "categoria": "creature-items",
+      "sprite": "ui/comercio/item",
+      "apilable": null,
+      "precioNpc": {
+        "vende": 100,
+        "compra": null
+      },
+      "mercado": true
+    },
+    {
+      "id": "big-petal",
+      "nombre": "Big Petal",
+      "clientId": 35940,
+      "categoria": "creature-items",
+      "sprite": "ui/comercio/item",
+      "apilable": null,
+      "precioNpc": {
+        "vende": 180,
+        "compra": null
+      },
+      "mercado": true
+    },
+    {
+      "id": "cyndaquil-nose",
+      "nombre": "Cyndaquil Nose",
+      "clientId": 35941,
+      "categoria": "creature-items",
+      "sprite": "ui/comercio/item",
+      "apilable": null,
+      "precioNpc": {
+        "vende": 15,
+        "compra": null
+      },
+      "mercado": true
+    },
+    {
+      "id": "quilava-fur",
+      "nombre": "Quilava Fur",
+      "clientId": 35942,
+      "categoria": "creature-items",
+      "sprite": "ui/comercio/item",
+      "apilable": null,
+      "precioNpc": {
+        "vende": 105,
+        "compra": null
+      },
+      "mercado": true
+    },
+    {
+      "id": "typhlosion-fur",
+      "nombre": "Typhlosion Fur",
+      "clientId": 35943,
+      "categoria": "creature-items",
+      "sprite": "ui/comercio/item",
+      "apilable": null,
+      "precioNpc": {
+        "vende": 185,
+        "compra": null
+      },
+      "mercado": true
+    },
+    {
+      "id": "totodile-tail",
+      "nombre": "Totodile Tail",
+      "clientId": 35944,
+      "categoria": "creature-items",
+      "sprite": "ui/comercio/item",
+      "apilable": null,
+      "precioNpc": {
+        "vende": 15,
+        "compra": null
+      },
+      "mercado": true
+    },
+    {
+      "id": "crocodile-hair",
+      "nombre": "Crocodile Hair",
+      "clientId": 35945,
+      "categoria": "creature-items",
+      "sprite": "ui/comercio/item",
+      "apilable": null,
+      "precioNpc": {
+        "vende": 100,
+        "compra": null
+      },
+      "mercado": true
+    },
+    {
+      "id": "red-hair",
+      "nombre": "Red Hair",
+      "clientId": 35946,
+      "categoria": "creature-items",
+      "sprite": "ui/comercio/item",
+      "apilable": null,
+      "precioNpc": {
+        "vende": 180,
+        "compra": null
+      },
+      "mercado": true
+    },
+    {
+      "id": "furry-tail-35947",
+      "nombre": "Furry Tail",
+      "clientId": 35947,
+      "categoria": "creature-items",
+      "sprite": "ui/comercio/item",
+      "apilable": null,
+      "precioNpc": {
+        "vende": 20,
+        "compra": null
+      },
+      "mercado": true
+    },
+    {
+      "id": "furret-tail",
+      "nombre": "Furret Tail",
+      "clientId": 35948,
+      "categoria": "creature-items",
+      "sprite": "ui/comercio/item",
+      "apilable": null,
+      "precioNpc": {
+        "vende": 105,
+        "compra": null
+      },
+      "mercado": true
+    },
+    {
+      "id": "owl-antennas",
+      "nombre": "Owl Antennas",
+      "clientId": 35949,
+      "categoria": "creature-items",
+      "sprite": "ui/comercio/item",
+      "apilable": null,
+      "precioNpc": {
+        "vende": 40,
+        "compra": null
+      },
+      "mercado": true
+    },
+    {
+      "id": "owl-crest",
+      "nombre": "Owl Crest",
+      "clientId": 35950,
+      "categoria": "creature-items",
+      "sprite": "ui/comercio/item",
+      "apilable": null,
+      "precioNpc": {
+        "vende": 120,
+        "compra": null
+      },
+      "mercado": true
+    },
+    {
+      "id": "ladybug-wings",
+      "nombre": "Ladybug Wings",
+      "clientId": 35951,
+      "categoria": "creature-items",
+      "sprite": "ui/comercio/item",
+      "apilable": null,
+      "precioNpc": {
+        "vende": 25,
+        "compra": null
+      },
+      "mercado": true
+    },
+    {
+      "id": "ledian-wings",
+      "nombre": "Ledian Wings",
+      "clientId": 35952,
+      "categoria": "creature-items",
+      "sprite": "ui/comercio/item",
+      "apilable": null,
+      "precioNpc": {
+        "vende": 100,
+        "compra": null
+      },
+      "mercado": true
+    },
+    {
+      "id": "spider-legs",
+      "nombre": "Spider Legs",
+      "clientId": 35953,
+      "categoria": "creature-items",
+      "sprite": "ui/comercio/item",
+      "apilable": null,
+      "precioNpc": {
+        "vende": 25,
+        "compra": null
+      },
+      "mercado": true
+    },
+    {
+      "id": "arachnid-legs",
+      "nombre": "Arachnid Legs",
+      "clientId": 35954,
+      "categoria": "creature-items",
+      "sprite": "ui/comercio/item",
+      "apilable": null,
+      "precioNpc": {
+        "vende": 105,
+        "compra": null
+      },
+      "mercado": true
+    },
+    {
+      "id": "giant-bat-wing",
+      "nombre": "Giant Bat Wing",
+      "clientId": 35955,
+      "categoria": "creature-items",
+      "sprite": "ui/comercio/item",
+      "apilable": null,
+      "precioNpc": {
+        "vende": 185,
+        "compra": null
+      },
+      "mercado": true
+    },
+    {
+      "id": "teardrop-orb",
+      "nombre": "Teardrop Orb",
+      "clientId": 35956,
+      "categoria": "creature-items",
+      "sprite": "ui/comercio/item",
+      "apilable": null,
+      "precioNpc": {
+        "vende": 20,
+        "compra": null
+      },
+      "mercado": true
+    },
+    {
+      "id": "electric-fish-tail",
+      "nombre": "Electric Fish Tail",
+      "clientId": 35957,
+      "categoria": "creature-items",
+      "sprite": "ui/comercio/item",
+      "apilable": null,
+      "precioNpc": {
+        "vende": 180,
+        "compra": null
+      },
+      "mercado": true
+    },
+    {
+      "id": "pichu-ears",
+      "nombre": "Pichu Ears",
+      "clientId": 35958,
+      "categoria": "creature-items",
+      "sprite": "ui/comercio/item",
+      "apilable": null,
+      "precioNpc": {
+        "vende": 45,
+        "compra": null
+      },
+      "mercado": true
+    },
+    {
+      "id": "small-pink-ears",
+      "nombre": "Small Pink Ears",
+      "clientId": 35959,
+      "categoria": "creature-items",
+      "sprite": "ui/comercio/item",
+      "apilable": null,
+      "precioNpc": {
+        "vende": 40,
+        "compra": null
+      },
+      "mercado": true
+    },
+    {
+      "id": "small-topknot",
+      "nombre": "Small Topknot",
+      "clientId": 35960,
+      "categoria": "creature-items",
+      "sprite": "ui/comercio/item",
+      "apilable": null,
+      "precioNpc": {
+        "vende": 45,
+        "compra": null
+      },
+      "mercado": true
+    },
+    {
+      "id": "baby-egg-shell",
+      "nombre": "Baby Egg Shell",
+      "clientId": 35961,
+      "categoria": "creature-items",
+      "sprite": "ui/comercio/item",
+      "apilable": null,
+      "precioNpc": {
+        "vende": 15,
+        "compra": null
+      },
+      "mercado": true
+    },
+    {
+      "id": "dainty-wing",
+      "nombre": "Dainty Wing",
+      "clientId": 35962,
+      "categoria": "creature-items",
+      "sprite": "ui/comercio/item",
+      "apilable": null,
+      "precioNpc": {
+        "vende": 185,
+        "compra": null
+      },
+      "mercado": true
+    },
+    {
+      "id": "natu-wing",
+      "nombre": "Natu Wing",
+      "clientId": 35963,
+      "categoria": "creature-items",
+      "sprite": "ui/comercio/item",
+      "apilable": null,
+      "precioNpc": {
+        "vende": 70,
+        "compra": null
+      },
+      "mercado": true
+    },
+    {
+      "id": "xatu-wing",
+      "nombre": "Xatu Wing",
+      "clientId": 35964,
+      "categoria": "creature-items",
+      "sprite": "ui/comercio/item",
+      "apilable": null,
+      "precioNpc": {
+        "vende": 180,
+        "compra": null
+      },
+      "mercado": true
+    },
+    {
+      "id": "yellow-sheep-wool",
+      "nombre": "Yellow Sheep Wool",
+      "clientId": 35965,
+      "categoria": "creature-items",
+      "sprite": "ui/comercio/item",
+      "apilable": null,
+      "precioNpc": {
+        "vende": 40,
+        "compra": null
+      },
+      "mercado": true
+    },
+    {
+      "id": "soft-wool",
+      "nombre": "Soft Wool",
+      "clientId": 35966,
+      "categoria": "creature-items",
+      "sprite": "ui/comercio/item",
+      "apilable": null,
+      "precioNpc": {
+        "vende": 100,
+        "compra": null
+      },
+      "mercado": true
+    },
+    {
+      "id": "electric-sheep-tail",
+      "nombre": "Electric Sheep Tail",
+      "clientId": 35967,
+      "categoria": "creature-items",
+      "sprite": "ui/comercio/item",
+      "apilable": null,
+      "precioNpc": {
+        "vende": 185,
+        "compra": null
+      },
+      "mercado": true
+    },
+    {
+      "id": "small-red-flower",
+      "nombre": "Small Red Flower",
+      "clientId": 35968,
+      "categoria": "creature-items",
+      "sprite": "ui/comercio/item",
+      "apilable": null,
+      "precioNpc": {
+        "vende": 115,
+        "compra": null
+      },
+      "mercado": true
+    },
+    {
+      "id": "aquatic-tail-35969",
+      "nombre": "Aquatic Tail",
+      "clientId": 35969,
+      "categoria": "creature-items",
+      "sprite": "ui/comercio/item",
+      "apilable": null,
+      "precioNpc": {
+        "vende": 45,
+        "compra": null
+      },
+      "mercado": true
+    },
+    {
+      "id": "cute-ears",
+      "nombre": "Cute Ears",
+      "clientId": 35970,
+      "categoria": "creature-items",
+      "sprite": "ui/comercio/item",
+      "apilable": null,
+      "precioNpc": {
+        "vende": 180,
+        "compra": null
+      },
+      "mercado": true
+    },
+    {
+      "id": "branch-of-stones",
+      "nombre": "Branch of Stones",
+      "clientId": 35971,
+      "categoria": "creature-items",
+      "sprite": "ui/comercio/item",
+      "apilable": null,
+      "precioNpc": {
+        "vende": 245,
+        "compra": null
+      },
+      "mercado": true
+    },
+    {
+      "id": "frog-topknot",
+      "nombre": "Frog Topknot",
+      "clientId": 35972,
+      "categoria": "creature-items",
+      "sprite": "ui/comercio/item",
+      "apilable": null,
+      "precioNpc": {
+        "vende": 140,
+        "compra": null
+      },
+      "mercado": true
+    },
+    {
+      "id": "pointy-leaf",
+      "nombre": "Pointy Leaf",
+      "clientId": 35973,
+      "categoria": "creature-items",
+      "sprite": "ui/comercio/item",
+      "apilable": null,
+      "precioNpc": {
+        "vende": 15,
+        "compra": null
+      },
+      "mercado": true
+    },
+    {
+      "id": "yellow-flower",
+      "nombre": "Yellow Flower",
+      "clientId": 35974,
+      "categoria": "creature-items",
+      "sprite": "ui/comercio/item",
+      "apilable": null,
+      "precioNpc": {
+        "vende": 78,
+        "compra": null
+      },
+      "mercado": true
+    },
+    {
+      "id": "dandelion",
+      "nombre": "Dandelion",
+      "clientId": 35975,
+      "categoria": "creature-items",
+      "sprite": "ui/comercio/item",
+      "apilable": null,
+      "precioNpc": {
+        "vende": 115,
+        "compra": null
+      },
+      "mercado": true
+    },
+    {
+      "id": "aipom-paw",
+      "nombre": "Aipom Paw",
+      "clientId": 35976,
+      "categoria": "creature-items",
+      "sprite": "ui/comercio/item",
+      "apilable": null,
+      "precioNpc": {
+        "vende": 105,
+        "compra": null
+      },
+      "mercado": true
+    },
+    {
+      "id": "sun-leaves",
+      "nombre": "Sun Leaves",
+      "clientId": 35977,
+      "categoria": "creature-items",
+      "sprite": "ui/comercio/item",
+      "apilable": null,
+      "precioNpc": {
+        "vende": 15,
+        "compra": null
+      },
+      "mercado": true
+    },
+    {
+      "id": "sunflower",
+      "nombre": "Sunflower",
+      "clientId": 35978,
+      "categoria": "creature-items",
+      "sprite": "ui/comercio/item",
+      "apilable": null,
+      "precioNpc": {
+        "vende": 70,
+        "compra": null
+      },
+      "mercado": true
+    },
+    {
+      "id": "mosquito-tail",
+      "nombre": "Mosquito Tail",
+      "clientId": 35979,
+      "categoria": "creature-items",
+      "sprite": "ui/comercio/item",
+      "apilable": null,
+      "precioNpc": {
+        "vende": 115,
+        "compra": null
+      },
+      "mercado": true
+    },
+    {
+      "id": "magenta-gill",
+      "nombre": "Magenta Gill",
+      "clientId": 35980,
+      "categoria": "creature-items",
+      "sprite": "ui/comercio/item",
+      "apilable": null,
+      "precioNpc": {
+        "vende": 40,
+        "compra": null
+      },
+      "mercado": true
+    },
+    {
+      "id": "amphibian-tail",
+      "nombre": "Amphibian Tail",
+      "clientId": 35981,
+      "categoria": "creature-items",
+      "sprite": "ui/comercio/item",
+      "apilable": null,
+      "precioNpc": {
+        "vende": 120,
+        "compra": null
+      },
+      "mercado": true
+    },
+    {
+      "id": "psychic-ears",
+      "nombre": "Psychic Ears",
+      "clientId": 35982,
+      "categoria": "creature-items",
+      "sprite": "ui/comercio/item",
+      "apilable": null,
+      "precioNpc": {
+        "vende": 185,
+        "compra": null
+      },
+      "mercado": true
+    },
+    {
+      "id": "dark-ears",
+      "nombre": "Dark Ears",
+      "clientId": 35983,
+      "categoria": "creature-items",
+      "sprite": "ui/comercio/item",
+      "apilable": null,
+      "precioNpc": {
+        "vende": 180,
+        "compra": null
+      },
+      "mercado": true
+    },
+    {
+      "id": "yellow-beak",
+      "nombre": "Yellow Beak",
+      "clientId": 35984,
+      "categoria": "creature-items",
+      "sprite": "ui/comercio/item",
+      "apilable": null,
+      "precioNpc": {
+        "vende": 115,
+        "compra": null
+      },
+      "mercado": true
+    },
+    {
+      "id": "slowking-necklace",
+      "nombre": "Slowking Necklace",
+      "clientId": 35985,
+      "categoria": "creature-items",
+      "sprite": "ui/comercio/item",
+      "apilable": null,
+      "precioNpc": {
+        "vende": 245,
+        "compra": null
+      },
+      "mercado": true
+    },
+    {
+      "id": "miss-traces",
+      "nombre": "Miss Traces",
+      "clientId": 35986,
+      "categoria": "creature-items",
+      "sprite": "ui/comercio/item",
+      "apilable": null,
+      "precioNpc": {
+        "vende": 235,
+        "compra": null
+      },
+      "mercado": true
+    },
+    {
+      "id": "alphabetic-eye",
+      "nombre": "Alphabetic Eye",
+      "clientId": 35987,
+      "categoria": "creature-items",
+      "sprite": "ui/comercio/item",
+      "apilable": null,
+      "precioNpc": {
+        "vende": 20,
+        "compra": null
+      },
+      "mercado": true
+    },
+    {
+      "id": "two-eyed-black-tail",
+      "nombre": "Two-Eyed Black Tail",
+      "clientId": 35988,
+      "categoria": "creature-items",
+      "sprite": "ui/comercio/item",
+      "apilable": null,
+      "precioNpc": {
+        "vende": 245,
+        "compra": null
+      },
+      "mercado": true
+    },
+    {
+      "id": "giraffe-antenna",
+      "nombre": "Giraffe Antenna",
+      "clientId": 35989,
+      "categoria": "creature-items",
+      "sprite": "ui/comercio/item",
+      "apilable": null,
+      "precioNpc": {
+        "vende": 185,
+        "compra": null
+      },
+      "mercado": true
+    },
+    {
+      "id": "pineco-shell",
+      "nombre": "Pineco Shell",
+      "clientId": 35990,
+      "categoria": "creature-items",
+      "sprite": "ui/comercio/item",
+      "apilable": null,
+      "precioNpc": {
+        "vende": 20,
+        "compra": null
+      },
+      "mercado": true
+    },
+    {
+      "id": "forretress-shell",
+      "nombre": "Forretress Shell",
+      "clientId": 35991,
+      "categoria": "creature-items",
+      "sprite": "ui/comercio/item",
+      "apilable": null,
+      "precioNpc": {
+        "vende": 235,
+        "compra": null
+      },
+      "mercado": true
+    },
+    {
+      "id": "dunsparce-wings",
+      "nombre": "Dunsparce Wings",
+      "clientId": 35992,
+      "categoria": "creature-items",
+      "sprite": "ui/comercio/item",
+      "apilable": null,
+      "precioNpc": {
+        "vende": 78,
+        "compra": null
+      },
+      "mercado": true
+    },
+    {
+      "id": "bat-claw",
+      "nombre": "Bat Claw",
+      "clientId": 35993,
+      "categoria": "creature-items",
+      "sprite": "ui/comercio/item",
+      "apilable": null,
+      "precioNpc": {
+        "vende": 105,
+        "compra": null
+      },
+      "mercado": true
+    },
+    {
+      "id": "steelix-tail",
+      "nombre": "Steelix Tail",
+      "clientId": 35994,
+      "categoria": "creature-items",
+      "sprite": "ui/comercio/item",
+      "apilable": null,
+      "precioNpc": {
+        "vende": 245,
+        "compra": null
+      },
+      "mercado": true
+    },
+    {
+      "id": "snubull-ear",
+      "nombre": "Snubull Ear",
+      "clientId": 35995,
+      "categoria": "creature-items",
+      "sprite": "ui/comercio/item",
+      "apilable": null,
+      "precioNpc": {
+        "vende": 70,
+        "compra": null
+      },
+      "mercado": true
+    },
+    {
+      "id": "granbull-ear",
+      "nombre": "Granbull Ear",
+      "clientId": 35996,
+      "categoria": "creature-items",
+      "sprite": "ui/comercio/item",
+      "apilable": null,
+      "precioNpc": {
+        "vende": 180,
+        "compra": null
+      },
+      "mercado": true
+    },
+    {
+      "id": "puffer-tail",
+      "nombre": "Puffer Tail",
+      "clientId": 35997,
+      "categoria": "creature-items",
+      "sprite": "ui/comercio/item",
+      "apilable": null,
+      "precioNpc": {
+        "vende": 115,
+        "compra": null
+      },
+      "mercado": true
+    },
+    {
+      "id": "scizor-claw",
+      "nombre": "Scizor Claw",
+      "clientId": 35998,
+      "categoria": "creature-items",
+      "sprite": "ui/comercio/item",
+      "apilable": null,
+      "precioNpc": {
+        "vende": 235,
+        "compra": null
+      },
+      "mercado": true
+    },
+    {
+      "id": "shuckle-shell",
+      "nombre": "Shuckle Shell",
+      "clientId": 35999,
+      "categoria": "creature-items",
+      "sprite": "ui/comercio/item",
+      "apilable": null,
+      "precioNpc": {
+        "vende": 100,
+        "compra": null
+      },
+      "mercado": true
+    },
+    {
+      "id": "bug-horn",
+      "nombre": "Bug Horn",
+      "clientId": 36000,
+      "categoria": "creature-items",
+      "sprite": "ui/comercio/item",
+      "apilable": null,
+      "precioNpc": {
+        "vende": 245,
+        "compra": null
+      },
+      "mercado": true
+    },
+    {
+      "id": "sneasel-feather",
+      "nombre": "Sneasel Feather",
+      "clientId": 36001,
+      "categoria": "creature-items",
+      "sprite": "ui/comercio/item",
+      "apilable": null,
+      "precioNpc": {
+        "vende": 115,
+        "compra": null
+      },
+      "mercado": true
+    },
+    {
+      "id": "moon-pendant",
+      "nombre": "Moon Pendant",
+      "clientId": 36002,
+      "categoria": "creature-items",
+      "sprite": "ui/comercio/item",
+      "apilable": null,
+      "precioNpc": {
+        "vende": 78,
+        "compra": null
+      },
+      "mercado": true
+    },
+    {
+      "id": "bear-claw",
+      "nombre": "Bear Claw",
+      "clientId": 36003,
+      "categoria": "creature-items",
+      "sprite": "ui/comercio/item",
+      "apilable": null,
+      "precioNpc": {
+        "vende": 200,
+        "compra": null
+      },
+      "mercado": true
+    },
+    {
+      "id": "magma-ears",
+      "nombre": "Magma Ears",
+      "clientId": 36004,
+      "categoria": "creature-items",
+      "sprite": "ui/comercio/item",
+      "apilable": null,
+      "precioNpc": {
+        "vende": 25,
+        "compra": null
+      },
+      "mercado": true
+    },
+    {
+      "id": "magma-shell",
+      "nombre": "Magma Shell",
+      "clientId": 36005,
+      "categoria": "creature-items",
+      "sprite": "ui/comercio/item",
+      "apilable": null,
+      "precioNpc": {
+        "vende": 185,
+        "compra": null
+      },
+      "mercado": true
+    },
+    {
+      "id": "furry-hair",
+      "nombre": "Furry Hair",
+      "clientId": 36006,
+      "categoria": "creature-items",
+      "sprite": "ui/comercio/item",
+      "apilable": null,
+      "precioNpc": {
+        "vende": 20,
+        "compra": null
+      },
+      "mercado": true
+    },
+    {
+      "id": "ice-tusks",
+      "nombre": "Ice Tusks",
+      "clientId": 36007,
+      "categoria": "creature-items",
+      "sprite": "ui/comercio/item",
+      "apilable": null,
+      "precioNpc": {
+        "vende": 180,
+        "compra": null
+      },
+      "mercado": true
+    },
+    {
+      "id": "piece-of-corsola",
+      "nombre": "Piece of Corsola",
+      "clientId": 36008,
+      "categoria": "creature-items",
+      "sprite": "ui/comercio/item",
+      "apilable": null,
+      "precioNpc": {
+        "vende": 115,
+        "compra": null
+      },
+      "mercado": true
+    },
+    {
+      "id": "small-blue-fin",
+      "nombre": "Small Blue Fin",
+      "clientId": 36009,
+      "categoria": "creature-items",
+      "sprite": "ui/comercio/item",
+      "apilable": null,
+      "precioNpc": {
+        "vende": 25,
+        "compra": null
+      },
+      "mercado": true
+    },
+    {
+      "id": "red-tentacle",
+      "nombre": "Red Tentacle",
+      "clientId": 36010,
+      "categoria": "creature-items",
+      "sprite": "ui/comercio/item",
+      "apilable": null,
+      "precioNpc": {
+        "vende": 140,
+        "compra": null
+      },
+      "mercado": true
+    },
+    {
+      "id": "gift-tail",
+      "nombre": "Gift Tail",
+      "clientId": 36011,
+      "categoria": "creature-items",
+      "sprite": "ui/comercio/item",
+      "apilable": null,
+      "precioNpc": {
+        "vende": 115,
+        "compra": null
+      },
+      "mercado": true
+    },
+    {
+      "id": "blue-ray-tail",
+      "nombre": "Blue Ray Tail",
+      "clientId": 36012,
+      "categoria": "creature-items",
+      "sprite": "ui/comercio/item",
+      "apilable": null,
+      "precioNpc": {
+        "vende": 235,
+        "compra": null
+      },
+      "mercado": true
+    },
+    {
+      "id": "steel-wing",
+      "nombre": "Steel Wing",
+      "clientId": 36013,
+      "categoria": "creature-items",
+      "sprite": "ui/comercio/item",
+      "apilable": null,
+      "precioNpc": {
+        "vende": 245,
+        "compra": null
+      },
+      "mercado": true
+    },
+    {
+      "id": "back-bone",
+      "nombre": "Back Bone",
+      "clientId": 36014,
+      "categoria": "creature-items",
+      "sprite": "ui/comercio/item",
+      "apilable": null,
+      "precioNpc": {
+        "vende": 40,
+        "compra": null
+      },
+      "mercado": true
+    },
+    {
+      "id": "dark-canine-horns",
+      "nombre": "Dark Canine Horns",
+      "clientId": 36015,
+      "categoria": "creature-items",
+      "sprite": "ui/comercio/item",
+      "apilable": null,
+      "precioNpc": {
+        "vende": 235,
+        "compra": null
+      },
+      "mercado": true
+    },
+    {
+      "id": "sea-dragon-fin",
+      "nombre": "Sea Dragon Fin",
+      "clientId": 36016,
+      "categoria": "creature-items",
+      "sprite": "ui/comercio/item",
+      "apilable": null,
+      "precioNpc": {
+        "vende": 245,
+        "compra": null
+      },
+      "mercado": true
+    },
+    {
+      "id": "small-elephant-ear",
+      "nombre": "Small Elephant Ear",
+      "clientId": 36017,
+      "categoria": "creature-items",
+      "sprite": "ui/comercio/item",
+      "apilable": null,
+      "precioNpc": {
+        "vende": 45,
+        "compra": null
+      },
+      "mercado": true
+    },
+    {
+      "id": "elephant-foot",
+      "nombre": "Elephant Foot",
+      "clientId": 36018,
+      "categoria": "creature-items",
+      "sprite": "ui/comercio/item",
+      "apilable": null,
+      "precioNpc": {
+        "vende": 185,
+        "compra": null
+      },
+      "mercado": true
+    },
+    {
+      "id": "dimensional-cube",
+      "nombre": "Dimensional Cube",
+      "clientId": 36019,
+      "categoria": "creature-items",
+      "sprite": "ui/comercio/item",
+      "apilable": null,
+      "precioNpc": {
+        "vende": 180,
+        "compra": null
+      },
+      "mercado": true
+    },
+    {
+      "id": "reindeer-horns",
+      "nombre": "Reindeer Horns",
+      "clientId": 36020,
+      "categoria": "creature-items",
+      "sprite": "ui/comercio/item",
+      "apilable": null,
+      "precioNpc": {
+        "vende": 115,
+        "compra": null
+      },
+      "mercado": true
+    },
+    {
+      "id": "smeargle-tail",
+      "nombre": "Smeargle Tail",
+      "clientId": 36021,
+      "categoria": "creature-items",
+      "sprite": "ui/comercio/item",
+      "apilable": null,
+      "precioNpc": {
+        "vende": 185,
+        "compra": null
+      },
+      "mercado": true
+    },
+    {
+      "id": "fist-bandages",
+      "nombre": "Fist Bandages",
+      "clientId": 36022,
+      "categoria": "creature-items",
+      "sprite": "ui/comercio/item",
+      "apilable": null,
+      "precioNpc": {
+        "vende": 125,
+        "compra": null
+      },
+      "mercado": true
+    },
+    {
+      "id": "martial-arts-tail",
+      "nombre": "Martial Arts Tail",
+      "clientId": 36023,
+      "categoria": "creature-items",
+      "sprite": "ui/comercio/item",
+      "apilable": null,
+      "precioNpc": {
+        "vende": 120,
+        "compra": null
+      },
+      "mercado": true
+    },
+    {
+      "id": "baby-hair",
+      "nombre": "Baby Hair",
+      "clientId": 36024,
+      "categoria": "creature-items",
+      "sprite": "ui/comercio/item",
+      "apilable": null,
+      "precioNpc": {
+        "vende": 70,
+        "compra": null
+      },
+      "mercado": true
+    },
+    {
+      "id": "plug-ears",
+      "nombre": "Plug Ears",
+      "clientId": 36025,
+      "categoria": "creature-items",
+      "sprite": "ui/comercio/item",
+      "apilable": null,
+      "precioNpc": {
+        "vende": 78,
+        "compra": null
+      },
+      "mercado": true
+    },
+    {
+      "id": "magma-topknot",
+      "nombre": "Magma Topknot",
+      "clientId": 36026,
+      "categoria": "creature-items",
+      "sprite": "ui/comercio/item",
+      "apilable": null,
+      "precioNpc": {
+        "vende": 70,
+        "compra": null
+      },
+      "mercado": true
+    },
+    {
+      "id": "cow-tail",
+      "nombre": "Cow Tail",
+      "clientId": 36027,
+      "categoria": "creature-items",
+      "sprite": "ui/comercio/item",
+      "apilable": null,
+      "precioNpc": {
+        "vende": 180,
+        "compra": null
+      },
+      "mercado": true
+    },
+    {
+      "id": "nurse-s-fur",
+      "nombre": "Nurse's Fur",
+      "clientId": 36028,
+      "categoria": "creature-items",
+      "sprite": "ui/comercio/item",
+      "apilable": null,
+      "precioNpc": {
+        "vende": 235,
+        "compra": null
+      },
+      "mercado": true
+    },
+    {
+      "id": "thunder-tiger-emblem",
+      "nombre": "Thunder Tiger Emblem",
+      "clientId": 36029,
+      "categoria": "creature-items",
+      "sprite": "ui/comercio/item",
+      "apilable": null,
+      "precioNpc": {
+        "vende": 150000,
+        "compra": null
+      },
+      "mercado": true
+    },
+    {
+      "id": "volcano-lion-star",
+      "nombre": "Volcano Lion Star",
+      "clientId": 36030,
+      "categoria": "creature-items",
+      "sprite": "ui/comercio/item",
+      "apilable": null,
+      "precioNpc": {
+        "vende": 150000,
+        "compra": null
+      },
+      "mercado": true
+    },
+    {
+      "id": "aurora-crown",
+      "nombre": "Aurora Crown",
+      "clientId": 36031,
+      "categoria": "creature-items",
+      "sprite": "ui/comercio/item",
+      "apilable": null,
+      "precioNpc": {
+        "vende": 150000,
+        "compra": null
+      },
+      "mercado": true
+    },
+    {
+      "id": "larvitar-tail",
+      "nombre": "Larvitar Tail",
+      "clientId": 36032,
+      "categoria": "creature-items",
+      "sprite": "ui/comercio/item",
+      "apilable": null,
+      "precioNpc": {
+        "vende": 78,
+        "compra": null
+      },
+      "mercado": true
+    },
+    {
+      "id": "rock-plate",
+      "nombre": "Rock Plate",
+      "clientId": 36033,
+      "categoria": "creature-items",
+      "sprite": "ui/comercio/item",
+      "apilable": null,
+      "precioNpc": {
+        "vende": 125,
+        "compra": null
+      },
+      "mercado": true
+    },
+    {
+      "id": "tyranitar-tail",
+      "nombre": "Tyranitar Tail",
+      "clientId": 36034,
+      "categoria": "creature-items",
+      "sprite": "ui/comercio/item",
+      "apilable": null,
+      "precioNpc": {
+        "vende": 235,
+        "compra": null
+      },
+      "mercado": true
+    },
+    {
+      "id": "silver-wing",
+      "nombre": "Silver Wing",
+      "clientId": 36035,
+      "categoria": "creature-items",
+      "sprite": "ui/comercio/item",
+      "apilable": null,
+      "precioNpc": {
+        "vende": 150000,
+        "compra": null
+      },
+      "mercado": true
+    },
+    {
+      "id": "rainbow-wing",
+      "nombre": "Rainbow Wing",
+      "clientId": 36036,
+      "categoria": "creature-items",
+      "sprite": "ui/comercio/item",
+      "apilable": null,
+      "precioNpc": {
+        "vende": 150000,
+        "compra": null
+      },
+      "mercado": true
+    },
+    {
+      "id": "pink-fairy-bow",
+      "nombre": "pink fairy bow",
+      "clientId": 48316,
+      "categoria": "creature-items",
+      "sprite": "ui/comercio/item",
+      "apilable": null,
+      "precioNpc": {
+        "vende": 245,
+        "compra": null
+      },
+      "mercado": true
+    },
+    {
+      "id": "mystic-petal",
+      "nombre": "mystic petal",
+      "clientId": 31388,
+      "categoria": "creature-items",
+      "sprite": "ui/comercio/item",
+      "apilable": null,
+      "precioNpc": {
+        "vende": 245,
+        "compra": null
+      },
+      "mercado": true
     }
   ]
 }

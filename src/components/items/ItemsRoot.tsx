@@ -231,7 +231,7 @@ export function ItemsRoot({
 
   /** The one Pokémon that drops a row's item, when it is only one. */
   const onlyDropper = (row: ItemsRow): string | undefined =>
-    row.dropDe?.length === 1 ? row.dropDe[0] : undefined;
+    Array.isArray(row.dropDe) && row.dropDe.length === 1 ? row.dropDe[0] : undefined;
 
   // Whether the Lista needs its deferred part, and whether it is here.
   const later = deferred;
@@ -277,10 +277,11 @@ export function ItemsRoot({
    * nothing. Until its panel is here the one Pokémon is its name (the list is still pending).
    */
   const droppedBy = (row: ItemsRow): LootCardEntity | string | null => {
-    const ids = row.dropDe ?? [];
-    if (ids.length === 0) return null;
+    // A number when the list only counts them (`DROPPER_NAMES_MAX`).
+    const count = typeof row.dropDe === 'number' ? row.dropDe : (row.dropDe ?? []).length;
+    if (count === 0) return null;
     const one = onlyDropper(row);
-    if (one === undefined) return counted(labels.droppedByCount, ids.length, locale);
+    if (one === undefined) return counted(labels.droppedByCount, count, locale);
     return entities.get(one) ?? refs.pokemon[one]?.nombre ?? null;
   };
 

@@ -43,9 +43,10 @@ export const TIERS_PAGE_SIZE = 48;
 
 /**
  * Rows the prerendered page and its props carry (13.6: props within 20 KB); the island takes
- * the rest from `datos.json` as it hydrates (PR5).
+ * the rest from `datos.json` as it hydrates (PR5). 24 since the rows carry their moveset element
+ * (the imported Pokédex): 28 rows went past the 20 KB.
  */
-export const TIERS_PROPS_ROWS = 28;
+export const TIERS_PROPS_ROWS = 24;
 
 /**
  * The values each filter accepts (U3, U4), read from the rows with a tier. No tiers: the

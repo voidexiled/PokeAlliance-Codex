@@ -59,6 +59,14 @@ const data = buildPokedexData(locale);
 const records = decodePokedex(data);
 const first = { v: data.v, campos: data.campos, filas: data.filas.slice(0, POKEDEX_PAGE_SIZE) };
 const firstRows = decodePokedex(first);
+// The drops of the first page travel without their panels: with the imported loot, twelve
+// Pokémon name ten items whose panels alone would take the props past the 20 KB of §13.6. The
+// island builds them with `itemTip` once `datos.json` and its deferred part are here.
+const firstDrops = Object.fromEntries(
+  Object.entries(
+    pokedexDrops(firstRows, records, data.refs.items, locale, messages.ui.tooltip),
+  ).map(([id, { name, sprite }]) => [id, { name, sprite }]),
+);
 const description = fill(messages.pokedex.description, {
   n: formatInteger(records.length, locale),
 });
@@ -81,7 +89,7 @@ const description = fill(messages.pokedex.description, {
     total={records.length}
     ids={pokedexIds(records, data.refs.elementos, tierInfo)}
     elements={pokedexElements(firstRows, locale, messages.ui.tooltip)}
-    drops={pokedexDrops(firstRows, records, data.refs.items, locale, messages.ui.tooltip)}
+    drops={firstDrops}
     title={title}
     ui={messages.ui}
     pokedex={messages.pokedex}

@@ -94,8 +94,11 @@ export interface DexCardDrop {
    * anatomy, a slot with the missing mark in the compact one.
    */
   sprite: SpriteProps | null;
-  /** Panel of the item, `itemTip` (7.5.3). `null`, or nothing below its title: plain text (R2). */
-  tip: TipData | null;
+  /**
+   * Panel of the item, `itemTip` (7.5.3). `null`, missing (the first page of the Pokédex, whose
+   * island builds it after hydrating) or nothing below its title: plain text (R2).
+   */
+  tip?: TipData | null;
   /** Page of the item. Without it the trigger is a button (7.5.7). */
   href?: string;
 }

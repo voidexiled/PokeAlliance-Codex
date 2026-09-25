@@ -21,6 +21,7 @@ import type { SpriteProps } from '@/components/game/Sprite';
 import type { Locale } from '@/i18n/config';
 import { fill } from '@/i18n/messages/types';
 import { formatTier } from '@/lib/content/format';
+import { DROPPER_NAMES_MAX } from '@/lib/game/dropper-limit';
 import { resolvePokemonImage } from '@/lib/content/pokemon-media';
 import { tierInfo } from '@/lib/content/tiers';
 import type { PokemonRecord, SystemItemRecord } from '@/lib/content/types';
@@ -136,6 +137,11 @@ export type TipLabels = {
   category: string;
   /** «Drop de» / «Dropped by». */
   droppedBy: string;
+  /**
+   * «{n} Pokémon»: the value of «Drop de» when more than `DROPPER_NAMES_MAX` Pokémon drop the
+   * item (an Evolution Stone drops from a hundred). Without it the row lists every name.
+   */
+  pokemonCount?: string;
   /** «Elemento» / «Element». */
   element: string;
   /** «Uso» / «Use». */
@@ -320,8 +326,11 @@ export type ItemTipRecord = {
   precioNpc: { vende: number | null; compra: number | null };
   /** `nombre` of the category in `content/items/categorias.json`. */
   nombreCategoria?: LocalizedText | null;
-  /** Names of the Pokémon that drop it, in the order of §8.0.5. Pokémon names do not translate (§13.4). */
-  dropDe?: readonly string[];
+  /**
+   * Names of the Pokémon that drop it, in the order of §8.0.5 (Pokémon names do not translate,
+   * §13.4), or how many they are when a list gives only that (`DROPPER_NAMES_MAX`).
+   */
+  dropDe?: readonly string[] | number;
   /** `nombre` of the element in the item's `elemento` id (§3.13). */
   nombreElemento?: LocalizedText | null;
   /** `uso` of the item (§3.13). */
@@ -334,6 +343,12 @@ export type ItemTipRecord = {
  * new fields written — the panel is the sprite and the name, and not one row.
  */
 export function itemTip(item: ItemTipRecord, locale: Locale, labels: TipLabels): TipData {
+  const droppers = item.dropDe ?? [];
+  const count = typeof droppers === 'number' ? droppers : droppers.length;
+  const droppedBy =
+    count > DROPPER_NAMES_MAX && labels.pokemonCount !== undefined
+      ? fill(labels.pokemonCount, { n: formatInteger(count, locale) })
+      : { list: typeof droppers === 'number' ? [] : [...droppers] };
   return {
     key: `item:${item.id}`,
     title: item.nombre,
@@ -341,7 +356,7 @@ export function itemTip(item: ItemTipRecord, locale: Locale, labels: TipLabels):
     head: { type: 'sprite', sprite: item.sprite },
     rows: tipRows([
       [labels.category, text(item.nombreCategoria, locale)],
-      [labels.droppedBy, { list: [...(item.dropDe ?? [])] }],
+      [labels.droppedBy, droppedBy],
       [labels.element, text(item.nombreElemento, locale)],
       [labels.use, text(item.uso, locale)],
       [labels.npcPrice, item.precioNpc.vende === null ? null : { pd: item.precioNpc.vende }],

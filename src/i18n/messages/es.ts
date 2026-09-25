@@ -51,6 +51,7 @@ export const es = {
       fragment: 'Fragment',
       category: 'Categoría',
       droppedBy: 'Drop de',
+      pokemonCount: '{n} Pokémon',
       element: 'Elemento',
       use: 'Uso',
       quantity: 'Cantidad',
@@ -511,6 +512,7 @@ export const es = {
   item: {
     description: '{name}, ítem de {category} en PokeAlliance: cómo se obtiene y para qué se usa.',
     tradeable: 'Comercializable en el mercado',
+    notTradeable: 'No comerciable en el mercado',
     stackable: 'Apilable',
     heldTier: 'Tier',
     heldTiers: 'Tiers de {effect}',

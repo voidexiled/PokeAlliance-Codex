@@ -158,9 +158,10 @@ export interface PokedexIds {
   /**
    * §16.2.2: the elements at least one record's `elementoMoveset` names, in the order of
    * `elements`. Empty while the importer has not written the field, so «Tipo de moveset»
-   * has fewer than two options and the filter chips do not draw it (C-R5).
+   * has fewer than two options and the filter chips do not draw it (C-R5). Ids only: their
+   * names are the ones of `elements` (the props stay within the 20 KB of §13.6).
    */
-  movesets: readonly PokedexOption[];
+  movesets: readonly string[];
   /** The variants present: `normal`, then `shiny`. */
   variants: readonly string[];
   /** Every tier the rows have, hidden ones included, with its name and «Max brokes». */
@@ -404,7 +405,7 @@ export function pokedexConfig(
       // Hidden by the filter chips (C-R5) while `ids.movesets` has fewer than two options.
       {
         key: 'moveset',
-        values: optionIds(ids.movesets),
+        values: ids.movesets,
         multi: true,
         test: (row, value) => row.elementoMoveset === value,
       },
@@ -464,7 +465,7 @@ export function pokedexFilterDefs(
       key: 'moveset',
       label: names.movesetType,
       kind: 'elements',
-      options: options(ids.movesets),
+      options: options(ids.elements.filter(([id]) => ids.movesets.includes(id))),
       join: 'any',
       hint: text.hints.moveset,
     },

@@ -68,6 +68,10 @@ const pokemonMove = z.strictObject({
   slot: text.nullable(),
   cooldownPve: z.number().min(0).nullable(),
   cooldownPvp: z.number().min(0).nullable(),
+  /** Optional: what this Pokémon's version of the move has when it is not the move's own. */
+  elemento: element.nullable().optional(),
+  alcance: oneOf($defs.movimientoPokemon.properties.alcance.enum).optional(),
+  efectos: z.array(slug).optional(),
 });
 
 const evolucion = z.strictObject({

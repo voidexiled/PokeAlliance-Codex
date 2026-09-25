@@ -31,6 +31,10 @@ export type PokemonMove = {
   slot: string | null;
   cooldownPve: number | null;
   cooldownPvp: number | null;
+  /** What this Pokémon's version of the move has, only when it is not the move's own. */
+  elemento?: string | null;
+  alcance?: string | null;
+  efectos?: string[];
 };
 
 /** The element groups of the game's Pokédex «Efectividad» (×2, ×1,5, ×0,5, ×0,4, ×0). */

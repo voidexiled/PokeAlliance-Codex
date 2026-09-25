@@ -271,7 +271,7 @@ export function pokedexIds(
     ],
     elements: elementOptions,
     // §16.2.2: only the elements at least one record's moveset names, in element order.
-    movesets: elementOptions.filter(([id]) => movesetIds.has(id)),
+    movesets: elementOptions.flatMap(([id]) => (movesetIds.has(id) ? [id] : [])),
     variants: VARIANTS.filter((variant) => variants.has(variant)),
     tierMeta,
   };

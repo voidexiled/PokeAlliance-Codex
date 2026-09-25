@@ -23,6 +23,6 @@ describe('content repository', () => {
     const metrics = getCatalogMetrics();
 
     expect(metrics.collections).toBe(6);
-    expect(metrics.records).toBe(915);
+    expect(metrics.records).toBe(1535);
   });
 });

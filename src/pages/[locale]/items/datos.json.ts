@@ -55,6 +55,7 @@ import {
 import type { Elemento } from '@/lib/content/registry-schema';
 import { getPokemon } from '@/lib/content/repository';
 import type { PokemonRecord } from '@/lib/content/types';
+import { DROPPER_NAMES_MAX } from '@/lib/game/dropper-limit';
 import { elementTip, pokemonTip, type TipLabels } from '@/lib/game/tips';
 import { spriteOrNull } from '@/lib/sprites/resolve';
 
@@ -134,7 +135,9 @@ export function buildItemsData(locale: Locale): ItemsData {
         : null;
     if (elemento !== null) elementIds.add(elemento);
     const by = droppers.get(record.id) ?? [];
-    for (const entry of by) pokemon.set(entry.id, entry);
+    // Past DROPPER_NAMES_MAX the row carries how many they are, not who (config.ts, `dropDe`).
+    const many = by.length > DROPPER_NAMES_MAX;
+    if (!many) for (const entry of by) pokemon.set(entry.id, entry);
     const values: Record<ItemsField, unknown> = {
       id: record.id,
       nombre: record.nombre,
@@ -144,7 +147,7 @@ export function buildItemsData(locale: Locale): ItemsData {
       compra: record.precioNpc.compra,
       elemento,
       uso: record.uso?.[locale] ?? null,
-      dropDe: by.length > 0 ? by.map((entry) => entry.id) : null,
+      dropDe: many ? by.length : by.length > 0 ? by.map((entry) => entry.id) : null,
       held: record.held ?? null,
       mega: record.mega ?? null,
     };
@@ -250,7 +253,9 @@ export function itemsDroppers(
   locale: Locale,
   labels: TipLabels,
 ): Record<string, LootCardEntity> {
-  const single = rows.flatMap((row) => (row.dropDe?.length === 1 ? row.dropDe : []));
+  const single = rows.flatMap((row) =>
+    Array.isArray(row.dropDe) && row.dropDe.length === 1 ? row.dropDe : [],
+  );
   return Object.fromEntries(
     single.flatMap((id) => {
       const ref = refs.pokemon[id];

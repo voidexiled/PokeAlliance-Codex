@@ -76,7 +76,7 @@ describe('registry loaders', () => {
   });
 
   it('loads items per category and "todo" as every category', () => {
-    expect(getItems('stones')).toHaveLength(35);
+    expect(getItems('stones')).toHaveLength(37);
     expect(
       getItems('stones')
         .slice(0, 5)
@@ -593,7 +593,7 @@ describe('pnpm content:check', () => {
     expect(result.errors).toEqual([]);
     expect(result.summary.find((row) => row.file === 'content/items/stones.json')).toEqual({
       file: 'content/items/stones.json',
-      registros: '35 items',
+      registros: '37 items',
       borradores: 20,
     });
     expect(formatReport(result)).toMatch(/Resultado: sin errores/);

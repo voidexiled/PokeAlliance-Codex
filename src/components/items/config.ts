@@ -34,9 +34,10 @@ export const ITEMS_PAGE_SIZE = 96;
 
 /**
  * Rows the prerendered page and its props carry (13.6: props within 20 KB). A longer list takes
- * the rest of its first page from `datos.json` as the island hydrates (PR5).
+ * the rest of its first page from `datos.json` as the island hydrates (PR5). 20 since the items
+ * carry their «Drop de» (the imported loot): 28 rows went past the 20 KB.
  */
-export const ITEMS_PROPS_ROWS = 28;
+export const ITEMS_PROPS_ROWS = 20;
 
 /** The virtual category of content/items/categorias.json: `/{l}/items/` (8.5). */
 export const ALL_CATEGORY = 'todo';
@@ -71,7 +72,9 @@ type ItemsField = (typeof ITEMS_FIELDS)[number];
  * - `elemento`, the id of its element in `refs.elementos`, and `uso`, in the language of the
  *   file (both optional fields of §3.13);
  * - `dropDe`, the ids of the Pokémon whose `drops` hold it, in the order of 8.0.5 and each one
- *   in `refs.pokemon`: «Drop de» is the inverse of that field (7.5.3).
+ *   in `refs.pokemon`: «Drop de» is the inverse of that field (7.5.3). Past
+ *   `DROPPER_NAMES_MAX` Pokémon it is their number: «Drop de» only counts them (an Evolution
+ *   Stone drops from a hundred), and the ids would only weigh on the props and the file.
  *
  * `null` is the registry's unknown, and a field the registry does not write is `null` as well.
  */
@@ -84,7 +87,7 @@ export interface ItemsRow {
   compra: number | null;
   elemento: string | null;
   uso: string | null;
-  dropDe: readonly string[] | null;
+  dropDe: readonly string[] | number | null;
   /** `held` of a held item (16.2.3): its slot, effect and tier. */
   held?: { ranura: 'x' | 'y'; efecto: string; tier: number } | null;
   /** `mega` of a Mega Stone (16.2.3): the Pokémon ids it evolves. */
@@ -153,8 +156,8 @@ export interface ItemsTab extends ItemsCategory {
 // ------------------------------------------------------------------------------ reading
 
 /**
- * What a value of each field may be: a text (`s`), an integer (`i`), a list of texts (`l`)
- * or a resolved sprite (`p`); `?` also takes `null`.
+ * What a value of each field may be: a text (`s`), an integer (`i`), a list of texts (`l`), a
+ * list of texts or an integer (`L`) or a resolved sprite (`p`); `?` also takes `null`.
  */
 const SHAPES: Record<ItemsField, string> = {
   id: 's',
@@ -165,7 +168,7 @@ const SHAPES: Record<ItemsField, string> = {
   compra: 'i?',
   elemento: 's?',
   uso: 's?',
-  dropDe: 'l?',
+  dropDe: 'L?',
   held: 'o?',
   mega: 'o?',
 };
@@ -173,10 +176,13 @@ const SHAPES: Record<ItemsField, string> = {
 function fits(value: unknown, shape: string): boolean {
   if (value === null || (value === undefined && shape === 'o?')) return shape.endsWith('?');
   if (typeof value === 'string') return shape[0] === 's' && value !== '';
-  if (typeof value === 'number') return shape[0] === 'i' && Number.isInteger(value) && value >= 0;
+  if (typeof value === 'number')
+    return (shape[0] === 'i' || shape[0] === 'L') && Number.isInteger(value) && value >= 0;
   if (shape[0] === 'o') return typeof value === 'object' && !Array.isArray(value);
   if (Array.isArray(value)) {
-    return shape[0] === 'l' && value.every((entry) => typeof entry === 'string');
+    return (
+      (shape[0] === 'l' || shape[0] === 'L') && value.every((entry) => typeof entry === 'string')
+    );
   }
   return (
     shape[0] === 'p' &&
@@ -310,7 +316,11 @@ export function itemPanel(
       sprite: row.sprite,
       precioNpc: { vende: row.vende, compra: row.compra },
       nombreCategoria: category === null ? null : localized(category, locale),
-      dropDe: (row.dropDe ?? []).flatMap((id) => refs.pokemon[id]?.nombre ?? []),
+      // A number: past DROPPER_NAMES_MAX the panel only counts them.
+      dropDe:
+        typeof row.dropDe === 'number'
+          ? row.dropDe
+          : (row.dropDe ?? []).flatMap((id) => refs.pokemon[id]?.nombre ?? []),
       nombreElemento: element === undefined ? null : localized(element.nombre, locale),
       uso: row.uso === null ? null : localized(row.uso, locale),
     },
@@ -329,7 +339,7 @@ export function refsOf(rows: readonly ItemsRow[], refs: ItemsData['refs']): Item
   for (const row of rows) {
     const element = row.elemento === null ? undefined : refs.elementos[row.elemento];
     if (row.elemento !== null && element !== undefined) elementos[row.elemento] = element;
-    for (const id of row.dropDe ?? []) {
+    for (const id of Array.isArray(row.dropDe) ? row.dropDe : []) {
       const ref = refs.pokemon[id];
       if (ref !== undefined) pokemon[id] = ref;
     }

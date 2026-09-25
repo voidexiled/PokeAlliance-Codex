@@ -264,8 +264,17 @@ const show = {
   evolutions: uses.evolutions.length > 0,
   elementParts: stoneElements.length > 0 || fragmentElements.length > 0,
 };
-// The Market block: every item of content/items/ is in a Market category (D-011).
-const obtainShown = true;
+// The Market block: every item of content/items/ is in a Market category (D-011), unless the
+// registry says the Market does not take it (`mercado: false`).
+const marketShown = item.mercado !== false;
+const obtainShown =
+  marketShown ||
+  show.loot ||
+  show.shops ||
+  show.pass ||
+  show.calendar ||
+  show.tasks ||
+  show.recipes;
 const usesShown = show.use || show.usedIn || show.evolutions || show.elementParts;
 const toc: TocItem[] = [
   obtainShown && { id: 'como-se-obtiene', label: copy.sections.obtain },
@@ -274,13 +283,21 @@ const toc: TocItem[] = [
 ].filter((entry): entry is TocItem => entry !== false);
 
 const tradeHref = `/${locale}/comercio/?item=${encodeURIComponent(item.id)}`;
-const pageDescription = fill(copy.description, { name, category: categoryName });
+// The game has items that share a name (two «Furry Tail», dropped by Eevee and by Sentret): the
+// title and the description of such a page name the first Pokémon that drops it, or its client
+// id, so no two pages repeat them (13.5). The h1 stays the game's name.
+const namesake = allItems.some((entry) => entry.id !== item.id && entry.nombre === item.nombre);
+const qualifier = !namesake
+  ? null
+  : (loot[0]?.pokemon.nombre ?? (item.clientId === null ? item.id : `#${item.clientId}`));
+const pageName = qualifier === null ? name : `${name} (${qualifier})`;
+const pageDescription = fill(copy.description, { name: pageName, category: categoryName });
 ---
 
 <PageLayout
   locale={locale}
   title={name}
-  documentTitle={`${name} · ${categoryName} · ${BRAND}`}
+  documentTitle={`${pageName} · ${categoryName} · ${BRAND}`}
   description={pageDescription}
   alternates={alternates}
   breadcrumb={[
@@ -303,7 +320,8 @@ const pageDescription = fill(copy.description, { name, category: categoryName })
         <a href={categoryHref}>{categoryName}</a>
         {item.apilable === true && <span>· {copy.stackable}</span>}
       </p>
-      <span class="ac-entity-tag">{copy.tradeable}</span>
+      {item.mercado === true && <span class="ac-entity-tag">{copy.tradeable}</span>}
+      {item.mercado === false && <span class="ac-entity-tag">{copy.notTradeable}</span>}
       {
         description && (
           <p class="ac-entity-hero__text" lang={description.lang}>
@@ -399,350 +417,341 @@ const pageDescription = fill(copy.description, { name, category: categoryName })
     </div>
   </header>
 
-  <Section id="como-se-obtiene" title={copy.sections.obtain}>
-    {
-      show.loot && (
-        <div class="ac-entity-block" id="loot">
-          <h3 class="ac-entity-block__title">
-            {copy.loot}
-            <span class="ac-entity-block__count">
-              {fill(plural(locale, lootPokemon, copy.lootCount), {
-                n: formatInteger(lootPokemon, locale),
-              })}
-            </span>
-          </h3>
-          <div class="ac-entity-tabs">
-            {lootZones.length > 1 && (
-              <fieldset class="ac-entity-tabs__list">
-                <legend class="sr-only">{copy.zoneFilter}</legend>
-                <label>
-                  <input type="radio" name="zona" value="todas" checked class="sr-only" />
-                  {copy.zoneAll}
-                  <span class="ac-entity-tabs__count">{formatInteger(loot.length, locale)}</span>
-                </label>
-                {lootZones.map((zone) => (
+  {
+    obtainShown && (
+      <Section id="como-se-obtiene" title={copy.sections.obtain}>
+        {show.loot && (
+          <div class="ac-entity-block" id="loot">
+            <h3 class="ac-entity-block__title">
+              {copy.loot}
+              <span class="ac-entity-block__count">
+                {fill(plural(locale, lootPokemon, copy.lootCount), {
+                  n: formatInteger(lootPokemon, locale),
+                })}
+              </span>
+            </h3>
+            <div class="ac-entity-tabs">
+              {lootZones.length > 1 && (
+                <fieldset class="ac-entity-tabs__list">
+                  <legend class="sr-only">{copy.zoneFilter}</legend>
                   <label>
-                    <input type="radio" name="zona" value={zone} class="sr-only" />
-                    {LOOT_ZONE_NAMES[zone]}
-                    <span class="ac-entity-tabs__count">
-                      {formatInteger(loot.filter((row) => row.zone === zone).length, locale)}
-                    </span>
+                    <input type="radio" name="zona" value="todas" checked class="sr-only" />
+                    {copy.zoneAll}
+                    <span class="ac-entity-tabs__count">{formatInteger(loot.length, locale)}</span>
                   </label>
-                ))}
-              </fieldset>
-            )}
-            <div class="ac-entity-table">
-              <table data-ac-sortable>
-                <caption class="sr-only">{fill(copy.lootCaption, { name })}</caption>
-                <thead>
-                  <tr>
-                    <th scope="col" aria-sort="none" data-sort="pokemon">
-                      <button type="button" class="ac-entity-sort">
-                        {copy.columnPokemon}
-                      </button>
-                    </th>
-                    <th scope="col">{copy.columnZone}</th>
-                    {lootHasChance && (
-                      <th scope="col" class="ac-num" aria-sort="descending" data-sort="chance">
+                  {lootZones.map((zone) => (
+                    <label>
+                      <input type="radio" name="zona" value={zone} class="sr-only" />
+                      {LOOT_ZONE_NAMES[zone]}
+                      <span class="ac-entity-tabs__count">
+                        {formatInteger(loot.filter((row) => row.zone === zone).length, locale)}
+                      </span>
+                    </label>
+                  ))}
+                </fieldset>
+              )}
+              <div class="ac-entity-table">
+                <table data-ac-sortable>
+                  <caption class="sr-only">{fill(copy.lootCaption, { name })}</caption>
+                  <thead>
+                    <tr>
+                      <th scope="col" aria-sort="none" data-sort="pokemon">
                         <button type="button" class="ac-entity-sort">
-                          {copy.columnChance}
+                          {copy.columnPokemon}
                         </button>
                       </th>
-                    )}
+                      <th scope="col">{copy.columnZone}</th>
+                      {lootHasChance && (
+                        <th scope="col" class="ac-num" aria-sort="descending" data-sort="chance">
+                          <button type="button" class="ac-entity-sort">
+                            {copy.columnChance}
+                          </button>
+                        </th>
+                      )}
+                      <th scope="col" class="ac-num">
+                        {copy.columnQuantity}
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {[...loot]
+                      .sort((a, b) => (b.probabilidad ?? -1) - (a.probabilidad ?? -1))
+                      .map((row) => {
+                        const source = resolvePokemonImage(row.pokemon.imagen);
+                        return (
+                          <tr
+                            data-zone={row.zone}
+                            data-pokemon={row.pokemon.nombre}
+                            data-chance={row.probabilidad ?? -1}
+                          >
+                            <th scope="row">
+                              {/* No panel and a bare portrait per row: a stone drops from
+                                  100+ Pokémon in three zones, and a panel is ~2.5 KB of HTML
+                                  (§13.6, 450 KB). The name is the link. */}
+                              <span class="ac-entity-move">
+                                <span class={entitySlotClasses(32)} aria-hidden="true">
+                                  {source !== null && (
+                                    <img
+                                      class:list={[
+                                        'ac-sprite ac-sprite--smooth',
+                                        { 'ac-shiny-glow': row.pokemon.variante === SHINY },
+                                      ]}
+                                      src={source}
+                                      width="24"
+                                      height="24"
+                                      alt=""
+                                      loading="lazy"
+                                      decoding="async"
+                                    />
+                                  )}
+                                </span>
+                                <a href={pokemonHref(row.pokemon.id)}>{row.pokemon.nombre}</a>
+                              </span>
+                            </th>
+                            <td>{LOOT_ZONE_NAMES[row.zone]}</td>
+                            {lootHasChance && (
+                              <td class="ac-num">
+                                {row.probabilidad === null ? (
+                                  UNKNOWN
+                                ) : (
+                                  <span class="ac-entity-chance">
+                                    <span class="ac-entity-chance__bar" aria-hidden="true">
+                                      <span style={`inline-size: ${row.probabilidad}%`} />
+                                    </span>
+                                    {formatPercent(row.probabilidad, locale)}
+                                  </span>
+                                )}
+                              </td>
+                            )}
+                            <td class="ac-num">
+                              {row.cantidad === null
+                                ? UNKNOWN
+                                : row.cantidad.min === row.cantidad.max
+                                  ? formatInteger(row.cantidad.min, locale)
+                                  : `${formatInteger(row.cantidad.min, locale)}–${formatInteger(row.cantidad.max, locale)}`}
+                            </td>
+                          </tr>
+                        );
+                      })}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {marketShown && (
+          <div class="ac-entity-block">
+            <h3 class="ac-entity-block__title">{copy.market}</h3>
+            <p class="ac-entity-note">{fill(copy.marketText, { category: categoryName })}</p>
+          </div>
+        )}
+
+        {show.shops && (
+          <div class="ac-entity-block">
+            <h3 class="ac-entity-block__title">{copy.shops}</h3>
+            <div class="ac-entity-table">
+              <table>
+                <thead>
+                  <tr>
+                    <th scope="col">{copy.columnShop}</th>
+                    <th scope="col" class="ac-num">
+                      {copy.columnPrice}
+                    </th>
                     <th scope="col" class="ac-num">
                       {copy.columnQuantity}
                     </th>
                   </tr>
                 </thead>
                 <tbody>
-                  {[...loot]
-                    .sort((a, b) => (b.probabilidad ?? -1) - (a.probabilidad ?? -1))
-                    .map((row) => {
-                      const source = resolvePokemonImage(row.pokemon.imagen);
-                      return (
-                        <tr
-                          data-zone={row.zone}
-                          data-pokemon={row.pokemon.nombre}
-                          data-chance={row.probabilidad ?? -1}
-                        >
-                          <th scope="row">
-                            <span class="ac-entity-move">
-                              <EntitySlot
-                                size={32}
-                                name={row.pokemon.nombre}
-                                sprite={source === null ? null : { src: source, smooth: true }}
-                                shiny={row.pokemon.variante === SHINY}
-                                art
-                                tip={tipOfPokemon(row.pokemon)}
-                                href={pokemonHref(row.pokemon.id)}
-                                locale={locale}
-                                hint={ui.pinHint}
-                                shinyLabel={ui.shiny}
-                              />
-                              <NestedEntity
-                                tip={tipOfPokemon(row.pokemon)}
-                                href={pokemonHref(row.pokemon.id)}
-                                locale={locale}
-                                hint={ui.pinHint}
-                                shinyLabel={ui.shiny}
-                              >
-                                {row.pokemon.nombre}
-                              </NestedEntity>
-                            </span>
-                          </th>
-                          <td>{LOOT_ZONE_NAMES[row.zone]}</td>
-                          {lootHasChance && (
-                            <td class="ac-num">
-                              {row.probabilidad === null ? (
-                                UNKNOWN
-                              ) : (
-                                <span class="ac-entity-chance">
-                                  <span class="ac-entity-chance__bar" aria-hidden="true">
-                                    <span style={`inline-size: ${row.probabilidad}%`} />
-                                  </span>
-                                  {formatPercent(row.probabilidad, locale)}
-                                </span>
-                              )}
-                            </td>
-                          )}
-                          <td class="ac-num">
-                            {row.cantidad === null
-                              ? UNKNOWN
-                              : row.cantidad.min === row.cantidad.max
-                                ? formatInteger(row.cantidad.min, locale)
-                                : `${formatInteger(row.cantidad.min, locale)}–${formatInteger(row.cantidad.max, locale)}`}
-                          </td>
-                        </tr>
-                      );
-                    })}
+                  {shops.map((shop) => (
+                    <tr>
+                      <th scope="row">{shop.tienda}</th>
+                      <td class="ac-num">
+                        {shop.precio === null
+                          ? UNKNOWN
+                          : [formatInteger(shop.precio, locale), shop.moneda]
+                              .filter(Boolean)
+                              .join(' ')}
+                      </td>
+                      <td class="ac-num">{count(shop.cantidad)}</td>
+                    </tr>
+                  ))}
                 </tbody>
               </table>
             </div>
           </div>
-        </div>
-      )
-    }
+        )}
 
-    <div class="ac-entity-block">
-      <h3 class="ac-entity-block__title">{copy.market}</h3>
-      <p class="ac-entity-note">
-        {fill(copy.marketText, { category: categoryName })}
-      </p>
-    </div>
-
-    {
-      show.shops && (
-        <div class="ac-entity-block">
-          <h3 class="ac-entity-block__title">{copy.shops}</h3>
-          <div class="ac-entity-table">
-            <table>
-              <thead>
-                <tr>
-                  <th scope="col">{copy.columnShop}</th>
-                  <th scope="col" class="ac-num">
-                    {copy.columnPrice}
-                  </th>
-                  <th scope="col" class="ac-num">
-                    {copy.columnQuantity}
-                  </th>
-                </tr>
-              </thead>
-              <tbody>
-                {shops.map((shop) => (
+        {show.pass && (
+          <div class="ac-entity-block">
+            <h3 class="ac-entity-block__title">{copy.pass}</h3>
+            <div class="ac-entity-table">
+              <table>
+                <thead>
                   <tr>
-                    <th scope="row">{shop.tienda}</th>
-                    <td class="ac-num">
-                      {shop.precio === null
-                        ? UNKNOWN
-                        : [formatInteger(shop.precio, locale), shop.moneda]
-                            .filter(Boolean)
-                            .join(' ')}
-                    </td>
-                    <td class="ac-num">{count(shop.cantidad)}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        </div>
-      )
-    }
-
-    {
-      show.pass && (
-        <div class="ac-entity-block">
-          <h3 class="ac-entity-block__title">{copy.pass}</h3>
-          <div class="ac-entity-table">
-            <table>
-              <thead>
-                <tr>
-                  <th scope="col">{copy.columnSeason}</th>
-                  <th scope="col" class="ac-num">
-                    {copy.columnLevel}
-                  </th>
-                  <th scope="col">{copy.columnTrack}</th>
-                  <th scope="col" class="ac-num">
-                    {copy.columnQuantity}
-                  </th>
-                </tr>
-              </thead>
-              <tbody>
-                {pass.map((reward) => (
-                  <tr>
-                    <th scope="row">
-                      {reward.temporada === null
-                        ? UNKNOWN
-                        : formatInteger(reward.temporada, locale)}
+                    <th scope="col">{copy.columnSeason}</th>
+                    <th scope="col" class="ac-num">
+                      {copy.columnLevel}
                     </th>
-                    <td class="ac-num">
-                      {reward.nivel === null ? UNKNOWN : formatInteger(reward.nivel, locale)}
-                    </td>
-                    <td>{trackLabel[reward.pista]}</td>
-                    <td class="ac-num">{count(reward.cantidad)}</td>
+                    <th scope="col">{copy.columnTrack}</th>
+                    <th scope="col" class="ac-num">
+                      {copy.columnQuantity}
+                    </th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        </div>
-      )
-    }
-
-    {
-      show.calendar && (
-        <div class="ac-entity-block">
-          <h3 class="ac-entity-block__title">{copy.calendar}</h3>
-          <div class="ac-entity-table">
-            <table>
-              <thead>
-                <tr>
-                  <th scope="col" class="ac-num">
-                    {copy.columnMonth}
-                  </th>
-                  <th scope="col">{copy.columnDay}</th>
-                  <th scope="col">{copy.columnCalendar}</th>
-                  <th scope="col" class="ac-num">
-                    {copy.columnQuantity}
-                  </th>
-                </tr>
-              </thead>
-              <tbody>
-                {calendar.map((reward) => (
-                  <tr>
-                    <td class="ac-num">
-                      {reward.mes === null ? UNKNOWN : formatInteger(reward.mes, locale)}
-                    </td>
-                    <td>
-                      {reward.trasDia21
-                        ? copy.afterDay21
-                        : reward.dia === null
+                </thead>
+                <tbody>
+                  {pass.map((reward) => (
+                    <tr>
+                      <th scope="row">
+                        {reward.temporada === null
                           ? UNKNOWN
-                          : formatInteger(reward.dia, locale)}
-                    </td>
-                    <td>{trackLabel[reward.calendario]}</td>
-                    <td class="ac-num">{count(reward.cantidad)}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
+                          : formatInteger(reward.temporada, locale)}
+                      </th>
+                      <td class="ac-num">
+                        {reward.nivel === null ? UNKNOWN : formatInteger(reward.nivel, locale)}
+                      </td>
+                      <td>{trackLabel[reward.pista]}</td>
+                      <td class="ac-num">{count(reward.cantidad)}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
           </div>
-        </div>
-      )
-    }
+        )}
 
-    {
-      show.tasks && (
-        <div class="ac-entity-block">
-          <h3 class="ac-entity-block__title">{copy.tasks}</h3>
-          <div class="ac-entity-table">
-            <table>
-              <tbody>
-                {tasks.map((task) => (
+        {show.calendar && (
+          <div class="ac-entity-block">
+            <h3 class="ac-entity-block__title">{copy.calendar}</h3>
+            <div class="ac-entity-table">
+              <table>
+                <thead>
                   <tr>
-                    <td class="ac-entity-table__label">{taskLabel[task.tipo]}</td>
-                    <th scope="row">
-                      {task.actividad ? (
-                        <a href={`/${locale}/actividades/${task.actividad}/`}>{task.nombre}</a>
-                      ) : (
-                        task.nombre
-                      )}
+                    <th scope="col" class="ac-num">
+                      {copy.columnMonth}
                     </th>
-                    <td class="ac-num">{count(task.cantidad)}</td>
+                    <th scope="col">{copy.columnDay}</th>
+                    <th scope="col">{copy.columnCalendar}</th>
+                    <th scope="col" class="ac-num">
+                      {copy.columnQuantity}
+                    </th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
+                </thead>
+                <tbody>
+                  {calendar.map((reward) => (
+                    <tr>
+                      <td class="ac-num">
+                        {reward.mes === null ? UNKNOWN : formatInteger(reward.mes, locale)}
+                      </td>
+                      <td>
+                        {reward.trasDia21
+                          ? copy.afterDay21
+                          : reward.dia === null
+                            ? UNKNOWN
+                            : formatInteger(reward.dia, locale)}
+                      </td>
+                      <td>{trackLabel[reward.calendario]}</td>
+                      <td class="ac-num">{count(reward.cantidad)}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
           </div>
-        </div>
-      )
-    }
+        )}
 
-    {
-      show.recipes && (
-        <div class="ac-entity-block">
-          <h3 class="ac-entity-block__title">
-            {copy.crafting}
-            <span class="ac-entity-block__count">
-              {fill(plural(locale, recipes.length, copy.recipesCount), {
-                n: formatInteger(recipes.length, locale),
-              })}
-            </span>
-          </h3>
-          <ul class="ac-entity-cards">
-            {recipes.map((recipe) => (
-              <li class="ac-entity-recipe">
-                <span class="ac-entity-muted">{copy.materials}</span>
-                <ul class="ac-entity-recipe__materials">
-                  {recipe.materiales.map((material) => {
-                    const part = partOf(material.item);
-                    return (
-                      <li>
-                        {part ? (
-                          <span class="ac-entity-move">
-                            <EntitySlot
-                              size={32}
-                              name={part.entry.nombre}
-                              sprite={part.sprite}
-                              tip={part.tip}
-                              href={itemHref(part.entry.id)}
-                              locale={locale}
-                              hint={ui.pinHint}
-                            />
-                            <a href={itemHref(part.entry.id)}>{part.entry.nombre}</a>
-                          </span>
+        {show.tasks && (
+          <div class="ac-entity-block">
+            <h3 class="ac-entity-block__title">{copy.tasks}</h3>
+            <div class="ac-entity-table">
+              <table>
+                <tbody>
+                  {tasks.map((task) => (
+                    <tr>
+                      <td class="ac-entity-table__label">{taskLabel[task.tipo]}</td>
+                      <th scope="row">
+                        {task.actividad ? (
+                          <a href={`/${locale}/actividades/${task.actividad}/`}>{task.nombre}</a>
                         ) : (
-                          material.item
+                          task.nombre
                         )}
-                        <span>{count(material.cantidad)}</span>
-                      </li>
-                    );
-                  })}
-                </ul>
-                <dl class="ac-entity-recipe__foot">
-                  <div>
-                    <dt>{copy.perRecipe}</dt>
-                    <dd>{count(recipe.cantidad)}</dd>
-                  </div>
-                  <div>
-                    <dt>{copy.workshop}</dt>
-                    <dd>{recipe.taller ?? UNKNOWN}</dd>
-                  </div>
-                  <div>
-                    <dt>{copy.timePerUnit}</dt>
-                    <dd>
-                      {recipe.tiempoSegundos === null
-                        ? UNKNOWN
-                        : fill(copy.seconds, { n: figure(recipe.tiempoSegundos) })}
-                    </dd>
-                  </div>
-                </dl>
-              </li>
-            ))}
-          </ul>
-        </div>
-      )
-    }
-  </Section>
+                      </th>
+                      <td class="ac-num">{count(task.cantidad)}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        )}
+
+        {show.recipes && (
+          <div class="ac-entity-block">
+            <h3 class="ac-entity-block__title">
+              {copy.crafting}
+              <span class="ac-entity-block__count">
+                {fill(plural(locale, recipes.length, copy.recipesCount), {
+                  n: formatInteger(recipes.length, locale),
+                })}
+              </span>
+            </h3>
+            <ul class="ac-entity-cards">
+              {recipes.map((recipe) => (
+                <li class="ac-entity-recipe">
+                  <span class="ac-entity-muted">{copy.materials}</span>
+                  <ul class="ac-entity-recipe__materials">
+                    {recipe.materiales.map((material) => {
+                      const part = partOf(material.item);
+                      return (
+                        <li>
+                          {part ? (
+                            <span class="ac-entity-move">
+                              <EntitySlot
+                                size={32}
+                                name={part.entry.nombre}
+                                sprite={part.sprite}
+                                tip={part.tip}
+                                href={itemHref(part.entry.id)}
+                                locale={locale}
+                                hint={ui.pinHint}
+                              />
+                              <a href={itemHref(part.entry.id)}>{part.entry.nombre}</a>
+                            </span>
+                          ) : (
+                            material.item
+                          )}
+                          <span>{count(material.cantidad)}</span>
+                        </li>
+                      );
+                    })}
+                  </ul>
+                  <dl class="ac-entity-recipe__foot">
+                    <div>
+                      <dt>{copy.perRecipe}</dt>
+                      <dd>{count(recipe.cantidad)}</dd>
+                    </div>
+                    <div>
+                      <dt>{copy.workshop}</dt>
+                      <dd>{recipe.taller ?? UNKNOWN}</dd>
+                    </div>
+                    <div>
+                      <dt>{copy.timePerUnit}</dt>
+                      <dd>
+                        {recipe.tiempoSegundos === null
+                          ? UNKNOWN
+                          : fill(copy.seconds, { n: figure(recipe.tiempoSegundos) })}
+                      </dd>
+                    </div>
+                  </dl>
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
+      </Section>
+    )
+  }
 
   {
     usesShown && (

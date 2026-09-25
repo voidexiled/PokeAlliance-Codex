@@ -9,8 +9,12 @@
       "sprite": "items/stones/fire-stone",
       "apilable": true,
       "precioNpc": {
-        "vende": null,
+        "vende": 3000,
         "compra": null
+      },
+      "mercado": true,
+      "descripcion": {
+        "en": "A peculiar stone that makes certain species of Pokémon evolve."
       }
     },
     {
@@ -21,8 +25,12 @@
       "sprite": "items/stones/heart-stone",
       "apilable": true,
       "precioNpc": {
-        "vende": null,
+        "vende": 3000,
         "compra": null
+      },
+      "mercado": true,
+      "descripcion": {
+        "en": "A peculiar stone that makes certain species of Pokémon evolve."
       }
     },
     {
@@ -33,8 +41,12 @@
       "sprite": "items/stones/leaf-stone",
       "apilable": true,
       "precioNpc": {
-        "vende": null,
+        "vende": 3000,
         "compra": null
+      },
+      "mercado": true,
+      "descripcion": {
+        "en": "A peculiar stone that makes certain species of Pokémon evolve."
       }
     },
     {
@@ -45,8 +57,12 @@
       "sprite": "items/stones/thunder-stone",
       "apilable": true,
       "precioNpc": {
-        "vende": null,
+        "vende": 3000,
         "compra": null
+      },
+      "mercado": true,
+      "descripcion": {
+        "en": "A peculiar stone that makes certain species of Pokémon evolve."
       }
     },
     {
@@ -57,8 +73,12 @@
       "sprite": "items/stones/water-stone",
       "apilable": true,
       "precioNpc": {
-        "vende": null,
+        "vende": 3000,
         "compra": null
+      },
+      "mercado": true,
+      "descripcion": {
+        "en": "A peculiar stone that makes certain species of Pokémon evolve."
       }
     },
     {
@@ -69,8 +89,12 @@
       "sprite": "items/stones/ice-stone",
       "apilable": true,
       "precioNpc": {
-        "vende": null,
+        "vende": 3000,
         "compra": null
+      },
+      "mercado": true,
+      "descripcion": {
+        "en": "A peculiar stone that makes certain species of Pokémon evolve."
       }
     },
     {
@@ -81,8 +105,12 @@
       "sprite": "items/stones/punch-stone",
       "apilable": true,
       "precioNpc": {
-        "vende": null,
+        "vende": 3000,
         "compra": null
+      },
+      "mercado": true,
+      "descripcion": {
+        "en": "A peculiar stone that makes certain species of Pokémon evolve."
       }
     },
     {
@@ -93,8 +121,12 @@
       "sprite": "items/stones/venom-stone",
       "apilable": true,
       "precioNpc": {
-        "vende": null,
+        "vende": 3000,
         "compra": null
+      },
+      "mercado": true,
+      "descripcion": {
+        "en": "A peculiar stone that makes certain species of Pokémon evolve."
       }
     },
     {
@@ -105,10 +137,14 @@
       "sprite": "items/stones/earth-stone",
       "apilable": true,
       "precioNpc": {
-        "vende": null,
+        "vende": 3000,
         "compra": null
       },
-      "borrador": true
+      "borrador": true,
+      "mercado": true,
+      "descripcion": {
+        "en": "A peculiar stone that makes certain species of Pokémon evolve."
+      }
     },
     {
       "id": "feather-stone",
@@ -118,8 +154,12 @@
       "sprite": "items/stones/feather-stone",
       "apilable": true,
       "precioNpc": {
-        "vende": null,
+        "vende": 3000,
         "compra": null
+      },
+      "mercado": true,
+      "descripcion": {
+        "en": "A peculiar stone that makes certain species of Pokémon evolve."
       }
     },
     {
@@ -130,8 +170,12 @@
       "sprite": "items/stones/enigma-stone",
       "apilable": true,
       "precioNpc": {
-        "vende": null,
+        "vende": 3000,
         "compra": null
+      },
+      "mercado": true,
+      "descripcion": {
+        "en": "A peculiar stone that makes certain species of Pokémon evolve."
       }
     },
     {
@@ -142,8 +186,12 @@
       "sprite": "items/stones/cocoon-stone",
       "apilable": true,
       "precioNpc": {
-        "vende": null,
+        "vende": 3000,
         "compra": null
+      },
+      "mercado": true,
+      "descripcion": {
+        "en": "A peculiar stone that makes certain species of Pokémon evolve."
       }
     },
     {
@@ -154,8 +202,12 @@
       "sprite": "items/stones/rock-stone",
       "apilable": true,
       "precioNpc": {
-        "vende": null,
+        "vende": 3000,
         "compra": null
+      },
+      "mercado": true,
+      "descripcion": {
+        "en": "A peculiar stone that makes certain species of Pokémon evolve."
       }
     },
     {
@@ -166,8 +218,12 @@
       "sprite": "items/stones/ghost-stone",
       "apilable": true,
       "precioNpc": {
-        "vende": null,
+        "vende": 3000,
         "compra": null
+      },
+      "mercado": true,
+      "descripcion": {
+        "en": "A peculiar stone that makes certain species of Pokémon evolve."
       }
     },
     {
@@ -178,8 +234,12 @@
       "sprite": "items/stones/crystal-stone",
       "apilable": true,
       "precioNpc": {
-        "vende": null,
+        "vende": 10000,
         "compra": null
+      },
+      "mercado": true,
+      "descripcion": {
+        "en": "A peculiar stone that makes certain species of Pokémon evolve."
       }
     },
     {
@@ -190,10 +250,14 @@
       "sprite": "items/stones/darkness-stone",
       "apilable": true,
       "precioNpc": {
-        "vende": null,
+        "vende": 3000,
         "compra": null
       },
-      "borrador": true
+      "borrador": true,
+      "mercado": true,
+      "descripcion": {
+        "en": "A peculiar stone that makes certain species of Pokémon evolve."
+      }
     },
     {
       "id": "metal-stone",
@@ -203,8 +267,12 @@
       "sprite": "items/stones/metal-stone",
       "apilable": true,
       "precioNpc": {
-        "vende": null,
+        "vende": 10000,
         "compra": null
+      },
+      "mercado": true,
+      "descripcion": {
+        "en": "A peculiar stone that makes certain species of Pokémon evolve."
       }
     },
     {
@@ -440,6 +508,38 @@
         "compra": null
       },
       "borrador": true
+    },
+    {
+      "id": "fairy-stone",
+      "nombre": "Fairy Stone",
+      "clientId": 37865,
+      "categoria": "stones",
+      "sprite": "ui/comercio/item",
+      "apilable": null,
+      "precioNpc": {
+        "vende": 3000,
+        "compra": null
+      },
+      "mercado": true,
+      "descripcion": {
+        "en": "A peculiar stone that makes certain species of Pokémon evolve."
+      }
+    },
+    {
+      "id": "ancient-stone",
+      "nombre": "Ancient Stone",
+      "clientId": 37871,
+      "categoria": "stones",
+      "sprite": "ui/comercio/item",
+      "apilable": null,
+      "precioNpc": {
+        "vende": 10000,
+        "compra": null
+      },
+      "mercado": true,
+      "descripcion": {
+        "en": "A peculiar stone that makes certain species of Pokémon evolve."
+      }
     }
   ]
 }

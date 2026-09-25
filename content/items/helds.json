@@ -36,6 +36,2085 @@
         "tier": 1
       },
       "borrador": true
+    },
+    {
+      "id": "y-ghost-t3",
+      "nombre": "Y-Ghost (Tier: 3)",
+      "clientId": 12544,
+      "categoria": "helds",
+      "sprite": "ui/comercio/item",
+      "apilable": null,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      },
+      "held": {
+        "ranura": "y",
+        "efecto": "Y-Ghost",
+        "tier": 3
+      },
+      "mercado": true,
+      "descripcion": {
+        "en": "Grants ghost mobility to the Pokémon."
+      }
+    },
+    {
+      "id": "x-attack-t1",
+      "nombre": "X-Attack (Tier: 1)",
+      "clientId": 12362,
+      "categoria": "helds",
+      "sprite": "ui/comercio/item",
+      "apilable": null,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      },
+      "held": {
+        "ranura": "x",
+        "efecto": "X-Attack",
+        "tier": 1
+      },
+      "mercado": true,
+      "descripcion": {
+        "en": "Increase the Pokémon attack by 8%."
+      }
+    },
+    {
+      "id": "x-attack-t2",
+      "nombre": "X-Attack (Tier: 2)",
+      "clientId": 12387,
+      "categoria": "helds",
+      "sprite": "ui/comercio/item",
+      "apilable": null,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      },
+      "held": {
+        "ranura": "x",
+        "efecto": "X-Attack",
+        "tier": 2
+      },
+      "mercado": true,
+      "descripcion": {
+        "en": "Increase the Pokémon attack by 12%."
+      }
+    },
+    {
+      "id": "x-attack-t3",
+      "nombre": "X-Attack (Tier: 3)",
+      "clientId": 12412,
+      "categoria": "helds",
+      "sprite": "ui/comercio/item",
+      "apilable": null,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      },
+      "held": {
+        "ranura": "x",
+        "efecto": "X-Attack",
+        "tier": 3
+      },
+      "mercado": true,
+      "descripcion": {
+        "en": "Increase the Pokémon attack by 16%."
+      }
+    },
+    {
+      "id": "x-attack-t4",
+      "nombre": "X-Attack (Tier: 4)",
+      "clientId": 12437,
+      "categoria": "helds",
+      "sprite": "ui/comercio/item",
+      "apilable": null,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      },
+      "held": {
+        "ranura": "x",
+        "efecto": "X-Attack",
+        "tier": 4
+      },
+      "mercado": true,
+      "descripcion": {
+        "en": "Increase the Pokémon attack by 19%."
+      }
+    },
+    {
+      "id": "x-attack-t5",
+      "nombre": "X-Attack (Tier: 5)",
+      "clientId": 12462,
+      "categoria": "helds",
+      "sprite": "ui/comercio/item",
+      "apilable": null,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      },
+      "held": {
+        "ranura": "x",
+        "efecto": "X-Attack",
+        "tier": 5
+      },
+      "mercado": true,
+      "descripcion": {
+        "en": "Increase the Pokémon attack by 22%."
+      }
+    },
+    {
+      "id": "x-attack-t6",
+      "nombre": "X-Attack (Tier: 6)",
+      "clientId": 12487,
+      "categoria": "helds",
+      "sprite": "ui/comercio/item",
+      "apilable": null,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      },
+      "held": {
+        "ranura": "x",
+        "efecto": "X-Attack",
+        "tier": 6
+      },
+      "mercado": true,
+      "descripcion": {
+        "en": "Increase the Pokémon attack by 25%."
+      }
+    },
+    {
+      "id": "x-attack-t7",
+      "nombre": "X-Attack (Tier: 7)",
+      "clientId": 12512,
+      "categoria": "helds",
+      "sprite": "ui/comercio/item",
+      "apilable": null,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      },
+      "held": {
+        "ranura": "x",
+        "efecto": "X-Attack",
+        "tier": 7
+      },
+      "mercado": true,
+      "descripcion": {
+        "en": "Increase the Pokémon attack by 28%."
+      }
+    },
+    {
+      "id": "x-lucky-t1",
+      "nombre": "X-Lucky (Tier: 1)",
+      "clientId": 12373,
+      "categoria": "helds",
+      "sprite": "ui/comercio/item",
+      "apilable": null,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      },
+      "held": {
+        "ranura": "x",
+        "efecto": "X-Lucky",
+        "tier": 1
+      },
+      "mercado": true,
+      "descripcion": {
+        "en": "Increase your drop rate by 10%."
+      }
+    },
+    {
+      "id": "x-lucky-t2",
+      "nombre": "X-Lucky (Tier: 2)",
+      "clientId": 12398,
+      "categoria": "helds",
+      "sprite": "ui/comercio/item",
+      "apilable": null,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      },
+      "held": {
+        "ranura": "x",
+        "efecto": "X-Lucky",
+        "tier": 2
+      },
+      "mercado": true,
+      "descripcion": {
+        "en": "Increase your drop rate by 20%."
+      }
+    },
+    {
+      "id": "x-lucky-t3",
+      "nombre": "X-Lucky (Tier: 3)",
+      "clientId": 12423,
+      "categoria": "helds",
+      "sprite": "ui/comercio/item",
+      "apilable": null,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      },
+      "held": {
+        "ranura": "x",
+        "efecto": "X-Lucky",
+        "tier": 3
+      },
+      "mercado": true,
+      "descripcion": {
+        "en": "Increase your drop rate by 35%."
+      }
+    },
+    {
+      "id": "x-lucky-t4",
+      "nombre": "X-Lucky (Tier: 4)",
+      "clientId": 12448,
+      "categoria": "helds",
+      "sprite": "ui/comercio/item",
+      "apilable": null,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      },
+      "held": {
+        "ranura": "x",
+        "efecto": "X-Lucky",
+        "tier": 4
+      },
+      "mercado": true,
+      "descripcion": {
+        "en": "Increase your drop rate by 50%."
+      }
+    },
+    {
+      "id": "x-lucky-t5",
+      "nombre": "X-Lucky (Tier: 5)",
+      "clientId": 12473,
+      "categoria": "helds",
+      "sprite": "ui/comercio/item",
+      "apilable": null,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      },
+      "held": {
+        "ranura": "x",
+        "efecto": "X-Lucky",
+        "tier": 5
+      },
+      "mercado": true,
+      "descripcion": {
+        "en": "Increase your drop rate by 65%."
+      }
+    },
+    {
+      "id": "x-lucky-t6",
+      "nombre": "X-Lucky (Tier: 6)",
+      "clientId": 12498,
+      "categoria": "helds",
+      "sprite": "ui/comercio/item",
+      "apilable": null,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      },
+      "held": {
+        "ranura": "x",
+        "efecto": "X-Lucky",
+        "tier": 6
+      },
+      "mercado": true,
+      "descripcion": {
+        "en": "Increase your drop rate by 80%."
+      }
+    },
+    {
+      "id": "x-lucky-t7",
+      "nombre": "X-Lucky (Tier: 7)",
+      "clientId": 12523,
+      "categoria": "helds",
+      "sprite": "ui/comercio/item",
+      "apilable": null,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      },
+      "held": {
+        "ranura": "x",
+        "efecto": "X-Lucky",
+        "tier": 7
+      },
+      "mercado": true,
+      "descripcion": {
+        "en": "Increase your drop rate by 100%."
+      }
+    },
+    {
+      "id": "x-defense-t1",
+      "nombre": "X-Defense (Tier: 1)",
+      "clientId": 12361,
+      "categoria": "helds",
+      "sprite": "ui/comercio/item",
+      "apilable": null,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      },
+      "held": {
+        "ranura": "x",
+        "efecto": "X-Defense",
+        "tier": 1
+      },
+      "mercado": true,
+      "descripcion": {
+        "en": "Increase the Pokémon defense by 8%."
+      }
+    },
+    {
+      "id": "x-defense-t2",
+      "nombre": "X-Defense (Tier: 2)",
+      "clientId": 12386,
+      "categoria": "helds",
+      "sprite": "ui/comercio/item",
+      "apilable": null,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      },
+      "held": {
+        "ranura": "x",
+        "efecto": "X-Defense",
+        "tier": 2
+      },
+      "mercado": true,
+      "descripcion": {
+        "en": "Increase the Pokémon defense by 10%."
+      }
+    },
+    {
+      "id": "x-defense-t3",
+      "nombre": "X-Defense (Tier: 3)",
+      "clientId": 12411,
+      "categoria": "helds",
+      "sprite": "ui/comercio/item",
+      "apilable": null,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      },
+      "held": {
+        "ranura": "x",
+        "efecto": "X-Defense",
+        "tier": 3
+      },
+      "mercado": true,
+      "descripcion": {
+        "en": "Increase the Pokémon defense by 12%."
+      }
+    },
+    {
+      "id": "x-defense-t4",
+      "nombre": "X-Defense (Tier: 4)",
+      "clientId": 12436,
+      "categoria": "helds",
+      "sprite": "ui/comercio/item",
+      "apilable": null,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      },
+      "held": {
+        "ranura": "x",
+        "efecto": "X-Defense",
+        "tier": 4
+      },
+      "mercado": true,
+      "descripcion": {
+        "en": "Increase the Pokémon defense by 14%."
+      }
+    },
+    {
+      "id": "x-defense-t5",
+      "nombre": "X-Defense (Tier: 5)",
+      "clientId": 12461,
+      "categoria": "helds",
+      "sprite": "ui/comercio/item",
+      "apilable": null,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      },
+      "held": {
+        "ranura": "x",
+        "efecto": "X-Defense",
+        "tier": 5
+      },
+      "mercado": true,
+      "descripcion": {
+        "en": "Increase the Pokémon defense by 16%."
+      }
+    },
+    {
+      "id": "x-defense-t6",
+      "nombre": "X-Defense (Tier: 6)",
+      "clientId": 12486,
+      "categoria": "helds",
+      "sprite": "ui/comercio/item",
+      "apilable": null,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      },
+      "held": {
+        "ranura": "x",
+        "efecto": "X-Defense",
+        "tier": 6
+      },
+      "mercado": true,
+      "descripcion": {
+        "en": "Increase the Pokémon defense by 20%."
+      }
+    },
+    {
+      "id": "x-defense-t7",
+      "nombre": "X-Defense (Tier: 7)",
+      "clientId": 12511,
+      "categoria": "helds",
+      "sprite": "ui/comercio/item",
+      "apilable": null,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      },
+      "held": {
+        "ranura": "x",
+        "efecto": "X-Defense",
+        "tier": 7
+      },
+      "mercado": true,
+      "descripcion": {
+        "en": "Increase the Pokémon defense by 24%."
+      }
+    },
+    {
+      "id": "y-teleport-t1",
+      "nombre": "Y-Teleport (Tier: 1)",
+      "clientId": 12366,
+      "categoria": "helds",
+      "sprite": "ui/comercio/item",
+      "apilable": null,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      },
+      "held": {
+        "ranura": "y",
+        "efecto": "Y-Teleport",
+        "tier": 1
+      },
+      "mercado": true,
+      "descripcion": {
+        "en": "Reduces the teleport cooldown by 5 minutes."
+      }
+    },
+    {
+      "id": "y-teleport-t2",
+      "nombre": "Y-Teleport (Tier: 2)",
+      "clientId": 12391,
+      "categoria": "helds",
+      "sprite": "ui/comercio/item",
+      "apilable": null,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      },
+      "held": {
+        "ranura": "y",
+        "efecto": "Y-Teleport",
+        "tier": 2
+      },
+      "mercado": true,
+      "descripcion": {
+        "en": "Reduces the teleport cooldown by 8 minutes."
+      }
+    },
+    {
+      "id": "y-teleport-t3",
+      "nombre": "Y-Teleport (Tier: 3)",
+      "clientId": 12416,
+      "categoria": "helds",
+      "sprite": "ui/comercio/item",
+      "apilable": null,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      },
+      "held": {
+        "ranura": "y",
+        "efecto": "Y-Teleport",
+        "tier": 3
+      },
+      "mercado": true,
+      "descripcion": {
+        "en": "Reduces the teleport cooldown by 10 minutes."
+      }
+    },
+    {
+      "id": "y-teleport-t4",
+      "nombre": "Y-Teleport (Tier: 4)",
+      "clientId": 12441,
+      "categoria": "helds",
+      "sprite": "ui/comercio/item",
+      "apilable": null,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      },
+      "held": {
+        "ranura": "y",
+        "efecto": "Y-Teleport",
+        "tier": 4
+      },
+      "mercado": true,
+      "descripcion": {
+        "en": "Reduces the teleport cooldown by 15 minutes."
+      }
+    },
+    {
+      "id": "y-teleport-t5",
+      "nombre": "Y-Teleport (Tier: 5)",
+      "clientId": 12466,
+      "categoria": "helds",
+      "sprite": "ui/comercio/item",
+      "apilable": null,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      },
+      "held": {
+        "ranura": "y",
+        "efecto": "Y-Teleport",
+        "tier": 5
+      },
+      "mercado": true,
+      "descripcion": {
+        "en": "Reduces the teleport cooldown by 20 minutes."
+      }
+    },
+    {
+      "id": "y-teleport-t6",
+      "nombre": "Y-Teleport (Tier: 6)",
+      "clientId": 12491,
+      "categoria": "helds",
+      "sprite": "ui/comercio/item",
+      "apilable": null,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      },
+      "held": {
+        "ranura": "y",
+        "efecto": "Y-Teleport",
+        "tier": 6
+      },
+      "mercado": true,
+      "descripcion": {
+        "en": "Reduces the teleport cooldown by 25 minutes."
+      }
+    },
+    {
+      "id": "y-teleport-t7",
+      "nombre": "Y-Teleport (Tier: 7)",
+      "clientId": 12516,
+      "categoria": "helds",
+      "sprite": "ui/comercio/item",
+      "apilable": null,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      },
+      "held": {
+        "ranura": "y",
+        "efecto": "Y-Teleport",
+        "tier": 7
+      },
+      "mercado": true,
+      "descripcion": {
+        "en": "Reduces the teleport cooldown by 29 minutes."
+      }
+    },
+    {
+      "id": "x-critical-t1",
+      "nombre": "X-Critical (Tier: 1)",
+      "clientId": 12383,
+      "categoria": "helds",
+      "sprite": "ui/comercio/item",
+      "apilable": null,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      },
+      "held": {
+        "ranura": "x",
+        "efecto": "X-Critical",
+        "tier": 1
+      },
+      "mercado": true,
+      "descripcion": {
+        "en": "Increase the Pokémon critical chance by 8%."
+      }
+    },
+    {
+      "id": "x-critical-t2",
+      "nombre": "X-Critical (Tier: 2)",
+      "clientId": 12408,
+      "categoria": "helds",
+      "sprite": "ui/comercio/item",
+      "apilable": null,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      },
+      "held": {
+        "ranura": "x",
+        "efecto": "X-Critical",
+        "tier": 2
+      },
+      "mercado": true,
+      "descripcion": {
+        "en": "Increase the Pokémon critical chance by 10%."
+      }
+    },
+    {
+      "id": "x-critical-t3",
+      "nombre": "X-Critical (Tier: 3)",
+      "clientId": 12433,
+      "categoria": "helds",
+      "sprite": "ui/comercio/item",
+      "apilable": null,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      },
+      "held": {
+        "ranura": "x",
+        "efecto": "X-Critical",
+        "tier": 3
+      },
+      "mercado": true,
+      "descripcion": {
+        "en": "Increase the Pokémon critical chance by 12%."
+      }
+    },
+    {
+      "id": "x-critical-t4",
+      "nombre": "X-Critical (Tier: 4)",
+      "clientId": 12458,
+      "categoria": "helds",
+      "sprite": "ui/comercio/item",
+      "apilable": null,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      },
+      "held": {
+        "ranura": "x",
+        "efecto": "X-Critical",
+        "tier": 4
+      },
+      "mercado": true,
+      "descripcion": {
+        "en": "Increase the Pokémon critical chance by 14%."
+      }
+    },
+    {
+      "id": "x-critical-t5",
+      "nombre": "X-Critical (Tier: 5)",
+      "clientId": 12483,
+      "categoria": "helds",
+      "sprite": "ui/comercio/item",
+      "apilable": null,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      },
+      "held": {
+        "ranura": "x",
+        "efecto": "X-Critical",
+        "tier": 5
+      },
+      "mercado": true,
+      "descripcion": {
+        "en": "Increase the Pokémon critical chance by 16%."
+      }
+    },
+    {
+      "id": "x-critical-t6",
+      "nombre": "X-Critical (Tier: 6)",
+      "clientId": 12508,
+      "categoria": "helds",
+      "sprite": "ui/comercio/item",
+      "apilable": null,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      },
+      "held": {
+        "ranura": "x",
+        "efecto": "X-Critical",
+        "tier": 6
+      },
+      "mercado": true,
+      "descripcion": {
+        "en": "Increase the Pokémon critical chance by 20%."
+      }
+    },
+    {
+      "id": "x-critical-t7",
+      "nombre": "X-Critical (Tier: 7)",
+      "clientId": 12533,
+      "categoria": "helds",
+      "sprite": "ui/comercio/item",
+      "apilable": null,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      },
+      "held": {
+        "ranura": "x",
+        "efecto": "X-Critical",
+        "tier": 7
+      },
+      "mercado": true,
+      "descripcion": {
+        "en": "Increase the Pokémon critical chance by 24%."
+      }
+    },
+    {
+      "id": "x-experience-t1",
+      "nombre": "X-Experience (Tier: 1)",
+      "clientId": 12363,
+      "categoria": "helds",
+      "sprite": "ui/comercio/item",
+      "apilable": null,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      },
+      "held": {
+        "ranura": "x",
+        "efecto": "X-Experience",
+        "tier": 1
+      },
+      "mercado": true,
+      "descripcion": {
+        "en": "Increase the player experience by 10%."
+      }
+    },
+    {
+      "id": "x-experience-t2",
+      "nombre": "X-Experience (Tier: 2)",
+      "clientId": 12388,
+      "categoria": "helds",
+      "sprite": "ui/comercio/item",
+      "apilable": null,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      },
+      "held": {
+        "ranura": "x",
+        "efecto": "X-Experience",
+        "tier": 2
+      },
+      "mercado": true,
+      "descripcion": {
+        "en": "Increase the player experience by 15%."
+      }
+    },
+    {
+      "id": "x-experience-t3",
+      "nombre": "X-Experience (Tier: 3)",
+      "clientId": 12413,
+      "categoria": "helds",
+      "sprite": "ui/comercio/item",
+      "apilable": null,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      },
+      "held": {
+        "ranura": "x",
+        "efecto": "X-Experience",
+        "tier": 3
+      },
+      "mercado": true,
+      "descripcion": {
+        "en": "Increase the player experience by 20%."
+      }
+    },
+    {
+      "id": "x-experience-t4",
+      "nombre": "X-Experience (Tier: 4)",
+      "clientId": 12438,
+      "categoria": "helds",
+      "sprite": "ui/comercio/item",
+      "apilable": null,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      },
+      "held": {
+        "ranura": "x",
+        "efecto": "X-Experience",
+        "tier": 4
+      },
+      "mercado": true,
+      "descripcion": {
+        "en": "Increase the player experience by 25%."
+      }
+    },
+    {
+      "id": "x-experience-t5",
+      "nombre": "X-Experience (Tier: 5)",
+      "clientId": 12463,
+      "categoria": "helds",
+      "sprite": "ui/comercio/item",
+      "apilable": null,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      },
+      "held": {
+        "ranura": "x",
+        "efecto": "X-Experience",
+        "tier": 5
+      },
+      "mercado": true,
+      "descripcion": {
+        "en": "Increase the player experience by 30%."
+      }
+    },
+    {
+      "id": "x-experience-t6",
+      "nombre": "X-Experience (Tier: 6)",
+      "clientId": 12488,
+      "categoria": "helds",
+      "sprite": "ui/comercio/item",
+      "apilable": null,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      },
+      "held": {
+        "ranura": "x",
+        "efecto": "X-Experience",
+        "tier": 6
+      },
+      "mercado": true,
+      "descripcion": {
+        "en": "Increase the player experience by 35%."
+      }
+    },
+    {
+      "id": "x-experience-t7",
+      "nombre": "X-Experience (Tier: 7)",
+      "clientId": 12513,
+      "categoria": "helds",
+      "sprite": "ui/comercio/item",
+      "apilable": null,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      },
+      "held": {
+        "ranura": "x",
+        "efecto": "X-Experience",
+        "tier": 7
+      },
+      "mercado": true,
+      "descripcion": {
+        "en": "Increase the player experience by 40%."
+      }
+    },
+    {
+      "id": "y-cure-t1",
+      "nombre": "Y-Cure (Tier: 1)",
+      "clientId": 12371,
+      "categoria": "helds",
+      "sprite": "ui/comercio/item",
+      "apilable": null,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      },
+      "held": {
+        "ranura": "y",
+        "efecto": "Y-Cure",
+        "tier": 1
+      },
+      "mercado": true,
+      "descripcion": {
+        "en": "Gives 20% chance of removing your Pokémon negative effects (doesn't work in duel)."
+      }
+    },
+    {
+      "id": "y-cure-t2",
+      "nombre": "Y-Cure (Tier: 2)",
+      "clientId": 12396,
+      "categoria": "helds",
+      "sprite": "ui/comercio/item",
+      "apilable": null,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      },
+      "held": {
+        "ranura": "y",
+        "efecto": "Y-Cure",
+        "tier": 2
+      },
+      "mercado": true,
+      "descripcion": {
+        "en": "Gives 30% chance of removing your Pokémon negative effects (doesn't work in duel)."
+      }
+    },
+    {
+      "id": "y-cure-t3",
+      "nombre": "Y-Cure (Tier: 3)",
+      "clientId": 12421,
+      "categoria": "helds",
+      "sprite": "ui/comercio/item",
+      "apilable": null,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      },
+      "held": {
+        "ranura": "y",
+        "efecto": "Y-Cure",
+        "tier": 3
+      },
+      "mercado": true,
+      "descripcion": {
+        "en": "Gives 50% chance of removing your Pokémon negative effects (doesn't work in duel)."
+      }
+    },
+    {
+      "id": "y-cure-t4",
+      "nombre": "Y-Cure (Tier: 4)",
+      "clientId": 12446,
+      "categoria": "helds",
+      "sprite": "ui/comercio/item",
+      "apilable": null,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      },
+      "held": {
+        "ranura": "y",
+        "efecto": "Y-Cure",
+        "tier": 4
+      },
+      "mercado": true,
+      "descripcion": {
+        "en": "Gives 70% chance of removing your Pokémon negative effects (doesn't work in duel)."
+      }
+    },
+    {
+      "id": "y-cure-t5",
+      "nombre": "Y-Cure (Tier: 5)",
+      "clientId": 12471,
+      "categoria": "helds",
+      "sprite": "ui/comercio/item",
+      "apilable": null,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      },
+      "held": {
+        "ranura": "y",
+        "efecto": "Y-Cure",
+        "tier": 5
+      },
+      "mercado": true,
+      "descripcion": {
+        "en": "Gives 80% chance of removing your Pokémon negative effects (doesn't work in duel)."
+      }
+    },
+    {
+      "id": "y-cure-t6",
+      "nombre": "Y-Cure (Tier: 6)",
+      "clientId": 12496,
+      "categoria": "helds",
+      "sprite": "ui/comercio/item",
+      "apilable": null,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      },
+      "held": {
+        "ranura": "y",
+        "efecto": "Y-Cure",
+        "tier": 6
+      },
+      "mercado": true,
+      "descripcion": {
+        "en": "Gives 90% chance of removing your Pokémon negative effects (doesn't work in duel)."
+      }
+    },
+    {
+      "id": "y-cure-t7",
+      "nombre": "Y-Cure (Tier: 7)",
+      "clientId": 12521,
+      "categoria": "helds",
+      "sprite": "ui/comercio/item",
+      "apilable": null,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      },
+      "held": {
+        "ranura": "y",
+        "efecto": "Y-Cure",
+        "tier": 7
+      },
+      "mercado": true,
+      "descripcion": {
+        "en": "Gives 100% chance of removing your Pokémon negative effects (doesn't work in duel)."
+      }
+    },
+    {
+      "id": "x-boost-t1",
+      "nombre": "X-Boost (Tier: 1)",
+      "clientId": 12372,
+      "categoria": "helds",
+      "sprite": "ui/comercio/item",
+      "apilable": null,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      },
+      "held": {
+        "ranura": "x",
+        "efecto": "X-Boost",
+        "tier": 1
+      },
+      "mercado": true,
+      "descripcion": {
+        "en": "Increase the Pokémon boost by 12. Attack enhanced."
+      }
+    },
+    {
+      "id": "x-boost-t2",
+      "nombre": "X-Boost (Tier: 2)",
+      "clientId": 12397,
+      "categoria": "helds",
+      "sprite": "ui/comercio/item",
+      "apilable": null,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      },
+      "held": {
+        "ranura": "x",
+        "efecto": "X-Boost",
+        "tier": 2
+      },
+      "mercado": true,
+      "descripcion": {
+        "en": "Increase the Pokémon boost by 16. Attack enhanced."
+      }
+    },
+    {
+      "id": "x-boost-t3",
+      "nombre": "X-Boost (Tier: 3)",
+      "clientId": 12422,
+      "categoria": "helds",
+      "sprite": "ui/comercio/item",
+      "apilable": null,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      },
+      "held": {
+        "ranura": "x",
+        "efecto": "X-Boost",
+        "tier": 3
+      },
+      "mercado": true,
+      "descripcion": {
+        "en": "Increase the Pokémon boost by 20. Attack enhanced."
+      }
+    },
+    {
+      "id": "x-boost-t4",
+      "nombre": "X-Boost (Tier: 4)",
+      "clientId": 12447,
+      "categoria": "helds",
+      "sprite": "ui/comercio/item",
+      "apilable": null,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      },
+      "held": {
+        "ranura": "x",
+        "efecto": "X-Boost",
+        "tier": 4
+      },
+      "mercado": true,
+      "descripcion": {
+        "en": "Increase the Pokémon boost by 24. Attack enhanced."
+      }
+    },
+    {
+      "id": "x-boost-t5",
+      "nombre": "X-Boost (Tier: 5)",
+      "clientId": 12472,
+      "categoria": "helds",
+      "sprite": "ui/comercio/item",
+      "apilable": null,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      },
+      "held": {
+        "ranura": "x",
+        "efecto": "X-Boost",
+        "tier": 5
+      },
+      "mercado": true,
+      "descripcion": {
+        "en": "Increase the Pokémon boost by 28. Attack enhanced."
+      }
+    },
+    {
+      "id": "x-boost-t6",
+      "nombre": "X-Boost (Tier: 6)",
+      "clientId": 12497,
+      "categoria": "helds",
+      "sprite": "ui/comercio/item",
+      "apilable": null,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      },
+      "held": {
+        "ranura": "x",
+        "efecto": "X-Boost",
+        "tier": 6
+      },
+      "mercado": true,
+      "descripcion": {
+        "en": "Increase the Pokémon boost by 32. Attack enhanced."
+      }
+    },
+    {
+      "id": "x-boost-t7",
+      "nombre": "X-Boost (Tier: 7)",
+      "clientId": 12522,
+      "categoria": "helds",
+      "sprite": "ui/comercio/item",
+      "apilable": null,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      },
+      "held": {
+        "ranura": "x",
+        "efecto": "X-Boost",
+        "tier": 7
+      },
+      "mercado": true,
+      "descripcion": {
+        "en": "Increase the Pokémon boost by 36. Attack enhanced."
+      }
+    },
+    {
+      "id": "y-wing-t1",
+      "nombre": "Y-Wing (Tier: 1)",
+      "clientId": 12378,
+      "categoria": "helds",
+      "sprite": "ui/comercio/item",
+      "apilable": null,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      },
+      "held": {
+        "ranura": "y",
+        "efecto": "Y-Wing",
+        "tier": 1
+      },
+      "mercado": true,
+      "descripcion": {
+        "en": "Increase the Pokémon flight speed by 100."
+      }
+    },
+    {
+      "id": "y-wing-t2",
+      "nombre": "Y-Wing (Tier: 2)",
+      "clientId": 12403,
+      "categoria": "helds",
+      "sprite": "ui/comercio/item",
+      "apilable": null,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      },
+      "held": {
+        "ranura": "y",
+        "efecto": "Y-Wing",
+        "tier": 2
+      },
+      "mercado": true,
+      "descripcion": {
+        "en": "Increase the Pokémon flight speed by 145."
+      }
+    },
+    {
+      "id": "y-wing-t3",
+      "nombre": "Y-Wing (Tier: 3)",
+      "clientId": 12428,
+      "categoria": "helds",
+      "sprite": "ui/comercio/item",
+      "apilable": null,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      },
+      "held": {
+        "ranura": "y",
+        "efecto": "Y-Wing",
+        "tier": 3
+      },
+      "mercado": true,
+      "descripcion": {
+        "en": "Increase the Pokémon flight speed by 185."
+      }
+    },
+    {
+      "id": "y-wing-t4",
+      "nombre": "Y-Wing (Tier: 4)",
+      "clientId": 12453,
+      "categoria": "helds",
+      "sprite": "ui/comercio/item",
+      "apilable": null,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      },
+      "held": {
+        "ranura": "y",
+        "efecto": "Y-Wing",
+        "tier": 4
+      },
+      "mercado": true,
+      "descripcion": {
+        "en": "Increase the Pokémon flight speed by 225."
+      }
+    },
+    {
+      "id": "y-wing-t5",
+      "nombre": "Y-Wing (Tier: 5)",
+      "clientId": 12478,
+      "categoria": "helds",
+      "sprite": "ui/comercio/item",
+      "apilable": null,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      },
+      "held": {
+        "ranura": "y",
+        "efecto": "Y-Wing",
+        "tier": 5
+      },
+      "mercado": true,
+      "descripcion": {
+        "en": "Increase the Pokémon flight speed by 270."
+      }
+    },
+    {
+      "id": "y-wing-t6",
+      "nombre": "Y-Wing (Tier: 6)",
+      "clientId": 12503,
+      "categoria": "helds",
+      "sprite": "ui/comercio/item",
+      "apilable": null,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      },
+      "held": {
+        "ranura": "y",
+        "efecto": "Y-Wing",
+        "tier": 6
+      },
+      "mercado": true,
+      "descripcion": {
+        "en": "Increase the Pokémon flight speed by 310."
+      }
+    },
+    {
+      "id": "y-wing-t7",
+      "nombre": "Y-Wing (Tier: 7)",
+      "clientId": 12528,
+      "categoria": "helds",
+      "sprite": "ui/comercio/item",
+      "apilable": null,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      },
+      "held": {
+        "ranura": "y",
+        "efecto": "Y-Wing",
+        "tier": 7
+      },
+      "mercado": true,
+      "descripcion": {
+        "en": "Increase the Pokémon flight speed by 370."
+      }
+    },
+    {
+      "id": "x-haste-t1",
+      "nombre": "X-Haste (Tier: 1)",
+      "clientId": 12360,
+      "categoria": "helds",
+      "sprite": "ui/comercio/item",
+      "apilable": null,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      },
+      "held": {
+        "ranura": "x",
+        "efecto": "X-Haste",
+        "tier": 1
+      },
+      "mercado": true,
+      "descripcion": {
+        "en": "Increase the Pokémon speed by 60."
+      }
+    },
+    {
+      "id": "x-haste-t2",
+      "nombre": "X-Haste (Tier: 2)",
+      "clientId": 12385,
+      "categoria": "helds",
+      "sprite": "ui/comercio/item",
+      "apilable": null,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      },
+      "held": {
+        "ranura": "x",
+        "efecto": "X-Haste",
+        "tier": 2
+      },
+      "mercado": true,
+      "descripcion": {
+        "en": "Increase the Pokémon speed by 85."
+      }
+    },
+    {
+      "id": "x-haste-t3",
+      "nombre": "X-Haste (Tier: 3)",
+      "clientId": 12410,
+      "categoria": "helds",
+      "sprite": "ui/comercio/item",
+      "apilable": null,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      },
+      "held": {
+        "ranura": "x",
+        "efecto": "X-Haste",
+        "tier": 3
+      },
+      "mercado": true,
+      "descripcion": {
+        "en": "Increase the Pokémon speed by 110."
+      }
+    },
+    {
+      "id": "x-haste-t4",
+      "nombre": "X-Haste (Tier: 4)",
+      "clientId": 12435,
+      "categoria": "helds",
+      "sprite": "ui/comercio/item",
+      "apilable": null,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      },
+      "held": {
+        "ranura": "x",
+        "efecto": "X-Haste",
+        "tier": 4
+      },
+      "mercado": true,
+      "descripcion": {
+        "en": "Increase the Pokémon speed by 135."
+      }
+    },
+    {
+      "id": "x-haste-t5",
+      "nombre": "X-Haste (Tier: 5)",
+      "clientId": 12460,
+      "categoria": "helds",
+      "sprite": "ui/comercio/item",
+      "apilable": null,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      },
+      "held": {
+        "ranura": "x",
+        "efecto": "X-Haste",
+        "tier": 5
+      },
+      "mercado": true,
+      "descripcion": {
+        "en": "Increase the Pokémon speed by 170."
+      }
+    },
+    {
+      "id": "x-haste-t6",
+      "nombre": "X-Haste (Tier: 6)",
+      "clientId": 12485,
+      "categoria": "helds",
+      "sprite": "ui/comercio/item",
+      "apilable": null,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      },
+      "held": {
+        "ranura": "x",
+        "efecto": "X-Haste",
+        "tier": 6
+      },
+      "mercado": true,
+      "descripcion": {
+        "en": "Increase the Pokémon speed by 205."
+      }
+    },
+    {
+      "id": "x-haste-t7",
+      "nombre": "X-Haste (Tier: 7)",
+      "clientId": 12510,
+      "categoria": "helds",
+      "sprite": "ui/comercio/item",
+      "apilable": null,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      },
+      "held": {
+        "ranura": "x",
+        "efecto": "X-Haste",
+        "tier": 7
+      },
+      "mercado": true,
+      "descripcion": {
+        "en": "Increase the Pokémon speed by 250."
+      }
+    },
+    {
+      "id": "x-agility-t1",
+      "nombre": "X-Agility (Tier: 1)",
+      "clientId": 12382,
+      "categoria": "helds",
+      "sprite": "ui/comercio/item",
+      "apilable": null,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      },
+      "held": {
+        "ranura": "x",
+        "efecto": "X-Agility",
+        "tier": 1
+      },
+      "mercado": true,
+      "descripcion": {
+        "en": "Grants your Pokémon 8% chance to activate the Agility ability."
+      }
+    },
+    {
+      "id": "x-agility-t2",
+      "nombre": "X-Agility (Tier: 2)",
+      "clientId": 12407,
+      "categoria": "helds",
+      "sprite": "ui/comercio/item",
+      "apilable": null,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      },
+      "held": {
+        "ranura": "x",
+        "efecto": "X-Agility",
+        "tier": 2
+      },
+      "mercado": true,
+      "descripcion": {
+        "en": "Grants your Pokémon 14% chance to activate the Agility ability."
+      }
+    },
+    {
+      "id": "x-agility-t3",
+      "nombre": "X-Agility (Tier: 3)",
+      "clientId": 12432,
+      "categoria": "helds",
+      "sprite": "ui/comercio/item",
+      "apilable": null,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      },
+      "held": {
+        "ranura": "x",
+        "efecto": "X-Agility",
+        "tier": 3
+      },
+      "mercado": true,
+      "descripcion": {
+        "en": "Grants your Pokémon 20% chance to activate the Agility ability."
+      }
+    },
+    {
+      "id": "x-agility-t4",
+      "nombre": "X-Agility (Tier: 4)",
+      "clientId": 12457,
+      "categoria": "helds",
+      "sprite": "ui/comercio/item",
+      "apilable": null,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      },
+      "held": {
+        "ranura": "x",
+        "efecto": "X-Agility",
+        "tier": 4
+      },
+      "mercado": true,
+      "descripcion": {
+        "en": "Grants your Pokémon 30% chance to activate the Agility ability."
+      }
+    },
+    {
+      "id": "x-agility-t5",
+      "nombre": "X-Agility (Tier: 5)",
+      "clientId": 12482,
+      "categoria": "helds",
+      "sprite": "ui/comercio/item",
+      "apilable": null,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      },
+      "held": {
+        "ranura": "x",
+        "efecto": "X-Agility",
+        "tier": 5
+      },
+      "mercado": true,
+      "descripcion": {
+        "en": "Grants your Pokémon 40% chance to activate the Agility ability."
+      }
+    },
+    {
+      "id": "x-agility-t6",
+      "nombre": "X-Agility (Tier: 6)",
+      "clientId": 12507,
+      "categoria": "helds",
+      "sprite": "ui/comercio/item",
+      "apilable": null,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      },
+      "held": {
+        "ranura": "x",
+        "efecto": "X-Agility",
+        "tier": 6
+      },
+      "mercado": true,
+      "descripcion": {
+        "en": "Grants your Pokémon 50% chance to activate the Agility ability."
+      }
+    },
+    {
+      "id": "x-agility-t7",
+      "nombre": "X-Agility (Tier: 7)",
+      "clientId": 12532,
+      "categoria": "helds",
+      "sprite": "ui/comercio/item",
+      "apilable": null,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      },
+      "held": {
+        "ranura": "x",
+        "efecto": "X-Agility",
+        "tier": 7
+      },
+      "mercado": true,
+      "descripcion": {
+        "en": "Grants your Pokémon 60% chance to activate the Agility ability."
+      }
+    },
+    {
+      "id": "x-harden-t1",
+      "nombre": "X-Harden (Tier: 1)",
+      "clientId": 12381,
+      "categoria": "helds",
+      "sprite": "ui/comercio/item",
+      "apilable": null,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      },
+      "held": {
+        "ranura": "x",
+        "efecto": "X-Harden",
+        "tier": 1
+      },
+      "mercado": true,
+      "descripcion": {
+        "en": "Grants your Pokémon 4% chance to activate the Harden ability."
+      }
+    },
+    {
+      "id": "x-harden-t2",
+      "nombre": "X-Harden (Tier: 2)",
+      "clientId": 12406,
+      "categoria": "helds",
+      "sprite": "ui/comercio/item",
+      "apilable": null,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      },
+      "held": {
+        "ranura": "x",
+        "efecto": "X-Harden",
+        "tier": 2
+      },
+      "mercado": true,
+      "descripcion": {
+        "en": "Grants your Pokémon 7% chance to activate the Harden ability."
+      }
+    },
+    {
+      "id": "x-harden-t3",
+      "nombre": "X-Harden (Tier: 3)",
+      "clientId": 12431,
+      "categoria": "helds",
+      "sprite": "ui/comercio/item",
+      "apilable": null,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      },
+      "held": {
+        "ranura": "x",
+        "efecto": "X-Harden",
+        "tier": 3
+      },
+      "mercado": true,
+      "descripcion": {
+        "en": "Grants your Pokémon 10% chance to activate the Harden ability."
+      }
+    },
+    {
+      "id": "x-harden-t4",
+      "nombre": "X-Harden (Tier: 4)",
+      "clientId": 12456,
+      "categoria": "helds",
+      "sprite": "ui/comercio/item",
+      "apilable": null,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      },
+      "held": {
+        "ranura": "x",
+        "efecto": "X-Harden",
+        "tier": 4
+      },
+      "mercado": true,
+      "descripcion": {
+        "en": "Grants your Pokémon 13% chance to activate the Harden ability."
+      }
+    },
+    {
+      "id": "x-harden-t5",
+      "nombre": "X-Harden (Tier: 5)",
+      "clientId": 12481,
+      "categoria": "helds",
+      "sprite": "ui/comercio/item",
+      "apilable": null,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      },
+      "held": {
+        "ranura": "x",
+        "efecto": "X-Harden",
+        "tier": 5
+      },
+      "mercado": true,
+      "descripcion": {
+        "en": "Grants your Pokémon 16% chance to activate the Harden ability."
+      }
+    },
+    {
+      "id": "x-harden-t6",
+      "nombre": "X-Harden (Tier: 6)",
+      "clientId": 12506,
+      "categoria": "helds",
+      "sprite": "ui/comercio/item",
+      "apilable": null,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      },
+      "held": {
+        "ranura": "x",
+        "efecto": "X-Harden",
+        "tier": 6
+      },
+      "mercado": true,
+      "descripcion": {
+        "en": "Grants your Pokémon 19% chance to activate the Harden ability."
+      }
+    },
+    {
+      "id": "x-harden-t7",
+      "nombre": "X-Harden (Tier: 7)",
+      "clientId": 12531,
+      "categoria": "helds",
+      "sprite": "ui/comercio/item",
+      "apilable": null,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      },
+      "held": {
+        "ranura": "x",
+        "efecto": "X-Harden",
+        "tier": 7
+      },
+      "mercado": true,
+      "descripcion": {
+        "en": "Grants your Pokémon 22% chance to activate the Harden ability."
+      }
+    },
+    {
+      "id": "x-strafe-t1",
+      "nombre": "X-Strafe (Tier: 1)",
+      "clientId": 12376,
+      "categoria": "helds",
+      "sprite": "ui/comercio/item",
+      "apilable": null,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      },
+      "held": {
+        "ranura": "x",
+        "efecto": "X-Strafe",
+        "tier": 1
+      },
+      "mercado": true,
+      "descripcion": {
+        "en": "Grants your Pokémon 10% chance to activate the Strafe ability."
+      }
+    },
+    {
+      "id": "x-strafe-t2",
+      "nombre": "X-Strafe (Tier: 2)",
+      "clientId": 12401,
+      "categoria": "helds",
+      "sprite": "ui/comercio/item",
+      "apilable": null,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      },
+      "held": {
+        "ranura": "x",
+        "efecto": "X-Strafe",
+        "tier": 2
+      },
+      "mercado": true,
+      "descripcion": {
+        "en": "Grants your Pokémon 20% chance to activate the Strafe ability."
+      }
+    },
+    {
+      "id": "x-strafe-t3",
+      "nombre": "X-Strafe (Tier: 3)",
+      "clientId": 12426,
+      "categoria": "helds",
+      "sprite": "ui/comercio/item",
+      "apilable": null,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      },
+      "held": {
+        "ranura": "x",
+        "efecto": "X-Strafe",
+        "tier": 3
+      },
+      "mercado": true,
+      "descripcion": {
+        "en": "Grants your Pokémon 30% chance to activate the Strafe ability."
+      }
+    },
+    {
+      "id": "x-strafe-t4",
+      "nombre": "X-Strafe (Tier: 4)",
+      "clientId": 12451,
+      "categoria": "helds",
+      "sprite": "ui/comercio/item",
+      "apilable": null,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      },
+      "held": {
+        "ranura": "x",
+        "efecto": "X-Strafe",
+        "tier": 4
+      },
+      "mercado": true,
+      "descripcion": {
+        "en": "Grants your Pokémon 40% chance to activate the Strafe ability."
+      }
+    },
+    {
+      "id": "x-strafe-t5",
+      "nombre": "X-Strafe (Tier: 5)",
+      "clientId": 12476,
+      "categoria": "helds",
+      "sprite": "ui/comercio/item",
+      "apilable": null,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      },
+      "held": {
+        "ranura": "x",
+        "efecto": "X-Strafe",
+        "tier": 5
+      },
+      "mercado": true,
+      "descripcion": {
+        "en": "Grants your Pokémon 50% chance to activate the Strafe ability."
+      }
+    },
+    {
+      "id": "x-strafe-t6",
+      "nombre": "X-Strafe (Tier: 6)",
+      "clientId": 12501,
+      "categoria": "helds",
+      "sprite": "ui/comercio/item",
+      "apilable": null,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      },
+      "held": {
+        "ranura": "x",
+        "efecto": "X-Strafe",
+        "tier": 6
+      },
+      "mercado": true,
+      "descripcion": {
+        "en": "Grants your Pokémon 70% chance to activate the Strafe ability."
+      }
+    },
+    {
+      "id": "x-strafe-t7",
+      "nombre": "X-Strafe (Tier: 7)",
+      "clientId": 12526,
+      "categoria": "helds",
+      "sprite": "ui/comercio/item",
+      "apilable": null,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      },
+      "held": {
+        "ranura": "x",
+        "efecto": "X-Strafe",
+        "tier": 7
+      },
+      "mercado": true,
+      "descripcion": {
+        "en": "Grants your Pokémon 100% chance to activate the Strafe ability."
+      }
+    },
+    {
+      "id": "x-rage-t1",
+      "nombre": "X-Rage (Tier: 1)",
+      "clientId": 12370,
+      "categoria": "helds",
+      "sprite": "ui/comercio/item",
+      "apilable": null,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      },
+      "held": {
+        "ranura": "x",
+        "efecto": "X-Rage",
+        "tier": 1
+      },
+      "mercado": true,
+      "descripcion": {
+        "en": "Grants your Pokémon 10% chance to activate the Rage ability."
+      }
+    },
+    {
+      "id": "x-rage-t2",
+      "nombre": "X-Rage (Tier: 2)",
+      "clientId": 12395,
+      "categoria": "helds",
+      "sprite": "ui/comercio/item",
+      "apilable": null,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      },
+      "held": {
+        "ranura": "x",
+        "efecto": "X-Rage",
+        "tier": 2
+      },
+      "mercado": true,
+      "descripcion": {
+        "en": "Grants your Pokémon 20% chance to activate the Rage ability."
+      }
+    },
+    {
+      "id": "x-rage-t3",
+      "nombre": "X-Rage (Tier: 3)",
+      "clientId": 12420,
+      "categoria": "helds",
+      "sprite": "ui/comercio/item",
+      "apilable": null,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      },
+      "held": {
+        "ranura": "x",
+        "efecto": "X-Rage",
+        "tier": 3
+      },
+      "mercado": true,
+      "descripcion": {
+        "en": "Grants your Pokémon 30% chance to activate the Rage ability."
+      }
+    },
+    {
+      "id": "x-rage-t4",
+      "nombre": "X-Rage (Tier: 4)",
+      "clientId": 12445,
+      "categoria": "helds",
+      "sprite": "ui/comercio/item",
+      "apilable": null,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      },
+      "held": {
+        "ranura": "x",
+        "efecto": "X-Rage",
+        "tier": 4
+      },
+      "mercado": true,
+      "descripcion": {
+        "en": "Grants your Pokémon 40% chance to activate the Rage ability."
+      }
+    },
+    {
+      "id": "x-rage-t5",
+      "nombre": "X-Rage (Tier: 5)",
+      "clientId": 12470,
+      "categoria": "helds",
+      "sprite": "ui/comercio/item",
+      "apilable": null,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      },
+      "held": {
+        "ranura": "x",
+        "efecto": "X-Rage",
+        "tier": 5
+      },
+      "mercado": true,
+      "descripcion": {
+        "en": "Grants your Pokémon 50% chance to activate the Rage ability."
+      }
+    },
+    {
+      "id": "x-rage-t6",
+      "nombre": "X-Rage (Tier: 6)",
+      "clientId": 12495,
+      "categoria": "helds",
+      "sprite": "ui/comercio/item",
+      "apilable": null,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      },
+      "held": {
+        "ranura": "x",
+        "efecto": "X-Rage",
+        "tier": 6
+      },
+      "mercado": true,
+      "descripcion": {
+        "en": "Grants your Pokémon 70% chance to activate the Rage ability."
+      }
+    },
+    {
+      "id": "x-rage-t7",
+      "nombre": "X-Rage (Tier: 7)",
+      "clientId": 12520,
+      "categoria": "helds",
+      "sprite": "ui/comercio/item",
+      "apilable": null,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      },
+      "held": {
+        "ranura": "x",
+        "efecto": "X-Rage",
+        "tier": 7
+      },
+      "mercado": true,
+      "descripcion": {
+        "en": "Grants your Pokémon 100% chance to activate the Rage ability."
+      }
     }
   ]
 }

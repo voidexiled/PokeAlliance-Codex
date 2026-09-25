@@ -30,6 +30,19 @@
         "compra": null
       },
       "borrador": true
+    },
+    {
+      "id": "diamond-3028",
+      "nombre": "diamond",
+      "clientId": 3028,
+      "categoria": "diamantes",
+      "sprite": "ui/comercio/item",
+      "apilable": null,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      },
+      "mercado": true
     }
   ]
 }

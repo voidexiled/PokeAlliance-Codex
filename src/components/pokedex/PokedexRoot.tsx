@@ -242,8 +242,9 @@ export function PokedexRoot({
     if (refs !== null && later !== undefined) {
       for (const [id, ref] of Object.entries(refs.elementos))
         if (!own.has(id)) own.set(id, later.elementEntry(id, ref, locale, ui.tooltip));
+      // The first page's drops come without a panel (index.astro): they get it here too.
       for (const [id, ref] of Object.entries(refs.items))
-        if (!dropped.has(id))
+        if (!dropped.get(id)?.tip)
           dropped.set(id, later.itemEntry(id, ref, refs.rows, locale, ui.tooltip));
     }
     return [own, dropped] as const;
@@ -280,8 +281,13 @@ export function PokedexRoot({
     };
   }, [absent]);
   useEffect(() => {
+    // Once here, render again (any change of the counter does): the drops of the first page
+    // get their panels (see above).
     const prefetch = () => {
-      loadDeferred().catch(() => {});
+      loadDeferred().then(
+        () => setLoaded(1),
+        () => {},
+      );
     };
     if (typeof window.requestIdleCallback === 'function') {
       const handle = window.requestIdleCallback(prefetch);

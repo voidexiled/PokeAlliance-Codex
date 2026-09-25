@@ -22,6 +22,7 @@ import { pokedexOrder } from '@/components/pokedex/config';
 import { es } from '@/i18n/messages/es';
 import { getCategorias, getElementos, getItems } from '@/lib/content/registry';
 import { getPokemon } from '@/lib/content/repository';
+import { DROPPER_NAMES_MAX } from '@/lib/game/dropper-limit';
 import { itemTip } from '@/lib/game/tips';
 import { applyListState, pageCountOf, parseListState, pendingScript } from '@/lib/lists/state';
 import { buildSearchIndex } from '../../src/pages/[locale]/buscar/indice.json';
@@ -76,7 +77,14 @@ describe('datos.json (PR5)', () => {
       expect(row.elemento).toBe(elemento !== null && elementIds.has(elemento) ? elemento : null);
       expect(row.uso).toBe(record.uso?.es ?? null);
       const droppers = droppersOf(row.id);
-      expect(row.dropDe).toEqual(droppers.length > 0 ? droppers : null);
+      // Past DROPPER_NAMES_MAX the row carries how many they are (an Evolution Stone).
+      expect(row.dropDe).toEqual(
+        droppers.length > DROPPER_NAMES_MAX
+          ? droppers.length
+          : droppers.length > 0
+            ? droppers
+            : null,
+      );
     }
     const english = decodeItems(buildItemsData('en'));
     for (const row of english) {
@@ -92,7 +100,8 @@ describe('datos.json (PR5)', () => {
         .map((element) => element.id)
         .filter((id) => named.has(id)),
     );
-    const droppers = new Set(rows.flatMap((row) => row.dropDe ?? []));
+    // A row past DROPPER_NAMES_MAX carries a count and names no Pokémon in `refs`.
+    const droppers = new Set(rows.flatMap((row) => (Array.isArray(row.dropDe) ? row.dropDe : [])));
     expect(Object.keys(data.refs.pokemon).sort()).toEqual([...droppers].sort());
   });
 

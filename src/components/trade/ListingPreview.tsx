@@ -274,7 +274,11 @@ function itemsCard(
 
   let droppedBy: ListingFactValue = null;
   const droppers = record?.dropDe ?? [];
-  if (droppers.length === 1) {
+  if (typeof droppers === 'number') {
+    // Past DROPPER_NAMES_MAX the list only counts them (items/config.ts, `dropDe`).
+    const count = labels.tooltip.pokemonCount;
+    droppedBy = count ? fill(count, { n: formatInteger(droppers, locale) }) : droppers;
+  } else if (droppers.length === 1) {
     const id = droppers[0];
     const ref = data.itemRefs.pokemon[id];
     if (ref !== undefined) droppedBy = dropperEntity(id, ref, locale, labels.tooltip, pokemonTip);

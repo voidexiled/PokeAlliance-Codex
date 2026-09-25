@@ -218,6 +218,8 @@ const itemShape = z.strictObject({
   descripcion: itemGameText.nullable().optional(),
   /** Optional: the ways to get it besides loot and the NPC (see `obtencionSchema`). */
   obtencion: obtencionSchema.optional(),
+  /** Optional: whether the game's Market accepts it; `null` or missing while unknown. */
+  mercado: z.boolean().nullable().optional(),
 });
 
 export const itemSchema = itemShape.superRefine((item, context) => {

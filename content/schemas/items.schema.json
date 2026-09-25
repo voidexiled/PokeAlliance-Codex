@@ -343,7 +343,11 @@
           "if": { "type": "object" },
           "then": { "$ref": "#/$defs/textoJuego" }
         },
-        "obtencion": { "$ref": "#/$defs/obtencion" }
+        "obtencion": { "$ref": "#/$defs/obtencion" },
+        "mercado": {
+          "type": ["boolean", "null"],
+          "description": "Opcional. true si el ítem se puede ofrecer en el mercado del juego («Comercializable en el mercado»), false si no se puede («No comerciable en el mercado»). null o ausente si no se sabe: la página no dice nada."
+        }
       },
       "if": { "properties": { "categoria": { "const": "helds" } } },
       "then": { "required": ["held"] }

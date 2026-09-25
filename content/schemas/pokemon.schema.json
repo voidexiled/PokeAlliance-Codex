@@ -122,6 +122,21 @@
           "type": ["number", "null"],
           "minimum": 0,
           "description": "Cooldown en PVP, en segundos, en este Pokémon. null si no se conoce."
+        },
+        "elemento": {
+          "type": ["string", "null"],
+          "description": "Opcional. Elemento del movimiento en este Pokémon, solo cuando no es el \"elemento\" de content/moves.json (el Pokédex del juego da elementos distintos al mismo movimiento según el Pokémon).",
+          "if": { "type": "string" },
+          "then": { "$ref": "#/$defs/elemento" }
+        },
+        "alcance": {
+          "description": "Opcional. Alcance del movimiento en este Pokémon, solo cuando no es el \"alcance\" de content/moves.json.",
+          "enum": ["area", "objetivo", "pasivo", null]
+        },
+        "efectos": {
+          "type": "array",
+          "description": "Opcional. Efectos del movimiento en este Pokémon, solo cuando no son los \"efectos\" de content/moves.json.",
+          "items": { "$ref": "#/$defs/slug" }
         }
       }
     },

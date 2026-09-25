@@ -21,6 +21,7 @@
     "assets:outfits": "node scripts/assets/dump-outfits.mjs",
     "content:roster": "node scripts/content/import-roster.mjs",
     "content:check": "node scripts/content/check.mjs",
+    "content:datamine": "node scripts/content/import-datamine.mjs",
     "design:tokens": "node scripts/design/tokens.mjs",
     "design:check": "node scripts/design/check.mjs",
     "i18n:check": "node scripts/i18n/check.mjs",

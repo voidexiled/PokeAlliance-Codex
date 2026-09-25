@@ -688,6 +688,9 @@ export function SearchResultsRoot({
 
     /** «Drop de» of a Market item (7.5.3): the one Pokémon with its panel, «{n} Pokémon». */
     const droppedBy = (row: ItemsRow, refs: ItemsData['refs']): LootCardEntity | string | null => {
+      // A number when the list only counts them (`DROPPER_NAMES_MAX`).
+      if (typeof row.dropDe === 'number')
+        return row.dropDe === 0 ? null : counted(items.droppedByCount, row.dropDe, locale);
       const ids = row.dropDe ?? [];
       if (ids.length === 0) return null;
       if (ids.length > 1) return counted(items.droppedByCount, ids.length, locale);
