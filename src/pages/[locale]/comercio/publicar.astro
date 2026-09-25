@@ -1,9 +1,11 @@
 ---
 // Crear anuncio (spec 9.7, template G of 8.0.2; 9.3): `/{l}/comercio/publicar/`, the form of a
 // listing and its live preview. Phase A publishes nothing — no Supabase, no account, no contact
-// (9.2) — and its action is «Copiar anuncio» (9.7.7). The page exists in every build, production
-// included: it reads no listing and no seller of content/comercio/, so COMERCIO_DEMO changes
-// nothing here (9.2, CA-9.1).
+// (9.2) — and has no action (the copied text «para Discord» was removed by the owner on
+// 2026-09-24). The page exists in every build, production included: it reads no listing and no
+// seller of content/comercio/, so COMERCIO_DEMO changes nothing here (9.2, CA-9.1). In phase B
+// `?editar={id}` opens the seller's listing in the same form (owner rule 2026-09-24): the page is
+// prerendered, so a small script names it «Editar anuncio» before the first paint.
 //
 // Render (9.3): «Prerender del marco e isla» in both phases, so the page exports `prerender`
 // itself. src/integrations/comercio-fases.ts sets the render mode of the other Comercio pages
@@ -66,8 +68,6 @@ const alternates = Object.fromEntries(
 ) as Record<Locale, string>;
 
 const { trade, ui, picker, shell } = dictionaries[locale];
-// 9.7.7: the lines of the copied text. `listingText` calls «Next Boost chance» `nextBoostChance`.
-const { nextBoost, ...copyLines } = trade.copy;
 
 // 8.0.4, 9.3: «Comunidad › Comercio › Crear anuncio». The group and the entry are the menu's
 // (8.0.3), so the crumbs and the sidebar always say the same.
@@ -176,10 +176,7 @@ const form: ListingFormProps = {
     addOption: trade.form.addOption,
     negotiable: trade.listing.negotiable,
     world: trade.world,
-    copy: trade.composer.copyDiscord,
-    copied: trade.form.copied,
-    copyFailed: trade.form.copyFailed,
-    copyText: trade.form.copyText,
+    unitPrice: trade.unitPrice,
     preview: trade.form.preview,
     errors: trade.form.errors,
     hints: trade.form.hints,
@@ -240,6 +237,18 @@ const form: ListingFormProps = {
         publish: trade.composer.publish,
         published: trade.composer.published,
         view: trade.composer.view,
+        sellAs: { ...trade.sellAs, add: trade.box.addCharacter },
+        publishing: {
+          ...trade.publishing,
+          retry: trade.retry,
+          copyLink: trade.box.copyLink,
+          linkCopied: trade.box.linkCopied,
+          copyFailed: trade.box.copyFailed,
+          save: trade.manage.save,
+          refusals: trade.refusals,
+        },
+        charactersHref: `/${locale}/cuenta/#personajes`,
+        listingsHref: `/${locale}/cuenta/perfil/?pestana=anuncios`,
         signInLine: trade.composer.signInToPublish,
         signIn: shell.account.signIn,
         contact: {
@@ -261,16 +270,7 @@ const form: ListingFormProps = {
     card: { ...trade.listing, reserved: trade.states.reservado },
     now: trade.now,
     unsellable: trade.unsellable,
-  },
-  // 9.7.7: the lines of the copied text; «o», «A convenir» and «Unsellable» are the words the page
-  // already shows.
-  text: {
-    ...copyLines,
-    nextBoostChance: nextBoost,
-    unsellable: trade.unsellable,
-    price: trade.price,
-    negotiable: trade.listing.negotiable,
-    or: ui.or,
+    anyWorld: trade.anyWorld,
   },
   ui: {
     pinHint: ui.pinHint,
@@ -299,7 +299,9 @@ const form: ListingFormProps = {
   ]}
   noindex
 >
-  <PageTitle title={trade.create} />
+  <div data-ac-edit-title={trade.publishing.editTitle}>
+    <PageTitle title={trade.create} />
+  </div>
   <ListingForm client:load {...form} />
   {/* 9.15.2: every Comercio route opens with the 18+ gate. */}
   <AgeGate
@@ -309,3 +311,19 @@ const form: ListingFormProps = {
     closeLabel={ui.close}
   />
 </PageLayout>
+
+<script>
+  // «Editar» (`?editar={id}`, phase B): the prerendered page is the same form, so the h1, the last
+  // crumb and the title of the tab say «Editar anuncio» before the island reads the listing.
+  const box = document.querySelector<HTMLElement>('[data-ac-edit-title]');
+  const editTitle = box?.dataset.acEditTitle;
+  if (editTitle && new URLSearchParams(window.location.search).has('editar')) {
+    const heading = box?.querySelector('h1');
+    const previous = heading?.textContent ?? '';
+    if (heading) heading.textContent = editTitle;
+    for (const crumb of document.querySelectorAll('.ac-breadcrumb__current')) {
+      if (crumb.textContent?.trim() === previous) crumb.textContent = editTitle;
+    }
+    document.title = document.title.replace(previous, editTitle);
+  }
+</script>

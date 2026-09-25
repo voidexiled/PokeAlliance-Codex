@@ -4,21 +4,20 @@
    order of global.css before its block, so the `components` layer keeps its place whichever sheet
    the browser reads first (3.6).
 
-   There is no board for the menu: it is composed with the tokens of the language list of the
-   header (language-menu.css), which follows the Select listbox: `bg-tertiary`, radius 8, padding
-   4, items of radius 2 that take `bg-quaternary` on hover and focus, 40 tall and 44 with a coarse
-   pointer (13.7). It does not animate on opening: the entries of 6.2 are the game tooltip, the
-   Select listbox, «+N» and the Guild chart.
+   Board: Menu-cuenta.dc.html, variant 3 (approved by the owner, 2026-09-24).
 
-   - Under the chip, 4 below it, against the end of the entry, 240 wide and never wider than the
-     window minus its 16 margins.
-   - The head: the 28 avatar and, beside it, the username in 700, «{jugador} · {mundo}» and the
-     status with its dot in `text-secondary`.
-   - «Estado»: its label in the caps of the design system's small titles, then the three statuses
-     in a row, each a bordered cell with its dot above the label; the chosen one takes the
-     `selected` border and ring of ToggleGroup instead of a check mark.
-   - Separators are 1 px `border-secondary` lines; an error line under the items only while it has
-     a text. */
+   - Under the chip, 4 below it, against the end of the entry: 300 wide and never wider than the
+     window minus its 16 margins; `bg-secondary`, a 1 px `border-primary` border, radius 12,
+     padding 8. It does not animate on opening (6.2).
+   - The head: the 40 avatar and, beside it, the username in 700, the main character
+     «{jugador} · {mundo}» in `text-secondary` on one line, and «+N personajes» as a link.
+   - Every item is a 32 row of radius 8: a 16 icon column in `text-tertiary`, 10 apart from its
+     label in 12 px type; `bg-tertiary` on hover and on keyboard focus, which also draws the ring.
+     With a coarse pointer the rows grow to 44 (13.7).
+   - The statuses are rows too: their dot sits in the icon column, the chosen one is in 700 with
+     a check at the end. The dot changes shape as well as colour: filled («En el juego»), a
+     crescent («Ausente»), a ring («Desconectado»).
+   - Separators run from edge to edge of the panel, 8 above and below. */
 
 @reference '../theme.css';
 
@@ -30,20 +29,26 @@
     top: calc(100% + var(--space-4));
     right: 0;
     z-index: var(--z-listbox);
-    width: 240px; /* sin token: el ancho del menú de cuenta */
+    width: var(--size-tt-wide);
     max-width: calc(100vw - var(--space-32)); /* sin token: la ventana menos sus márgenes de 16 */
-    padding: var(--space-4);
-    border-radius: var(--radius-8);
-    background: var(--bg-tertiary);
+    padding: var(--space-8);
+    border: 1px solid var(--border-primary);
+    border-radius: var(--radius-12);
+    background: var(--bg-secondary);
     color: var(--text-primary);
     font-family: var(--font-sans);
-    @apply type-field;
+    @apply type-ui;
+  }
+
+  .ac-account-menu__list {
+    display: flex;
+    flex-direction: column;
   }
 
   .ac-account-menu__head {
     display: flex;
-    align-items: flex-start;
-    gap: var(--space-8);
+    align-items: center;
+    gap: var(--space-12);
     padding: var(--space-8);
   }
 
@@ -52,12 +57,12 @@
     flex: none;
     align-items: center;
     justify-content: center;
-    width: 28px; /* sin token: el avatar de 9.16.1 */
-    height: 28px; /* sin token: el avatar de 9.16.1 */
+    width: var(--size-slot);
+    height: var(--size-slot);
     overflow: hidden;
     border-radius: var(--radius-full);
-    background: var(--bg-quaternary);
-    @apply type-ui-strong;
+    background: var(--bg-tertiary);
+    @apply type-body-strong;
   }
 
   .ac-account-menu__avatar > img {
@@ -70,50 +75,59 @@
     display: flex;
     min-width: 0;
     flex-direction: column;
-    gap: var(--space-2);
+    align-items: flex-start;
   }
 
   .ac-account-menu__name {
-    overflow-wrap: anywhere;
-    @apply type-body-strong;
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    @apply type-field;
+    font-weight: 700;
   }
 
   .ac-account-menu__line {
+    max-width: 100%;
+    overflow: hidden;
     color: var(--text-secondary);
-    overflow-wrap: anywhere;
-    @apply type-ui;
+    text-overflow: ellipsis;
+    white-space: nowrap;
   }
 
-  .ac-account-menu__list {
-    display: flex;
-    flex-direction: column;
+  .ac-account-menu__more {
+    margin-top: var(--space-2);
+    border-radius: var(--radius-2);
+    color: var(--link);
+    text-decoration: none;
   }
 
-  .ac-account-menu__label {
-    padding: var(--space-8) var(--space-8) var(--space-4);
-    color: var(--text-tertiary);
-    @apply type-ui-caps;
+  .ac-account-menu__more:hover {
+    text-decoration: underline;
   }
 
   .ac-account-menu__item {
     display: flex;
     align-items: center;
-    gap: var(--space-8);
+    gap: var(--space-10);
     width: 100%;
+    min-height: var(--size-cell);
     margin: 0;
-    padding: var(--space-10) var(--space-8);
+    padding: 0 var(--space-8);
     border: 0;
-    border-radius: var(--radius-2);
+    border-radius: var(--radius-8);
     background: transparent;
     color: var(--text-primary);
+    font: inherit;
     text-align: left;
     text-decoration: none;
+    white-space: nowrap;
     cursor: pointer;
   }
 
   .ac-account-menu__item:hover,
   .ac-account-menu__item:focus-visible {
-    background: var(--bg-quaternary);
+    background: var(--bg-tertiary);
   }
 
   .ac-account-menu__item[aria-disabled='true'] {
@@ -121,111 +135,79 @@
     cursor: progress;
   }
 
-  /* «Estado» (9.16.2): three columns, the dot above its label; the chosen one takes the
-     `selected` border and its ring instead of a check mark, as ToggleGroup does. */
-  .ac-account-menu__presence-grid {
-    display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: var(--space-4);
-  }
-
-  .ac-account-menu__presence-item {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: var(--space-8);
-    height: 52px; /* sin token: alto del selector de estado de 9.16.2 */
-    margin: 0;
-    padding: 0 var(--space-2);
-    border: 1px solid var(--border-primary);
-    border-radius: var(--radius-8);
-    background: transparent;
-    color: var(--text-primary);
-    font-family: var(--font-sans);
-    text-align: center;
-    cursor: pointer;
-    @apply type-ui-strong;
-  }
-
-  .ac-account-menu__presence-item:hover,
-  .ac-account-menu__presence-item:focus-visible {
-    background: var(--bg-quaternary);
-  }
-
-  .ac-account-menu__presence-item[aria-checked='true'] {
-    border-color: var(--selected);
-    box-shadow: var(--ring-selected);
-    background: transparent;
-  }
-
-  /* The dot of a status, in the colours of the chip's (account-entry.css) and Comercio's. */
-  .ac-account-menu__dot,
-  .ac-account-menu__line[data-presence]::before {
-    width: var(--space-6);
-    height: var(--space-6);
+  .ac-account-menu__glyph {
     flex: none;
-    border-radius: var(--radius-full);
-    background: var(--text-quaternary);
+    color: var(--text-tertiary);
   }
 
-  .ac-account-menu__line[data-presence] {
+  .ac-account-menu__icon {
     display: flex;
-    align-items: center;
-    gap: var(--space-4);
+    flex: none;
+    justify-content: center;
+    width: var(--space-16);
   }
 
-  .ac-account-menu__line[data-presence]::before {
-    content: '';
+  .ac-account-menu__text {
+    flex: 1;
   }
 
-  [data-ac-presence='en_juego'] > .ac-account-menu__dot,
-  .ac-account-menu__line[data-presence='en_juego']::before {
+  .ac-account-menu__check {
+    flex: none;
+    visibility: hidden;
+  }
+
+  [aria-checked='true'] > .ac-account-menu__text {
+    font-weight: 700;
+  }
+
+  [aria-checked='true'] > .ac-account-menu__check {
+    visibility: visible;
+  }
+
+  /* The status dot: 10 across, its shape and colour by the row's status. */
+  .ac-account-menu__dot {
+    width: var(--space-10);
+    height: var(--space-10);
+    border-radius: var(--radius-full);
+    background: radial-gradient(
+      closest-side,
+      transparent 50%,
+      var(--text-quaternary) calc(50% + 0.5px)
+    );
+  }
+
+  [data-ac-presence='en_juego'] .ac-account-menu__dot {
     background: var(--success);
   }
 
-  [data-ac-presence='ausente'] > .ac-account-menu__dot,
-  .ac-account-menu__line[data-presence='ausente']::before {
-    background: var(--amber);
+  [data-ac-presence='ausente'] .ac-account-menu__dot {
+    background: radial-gradient(circle at 22% 26%, transparent 36%, var(--amber) 37%);
   }
 
   .ac-account-menu__sep {
     height: 1px;
-    margin: var(--space-4) 0;
+    margin: var(--space-8) calc(var(--space-8) * -1);
     background: var(--border-secondary);
   }
 
   .ac-account-menu__error {
-    padding: var(--space-8);
+    padding: var(--space-8) var(--space-8) 0;
     color: var(--text-secondary);
-    @apply type-ui;
   }
 
   .ac-account-menu__error:empty {
     display: none;
   }
 
-  /* With a coarse pointer an item grows from 40 to 44 (13.7), as the language list does; the
-     52 tall presence buttons already clear that minimum. */
   @media (pointer: coarse) {
     .ac-account-menu__item {
-      padding-top: var(--space-12);
-      padding-bottom: var(--space-12);
+      min-height: var(--size-touch);
     }
   }
 
   @media (prefers-reduced-motion: no-preference) {
-    .ac-account-menu__item,
-    .ac-account-menu__presence-item {
+    .ac-account-menu__item {
       transition: background-color var(--duration-fast) var(--ease-standard);
-    }
-  }
-
-  /* Forced colors (5.2): the mode drops the ring's second pixel, so the chosen status becomes
-     a 2 px border in the system Highlight colour, as ToggleGroup does. */
-  @media (forced-colors: active) {
-    .ac-account-menu__presence-item[aria-checked='true'] {
-      border: 2px solid Highlight;
     }
   }
 }

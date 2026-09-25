@@ -15,6 +15,7 @@ import { getSupabasePublicConfig } from '@/lib/supabase/env';
 
 import { ResetPasswordPanel } from '@/components/account/auth/ResetPassword';
 import { authTexts } from '@/components/account/auth/texts';
+import { panelWithoutCharacters } from '@/components/account/panel/texts';
 import PageLayout from '@/layouts/PageLayout.astro';
 
 import '@/styles/components/auth.css';
@@ -35,6 +36,8 @@ const alternates = Object.fromEntries(
 ) as Record<Locale, string>;
 
 const { account, ui } = dictionaries[locale];
+// «Personajes» is not part of this page: it stays out of the island's props (13.6).
+const panelTexts = panelWithoutCharacters(account.panel);
 const texts = authTexts(account);
 ---
 
@@ -48,7 +51,7 @@ const texts = authTexts(account);
   <ResetPasswordPanel
     client:load
     locale={locale}
-    messages={account}
+    messages={{ ...account, panel: panelTexts }}
     ui={{ close: ui.close, dismiss: ui.dismiss }}
   />
 </PageLayout>

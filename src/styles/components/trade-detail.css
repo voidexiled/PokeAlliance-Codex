@@ -1,165 +1,705 @@
-/* The listing detail (spec 9.6, template F of 8.0.2): src/pages/[locale]/comercio/anuncio/[id].astro
-   and the seller block it draws, `SellerCard` of src/components/trade/SellerCard.tsx. There is
-   no board for this page: it is composed only of tokens and of pieces of the design system
-   (R16), with the geometry template F gives.
+/* The listing page (spec 9.6; board Anuncio-detalle «Variante 1» and Anuncio-detalle-movil, owner
+   decision 2026-09-24): src/pages/[locale]/comercio/anuncio/[id].astro with ListingHero.tsx and
+   TradeBox.tsx.
 
    Per-page stylesheet (plan M12, D-018, §13.6): only this page draws these blocks, so
    global.css does not import it; the page imports it and the build writes it next to the page.
    It repeats the layer order of global.css before its block, so the `components` layer keeps
    its place whichever of the two sheets the browser reads first (§3.6).
 
-   - The head: `PageTitle` and, 16 under its rule, the data line «{Mundo} · Publicado el
-     {fecha}» and the state, 12/16 in `text-tertiary`: the distance `Lienzo:Guild` keeps between
-     its title and its data row, the only board with a line of data under an h1.
-   - From 768 (`md:`) two columns: the fixed sheet of `size-tt` (282) and, 24 to its right, the
-     rest of the width with its sections 24 apart; below 768 one column, the sheet first.
-   - The sheet is `GameTooltip variant="sheet"` and, when the listing declares training or
-     memories, the panel that continues it with those sections (a section of `TipData` holds
-     no entity, 7.5.2). The two read as one sheet: no seam, no second radius, no padding between
-     them. The build writes this sheet before the shared one, so inside `components` a rule here
-     that only matches the rule of `GameTooltip` it overrides would lose to it: each of these
-     rules names the sheet as well, and outweighs the `GameTooltip` rule in every build.
-   - The seller block (`SellerCard`): the seller's name, linked to the profile, with its online
-     status 8 to its right (9.15.6, trade-presence.css), and 4 under them the reputation line
-     «Valoración: ★ 4.8 · 50 operaciones · 5 compradores distintos» (9.15.4), the score tabular
-     like every figure of a price.
-   - Phase B (9.15.2): the tag «Dinero real», a `Chip` on its own line 8 under the head line; the
-     actions under the sections, «Contactar al vendedor» (`ContactSeller`) above «Reportar
-     anuncio» (`ReportAction`), 16 apart, each at its own width, with the notice of a contact 8
-     under its button. */
+   - From 64rem two columns: the hero, «Equipo» and «Más anuncios» on the left; the trade box on
+     the right, 280 wide, sticky 16 under the header while the page scrolls.
+   - Under 64rem one column in the order of the phone board: the hero, the trade box, «Equipo»,
+     the training, «Más anuncios» (a row that scrolls sideways); the bar with the price and
+     «Contactar al vendedor» fixed at the bottom once the box has left the view.
+   - The boxes are the cards of the boards: `bg-secondary`, 1 px `border-secondary`, radius 12,
+     padding 20 (16 on a phone). The seller's own view hides the rows meant for a buyer
+     (`data-ac-owner`, set by TradeBox.tsx). */
 
 @reference '../theme.css';
 
 @layer properties, theme, base, components, utilities;
 
 @layer components {
-  .ac-trade-detail__head {
+  .ac-listing-page {
     display: flex;
     flex-direction: column;
     gap: var(--space-16);
     min-width: 0;
   }
 
-  .ac-trade-detail__meta {
+  .ac-listing-page__main {
+    display: contents;
+  }
+
+  .ac-listing-hero {
+    order: 1;
+  }
+
+  .ac-trade-box {
+    order: 2;
+  }
+
+  .ac-listing-equipment {
+    order: 3;
+  }
+
+  .ac-listing-panel {
+    order: 4;
+  }
+
+  .ac-listing-more {
+    order: 5;
+  }
+
+  @media (width >= 64rem) {
+    .ac-listing-page {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 17.5rem;
+      grid-template-rows: auto 1fr;
+      align-items: start;
+      gap: var(--space-24);
+    }
+
+    .ac-listing-page__main {
+      display: flex;
+      min-width: 0;
+      flex-direction: column;
+      gap: var(--space-16);
+      grid-column: 1;
+      grid-row: 1;
+    }
+
+    .ac-trade-box {
+      position: sticky;
+      top: calc(var(--layout-header) + var(--space-16));
+      grid-column: 2;
+      grid-row: 1 / span 2;
+    }
+
+    .ac-listing-more {
+      grid-column: 1;
+      grid-row: 2;
+    }
+  }
+
+  /* The cards of the page. */
+  .ac-listing-hero,
+  .ac-listing-equipment,
+  .ac-listing-panel,
+  .ac-trade-box {
+    min-width: 0;
+    padding: var(--space-20);
+    border: 1px solid var(--border-secondary);
+    border-radius: var(--radius-12);
+    background: var(--bg-secondary);
+  }
+
+  @media (width < 48rem) {
+    .ac-listing-hero,
+    .ac-listing-equipment,
+    .ac-listing-panel,
+    .ac-trade-box {
+      padding: var(--space-16);
+    }
+  }
+
+  /* ---------------------------------------------------------------------------- hero */
+  .ac-listing-hero {
+    display: grid;
+    grid-template-columns: 8.5rem minmax(0, 1fr);
+    gap: var(--space-20);
+  }
+
+  .ac-listing-hero__art {
+    display: flex;
+    aspect-ratio: 1;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid var(--border-secondary);
+    border-radius: var(--radius-8);
+    background: var(--bg-primary);
+  }
+
+  .ac-listing-hero__art[data-pokemon] img {
+    width: 88%;
+    height: 88%;
+    object-fit: contain;
+  }
+
+  .ac-listing-hero__main {
+    display: flex;
+    min-width: 0;
+    flex-direction: column;
+    gap: var(--space-4);
+  }
+
+  .ac-listing-hero__title {
+    margin: 0;
+    @apply type-h1;
+    overflow-wrap: anywhere;
+  }
+
+  .ac-listing-hero__meta {
     margin: 0;
     color: var(--text-tertiary);
     @apply type-ui;
   }
 
-  /* The head is a column 16 apart; the tag sits 8 under the line it qualifies. */
-  .ac-trade-detail__tag {
+  .ac-listing-hero__tags,
+  .ac-listing-hero__tag-row {
     display: flex;
-    margin: calc(var(--space-8) - var(--space-16)) 0 0;
+    flex-wrap: wrap;
+    gap: var(--space-8);
+    margin: var(--space-4) 0 0;
   }
 
-  .ac-trade-detail {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    gap: var(--space-24);
+  .ac-listing-hero__facts {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: var(--space-16) var(--space-24);
+    margin: var(--space-12) 0 0;
+  }
+
+  .ac-listing-hero__fact {
     min-width: 0;
   }
 
-  @media (width >= 48rem) {
-    .ac-trade-detail {
-      flex-direction: row;
+  .ac-listing-hero__fact dt {
+    color: var(--text-tertiary);
+    @apply type-ui;
+  }
+
+  .ac-listing-hero__fact dd {
+    display: flex;
+    min-height: 24px; /* sin token: la línea de un valor del lienzo */
+    align-items: center;
+    margin: var(--space-2) 0 0;
+    @apply type-body-strong;
+    overflow-wrap: anywhere;
+  }
+
+  .ac-listing-hero__els {
+    display: inline-flex;
+    flex-wrap: wrap;
+    gap: var(--space-4) var(--space-8);
+  }
+
+  .ac-listing-hero__stars [data-on] {
+    color: var(--amber);
+  }
+
+  @media (width < 48rem) {
+    .ac-listing-hero {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .ac-listing-hero__art {
+      aspect-ratio: auto;
+      height: 8.75rem;
+    }
+
+    .ac-listing-hero__art[data-pokemon] img {
+      width: auto;
+      height: 88%;
     }
   }
 
-  .ac-trade-detail__side {
-    display: flex;
-    flex: 1;
-    flex-direction: column;
-    gap: var(--space-24);
-    align-self: stretch;
-    min-width: 0;
+  /* ------------------------------------------------------------------------ equipment */
+  .ac-listing-equipment__title,
+  .ac-listing-panel__title,
+  .ac-listing-more__title {
+    margin: 0 0 var(--space-12);
+    @apply type-h3;
   }
 
-  .ac-trade-sheet {
+  .ac-listing-equipment__groups {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: var(--space-16);
+  }
+
+  .ac-listing-equipment__group[data-wide] {
+    grid-column: span 3;
+  }
+
+  .ac-listing-equipment__label {
+    margin: 0 0 var(--space-6);
+    color: var(--text-tertiary);
+    @apply type-ui;
+  }
+
+  .ac-listing-equipment__slots,
+  .ac-listing-equipment__none {
     display: flex;
+    align-items: center;
+    gap: var(--space-8);
+    margin: 0;
+  }
+
+  .ac-listing-equipment__name {
+    @apply type-ui-strong;
+  }
+
+  .ac-listing-equipment__none {
+    color: var(--text-tertiary);
+    @apply type-ui;
+  }
+
+  .ac-listing-equipment__empty {
+    width: var(--size-slot);
+    height: var(--size-slot);
     flex: none;
-    flex-direction: column;
-    width: var(--size-tt);
+    border: 1px dashed var(--border-primary);
+    border-radius: var(--radius-6);
   }
 
-  .ac-trade-sheet > .ac-game-tooltip:has(+ .ac-trade-sheet__more) {
-    padding-bottom: 0;
-    border-bottom-right-radius: 0;
-    border-bottom-left-radius: 0;
+  @media (width < 48rem) {
+    .ac-listing-equipment__groups {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .ac-listing-equipment__group[data-wide] {
+      grid-column: 1 / -1;
+    }
   }
 
-  .ac-trade-sheet > .ac-trade-sheet__more {
-    padding-top: 0;
-    border-top-left-radius: 0;
-    border-top-right-radius: 0;
-  }
-
-  /* Every trained skill of the listing in one section, 8 apart. */
-  .ac-trade-sheet .ac-trade-sheet__trainings {
+  .ac-listing-panel__trainings {
     display: flex;
     flex-direction: column;
     gap: var(--space-8);
+    margin-bottom: var(--space-16);
   }
 
-  /* The Ditto Memory: a line of links to the memorised Pokémon that wraps, 16 x 8. They are
-     links in running text (13.7, WCAG 2.5.8): 8 px at least from any other target, the toggle
-     above included, whose box reaches 6 px into the section body. */
-  .ac-trade-sheet__memories {
+  .ac-listing-panel__memories {
     display: flex;
     flex-wrap: wrap;
-    column-gap: var(--space-16);
-    row-gap: var(--space-8);
+    gap: var(--space-4) var(--space-12);
     margin: 0;
-    padding: var(--space-16) 0 var(--space-6);
   }
 
-  /* The toggles of the sheet are targets on a phone and under a coarse pointer (S14): 44 tall,
-     like every control there. */
-  @media (width < 48rem), (pointer: coarse) {
-    .ac-trade-sheet .ac-game-tooltip__toggle {
-      min-height: var(--size-touch);
-    }
+  /* ------------------------------------------------------------------------ trade box */
+  .ac-trade-box {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-16);
   }
 
-  /* «Dinero real» in 700, tabular like every price (9.6). */
-  .ac-trade-detail__fiat {
-    font-variant-numeric: tabular-nums;
-    @apply type-body-strong;
-  }
-
-  .ac-seller-card {
+  .ac-trade-box__price,
+  .ac-trade-box__seller {
     display: flex;
     flex-direction: column;
     gap: var(--space-4);
-    min-width: 0;
   }
 
-  .ac-seller-card__name {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    gap: var(--space-4) var(--space-8);
-    min-width: 0;
+  .ac-trade-box__seller,
+  .ac-trade-box__actions {
+    padding-top: var(--space-16);
+    border-top: 1px solid var(--border-secondary);
+  }
+
+  .ac-trade-box__label {
     margin: 0;
+    color: var(--text-tertiary);
+    @apply type-ui;
   }
 
-  .ac-reputation__score {
+  .ac-trade-box__amount {
+    margin: 0;
+    font-size: 1.75rem; /* sin token: la cifra del precio del lienzo, 28/36 */
+    line-height: 2.25rem;
+    font-weight: 700;
     font-variant-numeric: tabular-nums;
   }
 
-  .ac-trade-detail__actions {
+  .ac-trade-box__or {
     display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    gap: var(--space-16);
-    min-width: 0;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-6);
+    color: var(--text-tertiary);
+    @apply type-ui;
   }
 
-  .ac-contact-seller {
+  .ac-trade-box__unit {
+    margin: 0;
+    color: var(--text-secondary);
+    @apply type-ui;
+  }
+
+  .ac-trade-box__muted,
+  .ac-trade-box__line {
+    margin: 0;
+    color: var(--text-tertiary);
+    @apply type-ui;
+  }
+
+  .ac-trade-box__who {
+    display: flex;
+    align-items: center;
+    gap: var(--space-10);
+    margin-bottom: var(--space-8);
+  }
+
+  .ac-trade-box__who > span:last-child {
+    display: flex;
+    min-width: 0;
+    flex-direction: column;
+  }
+
+  .ac-trade-box__avatar {
+    display: inline-flex;
+    width: var(--size-control);
+    height: var(--size-control);
+    flex: none;
+    align-items: center;
+    justify-content: center;
+    border-radius: var(--radius-full);
+    background: var(--bg-tertiary);
+    @apply type-body-strong;
+  }
+
+  .ac-trade-box__handle {
+    color: var(--text-primary);
+    @apply type-body-strong;
+    text-decoration: none;
+  }
+
+  .ac-trade-box__handle:hover {
+    text-decoration: underline;
+  }
+
+  .ac-trade-box__character {
+    display: flex;
+    align-items: center;
+    gap: var(--space-8);
+    margin: 0;
+    padding: var(--space-8) var(--space-8) var(--space-8) var(--space-12);
+    border: 1px solid var(--border-secondary);
+    border-radius: var(--radius-8);
+    background: var(--bg-primary);
+  }
+
+  .ac-trade-box__character > strong {
+    min-width: 0;
+    overflow-wrap: anywhere;
+  }
+
+  .ac-trade-box__character > .ac-chip {
+    flex: none;
+    white-space: nowrap;
+  }
+
+  .ac-trade-box__copy {
+    margin: 0 0 0 auto;
+    padding: var(--space-4) var(--space-6);
+    border: 0;
+    border-radius: var(--radius-6);
+    background: transparent;
+    color: var(--text-secondary);
+    font-family: var(--font-sans);
+    @apply type-ui;
+    cursor: pointer;
+  }
+
+  .ac-trade-box__copy:hover {
+    background: var(--bg-tertiary);
+    color: var(--text-primary);
+  }
+
+  .ac-trade-box__rows {
     display: flex;
     flex-direction: column;
+    gap: var(--space-6);
+    margin: var(--space-8) 0 0;
+    @apply type-ui;
+  }
+
+  .ac-trade-box__row {
+    @apply type-ui;
+  }
+
+  .ac-trade-box__rows > div,
+  .ac-trade-box__row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-8);
+    margin: 0;
+  }
+
+  .ac-trade-box__rows dt {
+    color: var(--text-tertiary);
+  }
+
+  .ac-trade-box__rows dd {
+    margin: 0;
+    text-align: right;
+  }
+
+  .ac-trade-box__rows a {
+    color: var(--link);
+  }
+
+  .ac-trade-box__actions {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-12);
+  }
+
+  .ac-trade-box__buttons {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-8);
+  }
+
+  .ac-trade-box__buttons > .ac-button {
+    justify-content: center;
+  }
+
+  .ac-trade-box__state {
+    display: flex;
+    align-items: center;
+    gap: var(--space-8);
+    margin: 0;
+    @apply type-ui-strong;
+  }
+
+  .ac-trade-box__dot {
+    width: 8px; /* sin token: el punto de estado del lienzo */
+    height: 8px; /* sin token: el punto de estado del lienzo */
+    border-radius: var(--radius-full);
+    background: var(--text-tertiary);
+  }
+
+  .ac-trade-box__state[data-state='publicado'] .ac-trade-box__dot {
+    background: var(--success, var(--text-secondary));
+  }
+
+  .ac-trade-box__state[data-state='reservado'] .ac-trade-box__dot {
+    background: var(--amber);
+  }
+
+  .ac-trade-box__note {
+    margin: 0;
+    padding: var(--space-10) var(--space-12);
+    border: 1px solid var(--border-secondary);
+    border-radius: var(--radius-8);
+    @apply type-ui;
+  }
+
+  .ac-trade-box__deal {
+    display: flex;
     align-items: flex-start;
     gap: var(--space-8);
+    margin: 0;
+    @apply type-ui;
+  }
+
+  .ac-trade-box__contacts {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-8);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .ac-trade-box__contact {
+    display: flex;
+    align-items: center;
+    gap: var(--space-8);
+    padding: var(--space-8) var(--space-8) var(--space-8) var(--space-12);
+    border: 1px solid var(--border-secondary);
+    border-radius: var(--radius-8);
+    background: var(--bg-primary);
+    @apply type-ui;
+    overflow-wrap: anywhere;
+  }
+
+  .ac-trade-box__url {
+    width: 100%;
+    padding: var(--space-8) var(--space-12);
+    border: 1px solid var(--border-primary);
+    border-radius: var(--radius-8);
+    background: var(--bg-primary);
+    color: var(--text-primary);
+    font-family: var(--font-sans);
+    @apply type-ui;
+  }
+
+  .ac-trade-box__quiet {
+    align-self: center;
+    margin: 0;
+    padding: var(--space-4) var(--space-8);
+    border: 0;
+    background: transparent;
+    color: var(--text-tertiary);
+    font-family: var(--font-sans);
+    @apply type-ui;
+    cursor: pointer;
+  }
+
+  .ac-trade-box__quiet:hover {
+    color: var(--text-primary);
+    text-decoration: underline;
+  }
+
+  /* «Reportar anuncio»: the quiet line at the foot of the box. */
+  .ac-trade-box__report {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-8);
+    margin-top: calc(-1 * var(--space-8));
+  }
+
+  .ac-trade-box__report .ac-button {
+    min-height: 0;
+    height: auto;
+    padding: var(--space-4) var(--space-8);
+    border: 0;
+    color: var(--text-tertiary);
+    @apply type-ui;
+  }
+
+  .ac-trade-box__report .ac-button:hover {
+    background: transparent;
+    color: var(--text-primary);
+    text-decoration: underline;
+  }
+
+  /* The seller's own view: the buyer's rows go, «Publicado como» replaces «Personaje». */
+  [data-owner-only] {
+    display: none;
+  }
+
+  .ac-trade-box[data-ac-owner] [data-owner-only] {
+    display: inline;
+  }
+
+  .ac-trade-box[data-ac-owner] [data-buyer-only] {
+    display: none;
+  }
+
+  /* ----------------------------------------------------------------------- more listings */
+  .ac-listing-more__head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: var(--space-12);
+    border-bottom: 1px solid var(--border-secondary);
+    margin-bottom: var(--space-12);
+  }
+
+  .ac-listing-more__profile {
+    color: var(--link);
+    @apply type-ui;
+  }
+
+  .ac-listing-more__list {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--space-12);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .ac-listing-more__card {
+    position: relative;
+    display: flex;
     min-width: 0;
+    align-items: center;
+    gap: var(--space-12);
+    padding: var(--space-12);
+    border: 1px solid var(--border-secondary);
+    border-radius: var(--radius-12);
+    background: var(--bg-secondary);
+  }
+
+  .ac-listing-more__card:hover {
+    background: var(--bg-tertiary);
+  }
+
+  .ac-listing-more__art {
+    display: flex;
+    width: 3.5rem;
+    height: 3.5rem;
+    flex: none;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .ac-listing-more__art img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+  }
+
+  .ac-listing-more__text {
+    display: flex;
+    min-width: 0;
+    flex-direction: column;
+    gap: var(--space-2);
+  }
+
+  /* The title's link covers the card. */
+  .ac-listing-more__link {
+    color: var(--text-primary);
+    @apply type-body-strong;
+    text-decoration: none;
+  }
+
+  .ac-listing-more__link::after {
+    position: absolute;
+    inset: 0;
+    content: '';
+  }
+
+  .ac-listing-more__who {
+    color: var(--text-tertiary);
+    @apply type-ui;
+  }
+
+  .ac-listing-more__price {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-6);
+    @apply type-ui;
+  }
+
+  @media (width < 48rem) {
+    .ac-listing-more__list {
+      display: flex;
+      overflow-x: auto;
+      scrollbar-width: none;
+    }
+
+    .ac-listing-more__card {
+      flex: 0 0 15rem;
+    }
+  }
+
+  /* ------------------------------------------------------------------- the phone bar */
+  .ac-listing-bar:not([hidden]) {
+    position: fixed;
+    z-index: 20;
+    inset: auto 0 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-12);
+    padding: var(--space-12) var(--space-16);
+    border-top: 1px solid var(--border-secondary);
+    background: var(--bg-primary);
+  }
+
+  .ac-listing-bar__price {
+    display: flex;
+    min-width: 0;
+    flex-direction: column;
+    @apply type-ui;
   }
 }

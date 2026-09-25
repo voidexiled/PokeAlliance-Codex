@@ -105,6 +105,85 @@ export const megaSchema = z.strictObject({
   pokemon: z.array(slug),
 });
 
+/** `textoJuego`: a text of the game in the language or languages it exists in, one at least. */
+const itemGameText = z
+  .strictObject({ es: itemProse.optional(), en: itemProse.optional() })
+  .refine((value) => value.es !== undefined || value.en !== undefined, {
+    message: 'Un texto necesita "es", "en" o los dos.',
+  });
+
+const obtencionDefs = itemsJsonSchema.$defs.obtencion.properties;
+const itemAmount = positive.nullable();
+const track = z.enum(itemsJsonSchema.$defs.pista.enum as ['gratis', 'premium']);
+
+/**
+ * `obtencion`: the ways to get an item the game shows besides the Pokémon loot (computed from
+ * content/pokemon.json) and the NPC price (`precioNpc`). The importer fills it
+ * (importer_plan.md §8); a list that is missing or empty is not drawn.
+ */
+export const obtencionSchema = z.strictObject({
+  tiendas: z
+    .array(
+      z.strictObject({
+        tienda: text,
+        precio: z.number().int().min(0).nullable(),
+        moneda: text.nullable(),
+        cantidad: itemAmount,
+      }),
+    )
+    .optional(),
+  pase: z
+    .array(
+      z.strictObject({
+        temporada: positive.nullable(),
+        nivel: positive.nullable(),
+        pista: track,
+        cantidad: itemAmount,
+      }),
+    )
+    .optional(),
+  calendario: z
+    .array(
+      z.strictObject({
+        mes: z.number().int().min(1).max(12).nullable(),
+        dia: z.number().int().min(1).max(21).nullable(),
+        trasDia21: z.boolean(),
+        calendario: track,
+        cantidad: itemAmount,
+      }),
+    )
+    .optional(),
+  tareas: z
+    .array(
+      z.strictObject({
+        tipo: z.enum(
+          obtencionDefs.tareas.items.properties.tipo.enum as [
+            'quest',
+            'linked-task',
+            'poke-task',
+            'daily',
+            'logro',
+            'dungeon',
+          ],
+        ),
+        nombre: text,
+        actividad: slug.optional(),
+        cantidad: itemAmount,
+      }),
+    )
+    .optional(),
+  recetas: z
+    .array(
+      z.strictObject({
+        taller: text.nullable(),
+        cantidad: itemAmount,
+        tiempoSegundos: z.number().min(0).nullable(),
+        materiales: z.array(z.strictObject({ item: slug, cantidad: itemAmount })),
+      }),
+    )
+    .optional(),
+});
+
 const itemShape = z.strictObject({
   id: slug,
   nombre: text,
@@ -135,6 +214,10 @@ const itemShape = z.strictObject({
   held: heldSchema.optional(),
   /** Optional en cualquier categoría (§16.2.3): marca una Mega Stone. */
   mega: megaSchema.optional(),
+  /** Optional: the text of the item's inspection in the game, without «You see …». */
+  descripcion: itemGameText.nullable().optional(),
+  /** Optional: the ways to get it besides loot and the NPC (see `obtencionSchema`). */
+  obtencion: obtencionSchema.optional(),
 });
 
 export const itemSchema = itemShape.superRefine((item, context) => {
@@ -650,6 +733,8 @@ export type Item = z.infer<typeof itemSchema>;
 export type Held = z.infer<typeof heldSchema>;
 /** `mega` de una Mega Stone (§16.2.3). */
 export type Mega = z.infer<typeof megaSchema>;
+/** `obtencion` of an item. */
+export type Obtencion = z.infer<typeof obtencionSchema>;
 export type Addon = z.infer<typeof addonSchema>;
 export type OutfitRecord = z.infer<typeof outfitSchema>;
 export type AuraShader = (typeof auraShaders)[number];

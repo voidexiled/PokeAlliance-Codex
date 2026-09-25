@@ -1,8 +1,8 @@
-/* OutfitPreview (spec 8.3 step 3, R18; DS:guias/20 «Outfit en la ficha del Pokémon»): the
-   outfit panel of the Pokémon page and its «Aura» group, as `Lienzo:Pokedex-Shiny-Charizard`
-   draws them. A sheet of this page family alone (13.6): src/components/wiki/OutfitPreview.tsx
-   imports it, so it never reaches the shared sheet of global.css. The «Aura» group is the
-   design system's `ToggleGroup` and brings its own rules.
+/* OutfitPreview (spec 8.3 step 3, R18; DS:guias/20; design «Pokemon-pagina»): the aura
+   preview of the Pokémon page hero — one row of aura slots over the outfit stage and the line
+   with the chosen aura. A sheet of this page family alone (13.6):
+   src/components/wiki/OutfitPreview.tsx imports it, so it never reaches the shared sheet of
+   global.css. The slots are the game slots of entity-slot.css.
 
    The layer order is repeated before the block, so the `components` layer keeps its place
    whichever of the two sheets the browser reads first (3.6). `@reference` makes the text
@@ -13,33 +13,41 @@
 @layer properties, theme, base, components, utilities;
 
 @layer components {
-  /* The panel and the «Aura» group side by side, 16 apart, as tall as the head row. */
+  /* The card: the slots, the stage and the caption, stacked, on `bg-secondary`. */
   .ac-outfit-preview {
     display: flex;
-    align-items: stretch;
-    gap: var(--space-16);
-    min-width: 0;
-  }
-
-  /* The panel's column: the panel, and under it the status line of D-12 when WebGL fails. */
-  .ac-outfit-preview__main {
-    display: flex;
-    flex: none;
     flex-direction: column;
-    gap: var(--space-8);
-    width: 176px; /* sin token: panel de outfit de 176 (R18, DS:guias/20) */
+    gap: var(--space-12);
+    min-width: 0;
+    padding: var(--space-12);
+    border: 1px solid var(--border-secondary);
+    border-radius: var(--radius-12);
+    background: var(--bg-secondary);
   }
 
-  /* The panel: `bg-secondary`, radius 12, at least 176 tall, the frame in its centre. */
+  /* One row of slots, 4 apart; it wraps on a narrow card. */
+  .ac-outfit-preview__slots {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-4);
+  }
+
+  .ac-outfit-preview__slots > button {
+    cursor: pointer;
+  }
+
+  .ac-outfit-preview__slots > button:disabled {
+    cursor: default;
+  }
+
+  /* The stage: the frame in its centre, at least the 128 box of DS:guias/20 plus room. */
   .ac-outfit-preview__panel {
     position: relative;
     display: flex;
     flex: 1 0 auto;
     align-items: center;
     justify-content: center;
-    min-height: 176px; /* sin token: panel de outfit de 176 (R18, DS:guias/20) */
-    border-radius: var(--radius-12);
-    background: var(--bg-secondary);
+    min-height: 144px; /* sin token: caja de 128 de DS:guias/20 más el aura */
   }
 
   /* The frame at its integer scale; the canvas of the aura lies over it. */
@@ -58,14 +66,16 @@
     pointer-events: none;
   }
 
-  /* The ball of the chosen aura, 32 at 1x, 12 px from the top right corner. */
-  .ac-outfit-preview__ball {
-    position: absolute;
-    top: var(--space-12);
-    right: var(--space-12);
-    display: block;
-    width: var(--size-cell);
-    height: var(--size-cell);
+  /* «Aura Alliance»: the chosen aura, its name in bold. */
+  .ac-outfit-preview__caption {
+    margin: 0;
+    color: var(--text-tertiary);
+    @apply type-ui;
+  }
+
+  .ac-outfit-preview__caption > strong {
+    color: var(--text-primary);
+    font-weight: 600;
   }
 
   /* D-12: the aura is not available in this browser. */

@@ -46,6 +46,28 @@ const drop = z.strictObject({
   cantidad: z
     .strictObject({ min: z.number().int().min(1), max: z.number().int().min(1) })
     .nullable(),
+  /** Optional: the % the game's Pokédex shows (`chance / 1000`); `null` while unknown. */
+  probabilidad: z.number().min(0).max(100).nullable().optional(),
+});
+
+/**
+ * `textoJuego`: a text of the game in the language or languages it exists in, one at least.
+ * The page of the other language shows it in the one there is, inside its `lang` (`textIn`).
+ */
+const gameText = z
+  .strictObject({ es: prose.optional(), en: prose.optional() })
+  .refine((value) => value.es !== undefined || value.en !== undefined, {
+    message: 'Un texto necesita "es", "en" o los dos.',
+  });
+
+const element = oneOf($defs.elemento.enum);
+
+/** One move of a Pokémon, in the game's order, with the slot and cooldowns it has there. */
+const pokemonMove = z.strictObject({
+  movimiento: slug,
+  slot: text.nullable(),
+  cooldownPve: z.number().min(0).nullable(),
+  cooldownPvp: z.number().min(0).nullable(),
 });
 
 const evolucion = z.strictObject({
@@ -82,6 +104,23 @@ export const pokemonSchema = z.strictObject({
     })
     .optional(),
   elementoMoveset: oneOf($defs.elemento.enum).nullable().optional(),
+  // Fields of the game's Pokédex the importer fills (importer_plan.md §2).
+  descripcion: gameText.nullable().optional(),
+  rapido: z.boolean().nullable().optional(),
+  pesado: z.boolean().nullable().optional(),
+  movimientos: z.array(pokemonMove).optional(),
+  dropsPorZona: z
+    .strictObject({ wildscape: z.array(drop).optional(), primal: z.array(drop).optional() })
+    .optional(),
+  efectividad: z
+    .strictObject({
+      muyDebil: z.array(element),
+      debil: z.array(element),
+      resiste: z.array(element),
+      muyResistente: z.array(element),
+      inmune: z.array(element),
+    })
+    .optional(),
 });
 
 export const pokemonFileSchema = z.strictObject({
@@ -106,6 +145,12 @@ export const movesFileSchema = z.strictObject({
        * del Pokédex del juego. null si no se conoce.
        */
       alcance: oneOf(movesJsonSchema.$defs.movimiento.properties.alcance.enum).optional(),
+      /** Optional: the effect ids of the game's Pokédex («damage», «paralyze»…). */
+      efectos: z.array(slug).optional(),
+      /** Optional: the description the game shows, in the language or languages it has. */
+      descripcion: gameText.nullable().optional(),
+      /** Optional: the sprite key of the move's icon. */
+      icono: spriteKey.nullable().optional(),
     }),
   ),
 });

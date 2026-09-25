@@ -36,8 +36,15 @@
 // with their texts and links for this page, in the order of 9.16.2. `src/scripts/account-menu.ts`,
 // loaded with `import()` on the first open, clones it once. Items that depend on the account carry
 // `data-ac-only`: «Completar registro» (`unfinished`) and «Moderación» (`moderator`); the Comercio
-// items, the status group and the status line exist only with COMERCIO_PUBLICO. Showing the
-// moderation link is a convenience: the moderation page and its functions check the role.
+// items and the status group exist only with COMERCIO_PUBLICO. Showing the moderation link is a
+// convenience: the moderation page and its functions check the role.
+//
+// The layout is variant 3 of Menu-cuenta.dc.html: 300 wide; the head with the 40 avatar, the
+// username, the main character «{jugador} · {mundo}» and «+N personajes» to /cuenta/#personajes
+// when the account has more than one; the three statuses as ordinary rows with their dot in the
+// icon column and a check on the chosen one; then Mi perfil, Mis anuncios, Mis operaciones, Mis
+// guilds (and Moderación) | Ajustes de la cuenta | Cerrar sesión. «Crear anuncio» is not in the
+// menu: Comercio has it beside its search.
 import type { Locale } from '@/i18n/config';
 import type { Messages } from '@/i18n/messages/en';
 import { en } from '@/i18n/messages/en';
@@ -49,6 +56,7 @@ import { comercioPublico } from '@/lib/trade/registry';
 import { ESTADOS_PRESENCIA } from '@/lib/trade/types';
 import { Sprite } from '@/components/game/Sprite';
 import { Glyph } from '@/components/icons/Glyph';
+import MenuIcon from '@/components/layout/AccountMenuIcon.astro';
 
 interface Props {
   /** Page locale: the dictionary, the links and the world names of the menu. */
@@ -84,7 +92,7 @@ const links = {
   profile: `${base}/cuenta/perfil/`,
   listings: `${base}/cuenta/perfil/?pestana=anuncios`,
   deals: `${base}/comercio/operaciones/`,
-  create: `${base}/comercio/publicar/`,
+  characters: `${base}/cuenta/#personajes`,
   guilds: `${base}/cuenta/#guilds`,
   moderation: `${base}/comercio/moderacion/`,
 };
@@ -157,20 +165,54 @@ const menuItem = 'ac-account-menu__item';
     menu && (
       <template data-ac-account-menu data-locale={locale} data-worlds={worlds}>
         <div class="ac-account-menu" id="menu-cuenta" hidden>
-          <div class="ac-account-menu__head">
-            <span class="ac-account-menu__avatar" data-ac-slot="avatar" aria-hidden="true" />
-            <div class="ac-account-menu__who">
-              <p class="ac-account-menu__name" id="menu-cuenta-nombre" data-ac-slot="name" />
-              <p class="ac-account-menu__line" id="menu-cuenta-jugador" data-ac-slot="player" />
-              {comercio && <p class="ac-account-menu__line" data-ac-slot="presence" />}
-            </div>
-          </div>
           <div
             class="ac-account-menu__list"
             role="menu"
             aria-labelledby="menu-cuenta-nombre"
             aria-describedby="menu-cuenta-jugador"
           >
+            <div class="ac-account-menu__head" role="none">
+              <span class="ac-account-menu__avatar" data-ac-slot="avatar" aria-hidden="true" />
+              <div class="ac-account-menu__who" role="none">
+                <span class="ac-account-menu__name" id="menu-cuenta-nombre" data-ac-slot="name" />
+                <span class="ac-account-menu__line" id="menu-cuenta-jugador" hidden>
+                  <span class="sr-only">{texts.mainCharacter}: </span>
+                  <span data-ac-slot="player" />
+                </span>
+                <a
+                  class="ac-account-menu__more"
+                  role="menuitem"
+                  tabindex="-1"
+                  href={links.characters}
+                  data-ac-slot="more"
+                  data-one={texts.moreCharacters.one}
+                  data-other={texts.moreCharacters.other}
+                  hidden
+                />
+              </div>
+            </div>
+            <div class="ac-account-menu__sep" role="separator" />
+            {comercio && (
+              <div class="ac-account-menu__group" role="group" aria-label={texts.status}>
+                {ESTADOS_PRESENCIA.map((state) => (
+                  <button
+                    type="button"
+                    class={menuItem}
+                    role="menuitemradio"
+                    aria-checked="false"
+                    tabindex="-1"
+                    data-ac-presence={state}
+                  >
+                    <span class="ac-account-menu__icon" aria-hidden="true">
+                      <span class="ac-account-menu__dot" />
+                    </span>
+                    <span class="ac-account-menu__text">{texts.presence[state]}</span>
+                    <Glyph name="check" size={16} className="ac-account-menu__check" />
+                  </button>
+                ))}
+              </div>
+            )}
+            {comercio && <div class="ac-account-menu__sep" role="separator" />}
             <a
               class={menuItem}
               role="menuitem"
@@ -178,54 +220,28 @@ const menuItem = 'ac-account-menu__item';
               href={links.account}
               data-ac-only="unfinished"
             >
+              <MenuIcon name="alert" />
               {texts.completeRegistration}
             </a>
-            {comercio && (
-              <div class="ac-account-menu__group" role="group" aria-label={texts.status}>
-                <p class="ac-account-menu__label" aria-hidden="true">
-                  {texts.status}
-                </p>
-                <div class="ac-account-menu__presence-grid">
-                  {ESTADOS_PRESENCIA.map((state) => (
-                    <button
-                      type="button"
-                      class="ac-account-menu__presence-item"
-                      role="menuitemradio"
-                      aria-checked="false"
-                      tabindex="-1"
-                      data-ac-presence={state}
-                    >
-                      <span class="ac-account-menu__dot" aria-hidden="true" />
-                      {texts.presence[state]}
-                    </button>
-                  ))}
-                </div>
-              </div>
-            )}
-            {comercio && <div class="ac-account-menu__sep" role="separator" />}
             <a class={menuItem} role="menuitem" tabindex="-1" href={links.profile}>
+              <MenuIcon name="user" />
               {texts.myProfile}
             </a>
             {comercio && (
               <a class={menuItem} role="menuitem" tabindex="-1" href={links.listings}>
+                <MenuIcon name="tag" />
                 {texts.myListings}
               </a>
             )}
             {comercio && (
               <a class={menuItem} role="menuitem" tabindex="-1" href={links.deals}>
+                <MenuIcon name="swap" />
                 {texts.myDeals}
               </a>
             )}
-            {comercio && (
-              <a class={menuItem} role="menuitem" tabindex="-1" href={links.create}>
-                {texts.createListing}
-              </a>
-            )}
             <a class={menuItem} role="menuitem" tabindex="-1" href={links.guilds}>
+              <MenuIcon name="shield" />
               {texts.myGuilds}
-            </a>
-            <a class={menuItem} role="menuitem" tabindex="-1" href={links.account}>
-              {texts.settings}
             </a>
             {comercio && (
               <a
@@ -235,9 +251,15 @@ const menuItem = 'ac-account-menu__item';
                 href={links.moderation}
                 data-ac-only="moderator"
               >
+                <MenuIcon name="flag" />
                 {texts.moderation}
               </a>
             )}
+            <div class="ac-account-menu__sep" role="separator" />
+            <a class={menuItem} role="menuitem" tabindex="-1" href={links.account}>
+              <MenuIcon name="sliders" />
+              {texts.settings}
+            </a>
             <div class="ac-account-menu__sep" role="separator" />
             <button
               type="button"
@@ -246,6 +268,7 @@ const menuItem = 'ac-account-menu__item';
               tabindex="-1"
               data-ac-action="sign-out"
             >
+              <MenuIcon name="sign-out" />
               {texts.signOut}
             </button>
           </div>

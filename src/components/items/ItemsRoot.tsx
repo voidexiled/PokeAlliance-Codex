@@ -298,6 +298,9 @@ export function ItemsRoot({
     shopPrice: row.compra,
   });
 
+  /** The page of an item, `/{l}/items/{id}/`. */
+  const itemHref = (row: ItemsRow) => `/${locale}/items/${row.id}/`;
+
   /** The item panel of a slot and of a Lista name (7.5.3); only with the deferred part here. */
   const panelOf = (row: ItemsRow) =>
     itemPanel(row, refs, categoryName(row.categoria), locale, ui.tooltip, itemTip);
@@ -320,6 +323,7 @@ export function ItemsRoot({
               name={row.nombre}
               sprite={row.sprite ? { ...row.sprite, loading: lazy() } : null}
               tip={panelOf(row)}
+              href={itemHref(row)}
               locale={locale}
               hint={ui.pinHint}
             />
@@ -428,6 +432,7 @@ export function ItemsRoot({
                 />
               }
               name={row.nombre}
+              href={itemHref(row)}
               tip={panelOf(row)}
               hint={ui.pinHint}
               locale={locale}

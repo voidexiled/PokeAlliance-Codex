@@ -1,53 +1,47 @@
 ---
-// Pokémon page (spec 8.3, `Lienzo:Pokedex-Shiny-Charizard`): one prerendered HTML per record
-// of `content/pokemon.json` and per locale, on template C of 8.0.2 — the `Toc` rail with two
-// sections or more, the 208 spacer and a column of 944 with fewer (PageLayout decides both).
-// A slug that is not a record has no route and falls to the 404 of 8.12.
+// Pokémon page (spec 8.3; design «Pokemon-pagina» and «Pokemon-pagina-movil», approved
+// 2026-09-24): one prerendered HTML per record of `content/pokemon.json` and per locale. A
+// slug that is not a record has no route and falls to the 404 of 8.12.
 //
-// Composition, in the order of 8.3 and of the board:
-//   1. the crumbs «Pokémon › Pokédex › {nombre}» (8.0.4): the group has no index page, so its
-//      crumb is text;
-//   2. `PageTitle` with the name and «Nº {numero}», without a subtitle when `numero` is null;
-//   3. the head row (CARD_GRID_SYSTEM §6.8, one height): the art panel, the fixed sheet — a
-//      `GameTooltip variant="sheet"` of `size-tt` (282, 7.5.9), with the art of 70 in its head
-//      and only the rows that have a value — and, when the Pokémon has an outfit, its panel and
-//      the «Aura» group (`OutfitPreview`, `client:visible`, 7.3). The sheet paints Poppins on
-//      load, so this page asks PageLayout to preload it (3.9);
-//   4. the sections, each one only with data and each one an entry of the `Toc`: «Drops» (the
-//      `drops` list, `DropsList`), «Tier list» (the `familia` list, `FamilyList`, E15),
-//      «Evolución» (`EvolutionChain`), «Ataques» (`DataTable` and the «Habilidades» chips) and
-//      «Dónde encontrarlo» (`FactLines`). With none, the page ends at the head row.
-// There is no paginator and no «Volver a la Pokédex» (X11), and no direction selector on the
-// outfit (X11, Q11): the board draws the idle south frame alone.
+// Composition, in the order of the design:
+//   1. the crumbs «Pokémon › Pokédex › {nombre}» (8.0.4);
+//   2. the hero (`#resumen`): the art with the Normal / Shiny links (each variant is its own
+//      page, so the toggle is two links and needs no script), the h1 with «Nº», the element
+//      chips, the facts grid — Rol, Requisito, Tier (the chip with its «Max brokes» tooltip),
+//      Generación, Tipo de moveset, and Fast / Heavy only when the game marks them — and the
+//      game description; beside it, when the Pokémon has an outfit, the aura preview
+//      (`OutfitPreview`, `client:visible`): one row of aura slots over the outfit;
+//   3. the sticky section bar: an in-page link per section the page draws. The active link
+//      follows the scroll with the small script at the end (no island);
+//   4. the sections, each one only with data: Movimientos, Loot (Base / Wildscape / Primal
+//      tabs, CSS only), Ubicaciones, Evoluciones, Efectividad, Habilidades de campo,
+//      Variantes and the Comercio link.
+// There is no rail: the section bar is the index of this page, so PageLayout gets no `toc`.
 //
 // Data (8.0.5, R7, X4). Everything shown comes from the registries of `content/` and from
-// `public/sprites/sprites.json`, read with the functions of src/lib/content/ and resolved by
-// the sprite adapter (3.12). A value the registry does not have is not invented: in the sheet
-// and in the tooltips its row is dropped, in a table or a card it is «—» while another row has
-// it, and a section with nothing to show does not exist. No record is marked as a draft.
-//
-// The fields of §3.13 that `content/schemas/pokemon.schema.json` adds to a Pokémon (`hp`,
-// `experiencia`, `drops`, `evolucion`, `habilidades`, `donde`, `elementoMoveset`) are optional
-// in `PokemonRecord`, and so are the two an item gains in `Item` (`elemento`, `uso`, M9): a
-// registry without them builds the page without their rows and sections.
+// `public/sprites/sprites.json`. A value the registry does not have is not invented: a fact
+// of the hero is «—» when its field is `null` and absent when an optional field is missing,
+// and a section with nothing to show does not exist. The fields the importer fills later
+// (importer_plan.md §2: `movimientos`, `dropsPorZona`, `efectividad`, `descripcion`,
+// `rapido`, `pesado`, `probabilidad`) are optional: while missing, their parts are absent.
 //
 // Text (DP1, 13.2): the page's own copy is `messages.pokemon`; what the components and the
-// tooltip builders share is `messages.ui`. The islands receive those strings as props and
-// nothing else of the dictionary. Game names — Pokémon, items, abilities, NPC — are written as
-// the registry has them and carry no `lang` (13.4).
-//
-// Styles. The head row, the art panel and the abilities list are this page's alone, so they
-// live in the `<style>` block at the end, inside `@layer components`, instead of adding
-// utilities to the shared sheet (13.6, S17). Every other piece brings its own rules.
-import { createElement } from 'react';
+// tooltip builders share is `messages.ui`. Game names — Pokémon, items, moves, effects,
+// zones, abilities — are written as the registry has them and carry no `lang` (13.4).
+import '@/styles/components/entity-page.css';
 
 import { getAlternatePath, getLocale, locales, type Locale } from '@/i18n/config';
 import type { Messages } from '@/i18n/messages/en';
 import { en } from '@/i18n/messages/en';
 import { es } from '@/i18n/messages/es';
-import { fill } from '@/i18n/messages/types';
+import { fill, plural } from '@/i18n/messages/types';
 import { formatTier } from '@/lib/content/format';
-import { tierInfo } from '@/lib/content/tiers';
+import {
+  LOOT_ZONE_NAMES,
+  effectivenessRows,
+  lootZonesOf,
+  type EffectivenessKey,
+} from '@/lib/content/item-sources';
 import { resolvePokemonImage } from '@/lib/content/pokemon-media';
 import {
   getAuras,
@@ -59,39 +53,34 @@ import {
 } from '@/lib/content/registry';
 import type { Item } from '@/lib/content/registry-schema';
 import { getMoves, getPokemon } from '@/lib/content/repository';
-import type { EnlaceDato, PokemonRecord, PokemonTier } from '@/lib/content/types';
-import { formatDecimal, formatInteger } from '@/lib/format/numbers';
+import { tierInfo } from '@/lib/content/tiers';
+import type {
+  EnlaceDato,
+  GameText,
+  MoveRecord,
+  PokemonRecord,
+  PokemonTier,
+} from '@/lib/content/types';
+import { formatDecimal, formatInteger, formatPercent } from '@/lib/format/numbers';
 import { present, UNKNOWN } from '@/lib/format/unknown';
-import {
-  elementTip,
-  itemTip,
-  pokemonTip,
-  type LocalizedText,
-  type TipData,
-  type TipRow,
-} from '@/lib/game/tips';
+import { elementTip, itemTip, pokemonTip, type TipData } from '@/lib/game/tips';
 import { buildNav } from '@/lib/nav/groups';
 import { spriteData, spriteOrNull, type SpriteData } from '@/lib/sprites/resolve';
 
-import type { DexCardDrop, DexCardLabels } from '@/components/cards/DexCard';
 import { Chip } from '@/components/content/Chip';
-import { DataTable, type DataTableColumn, type DataTableRow } from '@/components/content/DataTable';
 import { FactLines, type FactLineData, type FactLinePart } from '@/components/content/FactLine';
 import { ElementChip, type ElementChipEntry } from '@/components/game/ElementChip';
-import { GameTooltip } from '@/components/game/GameTooltip';
-import { Sprite } from '@/components/game/Sprite';
-import { MissingSprite } from '@/components/game/SpriteStage';
-import type { TocItem } from '@/components/layout/Toc.astro';
-import { PageTitle } from '@/components/layout/PageTitle';
+import { ElementIcon } from '@/components/game/ElementIcon';
+import { EntitySlot, EntitySlotFace, entitySlotClasses } from '@/components/game/EntitySlot';
+import { NestedEntity } from '@/components/game/NestedEntity';
+import { PokemonArt } from '@/components/game/ShinyMark';
+import { Glyph } from '@/components/icons/Glyph';
 import { Section } from '@/components/layout/Section';
-import type { EntityListLabels } from '@/components/lists/EntityList';
-import { DropsList, FamilyList } from '@/components/pokemon/PokemonLists';
-import type { DropEntry } from '@/components/pokemon/DropsList';
 import EvolutionChain, {
   type EvolutionStage,
   type EvolutionStep,
 } from '@/components/pokemon/EvolutionChain.astro';
-import type { FamilyEntry } from '@/components/pokemon/FamilyList';
+import { TierChip } from '@/components/pokemon/TierChip';
 import { OutfitPreview, type OutfitAura } from '@/components/wiki/OutfitPreview';
 import PageLayout from '@/layouts/PageLayout.astro';
 
@@ -105,9 +94,6 @@ export function getStaticPaths() {
     })),
   );
 }
-
-/** A record of `content/pokemon.json`, with the optional fields of §3.13. */
-type PokemonSheet = PokemonRecord;
 
 /** A proper noun, the same in both locales (13.4); PageLayout and Header write the same one. */
 const BRAND = 'PokeAlliance Wiki';
@@ -123,7 +109,7 @@ const dictionaries: Record<Locale, Messages> = { es, en };
 const locale = getLocale(Astro.params.locale);
 const { ui, pokemon: copy } = dictionaries[locale];
 const labels = ui.tooltip;
-const record: PokemonSheet = Astro.props.record;
+const record: PokemonRecord = Astro.props.record;
 const name = record.nombre;
 
 const path = Astro.url.pathname;
@@ -139,20 +125,20 @@ if (group === undefined || pokedex === undefined) {
 }
 
 const registry = getSpriteRegistry();
-const allPokemon: PokemonSheet[] = getPokemon();
+const allPokemon: PokemonRecord[] = getPokemon();
 const byId = new Map(allPokemon.map((entry) => [entry.id, entry]));
 const pageHref = (id: string) => `/${locale}/pokedex/${id}/`;
+const itemHref = (id: string) => `/${locale}/items/${id}/`;
 
 // ------------------------------------------------------------------------------ helpers
 
-/** A `Texto` in the page's language, or in the other one with its `lang` (8.0.5, T22). */
-function localized(
-  value: LocalizedText | null | undefined,
-): { text: string; lang?: Locale } | null {
+/** A game text in the page's language, or in the other one with its `lang` (8.0.5, T22). */
+function localized(value: GameText | null | undefined): { text: string; lang?: Locale } | null {
   if (!value) return null;
-  if (present(value[locale])) return { text: value[locale] };
+  const own = value[locale];
+  if (own !== undefined && present(own)) return { text: own };
   const other = locales.find((option) => option !== locale && present(value[option]));
-  return other === undefined ? null : { text: value[other], lang: other };
+  return other === undefined ? null : { text: value[other] as string, lang: other };
 }
 
 /** A whole number as §13.3 writes it; a fractional one keeps one decimal. */
@@ -160,21 +146,25 @@ function figure(value: number): string {
   return Number.isInteger(value) ? formatInteger(value, locale) : formatDecimal(value, locale, 1);
 }
 
-/** 8.0.5: `numero` ascending (unknown last), `normal` before `shiny`, then `nombre`. */
+/** «2–3», or the number alone when both ends are the same. */
+function amount(cantidad: { min: number; max: number } | null): string {
+  if (cantidad === null) return UNKNOWN;
+  return cantidad.min === cantidad.max
+    ? formatInteger(cantidad.min, locale)
+    : `${formatInteger(cantidad.min, locale)}–${formatInteger(cantidad.max, locale)}`;
+}
+
+/** 8.0.5: `normal` before `shiny`, then `nombre`. */
 const collator = new Intl.Collator(locale);
-function pokemonOrder(a: PokemonSheet, b: PokemonSheet): number {
-  if (a.numero !== b.numero) {
-    if (a.numero === null) return 1;
-    if (b.numero === null) return -1;
-    return a.numero - b.numero;
-  }
-  const rank = (entry: PokemonSheet) =>
+function variantOrder(a: PokemonRecord, b: PokemonRecord): number {
+  const rank = (entry: PokemonRecord) =>
     entry.variante === 'normal' ? 0 : entry.variante === SHINY ? 1 : 2;
   return rank(a) - rank(b) || collator.compare(a.nombre, b.nombre);
 }
 
-// Elements (8.0.5): the records of `content/elementos.json`, keyed by id.
-const elements = new Map(getElementos().map((element) => [element.id, element]));
+// Elements (8.0.5): the records of `content/elementos.json`, keyed by id, in their order.
+const elementRecords = getElementos();
+const elements = new Map(elementRecords.map((element) => [element.id, element]));
 const itemName = (id: string | null) => (id === null ? null : (getItem(id)?.nombre ?? null));
 
 /** An element as `ElementChip` takes it, with its panel (7.5.3); `null` when unknown. */
@@ -201,28 +191,32 @@ function elementEntry(id: string | null | undefined): ElementChipEntry | null {
   };
 }
 
-/** The element records of a Pokémon, in its order, for `pokemonTip`. */
-const elementNames = (ids: readonly string[]) =>
-  ids.flatMap((id) => {
-    const element = elements.get(id);
-    return element === undefined ? [] : [{ nombre: element.nombre }];
-  });
-
 /** The Pokémon panel of 7.5.3. */
-const tipOf = (entry: PokemonSheet): TipData =>
-  pokemonTip({ ...entry, elementos: elementNames(entry.elementos) }, locale, labels);
+const tipOf = (entry: PokemonRecord): TipData =>
+  pokemonTip(
+    {
+      ...entry,
+      elementos: entry.elementos.flatMap((id) => {
+        const element = elements.get(id);
+        return element === undefined ? [] : [{ nombre: element.nombre }];
+      }),
+    },
+    locale,
+    labels,
+  );
 
-// Items (7.5.3): the category names, and «Drop de», the inverse of `drops`.
+// Items (7.5.3): the category names, and «Drop de», the Pokémon whose loot has the item.
 const categoryNames = new Map(getCategorias().map((category) => [category.id, category.nombre]));
-const droppers = new Map<string, PokemonSheet[]>();
+const droppers = new Map<string, PokemonRecord[]>();
 for (const entry of allPokemon) {
-  for (const drop of entry.drops ?? []) {
-    const list = droppers.get(drop.item) ?? [];
-    if (!list.includes(entry)) list.push(entry);
-    droppers.set(drop.item, list);
+  for (const { drops } of lootZonesOf(entry)) {
+    for (const drop of drops) {
+      const list = droppers.get(drop.item) ?? [];
+      if (!list.includes(entry)) list.push(entry);
+      droppers.set(drop.item, list);
+    }
   }
 }
-for (const list of droppers.values()) list.sort(pokemonOrder);
 
 /** An item of the registry with its sprite, or `null` when the id is not in it. */
 function itemOf(id: string): { item: Item; sprite: SpriteData | null } | null {
@@ -260,34 +254,41 @@ function outfitFrame(id: string): SpriteData | null {
 /** A Pokémon of the registry by id, or `null`: a reference that resolves to nothing is skipped. */
 const known = (id: string) => byId.get(id) ?? null;
 
-// ------------------------------------------------------------------------------ head row
+// ------------------------------------------------------------------------------ hero
 
 const art = resolvePokemonImage(record.imagen, 140);
+const isShiny = record.variante === SHINY;
 const numberText =
   record.numero === null ? null : fill(ui.cards.number, { n: String(record.numero) });
 
-// The sheet (7.5.9): the head of `pokemonTip` — the art of 70 and the Shiny mark — and the rows
-// of 8.3 in their order, each one only with a value (FI3): Requisito, Tier, Elementos, Rol,
-// HP, Experiencia, Generación.
-const recordTip = tipOf(record);
-const tipRow = (label: string): TipRow | null =>
-  recordTip.rows.find((row) => row.label === label) ?? null;
-const figureRow = (label: string, value: number | null | undefined): TipRow | null =>
-  value === null || value === undefined ? null : { label, value: formatInteger(value, locale) };
-const sheet: TipData = {
-  ...recordTip,
-  rows: [
-    tipRow(labels.requirement),
-    tipRow(labels.tier),
-    tipRow(labels.elements),
-    tipRow(labels.role),
-    figureRow(copy.hp, record.hp),
-    figureRow(copy.experience, record.experiencia),
-    tipRow(labels.generation),
-  ].filter((row): row is TipRow => row !== null),
-};
+// Normal / Shiny: two links when both records of the species exist with the same `numero`.
+const normalId = isShiny ? record.id.replace(/^shiny-/, '') : record.id;
+const normalRecord = known(normalId);
+const shinyRecord = known(`shiny-${normalId}`);
+const variantLinks =
+  normalRecord !== null &&
+  shinyRecord !== null &&
+  normalRecord.variante === 'normal' &&
+  shinyRecord.variante === SHINY &&
+  normalRecord.numero === shinyRecord.numero
+    ? [
+        { label: ui.cards.normal, href: pageHref(normalRecord.id), current: !isShiny },
+        { label: ui.shiny, href: pageHref(shinyRecord.id), current: isShiny },
+      ]
+    : null;
 
-// The outfit panel and «Aura» (8.3 step 3): only with an outfit in the registry.
+const heroElements = record.elementos
+  .map((id) => elementEntry(id))
+  .filter((entry): entry is ElementChipEntry => entry !== null);
+const movesetElement =
+  record.elementoMoveset === undefined ? undefined : elementEntry(record.elementoMoveset);
+const traits = [
+  record.rapido === true ? 'Fast' : null,
+  record.pesado === true ? 'Heavy' : null,
+].filter((trait): trait is string => trait !== null);
+const heroDescription = localized(record.descripcion);
+
+// The aura preview: only with an outfit in the registry.
 const frame = outfitFrame(record.id);
 const auras: OutfitAura[] = getAuras().map((aura) => ({
   id: aura.id,
@@ -296,52 +297,162 @@ const auras: OutfitAura[] = getAuras().map((aura) => ({
   icon: spriteOrNull(registry, aura.icono),
 }));
 
-// ------------------------------------------------------------------------------ sections
+// ------------------------------------------------------------------------------ Movimientos
 
-const listLabels: EntityListLabels = {
-  views: ui.views,
-  pagination: ui.pagination,
-  prev: ui.prev,
-  next: ui.next,
-  page: ui.page,
-  dataError: ui.dataError,
+interface MoveRow {
+  move: MoveRecord;
+  slot: string | null;
+  pve: number | null;
+  pvp: number | null;
+}
+const moveById = new Map(getMoves().map((move) => [move.id, move]));
+const slotOrder = new Intl.Collator(locale, { numeric: true });
+// With `movimientos` the order and the per-Pokémon slot and cooldowns are the game's; without
+// it, the moves of content/moves.json that name this record, by slot, with their one cooldown
+// in the column of its `modo`.
+const moveRows: MoveRow[] =
+  record.movimientos !== undefined
+    ? record.movimientos.flatMap((entry) => {
+        const move = moveById.get(entry.movimiento);
+        return move === undefined
+          ? []
+          : [{ move, slot: entry.slot, pve: entry.cooldownPve, pvp: entry.cooldownPvp }];
+      })
+    : [...moveById.values()]
+        .filter((move) => move.pokemon.includes(record.id))
+        .sort((a, b) => {
+          if (a.slot === b.slot) return 0;
+          if (a.slot === null) return 1;
+          if (b.slot === null) return -1;
+          return slotOrder.compare(a.slot, b.slot);
+        })
+        .map((move) => ({
+          move,
+          slot: move.slot,
+          pve: move.modo === 'PVE' ? move.cooldownSegundos : null,
+          pvp: move.modo === 'PVP' ? move.cooldownSegundos : null,
+        }));
+// A column no row has a value for is not drawn; «—» stays for a row that lacks what another has.
+const moveCols = {
+  slot: moveRows.some((row) => row.slot !== null),
+  element: moveRows.some((row) => elements.has(row.move.elemento ?? '')),
+  range: moveRows.some((row) => row.move.alcance !== undefined && row.move.alcance !== null),
+  effects: moveRows.some((row) => (row.move.efectos ?? []).length > 0),
+  pve: moveRows.some((row) => row.pve !== null),
+  pvp: moveRows.some((row) => row.pvp !== null),
 };
+const rangeLabels: Record<string, string> = {
+  area: copy.range.area,
+  objetivo: copy.range.objetivo,
+  pasivo: copy.range.pasivo,
+};
+const rangeLabel = (value: string) => rangeLabels[value] ?? value;
+/** A game effect id as the game writes it: «damage» → «Damage», «life-steal» → «Life Steal». */
+const effectName = (id: string) =>
+  id
+    .split('-')
+    .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
+    .join(' ');
+const cooldownText = (seconds: number | null) =>
+  seconds === null ? UNKNOWN : fill(copy.cooldown, { n: figure(seconds) });
+// «3 de 4 movimientos de área»: the area moves of the moveset element, over every area move.
+const areaMoves = moveRows.filter((row) => row.move.alcance === 'area');
+const areaLine =
+  record.elementoMoveset && areaMoves.length > 0
+    ? fill(copy.areaMoves, {
+        n: formatInteger(
+          areaMoves.filter((row) => row.move.elemento === record.elementoMoveset).length,
+          locale,
+        ),
+        total: formatInteger(areaMoves.length, locale),
+      })
+    : null;
 
-// «Drops» (list `drops`, 8.0.6): one row per entry of `drops`, in the registry's order.
-const drops: DropEntry[] = (record.drops ?? []).flatMap((drop) => {
-  const found = itemOf(drop.item);
-  if (found === null) return [];
-  const { item, sprite } = found;
-  const by = droppers.get(item.id) ?? [];
-  const only = by.length === 1 ? by[0] : undefined;
-  const use = localized(item.uso);
-  return [
-    {
-      id: item.id,
-      name: item.nombre,
-      sprite,
-      tip: itemTipOf(item, sprite),
-      droppedBy: {
-        count: by.length,
-        pokemon:
-          only === undefined
-            ? null
-            : { name: only.nombre, href: pageHref(only.id), tip: tipOf(only) },
+// ------------------------------------------------------------------------------ Loot
+
+interface LootRow {
+  id: string;
+  name: string;
+  sprite: SpriteData | null;
+  tip: TipData;
+  chance: number | null;
+  quantity: string;
+}
+const lootZones = lootZonesOf(record).map(({ zone, drops }) => ({
+  zone,
+  label: LOOT_ZONE_NAMES[zone],
+  rows: drops.flatMap((drop): LootRow[] => {
+    const found = itemOf(drop.item);
+    if (found === null) return [];
+    return [
+      {
+        id: found.item.id,
+        name: found.item.nombre,
+        sprite: found.sprite,
+        tip: itemTipOf(found.item, found.sprite),
+        chance: drop.probabilidad ?? null,
+        quantity: amount(drop.cantidad),
       },
-      element: elementEntry(item.elemento),
-      use: use?.text ?? null,
-      ...(use?.lang ? { useLang: use.lang } : {}),
-      quantity: drop.cantidad,
-      npcPrice: item.precioNpc.vende,
-    },
-  ];
-});
+    ];
+  }),
+}));
+const lootHasChance = lootZones.some((zone) => zone.rows.some((row) => row.chance !== null));
 
-// «Tier list» (list `familia`, E15): the evolution line with its variants when the family has
-// `evolucion`, the records with the same `numero` when it does not. One closure answers both:
-// from this record, every Pokémon it evolves into or from, and every record that shares a
-// `numero` with one of them.
-const parents = new Map<string, PokemonSheet[]>();
+// ------------------------------------------------------------------------------ Ubicaciones
+
+/** A value of `donde`: an entity with its panel when its registry has it, text otherwise. */
+function linkValue(link: EnlaceDato): FactLinePart {
+  if (link.ref?.tipo === 'pokemon') {
+    const entry = known(link.ref.id);
+    if (entry !== null) {
+      return entry.id === record.id
+        ? link.texto
+        : { text: link.texto, tip: tipOf(entry), href: pageHref(entry.id) };
+    }
+  }
+  if (link.ref?.tipo === 'item') {
+    const found = itemOf(link.ref.id);
+    if (found !== null)
+      return {
+        text: link.texto,
+        tip: itemTipOf(found.item, found.sprite),
+        href: itemHref(found.item.id),
+      };
+  }
+  // Systems and activities have no reader here yet (8.4, 8.9): their names are text (R2).
+  return link.texto;
+}
+
+// «Hunts de {especie}»: the species is the normal record of a Shiny, the record otherwise.
+const species =
+  normalRecord !== null &&
+  normalRecord.numero === record.numero &&
+  normalRecord.variante === 'normal'
+    ? normalRecord
+    : record;
+const speciesPart: FactLinePart =
+  species.id === record.id
+    ? species.nombre
+    : { text: species.nombre, tip: tipOf(species), href: pageHref(species.id) };
+const [huntsBefore, huntsAfter = ''] = copy.hunts.split('{species}');
+const huntsLabel: FactLinePart[] = [huntsBefore, speciesPart, huntsAfter].filter(
+  (part) => part !== '',
+);
+const where = record.donde;
+const whereLines: FactLineData[] =
+  where === undefined
+    ? []
+    : [
+        { key: 'hunts', label: huntsLabel, values: where.hunts.map(linkValue) },
+        { key: 'linked-tasks', label: copy.linkedTasks, values: where.linkedTasks.map(linkValue) },
+        { key: 'npc', label: copy.npcTeams, values: where.equiposNpc.map(linkValue) },
+      ].filter((line) => line.values.length > 0);
+
+// ------------------------------------------------------------------------------ Evoluciones
+
+// One `EvolutionChain` per line from a first stage to a last one that goes through this
+// record; a line that branches after it is drawn once per branch.
+const parents = new Map<string, PokemonRecord[]>();
 for (const entry of allPokemon) {
   for (const evolution of entry.evolucion ?? []) {
     const list = parents.get(evolution.a) ?? [];
@@ -349,96 +460,7 @@ for (const entry of allPokemon) {
     parents.set(evolution.a, list);
   }
 }
-const sameNumber = new Map<number, PokemonSheet[]>();
-for (const entry of allPokemon) {
-  if (entry.numero === null) continue;
-  const list = sameNumber.get(entry.numero) ?? [];
-  list.push(entry);
-  sameNumber.set(entry.numero, list);
-}
-const familySet = new Set<PokemonSheet>([record]);
-const queue: PokemonSheet[] = [record];
-for (let next = queue.shift(); next !== undefined; next = queue.shift()) {
-  const neighbours = [
-    ...(next.evolucion ?? []).flatMap((evolution) => known(evolution.a) ?? []),
-    ...(parents.get(next.id) ?? []),
-    ...(next.numero === null ? [] : (sameNumber.get(next.numero) ?? [])),
-  ];
-  for (const neighbour of neighbours) {
-    if (familySet.has(neighbour)) continue;
-    familySet.add(neighbour);
-    queue.push(neighbour);
-  }
-}
-const family = [...familySet].sort(pokemonOrder);
-const familyIds = new Set(family.map((entry) => entry.id));
-const hasEvolution = family.some((entry) =>
-  (entry.evolucion ?? []).some((evolution) => familyIds.has(evolution.a)),
-);
-// The first stage (8.3): the first member of the family, in the order of 8.0.5, that no
-// record names in `a` — the normal root before its Shiny.
-const firstStage = family.find((entry) => !parents.has(entry.id)) ?? family[0];
-// Without an evolution line the family is the records of one `numero`, which is then known.
-const familyCaption =
-  hasEvolution || record.numero === null
-    ? fill(copy.familyCaption, { name: firstStage?.nombre ?? name })
-    : fill(copy.variantsCaption, { n: String(record.numero) });
-
-// The rows carry the record's fields and ids; what the ids name travels once, however many
-// variants share it (FamilyList: 13.6 caps its props at 20 KB). A drop or an element the
-// registries do not resolve is left out.
-const familyElements: Record<string, ElementChipEntry> = {};
-const familyItems: Record<string, DexCardDrop> = {};
-const familyEntries: FamilyEntry[] = family.map((entry) => {
-  const elementIds = [
-    ...entry.elementos,
-    ...(entry.elementoMoveset ? [entry.elementoMoveset] : []),
-  ];
-  for (const id of elementIds) {
-    const element = familyElements[id] ?? elementEntry(id);
-    if (element !== null) familyElements[id] = element;
-  }
-  const drops = (entry.drops ?? []).flatMap(({ item: id }) => {
-    const found = familyItems[id] === undefined ? itemOf(id) : null;
-    if (found !== null) {
-      const { item, sprite } = found;
-      familyItems[id] = { name: item.nombre, sprite, tip: itemTipOf(item, sprite) };
-    }
-    return familyItems[id] === undefined ? [] : [id];
-  });
-  return {
-    id: entry.id,
-    nombre: entry.nombre,
-    numero: entry.numero,
-    generacion: entry.generacion,
-    variante: entry.variante,
-    nivel: entry.nivel,
-    tier: shownTier(entry.tier),
-    funcion: entry.funcion,
-    imagen: entry.imagen,
-    elementos: entry.elementos.filter((id) => familyElements[id] !== undefined),
-    ...(drops.length > 0 ? { drops } : {}),
-    moveset:
-      entry.elementoMoveset && familyElements[entry.elementoMoveset] !== undefined
-        ? entry.elementoMoveset
-        : null,
-  };
-});
-
-const dexLabels: DexCardLabels = {
-  ...ui.cards,
-  requirement: labels.requirement,
-  level: labels.level,
-  tier: labels.tier,
-  role: labels.role,
-  shiny: ui.shiny,
-  maxBrokes: ui.filterBar.maxBrokes,
-};
-
-// «Evolución»: one `EvolutionChain` per line from a first stage to a last one that goes
-// through this record. A line that branches after it (one Pokémon, several evolutions) is
-// drawn once per branch, so no evolution of the registry is left out.
-const lines: PokemonSheet[][] = [];
+const lines: PokemonRecord[][] = [];
 {
   let root = record;
   const seen = new Set<string>([root.id]);
@@ -448,11 +470,11 @@ const lines: PokemonSheet[][] = [];
     root = parent;
     parent = parents.get(root.id)?.[0];
   }
-  const walk = (line: PokemonSheet[]) => {
+  const walk = (line: PokemonRecord[]) => {
     const last = line[line.length - 1];
     const next = (last.evolucion ?? [])
       .map((evolution) => known(evolution.a))
-      .filter((entry): entry is PokemonSheet => entry !== null && !line.includes(entry));
+      .filter((entry): entry is PokemonRecord => entry !== null && !line.includes(entry));
     if (next.length === 0) {
       if (line.includes(record) && line.length > 1) lines.push(line);
       return;
@@ -468,7 +490,7 @@ const levelText = (template: string, level: number | null) =>
 
 const chains = lines.map((line) => {
   // DS:EvolutionChain «No hacer»: the meta of a tile keeps the parts the other tiles have,
-  // with «—» where this one misses one. Its level is the stage's own Requisito (13.3).
+  // with «—» where this one misses one.
   const withLevel = line.some((entry) => entry.nivel !== null);
   const withTier = line.some((entry) => shownTier(entry.tier) !== null);
   const stages: EvolutionStage[] = line.map((entry) => {
@@ -486,7 +508,6 @@ const chains = lines.map((line) => {
   });
   const steps: EvolutionStep[] = line.slice(0, -1).map((entry, index) => {
     const evolution = (entry.evolucion ?? []).find((item) => item.a === line[index + 1]?.id);
-    // The requirement chip: the level the Pokémon evolves at (DS:EvolutionChain).
     return {
       requirement: levelText(copy.evolutionLevel, evolution?.nivel ?? null),
       items: (evolution?.items ?? []).flatMap(({ item: id, cantidad }) => {
@@ -498,6 +519,7 @@ const chains = lines.map((line) => {
             name: cantidad > 1 ? `${formatInteger(cantidad, locale)} ${item.nombre}` : item.nombre,
             sprite,
             tip: itemTipOf(item, sprite),
+            href: itemHref(item.id),
           },
         ];
       }),
@@ -506,128 +528,71 @@ const chains = lines.map((line) => {
   return { stages, steps };
 });
 
-// «Ataques»: the moves whose `pokemon` includes this record, by `slot` in natural order.
-const slotOrder = new Intl.Collator(locale, { numeric: true });
-const moves = getMoves()
-  .filter((move) => move.pokemon.includes(record.id))
-  .sort((a, b) => {
-    if (a.slot === b.slot) return 0;
-    if (a.slot === null) return 1;
-    if (b.slot === null) return -1;
-    return slotOrder.compare(a.slot, b.slot);
-  });
-// 8.0.5: a key no row has disappears, so each column but the move's name is drawn only when
-// one of the moves has its value; «—» stays for a row that lacks what another row has.
-const moveElements = moves.map((move) => elementEntry(move.elemento));
-const moveColumns: DataTableColumn[] = [
-  ...(moves.some((move) => move.slot !== null)
-    ? [{ key: 'slot', label: copy.columnSlot, width: 90 }]
-    : []),
-  { key: 'move', label: copy.columnMove },
-  ...(moves.some((move) => move.cooldownSegundos !== null)
-    ? [{ key: 'cooldown', label: copy.columnCooldown, width: 160, numeric: true }]
-    : []),
-  ...(moveElements.some((element) => element !== null)
-    ? [{ key: 'element', label: labels.element, width: 220 }]
-    : []),
-];
-const moveRows: DataTableRow[] = moves.map((move, index) => {
-  const element = moveElements[index];
-  return {
-    key: move.id,
-    cells: {
-      slot: move.slot,
-      move: move.nombre,
-      cooldown:
-        move.cooldownSegundos === null
-          ? null
-          : fill(copy.cooldown, { n: figure(move.cooldownSegundos) }),
-      // The element of a move is its label: a table cell opens no panel (DS:ElementChip).
-      element:
-        element === null
-          ? null
-          : createElement(ElementChip, {
-              element,
-              variant: 'label',
-              locale,
-              hint: ui.pinHint,
-            }),
-    },
-  };
-});
+// ------------------------------------------------------------------------------ Efectividad
+
+const effectivenessLabel: Record<EffectivenessKey, string> = {
+  muyDebil: copy.effectiveness.muyDebil,
+  debil: copy.effectiveness.debil,
+  neutro: copy.effectiveness.neutro,
+  resiste: copy.effectiveness.resiste,
+  muyResistente: copy.effectiveness.muyResistente,
+  inmune: copy.effectiveness.inmune,
+};
+const effectiveness =
+  record.efectividad === undefined
+    ? []
+    : effectivenessRows(
+        record.efectividad,
+        elementRecords.map((element) => element.id),
+      ).map((row) => ({
+        ...row,
+        label: effectivenessLabel[row.key],
+        multiplier: `×${figure(row.multiplier)}`,
+        entries: row.elements
+          .map((id) => elementEntry(id))
+          .filter((entry): entry is ElementChipEntry => entry !== null),
+      }));
+
+// ------------------------------------------------------------------------------ the rest
+
 const abilities = (record.habilidades ?? []).filter((ability) => present(ability));
 
-// «Dónde encontrarlo»: one `FactLine` per key of `donde` with data (R2 for its values).
-/** A value of `donde`: an entity with its panel when its registry has it, text otherwise. */
-function linkValue(link: EnlaceDato): FactLinePart {
-  if (link.ref?.tipo === 'pokemon') {
-    const entry = known(link.ref.id);
-    if (entry !== null) {
-      return entry.id === record.id
-        ? link.texto
-        : { text: link.texto, tip: tipOf(entry), href: pageHref(entry.id) };
-    }
-  }
-  if (link.ref?.tipo === 'item') {
-    const found = itemOf(link.ref.id);
-    if (found !== null) return { text: link.texto, tip: itemTipOf(found.item, found.sprite) };
-  }
-  // Systems and activities have no reader yet (8.4, 8.9): their names are text (R2).
-  return link.texto;
-}
-
-// «Hunts de {especie}»: the species is the Pokémon these hunts are for — the normal record of a
-// Shiny (its id without `shiny-`, with the same `numero`), the record itself otherwise.
-const normalId = record.variante === SHINY ? record.id.replace(/^shiny-/, '') : record.id;
-const normalRecord = known(normalId);
-const species =
-  normalRecord !== null &&
-  normalRecord.numero === record.numero &&
-  normalRecord.variante === 'normal'
-    ? normalRecord
-    : record;
-const speciesPart: FactLinePart =
-  species.id === record.id
-    ? species.nombre
-    : { text: species.nombre, tip: tipOf(species), href: pageHref(species.id) };
-const [huntsBefore, huntsAfter = ''] = copy.hunts.split('{species}');
-const huntsLabel: FactLinePart[] = [huntsBefore, speciesPart, huntsAfter].filter(
-  (part) => part !== '',
-);
-
-const where = record.donde;
-const whereLines: FactLineData[] =
-  where === undefined
+// Variantes: the records with the same `numero`, normal first; only with two or more.
+const variants =
+  record.numero === null
     ? []
-    : [
-        { key: 'hunts', label: huntsLabel, values: where.hunts.map(linkValue) },
-        { key: 'linked-tasks', label: copy.linkedTasks, values: where.linkedTasks.map(linkValue) },
-        { key: 'npc', label: copy.npcTeams, values: where.equiposNpc.map(linkValue) },
-      ].filter((line) => line.values.length > 0);
+    : allPokemon.filter((entry) => entry.numero === record.numero).sort(variantOrder);
 
-// The `Toc` (7.11): one entry per section the page draws, in its order.
+const tradeHref = `/${locale}/comercio/?pokemon=${encodeURIComponent(record.id)}`;
+
+// The section bar: one link per section the page draws, in its order.
 const show = {
-  drops: drops.length > 0,
-  tierList: family.length > 1,
-  evolution: chains.length > 0,
-  moves: moves.length > 0 || abilities.length > 0,
+  moves: moveRows.length > 0,
+  loot: lootZones.some((zone) => zone.rows.length > 0),
   where: whereLines.length > 0,
+  evolution: chains.length > 0,
+  effectiveness: effectiveness.length > 0,
+  fieldAbilities: abilities.length > 0,
+  variants: variants.length > 1,
 };
-const toc: TocItem[] = [
-  show.drops && { id: 'drops', label: copy.sections.drops },
-  show.tierList && { id: 'tier-list', label: copy.sections.tierList },
-  show.evolution && { id: 'evolucion', label: copy.sections.evolution },
-  show.moves && { id: 'ataques', label: copy.sections.moves },
-  show.where && { id: 'donde', label: copy.sections.where },
-].filter((item): item is TocItem => item !== false);
+const sectionLinks = [
+  { id: 'resumen', label: copy.sections.summary },
+  show.moves && { id: 'movimientos', label: copy.sections.moves },
+  show.loot && { id: 'loot', label: copy.sections.loot },
+  show.where && { id: 'ubicaciones', label: copy.sections.where },
+  show.evolution && { id: 'evoluciones', label: copy.sections.evolution },
+  show.effectiveness && { id: 'efectividad', label: copy.sections.effectiveness },
+  show.fieldAbilities && { id: 'habilidades', label: copy.sections.fieldAbilities },
+  show.variants && { id: 'variantes', label: copy.sections.variants },
+  { id: 'comercio', label: copy.sections.trade },
+].filter((item): item is { id: string; label: string } => item !== false);
+const sideColumn = show.fieldAbilities || show.variants;
 
 // 13.5: «{nombre} · Pokédex · PokeAlliance Wiki», and the description with the parts that have
-// data, joined by «, »: «Nº», the elements — read as one value, as the Elementos row of the
-// sheet writes them («Fuego / Volador», 8.0.5) —, the level, the tier and the role.
-const elementsRow = tipRow(labels.elements)?.value;
+// data, joined by «, »: «Nº», the elements, the level, the tier and the role.
 const facts = [
   numberText,
-  typeof elementsRow === 'string' ? elementsRow : null,
+  heroElements.length > 0 ? heroElements.map((entry) => entry.name).join(' / ') : null,
   record.nivel === null
     ? null
     : fill(copy.descriptionLevel, { level: formatInteger(record.nivel, locale) }),
@@ -653,107 +618,381 @@ const description =
     { label: pokedex.label, href: pokedex.href },
     { label: name },
   ]}
-  toc={toc}
-  preloadGameFont
 >
-  <PageTitle title={name} subtitle={numberText ?? undefined} />
-
-  <div class="ac-detail-head">
-    <div class="ac-detail-head__art">
+  <header id="resumen" class:list={['ac-entity-hero', frame !== null && 'ac-entity-hero--aside']}>
+    <div class="ac-entity-hero__media">
+      <div class="ac-entity-hero__art">
+        <PokemonArt src={art} size={140} shiny={isShiny} loading="eager" />
+      </div>
       {
-        art === null ? (
-          <MissingSprite size={32} />
-        ) : (
-          <Sprite src={art} smooth width={140} height={140} alt="" />
+        variantLinks && (
+          <nav class="ac-entity-segment" aria-label={ui.cards.variant}>
+            {variantLinks.map((link) => (
+              <a href={link.href} aria-current={link.current ? 'page' : undefined}>
+                {link.label}
+              </a>
+            ))}
+          </nav>
         )
       }
     </div>
-    <GameTooltip
-      tip={sheet}
-      variant="sheet"
-      ariaLabel={fill(ui.sheet, { name })}
-      locale={locale}
-      shinyLabel={ui.shiny}
-      orLabel={ui.or}
-    />
+
+    <div class="ac-entity-hero__body">
+      <div class="ac-entity-hero__title">
+        <h1>{name}</h1>
+        {numberText && <span class="ac-entity-hero__number">{numberText}</span>}
+      </div>
+      {
+        heroElements.length > 0 && (
+          <ul class="ac-entity-hero__chips">
+            {heroElements.map((element) => (
+              <li>
+                <ElementChip element={element} locale={locale} hint={ui.pinHint} />
+              </li>
+            ))}
+          </ul>
+        )
+      }
+      <dl class="ac-entity-facts">
+        <div>
+          <dt>{labels.role}</dt>
+          <dd>{record.funcion ?? UNKNOWN}</dd>
+        </div>
+        <div>
+          <dt>{labels.requirement}</dt>
+          <dd>{levelText(labels.level, record.nivel) ?? UNKNOWN}</dd>
+        </div>
+        <div>
+          <dt>{labels.tier}</dt>
+          <dd>
+            {
+              shownTier(record.tier) === null ? (
+                UNKNOWN
+              ) : (
+                <TierChip
+                  tier={record.tier}
+                  maxBrokesLabel={ui.filterBar.maxBrokes}
+                  locale={locale}
+                />
+              )
+            }
+          </dd>
+        </div>
+        <div>
+          <dt>{labels.generation}</dt>
+          <dd>{record.generacion === null ? UNKNOWN : formatInteger(record.generacion, locale)}</dd>
+        </div>
+        {
+          movesetElement !== undefined && (
+            <div>
+              <dt>{copy.movesetType}</dt>
+              <dd>
+                {movesetElement === null ? (
+                  UNKNOWN
+                ) : (
+                  <ElementChip
+                    element={movesetElement}
+                    variant="link"
+                    locale={locale}
+                    hint={ui.pinHint}
+                  />
+                )}
+              </dd>
+            </div>
+          )
+        }
+        {
+          traits.length > 0 && (
+            <div class="ac-entity-facts__traits">
+              {traits.map((trait) => (
+                <Chip>{trait}</Chip>
+              ))}
+            </div>
+          )
+        }
+      </dl>
+      {
+        heroDescription && (
+          <p class="ac-entity-hero__text" lang={heroDescription.lang}>
+            {heroDescription.text}
+          </p>
+        )
+      }
+    </div>
+
     {
       frame !== null && (
-        <OutfitPreview
-          client:visible
-          frame={frame}
-          auras={auras}
-          name={name}
-          labels={{
-            outfit: copy.outfit,
-            aura: copy.aura,
-            none: copy.auraNone,
-            auraBall: copy.auraBall,
-            frame: copy.outfitAlt,
-            unavailable: copy.auraUnavailable,
-          }}
-        />
+        <div class="ac-entity-hero__aside">
+          <OutfitPreview
+            client:visible
+            frame={frame}
+            auras={auras}
+            name={name}
+            locale={locale}
+            labels={{
+              outfit: copy.outfit,
+              aura: copy.aura,
+              none: copy.auraNone,
+              auraBall: copy.auraBall,
+              frame: copy.outfitAlt,
+              unavailable: copy.auraUnavailable,
+            }}
+          />
+        </div>
       )
     }
-  </div>
+  </header>
 
   {
-    show.drops && (
-      <Section id="drops" title={copy.sections.drops}>
-        <DropsList
-          client:visible
-          locale={locale}
-          path={path}
-          drops={drops}
-          caption={fill(copy.dropCaption, { name })}
-          labels={{
-            list: listLabels,
-            count: copy.dropCount,
-            view: copy.dropView,
-            slots: ui.cards.drops,
-            sprite: copy.columnSprite,
-            item: copy.columnItem,
-            facts: {
-              droppedBy: labels.droppedBy,
-              element: labels.element,
-              use: labels.use,
-              quantity: labels.quantity,
-              npcPrice: labels.npcPrice,
-              shopPrice: labels.shopPrice,
-            },
-            quantityRange: copy.quantityRange,
-            pokemonCount: copy.droppedByCount,
-            pinHint: ui.pinHint,
-          }}
-        />
+    sectionLinks.length > 2 && (
+      <nav class="ac-section-bar" aria-label={copy.sectionsNav} data-ac-section-bar>
+        <ul>
+          {sectionLinks.map((link, index) => (
+            <li>
+              <a href={`#${link.id}`} aria-current={index === 0 ? 'location' : undefined}>
+                {link.label}
+              </a>
+            </li>
+          ))}
+        </ul>
+      </nav>
+    )
+  }
+
+  {
+    show.moves && (
+      <Section id="movimientos" title={copy.sections.moves}>
+        <div class="ac-entity-meta">
+          {movesetElement && (
+            <span class="ac-entity-meta__item">
+              {copy.movesetType}
+              <ElementChip element={movesetElement} locale={locale} hint={ui.pinHint} />
+            </span>
+          )}
+          {areaLine && <span class="ac-entity-meta__item">{areaLine}</span>}
+          <span class="ac-entity-meta__count">
+            {fill(plural(locale, moveRows.length, copy.movesCount), {
+              n: formatInteger(moveRows.length, locale),
+            })}
+          </span>
+        </div>
+        <div class="ac-entity-table ac-entity-table--moves">
+          <table>
+            <caption class="sr-only">{fill(copy.movesCaption, { name })}</caption>
+            <thead>
+              <tr>
+                {moveCols.slot && (
+                  <th scope="col" data-col="slot">
+                    {copy.columnSlot}
+                  </th>
+                )}
+                <th scope="col" data-col="move">
+                  {copy.columnMove}
+                </th>
+                {moveCols.element && (
+                  <th scope="col" data-col="element">
+                    {labels.element}
+                  </th>
+                )}
+                {moveCols.range && (
+                  <th scope="col" data-col="range">
+                    {copy.columnRange}
+                  </th>
+                )}
+                {moveCols.effects && (
+                  <th scope="col" data-col="effects">
+                    {copy.columnEffects}
+                  </th>
+                )}
+                {moveCols.pve && (
+                  <th scope="col" data-col="pve" class="ac-num">
+                    {copy.columnCooldownPve}
+                  </th>
+                )}
+                {moveCols.pvp && (
+                  <th scope="col" data-col="pvp" class="ac-num">
+                    {copy.columnCooldownPvp}
+                  </th>
+                )}
+              </tr>
+            </thead>
+            <tbody>
+              {moveRows.map((row) => {
+                const element = elementEntry(row.move.elemento);
+                const icon = row.move.icono ? spriteOrNull(registry, row.move.icono) : null;
+                const text = localized(row.move.descripcion);
+                return (
+                  <tr>
+                    {moveCols.slot && <td data-col="slot">{row.slot ?? UNKNOWN}</td>}
+                    <th scope="row" data-col="move">
+                      <span class="ac-entity-move">
+                        {icon && (
+                          <span class={entitySlotClasses(32)} aria-hidden="true">
+                            <EntitySlotFace sprite={icon} locale={locale} size={32} />
+                          </span>
+                        )}
+                        <span class="ac-entity-move__text">
+                          <span class="ac-entity-move__name">{row.move.nombre}</span>
+                          {text && (
+                            <span class="ac-entity-move__desc" lang={text.lang}>
+                              {text.text}
+                            </span>
+                          )}
+                        </span>
+                      </span>
+                    </th>
+                    {moveCols.element && (
+                      <td data-col="element">
+                        {element ? <ElementIcon element={element} size={24} /> : UNKNOWN}
+                      </td>
+                    )}
+                    {moveCols.range && (
+                      <td data-col="range">
+                        {row.move.alcance ? <Chip>{rangeLabel(row.move.alcance)}</Chip> : UNKNOWN}
+                      </td>
+                    )}
+                    {moveCols.effects && (
+                      <td data-col="effects">
+                        {(row.move.efectos ?? []).length > 0 ? (
+                          <span class="ac-entity-chips">
+                            {(row.move.efectos ?? []).map((effect) => (
+                              <Chip>{effectName(effect)}</Chip>
+                            ))}
+                          </span>
+                        ) : (
+                          UNKNOWN
+                        )}
+                      </td>
+                    )}
+                    {moveCols.pve && (
+                      <td data-col="pve" class="ac-num" data-label={copy.columnCooldownPve}>
+                        {cooldownText(row.pve)}
+                      </td>
+                    )}
+                    {moveCols.pvp && (
+                      <td data-col="pvp" class="ac-num" data-label={copy.columnCooldownPvp}>
+                        {cooldownText(row.pvp)}
+                      </td>
+                    )}
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+        </div>
       </Section>
     )
   }
 
   {
-    show.tierList && (
-      <Section id="tier-list" title={copy.sections.tierList}>
-        <FamilyList
-          client:visible
+    show.loot && (
+      <Section id="loot" title={copy.sections.loot}>
+        <div class="ac-entity-tabs">
+          {lootZones.length > 1 && (
+            <fieldset class="ac-entity-tabs__list">
+              <legend class="sr-only">{copy.lootZones}</legend>
+              {lootZones.map((zone, index) => (
+                <label>
+                  <input
+                    type="radio"
+                    name="loot-zona"
+                    value={zone.zone}
+                    checked={index === 0}
+                    class="sr-only"
+                  />
+                  {zone.label}
+                  <span class="ac-entity-tabs__count">
+                    {formatInteger(zone.rows.length, locale)}
+                  </span>
+                </label>
+              ))}
+            </fieldset>
+          )}
+          {lootZones.map((zone) => (
+            <div class="ac-entity-tabs__panel" data-zone={zone.zone}>
+              {zone.rows.length === 0 ? (
+                <p class="ac-entity-empty">{fill(copy.lootEmpty, { zone: zone.label })}</p>
+              ) : (
+                <div class="ac-entity-table">
+                  <table>
+                    <caption class="sr-only">
+                      {fill(copy.lootCaption, { name, zone: zone.label })}
+                    </caption>
+                    <thead>
+                      <tr>
+                        <th scope="col">{copy.columnItem}</th>
+                        {lootHasChance && (
+                          <th scope="col" class="ac-num ac-entity-table__chance">
+                            {copy.columnChance}
+                          </th>
+                        )}
+                        <th scope="col" class="ac-num">
+                          {copy.columnQuantity}
+                        </th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {zone.rows.map((row) => (
+                        <tr>
+                          <th scope="row">
+                            <span class="ac-entity-move">
+                              <EntitySlot
+                                size={32}
+                                name={row.name}
+                                sprite={row.sprite}
+                                tip={row.tip}
+                                href={itemHref(row.id)}
+                                locale={locale}
+                                hint={ui.pinHint}
+                              />
+                              <NestedEntity
+                                tip={row.tip}
+                                href={itemHref(row.id)}
+                                locale={locale}
+                                hint={ui.pinHint}
+                              >
+                                {row.name}
+                              </NestedEntity>
+                            </span>
+                          </th>
+                          {lootHasChance && (
+                            <td class="ac-num ac-entity-table__chance">
+                              {row.chance === null ? (
+                                UNKNOWN
+                              ) : (
+                                <span class="ac-entity-chance">
+                                  {formatPercent(row.chance, locale)}
+                                  <span class="ac-entity-chance__bar" aria-hidden="true">
+                                    <span style={`inline-size: ${row.chance}%`} />
+                                  </span>
+                                </span>
+                              )}
+                            </td>
+                          )}
+                          <td class="ac-num">{row.quantity}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              )}
+            </div>
+          ))}
+        </div>
+      </Section>
+    )
+  }
+
+  {
+    show.where && (
+      <Section id="ubicaciones" title={copy.sections.where}>
+        <FactLines
+          layout="column"
+          lines={whereLines}
           locale={locale}
-          path={path}
-          current={record.id}
-          entries={familyEntries}
-          elements={familyElements}
-          items={familyItems}
-          caption={familyCaption}
-          labels={{
-            list: listLabels,
-            count: copy.familyCount,
-            view: copy.familyView,
-            slots: copy.sections.tierList,
-            pokemon: copy.columnPokemon,
-            tier: labels.tier,
-            moveset: copy.columnMoveset,
-            card: dexLabels,
-            pinHint: ui.pinHint,
-            shiny: ui.shiny,
-            tooltip: labels,
-          }}
+          hint={ui.pinHint}
+          shinyLabel={ui.shiny}
+          orLabel={ui.or}
         />
       </Section>
     )
@@ -761,7 +1000,7 @@ const description =
 
   {
     show.evolution && (
-      <Section id="evolucion" title={copy.sections.evolution}>
+      <Section id="evoluciones" title={copy.sections.evolution}>
         {chains.map((chain) => (
           <EvolutionChain
             stages={chain.stages}
@@ -778,142 +1017,166 @@ const description =
   }
 
   {
-    show.moves && (
-      <Section id="ataques" title={copy.sections.moves}>
-        {moveRows.length > 0 && (
-          <DataTable
-            caption={fill(copy.movesCaption, { name })}
-            columns={moveColumns}
-            rows={moveRows}
-            locale={locale}
-            scroll
-          />
+    (show.effectiveness || sideColumn) && (
+      <div class:list={['ac-entity-duo', show.effectiveness && sideColumn && 'ac-entity-duo--two']}>
+        {show.effectiveness && (
+          <Section id="efectividad" title={copy.sections.effectiveness}>
+            <p class="ac-entity-note">{copy.effectivenessCaption}</p>
+            <div class="ac-entity-table">
+              <table>
+                <caption class="sr-only">{copy.effectivenessCaption}</caption>
+                <tbody>
+                  {effectiveness.map((row) => (
+                    <tr>
+                      <th scope="row" class="ac-entity-table__label">
+                        {row.label}
+                        <span class="ac-entity-table__mult">{row.multiplier}</span>
+                      </th>
+                      <td>
+                        {row.entries.length === 0 ? (
+                          <span class="ac-entity-muted">{copy.effectivenessNone}</span>
+                        ) : (
+                          <span class="ac-entity-icons">
+                            {row.entries.map((element) => (
+                              <ElementIcon element={element} size={24} />
+                            ))}
+                          </span>
+                        )}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </Section>
         )}
-        {abilities.length > 0 && (
-          <>
-            <h3 class="ac-detail-subtitle">{copy.abilities}</h3>
-            <ul class="ac-detail-chips">
-              {abilities.map((ability) => (
-                <li>
-                  <Chip>{ability}</Chip>
-                </li>
-              ))}
-            </ul>
-          </>
+        {sideColumn && (
+          <div class="ac-entity-duo__side">
+            {show.fieldAbilities && (
+              <Section id="habilidades" title={copy.sections.fieldAbilities}>
+                <ul class="ac-entity-chips">
+                  {abilities.map((ability) => (
+                    <li>
+                      <Chip>{ability}</Chip>
+                    </li>
+                  ))}
+                </ul>
+              </Section>
+            )}
+            {show.variants && (
+              <Section id="variantes" title={copy.sections.variants}>
+                <ul class="ac-entity-cards">
+                  {variants.map((entry) => {
+                    const current = entry.id === record.id;
+                    const source = resolvePokemonImage(entry.imagen);
+                    const tier = shownTier(entry.tier);
+                    const meta = [
+                      entry.variante === SHINY ? ui.shiny : ui.cards.normal,
+                      levelText(labels.level, entry.nivel),
+                    ]
+                      .filter((part): part is string => part !== null)
+                      .join(' · ');
+                    return (
+                      <li class="ac-entity-card">
+                        <EntitySlot
+                          size={56}
+                          name={entry.nombre}
+                          sprite={source === null ? null : { src: source, smooth: true }}
+                          shiny={entry.variante === SHINY}
+                          art
+                          tip={tipOf(entry)}
+                          href={current ? undefined : pageHref(entry.id)}
+                          locale={locale}
+                          hint={ui.pinHint}
+                          shinyLabel={ui.shiny}
+                        />
+                        <span class="ac-entity-card__text">
+                          {current ? (
+                            <strong aria-current="page">{entry.nombre}</strong>
+                          ) : (
+                            <a href={pageHref(entry.id)}>{entry.nombre}</a>
+                          )}
+                          <span class="ac-entity-muted">{meta}</span>
+                          <span class="ac-entity-muted">
+                            {labels.tier}{' '}
+                            {tier === null ? (
+                              UNKNOWN
+                            ) : (
+                              <TierChip
+                                tier={entry.tier}
+                                maxBrokesLabel={ui.filterBar.maxBrokes}
+                                locale={locale}
+                              />
+                            )}
+                          </span>
+                        </span>
+                      </li>
+                    );
+                  })}
+                </ul>
+              </Section>
+            )}
+          </div>
         )}
-      </Section>
+      </div>
     )
   }
 
-  {
-    show.where && (
-      <Section id="donde" title={copy.sections.where}>
-        <FactLines
-          layout="column"
-          lines={whereLines}
-          locale={locale}
-          hint={ui.pinHint}
-          shinyLabel={ui.shiny}
-          orLabel={ui.or}
-        />
-      </Section>
-    )
-  }
+  <Section id="comercio" title={copy.sections.trade}>
+    <a class="ac-entity-action" href={tradeHref}>
+      {fill(copy.tradeLink, { name })}
+      <Glyph name="arrow-right" size={16} />
+    </a>
+  </Section>
 </PageLayout>
 
-<style is:global>
-  /* The head row of 8.3 and the abilities list of «Ataques», this page's own pieces
-     (8.0.2 template C, CARD_GRID_SYSTEM §6.8). Per-page CSS (13.6): the layer order of
-     global.css is repeated first, so `components` keeps its place whichever sheet the browser
-     reads first (3.6). */
-  @reference '../../../styles/theme.css';
-
-  @layer properties, theme, base, components, utilities;
-
-  @layer components {
-    /* One column below md (8.3 «A 390»: the art, the sheet of 282, then the outfit and its
-       Aura group in a row); from md one row of one height, which wraps where the column is
-       narrower than the four panels (736 at 768 and at 1280). */
-    .ac-detail-head {
-      display: flex;
-      flex-direction: column;
-      align-items: flex-start;
-      gap: var(--space-24);
-    }
-
-    @media (width >= 48rem) {
-      .ac-detail-head {
-        flex-direction: row;
-        flex-wrap: wrap;
-        align-items: stretch;
+<script>
+  // The section bar (design «Pokemon-pagina»): the link of the section at the top of the
+  // viewport carries `aria-current="location"`. No island: a few lines over the printed links.
+  const bar = document.querySelector<HTMLElement>('[data-ac-section-bar]');
+  if (bar) {
+    const links = [...bar.querySelectorAll<HTMLAnchorElement>('a[href^="#"]')];
+    const targets = links
+      .map((link) => document.getElementById(link.hash.slice(1)))
+      .filter((target): target is HTMLElement => target !== null);
+    const list = bar.querySelector('ul');
+    let active: string | undefined;
+    const mark = () => {
+      const edge = bar.getBoundingClientRect().bottom + 8;
+      let current = targets[0];
+      for (const target of targets)
+        if (target.getBoundingClientRect().top <= edge) current = target;
+      if (current?.id === active) return;
+      active = current?.id;
+      for (const link of links) {
+        const on = link.hash === `#${active}`;
+        if (!on) {
+          link.removeAttribute('aria-current');
+          continue;
+        }
+        link.setAttribute('aria-current', 'location');
+        // On a phone the bar scrolls sideways: keep the current link in view.
+        if (
+          list &&
+          (link.offsetLeft < list.scrollLeft ||
+            link.offsetLeft + link.offsetWidth > list.scrollLeft + list.clientWidth)
+        )
+          list.scrollLeft = link.offsetLeft;
       }
-    }
-
-    /* The art panel: 172 wide and at least as tall, `bg-secondary`, radius 12, the art of the
-       registry drawn smooth at 140 in its centre (the 140 px illustration at 1x). */
-    .ac-detail-head__art {
-      position: relative;
-      display: flex;
-      width: 172px; /* sin token: panel de arte del tablero */
-      min-height: 172px; /* sin token: panel de arte del tablero */
-      flex: none;
-      align-items: center;
-      justify-content: center;
-      border-radius: var(--radius-12);
-      background: var(--bg-secondary);
-    }
-
-    /* Remote art (7.4.4, sprite-stage.css): while it loads the panel pulses the 32 box of the
-       loading state, and art that never arrives leaves the missing mark of a 64 cell — no
-       fallback initial and no empty panel (8.3). */
-    .ac-detail-head__art:has(> .ac-sprite--smooth[data-state='loading'])::before,
-    .ac-detail-head__art:has(> .ac-sprite--smooth[data-state='error'])::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      width: var(--size-cell);
-      height: var(--size-cell);
-      margin: auto;
-    }
-
-    .ac-detail-head__art:has(> .ac-sprite--smooth[data-state='loading'])::before {
-      border-radius: var(--radius-4);
-      background: var(--bg-quaternary);
-    }
-
-    @media (prefers-reduced-motion: no-preference) {
-      .ac-detail-head__art:has(> .ac-sprite--smooth[data-state='loading'])::before {
-        animation: ac-pulse var(--duration-pulse) var(--ease-pulse) infinite;
-      }
-    }
-
-    .ac-detail-head__art:has(> .ac-sprite--smooth[data-state='error'])::before {
-      border-radius: var(--radius-3);
-      background: var(--tt-track);
-      box-shadow: var(--inset-missing);
-    }
-
-    /* «Habilidades»: the h3 16/24, 24 below the table (8 of margin over the 16 of the
-       Section's gap), and the chips in a wrapping row, 4 apart (the board). The plain-content
-       rules of section.css (sub-headings, list markers, «li + li») key on the Section's own
-       children, and Astro hands a TSX component its children inside a `display: contents`
-       slot element, so these two pieces carry their rules here. */
-    .ac-detail-subtitle {
-      margin: var(--space-8) 0 0;
-      @apply type-h3;
-    }
-
-    .ac-detail-chips {
-      display: flex;
-      flex-wrap: wrap;
-      gap: var(--space-4);
-      margin: 0;
-      padding: 0;
-      list-style: none;
-    }
-
-    .ac-detail-chips > li {
-      margin: 0;
-    }
+    };
+    let queued = false;
+    window.addEventListener(
+      'scroll',
+      () => {
+        if (queued) return;
+        queued = true;
+        requestAnimationFrame(() => {
+          queued = false;
+          mark();
+        });
+      },
+      { passive: true },
+    );
+    mark();
   }
-</style>
+</script>

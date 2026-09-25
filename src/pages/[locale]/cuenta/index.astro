@@ -33,6 +33,7 @@ import { telefonoObligatorio } from '@/lib/trade/limits';
 import { comercioPublico } from '@/lib/trade/registry';
 
 import { AccountPanel, type AccountConfig } from '@/components/account/AccountPanel';
+import { CHARACTER_TEXTS_ID, panelWithoutCharacters } from '@/components/account/panel/texts';
 import PageLayout from '@/layouts/PageLayout.astro';
 
 import '@/styles/components/account.css';
@@ -77,6 +78,11 @@ const alternates = Object.fromEntries(
 
 const { account, trade, ui } = dictionaries[locale];
 // The island never reads `account.description` (the page's meta): it stays out of the props (13.6).
+// «Personajes» goes beside the island as JSON: only its section and «Perfil» read it, when they
+// open (panel/texts.ts), so the props stay within 13.6.
+const characterTexts = account.panel.characters;
+const panelTexts = panelWithoutCharacters(account.panel);
+const characterJson = JSON.stringify(characterTexts).replace(/</g, '\\u003c');
 const worlds = getMundos(locale).map((world) => ({ id: world.id, nombre: world.nombre }));
 const captchaSiteKey = text(variables.turnstile);
 const config: AccountConfig = {
@@ -114,9 +120,10 @@ const tradeTexts = {
     client:load
     locale={locale}
     worlds={worlds}
-    messages={{ ...account, description: '' }}
+    messages={{ ...account, description: '', panel: panelTexts }}
     trade={tradeTexts}
     ui={{ close: ui.close, dismiss: ui.dismiss }}
     config={config}
   />
+  <script is:inline type="application/json" id={CHARACTER_TEXTS_ID} set:html={characterJson} />
 </PageLayout>

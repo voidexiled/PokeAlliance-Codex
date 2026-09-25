@@ -34,6 +34,11 @@ export interface RatingProps {
   seller: string;
   /** Profile of the seller. Required: a link that leads nowhere is not a link (C-R5). */
   href: string;
+  /**
+   * The world of the seller's character, after the name: «Void Exiled · Titan 1» (Comercio,
+   * owner rule 2026-09-24). None draws the name alone.
+   */
+  world?: string | null;
   /** Score from 0 to 5, computed from the confirmed trades (9.10). `null`: no score. */
   score?: number | null;
   /** Reviews tied to a confirmed trade. `null`: the count is not shown. */
@@ -49,7 +54,16 @@ function known(value: number | null | undefined): value is number {
   return value !== null && value !== undefined && Number.isFinite(value);
 }
 
-export function Rating({ seller, href, score, reviews, locale, labels, className }: RatingProps) {
+export function Rating({
+  seller,
+  href,
+  world,
+  score,
+  reviews,
+  locale,
+  labels,
+  className,
+}: RatingProps) {
   const count = known(reviews) ? Math.round(reviews) : null;
   // A score that no confirmed trade backs is not shown (DS:Rating §No hacer).
   const shown = known(score) && count !== 0;
@@ -65,6 +79,7 @@ export function Rating({ seller, href, score, reviews, locale, labels, className
       <a className="ac-rating__seller" href={href}>
         {seller}
       </a>
+      {world ? <span className="ac-rating__world">{` · ${world}`}</span> : null}
       {shown ? (
         <span className="ac-rating__score">
           {formatRating(score)}

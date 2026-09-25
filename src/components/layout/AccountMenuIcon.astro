@@ -1,0 +1,49 @@
+---
+// The stroke icons of the account menu (9.16.2, Menu-cuenta.dc.html variant 3): 16 px, stroke 2,
+// drawn in `text-tertiary` by account-menu.css. They belong to this menu alone, so they stay out
+// of Glyph.tsx and its fixed set of frame glyphs. Always decorative: the item's text names it.
+interface Props {
+  name: 'user' | 'tag' | 'swap' | 'shield' | 'sliders' | 'sign-out' | 'alert' | 'flag';
+}
+
+const { name } = Astro.props;
+
+const PATHS: Record<Props['name'], string[]> = {
+  user: ['M4 21a8 8 0 0 1 16 0'],
+  tag: ['M3 4a1 1 0 0 1 1-1h7.6l9.4 9.4-8.6 8.6L3 11.6z'],
+  swap: ['m7 3-4 4 4 4', 'M3 7h14', 'm17 21 4-4-4-4', 'M21 17H7'],
+  shield: ['M12 3 4 6v6c0 5 3.4 8 8 9 4.6-1 8-4 8-9V6z'],
+  sliders: ['M4 6h9', 'M19 6h1', 'M4 12h1', 'M11 12h9', 'M4 18h11', 'M21 18h-1'],
+  'sign-out': ['M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4', 'm16 17 5-5-5-5', 'M21 12H9'],
+  alert: ['M12 8v4', 'M12 16h.01'],
+  flag: ['M4 22V4', 'M4 4h13l-2 5 2 5H4'],
+};
+
+const CIRCLES: Partial<Record<Props['name'], [number, number, number][]>> = {
+  user: [[12, 8, 4]],
+  tag: [[7.5, 7.5, 1.5]],
+  sliders: [
+    [16, 6, 2.5],
+    [8, 12, 2.5],
+    [17.5, 18, 2.5],
+  ],
+  alert: [[12, 12, 9]],
+};
+---
+
+<svg
+  class="ac-account-menu__glyph"
+  width="16"
+  height="16"
+  viewBox="0 0 24 24"
+  fill="none"
+  stroke="currentColor"
+  stroke-width="2"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+  aria-hidden="true"
+  focusable="false"
+>
+  {(CIRCLES[name] ?? []).map(([cx, cy, r]) => <circle cx={cx} cy={cy} r={r} />)}
+  {PATHS[name].map((d) => <path d={d} />)}
+</svg>

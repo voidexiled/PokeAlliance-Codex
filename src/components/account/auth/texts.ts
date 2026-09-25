@@ -76,6 +76,9 @@ export interface AuthTexts {
   providerDownText: string;
   profileTitle: string;
   profileText: string;
+  /** Step 3's «Tu personaje principal» and its line; `{max}` is PERSONAJES_MAX. */
+  mainCharacterTitle: string;
+  mainCharacterText: string;
   day: string;
   month: string;
   year: string;

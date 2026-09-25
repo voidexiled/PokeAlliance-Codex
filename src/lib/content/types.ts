@@ -18,6 +18,28 @@ export type EnlaceDato = {
 export type PokemonDrop = {
   item: string;
   cantidad: { min: number; max: number } | null;
+  /** The % the game's Pokédex shows; `null` while unknown. */
+  probabilidad?: number | null;
+};
+
+/** A text of the game in the language or languages it exists in, one at least. */
+export type GameText = { es?: string; en?: string };
+
+/** One move of a Pokémon, in the game's order, with the slot and cooldowns it has there. */
+export type PokemonMove = {
+  movimiento: string;
+  slot: string | null;
+  cooldownPve: number | null;
+  cooldownPvp: number | null;
+};
+
+/** The element groups of the game's Pokédex «Efectividad» (×2, ×1,5, ×0,5, ×0,4, ×0). */
+export type PokemonEffectiveness = {
+  muyDebil: string[];
+  debil: string[];
+  resiste: string[];
+  muyResistente: string[];
+  inmune: string[];
 };
 
 /** One evolution out of a Pokémon: the id it evolves into, its level and its items. */
@@ -46,6 +68,12 @@ export type PokemonRecord = {
   habilidades?: string[];
   donde?: { hunts: EnlaceDato[]; linkedTasks: EnlaceDato[]; equiposNpc: EnlaceDato[] };
   elementoMoveset?: string | null;
+  descripcion?: GameText | null;
+  rapido?: boolean | null;
+  pesado?: boolean | null;
+  movimientos?: PokemonMove[];
+  dropsPorZona?: { wildscape?: PokemonDrop[]; primal?: PokemonDrop[] };
+  efectividad?: PokemonEffectiveness;
 };
 
 export type MoveRecord = {
@@ -56,6 +84,10 @@ export type MoveRecord = {
   cooldownSegundos: number | null;
   modo: string | null;
   pokemon: string[];
+  alcance?: string | null;
+  efectos?: string[];
+  descripcion?: GameText | null;
+  icono?: string | null;
 };
 
 export type SystemItemRecord = {

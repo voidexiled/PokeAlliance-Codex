@@ -528,6 +528,8 @@ export function checkContent(root) {
   const itemRecords = new Map();
   /** @type {Array<{ file: string, at: string, pokemon: unknown[] }>} `mega.pokemon` of every item with one (§16.2.3), checked once Pokémon ids are known. */
   const megaChecks = [];
+  /** @type {Array<{ file: string, at: string, kind: 'item' | 'actividad', id: string }>} references of `obtencion`, checked once every registry is read. */
+  const obtencionChecks = [];
   /** @type {Map<string, { file: string, at: string }>} element id -> the first item that names it. */
   const itemElements = new Map();
   // The `moneda` object of content/items/diamantes.json (spec 3.13): its two lists name the same
@@ -585,7 +587,12 @@ export function checkContent(root) {
           error(file, `id repetido: "${item.id}" (también en ${itemIds.get(item.id)})`, `${at}.id`);
         else {
           itemIds.set(item.id, rel(file));
-          itemRecords.set(item.id, { nombre: item.nombre, categoria: name, held: item.held, mega: item.mega });
+          itemRecords.set(item.id, {
+            nombre: item.nombre,
+            categoria: name,
+            held: item.held,
+            mega: item.mega,
+          });
         }
       }
       if (text(item.categoria) && item.categoria !== name)
@@ -598,6 +605,33 @@ export function checkContent(root) {
       // Mega Stone (§16.2.3): its `pokemon` ids are checked once content/pokemon.json is read.
       if (isObject(item.mega) && Array.isArray(item.mega.pokemon))
         megaChecks.push({ file, at: `${at}.mega.pokemon`, pokemon: item.mega.pokemon });
+      // `obtencion`: the materials of its recipes and the activities of its tasks resolve.
+      if (isObject(item.obtencion)) {
+        const { recetas, tareas } = item.obtencion;
+        if (Array.isArray(recetas))
+          recetas.forEach((receta, recipeIndex) => {
+            if (!isObject(receta) || !Array.isArray(receta.materiales)) return;
+            receta.materiales.forEach((material, materialIndex) => {
+              if (isObject(material) && text(material.item))
+                obtencionChecks.push({
+                  file,
+                  at: `${at}.obtencion.recetas[${recipeIndex}].materiales[${materialIndex}].item`,
+                  kind: 'item',
+                  id: material.item,
+                });
+            });
+          });
+        if (Array.isArray(tareas))
+          tareas.forEach((tarea, taskIndex) => {
+            if (isObject(tarea) && text(tarea.actividad))
+              obtencionChecks.push({
+                file,
+                at: `${at}.obtencion.tareas[${taskIndex}].actividad`,
+                kind: 'actividad',
+                id: tarea.actividad,
+              });
+          });
+      }
       // «Elemento» (spec 3.13, 8.5): its name is checked once the elements are read.
       const elemento = text(item.elemento);
       if (elemento && !itemElements.has(elemento))
@@ -847,6 +881,13 @@ export function checkContent(root) {
     ['sistema', { ids: sistemaIds, where: 'content/sistemas/' }],
     ['actividad', { ids: questIds, where: 'content/quests.json' }],
   ]);
+  for (const { file, at, kind, id } of obtencionChecks) {
+    const target = refTargets.get(kind);
+    if (target?.ids && !target.ids.has(id)) error(file, `"${id}" no existe en ${target.where}`, at);
+  }
+  const moveIds = contentRecords.moves
+    ? new Set(contentRecords.moves.filter(isObject).map((record) => record.id))
+    : null;
   const requireItem = (id, at) => {
     if (itemsKnown && text(id) && !itemIds.has(id))
       error(pokemonFile, `"${id}" no existe en content/items/`, at);
@@ -867,11 +908,19 @@ export function checkContent(root) {
         `${at}.id`,
       );
 
-    if (Array.isArray(pokemon.drops)) {
+    // The loot of Base (`drops`) and of the other zones of the game's Pokédex (`dropsPorZona`).
+    const zones = [
+      ['drops', pokemon.drops],
+      ...(isObject(pokemon.dropsPorZona)
+        ? Object.entries(pokemon.dropsPorZona).map(([zone, list]) => [`dropsPorZona.${zone}`, list])
+        : []),
+    ];
+    for (const [zoneKey, list] of zones) {
+      if (!Array.isArray(list)) continue;
       const seen = new Set();
-      pokemon.drops.forEach((drop, dropIndex) => {
+      list.forEach((drop, dropIndex) => {
         if (!isObject(drop)) return;
-        const dropAt = `${at}.drops[${dropIndex}]`;
+        const dropAt = `${at}.${zoneKey}[${dropIndex}]`;
         const item = text(drop.item);
         if (item) {
           // One entry per item: the Drops list anchors each one by its id.
@@ -892,6 +941,38 @@ export function checkContent(root) {
             `${dropAt}.cantidad.max`,
           );
       });
+    }
+
+    // `movimientos`: each one a move of content/moves.json, once.
+    if (Array.isArray(pokemon.movimientos)) {
+      const seen = new Set();
+      pokemon.movimientos.forEach((entry, moveIndex) => {
+        const id = isObject(entry) ? text(entry.movimiento) : null;
+        if (!id) return;
+        const moveAt = `${at}.movimientos[${moveIndex}].movimiento`;
+        if (seen.has(id)) error(pokemonFile, `movimiento repetido: "${id}"`, moveAt);
+        else if (moveIds && !moveIds.has(id))
+          error(pokemonFile, `"${id}" no existe en content/moves.json`, moveAt);
+        seen.add(id);
+      });
+    }
+
+    // `efectividad`: an element sits in one group at most.
+    if (isObject(pokemon.efectividad)) {
+      const seen = new Map();
+      for (const [group, list] of Object.entries(pokemon.efectividad)) {
+        if (!Array.isArray(list)) continue;
+        list.forEach((id, elementIndex) => {
+          if (!text(id)) return;
+          if (seen.has(id))
+            error(
+              pokemonFile,
+              `"${id}" ya está en efectividad.${seen.get(id)}`,
+              `${at}.efectividad.${group}[${elementIndex}]`,
+            );
+          else seen.set(id, group);
+        });
+      }
     }
 
     if (Array.isArray(pokemon.evolucion)) {
@@ -1733,7 +1814,11 @@ export function checkContent(root) {
         const key = slot === 'x' ? 'heldX' : 'heldY';
         const record = checkItemId(`${where}.${key}`, unit[key], null, 'un held');
         if (record && (!isObject(record.held) || record.held.ranura !== slot))
-          error(anunciosFile, `"${unit[key]}" no es un held de la ranura ${slot.toUpperCase()}`, `${where}.${key}`);
+          error(
+            anunciosFile,
+            `"${unit[key]}" no es un held de la ranura ${slot.toUpperCase()}`,
+            `${where}.${key}`,
+          );
       }
       const mega = checkItemId(`${where}.mega`, unit.mega, null, 'una Mega Stone');
       if (mega && !isObject(mega.mega))

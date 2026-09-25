@@ -1,12 +1,17 @@
 import { useEffect, useId, useMemo, useState } from 'react';
-import type { SubmitEvent } from 'react';
+import type { ReactNode, SubmitEvent } from 'react';
 
 import type { Locale } from '@/i18n/config';
 import { fill } from '@/i18n/messages/types';
 import { birthDateProblem, playerNameProblem, usernameProblem } from '@/lib/account/registration';
 import { mapSupabaseError } from '@/lib/supabase/errors';
 import type { SupabaseFailure } from '@/lib/supabase/errors';
-import { EDAD_MINIMA_CUENTA, NOMBRE_JUGADOR_MAX, NOMBRE_USUARIO_MAX } from '@/lib/trade/limits';
+import {
+  EDAD_MINIMA_CUENTA,
+  NOMBRE_JUGADOR_MAX,
+  NOMBRE_USUARIO_MAX,
+  PERSONAJES_MAX,
+} from '@/lib/trade/limits';
 
 import { Button } from '@/components/controls/Button';
 import { Checkbox } from '@/components/controls/Checkbox';
@@ -23,11 +28,13 @@ import { authTexts } from './texts';
 import { AuthField, AuthInput, AuthNotice, ErrorLine, Helper } from './ui';
 
 // Step 3 (9.15.1, Cuenta-acceso 8) and «Perfil» (9.16.3). Step 3 asks the public «Nombre de
-// usuario» (the handle of 9.9), «Nombre del jugador» and «Mundo» (unique together; the worlds are
-// slots, one per world of content/mundos.json), «País» by its name, «Fecha de nacimiento» as
-// day / month / year (kept, never shown) and the terms, with the non-affiliation line of 9.15.2.
-// «Perfil» changes the country, the player and the world, and the username until the first
-// listing; the birth date never changes once saved, so it is not there. There is no
+// usuario» (the handle of 9.9), «Tu personaje principal» — «Nombre del jugador» and «Mundo»,
+// unique together among all accounts, the worlds as slots, one per world of
+// content/mundos.json (Personajes.dc.html, registration step 3) —, «País» by its name, «Fecha de
+// nacimiento» as day / month / year (kept, never shown) and the terms, with the non-affiliation
+// line of 9.15.2. «Perfil» changes the country and the username until the first listing; the main
+// character stands there as one row that links to «Personajes», and the birth date never changes
+// once saved, so it is not there. There is no
 // availability call for the username: a used one is the server's refusal, under its field.
 
 /** The oldest birth date the form accepts. */
@@ -89,6 +96,8 @@ interface ProfileDraft extends ProfileValues {
 interface ProfileRules {
   /** Step 3: the terms, and the birth date unless it was saved before. */
   register: boolean;
+  /** Step 3 asks the main character; «Perfil» leaves it to «Personajes». */
+  character: boolean;
   birthDate: boolean;
   usernameLocked: boolean;
 }
@@ -109,8 +118,10 @@ function profileErrors(
   if (!rules.usernameLocked && usernameProblem(draft.username) !== null) {
     errors.username = text.username;
   }
-  if (playerNameProblem(draft.player) !== null) errors.player = text.player;
-  if (!worlds.some((world) => world.id === draft.world)) errors.world = text.world;
+  if (rules.character) {
+    if (playerNameProblem(draft.player) !== null) errors.player = text.player;
+    if (!worlds.some((world) => world.id === draft.world)) errors.world = text.world;
+  }
   if (!isCountryCode(draft.country)) errors.country = text.country;
   if (rules.birthDate) {
     // The database counts the age on its own (UTC) date; the form does the same (9.15.1).
@@ -182,6 +193,11 @@ export interface RegisterProfileFormProps extends ProfileFormBaseProps {
 export interface EditProfileFormProps extends ProfileFormBaseProps {
   mode: 'edit';
   initial: ProfileValues;
+  /**
+   * The row that stands where step 3 asks the main character: «Personaje principal» and its link
+   * to «Personajes», where the characters change. The player and the world are saved as they are.
+   */
+  mainCharacter: ReactNode;
   /** 9.9: the username does not change after the first listing. */
   usernameLocked: boolean;
   onSubmit: (values: ProfileValues) => Promise<ProfileSaveOutcome>;
@@ -194,6 +210,7 @@ export function ProfileForm(props: RegisterProfileFormProps | EditProfileFormPro
   const usernameLocked = props.mode === 'edit' && props.usernameLocked;
   const rules: ProfileRules = {
     register,
+    character: register,
     birthDate: props.mode === 'register' && !(props.saved?.birthDateSaved ?? false),
     usernameLocked,
   };
@@ -262,6 +279,7 @@ export function ProfileForm(props: RegisterProfileFormProps | EditProfileFormPro
   function drawn(field: ProfileField): boolean {
     if (field === 'birthDate') return rules.birthDate;
     if (field === 'terms') return register;
+    if (field === 'player' || field === 'world') return register;
     return true;
   }
 
@@ -374,42 +392,56 @@ export function ProfileForm(props: RegisterProfileFormProps | EditProfileFormPro
           {...described('username', `${ids.username}-help`)}
         />
       </AuthField>
-      <AuthField id={ids.player} label={text.player} below={errorLine('player')}>
-        <AuthInput
-          id={ids.player}
-          name="player"
-          value={draft.player}
-          onChange={(event) => update('player', event.target.value)}
-          autoComplete="off"
-          maxLength={NOMBRE_JUGADOR_MAX}
-          spellCheck={false}
-          {...described('player')}
-        />
-      </AuthField>
-      <fieldset
-        className="ac-auth-fieldset"
-        aria-invalid={errors.world === undefined ? undefined : true}
-        aria-describedby={errors.world === undefined ? undefined : errorId(ids.world)}
-      >
-        <legend className="ac-auth-field__label">{text.world}</legend>
-        <div className="ac-auth-slots">
-          {worlds.map((world, index) => (
-            <label key={world.id} className="ac-auth-slot">
-              <input
-                id={`${ids.world}-${String(index)}`}
-                className="ac-auth-slot__input"
-                type="radio"
-                name={ids.world}
-                value={world.id}
-                checked={draft.world === world.id}
-                onChange={() => update('world', world.id)}
+      {props.mode === 'edit' ? (
+        props.mainCharacter
+      ) : (
+        <section className="ac-auth-character" aria-labelledby={`${uid}-character`}>
+          <h3 className="ac-auth-character__title" id={`${uid}-character`}>
+            {texts.mainCharacterTitle}
+          </h3>
+          <p className="ac-auth-character__text">
+            {fill(texts.mainCharacterText, { max: PERSONAJES_MAX })}
+          </p>
+          <div className="ac-auth-character__box">
+            <AuthField id={ids.player} label={text.player} below={errorLine('player')}>
+              <AuthInput
+                id={ids.player}
+                name="player"
+                value={draft.player}
+                onChange={(event) => update('player', event.target.value)}
+                autoComplete="off"
+                maxLength={NOMBRE_JUGADOR_MAX}
+                spellCheck={false}
+                {...described('player')}
               />
-              <span className="ac-auth-slot__name">{world.nombre}</span>
-            </label>
-          ))}
-        </div>
-        {errorLine('world')}
-      </fieldset>
+            </AuthField>
+            <fieldset
+              className="ac-auth-fieldset"
+              aria-invalid={errors.world === undefined ? undefined : true}
+              aria-describedby={errors.world === undefined ? undefined : errorId(ids.world)}
+            >
+              <legend className="ac-auth-field__label">{text.world}</legend>
+              <div className="ac-auth-slots">
+                {worlds.map((world, index) => (
+                  <label key={world.id} className="ac-auth-slot">
+                    <input
+                      id={`${ids.world}-${String(index)}`}
+                      className="ac-auth-slot__input"
+                      type="radio"
+                      name={ids.world}
+                      value={world.id}
+                      checked={draft.world === world.id}
+                      onChange={() => update('world', world.id)}
+                    />
+                    <span className="ac-auth-slot__name">{world.nombre}</span>
+                  </label>
+                ))}
+              </div>
+              {errorLine('world')}
+            </fieldset>
+          </div>
+        </section>
+      )}
       <div className="ac-auth-field">
         <Select
           id={ids.country}

@@ -359,15 +359,35 @@ describe('account (account_trust)', () => {
       'sb-127-auth-token',
       JSON.stringify({ access_token: 'x.y.z', expires_at: 1_790_000_000, user: { id: USER } }),
     );
-    const { client, calls } = fakeClient(() => STATE);
+    const character = (id: string, isMain: boolean) => ({
+      id,
+      player_name: isMain ? 'Ash' : 'Misty',
+      world_key: 'kanto',
+      is_main: isMain,
+      listings: 0,
+      created_at: '2026-09-24T12:00:00Z',
+    });
+    const { client, calls } = fakeClient((name) =>
+      name === TRADE_RPC.listCharacters
+        ? [
+            character('11111111-1111-4111-8111-111111111111', true),
+            character('22222222-2222-4222-8222-222222222222', false),
+          ]
+        : STATE,
+    );
     const result = await refreshCachedAccount(client);
     expect(result.data?.username).toBe('ash');
-    expect(calls.map(({ name }) => name)).toEqual([TRADE_RPC.accountState]);
+    // The characters give the menu its «+N personajes».
+    expect(calls.map(({ name }) => name)).toEqual([
+      TRADE_RPC.accountState,
+      TRADE_RPC.listCharacters,
+    ]);
     expect(JSON.parse(storage.getItem(ACCOUNT_CACHE_KEY) ?? 'null')).toEqual({
       userId: USER,
       username: 'ash',
       player: 'Ash',
       world: 'kanto',
+      characters: 2,
       avatar: 'https://cdn.discordapp.com/avatars/1/a.png',
       presence: 'en_juego',
       moderator: true,

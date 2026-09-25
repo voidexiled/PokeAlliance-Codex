@@ -129,7 +129,11 @@
     height: var(--space-16);
     border: 3px solid var(--bg-secondary); /* sin token: aro del punto sobre el avatar */
     border-radius: var(--radius-full);
-    background: var(--text-quaternary);
+    background: radial-gradient(
+      closest-side,
+      var(--bg-secondary) 50%,
+      var(--text-quaternary) calc(50% + 0.5px)
+    );
   }
 
   .ac-panel-card__text {
@@ -201,12 +205,18 @@
     white-space: nowrap;
   }
 
+  /* The dot changes shape as well as colour (owner, 2026-09-24): a ring for «Desconectado», a
+     crescent for «Ausente», filled for «En el juego». */
   .ac-panel-presence__dot {
     width: var(--space-6);
     height: var(--space-6);
     flex: none;
     border-radius: var(--radius-full);
-    background: var(--text-quaternary);
+    background: radial-gradient(
+      closest-side,
+      transparent 50%,
+      var(--text-quaternary) calc(50% + 0.5px)
+    );
   }
 
   .ac-panel-toggle .ac-panel-presence__dot {
@@ -219,9 +229,12 @@
     background: var(--success, var(--text-secondary));
   }
 
-  [data-presence='ausente'] > .ac-panel-presence__dot,
+  [data-presence='ausente'] > .ac-panel-presence__dot {
+    background: radial-gradient(circle at 22% 26%, transparent 36%, var(--amber) 37%);
+  }
+
   .ac-panel-avatar__dot[data-presence='ausente'] {
-    background: var(--amber);
+    background: radial-gradient(circle at 22% 26%, var(--bg-secondary) 36%, var(--amber) 37%);
   }
 
   /* ------------------------------------------------------------------ section nav */
@@ -819,6 +832,39 @@
   /* «Perfil»: the profile form of the flow inside the section's box. */
   .ac-panel-form {
     gap: var(--space-16);
+  }
+
+  /* «Perfil»: the main character as one row that links to «Personajes». */
+  .ac-panel-main-character {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-4) var(--space-16);
+    padding: var(--space-12) var(--space-16);
+    border: 1px solid var(--border-secondary);
+    border-radius: var(--radius-8);
+  }
+
+  .ac-panel-main-character__label {
+    margin: 0;
+    color: var(--text-primary);
+    @apply type-body-strong;
+  }
+
+  .ac-panel-main-character__value {
+    display: flex;
+    flex: 1 1 auto;
+    flex-direction: column;
+    min-width: 0;
+    margin: 0;
+    color: var(--text-primary);
+    overflow-wrap: anywhere;
+    @apply type-body;
+  }
+
+  .ac-panel-main-character__more {
+    color: var(--text-tertiary);
+    @apply type-ui;
   }
 
   /* ------------------------------------------------------------------ «Estado en línea» */

@@ -116,7 +116,10 @@ export interface SellerPresenceData {
 
 /** The seller of a listing, with the score of the confirmed trades (9.10). */
 export interface ListingCardSeller {
+  /** The seller's character when the listing has one («Void Exiled»), else its name. */
   name: string;
+  /** The world of that character: «Void Exiled · Titan 1» (owner rule 2026-09-24). */
+  world?: string | null;
   /** Profile of the seller (§9.8). */
   href: string;
   score?: number | null;
@@ -171,8 +174,10 @@ export interface ListingCardListing {
   /** Stack count on the stage of an items or Diamonds listing. */
   qty?: number | null;
   shiny?: boolean;
-  /** Name of the world. */
+  /** Name of the world, in the meta; none when the seller row names the character's world. */
   world?: string | null;
+  /** «Cualquier mundo»: the tag of a listing sold to every world (Pokédólares). */
+  anyWorld?: string | null;
   /** The publication, as the island writes it: ISO instant and text. */
   posted?: { datetime: string; text: string } | null;
   /** `estado: 'reservado'`: «Reservado» after the meta. */
@@ -192,6 +197,8 @@ export interface ListingCardListing {
   game?: readonly PriceOption[] | null;
   /** `precio.aConvenir`. */
   negotiable?: boolean;
+  /** The price per unit with its unit, «MX$ 1,80 por 1kk», under the total (owner rule 2026-09-24). */
+  unit?: string | null;
   seller?: ListingCardSeller | null;
   /** Verified contact channels, already in the page's language («Teléfono +55», R13). */
   channels?: readonly ChipRowItem[] | null;
@@ -396,11 +403,22 @@ export function ListingCard({
       listing.title
     );
   const meta: ReactNode[] = [];
+  if (present(listing.anyWorld)) meta.push(<Chip>{listing.anyWorld}</Chip>);
   if (present(listing.world)) meta.push(listing.world);
   if (listing.posted) {
     meta.push(<time dateTime={listing.posted.datetime}>{listing.posted.text}</time>);
   }
   if (listing.reserved) meta.push(labels.reserved);
+  const withUnit = (value: ReactNode): ReactNode =>
+    present(listing.unit) && value !== null ? (
+      <span className="ac-listing-card__priced">
+        {value}
+        <span className="ac-listing-card__unit">{listing.unit}</span>
+      </span>
+    ) : (
+      value
+    );
+  let unitShown = false;
   const head = (
     <Head
       stage={
@@ -454,7 +472,14 @@ export function ListingCard({
         negotiable = false;
         foot.push({ key: price, label: labels.fiat, value: labels.negotiable, mode: 'clip' });
       } else {
-        foot.push({ key: price, label: labels.fiat, value: shown, mode: 'node' });
+        const unitHere = shown !== null && !unitShown && present(listing.unit);
+        if (unitHere) unitShown = true;
+        foot.push({
+          key: price,
+          label: labels.fiat,
+          value: unitHere ? withUnit(shown) : shown,
+          mode: unitHere ? 'nodetop' : 'node',
+        });
       }
     } else {
       const options = listing.game ?? [];
@@ -462,20 +487,23 @@ export function ListingCard({
         negotiable = false;
         foot.push({ key: price, label: labels.game, value: labels.negotiable, mode: 'wrap' });
       } else {
+        const priced =
+          options.length > 0 ? (
+            <PriceOptions
+              options={options}
+              locale={locale}
+              orLabel={orLabel}
+              align="end"
+              link={diamondsLink}
+            />
+          ) : null;
+        const unitHere = priced !== null && !unitShown && present(listing.unit);
+        if (unitHere) unitShown = true;
         foot.push({
           key: price,
           label: labels.game,
           mode: 'nodetop',
-          value:
-            options.length > 0 ? (
-              <PriceOptions
-                options={options}
-                locale={locale}
-                orLabel={orLabel}
-                align="end"
-                link={diamondsLink}
-              />
-            ) : null,
+          value: unitHere ? withUnit(priced) : priced,
         });
       }
     }
@@ -484,6 +512,7 @@ export function ListingCard({
   const rating = seller ? (
     <Rating
       seller={seller.name}
+      world={seller.world}
       href={seller.href}
       score={seller.score}
       reviews={seller.reviews}

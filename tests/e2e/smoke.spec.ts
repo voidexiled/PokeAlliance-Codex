@@ -537,9 +537,9 @@ test.describe('flows of the site', () => {
     await list.getByRole('link', { name: 'Chimchar', exact: true }).click();
     await expect(page).toHaveURL(/\/es\/pokedex\/chimchar\/$/);
     await expect(page.getByRole('heading', { name: 'Chimchar', exact: true })).toBeVisible();
-    // The Pokémon page (§8.3): the art panel and the fixed sheet of the head row.
-    await expect(page.locator('.ac-detail-head__art')).toBeVisible();
-    await expect(page.getByRole('group', { name: 'Ficha de Chimchar' })).toContainText('T6');
+    // The Pokémon page (§8.3): the art panel and the facts of the hero.
+    await expect(page.locator('.ac-entity-hero__art')).toBeVisible();
+    await expect(page.locator('.ac-entity-facts')).toContainText('T6');
     expect(browserErrors).toEqual([]);
   });
 
@@ -795,7 +795,8 @@ test.describe('flows of the site', () => {
     await expect(page.getByRole('heading', { level: 1 })).toHaveText(sellerName);
 
     // «Crear anuncio» (9.7): a Pokédólares amount shows its exact figure under the field, sprite
-    // first (9.7.3, S8), and phase A has «Copiar anuncio» and no «Publicar» (9.2, CA-9.13).
+    // first (9.7.3, S8), and phase A has no «Publicar» (9.2, CA-9.13) and no copy action (owner
+    // rule 2026-09-24).
     await visit(page, '/es/comercio/publicar/');
     await expect(
       page.getByRole('heading', { level: 1, name: trade.create, exact: true }),
@@ -808,7 +809,6 @@ test.describe('flows of the site', () => {
     const exact = page.locator('.ac-listing-form__exact');
     await expect(exact).toHaveText(formatPokedolaresLabel(50_000_000, 'es'));
     await expect(exact.locator('img')).toHaveAttribute('src', /\/sprites\/ui\/pokedolares\.png$/);
-    await expect(page.getByRole('button', { name: trade.form.copy, exact: true })).toBeVisible();
     await expect(page.getByRole('button', { name: /^Publicar/ })).toHaveCount(0);
   });
 });

@@ -1,25 +1,24 @@
 ---
-// The detail of a listing (spec 9.6, template F of 8.0.2): `noindex` (9.3), one page per listing
-// of the sample registry but the `retirado` ones, which are a 404 to the public (9.4).
+// The listing page (spec 9.6; board Anuncio-detalle «Variante 1» and its phone board, owner
+// decision 2026-09-24): `noindex` (9.3), one page per listing but the `retirado` ones, which are
+// a 404 to the public (9.4).
 //
-// Composition, in the order of 9.6:
+// Composition:
 //   1. the crumbs «Comunidad › Comercio › {título}» (8.0.4): «Comunidad» has no index page;
-//   2. `PageTitle` with the title of `listingTitle` (9.4), the visible form hidden from screen
-//      readers and the exact one in `sr-only` when they differ (Pokédólares), and under it, in
-//      12/16 `text-tertiary`, «{Mundo} · Publicado el {fecha}» and the state when the listing is
-//      not `publicado`: «Reservado», «Completado» or «Expirado»;
-//   3. from 768 two columns: the fixed sheet of 282 (`GameTooltip variant="sheet"`, 7.5.9) with
-//      the rows of the listing panel (9.5.9) plus «Addon:» and «Next Boost chance:», every held
-//      item, every trained skill and «Ditto Memory: N», each memorised Pokémon a `NestedEntity`
-//      with its panel; and 24 to its right the sections «Precio» (`FactList`), «Vendedor»
-//      (`SellerCard`: the seller with its online status, 9.15.6, and its reputation «★ 4.8 · 50
-//      operaciones · 5 compradores distintos», 9.15.4) and «Contacto verificado» (`ChipRow` with
-//      no cap). Below 768 one column, the sheet first. Phase A has no action at all (9.6 step 4):
-//      the channels are chips.
-//   4. Phase B only (COMERCIO_PUBLICO, 9.2, S11): a listing with a real-money price carries the
-//      tag «Dinero real» under the head line and the short safety `Note` in «Precio» (9.15.2);
-//      under the sections, «Contactar al vendedor» (`ContactSeller`, with the real-money consent
-//      of 9.15.2) and «Reportar anuncio» (`ReportAction`, 9.11).
+//   2. the hero (ListingHero.tsx): the art in its frame, the h1 with the title of
+//      `listingTitle` (9.4), «{Mundo} · Publicado el {fecha}» and the state when it is not
+//      `publicado`, the tag «Dinero real» of phase B (9.15.2), and the facts, label over value;
+//   3. «Equipo», the panel of slots of a Pokémon (16.4.5): Ball, Auras, Addons, Held X and Held Y
+//      with their tier, Mega Stone; then «Entrenamiento» and «Ditto Memory» when declared;
+//   4. the trade box, sticky beside them from 64rem: the price with its unit price and «El sitio
+//      no procesa pagos.»; the seller with its status, the character it sells as («Void Exiled ·
+//      Titan 1», «Copiar»), «Entrega solo en {mundo}» or «Cualquier mundo», its reputation, member
+//      date and verified channels; then the actions (`TradeBox`, phase B), «Copiar enlace» and
+//      «Reportar anuncio» (9.11). The seller sees its own actions there: «Editar anuncio» and the
+//      states (owner rule 2026-09-24: editable at any time, quantity included);
+//   5. «Más anuncios de {vendedor}»: up to four of its other public listings, and «Ver perfil».
+// On a phone the box follows the hero, «Equipo» after it, and a bar with the price and
+// «Contactar al vendedor» shows at the bottom once the box leaves the view.
 //
 // Every Comercio route opens with the 18+ gate (`AgeGate`, 9.15.2), in both phases.
 //
@@ -30,19 +29,13 @@
 // Time (9.4, CA-9.20). The state is the one the visitor sees: a `publicado` or `reservado` listing
 // whose `expira` is behind the clock is «Expirado». The build writes it with its own clock, and a
 // small script writes it again with the visitor's, when the page opens and when `expira` comes.
-//
-// The sheet. `TipData` holds no entity inside a section (7.5.2), so the sheet is `GameTooltip`
-// with the listing's rows and its Held Items, continued by a panel of the same look with
-// «Entrenamiento: N» (every skill, the order of `HABILIDADES`) and «Ditto Memory: N»
-// (trade-detail.css joins the two into one sheet). The sheet paints Poppins on
-// load, so this page asks PageLayout to preload it (3.9).
 import { createElement } from 'react';
 
 import { getAlternatePath, getLocale, locales, type Locale } from '@/i18n/config';
 import type { Messages } from '@/i18n/messages/en';
 import { en } from '@/i18n/messages/en';
 import { es } from '@/i18n/messages/es';
-import { fill } from '@/i18n/messages/types';
+import { fill, isPluralMessage, plural } from '@/i18n/messages/types';
 import {
   getAuras,
   getCategorias,
@@ -54,35 +47,40 @@ import {
   getSpriteRegistry,
 } from '@/lib/content/registry';
 import { getPokemon } from '@/lib/content/repository';
+import { resolvePokemonImage } from '@/lib/content/pokemon-media';
 import { formatDate } from '@/lib/format/dates';
-import { formatInteger, formatRealMoney } from '@/lib/format/numbers';
+import { formatInteger, formatPercent, formatRating, formatRealMoney } from '@/lib/format/numbers';
 import { diamondsTip } from '@/lib/game/tips';
 import { buildNav } from '@/lib/nav/groups';
 import { COMERCIO_CACHE_CONTROL, DISCORD_EDAD_MIN_DIAS, EVIDENCIA_DIAS } from '@/lib/trade/limits';
 import { comercioPublico, getAnuncios } from '@/lib/trade/registry';
-import { loadAnuncio } from '@/lib/trade/source';
-import { hasPublicDetail, sellerReputation, visibleStatus } from '@/lib/trade/types';
-import { FactList, type FactRow } from '@/components/cards/FactList';
+import { loadAnuncio, loadVendedor } from '@/lib/trade/source';
+import {
+  hasPublicDetail,
+  isListed,
+  sellerReputation,
+  tradesAcrossWorlds,
+  visibleStatus,
+} from '@/lib/trade/types';
 import { Chip } from '@/components/content/Chip';
-import Note from '@/components/content/Note.astro';
-import { GameTooltip } from '@/components/game/GameTooltip';
 import { NestedEntity } from '@/components/game/NestedEntity';
-import { Glyph } from '@/components/icons/Glyph';
-import { PageTitle } from '@/components/layout/PageTitle';
-import { Section } from '@/components/layout/Section';
+import { Sprite } from '@/components/game/Sprite';
 import { ChipRow } from '@/components/money/ChipRow';
 import { PriceOptions } from '@/components/money/PriceOptions';
 import { TrainingMeter } from '@/components/money/TrainingMeter';
+import { SellerPresence } from '@/components/cards/ListingCard';
 import { AgeGate } from '@/components/trade/AgeGate';
+import { ListingEquipment, ListingHero, type HeroFact } from '@/components/trade/ListingHero';
 import {
-  ContactSeller,
   realMoneyConsentLabels,
   type ContactSellerLabels,
 } from '@/components/trade/RealMoneyConsent';
 import { ReportAction } from '@/components/trade/ReportDialog';
-import { SellerCard } from '@/components/trade/SellerCard';
+import { TradeBox, type TradeBoxLabels } from '@/components/trade/TradeBox';
 import {
-  listingTip,
+  listingCard,
+  listingHref,
+  listingSprite,
   listingTitleNode,
   pokemonPanel,
   sellerHref,
@@ -91,8 +89,10 @@ import {
   tradeLabels,
   tradeRecords,
   tradeSprites,
+  unitText,
   type TradeCatalog,
   type TradeContext,
+  type TradeRow,
 } from '@/components/trade/TradeListRoot';
 import PageLayout from '@/layouts/PageLayout.astro';
 
@@ -131,6 +131,13 @@ if (group === undefined || comercio === undefined) {
   throw new Error('src/lib/nav/groups.ts: no «comercio» entry in the «comunidad» group (8.0.3).');
 }
 
+// «Más anuncios de {vendedor}»: its other public listings (phase B reads them with the profile).
+const builtAt = new Date();
+const { anuncios: sellerListings } = await loadVendedor(anuncio.vendedor);
+const others = sellerListings
+  .filter((other) => other.id !== anuncio.id && isListed(other, builtAt))
+  .slice(0, 4);
+
 const registry = getSpriteRegistry();
 const catalog: TradeCatalog = {
   pokemon: getPokemon(),
@@ -145,13 +152,11 @@ const catalog: TradeCatalog = {
   channels: trade.channels,
 };
 const {
-  rows: [row],
+  rows: [row, ...moreRows],
   refs,
-} = tradeRecords([anuncio], catalog, locale);
-// Phase B (9.2): the tag, the note and the actions exist only with COMERCIO_PUBLICO (S11).
+} = tradeRecords([anuncio, ...others], catalog, locale);
+// Phase B (9.2): the tag, the actions and the report exist only with COMERCIO_PUBLICO (S11).
 const publico = comercioPublico();
-// The `moneda` object of content/items/diamantes.json (§3.13): the facts «Se compran en» and
-// «Se usan en» of a Diamonds listing and the rows of the Diamonds panel its price opens (7.5.3).
 const moneda = getMonedaDiamantes();
 const sprites = tradeSprites(registry);
 const context: TradeContext = {
@@ -162,16 +167,15 @@ const context: TradeContext = {
   ui,
   labels: tradeLabels(messages, publico),
 };
-// The Diamond turns in Comercio (7.8). Without a row there is no panel, and the Diamonds of the
-// price stay text (R2).
+// The Diamond turns in Comercio (7.8). Without a row there is no panel (R2).
 const diamondsPanel = diamondsTip(moneda, locale, ui.tooltip, {
   sprite: sprites.types.diamonds,
   animated: true,
 });
+const diamondsLink = diamondsPanel === null ? undefined : { tip: diamondsPanel, hint: ui.pinHint };
 const title = listingTitleNode(row);
 
-// The head line (9.6 step 2): the world, the day of publication and the state the visitor sees.
-const builtAt = new Date();
+// The head line (9.6): the world, the day of publication and the state the visitor sees.
 const status = visibleStatus(anuncio, builtAt);
 const state =
   status === 'reservado'
@@ -181,19 +185,130 @@ const state =
       : status === 'expirado'
         ? trade.states.expirado
         : null;
-// A listing that is still public can expire under the visitor's clock (see the script below).
 const canExpire = anuncio.estado === 'publicado' || anuncio.estado === 'reservado';
-const world = Object.hasOwn(refs.mundos, row.mundo) ? refs.mundos[row.mundo] : null;
-const meta = [world, fill(trade.detail.posted, { date: formatDate(row.publicado, locale) })]
+const worldName = Object.hasOwn(refs.mundos, row.mundo) ? refs.mundos[row.mundo] : null;
+const anyWorld = tradesAcrossWorlds(row.tipo);
+const meta = [worldName, fill(trade.detail.posted, { date: formatDate(row.publicado, locale) })]
   .filter((part) => part !== null)
   .join(' · ');
 
-// The sheet (7.5.9) and what continues it.
-const sheet = listingTip(row, context, {
-  addon: trade.detail.addon,
-  nextBoostChance: trade.detail.nextBoost,
-});
+// The hero's facts: the card's, label over value, with Variante first for a Pokémon.
+const card = listingCard(row, context, formatDate(row.publicado, locale));
+const keys = trade.listing.keys;
+const facts: HeroFact[] = [];
+const cardFacts = card.facts ?? {};
+const pokemonRef =
+  row.pokemon !== null && Object.hasOwn(refs.pokemon, row.pokemon.pokemon)
+    ? refs.pokemon[row.pokemon.pokemon]
+    : null;
+if (row.tipo === 'pokemon') {
+  if (pokemonRef !== null) {
+    facts.push({
+      key: 'variant',
+      label: trade.box.variant,
+      value: pokemonRef.variante === 'shiny' ? ui.shiny : ui.cards.normal,
+    });
+    facts.push({ key: 'tier', label: keys.tier, value: pokemonRef.tier, kind: 'tier' });
+  }
+  facts.push({ key: 'elements', label: keys.elements, value: cardFacts.elements ?? null });
+  facts.push({ key: 'requirement', label: keys.requirement, value: cardFacts.requirement ?? null });
+  facts.push({ key: 'boost', label: keys.boost, value: cardFacts.boost ?? null });
+  facts.push({
+    key: 'starLevel',
+    label: keys.starLevel,
+    value: row.pokemon?.starLevel ?? null,
+    kind: 'stars',
+  });
+  facts.push({ key: 'nickname', label: keys.nickname, value: cardFacts.nickname ?? null });
+  facts.push({ key: 'memorySlots', label: keys.memorySlots, value: cardFacts.memorySlots ?? null });
+  const chance = row.pokemon?.nextBoostChance ?? null;
+  facts.push({
+    key: 'nextBoost',
+    label: trade.detail.nextBoost,
+    value:
+      chance === null
+        ? null
+        : formatPercent(Number(chance), locale, { decimals: chance.includes('.') ? 2 : 0 }),
+  });
+  const npc = row.pokemon?.precioNpc ?? null;
+  facts.push({
+    key: 'npcPrice',
+    label: keys.npcPrice,
+    value: npc === null ? null : npc.tipo === 'unsellable' ? trade.unsellable : npc.cantidad,
+    kind: npc?.tipo === 'pokedolares' ? 'pokedolares' : 'text',
+  });
+} else {
+  const quantityKind =
+    row.tipo === 'pokedolares' ? 'pokedolares' : row.tipo === 'diamonds' ? 'diamonds' : 'text';
+  facts.push({
+    key: 'quantity',
+    label: keys.quantity,
+    value: cardFacts.quantity ?? null,
+    kind: quantityKind,
+  });
+  for (const key of ['category', 'element', 'use', 'droppedBy', 'boughtAt', 'usedFor'] as const) {
+    if (key in cardFacts) facts.push({ key, label: keys[key], value: cardFacts[key] ?? null });
+  }
+}
+const art =
+  row.tipo === 'pokemon'
+    ? (() => {
+        const src = resolvePokemonImage(pokemonRef?.imagen);
+        return src === null ? null : { src, smooth: true };
+      })()
+    : listingSprite(row, context);
+
+// «Equipo» (16.4.5): the card's slots, grouped by kind.
 const unit = row.pokemon;
+const byId = new Map((card.helds ?? []).map((item) => [item.id ?? item.name, item]));
+const slots = (ids: readonly (string | null)[]) =>
+  ids.flatMap((id) => (id === null ? [] : (byId.get(id) ?? [])));
+const equipment =
+  unit === null
+    ? []
+    : [
+        {
+          key: 'ball',
+          label: keys.ball,
+          items: slots([unit.ball]),
+          none: trade.box.none,
+          named: true,
+        },
+        {
+          key: 'auras',
+          label: fill(trade.box.auras, { n: formatInteger(unit.auras.length, locale) }),
+          items: slots(unit.auras),
+          none: trade.box.noneFeminine,
+          wide: true,
+        },
+        {
+          key: 'addons',
+          label: trade.detail.addon,
+          items: slots(unit.addons),
+          none: trade.box.none,
+        },
+        {
+          key: 'heldX',
+          label: 'Held X',
+          items: slots([unit.heldX]),
+          none: trade.box.none,
+          named: true,
+        },
+        {
+          key: 'heldY',
+          label: 'Held Y',
+          items: slots([unit.heldY]),
+          none: trade.box.none,
+          named: true,
+        },
+        {
+          key: 'mega',
+          label: 'Mega Stone',
+          items: slots([unit.mega]),
+          none: trade.box.noneFeminine,
+          named: true,
+        },
+      ];
 const trained = (unit?.entrenamiento ?? []).flatMap((entry) => {
   const percent = entry.progreso === null ? Number.NaN : Number(entry.progreso);
   return entry.nivel === null || !Number.isFinite(percent)
@@ -212,57 +327,40 @@ const memories = (unit?.memorias ?? []).flatMap((id) => {
     },
   ];
 });
-const heldSection = (sheet.sections ?? []).length > 0;
 
-// «Precio» (9.6): real money in 700 or «A convenir», and the in-game options. In phase B a
-// real-money price also carries the tag «Dinero real» and the safety note (9.15.2).
+// The price (9.6): real money first, «o en el juego» after it; the unit price under them.
 const precio = row.precio;
 const realMoney = publico && precio.real !== null;
 const importe = precio.real === null ? Number.NaN : Number(precio.real.importe);
 const fiat =
   precio.real !== null && Number.isFinite(importe)
-    ? createElement(
-        'span',
-        { className: 'ac-trade-detail__fiat' },
-        formatRealMoney(importe, precio.real.moneda, locale),
-      )
-    : precio.aConvenir
-      ? trade.listing.negotiable
-      : null;
+    ? formatRealMoney(importe, precio.real.moneda, locale)
+    : null;
 const options = precio.juego.map((option) => ({
   kind: option.tipo === 'pokedolares' ? ('pd' as const) : ('dia' as const),
   amount: option.cantidad,
 }));
-const priceRows: FactRow[] = [
-  { key: 'fiat', label: trade.listing.fiat, value: fiat, mode: 'node' },
-  {
-    key: 'game',
-    label: trade.listing.game,
-    value:
-      options.length > 0
-        ? createElement(PriceOptions, {
-            options,
-            locale,
-            orLabel: ui.or,
-            link: diamondsPanel === null ? undefined : { tip: diamondsPanel, hint: ui.pinHint },
-          })
-        : null,
-    mode: 'nodetop',
-  },
-];
+const unitLine = unitText(row, context);
+const priceLabel =
+  fiat !== null ? trade.listing.fiat : options.length > 0 ? trade.listing.game : null;
 
-// «Vendedor» and «Contacto verificado» (9.6): the seller's online status (9.15.6) and its
-// reputation from its reviews (9.15.4).
+// The seller: its status (9.15.6), the character it sells as, its reputation (9.15.4).
 const seller = vendedores.find((vendedor) => vendedor.id === row.vendedor);
 const sellerRef = Object.hasOwn(refs.vendedores, row.vendedor)
   ? refs.vendedores[row.vendedor]
   : null;
 const reputation = sellerReputation(seller?.resenas ?? []);
+const presence = sellerPresence(sellerRef, context);
 const channels = sellerRef?.canales ?? [];
+const counted = (template: Messages['trade']['box']['reviews'], n: number) =>
+  fill(isPluralMessage(template) ? plural(locale, n, template) : template, {
+    n: formatInteger(n, locale),
+  });
+const profile = sellerHref(locale, row.vendedor);
+const sellerName = sellerRef?.nombre ?? row.vendedor;
+const initial = Array.from(sellerName)[0]?.toUpperCase() ?? '';
 
-// The actions of phase B (9.6, 9.10, 9.11, 9.15.2). Their texts travel as props (DP1). A deal
-// only starts on a listing the visitor sees `publicado` or `reservado` (9.10).
-const contactable = status === 'publicado' || status === 'reservado';
+// The actions of phase B (9.6, 9.10, 9.11, 9.15.2). Their texts travel as props (DP1).
 const dialogUi = { close: ui.close, dismiss: ui.dismiss };
 const contactLabels: ContactSellerLabels = {
   contact: trade.contactSeller,
@@ -281,6 +379,72 @@ const contactLabels: ContactSellerLabels = {
   openDeal: trade.limits.openDeal,
   consent: realMoneyConsentLabels(trade, formatInteger(EVIDENCIA_DIAS, locale)),
 };
+const boxLabels: TradeBoxLabels = {
+  buyingAs: trade.box.buyingAs,
+  noCharacter: trade.box.noCharacter,
+  addCharacter: trade.box.addCharacter,
+  dealOpen: trade.box.dealOpen,
+  viewDeal: trade.box.viewDeal,
+  copy: trade.box.copy,
+  copied: trade.box.copied,
+  copyLink: trade.box.copyLink,
+  linkCopied: trade.box.linkCopied,
+  copyFailed: trade.box.copyFailed,
+  published: trade.box.published,
+  expires: trade.box.expires,
+  completedOn: trade.box.completedOn,
+  publishedAs: trade.box.publishedAs,
+  openDeals: trade.box.openDeals,
+  view: trade.box.view,
+  edit: trade.box.edit,
+  reserve: trade.box.reserve,
+  release: trade.manage.release,
+  complete: trade.box.complete,
+  renew: trade.manage.renew,
+  withdraw: trade.box.withdraw,
+  withdrawTitle: trade.box.withdrawTitle,
+  withdrawText: trade.box.withdrawText,
+  cancel: trade.cancel,
+  states: {
+    reservado: trade.states.reservado,
+    completado: trade.states.completado,
+    expirado: trade.states.expirado,
+  },
+  channels: {
+    email: trade.channels.correo,
+    phone: trade.channels.telefono.replace('{code}', '').trim(),
+    discord: trade.channels.discord,
+    google: trade.channels.google,
+    twitch: trade.channels.twitch,
+  },
+  refusals: trade.refusals,
+};
+
+// «Más anuncios de {vendedor}»: the title, the character and world, and the price.
+const moreCards = moreRows.map((other: TradeRow) => {
+  const otherFiat =
+    other.precio.real === null
+      ? null
+      : formatRealMoney(Number(other.precio.real.importe), other.precio.real.moneda, locale);
+  const otherWorld = Object.hasOwn(refs.mundos, other.mundo) ? refs.mundos[other.mundo] : null;
+  return {
+    id: other.id,
+    href: listingHref(locale, other.id),
+    title: other.titulo,
+    heard: other.accesible === other.titulo ? null : other.accesible,
+    sprite: listingSprite(other, context),
+    pokemon: other.tipo === 'pokemon',
+    who: [other.personaje ?? sellerName, otherWorld].filter(Boolean).join(' · '),
+    fiat: otherFiat,
+    game: other.precio.juego.map((option) => ({
+      kind: option.tipo === 'pokedolares' ? ('pd' as const) : ('dia' as const),
+      amount: option.cantidad,
+    })),
+    anyWorld: tradesAcrossWorlds(other.tipo),
+    negotiable: other.precio.aConvenir,
+  };
+});
+const contactable = status === 'publicado' || status === 'reservado';
 ---
 
 <PageLayout
@@ -296,65 +460,63 @@ const contactLabels: ContactSellerLabels = {
   preloadGameFont
   noindex
 >
-  <div class="ac-trade-detail__head">
-    <PageTitle title={title} />
-    <p class="ac-trade-detail__meta">
-      {meta}{
-        canExpire ? (
-          <span data-ac-expira={row.expira} data-ac-expirado={` · ${trade.states.expirado}`}>
-            {state === null ? '' : ` · ${state}`}
-          </span>
-        ) : (
-          state !== null && ` · ${state}`
-        )
-      }
-    </p>
-    {
-      realMoney && (
-        <p class="ac-trade-detail__tag">
-          <Chip>{trade.listing.fiat}</Chip>
-        </p>
-      )
-    }
-  </div>
-
-  <div class="ac-trade-detail">
-    <div class="ac-trade-sheet">
-      <GameTooltip
-        tip={sheet}
-        variant="sheet"
-        ariaLabel={fill(ui.sheet, { name: row.accesible })}
+  <div class="ac-listing-page">
+    <div class="ac-listing-page__main">
+      <ListingHero
+        label={fill(ui.sheet, { name: row.accesible })}
+        title={title}
+        meta={canExpire
+          ? createElement(
+              'span',
+              null,
+              meta,
+              createElement(
+                'span',
+                { 'data-ac-expira': row.expira, 'data-ac-expirado': ` · ${trade.states.expirado}` },
+                state === null ? '' : ` · ${state}`,
+              ),
+            )
+          : state === null
+            ? meta
+            : `${meta} · ${state}`}
+        tags={realMoney || anyWorld
+          ? createElement(
+              'span',
+              { className: 'ac-listing-hero__tag-row' },
+              realMoney ? createElement(Chip, null, trade.listing.fiat) : null,
+              anyWorld ? createElement(Chip, null, trade.anyWorld) : null,
+            )
+          : null}
+        art={art}
+        pokemon={row.tipo === 'pokemon'}
+        qty={card.qty ?? null}
+        facts={facts}
         locale={locale}
+        hint={ui.pinHint}
         shinyLabel={ui.shiny}
         orLabel={ui.or}
+        starsLabel={(n: number) => `${keys.starLevel} ${formatInteger(n, locale)}`}
       />
       {
+        equipment.length > 0 && (
+          <ListingEquipment
+            title={trade.listing.equipment}
+            groups={equipment}
+            locale={locale}
+            hint={ui.pinHint}
+            orLabel={ui.or}
+          />
+        )
+      }
+      {
         (trained.length > 0 || memories.length > 0) && (
-          <div class="ac-game-tooltip ac-game-tooltip--static ac-trade-sheet__more">
+          <section class="ac-listing-panel">
             {trained.length > 0 && (
-              <details
-                class:list={[
-                  'ac-game-tooltip__section',
-                  !heldSection && 'ac-game-tooltip__section--first',
-                ]}
-                open
-              >
-                <summary class="ac-game-tooltip__toggle">
+              <>
+                <h2 class="ac-listing-panel__title">
                   {fill(trade.tip.training, { n: formatInteger(trained.length, locale) })}
-                  <span class="ac-game-tooltip__chevron" aria-hidden="true">
-                    <Glyph
-                      name="chevron-down"
-                      size={12}
-                      className="ac-game-tooltip__chevron-open"
-                    />
-                    <Glyph
-                      name="chevron-right"
-                      size={12}
-                      className="ac-game-tooltip__chevron-closed"
-                    />
-                  </span>
-                </summary>
-                <div class="ac-game-tooltip__section-body ac-trade-sheet__trainings">
+                </h2>
+                <div class="ac-listing-panel__trainings">
                   {trained.map((training) => (
                     <TrainingMeter
                       variant="tooltip"
@@ -366,32 +528,14 @@ const contactLabels: ContactSellerLabels = {
                     />
                   ))}
                 </div>
-              </details>
+              </>
             )}
             {memories.length > 0 && (
-              <details
-                class:list={[
-                  'ac-game-tooltip__section',
-                  !heldSection && trained.length === 0 && 'ac-game-tooltip__section--first',
-                ]}
-                open
-              >
-                <summary class="ac-game-tooltip__toggle">
+              <>
+                <h2 class="ac-listing-panel__title">
                   {fill(trade.detail.dittoMemory, { n: formatInteger(memories.length, locale) })}
-                  <span class="ac-game-tooltip__chevron" aria-hidden="true">
-                    <Glyph
-                      name="chevron-down"
-                      size={12}
-                      className="ac-game-tooltip__chevron-open"
-                    />
-                    <Glyph
-                      name="chevron-right"
-                      size={12}
-                      className="ac-game-tooltip__chevron-closed"
-                    />
-                  </span>
-                </summary>
-                <p class="ac-trade-sheet__memories">
+                </h2>
+                <p class="ac-listing-panel__memories">
                   {memories.map((memory) => (
                     <NestedEntity
                       tip={memory.tip}
@@ -409,62 +553,157 @@ const contactLabels: ContactSellerLabels = {
                     </NestedEntity>
                   ))}
                 </p>
-              </details>
+              </>
             )}
-          </div>
+          </section>
         )
       }
     </div>
 
-    <div class="ac-trade-detail__side">
-      <Section id="precio" title={trade.price}>
-        <FactList rows={priceRows} gap={8} zone={null} />
-        {realMoney && <Note lead={null}>{trade.realMoney.note}</Note>}
-      </Section>
+    <aside class="ac-trade-box" id="caja" aria-label={trade.price}>
+      <div class="ac-trade-box__price">
+        {priceLabel !== null && <p class="ac-trade-box__label">{priceLabel}</p>}
+        {
+          fiat !== null ? (
+            <p class="ac-trade-box__amount">{fiat}</p>
+          ) : options.length > 0 ? (
+            <div class="ac-trade-box__amount">
+              <PriceOptions options={options} locale={locale} orLabel={ui.or} link={diamondsLink} />
+            </div>
+          ) : precio.aConvenir ? (
+            <p class="ac-trade-box__amount">{trade.listing.negotiable}</p>
+          ) : null
+        }
+        {
+          fiat !== null && options.length > 0 && (
+            <div class="ac-trade-box__or">
+              <span>{trade.box.orInGame}</span>
+              <PriceOptions options={options} locale={locale} orLabel={ui.or} link={diamondsLink} />
+            </div>
+          )
+        }
+        {unitLine !== null && <p class="ac-trade-box__unit">{unitLine}</p>}
+        <p class="ac-trade-box__muted">{trade.box.noPayments}</p>
+      </div>
+
       {
         sellerRef !== null && (
-          <Section id="vendedor" title={trade.listing.seller}>
-            <SellerCard
-              name={sellerRef.nombre}
-              href={sellerHref(locale, row.vendedor)}
-              presence={sellerPresence(sellerRef, context)}
-              reputation={reputation}
-              locale={locale}
-              labels={{
-                rating: trade.seller.rating,
-                outOf: ui.money.outOf,
-                deals: trade.reputation.deals,
-                buyers: trade.reputation.buyers,
-                noReviews: trade.seller.noReviews,
-              }}
-            />
-          </Section>
+          <div class="ac-trade-box__seller">
+            <div class="ac-trade-box__who" data-buyer-only>
+              <span class="ac-trade-box__avatar" aria-hidden="true">
+                {initial}
+              </span>
+              <span>
+                <a class="ac-trade-box__handle" href={profile}>
+                  {sellerRef.nombre}
+                </a>
+                {presence !== null && (
+                  <SellerPresence state={presence.state} label={presence.label} />
+                )}
+              </span>
+            </div>
+            {row.personaje !== null && (
+              <>
+                <p class="ac-trade-box__label">
+                  <span data-buyer-only>{trade.box.character}</span>
+                  <span data-owner-only>{trade.box.publishedAs}</span>
+                </p>
+                <p class="ac-trade-box__character">
+                  <strong>{row.personaje}</strong>
+                  {worldName !== null && <Chip>{worldName}</Chip>}
+                  <button
+                    type="button"
+                    class="ac-trade-box__copy"
+                    data-ac-copy={row.personaje}
+                    data-ac-copied={trade.box.copied}
+                  >
+                    {trade.box.copy}
+                  </button>
+                </p>
+              </>
+            )}
+            {anyWorld ? (
+              <p class="ac-trade-box__muted">
+                {trade.box.delivery} <Chip>{trade.anyWorld}</Chip>
+              </p>
+            ) : (
+              worldName !== null && (
+                <p class="ac-trade-box__muted">{fill(trade.box.deliverIn, { world: worldName })}</p>
+              )
+            )}
+            <dl class="ac-trade-box__rows" data-buyer-only>
+              <div>
+                <dt>{trade.seller.rating}</dt>
+                <dd>
+                  {reputation.valoracion !== null && reputation.resenas > 0 ? (
+                    <>
+                      {fill(trade.box.scoreOf, { score: formatRating(reputation.valoracion) })}{' '}
+                      <a href={`${profile}#resenas`}>
+                        {counted(trade.box.reviews, reputation.resenas)}
+                      </a>
+                    </>
+                  ) : (
+                    trade.seller.noReviews
+                  )}
+                </dd>
+              </div>
+              <div>
+                <dt>{trade.confirmed}</dt>
+                <dd>{formatInteger(reputation.operaciones, locale)}</dd>
+              </div>
+              {seller?.desde && (
+                <div>
+                  <dt>{trade.seller.memberSince}</dt>
+                  <dd>{formatDate(seller.desde, 'es').slice(3)}</dd>
+                </div>
+              )}
+              {channels.length > 0 && (
+                <div>
+                  <dt>{trade.box.contact}</dt>
+                  <dd>
+                    <ChipRow
+                      items={channels}
+                      cap={channels.length}
+                      labels={ui.money}
+                      locale={locale}
+                    />
+                  </dd>
+                </div>
+              )}
+            </dl>
+          </div>
         )
       }
+
       {
-        channels.length > 0 && (
-          <Section id="contacto" title={trade.listing.contact}>
-            {/* In a box of its own: the plain-list rules of section.css (markers, «li + li»)
-                are for a list written straight into a section, not for the chips. */}
-            <div>
-              <ChipRow items={channels} cap={channels.length} labels={ui.money} locale={locale} />
-            </div>
-          </Section>
-        )
+        publico ? (
+          <TradeBox
+            client:load
+            locale={locale}
+            listingId={anuncio.id}
+            seller={row.vendedor}
+            sellerName={row.personaje ?? sellerName}
+            world={row.mundo}
+            worldName={worldName}
+            anyWorld={anyWorld}
+            status={status}
+            expira={row.expira}
+            realMoney={precio.real !== null}
+            worlds={Object.fromEntries(catalog.mundos.map((world) => [world.id, world.nombre]))}
+            hrefs={{
+              characters: `/${locale}/cuenta/#personajes`,
+              edit: `/${locale}/comercio/publicar/?editar=${anuncio.id}`,
+              deals: `/${locale}/comercio/operaciones/`,
+            }}
+            labels={boxLabels}
+            contact={contactLabels}
+            ui={dialogUi}
+          />
+        ) : null
       }
       {
         publico && (
-          <div class="ac-trade-detail__actions">
-            {contactable && (
-              <ContactSeller
-                client:load
-                locale={locale}
-                listingId={anuncio.id}
-                realMoney={precio.real !== null}
-                labels={contactLabels}
-                ui={dialogUi}
-              />
-            )}
+          <div class="ac-trade-box__report" data-buyer-only>
             <ReportAction
               client:load
               locale={locale}
@@ -476,8 +715,72 @@ const contactLabels: ContactSellerLabels = {
           </div>
         )
       }
-    </div>
+    </aside>
+
+    {
+      moreCards.length > 0 && (
+        <section class="ac-listing-more">
+          <div class="ac-listing-more__head">
+            <h2 class="ac-listing-more__title">{fill(trade.box.moreFrom, { name: sellerName })}</h2>
+            <a class="ac-listing-more__profile" href={profile}>
+              {trade.box.viewProfile}
+            </a>
+          </div>
+          <ul class="ac-listing-more__list">
+            {moreCards.map((more) => (
+              <li class="ac-listing-more__card">
+                <span class="ac-listing-more__art" data-pokemon={more.pokemon ? '' : undefined}>
+                  {more.sprite !== null && <Sprite {...more.sprite} alt="" loading="lazy" />}
+                </span>
+                <span class="ac-listing-more__text">
+                  <a class="ac-listing-more__link" href={more.href}>
+                    {more.heard === null ? (
+                      more.title
+                    ) : (
+                      <>
+                        <span aria-hidden="true">{more.title}</span>
+                        <span class="sr-only">{more.heard}</span>
+                      </>
+                    )}
+                  </a>
+                  <span class="ac-listing-more__who">{more.who}</span>
+                  <span class="ac-listing-more__price">
+                    {more.fiat !== null ? (
+                      <strong>{more.fiat}</strong>
+                    ) : more.game.length > 0 ? (
+                      <PriceOptions
+                        options={more.game.slice(0, 1)}
+                        locale={locale}
+                        orLabel={ui.or}
+                      />
+                    ) : more.negotiable ? (
+                      trade.listing.negotiable
+                    ) : null}
+                    {more.anyWorld && <Chip>{trade.anyWorld}</Chip>}
+                  </span>
+                </span>
+              </li>
+            ))}
+          </ul>
+        </section>
+      )
+    }
   </div>
+
+  {
+    contactable && publico && (
+      <div class="ac-listing-bar" data-ac-listing-bar hidden>
+        <span class="ac-listing-bar__price">
+          <strong>{fiat ?? (options.length > 0 ? '' : trade.listing.negotiable)}</strong>
+          {options.length > 0 && <PriceOptions options={options} locale={locale} orLabel={ui.or} />}
+        </span>
+        <a class="ac-button ac-button--solid" href="#caja">
+          {trade.contactSeller}
+        </a>
+      </div>
+    )
+  }
+
   {/* 9.15.2: the 18+ gate, a closed dialog until the island decides. */}
   <AgeGate
     client:load
@@ -501,5 +804,34 @@ const contactLabels: ContactSellerLabels = {
     const left = end - Date.now();
     if (left <= 0) expire();
     else if (left <= LONGEST_TIMER) window.setTimeout(expire, left);
+  }
+
+  // «Copiar» of the seller's character: the player name on the clipboard, «Copiado» for a moment.
+  for (const button of document.querySelectorAll<HTMLButtonElement>('[data-ac-copy]')) {
+    const idle = button.textContent ?? '';
+    button.addEventListener('click', () => {
+      navigator.clipboard.writeText(button.dataset.acCopy ?? '').then(
+        () => {
+          button.textContent = button.dataset.acCopied ?? idle;
+          window.setTimeout(() => {
+            button.textContent = idle;
+          }, 2000);
+        },
+        () => undefined,
+      );
+    });
+  }
+
+  // The phone bar (board Anuncio-detalle-movil): the price and «Contactar al vendedor» show at the
+  // bottom once the trade box has left the view, and hide while it is on screen.
+  const bar = document.querySelector<HTMLElement>('[data-ac-listing-bar]');
+  const box = document.getElementById('caja');
+  if (bar && box && 'IntersectionObserver' in window) {
+    const phone = window.matchMedia('(width < 64rem)');
+    const observer = new IntersectionObserver(([entry]) => {
+      const below = entry.boundingClientRect.bottom < 0;
+      bar.hidden = !(phone.matches && below && !entry.isIntersecting);
+    });
+    observer.observe(box);
   }
 </script>

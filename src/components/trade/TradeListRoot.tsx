@@ -1,4 +1,13 @@
-import { useCallback, useEffect, useMemo, useState, useSyncExternalStore } from 'react';
+import {
+  lazy as lazyComponent,
+  Suspense,
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+  useSyncExternalStore,
+} from 'react';
 import type { FocusEvent, ReactNode } from 'react';
 
 import '@/styles/components/trade-list.css';
@@ -19,21 +28,11 @@ import type { DataTableColumn } from '@/components/content/DataTable';
 import { Chip } from '@/components/content/Chip';
 import { EmptyState } from '@/components/content/EmptyState';
 import { Button } from '@/components/controls/Button';
-import { Checkbox } from '@/components/controls/Checkbox';
-import { ChipChoice } from '@/components/controls/ChipChoice';
-import { FilterBar } from '@/components/controls/FilterBar';
-import { ItemPicker, PokemonPicker, type PokemonFilterLabels } from '@/components/pickers/pickers';
+import type { PokemonFilterLabels } from '@/components/pickers/pickers';
 import type { PickerLabels } from '@/lib/pickers/labels';
-import { itemOptions, pokemonOptions } from '@/lib/pickers/options';
-import { portraitSprite } from '@/lib/trade/pickers';
-import { RangeField } from '@/components/controls/RangeField';
 import type { RangeFieldValue } from '@/components/controls/RangeField';
-import { Select } from '@/components/controls/Select';
-import type { SelectOption } from '@/components/controls/Select';
 import { SortSelect } from '@/components/controls/SortSelect';
 import { TextField } from '@/components/controls/TextField';
-import { ToggleGroup } from '@/components/controls/ToggleGroup';
-import type { ToggleGroupOption } from '@/components/controls/ToggleGroup';
 import type { ElementChipEntry } from '@/components/game/ElementChip';
 import type * as SlotModule from '@/components/game/EntitySlot';
 import { Sprite } from '@/components/game/Sprite';
@@ -64,11 +63,13 @@ import type {
   OutfitRecord,
 } from '@/lib/content/registry-schema';
 import type { PokemonRecord, PokemonTier } from '@/lib/content/types';
+import { readAccountSnapshot, onCachedAccountChange } from '@/lib/account/session-cache';
 import { formatDate, formatRelative } from '@/lib/format/dates';
 import {
   formatDiamonds,
   formatInteger,
   formatPercent,
+  formatPokedolares,
   formatPokedolaresLabel,
   formatRating,
   formatRealMoney,
@@ -85,7 +86,7 @@ import type {
   TipTraining,
   TipValue,
 } from '@/lib/game/tips';
-import { applyListState } from '@/lib/lists/state';
+import { applyListState, filterValues, listSearch } from '@/lib/lists/state';
 import type { EntityView, ListConfig, ListFilter, ListPage, ListState } from '@/lib/lists/state';
 import { spriteOrNull } from '@/lib/sprites/resolve';
 import type { SpriteData, SpriteRegistry } from '@/lib/sprites/resolve';
@@ -96,6 +97,8 @@ import { LISTING_ORDERS, listingComparator } from '@/lib/trade/sort';
 import type { ListingOrder, SellerScore } from '@/lib/trade/sort';
 import { listingTitle } from '@/lib/trade/title';
 import type { ListingNames } from '@/lib/trade/title';
+import { unitPriceText } from '@/lib/trade/unit-price';
+import type { UnitPriceLabels } from '@/lib/trade/unit-price';
 import {
   ESTADOS_ANUNCIO,
   ESTADOS_PRESENCIA,
@@ -108,8 +111,20 @@ import {
   equipmentOf,
   inGameFirst,
   isListed,
+  listedInWorld,
   sellerReputation,
+  tradesAcrossWorlds,
 } from '@/lib/trade/types';
+import {
+  FiltersButton,
+  FilterTokens,
+  TypeRail,
+  TRADE_PANEL_TEXTS_ID,
+  type FilterToken,
+  type TradeFilterLabels,
+  type TradePanelLabels,
+} from './TradeFilters';
+import type { TradePanelTexts } from './TradeFiltersPanel';
 import type {
   Anuncio,
   ChannelLabels,
@@ -122,6 +137,7 @@ import type {
   Precio,
   PrecioNpc,
   PrecioReal,
+  PrecioUnidad,
   TipoActivo,
   UnidadPokemon,
   Vendedor,
@@ -229,12 +245,14 @@ const PRICE_ID = 'ac-comercio-precio';
  */
 const LIST_WIDTHS = {
   sprite: 73,
-  type: 110,
-  world: 74.1,
-  fiat: 100,
-  game: 176,
-  seller: 152,
-  posted: 100,
+  // Board Personajes «Variante 1» and Comercio-filtros «Variante 2»: «Mundo» joins «Vendedor»
+  // («Void Exiled · Titan 1») and the type rail takes the left of the list, so the columns are
+  // the ones that fit its 736 with «Anuncio» wrapping on two lines at most.
+  type: 84,
+  fiat: 92,
+  game: 128,
+  seller: 140,
+  posted: 76,
 };
 
 /** The hard space `formatRealMoney` writes between the symbol and the figure (§13.3). */
@@ -273,6 +291,11 @@ export interface TradeRow {
   item: ItemAnunciado | null;
   /** The amount of a Diamonds or Pokédólares listing, in base units (R5). */
   cantidad: number | null;
+  /**
+   * The player name of the seller's character the listing is published as (owner rule
+   * 2026-09-24): «Void Exiled · Titan 1» where the seller shows. `null` without one (phase A).
+   */
+  personaje: string | null;
 }
 
 /** A row without the two texts written from it and the names of `refs` (9.4, 9.5.2). */
@@ -455,8 +478,6 @@ export interface TradeListLabels {
   search: string;
   /** «Shiny Ditto +20, Premier, Memory Slots 6, Fire Stone, 50kk…» (DS:guias/40). */
   searchPlaceholder: string;
-  /** «Crear anuncio» in phase A, towards `/comercio/publicar/`. */
-  publish: string;
   /** «Tipo de activo», the visible label of the tabs. */
   type: string;
   /** «Todos», the tab of every type. */
@@ -465,29 +486,12 @@ export interface TradeListLabels {
   types: Record<TipoActivo, string>;
   /** The «Tipo» cell of the Lista: «Pokémon», «Item», «Diamonds», «Pokédólares». */
   typeCells: Record<TipoActivo, string>;
-  /** «Mundo»: the filter, the Lista column and the row of a panel; and «Todos». */
+  /** «Mundo»: the row of a panel. */
   world: string;
-  allWorlds: string;
-  /** «Moneda» and its first option, «Todas». */
-  currency: string;
-  allCurrencies: string;
-  /** «Precio», and «Precio (elige moneda)» while the currency is «Todas». */
-  price: string;
-  priceDisabled: string;
-  /** Hidden labels of the two ends: «Precio mínimo», «Precio máximo». */
-  minLabel: string;
-  maxLabel: string;
-  /** «Importe no válido»: the hidden description of an invalid end. */
+  /** «Importe no válido»: the hidden description of an invalid end of «Precio». */
   invalidAmount: string;
-  /** «Valoración del vendedor» and its first option, «Todas». */
-  rating: string;
-  allRatings: string;
-  /** «4.5 o más», «4.0 o más», «3.0 o más». */
-  ratings: Record<RatingFloor, string>;
   /** The label of each online status (9.15.6): «En el juego», «Ausente», «Desconectado». */
   presence: Record<EstadoPresencia, string>;
-  /** «Solo en el juego»: the filter of the sellers in the game (9.15.6). */
-  onlyInGame: string;
   /** The option of each order in `SortSelect`, by its id in the URL (9.5.5). */
   sorts: Record<ListingOrder, string>;
   /** «{n} anuncio» / «{n} anuncios». */
@@ -531,6 +535,12 @@ export interface TradeListLabels {
   };
   /** «{n} Pokémon»: «Drop de» of an item that several Pokémon drop. */
   droppedByCount: MessageLeaf;
+  /** «Cualquier mundo»: the tag of a Pokédólares listing, sold to every world. */
+  anyWorld: string;
+  /** A price per unit: «{price} por {unit}», «unidad», and «Por unidad» for a panel row. */
+  unitPrice: UnitPriceLabels & { perUnit: string };
+  /** The rail, the «Filtros» button, its panel and the tokens (market only). */
+  filters?: TradeFilterLabels;
 }
 
 /** The part of the list a detail page and the profile build with the same functions. */
@@ -550,6 +560,8 @@ export interface TradeContext {
     | 'market'
     | 'droppedByCount'
     | 'presence'
+    | 'anyWorld'
+    | 'unitPrice'
   >;
 }
 
@@ -560,12 +572,16 @@ export interface TradeContext {
  * the words the other lists use. `publico` is phase B (9.2): only then does a listing with a
  * real-money price carry the tag «Dinero real», the word of its price row (9.15.2).
  */
-export function tradeLabels(messages: Messages, publico = false): TradeListLabels {
+export function tradeLabels(messages: Messages, publico = false, market = false): TradeListLabels {
   const { trade } = messages;
+  const ratings = {
+    '4.5': fill(trade.filters.ratingAtLeast, { score: formatRating(4.5) }),
+    '4.0': fill(trade.filters.ratingAtLeast, { score: formatRating(4) }),
+    '3.0': fill(trade.filters.ratingAtLeast, { score: formatRating(3) }),
+  };
   return {
     search: trade.list.searchLabel,
     searchPlaceholder: trade.list.searchPlaceholder,
-    publish: trade.create,
     type: trade.typeLabel,
     allTypes: trade.types.all,
     types: {
@@ -576,27 +592,12 @@ export function tradeLabels(messages: Messages, publico = false): TradeListLabel
     },
     typeCells: trade.typeNames,
     world: trade.world,
-    allWorlds: trade.filters.allWorlds,
-    currency: trade.currency,
-    allCurrencies: trade.filters.allCurrencies,
-    price: trade.price,
-    priceDisabled: trade.filters.priceNeedsCurrency,
-    minLabel: trade.filters.minLabel,
-    maxLabel: trade.filters.maxLabel,
     invalidAmount: trade.filters.invalidAmount,
-    rating: trade.filters.rating,
-    allRatings: trade.filters.allRatings,
-    ratings: {
-      '4.5': fill(trade.filters.ratingAtLeast, { score: formatRating(4.5) }),
-      '4.0': fill(trade.filters.ratingAtLeast, { score: formatRating(4) }),
-      '3.0': fill(trade.filters.ratingAtLeast, { score: formatRating(3) }),
-    },
     presence: {
       en_juego: trade.presence.en_juego,
       ausente: trade.presence.ausente,
       desconectado: trade.presence.desconectado,
     },
-    onlyInGame: trade.filters.onlyInGame,
     sorts: trade.list.sort,
     count: trade.list.count,
     none: trade.list.empty,
@@ -627,6 +628,66 @@ export function tradeLabels(messages: Messages, publico = false): TradeListLabel
       contact: trade.tip.contact,
     },
     droppedByCount: messages.items.droppedByCount,
+    anyWorld: trade.anyWorld,
+    unitPrice: {
+      per: trade.unitPrice.per,
+      one: trade.unitPrice.one,
+      perUnit: trade.unitPrice.perUnit,
+    },
+    ...(market ? { filters: filterLabels(messages, ratings) } : {}),
+  };
+}
+
+/** The texts the list needs before «Filtros» opens (board Comercio-filtros V2). */
+function filterLabels(messages: Messages, ratings: Record<RatingFloor, string>): TradeFilterLabels {
+  const { trade } = messages;
+  return {
+    open: trade.filterPanel.open,
+    clearAll: trade.filterPanel.clearAll,
+    remove: trade.filterPanel.remove,
+    from: trade.filterPanel.from,
+    upTo: trade.filterPanel.upTo,
+    world: trade.world,
+    price: trade.price,
+    seller: trade.listing.seller,
+    pokemon: trade.types.pokemon,
+    item: trade.typeNames.items,
+    ratings,
+  };
+}
+
+/**
+ * The texts of the «Filtros» panel and of its pickers, which the page writes in a JSON script
+ * (`TRADE_PANEL_TEXTS_ID`) and the panel reads when it first opens (13.6: out of the props).
+ */
+export function tradePanelTexts(
+  messages: Messages,
+  pickers: TradeListPickerLabels | null,
+): { labels: TradePanelLabels; pickers: TradeListPickerLabels | null } {
+  const { trade, ui } = messages;
+  return {
+    labels: {
+      clear: trade.filterPanel.clear,
+      allWorlds: trade.filterPanel.allWorlds,
+      yourCharacter: trade.filterPanel.yourCharacter,
+      worldNote: trade.filterPanel.worldNote,
+      currency: trade.currency,
+      allCurrencies: trade.filters.allCurrencies,
+      min: ui.rangeMin,
+      max: ui.rangeMax,
+      minLabel: trade.filters.minLabel,
+      maxLabel: trade.filters.maxLabel,
+      amountHelp: trade.filterPanel.amountHelp,
+      pickCurrency: trade.filterPanel.pickCurrency,
+      rating: trade.seller.rating,
+      allRatings: trade.filters.allRatings,
+      ratingNote: trade.filterPanel.ratingNote,
+      onlyInGame: trade.filters.onlyInGame,
+      inGameNote: trade.filterPanel.inGameNote,
+      show: trade.filterPanel.show,
+      close: ui.close,
+    },
+    pickers,
   };
 }
 
@@ -665,9 +726,11 @@ export const TRADE_FIELDS = fieldList<TradeListing>()([
   'pokemon',
   'item',
   'cantidad',
+  'personaje',
 ]);
 
-const PRICE_FIELDS = fieldList<Precio>()(['real', 'juego', 'aConvenir']);
+const PRICE_FIELDS = fieldList<Precio>()(['real', 'juego', 'aConvenir', 'porUnidad']);
+const PER_UNIT_FIELDS = fieldList<PrecioUnidad>()(['cantidad', 'real', 'juego']);
 const REAL_FIELDS = fieldList<PrecioReal>()(['moneda', 'importe']);
 const OPTION_FIELDS = fieldList<OpcionJuego>()(['tipo', 'cantidad']);
 const UNIT_FIELDS = fieldList<UnidadPokemon>()([
@@ -754,11 +817,22 @@ function packSprite(sprite: SpriteData | null): unknown[] | null {
 }
 
 function packPrice(precio: Precio): unknown[] {
+  const per = precio.porUnidad ?? null;
   return pack(
     {
       real: precio.real && pack(precio.real, REAL_FIELDS),
       juego: precio.juego.map((option) => pack(option, OPTION_FIELDS)),
       aConvenir: precio.aConvenir,
+      porUnidad:
+        per &&
+        pack(
+          {
+            cantidad: per.cantidad,
+            real: per.real && pack(per.real, REAL_FIELDS),
+            juego: per.juego.map((option) => pack(option, OPTION_FIELDS)),
+          },
+          PER_UNIT_FIELDS,
+        ),
     },
     PRICE_FIELDS,
   );
@@ -866,18 +940,35 @@ function readSprite(value: unknown, what: string): SpriteData | null {
   return trusted<SpriteData>({ src, size, frames, mode, ...(isRecord(rest) ? rest : {}) });
 }
 
+function readReal(value: unknown): PrecioReal | null {
+  return value === null ? null : trusted<PrecioReal>(unpack(value, REAL_FIELDS, 'precio'));
+}
+
+function readOptions(value: unknown): OpcionJuego[] {
+  return listOf(
+    value,
+    (option) => trusted<OpcionJuego>(unpack(option, OPTION_FIELDS, 'precio')),
+    'precio',
+  );
+}
+
 function readPrice(value: unknown): Precio {
   const price = unpack(value, PRICE_FIELDS, 'precio');
-  return {
-    real:
-      price.real === null ? null : trusted<PrecioReal>(unpack(price.real, REAL_FIELDS, 'precio')),
-    juego: listOf(
-      price.juego,
-      (option) => trusted<OpcionJuego>(unpack(option, OPTION_FIELDS, 'precio')),
-      'precio',
-    ),
+  const precio: Precio = {
+    real: readReal(price.real),
+    juego: readOptions(price.juego),
     aConvenir: price.aConvenir === true,
   };
+  if (price.porUnidad !== null && price.porUnidad !== undefined) {
+    const per = unpack(price.porUnidad, PER_UNIT_FIELDS, 'precio');
+    if (typeof per.cantidad !== 'number') return fail('precio');
+    precio.porUnidad = {
+      cantidad: per.cantidad,
+      real: readReal(per.real),
+      juego: readOptions(per.juego),
+    };
+  }
+  return precio;
 }
 
 function readNpc(value: unknown): PrecioNpc | null {
@@ -915,7 +1006,7 @@ function readRow(fila: unknown, columns: readonly (readonly [string, number])[])
   if (!Array.isArray(fila)) return fail('a row is not a list');
   const row: Record<string, unknown> = {};
   for (const [field, index] of columns) row[field] = index < 0 ? undefined : fila[index];
-  const { id, tipo, vendedor, mundo, publicado, expira, estado, cantidad, item } = row;
+  const { id, tipo, vendedor, mundo, publicado, expira, estado, cantidad, item, personaje } = row;
   if (
     !isText(id) ||
     !TIPOS_ACTIVO.includes(tipo as TipoActivo) ||
@@ -942,6 +1033,7 @@ function readRow(fila: unknown, columns: readonly (readonly [string, number])[])
         ? null
         : trusted<ItemAnunciado>(unpack(item, ITEM_FIELDS, 'item')),
     cantidad: typeof cantidad === 'number' ? cantidad : null,
+    personaje: isText(personaje) ? personaje : null,
   };
 }
 
@@ -1152,6 +1244,7 @@ export function tradeRecords(
             },
       item: anuncio.item ?? null,
       cantidad: anuncio.cantidad ?? null,
+      personaje: anuncio.character?.playerName ?? null,
     };
   });
 
@@ -1402,7 +1495,8 @@ export function tradeConfig({
     })),
     filters: [
       { key: 'tipo', values: TIPOS_ACTIVO, test: (row, value) => row.tipo === value },
-      { key: 'mundo', values: worlds, test: (row, value) => row.mundo === value },
+      // Pokédólares sell to every world: they stay under any «Mundo» (owner rule 2026-09-24).
+      { key: 'mundo', values: worlds, test: (row, value) => listedInWorld(row, value) },
       // 16.4.6: «Pokémon» and «Ítem», several ids each: `?pokemon=charizard,shiny-charizard`.
       {
         key: 'pokemon',
@@ -1722,18 +1816,50 @@ function gameOptions(precio: Precio): PriceOption[] {
  * 400 Diamonds»); without them, «A convenir».
  */
 export function priceLabel(row: TradeRow, context: TradeContext): string {
+  const unit = unitText(row, context);
+  const withUnit = (text: string) => (unit === null ? text : `${text} (${unit})`);
   const fiat = fiatText(row.precio, context.locale);
-  if (fiat !== null) return fiat;
+  if (fiat !== null) return withUnit(fiat);
   if (row.precio.juego.length > 0) {
-    return row.precio.juego
-      .map((option) =>
-        option.tipo === 'pokedolares'
-          ? formatPokedolaresLabel(option.cantidad, context.locale)
-          : formatDiamonds(option.cantidad, context.locale),
-      )
-      .join(` ${context.ui.or} `);
+    return withUnit(
+      row.precio.juego
+        .map((option) =>
+          option.tipo === 'pokedolares'
+            ? formatPokedolaresLabel(option.cantidad, context.locale)
+            : formatDiamonds(option.cantidad, context.locale),
+        )
+        .join(` ${context.ui.or} `),
+    );
   }
   return context.labels.card.negotiable;
+}
+
+/**
+ * The price per unit of a listing, «MX$ 1,80 por 1kk» (owner rule 2026-09-24), shown with the
+ * total wherever a price appears; `null` for a total price.
+ */
+export function unitText(
+  row: Pick<TradeRow, 'tipo' | 'precio'>,
+  context: TradeContext,
+): string | null {
+  return unitPriceText(
+    row.tipo,
+    row.precio,
+    context.locale,
+    context.labels.unitPrice,
+    context.ui.or,
+  );
+}
+
+/** The world a row sells in: its world's name, or «Cualquier mundo» for Pokédólares. */
+function worldText(row: Pick<TradeRow, 'tipo' | 'mundo'>, context: TradeContext): string | null {
+  if (tradesAcrossWorlds(row.tipo)) return context.labels.anyWorld;
+  return Object.hasOwn(context.refs.mundos, row.mundo) ? context.refs.mundos[row.mundo] : null;
+}
+
+/** The world name of a row's character, for «Void Exiled · Titan 1». */
+function worldName(row: Pick<TradeRow, 'mundo'>, context: TradeContext): string | null {
+  return Object.hasOwn(context.refs.mundos, row.mundo) ? context.refs.mundos[row.mundo] : null;
 }
 
 /** A seller's online status with its label (9.15.6), or `null` for a seller without one. */
@@ -1764,7 +1890,10 @@ export function listingCard(
     sprite: listingSprite(row, context),
     qty: stackOf(row),
     shiny: isShiny(row, context),
-    world: Object.hasOwn(refs.mundos, row.mundo) ? refs.mundos[row.mundo] : null,
+    // Board Personajes «Variante 1»: the character and its world go in «Vendedor»; the head
+    // only marks the exception, «Cualquier mundo» of the Pokédólares.
+    world: row.personaje === null ? worldName(row, context) : null,
+    anyWorld: tradesAcrossWorlds(row.tipo) ? context.labels.anyWorld : null,
     posted: { datetime: row.publicado, text: posted },
     reserved: row.estado === 'reservado',
     facts: listingFacts(row, context),
@@ -1773,11 +1902,13 @@ export function listingCard(
     fiat: fiatText(row.precio, locale),
     game: gameOptions(row.precio),
     negotiable: row.precio.aConvenir,
+    unit: unitText(row, context),
     seller:
       seller === null
         ? null
         : {
-            name: seller.nombre,
+            name: row.personaje ?? seller.nombre,
+            world: row.personaje === null ? null : worldName(row, context),
             href: sellerHref(locale, row.vendedor),
             score: seller.valoracion,
             reviews: seller.resenas,
@@ -1927,18 +2058,22 @@ export function listingTip(
     // «A convenir» takes the first price row, as on the card (9.5.8).
     pushMarket(labels.card.fiat, fiat ?? (row.precio.aConvenir ? labels.card.negotiable : null));
     pushMarket(labels.card.game, options.length > 0 ? { price: options } : null);
-    pushMarket(labels.world, Object.hasOwn(refs.mundos, row.mundo) ? refs.mundos[row.mundo] : null);
+    pushMarket(labels.unitPrice.perUnit, unitText(row, context));
+    pushMarket(labels.world, worldText(row, context));
     if (seller !== null) {
       const scored = seller.resenas > 0 && seller.valoracion !== null;
+      const world = worldName(row, context);
+      const name =
+        row.personaje === null ? seller.nombre : [row.personaje, world].filter(Boolean).join(' · ');
       pushMarket(
         labels.card.seller,
         scored
           ? fill(labels.market.sellerValue, {
-              name: seller.nombre,
+              name,
               score: formatRating(seller.valoracion),
               n: formatInteger(seller.resenas, locale),
             })
-          : seller.nombre,
+          : name,
       );
       pushMarket(
         labels.market.contact,
@@ -2063,6 +2198,53 @@ function currencyOf(search: string): PriceCurrency | null {
   return TRADE_CURRENCIES.find((currency) => currency === value) ?? null;
 }
 
+/** The «Filtros» panel (Variante 2), a chunk of its own loaded on its first press (13.6). */
+const PANEL_ID = 'ac-comercio-filtros';
+
+const FiltersPanel = lazyComponent(() =>
+  import('./TradeFiltersPanel').then((module) => ({ default: module.FiltersPanel })),
+);
+
+/** The filters the panel and «Limpiar filtros» empty: never the type, the search, the order or the view. */
+const PANEL_KEYS = ['mundo', 'moneda', 'min', 'max', 'val', 'presencia', 'pokemon', 'item'];
+
+/** The panel's texts, from the page's JSON script (`tradePanelTexts`); null without it. */
+function readPanelTexts(): TradePanelTexts | null {
+  const script = document.getElementById(TRADE_PANEL_TEXTS_ID);
+  if (script === null) return null;
+  try {
+    return JSON.parse(script.textContent ?? '') as TradePanelTexts;
+  } catch {
+    return null;
+  }
+}
+
+/** Set once the reader chooses a world: the main character's world is then not preselected. */
+const WORLD_CHOSEN_KEY = 'alliance-codex:comercio:mundo-elegido';
+
+function worldChosen(): boolean {
+  try {
+    return window.sessionStorage.getItem(WORLD_CHOSEN_KEY) === '1';
+  } catch {
+    return false;
+  }
+}
+
+function rememberWorldChosen(): void {
+  try {
+    window.sessionStorage.setItem(WORLD_CHOSEN_KEY, '1');
+  } catch {
+    // Without storage the world is preselected again on the next visit.
+  }
+}
+
+/** An amount of the price token: «50kk», «300 Diamonds», «US$ 10». */
+function amountText(amount: number, currency: PriceCurrency, locale: Locale): string {
+  if (currency === 'pokedolares') return formatPokedolares(amount, locale);
+  if (currency === 'diamonds') return formatDiamonds(amount, locale);
+  return formatRealMoney(amount, currency, locale);
+}
+
 /**
  * The controller of 7.5.4 closes every panel, pinned ones included, on `ac:modal-open` (TT12),
  * the one «close all» it offers. A type change closes the open panel (9.5.3, CA-9.3).
@@ -2163,8 +2345,11 @@ export interface TradeListRootProps {
   paginationLabel?: string;
   /** `tradeUi(messages.ui)` of the page's locale. */
   ui: TradeUi;
-  /** The «Pokémon» and «Ítem» filters (16.4.6); without them the list has neither. */
-  pickers?: TradeListPickerLabels | null;
+  /**
+   * Whether the list has the «Pokémon» and «Ítem» filters (16.4.6); their texts travel with the
+   * panel's, in the page's JSON script (`tradePanelTexts`).
+   */
+  pickers?: boolean;
   labels: TradeListLabels;
 }
 
@@ -2183,7 +2368,7 @@ export function TradeListRoot({
   paginationLabel,
   ui,
   labels,
-  pickers = null,
+  pickers = false,
 }: TradeListRootProps) {
   const market = variant === 'market';
   const { now, hydrated } = useClock(Date.parse(builtAt));
@@ -2336,10 +2521,27 @@ export function TradeListRoot({
     }
   });
 
+  // Several filters in one write of the URL (the panel's «Limpiar», a token that holds two
+  // filters): one `setFilter` after another would each start from the same state.
+  const setFilters = (changes: Readonly<Record<string, string | null>>) => {
+    const next = { ...state.filters };
+    for (const [key, value] of Object.entries(changes)) {
+      const filter = config.filters.find((candidate) => candidate.key === key);
+      if (filter === undefined) continue;
+      const valid = value === null ? undefined : filterValues(filter, value);
+      if (valid === undefined) delete next[key];
+      else next[key] = valid;
+    }
+    const { pathname, search, hash } = window.location;
+    const query = listSearch(config, search, { ...state, filters: next, page: 1 });
+    if (query === search) return;
+    window.history.replaceState(window.history.state, '', `${pathname}${query}${hash}`);
+    window.dispatchEvent(new Event(URL_EVENT));
+  };
+
   const setRange = (next: RangeFieldValue) => {
     setTyped(next);
-    if (next.min !== range.min) controller.setFilter('min', next.min.trim() || null);
-    if (next.max !== range.max) controller.setFilter('max', next.max.trim() || null);
+    setFilters({ min: next.min.trim() || null, max: next.max.trim() || null });
   };
   const leaveRange = (event: FocusEvent<HTMLFieldSetElement>) => {
     const next = event.relatedTarget;
@@ -2347,187 +2549,259 @@ export function TradeListRoot({
     setTyped(null);
   };
 
+  // ------------------------------------------------------------------- the main character
+  // Signed in, «Mundo» starts in the world of the account's main character (owner rule
+  // 2026-09-24), once per visit and only while the reader has not chosen a world itself. The
+  // header's cache says which world (src/lib/account/session-cache.ts): no request.
+  const [myWorld, setMyWorld] = useState<string | null>(null);
+  useEffect(() => {
+    if (!market) return undefined;
+    const read = () => {
+      const { session, account } = readAccountSnapshot();
+      const world = session !== null ? (account?.world ?? null) : null;
+      setMyWorld(world !== null && worldIds.includes(world) ? world : null);
+    };
+    read();
+    return onCachedAccountChange(read);
+  }, [market, worldIds]);
+  const preselected = useRef(false);
+  const { ready, setFilter } = controller;
+  useEffect(() => {
+    if (!market || myWorld === null || preselected.current || !ready) return;
+    preselected.current = true;
+    if (worldChosen() || new URLSearchParams(window.location.search).has('mundo')) return;
+    setFilter('mundo', myWorld);
+  }, [market, myWorld, ready, setFilter]);
+  const chooseWorld = (world: string | null) => {
+    rememberWorldChosen();
+    setFilter('mundo', world);
+  };
+
   // ------------------------------------------------------------------------ controls
   const filters = state.filters;
-  const typeOptions: ToggleGroupOption[] = [
-    { value: '', label: labels.allTypes },
-    ...TIPOS_ACTIVO.map((type): ToggleGroupOption => {
-      const sprite = sprites.types[type];
-      return sprite === null
-        ? { value: type, label: labels.types[type] }
-        : { value: type, label: labels.types[type], sprite };
-    }),
-  ];
-  // 16.4.6: the options of the pickers are the Pokémon and the items the rows name.
   const allRows = loaded?.rows ?? first.rows;
-  const pokemonChoices = useMemo(
-    () =>
-      pokemonOptions(
-        Object.entries(refs.pokemon)
-          .filter(([id]) => allRows.some((row) => row.pokemon?.pokemon === id))
-          .map(([id, ref]) => ({
-            id,
-            name: ref.nombre,
-            number: null,
-            types: [...ref.elementos],
-            elementoMoveset: null,
-            tier: ref.tier,
-            shiny: ref.variante === 'shiny',
-            generation: ref.generacion,
-            sprite: portraitSprite(ref.imagen),
-            tip: pokemonPanel(id, ref, context),
-          })),
-      ),
-    [refs, allRows, context],
-  );
-  const itemChoices = useMemo(
-    () =>
-      itemOptions(
-        Object.entries(refs.items)
-          .filter(([id]) => allRows.some((row) => row.item?.item === id))
-          .map(([id, ref]) => ({
-            id,
-            name: ref.nombre,
-            categoria: ref.categoria,
-            sprite: ref.sprite,
-            tip: itemPanel(id, ref, context),
-          })),
-      ),
-    [refs, allRows, context],
-  );
-  const categoryNames = useMemo(
-    () =>
-      Object.fromEntries(
-        Object.values(refs.items).flatMap((ref) =>
-          ref.nombreCategoria === null ? [] : [[ref.categoria, ref.nombreCategoria]],
-        ),
-      ),
-    [refs],
-  );
-  const elementChoices = useMemo(
-    () => Object.entries(refs.elementos).map(([id, ref]) => ({ id, name: ref.nombre })),
-    [refs],
-  );
   const idsOf = (value: string | undefined) => (value ? value.split(',') : []);
-  const pickerBase =
-    pickers === null
-      ? null
-      : {
-          locale,
-          labels: pickers.picker,
-          hint: ui.pinHint,
-          shinyLabel: ui.shiny,
-          orLabel: ui.or,
-          multiple: true,
-          optional: true,
-        };
-  const currencyOptions: SelectOption[] = [
-    { value: '', label: labels.allCurrencies },
-    ...TRADE_CURRENCIES.map((id) => ({ value: id, label: currencyName(id, ui) })),
-  ];
-  const ratingOptions: SelectOption[] = [
-    { value: '', label: labels.allRatings },
-    ...RATING_FLOORS.map((floor) => ({ value: floor, label: labels.ratings[floor] })),
-  ];
 
-  const controls = market ? (
-    <>
-      <div className="ac-trade-list__search">
-        <TextField
-          variant="search"
-          label={labels.search}
-          placeholder={labels.searchPlaceholder}
-          value={controller.query}
-          onChange={(value) => controller.setQuery(value)}
-          inputProps={{ autoComplete: 'off', spellCheck: false, enterKeyHint: 'search' }}
+  // The rail's counts (Variante 2): what each type would show under the other filters.
+  const live = useMemo(() => allRows.filter((row) => isListed(row, now)), [allRows, now]);
+  const counts = useMemo(() => {
+    const others = { ...state.filters };
+    delete others.tipo;
+    const base: ListState = { ...state, filters: others, page: 1 };
+    const result: Record<TipoActivo | 'all', number> = {
+      all: applyListState(config, live, base).total,
+      pokemon: 0,
+      items: 0,
+      diamonds: 0,
+      pokedolares: 0,
+    };
+    for (const tipo of TIPOS_ACTIVO) {
+      result[tipo] = applyListState(config, live, {
+        ...base,
+        filters: { ...others, tipo },
+      }).total;
+    }
+    return result;
+  }, [config, live, state]);
+
+  const [panelOpen, setPanelOpen] = useState(false);
+  const [panelMounted, setPanelMounted] = useState(false);
+  const [panelTexts, setPanelTexts] = useState<TradePanelTexts | null>(null);
+  const filterLabels = labels.filters;
+  const clearPanel = () => {
+    rememberWorldChosen();
+    setTyped(null);
+    setFilters(Object.fromEntries(PANEL_KEYS.map((key) => [key, null])));
+  };
+
+  // One token per active group (Variante 2): Mundo, Precio, Vendedor, and the pickers'.
+  const tokens: FilterToken[] = [];
+  if (filterLabels !== undefined) {
+    if (filters.mundo) {
+      const name = worlds.find(([id]) => id === filters.mundo)?.[1] ?? filters.mundo;
+      tokens.push({
+        key: 'mundo',
+        name: filterLabels.world,
+        value: <strong>{name}</strong>,
+        text: name,
+        onRemove: () => chooseWorld(null),
+      });
+    }
+    if (currency !== null) {
+      const [min, max] = [filters.min, filters.max].map((end) => {
+        const amount = end === undefined ? null : parsePrice(end, currency, locale);
+        return amount === null ? null : amountText(amount, currency, locale);
+      });
+      const text =
+        min !== null && max !== null
+          ? `${min} – ${max}`
+          : min !== null
+            ? fill(filterLabels.from, { min })
+            : max !== null
+              ? fill(filterLabels.upTo, { max })
+              : currencyName(currency, ui);
+      const sprite = isRealCurrency(currency) ? null : sprites.types[currency];
+      tokens.push({
+        key: 'precio',
+        name: filterLabels.price,
+        value: (
+          <>
+            {sprite !== null ? <Sprite {...sprite} alt="" /> : null}
+            <strong>{text}</strong>
+          </>
+        ),
+        text,
+        onRemove: () => {
+          setTyped(null);
+          setFilters({ moneda: null, min: null, max: null });
+        },
+      });
+    }
+    if (filters.val || filters.presencia === IN_GAME) {
+      const parts = [
+        filters.val ? (filterLabels.ratings[filters.val] ?? filters.val) : null,
+        filters.presencia === IN_GAME ? labels.presence.en_juego : null,
+      ].filter((part): part is string => part !== null);
+      tokens.push({
+        key: 'vendedor',
+        name: filterLabels.seller,
+        value: (
+          <>
+            {filters.presencia === IN_GAME ? (
+              <span className="ac-presence__dot" data-presence="en_juego" aria-hidden="true" />
+            ) : null}
+            <strong>{parts.join(' · ')}</strong>
+          </>
+        ),
+        text: parts.join(' · '),
+        onRemove: () => setFilters({ val: null, presencia: null }),
+      });
+    }
+    const named = (key: 'pokemon' | 'item', name: string) => {
+      const ids = idsOf(filters[key]);
+      if (ids.length === 0) return;
+      const nameOf = (id: string) =>
+        key === 'pokemon'
+          ? Object.hasOwn(refs.pokemon, id)
+            ? refs.pokemon[id].nombre
+            : id
+          : Object.hasOwn(refs.items, id)
+            ? refs.items[id].nombre
+            : id;
+      const text = ids.map(nameOf).join(', ');
+      tokens.push({
+        key,
+        name,
+        value: <strong>{text}</strong>,
+        text,
+        onRemove: () => setFilter(key, null),
+      });
+    };
+    if (pickers) {
+      named('pokemon', filterLabels.pokemon);
+      named('item', filterLabels.item);
+    }
+  }
+
+  const controls =
+    market && filterLabels !== undefined ? (
+      <>
+        <TypeRail
+          labels={{ type: labels.type, allTypes: labels.allTypes, types: labels.types }}
+          value={TIPOS_ACTIVO.find((tipo) => tipo === filters.tipo) ?? null}
+          counts={counts}
+          sprites={sprites.types}
+          locale={locale}
+          onChange={(tipo) => {
+            closePanels();
+            setFilter('tipo', tipo);
+          }}
         />
-        <Button href={publishHref(locale)}>{labels.publish}</Button>
-      </div>
-      <ToggleGroup
-        variant="tab"
-        label={labels.type}
-        labelHidden={false}
-        options={typeOptions}
-        value={filters.tipo ?? ''}
-        onChange={(value) => {
-          closePanels();
-          controller.setFilter('tipo', value || null);
-        }}
-      />
-      <FilterBar>
-        {pickers !== null && pickerBase !== null && pokemonChoices.length > 1 ? (
-          <PokemonPicker
-            {...pickerBase}
-            name="pokemon"
-            label={pickers.pokemon}
-            placeholder={pickers.choosePokemon}
-            options={pokemonChoices}
-            value={idsOf(filters.pokemon)}
-            elements={elementChoices}
-            filterLabels={pickers.filters}
-            onChange={(ids) => controller.setFilter('pokemon', ids.join(',') || null)}
+        <div className="ac-trade-list__search">
+          <TextField
+            variant="search"
+            label={labels.search}
+            placeholder={labels.searchPlaceholder}
+            value={controller.query}
+            onChange={(value) => controller.setQuery(value)}
+            inputProps={{ autoComplete: 'off', spellCheck: false, enterKeyHint: 'search' }}
           />
-        ) : null}
-        {pickers !== null && pickerBase !== null && itemChoices.length > 1 ? (
-          <ItemPicker
-            {...pickerBase}
-            name="item"
-            label={pickers.item}
-            placeholder={pickers.chooseItem}
-            options={itemChoices}
-            value={idsOf(filters.item)}
-            categoryLabel={pickers.category}
-            categoryNames={categoryNames}
-            onChange={(ids) => controller.setFilter('item', ids.join(',') || null)}
+          <FiltersButton
+            label={filterLabels.open}
+            count={tokens.length}
+            locale={locale}
+            expanded={panelOpen}
+            controls={panelMounted ? PANEL_ID : undefined}
+            onClick={() => {
+              if (panelTexts === null) setPanelTexts(readPanelTexts());
+              setPanelMounted(true);
+              setPanelOpen((open) => !open);
+            }}
           />
+        </div>
+        {panelMounted && panelTexts !== null ? (
+          <Suspense fallback={null}>
+            <FiltersPanel
+              id={PANEL_ID}
+              open={panelOpen}
+              onClose={() => setPanelOpen(false)}
+              labels={{ ...filterLabels, ...panelTexts.labels }}
+              locale={locale}
+              count={tokens.length}
+              value={{
+                mundo: filters.mundo ?? null,
+                moneda: currency,
+                val: filters.val ?? null,
+                presencia: filters.presencia === IN_GAME,
+              }}
+              worlds={worlds}
+              myWorld={myWorld}
+              currencies={TRADE_CURRENCIES.map((id) => ({
+                value: id,
+                label: currencyName(id, ui),
+                sprite: isRealCurrency(id) ? null : sprites.types[id],
+              }))}
+              ratingFloors={RATING_FLOORS}
+              range={range}
+              rangeId={PRICE_ID}
+              onRange={setRange}
+              onRangeBlur={leaveRange}
+              total={page.total}
+              onWorld={chooseWorld}
+              onCurrency={(next) => {
+                setTyped(null);
+                setFilters({ moneda: next, min: null, max: null });
+              }}
+              onRating={(floor) => setFilter('val', floor)}
+              onInGame={(only) => setFilter('presencia', only ? IN_GAME : null)}
+              onClear={clearPanel}
+              pickers={
+                pickers && panelTexts.pickers !== null
+                  ? {
+                      labels: panelTexts.pickers,
+                      rows: allRows,
+                      context,
+                      value: { pokemon: idsOf(filters.pokemon), item: idsOf(filters.item) },
+                      onPokemon: (ids) => setFilter('pokemon', ids.join(',') || null),
+                      onItem: (ids) => setFilter('item', ids.join(',') || null),
+                    }
+                  : null
+              }
+            />
+          </Suspense>
         ) : null}
-        {worlds.length > 1 ? (
-          <ChipChoice
-            label={labels.world}
-            multiple={false}
-            options={worlds.map(([id, name]) => ({ value: id, label: name }))}
-            value={filters.mundo ? [filters.mundo] : []}
-            onChange={(ids) => controller.setFilter('mundo', ids[0] ?? null)}
-          />
+        <FilterTokens
+          tokens={tokens}
+          labels={{ remove: filterLabels.remove, clearAll: filterLabels.clearAll }}
+          onClearAll={clearPanel}
+        />
+        {invalidMin || invalidMax ? (
+          <span id={`${PRICE_ID}-error`} className="sr-only">
+            {labels.invalidAmount}
+          </span>
         ) : null}
-        <Select
-          label={labels.currency}
-          options={currencyOptions}
-          value={filters.moneda ?? ''}
-          onChange={(value) => controller.setFilter('moneda', value || null)}
-        />
-        <RangeField
-          id={PRICE_ID}
-          legend={currency === null ? labels.priceDisabled : labels.price}
-          placeholders={[ui.rangeMin, ui.rangeMax]}
-          labels={[labels.minLabel, labels.maxLabel]}
-          inputMode={
-            currency === 'pokedolares' ? 'text' : currency === 'diamonds' ? 'numeric' : 'decimal'
-          }
-          value={range}
-          onChange={setRange}
-          onBlur={leaveRange}
-          disabled={currency === null}
-        />
-        <Select
-          label={labels.rating}
-          options={ratingOptions}
-          value={filters.val ?? ''}
-          onChange={(value) => controller.setFilter('val', value || null)}
-        />
-      </FilterBar>
-      <Checkbox
-        label={labels.onlyInGame}
-        checked={filters.presencia === IN_GAME}
-        onChange={(checked) => controller.setFilter('presencia', checked ? IN_GAME : null)}
-      />
-      {invalidMin || invalidMax ? (
-        <span id={`${PRICE_ID}-error`} className="sr-only">
-          {labels.invalidAmount}
-        </span>
-      ) : null}
-    </>
-  ) : undefined;
+      </>
+    ) : undefined;
 
   const sort = market ? (
     <SortSelect
@@ -2625,7 +2899,6 @@ export function TradeListRoot({
       { key: 'sprite', label: columns.sprite, srOnly: true, width: LIST_WIDTHS.sprite },
       { key: 'listing', label: columns.listing },
       { key: 'type', label: columns.type, width: LIST_WIDTHS.type },
-      { key: 'world', label: labels.world, width: LIST_WIDTHS.world },
       { key: 'fiat', label: card.fiat, width: LIST_WIDTHS.fiat },
       { key: 'game', label: card.game, width: LIST_WIDTHS.game },
       { key: 'seller', label: card.seller, width: LIST_WIDTHS.seller },
@@ -2643,9 +2916,16 @@ export function TradeListRoot({
           const options = gameOptions(row.precio);
           const presence = sellerPresence(seller, context);
           const sub = listSub(row, context);
-          // 9.15.2: in phase B the tag «Dinero real» follows what the row declares.
-          const tag =
-            card.realMoney !== undefined && fiat !== null ? <Chip>{card.realMoney}</Chip> : null;
+          const unit = unitText(row, context);
+          // 9.15.2: in phase B the tag «Dinero real» follows what the row declares; a
+          // Pokédólares listing carries «Cualquier mundo» (board Personajes, Lista V1).
+          const tags = [
+            tradesAcrossWorlds(row.tipo) ? <Chip key="world">{labels.anyWorld}</Chip> : null,
+            card.realMoney !== undefined && fiat !== null ? (
+              <Chip key="money">{card.realMoney}</Chip>
+            ) : null,
+          ].filter((tag) => tag !== null);
+          const tag = tags.length > 0 ? tags : null;
           const loading = lazy();
           let art: ReactNode;
           if (sprite === null) art = <MissingSprite size={pokemon ? 40 : 16} />;
@@ -2683,31 +2963,38 @@ export function TradeListRoot({
               locale={locale}
               cells={[
                 labels.typeCells[row.tipo],
-                {
-                  content: Object.hasOwn(refs.mundos, row.mundo) ? refs.mundos[row.mundo] : null,
-                  nowrap: true,
-                },
                 // 9.5.8: 100 wide at 944 (CA-9.7). An amount with cents does not fit it in 700,
                 // so here the symbol and the figure may part at the end of the line
                 // (trade-list.css): a normal space where formatRealMoney writes a hard one.
                 fiat !== null ? (
-                  <span className="ac-trade-list__fiat">{fiat.replace(HARD_SPACE, ' ')}</span>
+                  <span className="ac-trade-list__price">
+                    <span className="ac-trade-list__fiat">{fiat.replace(HARD_SPACE, ' ')}</span>
+                    {unit !== null ? <span className="ac-trade-list__unit">{unit}</span> : null}
+                  </span>
                 ) : row.precio.aConvenir ? (
                   labels.card.negotiable
                 ) : null,
                 options.length > 0 ? (
-                  <PriceOptions
-                    options={options}
-                    locale={locale}
-                    orLabel={ui.or}
-                    align="center"
-                    link={diamondsLink === null ? undefined : { ...diamondsLink, hint: ui.pinHint }}
-                  />
+                  <span className="ac-trade-list__price">
+                    <PriceOptions
+                      options={options}
+                      locale={locale}
+                      orLabel={ui.or}
+                      align="center"
+                      link={
+                        diamondsLink === null ? undefined : { ...diamondsLink, hint: ui.pinHint }
+                      }
+                    />
+                    {unit !== null && fiat === null ? (
+                      <span className="ac-trade-list__unit">{unit}</span>
+                    ) : null}
+                  </span>
                 ) : null,
                 seller === null ? null : (
                   <span className="ac-trade-list__seller">
                     <Rating
-                      seller={seller.nombre}
+                      seller={row.personaje ?? seller.nombre}
+                      world={row.personaje === null ? null : worldName(row, context)}
                       href={sellerHref(locale, row.vendedor)}
                       score={seller.valoracion}
                       reviews={seller.resenas}
@@ -2786,7 +3073,7 @@ export function TradeListRoot({
       controls={controls}
       sort={sort}
       paginationLabel={paginationLabel}
-      className="ac-trade-list"
+      className={market ? 'ac-trade-list ac-trade-list--market' : 'ac-trade-list'}
     />
   );
 }

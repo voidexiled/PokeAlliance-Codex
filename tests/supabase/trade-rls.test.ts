@@ -220,9 +220,19 @@ describe.skipIf(!ready)(title, { timeout: 240_000 }, () => {
     expect(shared.error).toBeNull();
   }
 
+  /** The account's main character: «Vendes como» is required (20260924200000). */
+  async function mainCharacter(account: Account): Promise<string> {
+    const listed = await account.client.rpc('account_characters_list');
+    expect(listed.error).toBeNull();
+    return (listed.data as { id: string; is_main: boolean }[]).find((row) => row.is_main)!.id;
+  }
+
   async function publish(account: Account, payload: Row = gameListing): Promise<string> {
     const published = await account.client.rpc('trade_publish_listing', {
-      p_listing: payload,
+      p_listing:
+        'character_id' in payload
+          ? payload
+          : { ...payload, character_id: await mainCharacter(account) },
       p_device_id: account.device,
     });
     expect(published.error).toBeNull();

@@ -9,6 +9,7 @@ import { DISCORD_EDAD_MIN_DIAS } from '@/lib/trade/limits';
 export const PANEL_SECTIONS = [
   'resumen',
   'perfil',
+  'personajes',
   'conexiones',
   'seguridad',
   'canales',
@@ -22,7 +23,7 @@ export type PanelGroup = 'cuenta' | 'comercio' | 'guild';
 
 /** The groups of the nav; «Eliminar cuenta» stands apart, after them. */
 export const PANEL_GROUPS: readonly { group: PanelGroup; sections: readonly PanelSection[] }[] = [
-  { group: 'cuenta', sections: ['resumen', 'perfil', 'conexiones', 'seguridad'] },
+  { group: 'cuenta', sections: ['resumen', 'perfil', 'personajes', 'conexiones', 'seguridad'] },
   { group: 'comercio', sections: ['canales', 'estado'] },
   { group: 'guild', sections: ['guilds'] },
 ];

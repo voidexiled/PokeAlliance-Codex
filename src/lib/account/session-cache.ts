@@ -1,7 +1,7 @@
 // The account the header entry shows before supabase-js loads (spec 9.16.4): the session that
 // supabase-js keeps in localStorage and a small cache of the profile, `alliance-codex:cuenta:v1`
-// (username, player, world, avatar, online status, moderator flag and whether the registration is
-// complete), which the account page and the account menu write after they load the account.
+// (username, player, world, number of characters, avatar, online status, moderator flag and
+// whether the registration is complete), which the account page and the account menu write after they load the account.
 //
 // - Nothing here imports supabase-js: the entry of every page reads this module alone, and the
 //   client loads on demand (D-025) only to act.
@@ -26,6 +26,11 @@ export interface CachedAccount {
   player: string | null;
   /** World id of content/mundos.json. */
   world: string | null;
+  /**
+   * How many game characters the account has (the main one included); the menu shows «+N
+   * personajes» for the others. Null while unknown.
+   */
+  characters: number | null;
   /** The picture of the linked Discord or Google identity, an https URL. */
   avatar: string | null;
   /** The state the account chose (9.15.6); null when unknown. */
@@ -205,6 +210,12 @@ function toCachedAccount(value: unknown): CachedAccount | null {
     username: optionalText(record.username),
     player: optionalText(record.player),
     world: optionalText(record.world),
+    characters:
+      typeof record.characters === 'number' &&
+      Number.isInteger(record.characters) &&
+      record.characters >= 0
+        ? record.characters
+        : null,
     avatar: httpsUrl(record.avatar),
     presence: isEstadoPresencia(record.presence) ? record.presence : null,
     moderator: record.moderator === true,

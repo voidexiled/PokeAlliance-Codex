@@ -57,9 +57,26 @@ export type PrecioReal = { moneda: MonedaReal; importe: string };
  * «A convenir», which leaves both parts empty.
  */
 export type Precio = {
+  /** The total in real money (with `porUnidad`, computed from the unit price). */
   real: PrecioReal | null;
+  /** The in-game totals (with `porUnidad`, computed from the unit price). */
   juego: OpcionJuego[];
   aConvenir: boolean;
+  /**
+   * The price per unit the seller wrote (owner rule 2026-09-24), for a listing with a quantity;
+   * absent or null when the price is a total. src/lib/trade/unit-price.ts computes the totals.
+   */
+  porUnidad?: PrecioUnidad | null;
+};
+
+/**
+ * A price per unit: `cantidad` is the unit, in the base units of the asset (1000000 for «1kk» of
+ * Pokédólares, 10 for «10 Diamonds»); `real` and `juego` are the price of one unit.
+ */
+export type PrecioUnidad = {
+  cantidad: number;
+  real: PrecioReal | null;
+  juego: OpcionJuego[];
 };
 
 /**
@@ -160,6 +177,20 @@ export function equipmentOf(
 }
 
 /**
+ * The game character a listing is published as (owner rule 2026-09-24): one of the seller's
+ * characters, a player name and a world of content/mundos.json. Phase B reads it through the
+ * computed field `trade_listing_character`; the phase A registry has none.
+ */
+export type ListingCharacter = {
+  /** `account_characters.id`. */
+  id: string;
+  /** «Nombre del jugador», as the game shows it. */
+  playerName: string;
+  /** `id` of content/mundos.json. */
+  worldKey: string;
+};
+
+/**
  * A listing (9.4). `pokemon` exists only for the type `pokemon`, `item` only for `items` and
  * `cantidad` only for `diamonds` and `pokedolares`, in base units.
  */
@@ -169,8 +200,13 @@ export type Anuncio = {
   tipo: TipoActivo;
   /** The seller's handle: the `id` of a record of content/comercio/vendedores.json. */
   vendedor: string;
-  /** `id` of content/mundos.json. */
+  /**
+   * `id` of content/mundos.json: the world of `character` (the database derives it). Listings
+   * completed before characters existed may keep another one.
+   */
   mundo: string;
+  /** The seller's character the listing is published as; absent in the phase A registry. */
+  character?: ListingCharacter;
   /** ISO 8601 instant with its zone. */
   publicado: string;
   /** ISO 8601 instant with its zone. */
@@ -272,6 +308,23 @@ export function visibleStatus(
 export function isListed(anuncio: Pick<Anuncio, 'estado' | 'expira'>, now: Instant): boolean {
   const status = visibleStatus(anuncio, now);
   return status === 'publicado' || status === 'reservado';
+}
+
+/**
+ * Whether a listing sells to players of every world (owner rule 2026-09-24): Pokédólares do;
+ * Pokémon, Items and Diamonds only trade inside the world of the seller's character. The interface
+ * tags the first «Cualquier mundo».
+ */
+export function tradesAcrossWorlds(tipo: TipoActivo): boolean {
+  return tipo === 'pokedolares';
+}
+
+/**
+ * The «Mundo» filter of the list (9.5.4): the listings of that world, and every Pokédólares
+ * listing, whichever world its character is in.
+ */
+export function listedInWorld(anuncio: Pick<Anuncio, 'tipo' | 'mundo'>, mundo: string): boolean {
+  return anuncio.mundo === mundo || tradesAcrossWorlds(anuncio.tipo);
 }
 
 /** Whether a listing has a public detail (9.6): every state but `retirado`, a 404 to the public. */

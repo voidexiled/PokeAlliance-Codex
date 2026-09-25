@@ -40,6 +40,7 @@ describe('the dictionaries of es and en', () => {
       'pokemon',
       'tiers',
       'items',
+      'item',
       'systems',
       'activities',
       'changes',

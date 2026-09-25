@@ -28,6 +28,7 @@ import { confirmationReturn } from './auth/arrival';
 import { AccountShell } from './panel/AccountShell';
 import { ErrorNotice } from './panel/notices';
 import { completeAccountProfile } from './panel/profile-save';
+import type { AccountPanelTexts } from './panel/texts';
 import type { LinkReturn } from './panel/types';
 import type { ProfileValues, RegistrationStep } from './RegistrationSteps';
 
@@ -47,7 +48,8 @@ import type { ProfileValues, RegistrationStep } from './RegistrationSteps';
 //   a server log; the token is only sent to `accept_guild_invitation` after the account presses
 //   «Aceptar invitación», and is removed from the address once accepted.
 
-export type AccountMessages = Messages['account'];
+/** The `account` namespace as the island gets it: «Personajes» apart (panel/texts.ts). */
+export type AccountMessages = Omit<Messages['account'], 'panel'> & { panel: AccountPanelTexts };
 
 export interface UiLabels {
   /** `ui.close`: the close button of the dialogs. */

@@ -35,7 +35,9 @@
     height: var(--space-6);
     flex: none;
     border-radius: var(--radius-full);
-    background: var(--text-quinary);
+    /* The shape says the status without colour (owner, 2026-09-24): a ring here, a crescent
+       for «Ausente», a filled dot for «En el juego», as the header chip draws them. */
+    background: radial-gradient(closest-side, transparent 50%, var(--text-quinary) 51%);
   }
 
   .ac-presence[data-presence='en_juego'] .ac-presence__dot {
@@ -43,7 +45,7 @@
   }
 
   .ac-presence[data-presence='ausente'] .ac-presence__dot {
-    background: var(--amber);
+    background: radial-gradient(circle at 22% 26%, transparent 36%, var(--amber) 37%);
   }
 
   .ac-presence[data-presence='desconectado'] {

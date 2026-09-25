@@ -57,6 +57,13 @@
     table-layout: fixed;
   }
 
+  /* Beside the type rail the table fills the column; on a phone it still scrolls sideways. */
+  @media (width >= 64rem) {
+    [data-ac-list='comercio'] [data-list] .ac-data-table__table {
+      min-width: 100%;
+    }
+  }
+
   :is([data-ac-list='comercio'], [data-ac-list='comercio-vendedor'])
     .ac-list-row__name
     .ac-nested-entity__trigger {
@@ -66,6 +73,22 @@
   :is([data-ac-list='comercio'], [data-ac-list='comercio-vendedor']) .ac-list-row .ac-rating {
     flex-wrap: wrap;
     justify-content: center;
+  }
+
+  /* The title row of `/{l}/comercio/` (board Comercio-filtros): «Publicar anuncio», the one white
+     button of the page, at the right of the h1. */
+  .ac-trade-title {
+    position: relative;
+  }
+
+  .ac-trade-title > .ac-page-title .ac-page-title__row {
+    padding-right: 12rem;
+  }
+
+  .ac-trade-title > .ac-button {
+    position: absolute;
+    top: 0;
+    right: 0;
   }
 
   /* The line of non-affiliation of `/{l}/comercio/` (9.15.2): one discreet line after the list,
@@ -98,5 +121,536 @@
      sheet of a detail does (trade-detail.css). */
   .ac-game-tooltip__section-body > .ac-training-meter + .ac-training-meter {
     margin-top: var(--space-8);
+  }
+
+  /* ------------------------------------------------------------ Variante 2 (2026-09-24)
+     Board Comercio-filtros «Variante 2» and its phone board: the asset type in a rail on the
+     left with a count per type; the search, «Filtros», the order and the views on one row; the
+     panel under them, pushing the list down; the removable tokens; then the results. From 64rem
+     the root is a grid of three columns (rail · search · order and views); under it, the column
+     of the entity list in the phone board's order: search, type chips, tokens, count and order,
+     views, results. On a wide screen the count sits in the rail, so the bar keeps it for screen
+     readers only. */
+  .ac-trade-list--market > .ac-trade-list__search {
+    order: 1;
+  }
+
+  .ac-trade-list--market > .ac-trade-rail {
+    order: 2;
+  }
+
+  .ac-trade-list--market > .ac-trade-filters {
+    order: 3;
+  }
+
+  .ac-trade-list--market > .ac-trade-tokens {
+    order: 4;
+  }
+
+  .ac-trade-list--market > .ac-entity-list__bar {
+    order: 5;
+  }
+
+  .ac-trade-list--market > .ac-entity-list__results {
+    order: 6;
+  }
+
+  .ac-trade-list--market > .ac-pagination {
+    order: 7;
+  }
+
+  @media (width >= 64rem) {
+    /* Doubled class: entity-list.css sets the root's flex with the same weight. */
+    .ac-entity-list.ac-trade-list--market {
+      display: grid;
+      grid-template-columns: 11.5rem minmax(0, 1fr) auto;
+      align-items: start;
+      column-gap: var(--space-24);
+      row-gap: 0;
+    }
+
+    .ac-trade-list--market > .ac-trade-rail {
+      grid-column: 1;
+      grid-row: 1 / span 6;
+    }
+
+    .ac-trade-list--market > .ac-trade-list__search {
+      grid-column: 2;
+      grid-row: 1;
+    }
+
+    .ac-trade-list--market > .ac-entity-list__bar {
+      grid-column: 3;
+      grid-row: 1;
+      align-self: center;
+    }
+
+    .ac-trade-list--market > .ac-trade-filters {
+      grid-column: 2 / 4;
+      grid-row: 2;
+      margin-top: var(--space-12);
+    }
+
+    .ac-trade-list--market > .ac-trade-tokens {
+      grid-column: 2 / 4;
+      grid-row: 3;
+      margin-top: var(--space-12);
+    }
+
+    .ac-trade-list--market > .ac-entity-list__results {
+      grid-column: 2 / 4;
+      grid-row: 4;
+      margin-top: var(--space-16);
+    }
+
+    .ac-trade-list--market > .ac-pagination {
+      grid-column: 2 / 4;
+      grid-row: 5;
+      margin-top: var(--space-16);
+    }
+
+    .ac-trade-list--market > .ac-entity-list__bar .ac-count {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      overflow: hidden;
+      clip-path: inset(50%);
+      white-space: nowrap;
+    }
+  }
+
+  /* The rail: «Tipo de activo», then one 40 tall option per type, its sprite, its name and its
+     count at the right; the chosen one has the selection ring of a ToggleGroup. On a phone it is
+     a row of chips that scrolls sideways, without the label and the counts. */
+  .ac-trade-rail {
+    min-width: 0;
+  }
+
+  .ac-trade-rail__label {
+    margin: 0 0 var(--space-8);
+    color: var(--text-secondary);
+    @apply type-ui-strong;
+  }
+
+  .ac-trade-rail__list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .ac-trade-rail__option {
+    display: flex;
+    width: 100%;
+    min-height: var(--size-control);
+    align-items: center;
+    gap: var(--space-8);
+    margin: 0;
+    padding: 0 var(--space-12) 0 var(--space-8);
+    border: 1px solid transparent;
+    border-radius: var(--radius-8);
+    background: transparent;
+    color: var(--text-primary);
+    font-family: var(--font-sans);
+    @apply type-ui-strong;
+    text-align: left;
+    cursor: pointer;
+  }
+
+  .ac-trade-rail__option[aria-pressed='false']:hover {
+    background: var(--bg-tertiary);
+  }
+
+  .ac-trade-rail__option[aria-pressed='true'] {
+    border-color: var(--selected);
+    box-shadow: var(--ring-selected);
+  }
+
+  .ac-trade-rail__sprite {
+    display: inline-flex;
+    width: 24px; /* sin token: la casilla del sprite del riel, como en el lienzo */
+    height: 24px; /* sin token: la casilla del sprite del riel, como en el lienzo */
+    flex: none;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .ac-trade-rail__sprite img {
+    max-width: 100%;
+    max-height: 100%;
+  }
+
+  .ac-trade-rail__missing {
+    width: 16px; /* sin token: la marca de sprite ausente del lienzo */
+    height: 16px; /* sin token: la marca de sprite ausente del lienzo */
+    border: 1px dashed var(--text-tertiary);
+    border-radius: var(--radius-4);
+  }
+
+  .ac-trade-rail__name {
+    min-width: 0;
+    flex: 1;
+  }
+
+  .ac-trade-rail__count {
+    color: var(--text-tertiary);
+    font-variant-numeric: tabular-nums;
+    @apply type-ui;
+  }
+
+  @media (width < 64rem) {
+    .ac-trade-rail__label {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      overflow: hidden;
+      clip-path: inset(50%);
+      white-space: nowrap;
+    }
+
+    .ac-trade-rail__list {
+      flex-direction: row;
+      gap: var(--space-8);
+      overflow-x: auto;
+      scrollbar-width: none;
+    }
+
+    .ac-trade-rail__option {
+      width: auto;
+      border-color: var(--border-primary);
+      white-space: nowrap;
+    }
+
+    .ac-trade-rail__count {
+      display: none;
+    }
+  }
+
+  /* «Filtros»: a 40 tall button like a ToggleGroup option, with the number of active groups. */
+  .ac-trade-filters__button {
+    display: inline-flex;
+    height: var(--size-control);
+    flex: none;
+    align-items: center;
+    gap: var(--space-8);
+    margin: 0;
+    padding: 0 var(--space-12);
+    border: 1px solid var(--border-primary);
+    border-radius: var(--radius-8);
+    background: transparent;
+    color: var(--text-primary);
+    font-family: var(--font-sans);
+    @apply type-ui-strong;
+    cursor: pointer;
+  }
+
+  .ac-trade-filters__button:hover,
+  .ac-trade-filters__button[aria-expanded='true'] {
+    background: var(--bg-tertiary);
+  }
+
+  .ac-trade-filters__badge,
+  .ac-trade-filters__title-count {
+    display: inline-flex;
+    min-width: 20px; /* sin token: la cifra redonda del botón «Filtros» */
+    height: 20px; /* sin token: la cifra redonda del botón «Filtros» */
+    align-items: center;
+    justify-content: center;
+    padding: 0 var(--space-6);
+    border-radius: var(--radius-full);
+    background: var(--bg-quaternary);
+    font-variant-numeric: tabular-nums;
+    @apply type-ui;
+  }
+
+  .ac-trade-filters__title-count {
+    background: transparent;
+    color: var(--text-tertiary);
+  }
+
+  /* The panel: a <dialog> shown in the flow (`show()`). The rules of the user agent for a dialog
+     (absolute, centred, bordered) give way to a box of the page. */
+  .ac-trade-filters {
+    position: static;
+    width: auto;
+    max-width: none;
+    margin: 0;
+    padding: var(--space-16);
+    border: 1px solid var(--border-secondary);
+    border-radius: var(--radius-12);
+    background: var(--bg-secondary);
+    color: var(--text-primary);
+    font-family: var(--font-sans);
+  }
+
+  .ac-trade-filters__head {
+    display: flex;
+    align-items: center;
+    gap: var(--space-12);
+    margin-bottom: var(--space-12);
+  }
+
+  .ac-trade-filters__title {
+    display: inline-flex;
+    flex: 1;
+    align-items: center;
+    gap: var(--space-8);
+    margin: 0;
+    @apply type-body-strong;
+  }
+
+  .ac-trade-filters__link {
+    margin: 0;
+    padding: var(--space-4) var(--space-6);
+    border: 0;
+    border-radius: var(--radius-6);
+    background: transparent;
+    color: var(--text-secondary);
+    font-family: var(--font-sans);
+    @apply type-ui;
+    cursor: pointer;
+  }
+
+  .ac-trade-filters__link:hover {
+    color: var(--text-primary);
+    text-decoration: underline;
+  }
+
+  .ac-trade-filters__close {
+    display: inline-flex;
+    width: 32px; /* sin token: la cruz del panel del lienzo */
+    height: 32px; /* sin token: la cruz del panel del lienzo */
+    align-items: center;
+    justify-content: center;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    border-radius: var(--radius-8);
+    background: transparent;
+    color: var(--text-primary);
+    cursor: pointer;
+  }
+
+  .ac-trade-filters__close:hover {
+    background: var(--bg-tertiary);
+  }
+
+  .ac-trade-filters__groups {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: var(--space-16);
+  }
+
+  .ac-trade-filters__group {
+    display: flex;
+    min-width: 0;
+    flex-direction: column;
+    gap: var(--space-8);
+  }
+
+  .ac-trade-filters__group + .ac-trade-filters__group {
+    padding-left: var(--space-16);
+    border-left: 1px solid var(--border-secondary);
+  }
+
+  .ac-trade-filters__name {
+    margin: 0;
+    @apply type-ui-strong;
+  }
+
+  .ac-trade-filters__note {
+    margin: 0;
+    color: var(--text-tertiary);
+    @apply type-ui;
+  }
+
+  /* «Precio» already names the group: the legend of the range stays for screen readers. */
+  .ac-trade-filters .ac-range-field legend {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+
+  .ac-trade-filters__worlds .ac-toggle-group__item {
+    width: 100%;
+  }
+
+  .ac-trade-filters__worlds .ac-toggle-group__text {
+    display: flex;
+    flex: 1;
+    align-items: baseline;
+  }
+
+  .ac-trade-filters__mine {
+    margin-left: auto;
+    padding-left: var(--space-8);
+    color: var(--text-tertiary);
+    font-weight: 400;
+  }
+
+  .ac-trade-filters__ratings .ac-toggle-group__items {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .ac-trade-filters__ratings .ac-toggle-group__item {
+    justify-content: center;
+  }
+
+  .ac-trade-filters__ingame {
+    width: 100%;
+  }
+
+  .ac-trade-filters__extra {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-12);
+    grid-column: 1 / -1;
+    padding-top: var(--space-12);
+    border-top: 1px solid var(--border-secondary);
+  }
+
+  .ac-trade-filters__foot {
+    display: none;
+  }
+
+  @media (width < 64rem) {
+    .ac-trade-filters__groups {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .ac-trade-filters__group + .ac-trade-filters__group {
+      padding: var(--space-16) 0 0;
+      border-top: 1px solid var(--border-secondary);
+      border-left: 0;
+    }
+
+    .ac-trade-filters__worlds .ac-toggle-group__items {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  /* The bottom sheet of the phone board: the same dialog opened with `showModal()`, fixed to the
+     bottom with the veil of a dialog and «Ver N anuncios». */
+  .ac-trade-filters:modal {
+    position: fixed;
+    inset: auto 0 0;
+    width: 100%;
+    max-height: 85dvh;
+    overflow-y: auto;
+    padding-bottom: 0;
+    border-width: 1px 0 0;
+    border-radius: var(--radius-12) var(--radius-12) 0 0;
+    background: var(--bg-primary);
+    overscroll-behavior: contain;
+  }
+
+  .ac-trade-filters:modal::backdrop {
+    background: var(--overlay);
+  }
+
+  .ac-trade-filters:modal .ac-trade-filters__foot {
+    position: sticky;
+    bottom: 0;
+    display: flex;
+    margin: var(--space-16) calc(-1 * var(--space-16)) 0;
+    padding: var(--space-12) var(--space-16) var(--space-16);
+    border-top: 1px solid var(--border-secondary);
+    background: var(--bg-primary);
+  }
+
+  .ac-trade-filters:modal .ac-trade-filters__foot > .ac-button {
+    flex: 1;
+    justify-content: center;
+  }
+
+  /* The tokens: one pill per active group, its name dimmed and its value strong, with a cross;
+     «Limpiar filtros» after them. */
+  .ac-trade-tokens {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-8);
+  }
+
+  .ac-trade-tokens__list {
+    display: contents;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .ac-trade-tokens__token {
+    display: inline-flex;
+    min-height: 32px; /* sin token: la ficha de un filtro del lienzo */
+    align-items: center;
+    gap: var(--space-6);
+    padding: 0 var(--space-4) 0 var(--space-12);
+    border-radius: var(--radius-full);
+    background: var(--bg-tertiary);
+    @apply type-ui;
+  }
+
+  .ac-trade-tokens__name {
+    color: var(--text-secondary);
+  }
+
+  .ac-trade-tokens__value {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-6);
+  }
+
+  .ac-trade-tokens__remove {
+    display: inline-flex;
+    width: 24px; /* sin token: la cruz de una ficha */
+    height: 24px; /* sin token: la cruz de una ficha */
+    align-items: center;
+    justify-content: center;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    border-radius: var(--radius-full);
+    background: transparent;
+    color: var(--text-secondary);
+    cursor: pointer;
+  }
+
+  .ac-trade-tokens__remove:hover {
+    background: var(--bg-quaternary);
+    color: var(--text-primary);
+  }
+
+  .ac-trade-tokens__clear {
+    margin: 0;
+    padding: var(--space-4) var(--space-6);
+    border: 0;
+    background: transparent;
+    color: var(--text-primary);
+    font-family: var(--font-sans);
+    @apply type-ui;
+    cursor: pointer;
+  }
+
+  .ac-trade-tokens__clear:hover {
+    text-decoration: underline;
+  }
+
+  /* A price and its unit price in a Lista cell: the total, and under it «MX$ 1,80 por 1kk». */
+  .ac-trade-list__price {
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-2);
+  }
+
+  .ac-trade-list__unit {
+    color: var(--text-tertiary);
+    @apply type-ui;
   }
 }

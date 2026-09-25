@@ -81,12 +81,6 @@ const ITEM_NAME = new Map(
     .map((item) => [item.id, item.nombre]),
 );
 
-const WORLD_NAME = new Map(
-  readJson<{ mundos: { id: string; nombre: string }[] }>('content/mundos.json').mundos.map(
-    (world) => [world.id, world.nombre],
-  ),
-);
-
 type OutfitRecord = { pokemon: string; addons: { id: string; borrador?: boolean }[] };
 
 /** 9.7.2: the Pokémon whose outfit record has an addon this build keeps. */
@@ -671,19 +665,23 @@ test('CA-9.4: «Precio, menor primero» agrupa por moneda, sube dentro de cada u
 
 // ================================================================================ CA-9.5
 
-test('CA-9.5: sin moneda el precio está desactivado; con Pokédólares «Mín 50kk» deja fuera lo que cuesta menos', async ({
+test('CA-9.5: sin moneda no hay importe; con Pokédólares «Mín 50kk» deja fuera lo que cuesta menos', async ({
   page,
 }) => {
   const { trade } = MESSAGES.es;
   const root = await openList(page, 'es');
-  const range = root.locator('.ac-range-field');
-  await expect(range.locator('legend')).toHaveText(trade.filters.priceNeedsCurrency);
-  await expect(range.locator('input')).toHaveCount(2);
-  for (const input of await range.locator('input').all()) await expect(input).toBeDisabled();
+  // Board Comercio-filtros «Variante 2»: the price lives in the «Filtros» panel.
+  await root.getByRole('button', { name: trade.filterPanel.open }).click();
+  const panel = root.locator('.ac-trade-filters');
+  const range = panel.locator('.ac-range-field');
+  await expect(range).toHaveCount(0);
+  await expect(panel).toContainText(trade.filterPanel.pickCurrency);
 
-  await chooseOption(selectNamed(root, trade.currency), MESSAGES.es.ui.tooltip.pokedolares);
+  await panel
+    .getByRole('button', { name: MESSAGES.es.ui.tooltip.pokedolares, exact: true })
+    .click();
   await expect.poll(() => new URL(page.url()).searchParams.get('moneda')).toBe('pokedolares');
-  for (const input of await range.locator('input').all()) await expect(input).toBeEnabled();
+  await expect(range.locator('input')).toHaveCount(2);
   const inPokedolares = LISTED.filter((anuncio) => amountIn(anuncio, 'pokedolares') !== null);
   await expect(countOf(root)).toHaveText(countText(inPokedolares.length, 'es'));
 
@@ -1229,57 +1227,9 @@ test('§12.16 y §12.20 (59–69): sin Ball estática, nada inválido antes de t
 });
 
 // =============================================================================== CA-9.12
-
-test('CA-9.12: «Copiar anuncio» copia el texto de §9.7.7 y el textarea solo aparece si la copia falla', async ({
-  page,
-}) => {
-  const { trade } = MESSAGES.es;
-  const origin = new URL(test.info().project.use.baseURL ?? 'http://127.0.0.1:4321').origin;
-  await page.context().grantPermissions(['clipboard-read', 'clipboard-write'], { origin });
-  await openForm(page, 'es');
-
-  await page
-    .locator('#lf-type')
-    .getByRole('button', { name: trade.types.diamonds, exact: true })
-    .click();
-  await page.locator('#lf-diamonds').fill('300');
-  await page.locator('#lf-real').fill('90');
-  await page.locator('#lf-world').click();
-  const world = (
-    (await page.locator('#lf-world-list [role="option"]').first().textContent()) ?? ''
-  ).trim();
-  // 9.7.1: «Mundo» offers the worlds of content/mundos.json.
-  expect([...WORLD_NAME.values()]).toContain(world);
-  await page.locator('#lf-world-list [role="option"]').first().click();
-
-  await page.locator('#lf-copy').click();
-  await expect(page.locator('main .ac-notice')).toContainText(trade.form.copied);
-  await expect(page.locator('#lf-text'), 'CA-9.12: no textarea while the copy works').toHaveCount(
-    0,
-  );
-  const copied = await page.evaluate(() => navigator.clipboard.readText());
-  // §9.7.7: one line per declared fact, in the order of the sheet (Windows writes CRLF).
-  expect(copied.replace(/\r\n/g, '\n')).toBe(
-    [
-      `${trade.copy.selling}: ${formatDiamonds(300, 'es')}`,
-      `${trade.copy.fiat}: R$ 90`,
-      `${trade.copy.world}: ${world}`,
-    ].join('\n'),
-  );
-
-  // When the copy fails, the notice asks to copy by hand and the text is there, selected.
-  await page.evaluate(() => {
-    Object.defineProperty(navigator.clipboard, 'writeText', {
-      configurable: true,
-      value: () => Promise.reject(new Error('denied')),
-    });
-  });
-  await page.locator('#lf-copy').click();
-  await expect(page.locator('main .ac-notice')).toContainText(trade.form.copyFailed);
-  const text = page.locator('#lf-text');
-  await expect(text).toBeFocused();
-  await expect(text).toHaveValue(copied.replace(/\r\n/g, '\n'));
-});
+//
+// «Copiar anuncio» / «Copiar texto para Discord» was removed by the owner (2026-09-24): the site
+// offers no off-site helper actions. The form has no copy action to test.
 
 // =============================================================================== CA-9.13
 

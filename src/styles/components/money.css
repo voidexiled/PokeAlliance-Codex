@@ -175,6 +175,11 @@
   text-decoration: underline;
 }
 
+/* The world of the seller's character after its name: «Void Exiled · Titan 1» (Comercio). */
+.ac-rating__world {
+  color: var(--text-secondary);
+}
+
 .ac-rating__score {
   font-variant-numeric: tabular-nums;
 }

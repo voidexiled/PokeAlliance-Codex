@@ -13,15 +13,14 @@ import {
 import type { ReactNode, SubmitEvent } from 'react';
 import { flushSync } from 'react-dom';
 
-import { Notice } from '@/components/content/Notice';
 import { Button } from '@/components/controls/Button';
 import { Checkbox } from '@/components/controls/Checkbox';
+import { Dialog, initialFocus } from '@/components/controls/Dialog';
 import { Select, type SelectOption } from '@/components/controls/Select';
 import { StarLevel } from '@/components/controls/StarLevel';
 import { Stepper } from '@/components/controls/Stepper';
 import { TextField } from '@/components/controls/TextField';
 import { TextLink } from '@/components/controls/TextLink';
-import { Textarea } from '@/components/controls/Textarea';
 import { ToggleGroup, type ToggleGroupOption } from '@/components/controls/ToggleGroup';
 import { Sprite } from '@/components/game/Sprite';
 import { TrainingMeter } from '@/components/money/TrainingMeter';
@@ -53,24 +52,36 @@ import { fill } from '@/i18n/messages/types';
 import { itemTip, pokemonTip } from '@/lib/game/tips';
 import type { PickerLabels } from '@/lib/pickers/labels';
 import { itemOptions, pokemonOptions } from '@/lib/pickers/options';
+import { readStoredSession } from '@/lib/account/session-cache';
+import { formatDate } from '@/lib/format/dates';
 import { getSupabaseBrowserClient } from '@/lib/supabase/client';
+import type { AccountCharacter } from '@/lib/supabase/trade';
 import {
   BALL_CATEGORY,
   itemPickerRecords,
   rosterPickerRecords,
   slotRecords,
 } from '@/lib/trade/pickers';
-import { formatInteger, formatPokedolaresLabel, parsePokedolares } from '@/lib/format/numbers';
+import {
+  formatDiamonds,
+  formatInteger,
+  formatPokedolares,
+  formatPokedolaresLabel,
+  formatRealMoney,
+  parsePokedolares,
+} from '@/lib/format/numbers';
 import { UNKNOWN } from '@/lib/format/unknown';
 import type { SpriteData } from '@/lib/sprites/resolve';
 import {
+  compactKks,
   isDittoSlug,
   isValidOptionalPercent,
   parsePositiveWhole,
   parsePrice,
 } from '@/lib/trade/draft';
-import { listingText, type ListingTextLabels } from '@/lib/trade/text';
+import { ANUNCIOS_ACTIVOS_MAX, listingExpiry } from '@/lib/trade/limits';
 import { listingTitle, type ListingNames } from '@/lib/trade/title';
+import { hasUnitPrice, priceFromUnit, type UnitPriceLabels } from '@/lib/trade/unit-price';
 import {
   BOOST_MAX,
   HABILIDADES,
@@ -82,10 +93,13 @@ import {
   SIMBOLOS_MONEDA,
   STAR_LEVEL_MAX,
   TIPOS_ACTIVO,
+  tradesAcrossWorlds,
+  type Anuncio,
   type MonedaJuego,
   type MonedaReal,
   type OpcionJuego,
   type Precio,
+  type PrecioReal,
   type TipoActivo,
   type UnidadPokemon,
 } from '@/lib/trade/types';
@@ -102,19 +116,33 @@ import type {
   ContactSellerLabels,
   RealMoneyConsentLabels,
 } from './RealMoneyConsent';
+import { refusalFor, retryable, type RefusalLabels } from './refusals';
 
 // ListingForm (spec 9.7, template G of 8.0.2; §12.16, §12.20 points 59–69): the island of
 // `/{l}/comercio/publicar/`, «Crear anuncio». Since 16.4.4 the form is guided: every game entity
 // is chosen in a picker (src/components/pickers), the asset type is a set of tiles, Boost and
 // the training levels are steppers, Star Level is stars and the world is chips. With
-// `publish` (COMERCIO_PUBLICO) the primary action is «Publicar anuncio» through
-// src/lib/supabase/trade.ts, with the real-money consent; «Copiar texto para Discord» stays as
-// the secondary action. The notes below describe phase A where they differ.
-// The form of a listing — «Tipo de
-// activo», the fields of the asset (9.7.2, 9.7.3), «Precio» (9.7.4) and «Mundo» — and its live
-// preview, the real `ListingCard` (ListingPreview.tsx, 9.7.6). Phase A publishes nothing: there
-// is no Supabase, no account and no contact, and the action is «Copiar anuncio», which puts the
-// text of 9.7.7 (`listingText`) on the clipboard. It hydrates with `client:load` (7.3).
+// `publish` (COMERCIO_PUBLICO) the action is «Publicar anuncio» through
+// src/lib/supabase/trade.ts, with the real-money consent. The owner's rules of 2026-09-24:
+//
+//   - «Vendes como» (board Personajes, Variante 2): a select of the account's characters, the
+//     main one first and preselected; the world is the character's and cannot be changed
+//     (Pokédólares: «Lo ven compradores de cualquier mundo»). Required for every type. Without
+//     characters the row links to «Añadir personaje» in the account; the draft is kept.
+//   - A price per unit for Items, Diamonds and Pokédólares: «Por unidad», a unit the seller
+//     chooses and the computed total (src/lib/trade/unit-price.ts, the database's rule).
+//   - Publishing (board Anuncio-publicado): the button reads «Publicando…» and the form is
+//     locked; a failure keeps the data, says why and, when it may pass, offers «Reintentar»; the
+//     success opens a dialog with the card, «Copiar enlace», «Ver anuncio», «Crear otro
+//     anuncio» and «Mis anuncios», and the form starts empty.
+//   - «Editar» (`?editar={id}`): the seller's listing fills the form, its type locked, and
+//     «Guardar cambios» saves it, quantity included; then the listing page opens.
+//   - No off-site helper: the text «para Discord» is gone.
+//
+// Phase A (no `publish`) has no account and no action: the form and its preview only.
+// The form of a listing — «Tipo de activo», the fields of the asset (9.7.2, 9.7.3), «Precio»
+// (9.7.4) and «Mundo» — and its live preview, the real `ListingCard` (ListingPreview.tsx,
+// 9.7.6). It hydrates with `client:load` (7.3).
 //
 // What the spec fixes, and where it lives here:
 //
@@ -223,6 +251,55 @@ export interface ListingFormPickerLabels {
   star: string;
 }
 
+/** «Vendes como» (board Personajes, Variante 2), `trade.sellAs`. */
+export interface ListingFormSellAs {
+  label: string;
+  /** «Personajes»: the link to the account's characters. */
+  characters: string;
+  /** «Principal». */
+  main: string;
+  /** «Elige un personaje». */
+  choose: string;
+  /** The line beside the locked world, and the one of a Pokédólares listing. */
+  worldLocked: string;
+  anyWorld: string;
+  /** «Aún no tienes personajes…» and «Añadir personaje». */
+  empty: string;
+  add: string;
+  /** «Elige el personaje con el que vendes.». */
+  required: string;
+}
+
+/** The texts of publishing, of the dialog after it and of «Editar» (board Anuncio-publicado). */
+export interface ListingFormPublishing {
+  /** «Publicando…», «Guardando…». */
+  busy: string;
+  saving: string;
+  /** «No se pudo publicar:», «No se pudieron guardar los cambios:», «Tus datos siguen…». */
+  failed: string;
+  saveFailed: string;
+  kept: string;
+  /** «Reintentar». */
+  retry: string;
+  /** «Visible en Comercio hasta el {date}.», «Enlace del anuncio». */
+  visibleUntil: string;
+  link: string;
+  /** «Copiar enlace», «Enlace copiado», and the line when the browser does not copy. */
+  copyLink: string;
+  linkCopied: string;
+  copyFailed: string;
+  /** «Crear otro anuncio», «Mis anuncios». */
+  another: string;
+  mine: string;
+  /** «Editar anuncio» (the h1 in edit mode), «Guardar cambios». */
+  editTitle: string;
+  save: string;
+  /** The edit mode when the listing cannot be read, or is not the account's. */
+  loadFailed: string;
+  notEditable: string;
+  refusals: RefusalLabels;
+}
+
 /**
  * «Publicar anuncio» of phase B (9.7.8, 16.4.4), given only with COMERCIO_PUBLICO. `contact` is
  * the text of the requirement lines, shared with «Contactar al vendedor».
@@ -230,10 +307,15 @@ export interface ListingFormPickerLabels {
 export interface ListingFormPublish {
   /** «Publicar anuncio». */
   publish: string;
-  /** «Anuncio publicado.». */
+  /** «Anuncio publicado»: the title of the dialog. */
   published: string;
   /** «Ver anuncio». */
   view: string;
+  sellAs: ListingFormSellAs;
+  publishing: ListingFormPublishing;
+  /** `/{l}/cuenta/#personajes`, `/{l}/cuenta/perfil/?pestana=anuncios`, `/{l}/cuenta/`. */
+  charactersHref: string;
+  listingsHref: string;
   /** «Inicia sesión para publicar». */
   signInLine: string;
   /** «Iniciar sesión». */
@@ -322,14 +404,16 @@ export interface ListingFormLabels {
   negotiable: string;
   /** «Mundo». */
   world: string;
-  /** «Copiar texto para Discord». */
-  copy: string;
-  /** «Anuncio copiado.». */
-  copied: string;
-  /** «No se pudo copiar. Selecciona el texto de abajo y cópialo.». */
-  copyFailed: string;
-  /** «Texto del anuncio». */
-  copyText: string;
+  /** The price per unit (`trade.unitPrice`). */
+  unitPrice: UnitPriceLabels & {
+    mode: string;
+    total: string;
+    perUnit: string;
+    unit: string;
+    unitHelp: string;
+    totalLine: string;
+    noTotal: string;
+  };
   /** The name of the preview region, «Vista previa». */
   preview: string;
   /** The hints under the row names of the trays (`Lienzo:Crear-anuncio`); a row without one
@@ -388,6 +472,8 @@ export interface ListingFormCardLabels {
   now: string;
   /** «Unsellable»: the NPC Price of a Pokémon the NPC does not buy, a game term. */
   unsellable: string;
+  /** «Cualquier mundo»: the tag of a Pokédólares listing. */
+  anyWorld?: string;
 }
 
 /**
@@ -427,8 +513,6 @@ export interface ListingFormProps {
   labels: ListingFormLabels;
   /** The texts of the preview card. */
   preview: ListingFormCardLabels;
-  /** The labels of the copied text (9.7.7). */
-  text: ListingTextLabels;
   /** The pickers and controls of 16.3. */
   pickers: ListingFormPickerLabels;
   /** Phase B: «Publicar anuncio»; absent in phase A. */
@@ -474,12 +558,20 @@ interface GameRow {
   amount: string;
 }
 
+type PriceMode = 'total' | 'unit';
+
+const PRICE_MODES: readonly PriceMode[] = ['total', 'unit'];
+
 interface PriceDraft {
   negotiable: boolean;
   currency: MonedaReal;
   real: string;
   /** 1 or 2 rows; a row without an amount is no option. */
   game: GameRow[];
+  /** «Total» or «Por unidad» (Items, Diamonds and Pokédólares only). */
+  mode: PriceMode;
+  /** The unit of a price per unit, as typed: «1», «10», «1kk». */
+  unit: string;
 }
 
 interface Draft {
@@ -489,8 +581,10 @@ interface Draft {
   diamonds: string;
   pokedolares: string;
   price: PriceDraft;
-  /** World id, or '' while none is chosen. */
+  /** World id, or '' while none is chosen (phase A; phase B takes the character's). */
   world: string;
+  /** «Vendes como»: `account_characters.id`, or '' while none is chosen (phase B). */
+  characterId: string;
 }
 
 /** The other in-game currency. */
@@ -535,8 +629,11 @@ function emptyDraft(): Draft {
       currency: MONEDAS_REALES[0],
       real: '',
       game: [emptyRow('pokemon')],
+      mode: 'total',
+      unit: '',
     },
     world: '',
+    characterId: '',
   };
 }
 
@@ -638,9 +735,102 @@ function restoreDraft(stored: unknown): Draft | null {
       currency: looseOneOf(price.currency, MONEDAS_REALES, base.price.currency),
       real: looseText(price.real, AMOUNT_MAX),
       game: game.length > 0 ? game : [emptyRow(tipo)],
+      mode: looseOneOf(price.mode, PRICE_MODES, 'total'),
+      unit: looseText(price.unit, AMOUNT_MAX),
     },
     world: looseId(stored.world) ?? '',
+    characterId:
+      typeof stored.characterId === 'string' && UUID.test(stored.characterId)
+        ? stored.characterId
+        : '',
   };
+}
+
+const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+
+/** A typed amount the form writes back: «50kk», «1.500», «1.80». */
+function typedAmount(value: number, kind: MonedaJuego | 'whole', locale: Locale): string {
+  if (kind === 'pokedolares') return compactKks(value) ?? formatInteger(value, locale);
+  return formatInteger(value, locale);
+}
+
+/** A listing of the account as the draft of «Editar» (owner rule 2026-09-24). */
+function draftFromListing(anuncio: Anuncio, locale: Locale): Draft {
+  const base = emptyDraft();
+  const per = anuncio.tipo === 'pokemon' ? null : (anuncio.precio.porUnidad ?? null);
+  const shown = per ?? anuncio.precio;
+  const real: PrecioReal | null = shown.real;
+  const game = shown.juego.map((option) => ({
+    kind: option.tipo,
+    amount: typedAmount(option.cantidad, option.tipo, locale),
+  }));
+  const unit = anuncio.pokemon;
+  const draft: Draft = {
+    ...base,
+    tipo: anuncio.tipo,
+    world: anuncio.mundo,
+    characterId: anuncio.character?.id ?? '',
+    price: {
+      negotiable: anuncio.precio.aConvenir,
+      currency: real?.moneda ?? base.price.currency,
+      real: real?.importe ?? '',
+      game: game.length > 0 ? game : [emptyRow(anuncio.tipo)],
+      mode: per === null ? 'total' : 'unit',
+      unit:
+        per === null
+          ? ''
+          : typedAmount(
+              per.cantidad,
+              anuncio.tipo === 'pokedolares' ? 'pokedolares' : 'whole',
+              locale,
+            ),
+    },
+  };
+  if (anuncio.tipo === 'pokemon' && unit !== undefined) {
+    draft.pokemon = {
+      ...base.pokemon,
+      pokemon: unit.pokemon,
+      nickname: unit.nickname ?? '',
+      ball: unit.ball,
+      auras: [...unit.auras],
+      addons: [...unit.addons],
+      heldX: unit.heldX,
+      heldY: unit.heldY,
+      mega: unit.mega,
+      boost: unit.boost,
+      starLevel: unit.starLevel,
+      memorySlots: unit.memorySlots,
+      memories: Array.from(
+        { length: MEMORY_SLOTS_MAX },
+        (_, index) => unit.memorias[index] ?? null,
+      ),
+      nextBoostChance: unit.nextBoostChance ?? '',
+      training: HABILIDADES.map((habilidad) => {
+        const entry = unit.entrenamiento.find((row) => row.habilidad === habilidad);
+        return { level: entry?.nivel ?? null, progress: entry?.progreso ?? '' };
+      }),
+      npc:
+        unit.precioNpc === null
+          ? 'none'
+          : unit.precioNpc.tipo === 'unsellable'
+            ? 'unsellable'
+            : 'amount',
+      npcAmount:
+        unit.precioNpc?.tipo === 'pokedolares'
+          ? typedAmount(unit.precioNpc.cantidad, 'pokedolares', locale)
+          : '',
+    };
+  } else if (anuncio.tipo === 'items' && anuncio.item !== undefined) {
+    draft.item = {
+      id: anuncio.item.item,
+      quantity: typedAmount(anuncio.item.cantidad, 'whole', locale),
+    };
+  } else if (anuncio.tipo === 'diamonds' && anuncio.cantidad !== undefined) {
+    draft.diamonds = typedAmount(anuncio.cantidad, 'whole', locale);
+  } else if (anuncio.tipo === 'pokedolares' && anuncio.cantidad !== undefined) {
+    draft.pokedolares = typedAmount(anuncio.cantidad, 'pokedolares', locale);
+  }
+  return draft;
 }
 
 function readStoredDraft(): Draft | null {
@@ -760,17 +950,47 @@ function gameOptions(draft: Draft, locale: Locale): OpcionJuego[] {
   });
 }
 
+/** The quantity of the asset as typed, once it reads: what a price per unit multiplies. */
+function quantityOf(draft: Draft, locale: Locale): number | null {
+  if (draft.tipo === 'items') return parsePositiveWhole(draft.item.quantity, locale);
+  if (draft.tipo === 'diamonds') return parsePositiveWhole(draft.diamonds, locale);
+  if (draft.tipo === 'pokedolares') return parsePrice(draft.pokedolares, 'pokedolares', locale);
+  return null;
+}
+
+/** The unit of a price per unit, once it reads: «1kk» of Pokédólares, a whole count otherwise. */
+function unitOf(draft: Draft, locale: Locale): number | null {
+  if (draft.tipo === 'pokedolares') return parsePrice(draft.price.unit, 'pokedolares', locale);
+  return parsePositiveWhole(draft.price.unit, locale);
+}
+
+/** Whether the draft is priced per unit: «Por unidad» on a listing with a quantity. */
+function perUnit(draft: Draft): boolean {
+  return draft.price.mode === 'unit' && hasUnitPrice(draft.tipo) && !draft.price.negotiable;
+}
+
 function readPrice(draft: Draft, locale: Locale): Precio {
   const { price } = draft;
   if (price.negotiable) return { real: null, juego: [], aConvenir: true };
-  const real = parsePrice(price.real, price.currency, locale);
+  const amount = parsePrice(price.real, price.currency, locale);
+  const real =
+    amount === null
+      ? null
+      : { moneda: price.currency, importe: price.real.trim().replace(',', '.') };
+  const juego = gameOptions(draft, locale);
+  if (!perUnit(draft)) return { real, juego, aConvenir: false };
+  // A price per unit: the totals once the unit and the quantity read (unit-price.ts).
+  const unit = unitOf(draft, locale);
+  const quantity = quantityOf(draft, locale);
+  if (unit !== null && quantity !== null) {
+    const priced = priceFromUnit(unit, real, juego, quantity);
+    if (priced !== null) return priced;
+  }
   return {
-    real:
-      real === null
-        ? null
-        : { moneda: price.currency, importe: price.real.trim().replace(',', '.') },
-    juego: gameOptions(draft, locale),
+    real: null,
+    juego: [],
     aConvenir: false,
+    porUnidad: unit === null ? null : { cantidad: unit, real, juego },
   };
 }
 
@@ -877,10 +1097,13 @@ const ID = {
   gameAmount: (index: number) => `lf-game-${index}-amount`,
   addOption: 'lf-add-option',
   negotiable: 'lf-negotiable',
+  priceMode: 'lf-price-mode',
+  unit: 'lf-unit',
   world: 'lf-world',
-  copy: 'lf-copy',
+  character: 'lf-character',
+  type: 'lf-type',
   publish: 'lf-publish',
-  text: 'lf-text',
+  link: 'lf-link',
 } as const;
 
 /** The fields of the in-game price options, whose position moves when one is removed. */
@@ -896,12 +1119,22 @@ function errorId(id: string): string {
  * does not have; a real price that is not an amount is no price, and takes the line of a listing
  * without one.
  */
+/** What the phase asks besides the fields: a world (phase A) or a character (phase B). */
+interface Seller {
+  /** Worlds offered in phase A; 0 in phase B. */
+  worlds: number;
+  /** Phase B: «Elige el personaje con el que vendes.»; null in phase A. */
+  character: string | null;
+  /** «Con esa unidad el precio no da un total válido.». */
+  noTotal: string;
+}
+
 function validate(
   draft: Draft,
   reading: Reading,
   context: Context,
   messages: ListingFormErrors,
-  worlds: number,
+  seller: Seller,
 ): Validation {
   const { locale } = context;
   const errors: Record<string, string> = {};
@@ -910,6 +1143,9 @@ function validate(
     order.push(id);
     if (message !== null) errors[id] = message;
   };
+  if (seller.character !== null) {
+    check(ID.character, draft.characterId === '' ? seller.character : null);
+  }
   const range = ([min, max]: readonly [number, number]) =>
     fill(messages.range, { min: formatInteger(min, locale), max: formatInteger(max, locale) });
   const number = (value: number | null, limits: readonly [number, number], required = false) =>
@@ -955,6 +1191,24 @@ function validate(
   }
 
   const { price } = draft;
+  if (perUnit(draft)) {
+    const unit = unitOf(draft, locale);
+    const priced = reading.anuncio.precio;
+    const typed = price.real.trim() !== '' || price.game.some((row) => row.amount.trim() !== '');
+    check(
+      ID.unit,
+      unit === null
+        ? draft.tipo === 'pokedolares'
+          ? pokedolares(price.unit)
+          : messages.quantity
+        : typed &&
+            quantityOf(draft, locale) !== null &&
+            priced.real === null &&
+            priced.juego.length === 0
+          ? seller.noTotal
+          : null,
+    );
+  }
   if (!price.negotiable) {
     const typedReal = price.real.trim() !== '';
     const realAmount = parsePrice(price.real, price.currency, locale);
@@ -976,7 +1230,9 @@ function validate(
         );
     });
   }
-  if (worlds > 0) check(ID.world, draft.world === '' ? messages.world : null);
+  if (seller.character === null && seller.worlds > 0) {
+    check(ID.world, draft.world === '' ? messages.world : null);
+  }
   return { errors, order };
 }
 
@@ -1101,10 +1357,51 @@ const ListingPreview = lazy(() =>
   import('./ListingPreview').then((module) => ({ default: module.ListingPreview })),
 );
 
-type CopyState = { state: 'idle' } | { state: 'copied' } | { state: 'failed'; text: string };
+/** The account's characters for «Vendes como» (phase B). */
+type Characters =
+  | { state: 'off' }
+  | { state: 'loading' }
+  | { state: 'signed-out' }
+  | { state: 'error' }
+  | { state: 'ready'; list: AccountCharacter[] };
+
+/** A publish or a save that failed (board Anuncio-publicado): its line and whether to retry. */
+interface Failure {
+  text: string;
+  toListings: boolean;
+  toAccount: boolean;
+  retry: boolean;
+}
+
+/** A published listing: the dialog after «Publicar anuncio» shows it. */
+interface Published {
+  id: string;
+  until: Date;
+  draft: ListingPreviewDraft;
+  character: string | null;
+}
+
+/** «Editar» (`?editar={id}`): the listing being edited, once read. */
+type Editing =
+  | { state: 'none' }
+  | { state: 'loading'; id: string }
+  | { state: 'ready'; id: string }
+  | { state: 'error'; id: string; text: string };
+
+type LinkCopy = 'idle' | 'copied' | 'failed';
+
+/** How long «Enlace copiado» stays before the button reads «Copiar enlace» again. */
+const COPIED_MS = 2000;
+
+/** The listing id of `?editar=`, or null. */
+function editTarget(): string | null {
+  const id = new URLSearchParams(window.location.search).get('editar');
+  return id !== null && UUID.test(id) ? id : null;
+}
 
 export function ListingForm(props: ListingFormProps) {
   const { locale, labels, ui, sprites, worlds, auras, addons, pickers } = props;
+  const texts = props.publish ?? null;
   const roster = useData(props.pokedexUrl, readRoster);
   const items = useData(props.itemsUrl, readItems);
   const rosterData = roster.state === 'ready' ? roster.data : null;
@@ -1113,9 +1410,15 @@ export function ListingForm(props: ListingFormProps) {
   const [draft, setDraft] = useState<Draft>(emptyDraft);
   const [submitted, setSubmitted] = useState(false);
   const [touched, setTouched] = useState<ReadonlySet<string>>(() => new Set());
-  const [copy, setCopy] = useState<CopyState>({ state: 'idle' });
   const [publishing, setPublishing] = useState(false);
-  const [published, setPublished] = useState<string | null>(null);
+  const [failure, setFailure] = useState<Failure | null>(null);
+  const [published, setPublished] = useState<Published | null>(null);
+  const [linkCopy, setLinkCopy] = useState<LinkCopy>('idle');
+  const [characters, setCharacters] = useState<Characters>(() =>
+    texts === null ? { state: 'off' } : { state: 'loading' },
+  );
+  const [editing, setEditing] = useState<Editing>({ state: 'none' });
+  const editId = editing.state === 'none' ? null : editing.id;
   const [blocker, setBlocker] = useState<ContactMessage | null>(null);
   const [consentOpen, setConsentOpen] = useState(false);
   const [consentError, setConsentError] = useState<string | null>(null);
@@ -1159,16 +1462,110 @@ export function ListingForm(props: ListingFormProps) {
   );
 
   // The stored draft replaces the empty one once hydrated (9.7.7): the server renders the empty
-  // form, so hydration renders it too.
+  // form, so hydration renders it too. «Editar» reads the listing instead, and never touches
+  // the stored draft of a new listing.
   useEffect(() => {
+    const target = texts === null ? null : editTarget();
+    if (target !== null) {
+      setEditing({ state: 'loading', id: target });
+      return;
+    }
     const stored = readStoredDraft();
     if (stored === null) return;
     setDraft(stored);
-  }, []);
+  }, [texts]);
 
   useEffect(() => {
-    if (edited.current) storeDraft(draft);
-  }, [draft]);
+    if (edited.current && editId === null) storeDraft(draft);
+  }, [draft, editId]);
+
+  // «Vendes como»: the account's characters, read once hydrated. Without a stored session there
+  // is nobody to read (the header's session, src/lib/account/session-cache.ts): supabase-js is not
+  // even loaded.
+  useEffect(() => {
+    if (texts === null) return undefined;
+    if (readStoredSession() === null) {
+      setCharacters({ state: 'signed-out' });
+      return undefined;
+    }
+    let alive = true;
+    void (async () => {
+      try {
+        const client = await getSupabaseBrowserClient();
+        const session = client === null ? null : (await client.auth.getSession()).data.session;
+        if (client === null || session === null) {
+          if (alive) setCharacters({ state: 'signed-out' });
+          return;
+        }
+        const [trade] = await publishModules();
+        const listed = await trade.listMyCharacters(client);
+        if (!alive) return;
+        setCharacters(
+          listed.data === null ? { state: 'error' } : { state: 'ready', list: listed.data },
+        );
+      } catch {
+        if (alive) setCharacters({ state: 'error' });
+      }
+    })();
+    return () => {
+      alive = false;
+    };
+  }, [texts]);
+
+  // The main character is chosen until the reader picks another one; a stored character the
+  // account no longer has falls back to it.
+  const characterList = characters.state === 'ready' ? characters.list : null;
+  useEffect(() => {
+    if (characterList === null || characterList.length === 0) return;
+    setDraft((current) => {
+      const own = characterList.find((character) => character.id === current.characterId);
+      if (own !== undefined) {
+        return own.worldKey === current.world ? current : { ...current, world: own.worldKey };
+      }
+      if (editId !== null && current.characterId !== '') return current;
+      const main = characterList.find((character) => character.isMain) ?? characterList[0];
+      return { ...current, characterId: main.id, world: main.worldKey };
+    });
+  }, [characterList, editId, draft.characterId]);
+
+  // «Editar»: the listing of the account fills the form.
+  useEffect(() => {
+    if (editing.state !== 'loading' || texts === null) return undefined;
+    let alive = true;
+    const { id } = editing;
+    void (async () => {
+      try {
+        const client = await getSupabaseBrowserClient();
+        const [trade] = await publishModules();
+        const read = client === null ? null : await trade.getMyListing(client, id);
+        if (!alive) return;
+        const anuncio = read?.data ?? null;
+        if (read === null || read.error !== null) {
+          setEditing({ state: 'error', id, text: texts.publishing.loadFailed });
+        } else if (
+          anuncio === null ||
+          (anuncio.estado !== 'publicado' && anuncio.estado !== 'reservado')
+        ) {
+          setEditing({ state: 'error', id, text: texts.publishing.notEditable });
+        } else {
+          setDraft(draftFromListing(anuncio, locale));
+          setEditing({ state: 'ready', id });
+        }
+      } catch {
+        if (alive) setEditing({ state: 'error', id, text: texts.publishing.loadFailed });
+      }
+    })();
+    return () => {
+      alive = false;
+    };
+  }, [editing, texts, locale]);
+
+  // «Enlace copiado» goes back to «Copiar enlace» after a moment.
+  useEffect(() => {
+    if (linkCopy !== 'copied') return undefined;
+    const timer = window.setTimeout(() => setLinkCopy('idle'), COPIED_MS);
+    return () => window.clearTimeout(timer);
+  }, [linkCopy]);
 
   useEffect(() => {
     if (focusNext === null) return;
@@ -1176,20 +1573,24 @@ export function ListingForm(props: ListingFormProps) {
     document.getElementById(focusNext)?.focus();
   }, [focusNext]);
 
-  // A failed copy puts the text in a read-only field and selects it, so one shortcut copies it
-  // (9.7.7).
+  // The browser did not copy: the link is selected in its field, so one shortcut copies it.
   useEffect(() => {
-    if (copy.state !== 'failed') return;
-    const area = document.getElementById(ID.text);
-    if (area instanceof HTMLTextAreaElement) {
-      area.focus();
-      area.select();
+    if (linkCopy !== 'failed') return;
+    const field = document.getElementById(ID.link);
+    if (field instanceof HTMLInputElement) {
+      field.focus();
+      field.select();
     }
-  }, [copy]);
+  }, [linkCopy]);
 
   const context: Context = { locale, roster: rosterData, addons };
   const reading = readDraft(draft, context);
-  const validation = validate(draft, reading, context, labels.errors, worlds.length);
+  const validation = validate(draft, reading, context, labels.errors, {
+    worlds: worlds.length,
+    character: texts === null ? null : texts.sellAs.required,
+    noTotal: labels.unitPrice.noTotal,
+  });
+  const character = characterList?.find((entry) => entry.id === draft.characterId) ?? null;
   const shown: Record<string, string> = {};
   for (const id of validation.order) {
     const message = validation.errors[id];
@@ -1272,8 +1673,10 @@ export function ListingForm(props: ListingFormProps) {
       tooltip: ui.tooltip,
       now: props.preview.now,
       unsellable: props.preview.unsellable,
+      unitPrice: labels.unitPrice,
+      anyWorld: props.preview.anyWorld,
     }),
-    [props.preview, ui],
+    [props.preview, ui, labels.unitPrice],
   );
 
   const previewData = useMemo<ListingPreviewData>(
@@ -1303,11 +1706,10 @@ export function ListingForm(props: ListingFormProps) {
 
   // ------------------------------------------------------------------------- changes
 
-  /** A change of the reader: the draft, and the end of the last copy's notice. */
+  /** A change of the reader: the draft, stored from then on (9.7.7). */
   function update(change: (current: Draft) => Draft) {
     edited.current = true;
     setDraft(change);
-    setCopy({ state: 'idle' });
   }
 
   function setUnit(change: (unit: PokemonDraft) => PokemonDraft) {
@@ -1392,15 +1794,6 @@ export function ListingForm(props: ListingFormProps) {
     );
   }
 
-  async function copyText(value: string) {
-    try {
-      await navigator.clipboard.writeText(value);
-      setCopy({ state: 'copied' });
-    } catch {
-      setCopy({ state: 'failed', text: value });
-    }
-  }
-
   /** Validates the draft; with errors, shows them and focuses the first (9.7.5). */
   function valid(): boolean {
     const first = validation.order.find((id) => validation.errors[id] !== undefined);
@@ -1415,29 +1808,46 @@ export function ListingForm(props: ListingFormProps) {
     return false;
   }
 
-  function copyForDiscord() {
-    if (!valid()) return;
-    // A new copy is a new status: the Notice of the last one goes, so the next one is read.
-    setCopy({ state: 'idle' });
-    void copyText(listingText(reading.anuncio, locale, names, props.text));
+  /** The line of a publish or a save the database refused, or that did not reach it. */
+  function failureOf(
+    words: ListingFormPublishing,
+    error: { code?: string | null; network?: boolean } | null,
+    reason: string | null,
+    mapSupabaseError: (error: unknown, locale: Locale) => string,
+  ): Failure {
+    const known = refusalFor(reason, words.refusals, formatInteger(ANUNCIOS_ACTIVOS_MAX, locale));
+    if (known !== null) return { ...known, retry: false };
+    const again = retryable(error);
+    return {
+      text:
+        error?.network === true || error === null
+          ? words.refusals.network
+          : mapSupabaseError(error, locale),
+      toListings: false,
+      toAccount: false,
+      retry: again,
+    };
   }
 
-  /** «Publicar anuncio» (9.7.8, 16.4.4): session, requirements, consent, then the RPC. */
+  /**
+   * «Publicar anuncio» (9.7.8, 16.4.4) or, editing, «Guardar cambios»: session, requirements,
+   * consent, then the RPC. While it runs the button reads «Publicando…» and the form is locked.
+   */
   async function publish(consented = false): Promise<void> {
-    const texts = props.publish;
-    if (texts == null || publishing || !valid()) return;
+    if (texts === null || publishing || !valid()) return;
     setPublishing(true);
     setBlocker(null);
-    setPublished(null);
-    let mapSupabaseError: (error: unknown, locale: Locale) => string = () => texts.signInLine;
+    setFailure(null);
+    let mapSupabaseError: (error: unknown, locale: Locale) => string = () =>
+      texts.publishing.refusals.network;
     try {
       const [trade, errors, consent] = await publishModules();
       mapSupabaseError = errors.mapSupabaseError;
-      const { getMyAccount, publishListing } = trade;
+      const { getMyAccount, publishListing, updateListing } = trade;
       const { contactBlocker } = consent;
       const client = await getSupabaseBrowserClient();
       if (client === null) {
-        setBlocker({ text: mapSupabaseError(null, locale), link: null });
+        setFailure(failureOf(texts.publishing, null, null, mapSupabaseError));
         return;
       }
       const { data } = await client.auth.getSession();
@@ -1450,7 +1860,7 @@ export function ListingForm(props: ListingFormProps) {
         return;
       }
       if (account.error !== null) {
-        setBlocker({ text: mapSupabaseError(account.error, locale), link: null });
+        setFailure(failureOf(texts.publishing, account.error, account.reason, mapSupabaseError));
         return;
       }
       const missing = contactBlocker(account.data, locale, texts.contact);
@@ -1463,20 +1873,46 @@ export function ListingForm(props: ListingFormProps) {
         setConsentOpen(true);
         return;
       }
-      const result = await publishListing(client, reading.anuncio);
-      if (result.error !== null || result.data === null) {
-        setBlocker({ text: mapSupabaseError(result.error, locale), link: null });
+      const input = { ...reading.anuncio, characterId: draft.characterId || null };
+      if (editId !== null) {
+        const saved = await updateListing(client, editId, input);
+        if (saved.error !== null) {
+          setFailure(failureOf(texts.publishing, saved.error, saved.reason, mapSupabaseError));
+          return;
+        }
+        // Saved: the listing page shows it (its owner view has «Editar anuncio» again).
+        window.location.assign(`/${locale}/comercio/anuncio/${editId}/`);
         return;
       }
-      setPublished(result.data);
+      const result = await publishListing(client, input);
+      if (result.error !== null || result.data === null) {
+        setFailure(failureOf(texts.publishing, result.error, result.reason, mapSupabaseError));
+        return;
+      }
+      setPublished({
+        id: result.data,
+        until: listingExpiry(Date.now()),
+        draft: reading.anuncio,
+        character: character?.playerName ?? null,
+      });
+      setLinkCopy('idle');
+      // Published: the draft is gone, the form starts empty as the same character.
       edited.current = false;
       try {
         window.localStorage.removeItem(STORAGE_KEY);
       } catch {
         // Without storage there is no draft to remove.
       }
-    } catch (caught) {
-      setBlocker({ text: mapSupabaseError(caught, locale), link: null });
+      setDraft((current) => ({
+        ...emptyDraft(),
+        characterId: current.characterId,
+        world: current.world,
+      }));
+      setSubmitted(false);
+      setTouched(new Set());
+    } catch {
+      // A call that threw never reached the database (the network, a chunk that did not load).
+      setFailure(failureOf(texts.publishing, null, null, mapSupabaseError));
     } finally {
       setPublishing(false);
     }
@@ -1503,16 +1939,29 @@ export function ListingForm(props: ListingFormProps) {
 
   function submit(event: SubmitEvent<HTMLFormElement>) {
     event.preventDefault();
-    if (props.publish) void publish();
-    else copyForDiscord();
+    if (texts !== null) void publish();
+    else valid();
   }
 
-  function closeNotice() {
-    const focused = document.activeElement;
-    const inside = focused instanceof Element && focused.closest('.ac-notice') !== null;
-    setCopy({ state: 'idle' });
-    // DS:Notice: the focus goes back to the control the notice came from.
-    if (inside) document.getElementById(ID.copy)?.focus();
+  /** The address of the published listing, absolute: what «Copiar enlace» copies. */
+  const publishedUrl =
+    published === null || typeof window === 'undefined'
+      ? ''
+      : new URL(`/${locale}/comercio/anuncio/${published.id}/`, window.location.origin).href;
+
+  async function copyLink(): Promise<void> {
+    try {
+      await navigator.clipboard.writeText(publishedUrl);
+      setLinkCopy('copied');
+    } catch {
+      setLinkCopy('failed');
+    }
+  }
+
+  /** «Crear otro anuncio»: the dialog closes and the focus goes to «¿Qué vendes?». */
+  function another(): void {
+    setPublished(null);
+    setFocusNext(ID.type);
   }
 
   // -------------------------------------------------------------------------- fields
@@ -2015,10 +2464,57 @@ export function ListingForm(props: ListingFormProps) {
       game: current.game.map((row, position) => (position === index ? { ...row, ...change } : row)),
     }));
 
+  // A price per unit (owner rule 2026-09-24): Items, Diamonds and Pokédólares. The two price rows
+  // then hold the price of one unit, the unit is its own field, and the total shows under them.
+  const unitMode = perUnit(draft);
+  const unitHint = unitMode ? labels.unitPrice.perUnit : undefined;
+  const totals = reading.anuncio.precio;
+  const totalParts = [
+    totals.real === null
+      ? null
+      : formatRealMoney(Number(totals.real.importe), totals.real.moneda, locale),
+    ...totals.juego.map((option) =>
+      option.tipo === 'pokedolares'
+        ? formatPokedolares(option.cantidad, locale)
+        : formatDiamonds(option.cantidad, locale),
+    ),
+  ].filter((part): part is string => part !== null);
+  const modeOptions: ToggleGroupOption[] = [
+    { value: 'total', label: labels.unitPrice.total },
+    { value: 'unit', label: labels.unitPrice.perUnit },
+  ];
+
   const priceFields = (
     <>
       {npcRow}
-      <Row label={labels.fiat} group>
+      {hasUnitPrice(draft.tipo) ? (
+        <Row label={labels.unitPrice.mode}>
+          <ToggleGroup
+            id={ID.priceMode}
+            className="ac-listing-form__segmented"
+            label={labels.unitPrice.mode}
+            options={modeOptions.map((option) => ({ ...option, disabled: price.negotiable }))}
+            value={price.negotiable ? 'total' : price.mode}
+            onChange={(mode) =>
+              setPrice((current) => ({ ...current, mode: looseOneOf(mode, PRICE_MODES, 'total') }))
+            }
+          />
+        </Row>
+      ) : null}
+      {unitMode ? (
+        <Row label={labels.unitPrice.unit} hint={labels.unitPrice.unitHelp}>
+          <Field id={ID.unit} error={shown[ID.unit]} narrow>
+            {textField(
+              ID.unit,
+              labels.unitPrice.unit,
+              price.unit,
+              (unit) => setPrice((current) => ({ ...current, unit })),
+              { labelHidden: true },
+            )}
+          </Field>
+        </Row>
+      ) : null}
+      <Row label={labels.fiat} hint={unitHint} group>
         <div className="ac-listing-form__pair ac-listing-form__pair--money">
           <Field id={ID.currency}>
             <Select
@@ -2051,7 +2547,7 @@ export function ListingForm(props: ListingFormProps) {
           </Field>
         </div>
       </Row>
-      <Row label={labels.game} group top>
+      <Row label={labels.game} hint={unitHint} group top>
         <div className="ac-listing-form__options">
           {price.game.map((row, index) => (
             // The options are the seller's sequence: the position is the identity.
@@ -2099,6 +2595,13 @@ export function ListingForm(props: ListingFormProps) {
           ) : null}
         </div>
       </Row>
+      {unitMode && totalParts.length > 0 ? (
+        <Row label="">
+          <p className="ac-listing-form__total">
+            {fill(labels.unitPrice.totalLine, { price: totalParts.join(` ${ui.or} `) })}
+          </p>
+        </Row>
+      ) : null}
       <Row label="">
         <Checkbox
           id={ID.negotiable}
@@ -2109,6 +2612,83 @@ export function ListingForm(props: ListingFormProps) {
       </Row>
     </>
   );
+
+  // ------------------------------------------------------------------ «Vendes como»
+
+  const worldName = (id: string) => worldNames[id] ?? id;
+  const sellAs = texts?.sellAs ?? null;
+  let sellAsRow: ReactNode = null;
+  let worldRow: ReactNode = null;
+  if (texts !== null && sellAs !== null) {
+    let control: ReactNode;
+    if (characters.state === 'signed-out') {
+      control = (
+        <p className="ac-listing-form__line">
+          {texts.signInLine} <TextLink href={`/${locale}/cuenta/`}>{texts.signIn}</TextLink>
+        </p>
+      );
+    } else if (characters.state === 'error') {
+      control = <p className="ac-listing-form__line">{ui.dataError}</p>;
+    } else if (characters.state === 'ready' && characters.list.length === 0) {
+      control = (
+        <div className="ac-listing-form__empty">
+          <p className="ac-listing-form__line">{sellAs.empty}</p>
+          <Button href={texts.charactersHref}>{sellAs.add}</Button>
+        </div>
+      );
+    } else {
+      const list = characterList ?? [];
+      control = (
+        <div className="ac-listing-form__sell-as">
+          <Field id={ID.character} error={shown[ID.character]} slot>
+            <Select
+              id={ID.character}
+              label={sellAs.label}
+              labelHidden
+              placeholder={sellAs.choose}
+              options={list.map((entry) => ({
+                value: entry.id,
+                label: [
+                  entry.playerName,
+                  worldName(entry.worldKey),
+                  entry.isMain ? sellAs.main : null,
+                ]
+                  .filter(Boolean)
+                  .join(' · '),
+              }))}
+              value={draft.characterId || undefined}
+              disabled={characters.state === 'loading'}
+              onChange={(id) => {
+                const chosen = list.find((entry) => entry.id === id);
+                if (chosen === undefined) return;
+                touch(ID.character);
+                update((current) => ({
+                  ...current,
+                  characterId: chosen.id,
+                  world: chosen.worldKey,
+                }));
+              }}
+            />
+          </Field>
+          <TextLink href={texts.charactersHref}>{sellAs.characters}</TextLink>
+        </div>
+      );
+    }
+    sellAsRow = <Row label={sellAs.label}>{control}</Row>;
+    // The world is the character's: shown, never chosen (board Personajes, Variante 1 and 2).
+    worldRow = (
+      <Row label={labels.world}>
+        <div className="ac-listing-form__world">
+          <span className="ac-listing-form__world-name">
+            {character === null ? UNKNOWN : worldName(character.worldKey)}
+          </span>
+          <span className="ac-listing-form__row-hint">
+            {tradesAcrossWorlds(draft.tipo) ? sellAs.anyWorld : sellAs.worldLocked}
+          </span>
+        </div>
+      </Row>
+    );
+  }
 
   // ------------------------------------------------------------------------- preview
 
@@ -2122,109 +2702,138 @@ export function ListingForm(props: ListingFormProps) {
         ? items.state !== 'loading'
         : true;
 
-  // Plan «Crear anuncio»: ¿Qué vendes?, NPC Price and Mundo are one segmented box each.
+  // Plan «Crear anuncio»: ¿Qué vendes?, NPC Price and Mundo are one segmented box each. Editing,
+  // the type is locked (the database keeps it).
   const typeOptions: ToggleGroupOption[] = TIPOS_ACTIVO.map((tipo) => ({
     value: tipo,
     label: labels.types[tipo],
+    disabled: editId !== null && tipo !== draft.tipo,
   }));
+
+  if (texts !== null && editing.state === 'error') {
+    return (
+      <div className="ac-listing-form">
+        <p className="ac-listing-form__line" role="status">
+          {editing.text}
+        </p>
+      </div>
+    );
+  }
+  const loadingEdit = editing.state === 'loading';
+  const words = texts?.publishing ?? null;
 
   return (
     <div className="ac-listing-form">
-      <form ref={formRef} className="ac-listing-form__form" noValidate onSubmit={submit}>
-        <section className="ac-listing-form__tray" aria-label={pickers.assetQuestion}>
-          <Row label={pickers.assetQuestion}>
-            <ToggleGroup
-              id="lf-type"
-              className="ac-listing-form__segmented ac-listing-form__segmented--fill"
-              label={pickers.assetQuestion}
-              options={typeOptions}
-              value={draft.tipo}
-              onChange={(tipo) => chooseType(looseOneOf(tipo, TIPOS_ACTIVO, draft.tipo))}
-            />
-          </Row>
-          {assetFields}
-        </section>
-        {draft.tipo === 'pokemon' ? trainingFields : null}
-        <section className="ac-listing-form__tray" aria-label={labels.price}>
-          {priceFields}
-          {worlds.length > 1 ? (
-            <Row label={labels.world}>
-              <Field id={ID.world} error={shown[ID.world]}>
-                <ToggleGroup
-                  id={ID.world}
-                  className="ac-listing-form__segmented"
-                  label={labels.world}
-                  options={worlds.map((world) => ({ value: world.id, label: world.nombre }))}
-                  value={draft.world}
-                  onChange={(world) => {
-                    touch(ID.world);
-                    update((current) => ({ ...current, world }));
-                  }}
-                />
-              </Field>
-            </Row>
-          ) : null}
-        </section>
-        <div className="ac-listing-form__action">
-          {props.publish ? (
-            <Button id={ID.publish} type="submit" variant="solid" disabled={publishing}>
-              {props.publish.publish}
-            </Button>
-          ) : null}
-          <Button
-            id={ID.copy}
-            type={props.publish ? 'button' : 'submit'}
-            variant={props.publish ? undefined : 'solid'}
-            onClick={props.publish ? copyForDiscord : undefined}
-          >
-            {labels.copy}
-          </Button>
-          {blocker !== null ? (
-            <p className="ac-listing-form__line" role="status">
-              {blocker.text}
-              {blocker.link === null ? null : (
-                <>
-                  {' '}
-                  <TextLink href={blocker.link.href}>{blocker.link.label}</TextLink>
-                </>
-              )}
-            </p>
-          ) : null}
-          {published !== null && props.publish ? (
-            <p className="ac-listing-form__line" role="status">
-              {props.publish.published}{' '}
-              <TextLink href={`/${locale}/comercio/anuncio/${published}/`}>
-                {props.publish.view}
-              </TextLink>
-            </p>
-          ) : null}
-          {props.publish && consentOpen ? (
-            <Suspense fallback={null}>
-              <RealMoneyConsent
-                open={consentOpen}
-                onAccept={() => void acceptConsent()}
-                onClose={() => setConsentOpen(false)}
-                labels={props.publish.consent}
-                ui={{ close: props.publish.close, dismiss: ui.dismiss }}
-                busy={publishing}
-                error={consentError}
-                onErrorClose={() => setConsentError(null)}
+      <form
+        ref={formRef}
+        className="ac-listing-form__form"
+        noValidate
+        onSubmit={submit}
+        aria-busy={publishing || loadingEdit}
+      >
+        <fieldset className="ac-listing-form__lock" disabled={publishing || loadingEdit}>
+          <section className="ac-listing-form__tray" aria-label={pickers.assetQuestion}>
+            {sellAsRow}
+            <Row label={pickers.assetQuestion}>
+              <ToggleGroup
+                id={ID.type}
+                className="ac-listing-form__segmented ac-listing-form__segmented--fill"
+                label={pickers.assetQuestion}
+                options={typeOptions}
+                value={draft.tipo}
+                onChange={(tipo) => chooseType(looseOneOf(tipo, TIPOS_ACTIVO, draft.tipo))}
               />
-            </Suspense>
-          ) : null}
-          <Notice open={copy.state !== 'idle'} onClose={closeNotice} closeLabel={ui.dismiss}>
-            {copy.state === 'failed' ? labels.copyFailed : labels.copied}
-          </Notice>
-          {copy.state === 'failed' ? (
-            <Textarea
-              id={ID.text}
-              label={labels.copyText}
-              value={copy.text}
-              rows={Math.min(Math.max(copy.text.split('\n').length, 4), 16)}
-              textareaProps={{ readOnly: true }}
-            />
-          ) : null}
-        </div>
+            </Row>
+            {worldRow}
+            {assetFields}
+          </section>
+          {draft.tipo === 'pokemon' ? trainingFields : null}
+          <section className="ac-listing-form__tray" aria-label={labels.price}>
+            {priceFields}
+            {texts === null && worlds.length > 1 ? (
+              <Row label={labels.world}>
+                <Field id={ID.world} error={shown[ID.world]}>
+                  <ToggleGroup
+                    id={ID.world}
+                    className="ac-listing-form__segmented"
+                    label={labels.world}
+                    options={worlds.map((world) => ({ value: world.id, label: world.nombre }))}
+                    value={draft.world}
+                    onChange={(world) => {
+                      touch(ID.world);
+                      update((current) => ({ ...current, world }));
+                    }}
+                  />
+                </Field>
+              </Row>
+            ) : null}
+          </section>
+        </fieldset>
+        {texts !== null && words !== null ? (
+          <div className="ac-listing-form__action">
+            {failure !== null ? (
+              <p className="ac-listing-form__failure" role="alert">
+                <strong>{editId === null ? words.failed : words.saveFailed}</strong> {failure.text}
+                {failure.toListings ? (
+                  <>
+                    {' '}
+                    <TextLink href={texts.listingsHref}>{words.mine}</TextLink>.
+                  </>
+                ) : null}
+                {failure.toAccount ? (
+                  <>
+                    {' '}
+                    <TextLink href={`/${locale}/cuenta/`}>{texts.contact.goToAccount}</TextLink>
+                  </>
+                ) : null}
+                {failure.retry ? <> {words.kept}</> : null}
+              </p>
+            ) : null}
+            <div className="ac-listing-form__buttons">
+              <Button
+                id={ID.publish}
+                type="submit"
+                variant="solid"
+                disabled={publishing || loadingEdit}
+              >
+                {publishing
+                  ? editId === null
+                    ? words.busy
+                    : words.saving
+                  : failure?.retry === true
+                    ? words.retry
+                    : editId === null
+                      ? texts.publish
+                      : words.save}
+              </Button>
+            </div>
+            {blocker !== null ? (
+              <p className="ac-listing-form__line" role="status">
+                {blocker.text}
+                {blocker.link === null ? null : (
+                  <>
+                    {' '}
+                    <TextLink href={blocker.link.href}>{blocker.link.label}</TextLink>
+                  </>
+                )}
+              </p>
+            ) : null}
+            {texts !== null && consentOpen ? (
+              <Suspense fallback={null}>
+                <RealMoneyConsent
+                  open={consentOpen}
+                  onAccept={() => void acceptConsent()}
+                  onClose={() => setConsentOpen(false)}
+                  labels={texts.consent}
+                  ui={{ close: texts.close, dismiss: ui.dismiss }}
+                  busy={publishing}
+                  error={consentError}
+                  onErrorClose={() => setConsentError(null)}
+                />
+              </Suspense>
+            ) : null}
+          </div>
+        ) : null}
       </form>
       {/* A named region, not an `aside`: a complementary landmark belongs at the top level of
           the page, and this one lives inside `main` (13.7, WA2). */}
@@ -2238,9 +2847,71 @@ export function ListingForm(props: ListingFormProps) {
               locale={locale}
               hint={ui.pinHint}
               orLabel={ui.or}
+              character={character?.playerName ?? null}
             />
           </Suspense>
         </section>
+      ) : null}
+      {texts !== null && words !== null && published !== null ? (
+        <Dialog
+          open
+          onClose={() => setPublished(null)}
+          title={texts.published}
+          closeLabel={texts.close}
+          className="ac-published"
+          actions={
+            <>
+              <TextLink href={texts.listingsHref} className="ac-published__mine">
+                {words.mine}
+              </TextLink>
+              <Button onClick={another}>{words.another}</Button>
+              <Button
+                {...initialFocus}
+                variant="solid"
+                href={`/${locale}/comercio/anuncio/${published.id}/`}
+              >
+                {texts.view}
+              </Button>
+            </>
+          }
+        >
+          <p className="ac-published__until">
+            {fill(words.visibleUntil, { date: formatDate(published.until.toISOString(), locale) })}
+          </p>
+          <div className="ac-published__body">
+            <Suspense fallback={null}>
+              <ListingPreview
+                draft={published.draft}
+                data={previewData}
+                labels={{ ...previewLabels, now: props.preview.now }}
+                locale={locale}
+                hint={ui.pinHint}
+                orLabel={ui.or}
+                character={published.character}
+              />
+            </Suspense>
+            <div className="ac-published__link">
+              <label className="ac-published__label" htmlFor={ID.link}>
+                {words.link}
+              </label>
+              <input
+                id={ID.link}
+                className="ac-published__url"
+                type="text"
+                readOnly
+                value={publishedUrl}
+              />
+              <Button onClick={() => void copyLink()}>
+                {linkCopy === 'copied' ? words.linkCopied : words.copyLink}
+              </Button>
+              {linkCopy === 'failed' ? (
+                <p className="ac-published__line" role="status">
+                  {words.copyFailed}
+                </p>
+              ) : null}
+            </div>
+          </div>
+        </Dialog>
       ) : null}
     </div>
   );

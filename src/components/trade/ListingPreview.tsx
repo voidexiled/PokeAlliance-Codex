@@ -30,7 +30,13 @@ import { elementTip, itemTip, pokemonTip, type TipData, type TipLabels } from '@
 import type { SpriteData } from '@/lib/sprites/resolve';
 import { parsePrice } from '@/lib/trade/draft';
 import { knownAmount, listingTitle } from '@/lib/trade/title';
-import { equipmentOf, type Anuncio, type UnidadPokemon } from '@/lib/trade/types';
+import {
+  equipmentOf,
+  tradesAcrossWorlds,
+  type Anuncio,
+  type UnidadPokemon,
+} from '@/lib/trade/types';
+import { unitPriceText, type UnitPriceLabels } from '@/lib/trade/unit-price';
 
 // ListingPreview (spec 9.7.6, template G of 8.0.2): the live preview of the publish page. It is
 // the real `ListingCard` of the list (7.2.6, §9.5.8) with `layout = listingLayout([borrador])`,
@@ -123,6 +129,10 @@ export interface ListingPreviewLabels {
   now: string;
   /** The value of an NPC Price the NPC does not pay: «Unsellable», a game term. */
   unsellable: string;
+  /** A price per unit, «MX$ 1,80 por 1kk» (owner rule 2026-09-24); without it none is shown. */
+  unitPrice?: UnitPriceLabels;
+  /** «Cualquier mundo»: the tag of a Pokédólares listing. */
+  anyWorld?: string;
 }
 
 export interface ListingPreviewProps {
@@ -134,6 +144,8 @@ export interface ListingPreviewProps {
   hint: string;
   /** `ui.or`: the word between two price options (13.3). */
   orLabel: string;
+  /** The seller's character the listing goes as: the meta reads «Void Exiled · Titan 1». */
+  character?: string | null;
 }
 
 /** The 300 wide panel of a held item (7.5.3). */
@@ -340,6 +352,8 @@ export function previewListing(
     return [{ kind: option.tipo === 'pokedolares' ? 'pd' : 'dia', amount }];
   });
   const world = data.worlds[draft.mundo];
+  const character = props.character ?? null;
+  const labels = props.labels;
 
   return {
     type: draft.tipo,
@@ -348,7 +362,13 @@ export function previewListing(
     sprite: built.sprite,
     qty: built.qty,
     shiny: built.shiny,
-    world: present(world) ? world : null,
+    world:
+      character !== null
+        ? [character, present(world) ? world : null].filter(Boolean).join(' · ')
+        : present(world)
+          ? world
+          : null,
+    anyWorld: tradesAcrossWorlds(draft.tipo) ? (labels.anyWorld ?? null) : null,
     posted,
     facts: built.facts,
     helds: built.helds,
@@ -357,6 +377,10 @@ export function previewListing(
       real === null || fiatValue === null ? null : formatRealMoney(fiatValue, real.moneda, locale),
     game,
     negotiable: precio.aConvenir,
+    unit:
+      labels.unitPrice === undefined
+        ? null
+        : unitPriceText(draft.tipo, precio, locale, labels.unitPrice, props.orLabel),
   };
 }
 

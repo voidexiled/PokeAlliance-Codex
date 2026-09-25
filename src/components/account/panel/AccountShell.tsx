@@ -31,7 +31,8 @@ import type { LinkReturn, PanelContext } from './types';
 
 // The structured account page of a complete account (Cuenta-panel.dc.html and its phone board):
 // the header card, the grouped section nav (Cuenta, Comercio, Guild, then «Eliminar cuenta»
-// apart) and one section at a time, chosen by the address fragment (`#perfil`, `#conexiones`…).
+// apart) and one section at a time, chosen by the address fragment (`#perfil`, `#personajes`,
+// `#conexiones`…).
 //
 // - From 768 the nav is a sticky column beside the card and the section, and no fragment means
 //   «Resumen». Below 768 no fragment is the index (the card and the grouped rows, each with its
@@ -44,6 +45,7 @@ import type { LinkReturn, PanelContext } from './types';
 //   for a new read.
 
 const ProfileSection = lazy(() => import('./ProfileSection'));
+const CharactersSection = lazy(() => import('./CharactersSection'));
 const ConnectionsSection = lazy(() => import('./ConnectionsSection'));
 const SecuritySection = lazy(() => import('./SecuritySection'));
 const ChannelsSection = lazy(() => import('./ChannelsSection'));
@@ -245,6 +247,8 @@ export function AccountShell(props: AccountShellProps) {
         );
       case 'perfil':
         return <ProfileSection {...context} />;
+      case 'personajes':
+        return <CharactersSection {...context} />;
       case 'conexiones':
         return (
           <ConnectionsSection
@@ -294,7 +298,7 @@ export function AccountShell(props: AccountShellProps) {
             {panel.summary.comercioReady}
           </>
         ) : null;
-      case 'perfil':
+      case 'personajes':
         return playerLine;
       case 'conexiones': {
         const linked = connectionRows(user.identities, config.providers).find(

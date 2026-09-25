@@ -166,6 +166,7 @@ export const plantillasDelSitio = [
   '/{l}/sistemas/{id}/',
   '/{l}/items/',
   '/{l}/items/c/{categoria}/',
+  '/{l}/items/{id}/',
   '/{l}/buscar/',
   '/{l}/cambios/',
   '/{l}/actividades/',
@@ -257,6 +258,31 @@ function ocultarBorradores() {
  *
  * @type {Record<string, Record<string, string[]>>}
  */
+/**
+ * The items of `content/items/<categoria>.json`, every real category of
+ * `content/items/categorias.json`, read the way `leerSistemas` reads its folder.
+ *
+ * @returns {{ id: string, borrador?: boolean }[]}
+ */
+function leerItems() {
+  const categorias = categoriasFile.categorias
+    .filter((categoria) => categoria.virtual !== true)
+    .map((categoria) => categoria.id);
+  try {
+    const archivos = import.meta.glob('@content/items/*.json', { eager: true, import: 'default' });
+    return Object.entries(archivos)
+      .filter(([ruta]) => categorias.some((id) => ruta.endsWith(`/${id}.json`)))
+      .flatMap(([, datos]) => datos.items ?? []);
+  } catch (error) {
+    if (!(error instanceof TypeError)) throw error;
+  }
+  const fs = globalThis.process.getBuiltinModule('node:fs');
+  const carpeta = new URL('../../content/items/', import.meta.url);
+  return categorias.flatMap(
+    (id) => JSON.parse(fs.readFileSync(new URL(`${id}.json`, carpeta), 'utf8')).items ?? [],
+  );
+}
+
 const PARAMETROS = {
   '/{l}/pokedex/{id}/': { id: pokemonFile.pokemon.map((record) => record.id) },
   '/{l}/sistemas/{id}/': {
@@ -270,6 +296,13 @@ const PARAMETROS = {
       .map((categoria) => categoria.id),
   },
   '/{l}/actividades/{id}/': { id: questsFile.misiones.map((record) => record.id) },
+  // One page per item of content/items/ (`getStaticPaths` of src/pages/[locale]/items/[slug].astro),
+  // drafts out under OCULTAR_BORRADORES=1 as `getItems` leaves them out.
+  '/{l}/items/{id}/': {
+    id: leerItems()
+      .filter((item) => !(ocultarBorradores() && item.borrador === true))
+      .map((item) => item.id),
+  },
 };
 
 const PARAMETRO = /\{([a-z]+)\}/g;

@@ -345,4 +345,153 @@
       grid-template-columns: 1fr 1fr;
     }
   }
+
+  /* ------------------------------------------------------------- owner rules 2026-09-24
+     «Vendes como» (board Personajes, Variante 2), the locked world, the price per unit, the
+     publishing states and the dialog after «Publicar anuncio» (board Anuncio-publicado). */
+
+  /* The form is locked while it publishes: a fieldset without a frame. */
+  .ac-listing-form__lock {
+    display: flex;
+    min-width: 0;
+    flex-direction: column;
+    gap: inherit;
+    margin: 0;
+    padding: 0;
+    border: 0;
+  }
+
+  .ac-listing-form__sell-as {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-8) var(--space-12);
+  }
+
+  .ac-listing-form__empty {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-12);
+  }
+
+  .ac-listing-form__world {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-8) var(--space-16);
+  }
+
+  .ac-listing-form__world-name {
+    display: inline-flex;
+    min-width: 9rem;
+    height: var(--size-control);
+    align-items: center;
+    padding: 0 var(--space-12);
+    border: 1px solid var(--border-secondary);
+    border-radius: var(--radius-8);
+    color: var(--text-secondary);
+    @apply type-ui-strong;
+  }
+
+  .ac-listing-form__total {
+    margin: 0;
+    @apply type-body-strong;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .ac-listing-form__buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-8);
+  }
+
+  .ac-listing-form__failure {
+    margin: 0;
+    padding: var(--space-10) var(--space-12);
+    border: 1px solid var(--border-secondary);
+    border-radius: var(--radius-8);
+    @apply type-ui;
+  }
+
+  /* The dialog after «Publicar anuncio»: the card of the listing and, beside it, its link with
+     «Copiar enlace»; «Mis anuncios» on the left of the actions. On a phone it is a bottom sheet. */
+  .ac-dialog.ac-published {
+    width: 45rem;
+  }
+
+  .ac-published__until {
+    color: var(--text-tertiary);
+    @apply type-ui;
+  }
+
+  .ac-published__body {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 13rem);
+    align-items: start;
+    gap: var(--space-20);
+  }
+
+  .ac-published__link {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-8);
+  }
+
+  .ac-published__label {
+    @apply type-ui-strong;
+  }
+
+  .ac-published__url {
+    width: 100%;
+    padding: var(--space-8) var(--space-12);
+    border: 1px solid var(--border-primary);
+    border-radius: var(--radius-8);
+    background: var(--bg-primary);
+    color: var(--text-primary);
+    font-family: var(--font-sans);
+    @apply type-ui;
+  }
+
+  .ac-published__line {
+    margin: 0;
+    color: var(--text-tertiary);
+    @apply type-ui;
+  }
+
+  .ac-published .ac-dialog__actions {
+    align-items: center;
+  }
+
+  .ac-published__mine {
+    margin-right: auto;
+  }
+
+  @media (width < 48rem) {
+    .ac-dialog.ac-published {
+      width: 100%;
+      max-width: 100%;
+      max-height: 90dvh;
+      margin: auto 0 0;
+      border-radius: var(--radius-12) var(--radius-12) 0 0;
+    }
+
+    .ac-published__body {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .ac-published .ac-dialog__actions {
+      flex-direction: column-reverse;
+      align-items: stretch;
+    }
+
+    .ac-published .ac-dialog__actions > .ac-button {
+      justify-content: center;
+    }
+
+    .ac-published__mine {
+      align-self: center;
+      margin-right: 0;
+    }
+  }
 }

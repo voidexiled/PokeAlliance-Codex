@@ -8,6 +8,13 @@ export const dynamicKeys = [
   // The account page's section nav reads `panel.groups[group]` by the group id (panel/model.ts):
   // no file spells `.cuenta`.
   'account.panel.groups.cuenta',
+  // «Personajes» reads `characters.errors[reason]` by the database's fixed reason
+  // (panel/characters.ts): these are the ones no file spells.
+  'account.panel.characters.errors.character_limit',
+  'account.panel.characters.errors.character_not_found',
+  'account.panel.characters.errors.profile_required',
+  'account.panel.characters.errors.character_has_listings',
+  'account.panel.characters.errors.character_is_main',
   // The list controller of spec §7.7 reads `messages.ui.views[view]` by the view
   // id (§13.2). `ViewToggle` itself spells `labels.cards`, `labels.slots` and
   // `labels.list`, so these three entries only matter once that controller reads
@@ -27,4 +34,7 @@ export const dynamicKeys = [
   // visible list shows a withdrawn listing, so only the seller's own views spell `.retirado`.
   'trade.states.retirado',
   'profile.listings.filters.retirado',
+  // The item page names two task types by their kebab-case id (`taskType['linked-task']`).
+  'item.taskType.linked-task',
+  'item.taskType.poke-task',
 ] as const satisfies readonly string[];

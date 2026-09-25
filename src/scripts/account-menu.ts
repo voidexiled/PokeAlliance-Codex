@@ -112,17 +112,20 @@ function fill(): void {
   if (player !== null) {
     const world = account.world === null ? null : (worlds[account.world] ?? account.world);
     player.textContent = [account.player, world].filter((part) => part !== null).join(' · ');
-    player.hidden = player.textContent === '';
+    const line = player.parentElement;
+    if (line !== null) line.hidden = player.textContent === '';
+  }
+  // «+N personajes» (variant 3): the other characters, only when there are any.
+  const more = slot('more');
+  if (more !== null) {
+    const others = (account.characters ?? 0) - 1;
+    more.hidden = others < 1;
+    const template =
+      new Intl.PluralRules(locale).select(others) === 'one' ? more.dataset.one : more.dataset.other;
+    more.textContent = others < 1 ? '' : (template ?? '').replace('{n}', String(others));
   }
 
   const presence = account.registrationComplete ? (account.presence ?? 'desconectado') : null;
-  const line = slot('presence');
-  if (line !== null) {
-    line.hidden = presence === null || texts.presence === null;
-    line.textContent = presence === null || texts.presence === null ? '' : texts.presence[presence];
-    if (presence === null) delete line.dataset.presence;
-    else line.dataset.presence = presence;
-  }
   for (const radio of menu.querySelectorAll<HTMLElement>('[data-ac-presence]')) {
     radio.setAttribute('aria-checked', String(radio.dataset.acPresence === presence));
   }

@@ -23,6 +23,7 @@ import {
 } from '@/lib/account/registration';
 import {
   clearCachedAccount,
+  readCachedAccount,
   writeCachedAccount,
   type CachedAccount,
 } from '@/lib/account/session-cache';
@@ -31,6 +32,7 @@ import { operationFailed, toSupabaseFailure, type SupabaseOperation } from '@/li
 import {
   CONSENTIMIENTO_DINERO_REAL_VERSION,
   NOMBRE_JUGADOR_MAX,
+  PERSONAJES_MAX,
   PLATAFORMA_MAX,
   PUNTUACION_MAX,
   PUNTUACION_MIN,
@@ -48,6 +50,7 @@ import {
   type Anuncio,
   type EstadoAnuncio,
   type ItemDeclarado,
+  type ListingCharacter,
   type MonedaJuego,
   type MonedaReal,
   type OpcionJuego,
@@ -74,6 +77,11 @@ export const TRADE_RPC = {
   accountState: 'account_registration_state',
   saveProfile: 'account_save_profile',
   deleteAccount: 'account_delete',
+  // account_characters
+  listCharacters: 'account_characters_list',
+  addCharacter: 'account_character_add',
+  setMainCharacter: 'account_character_set_main',
+  removeCharacter: 'account_character_remove',
   isModerator: 'account_is_moderator',
   acceptConsent: 'trade_accept_consent',
   setPresence: 'trade_set_presence',
@@ -374,17 +382,24 @@ export async function updateAccountProfile(
   );
 }
 
-/** The header cache of an account (9.16.4): the summary and the avatar of its identities. */
+/**
+ * The header cache of an account (9.16.4): the summary and the avatar of its identities.
+ * `characters` is how many characters the account has; left out, the cached count of the same
+ * account is kept.
+ */
 export function cachedAccountFrom(
   userId: string,
   summary: AccountSummary | null,
   identities: readonly IdentityLike[] | null | undefined,
+  characters?: number | null,
 ): CachedAccount {
+  const cached = characters === undefined ? readCachedAccount() : null;
   return {
     userId,
     username: summary?.username ?? null,
     player: summary?.player ?? null,
     world: summary?.world ?? null,
+    characters: characters ?? (cached?.userId === userId ? cached.characters : null),
     avatar: identityAvatar(identities),
     presence: summary?.presence ?? null,
     moderator: summary?.moderator ?? false,
@@ -409,7 +424,13 @@ export async function refreshCachedAccount(
   }
   const summary = await getMyAccount(client);
   if (summary.error) return summary;
-  writeCachedAccount(cachedAccountFrom(data.user.id, summary.data, data.user.identities));
+  // The characters exist from registration step 3; a failed list keeps the cached count.
+  const hasProfile = (summary.data?.player ?? null) !== null;
+  const list = hasProfile ? await listMyCharacters(client).catch(() => null) : null;
+  const characters = list?.data?.length;
+  writeCachedAccount(
+    cachedAccountFrom(data.user.id, summary.data, data.user.identities, characters),
+  );
   return summary;
 }
 
@@ -445,6 +466,140 @@ export async function deleteAccount(
   await client.auth.signOut({ scope: 'local' }).catch(() => undefined);
   clearCachedAccount();
   return { data: result.data, error: null, reason: null };
+}
+
+// ---------------------------------------------------------------------------- characters
+
+/**
+ * A game character of the signed-in account (owner rule 2026-09-24): a player name and a world,
+ * unique among all accounts. The main one is the header's and the profile's «Nombre del jugador» and
+ * «Mundo»; each listing is published as one of them.
+ */
+export interface AccountCharacter {
+  id: string;
+  /** «Nombre del jugador», as the game shows it. */
+  playerName: string;
+  /** World id of content/mundos.json. */
+  worldKey: string;
+  isMain: boolean;
+  /** Listings published as it, in any state: with one or more it cannot be removed or renamed. */
+  listings: number;
+  createdAt: string;
+}
+
+/**
+ * The fixed reasons of the character functions, besides `authentication_required`,
+ * `profile_required`, `account_deleted` and `suspended` (42501): `player_name_invalid` and
+ * `world_invalid` (22023), `player_name_taken` (23505, in that world by any account),
+ * `character_limit` (42501, more than `PERSONAJES_MAX`), `character_not_found` (42501),
+ * `character_has_listings` and `character_is_main` (22023).
+ */
+export const CHARACTER_REFUSALS = [
+  'player_name_invalid',
+  'world_invalid',
+  'player_name_taken',
+  'character_limit',
+  'character_not_found',
+  'character_has_listings',
+  'character_is_main',
+] as const;
+export type CharacterRefusal = (typeof CHARACTER_REFUSALS)[number];
+
+const WORLD_KEY = /^[a-z0-9]+(-[a-z0-9]+)*$/;
+
+/** The rows of `account_characters_list` (and of each character write), main first. */
+export function toAccountCharacters(data: unknown): AccountCharacter[] {
+  const list: AccountCharacter[] = [];
+  for (const row of rows(data)) {
+    const playerName = text(row.player_name);
+    const worldKey = text(row.world_key);
+    const createdAt = text(row.created_at);
+    if (!isUuid(row.id) || playerName === null || worldKey === null || createdAt === null) continue;
+    list.push({
+      id: row.id,
+      playerName,
+      worldKey,
+      isMain: row.is_main === true,
+      listings: count(row.listings),
+      createdAt,
+    });
+  }
+  return list;
+}
+
+/** «Mis personajes»: the account's characters, the main one first. */
+export async function listMyCharacters(
+  client: SupabaseClient,
+): Promise<TradeOperation<AccountCharacter[]>> {
+  return rpc<AccountCharacter[]>(client, TRADE_RPC.listCharacters, {}, toAccountCharacters);
+}
+
+/**
+ * «Añadir personaje»: a player name (spaces collapsed, 1 to 32 characters) and a world id of
+ * content/mundos.json. The first character becomes the main one. Resolves to the new list.
+ */
+export async function addCharacter(
+  client: SupabaseClient,
+  character: { playerName: string; worldKey: string },
+): Promise<TradeOperation<AccountCharacter[]>> {
+  const playerName = character.playerName.trim().replace(/\s+/g, ' ');
+  if (
+    playerName === '' ||
+    characters(playerName) > NOMBRE_JUGADOR_MAX ||
+    !WORLD_KEY.test(character.worldKey)
+  ) {
+    return invalidInput();
+  }
+  return rpc<AccountCharacter[]>(
+    client,
+    TRADE_RPC.addCharacter,
+    { p_player_name: playerName, p_world_key: character.worldKey },
+    toAccountCharacters,
+  );
+}
+
+/** «Principal»: the header chip and the profile show it from now on. Resolves to the new list. */
+export async function setMainCharacter(
+  client: SupabaseClient,
+  characterId: string,
+): Promise<TradeOperation<AccountCharacter[]>> {
+  if (!isUuid(characterId)) return invalidInput();
+  return rpc<AccountCharacter[]>(
+    client,
+    TRADE_RPC.setMainCharacter,
+    { p_id: characterId },
+    toAccountCharacters,
+  );
+}
+
+/**
+ * «Quitar personaje»: refused for the main one (`character_is_main`) and for one with any listing
+ * (`character_has_listings`). There is no rename: the account adds another character. Resolves to
+ * the new list.
+ */
+export async function removeCharacter(
+  client: SupabaseClient,
+  characterId: string,
+): Promise<TradeOperation<AccountCharacter[]>> {
+  if (!isUuid(characterId)) return invalidInput();
+  return rpc<AccountCharacter[]>(
+    client,
+    TRADE_RPC.removeCharacter,
+    { p_id: characterId },
+    toAccountCharacters,
+  );
+}
+
+/** Whether the account may add another character (`PERSONAJES_MAX`); the database decides. */
+export function canAddCharacter(list: readonly Pick<AccountCharacter, 'id'>[]): boolean {
+  return list.length < PERSONAJES_MAX;
+}
+
+/** Whether «Quitar» is offered for a character: not the main one, and no listing published as it. */
+export function canRemoveCharacter(
+  character: Pick<AccountCharacter, 'isMain' | 'listings'>,
+): boolean {
+  return !character.isMain && character.listings === 0;
 }
 
 // ------------------------------------------------------------------------------ consent
@@ -611,11 +766,20 @@ export function toListingRef(
   };
 }
 
-/** The listing fields a seller writes (9.7): the type fixes which asset field is present. */
+/**
+ * The listing fields a seller writes (9.7): the type fixes which asset field is present.
+ * `characterId` is the seller's character the listing is published as (`account_characters.id`);
+ * without it the database takes the seller's character in `mundo` (the main one first), which is
+ * how the composer before characters keeps working.
+ */
 export type TradeListingInput = Pick<Anuncio, 'tipo' | 'mundo' | 'precio'> &
-  Partial<Pick<Anuncio, 'pokemon' | 'item' | 'cantidad'>>;
+  Partial<Pick<Anuncio, 'pokemon' | 'item' | 'cantidad'>> & { characterId?: string | null };
 
-/** The `jsonb` of `trade_publish_listing` and `trade_update_listing`, in the columns of 9.12.1. */
+/**
+ * The `jsonb` of `trade_publish_listing` and `trade_update_listing`, in the columns of 9.12.1 and
+ * `character_id`. The database derives the world from the character and refuses a `world_key` that
+ * is not its world (`world_mismatch`).
+ */
 export function listingPayload(input: TradeListingInput): Row {
   const asset =
     input.tipo === 'pokemon'
@@ -623,14 +787,20 @@ export function listingPayload(input: TradeListingInput): Row {
       : input.tipo === 'items'
         ? (input.item ?? null)
         : { cantidad: input.cantidad ?? null };
+  // A price per unit sends the unit and the unit amounts; the database computes the totals
+  // (20260924200000_listing_unit_price.sql).
+  const unit = input.tipo === 'pokemon' ? null : (input.precio.porUnidad ?? null);
+  const price = unit ?? input.precio;
   return {
+    ...(isUuid(input.characterId) ? { character_id: input.characterId } : {}),
     asset_type: input.tipo,
     world_key: input.mundo,
     asset,
-    fiat_currency: input.precio.real?.moneda ?? null,
-    fiat_amount: input.precio.real?.importe ?? null,
-    game_prices: input.precio.juego,
+    fiat_currency: price.real?.moneda ?? null,
+    fiat_amount: price.real?.importe ?? null,
+    game_prices: price.juego,
     negotiable: input.precio.aConvenir,
+    ...(unit === null ? {} : { unit_quantity: unit.cantidad }),
   };
 }
 
@@ -642,21 +812,74 @@ function formatImporte(value: unknown): string | null {
   return fixed.endsWith('.00') ? fixed.slice(0, -3) : fixed;
 }
 
-function toPrecio(row: Row): Precio {
-  const moneda = oneOf<MonedaReal>(MONEDAS_REALES, row.fiat_currency);
-  const importe = formatImporte(row.fiat_amount);
+function gameOptionsOf(value: unknown): OpcionJuego[] {
   const juego: OpcionJuego[] = [];
-  for (const option of rows(row.game_prices)) {
+  for (const option of rows(value)) {
     const tipo = oneOf<MonedaJuego>(MONEDAS_JUEGO, option.tipo);
     const cantidad = numberOf(option.cantidad);
     if (tipo !== null && cantidad !== null && Number.isInteger(cantidad) && cantidad >= 1) {
       juego.push({ tipo, cantidad });
     }
   }
-  return {
+  return juego;
+}
+
+function toPrecio(row: Row): Precio {
+  const moneda = oneOf<MonedaReal>(MONEDAS_REALES, row.fiat_currency);
+  const importe = formatImporte(row.fiat_amount);
+  const precio: Precio = {
     real: moneda !== null && importe !== null ? { moneda, importe } : null,
-    juego,
+    juego: gameOptionsOf(row.game_prices),
     aConvenir: row.negotiable === true,
+  };
+  // The price per unit the seller wrote (20260924200000_listing_unit_price.sql).
+  const unit = numberOf(row.unit_quantity);
+  if (unit !== null && Number.isSafeInteger(unit) && unit >= 1) {
+    const unitImporte = formatImporte(row.unit_fiat_amount);
+    precio.porUnidad = {
+      cantidad: unit,
+      real: moneda !== null && unitImporte !== null ? { moneda, importe: unitImporte } : null,
+      juego: gameOptionsOf(row.unit_game_prices),
+    };
+  }
+  return precio;
+}
+
+/**
+ * The `character` of a listing row (the computed field `trade_listing_character`, selected as
+ * `character`): null when absent (a database without the characters migration) or malformed.
+ */
+export function toListingCharacter(value: unknown): ListingCharacter | null {
+  const character = record(value);
+  const playerName = text(character.player_name);
+  const worldKey = text(character.world_key);
+  if (!isUuid(character.id) || playerName === null || worldKey === null) return null;
+  return { id: character.id, playerName, worldKey };
+}
+
+/**
+ * The Pokémon of a listing row as the site reads it: the database keeps only the keys the seller
+ * declared (`trade_asset_problem`), so an absent list is empty and an absent value `null` (G7).
+ */
+function toUnidad(asset: Row): UnidadPokemon {
+  const list = (value: unknown) => (Array.isArray(value) ? value : []);
+  const nullable = <T>(value: unknown) => (value === undefined ? null : (value as T));
+  return {
+    pokemon: text(asset.pokemon) ?? '',
+    ball: nullable<string | null>(asset.ball),
+    auras: list(asset.auras) as string[],
+    addons: list(asset.addons) as string[],
+    heldX: nullable<string | null>(asset.heldX),
+    heldY: nullable<string | null>(asset.heldY),
+    mega: nullable<string | null>(asset.mega),
+    boost: nullable<number | null>(asset.boost),
+    starLevel: nullable<number | null>(asset.starLevel),
+    nickname: nullable<string | null>(asset.nickname),
+    memorySlots: nullable<number | null>(asset.memorySlots),
+    memorias: list(asset.memorias) as (string | null)[],
+    nextBoostChance: nullable<string | null>(asset.nextBoostChance),
+    entrenamiento: list(asset.entrenamiento) as UnidadPokemon['entrenamiento'],
+    precioNpc: nullable<UnidadPokemon['precioNpc']>(asset.precioNpc),
   };
 }
 
@@ -684,15 +907,49 @@ export function toAnuncio(row: Row, handle: string): Anuncio | null {
     estado,
     precio: toPrecio(row),
   };
+  const character = toListingCharacter(row.character);
+  if (character !== null) anuncio.character = character;
   const asset = assetRecord(row.asset);
-  if (tipo === 'pokemon') anuncio.pokemon = asset as unknown as UnidadPokemon;
+  if (tipo === 'pokemon') anuncio.pokemon = toUnidad(asset);
   else if (tipo === 'items') anuncio.item = asset as unknown as ItemDeclarado;
   else anuncio.cantidad = numberOf(asset.cantidad) ?? undefined;
   return anuncio;
 }
 
-const LISTING_COLUMNS =
+/** The columns of a listing row, without its character (the database before characters). */
+export const LISTING_BASE_COLUMNS =
   'listing_id,asset_type,world_key,status,asset,fiat_currency,fiat_amount,game_prices,negotiable,created_at,published_at,expires_at';
+
+/**
+ * The columns of a listing row with its character: `character_id` and the computed field
+ * `trade_listing_character` as `character` (supabase/migrations/20260924190000_account_characters.sql).
+ */
+export const LISTING_CHARACTER_COLUMNS = 'character_id,character:trade_listing_character';
+
+/** The price per unit of a listing (supabase/migrations/20260924200000_listing_unit_price.sql). */
+export const LISTING_UNIT_COLUMNS = 'unit_quantity,unit_fiat_amount,unit_game_prices';
+
+/**
+ * The column sets a listing read tries, newest schema first: with the unit price and the
+ * character, with the character only, then the base columns (see `isMissingColumn`).
+ */
+export const LISTING_COLUMN_SETS: readonly string[] = [
+  `${LISTING_BASE_COLUMNS},${LISTING_UNIT_COLUMNS},${LISTING_CHARACTER_COLUMNS}`,
+  `${LISTING_BASE_COLUMNS},${LISTING_CHARACTER_COLUMNS}`,
+  LISTING_BASE_COLUMNS,
+];
+
+/**
+ * PostgREST's answer to a column the database does not have: the characters migration is not
+ * applied yet. The readers then select the base columns once more, so a deploy that reaches a
+ * database without the migration keeps showing listings (without characters). Remove this with the
+ * fallback once the migration is applied everywhere.
+ */
+export function isMissingColumn(error: unknown): boolean {
+  return (
+    typeof error === 'object' && error !== null && (error as { code?: unknown }).code === '42703'
+  );
+}
 
 /**
  * «Mis anuncios» (9.16.3): every listing of the account in every state, newest first. `handle` is
@@ -703,11 +960,19 @@ export async function listMyListings(
   owner: { userId: string; handle: string },
 ): Promise<TradeOperation<Anuncio[]>> {
   if (!isUuid(owner.userId)) return invalidInput();
-  const { data, error, status } = await client
-    .from(TRADE_LISTINGS_TABLE)
-    .select(LISTING_COLUMNS)
-    .eq('seller_id', owner.userId)
-    .order('created_at', { ascending: false });
+  const select = (columns: string) =>
+    client
+      .from(TRADE_LISTINGS_TABLE)
+      .select(columns)
+      .eq('seller_id', owner.userId)
+      .order('created_at', { ascending: false });
+  let data: unknown = null;
+  let error: unknown = null;
+  let status: number | undefined;
+  for (const columns of LISTING_COLUMN_SETS) {
+    ({ data, error, status } = await select(columns));
+    if (!error || !isMissingColumn(error)) break;
+  }
   if (error) return failed(error, status);
   const listings: Anuncio[] = [];
   for (const row of rows(data)) {
@@ -715,6 +980,35 @@ export async function listMyListings(
     if (anuncio !== null) listings.push(anuncio);
   }
   return { data: listings, error: null, reason: null };
+}
+
+/**
+ * One listing of the signed-in account, for «Editar» (owner rule 2026-09-24: the seller edits a
+ * listing at any time, its quantity included). Null when it is not the account's or does not exist.
+ */
+export async function getMyListing(
+  client: SupabaseClient,
+  listingId: string,
+): Promise<TradeOperation<Anuncio | null>> {
+  if (!isUuid(listingId)) return invalidInput();
+  const { data: session } = await client.auth.getUser();
+  const userId = session.user?.id;
+  if (!isUuid(userId)) return { data: null, error: null, reason: null };
+  let data: unknown = null;
+  let error: unknown = null;
+  let status: number | undefined;
+  for (const columns of LISTING_COLUMN_SETS) {
+    ({ data, error, status } = await client
+      .from(TRADE_LISTINGS_TABLE)
+      .select(columns)
+      .eq('listing_id', listingId)
+      .eq('seller_id', userId)
+      .limit(1));
+    if (!error || !isMissingColumn(error)) break;
+  }
+  if (error) return failed(error, status);
+  const [row] = rows(data);
+  return { data: row === undefined ? null : toAnuncio(row, ''), error: null, reason: null };
 }
 
 /** «Publicar» (9.7.8): the id of the new listing. Evidence of 9.15.3. */

@@ -132,6 +132,142 @@
         "en": { "type": "string", "pattern": "\\S" }
       }
     },
+    "textoJuego": {
+      "type": "object",
+      "description": "Texto del juego en el idioma o idiomas en que existe: { \"es\": \"…\" }, { \"en\": \"…\" } o los dos. La página del otro idioma lo muestra en el que haya.",
+      "additionalProperties": false,
+      "properties": {
+        "es": { "type": "string", "pattern": "\\S" },
+        "en": { "type": "string", "pattern": "\\S" }
+      },
+      "if": { "required": ["es"] },
+      "else": { "required": ["en"] }
+    },
+    "cantidad": {
+      "type": ["integer", "null"],
+      "minimum": 1,
+      "description": "Cuántos da. null si no se conoce."
+    },
+    "pista": {
+      "enum": ["gratis", "premium"],
+      "description": "Pista gratuita o premium del Battle Pass o del calendario."
+    },
+    "obtencion": {
+      "type": "object",
+      "description": "Opcional. Vías de obtención que enseña el juego además del loot de los Pokémon (que se calcula de content/pokemon.json) y del precio NPC (precioNpc). Una lista que falta o está vacía no se muestra.",
+      "additionalProperties": false,
+      "properties": {
+        "tiendas": {
+          "type": "array",
+          "description": "Tiendas del juego (Diamond Shop, Online Shop, Twitch Shop, Daily Shop…).",
+          "items": {
+            "type": "object",
+            "required": ["tienda", "precio", "moneda", "cantidad"],
+            "additionalProperties": false,
+            "properties": {
+              "tienda": {
+                "type": "string",
+                "minLength": 1,
+                "description": "Nombre de la tienda como lo escribe el juego."
+              },
+              "precio": { "type": ["integer", "null"], "minimum": 0 },
+              "moneda": {
+                "type": ["string", "null"],
+                "minLength": 1,
+                "description": "Moneda del precio como la escribe el juego (\"Diamonds\"…). null si no se conoce."
+              },
+              "cantidad": { "$ref": "#/$defs/cantidad" }
+            }
+          }
+        },
+        "pase": {
+          "type": "array",
+          "description": "Premios del Battle Pass.",
+          "items": {
+            "type": "object",
+            "required": ["temporada", "nivel", "pista", "cantidad"],
+            "additionalProperties": false,
+            "properties": {
+              "temporada": { "type": ["integer", "null"], "minimum": 1 },
+              "nivel": { "type": ["integer", "null"], "minimum": 1 },
+              "pista": { "$ref": "#/$defs/pista" },
+              "cantidad": { "$ref": "#/$defs/cantidad" }
+            }
+          }
+        },
+        "calendario": {
+          "type": "array",
+          "description": "Premios del calendario mensual. dia null con trasDia21 true: premio de cada día después del 21.",
+          "items": {
+            "type": "object",
+            "required": ["mes", "dia", "trasDia21", "calendario", "cantidad"],
+            "additionalProperties": false,
+            "properties": {
+              "mes": { "type": ["integer", "null"], "minimum": 1, "maximum": 12 },
+              "dia": { "type": ["integer", "null"], "minimum": 1, "maximum": 21 },
+              "trasDia21": { "type": "boolean" },
+              "calendario": { "$ref": "#/$defs/pista" },
+              "cantidad": { "$ref": "#/$defs/cantidad" }
+            }
+          }
+        },
+        "tareas": {
+          "type": "array",
+          "description": "Quests, tasks, dailies, logros y dungeons que lo dan.",
+          "items": {
+            "type": "object",
+            "required": ["tipo", "nombre", "cantidad"],
+            "additionalProperties": false,
+            "properties": {
+              "tipo": { "enum": ["quest", "linked-task", "poke-task", "daily", "logro", "dungeon"] },
+              "nombre": {
+                "type": "string",
+                "minLength": 1,
+                "description": "Nombre como lo escribe el juego."
+              },
+              "actividad": {
+                "$ref": "#/$defs/slug",
+                "description": "Opcional. id de content/quests.json cuando la actividad tiene página."
+              },
+              "cantidad": { "$ref": "#/$defs/cantidad" }
+            }
+          }
+        },
+        "recetas": {
+          "type": "array",
+          "description": "Recetas de crafteo que lo producen. Cada material gana en su página «Se usa para».",
+          "items": {
+            "type": "object",
+            "required": ["taller", "cantidad", "tiempoSegundos", "materiales"],
+            "additionalProperties": false,
+            "properties": {
+              "taller": {
+                "type": ["string", "null"],
+                "minLength": 1,
+                "description": "Taller como lo escribe el juego. null si no se conoce."
+              },
+              "cantidad": { "$ref": "#/$defs/cantidad" },
+              "tiempoSegundos": { "type": ["number", "null"], "minimum": 0 },
+              "materiales": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "required": ["item", "cantidad"],
+                  "additionalProperties": false,
+                  "properties": {
+                    "item": {
+                      "$ref": "#/$defs/slug",
+                      "description": "id de un ítem de content/items/."
+                    },
+                    "cantidad": { "$ref": "#/$defs/cantidad" }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "item": {
       "type": "object",
       "required": ["id", "nombre", "clientId", "categoria", "sprite", "apilable", "precioNpc"],
@@ -200,7 +336,14 @@
           "description": "true en registros de relleno. Se pueden ocultar en producción con OCULTAR_BORRADORES=1."
         },
         "held": { "$ref": "#/$defs/held" },
-        "mega": { "$ref": "#/$defs/mega" }
+        "mega": { "$ref": "#/$defs/mega" },
+        "descripcion": {
+          "type": ["object", "null"],
+          "description": "Opcional. Texto de la inspección del ítem en el juego, sin la línea «You see …». null si no se conoce.",
+          "if": { "type": "object" },
+          "then": { "$ref": "#/$defs/textoJuego" }
+        },
+        "obtencion": { "$ref": "#/$defs/obtencion" }
       },
       "if": { "properties": { "categoria": { "const": "helds" } } },
       "then": { "required": ["held"] }

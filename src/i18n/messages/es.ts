@@ -216,6 +216,10 @@ export const es = {
       settings: 'Ajustes de la cuenta',
       moderation: 'Moderación',
       signOut: 'Cerrar sesión',
+      // The menu head: `mainCharacter` names the «{jugador} · {mundo}» line for assistive tech and
+      // `moreCharacters` links to /cuenta/#personajes when the account has more than one.
+      mainCharacter: 'Personaje principal',
+      moreCharacters: { one: '+{n} personaje', other: '+{n} personajes' },
     },
   },
   // Inicio (§8.1, template A). `documentTitle` is the whole `<title>` of the page
@@ -392,66 +396,69 @@ export const es = {
     descriptionLevel: 'nivel requerido {level}',
     descriptionTier: 'tier {tier}',
     descriptionRole: 'rol {role}',
-    // The two sheet rows `ui.tooltip` does not carry (§8.3 step 3), without the
-    // colon that `GameTooltip` adds.
-    hp: 'HP',
-    experience: 'Experiencia',
-    // Moveset (§16.2.2, §16.4.2): el chip de `elementoMoveset` en la ficha. Oculto sin dato.
-    moveset: 'Moveset',
-    // Outfit panel and its Aura group (§8.3 step 3, D-11 to D-16). `outfitAlt`
-    // is the alt of the idle south frame; `auraBall` names the ball drawn over
-    // the panel with an aura on; `auraUnavailable` shows only without WebGL.
+    // Hero: the facts grid (the Normal/Shiny links are `ui.cards.variant` and `ui.cards.normal`).
+    movesetType: 'Tipo de moveset',
+    // Outfit panel and its aura slots. `outfitAlt` is the alt of the idle south frame;
+    // `auraBall` names the chosen aura; `auraUnavailable` shows only without WebGL.
     outfit: 'Outfit',
     outfitAlt: '{name}, Sur',
     aura: 'Aura',
     auraNone: 'Ninguna',
     auraBall: 'Aura {name}',
     auraUnavailable: 'El aura no está disponible en este navegador.',
-    // Section titles (h2) and their `Toc` entries, in page order (§8.3 step 4).
+    // The sticky section bar and the section titles, in page order.
+    sectionsNav: 'Secciones de la ficha',
     sections: {
-      drops: 'Drops',
-      tierList: 'Tier list',
-      evolution: 'Evolución',
-      moves: 'Ataques',
-      where: 'Dónde encontrarlo',
+      summary: 'Resumen',
+      moves: 'Movimientos',
+      loot: 'Loot',
+      where: 'Ubicaciones',
+      evolution: 'Evoluciones',
+      effectiveness: 'Efectividad',
+      fieldAbilities: 'Habilidades de campo',
+      variants: 'Variantes',
+      trade: 'Comercio',
     },
-    // Drops (list `drops`, 8.0.6): the count, the name of its `ViewToggle`, the
-    // Lista caption and the two headers `ui` lacks, and the Cantidad value of a
-    // range; a fixed amount is the number alone.
-    dropCount: { one: '{n} drop', other: '{n} drops' },
-    dropView: 'Vista de drops',
-    dropCaption: 'Drops de {name}',
-    columnSprite: 'Sprite',
-    columnItem: 'Ítem',
-    quantityRange: '{min} a {max}',
-    // «Drop de» of an item that more than one Pokémon drops (7.5.3).
-    droppedByCount: { one: '{n} Pokémon', other: '{n} Pokémon' },
-    // Tier list (list `familia`, E15): the count, the name of its `ViewToggle`,
-    // the Lista caption with an evolution line (`{name}` its first stage) or
-    // without one (`{n}` the Pokédex number), and its Pokémon and Moveset headers.
-    familyCount: { one: '{n} variante', other: '{n} variantes' },
-    familyView: 'Vista de la Tier list',
-    familyCaption: 'Tier list de la familia de {name}',
-    variantsCaption: 'Variantes de Nº {n}',
-    columnPokemon: 'Pokémon',
-    columnMoveset: 'Moveset',
-    // `EvolutionChain`: the hidden text of each connector (DS:EvolutionChain).
-    evolvesWith: 'Evoluciona con:',
-    // The requirement chip of a connector: the level the Pokémon evolves at.
-    evolutionLevel: 'Nivel {n} del Pokémon',
-    // Ataques: the caption, the headers `ui` lacks, the Cooldown value in
-    // seconds and the h3 over the abilities.
-    movesCaption: 'Ataques de {name}',
+    // Movimientos.
+    movesCount: { one: '{n} movimiento', other: '{n} movimientos' },
+    areaMoves: '{n} de {total} movimientos de área',
+    movesCaption: 'Movimientos de {name}',
     columnSlot: 'Slot',
-    columnMove: 'Ataque',
-    columnCooldown: 'Cooldown',
+    columnMove: 'Movimiento',
+    columnRange: 'Alcance',
+    columnEffects: 'Efectos',
+    columnCooldownPve: 'Cooldown PVE',
+    columnCooldownPvp: 'Cooldown PVP',
     cooldown: '{n} s',
-    abilities: 'Habilidades',
-    // Dónde encontrarlo: the label of each `FactLine`, without the colon it adds.
+    range: { area: 'Área', objetivo: 'Objetivo', pasivo: 'Pasivo' },
+    // Loot: the zones are the game's own names (13.4).
+    lootZones: 'Zona del loot',
+    lootCaption: 'Loot de {name} en {zone}',
+    lootEmpty: 'Sin drops en {zone}.',
+    columnItem: 'Ítem',
+    columnChance: 'Probabilidad',
+    columnQuantity: 'Cantidad',
+    // Evoluciones: the hidden text of each connector and the requirement chip.
+    evolvesWith: 'Evoluciona con:',
+    evolutionLevel: 'Nivel {n}',
+    // Efectividad: the groups of the game's Pokédex and their client multipliers.
+    effectivenessCaption: 'Daño que recibe según el elemento del ataque.',
+    effectivenessNone: 'Ninguno',
+    effectiveness: {
+      muyDebil: 'Muy débil',
+      debil: 'Débil',
+      neutro: 'Neutro',
+      resiste: 'Resiste',
+      muyResistente: 'Muy resistente',
+      inmune: 'Inmune',
+    },
+    // Ubicaciones: the label of each `FactLine`, without the colon it adds.
     // `{species}` in `hunts` may be a nested entity (DS:FactLine).
     hunts: 'Hunts de {species}',
     linkedTasks: 'Linked Tasks',
     npcTeams: 'Equipos de NPC',
+    // Comercio: the link to the listings of this Pokémon.
+    tradeLink: 'Ver anuncios de {name} en Comercio',
   },
   // Tier list (§8.8, E1): the list `tiers` of 8.0.6 over the variants with a
   // tier, grouped by tier. The h1, which is also the Lista caption, and the
@@ -496,6 +503,72 @@ export const es = {
     // vista Cards desaparece. `searchPlaceholder` es el campo «Buscar ítem» de la página.
     searchPlaceholder: 'Buscar ítem',
     noResults: 'Ningún ítem coincide con la búsqueda.',
+  },
+  // Página de un ítem, /{l}/items/{id}/: la descripción de §13.5, los hechos del
+  // encabezado, las secciones «Cómo se obtiene» y «Se usa para» (cada bloque solo con
+  // datos) y el enlace a Comercio. Los nombres del juego (Pokémon, ítems, tiendas, zonas,
+  // Battle Pass) no se traducen (13.4).
+  item: {
+    description: '{name}, ítem de {category} en PokeAlliance: cómo se obtiene y para qué se usa.',
+    tradeable: 'Comercializable en el mercado',
+    stackable: 'Apilable',
+    heldTier: 'Tier',
+    heldTiers: 'Tiers de {effect}',
+    megaOf: 'Mega Evolución de',
+    sectionsNav: 'Secciones del ítem',
+    sections: {
+      obtain: 'Cómo se obtiene',
+      uses: 'Se usa para',
+      trade: 'Comercio',
+    },
+    loot: 'Loot',
+    lootCount: { one: '{n} Pokémon', other: '{n} Pokémon' },
+    lootCaption: 'Pokémon que sueltan {name}',
+    zoneAll: 'Todas',
+    zoneFilter: 'Zona',
+    columnPokemon: 'Pokémon',
+    columnZone: 'Zona',
+    columnChance: 'Probabilidad',
+    columnQuantity: 'Cantidad',
+    sortBy: 'Ordenar por {column}',
+    market: 'Mercado',
+    marketText: 'Se vende en el mercado del juego, en {category}.',
+    npc: 'NPC',
+    shops: 'Tiendas del juego',
+    columnShop: 'Tienda',
+    columnPrice: 'Precio',
+    pass: 'Battle Pass',
+    columnSeason: 'Temporada',
+    columnLevel: 'Nivel',
+    columnTrack: 'Pista',
+    track: { gratis: 'Gratis', premium: 'Premium' },
+    calendar: 'Calendario',
+    columnMonth: 'Mes',
+    columnDay: 'Día',
+    columnCalendar: 'Calendario',
+    afterDay21: 'Cada día después del 21',
+    tasks: 'Quests, tasks y logros',
+    taskType: {
+      quest: 'Quest',
+      'linked-task': 'Linked Task',
+      'poke-task': 'Poke Task',
+      daily: 'Daily',
+      logro: 'Logro',
+      dungeon: 'Dungeon',
+    },
+    crafting: 'Crafteo',
+    recipesCount: { one: '{n} receta', other: '{n} recetas' },
+    materials: 'Materiales',
+    thisItem: 'este ítem',
+    perRecipe: 'Por receta',
+    workshop: 'Taller',
+    timePerUnit: 'Tiempo por unidad',
+    seconds: '{n} s',
+    evolution: 'Evolución',
+    columnEvolvesTo: 'Evoluciona a',
+    elementStone: 'Stone del elemento',
+    elementFragment: 'Fragment del elemento',
+    tradeLink: 'Ver anuncios de {name} en Comercio',
   },
   // Sistemas (§8.4). The index of template D (8.4.1): its h1, which is also the
   // single crumb and the group crumb of every system page (8.0.4), the
@@ -1064,7 +1137,11 @@ export const es = {
       providerDownLead: 'No pudimos hablar con {provider}.',
       providerDownText: 'No se guardó nada.',
       profileTitle: 'Tu perfil',
-      profileText: 'Tu nombre de usuario y tu jugador se ven en tu perfil y en Comercio.',
+      profileText:
+        'Tu nombre de usuario y tu personaje principal se ven en tu perfil y en tus anuncios.',
+      mainCharacterTitle: 'Tu personaje principal',
+      mainCharacterText:
+        'Publicas con él en Comercio. Después puedes añadir otros en Cuenta, hasta {max}.',
       day: 'Día',
       month: 'Mes',
       year: 'Año',
@@ -1081,6 +1158,7 @@ export const es = {
       sections: {
         resumen: 'Resumen',
         perfil: 'Perfil',
+        personajes: 'Personajes',
         conexiones: 'Conexiones',
         seguridad: 'Seguridad',
         canales: 'Canales de contacto',
@@ -1132,8 +1210,46 @@ export const es = {
         sessions: 'Sesiones',
         signOutHelp: 'Cerrar sesión te pone en «Desconectado».',
       },
-      profileIntro:
-        'Tu nombre de usuario, jugador, mundo y país se ven en tu perfil y junto a tus anuncios.',
+      profileIntro: 'Tu nombre de usuario, tu personaje principal y tu país se ven en tu perfil.',
+      // «Personajes» (owner rule of 2026-09-24): up to `{max}` (PERSONAJES_MAX) game characters,
+      // each a player name and a world; `{name}` a player name, `{n}` a count. The refusals of the
+      // character functions are `errors`, by their fixed reason.
+      characters: {
+        intro:
+          'Cada anuncio se publica como uno de tus personajes. Pokémon, Items y Diamonds solo se venden en su mundo; los Pokédólares, a jugadores de cualquier mundo.',
+        main: 'Principal',
+        listings: { one: '{n} anuncio', other: '{n} anuncios' },
+        noListings: 'Sin anuncios',
+        makeMain: 'Hacer principal',
+        edit: 'Editar',
+        remove: 'Quitar',
+        hasListings:
+          'Tiene anuncios: no se puede quitar ni renombrar. Para usar otro nombre o mundo, añade otro personaje.',
+        isMain: 'Es tu personaje principal: haz principal a otro para quitarlo.',
+        add: 'Añadir personaje',
+        addSubmit: 'Añadir',
+        editTitle: 'Editar {name}',
+        help: 'Escríbelo como aparece en el juego. Cada personaje solo puede estar en una cuenta.',
+        count: '{n} de {max}',
+        limit: 'Quita un personaje sin anuncios para añadir otro.',
+        mainChanged: '{name} es ahora tu personaje principal.',
+        mainChangedText: 'Se ve en tu perfil y se elige primero al publicar.',
+        profileRow: 'Personaje principal',
+        profileMore: 'y {n} más',
+        total: { one: '{n} personaje', other: '{n} personajes' },
+        errors: {
+          player_name_taken: 'Ese personaje ya está en otra cuenta.',
+          player_name_taken_text: 'Si es tuyo, repórtalo.',
+          character_limit: 'Ya tienes {max} personajes. Quita uno sin anuncios para añadir otro.',
+          character_not_found: 'Ese personaje ya no está en tu cuenta.',
+          profile_required: 'Completa tu perfil antes de añadir personajes.',
+          suspended: 'Tu cuenta está suspendida en Comercio: no puedes cambiar tus personajes.',
+          player_name_invalid: 'Escribe el nombre del jugador, de 1 a 32 caracteres.',
+          world_invalid: 'Elige un mundo.',
+          character_has_listings: 'Ese personaje tiene anuncios: no se puede quitar ni renombrar.',
+          character_is_main: 'No puedes quitar tu personaje principal.',
+        },
+      },
       channelsIntro:
         'Por dónde te escribe la otra parte de una operación. En tus anuncios solo se ve el nombre del canal; tu usuario, nunca.',
       channelsFooter: 'Publicar pide al menos un canal verificado y visible.',
@@ -1225,7 +1341,7 @@ export const es = {
     sellerDescription:
       'Perfil de {name} en el Comercio de PokeAlliance: anuncios activos, reseñas de operaciones y contacto verificado.',
     createDescription:
-      'Crea un anuncio de Pokémon, ítems, Diamonds o Pokédólares de PokeAlliance y copia su texto.',
+      'Crea un anuncio de Pokémon, ítems, Diamonds o Pokédólares de PokeAlliance como uno de tus personajes.',
     // The button of the search row (9.5.1), the action of the empty list (9.5.10, CA-9.1) and the
     // h1 of the publish page (9.7.1) in phase A. Phase B says «Publicar anuncio».
     create: 'Crear anuncio',
@@ -1265,15 +1381,6 @@ export const es = {
       discord: 'Discord',
       twitch: 'Twitch',
       google: 'Google',
-    },
-    // `InfoBanner` of the list (9.5.1 step 3, A15): its three facts in reading order. It shows with
-    // phase B or with listings in the set, never on the empty list of production (R12). Reviews
-    // go both ways, from 1 to 5 stars (9.15.4).
-    banner: {
-      payments: 'PokeAlliance Wiki no procesa pagos',
-      contact: 'El comprador contacta al vendedor por sus canales verificados',
-      reviews:
-        'Reseñas de 1 a 5 en los dos sentidos, solo de operaciones confirmadas por ambas partes',
     },
     // The labels of `ListingCard` (DP1): one per fact key, in the order of `listingKeys`
     // (src/lib/cards/layout.ts), and the rows of its footer. The page adds `reserved`
@@ -1347,9 +1454,7 @@ export const es = {
     // hidden labels and the hidden description of an invalid end; and the rating filter, whose
     // options read «4.5 o más» (`{score}` written by `formatRating`, X5).
     filters: {
-      allWorlds: 'Todos',
       allCurrencies: 'Todas',
-      priceNeedsCurrency: 'Precio (elige moneda)',
       minLabel: 'Precio mínimo',
       maxLabel: 'Precio máximo',
       invalidAmount: 'Importe no válido',
@@ -1426,10 +1531,6 @@ export const es = {
       removeOption: 'Quitar opción',
       addOption: 'Añadir otra opción',
       preview: 'Vista previa',
-      copy: 'Copiar anuncio',
-      copied: 'Anuncio copiado.',
-      copyFailed: 'No se pudo copiar. Selecciona el texto de abajo y cópialo.',
-      copyText: 'Texto del anuncio',
       errors: {
         pokemon: 'Elige un Pokémon de la lista.',
         range: 'Escribe un número de {min} a {max}.',
@@ -1441,29 +1542,6 @@ export const es = {
         world: 'Elige un mundo.',
         item: 'Elige un ítem.',
       },
-    },
-    // The copied text (9.7.7, CA-9.12): one «{label}: {value}» line per declared fact, in the
-    // order of the sheet. Its own labels, because in English «Selling» and «In-game» are not the
-    // page's words. «o» between two options is `ui.or`, «A convenir» is `listing.negotiable` and
-    // «Unsellable» is `unsellable`.
-    copy: {
-      selling: 'Vendo',
-      nickname: 'Nickname',
-      ball: 'Ball',
-      aura: 'Aura',
-      boost: 'Boost',
-      starLevel: 'Star Level',
-      memorySlots: 'Memory Slots',
-      heldItems: 'Held Items',
-      addon: 'Addon',
-      nextBoost: 'Next Boost chance',
-      training: 'Entrenamiento',
-      dittoMemory: 'Ditto Memory',
-      npcPrice: 'NPC Price',
-      quantity: 'Cantidad',
-      fiat: 'Dinero real',
-      game: 'En el juego',
-      world: 'Mundo',
     },
     // Phase B (9.9 to 9.12, with the owner decisions of 9.15 over them where they clash), only with
     // COMERCIO_PUBLICO (CA-9.13). The UI never uses the three words of the §12.22 Comercio list.
@@ -1548,16 +1626,129 @@ export const es = {
       complete: 'Marcar completado',
       withdraw: 'Retirar',
     },
-    // El formulario guiado de §16.4.4 paso 6: con COMERCIO_PUBLICO la acción principal es
-    // «Publicar anuncio»; sin sesión, «Inicia sesión para publicar»; «Copiar texto para
-    // Discord» queda siempre como acción secundaria (sin COMERCIO_PUBLICO, la única).
+    // El formulario guiado de §16.4.4 paso 6: con COMERCIO_PUBLICO la acción es «Publicar
+    // anuncio»; sin sesión, «Inicia sesión para publicar». Sin acciones fuera del sitio (regla del
+    // dueño 2026-09-24: nada de «texto para Discord»).
     composer: {
-      published: 'Anuncio publicado.',
+      published: 'Anuncio publicado',
       view: 'Ver anuncio',
       assetQuestion: '¿Qué vendes?',
       publish: 'Publicar anuncio',
       signInToPublish: 'Inicia sesión para publicar',
-      copyDiscord: 'Copiar texto para Discord',
+    },
+    // Owner rules of 2026-09-24 (boards Comercio-filtros V2, Anuncio-detalle V1, Personajes V2,
+    // Anuncio-publicado). `filterPanel`: the «Filtros» button of the list, its panel (Mundo,
+    // Precio, Vendedor; a bottom sheet on a phone), the removable tokens and the line of the
+    // type rail. `anyWorld`: the tag of a Pokédólares listing, sold to every world.
+    filterPanel: {
+      open: 'Filtros',
+      clear: 'Limpiar',
+      clearAll: 'Limpiar filtros',
+      allWorlds: 'Todos los mundos',
+      yourCharacter: 'tu personaje',
+      worldNote: 'Los anuncios de Pokédólares salen en todos los mundos.',
+      amountHelp: 'Acepta 50kk, 2,5k o la cifra completa.',
+      pickCurrency: 'Elige una moneda para filtrar por importe.',
+      from: 'desde {min}',
+      upTo: 'hasta {max}',
+      ratingNote: 'Con un mínimo quedan fuera los vendedores sin reseñas.',
+      inGameNote: 'Vendedores con el estado «En el juego».',
+      remove: 'Quitar filtro {name}',
+      show: { one: 'Ver {n} anuncio', other: 'Ver {n} anuncios' },
+    },
+    anyWorld: 'Cualquier mundo',
+    // Price per unit (src/lib/trade/unit-price.ts): «MX$ 1,80 por 1kk», the two modes of the
+    // composer, the unit field with its help and the computed total.
+    unitPrice: {
+      per: '{price} por {unit}',
+      one: 'unidad',
+      mode: 'Tipo de precio',
+      total: 'Total',
+      perUnit: 'Por unidad',
+      unit: 'Unidad',
+      unitHelp: 'Cuántos cubre el precio: 1, 10, 1kk…',
+      totalLine: 'Total: {price}',
+      noTotal: 'Con esa unidad el precio no da un total válido.',
+    },
+    // The listing page (board Anuncio-detalle, Variante 1): the hero facts, the equipment slots,
+    // the trade box for a buyer, for its seller and after the contact, and «Más anuncios de».
+    box: {
+      variant: 'Variante',
+      auras: 'Auras {n}',
+      none: 'Ninguno',
+      noneFeminine: 'Ninguna',
+      orInGame: 'o en el juego',
+      noPayments: 'El sitio no procesa pagos.',
+      character: 'Personaje',
+      copy: 'Copiar',
+      copied: 'Copiado',
+      deliverIn: 'Entrega solo en {world}.',
+      delivery: 'Entrega',
+      reviews: { one: '{n} reseña', other: '{n} reseñas' },
+      scoreOf: '{score} de 5',
+      contact: 'Contacto',
+      buyingAs: 'Compras como',
+      copyLink: 'Copiar enlace',
+      linkCopied: 'Enlace copiado',
+      copyFailed: 'No se pudo copiar. El enlace está seleccionado: cópialo con Ctrl + C.',
+      noCharacter: 'Ninguno de tus personajes está en {world}.',
+      addCharacter: 'Añadir personaje',
+      dealOpen: 'Operación abierta con {name}',
+      viewDeal: 'Ver operación',
+      published: 'Publicado',
+      expires: 'vence el {date}',
+      completedOn: 'Completado el {date}',
+      publishedAs: 'Publicado como',
+      openDeals: 'Operaciones abiertas',
+      view: 'Ver',
+      edit: 'Editar anuncio',
+      reserve: 'Marcar como reservado',
+      complete: 'Marcar como completado',
+      withdraw: 'Retirar anuncio',
+      withdrawTitle: '¿Retirar este anuncio?',
+      withdrawText: 'Deja de verse en Comercio y no se puede publicar de nuevo.',
+      moreFrom: 'Más anuncios de {name}',
+      viewProfile: 'Ver perfil',
+    },
+    // «Vendes como» (board Personajes, Variante 2): the character a listing is published as.
+    sellAs: {
+      label: 'Vendes como',
+      characters: 'Personajes',
+      main: 'Principal',
+      choose: 'Elige un personaje',
+      worldLocked: 'Lo fija el personaje. Pokémon, Items y Diamonds solo se venden en su mundo.',
+      anyWorld: 'Lo ven compradores de cualquier mundo.',
+      empty: 'Aún no tienes personajes. Cada anuncio se publica como uno de ellos.',
+      required: 'Elige el personaje con el que vendes.',
+    },
+    // Publishing and saving (board Anuncio-publicado): the busy button, the error line (its lead
+    // and the reason), the dialog after «Publicar anuncio», and the edit mode of the composer.
+    publishing: {
+      busy: 'Publicando…',
+      saving: 'Guardando…',
+      failed: 'No se pudo publicar:',
+      saveFailed: 'No se pudieron guardar los cambios:',
+      kept: 'Tus datos siguen en el formulario.',
+      visibleUntil: 'Visible en Comercio hasta el {date}.',
+      link: 'Enlace del anuncio',
+      another: 'Crear otro anuncio',
+      mine: 'Mis anuncios',
+      editTitle: 'Editar anuncio',
+      loadFailed: 'No se pudo cargar el anuncio.',
+      notEditable: 'Este anuncio no es tuyo o ya no se puede editar.',
+    },
+    // The reasons the database gives (9.12.3), after «No se pudo publicar:» or alone.
+    refusals: {
+      network: 'el servidor no respondió.',
+      characterRequired: 'elige el personaje con el que vendes.',
+      characterMissing: 'ese personaje ya no está en tu cuenta.',
+      worldMismatch: 'el mundo no es el de tu personaje.',
+      buyerWorld: 'necesitas un personaje en el mundo del anuncio.',
+      listingLimit: 'ya tienes {n} anuncios activos. Retira o marca como completado uno en',
+      channel: 'necesitas un canal de contacto verificado y visible.',
+      rateLimited: 'llegaste al máximo de anuncios nuevos en 24 horas.',
+      price: 'revisa el precio.',
+      state: 'este anuncio ya no se puede editar.',
     },
     // «Contactar al vendedor» (9.10) on a detail and the `Notice` once the deal exists; `{number}`
     // is the deal number, `OP-` and 6 digits (9.15.4).

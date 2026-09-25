@@ -1,0 +1,278 @@
+/* «Personajes» of the account page (Personajes.dc.html and Personajes-movil.dc.html, account
+   parts). CharactersSection.tsx imports this sheet, so it reaches /cuenta/ only with that
+   section's chunk (D-018, 13.6). It repeats the layer order of global.css before its block, so
+   the `components` layer keeps its place whichever sheet the browser reads first (3.6).
+
+   - The list is the bordered `ac-panel-list` of the page; a row is the name in 700 with the world
+     chip and «Principal», the listings as a link, and the actions as quiet text buttons at its
+     end. From 768 the three sit on one line; below it they stack, and a character with listings
+     says why it cannot be removed as a line instead of the tooltip.
+   - «Quitar» unavailable keeps the focus (`aria-disabled`) and shows its reason in a tooltip
+     above it on hover and on focus; the board draws it beside the row, where the page has no
+     room below 1440.
+   - The inline form: the player name, the world slots of registration step 3 (auth.css) and
+     «Añadir» / «Cancelar», on one line from 1280, stacked below. */
+
+@reference '../theme.css';
+
+@layer properties, theme, base, components, utilities;
+
+@layer components {
+  .ac-panel-list.ac-chars {
+    overflow: visible;
+  }
+
+  .ac-chars-row {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--space-6);
+    padding: var(--space-12) var(--space-16);
+  }
+
+  .ac-chars-row__who {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-8);
+    margin: 0;
+    min-width: 0;
+  }
+
+  .ac-chars-row__name {
+    overflow-wrap: break-word;
+    color: var(--text-primary);
+    @apply type-body-strong;
+  }
+
+  .ac-chars-chip {
+    padding: 0 var(--space-8);
+    border-radius: var(--radius-full);
+    background: var(--bg-tertiary);
+    color: var(--text-secondary);
+    white-space: nowrap;
+    @apply type-ui;
+  }
+
+  .ac-chars-chip--main {
+    border: 1px solid var(--border-primary);
+    background: transparent;
+    color: var(--text-primary);
+    @apply type-ui-strong;
+  }
+
+  .ac-chars-row__count {
+    margin: 0;
+    @apply type-ui;
+  }
+
+  .ac-chars-row__listings {
+    border-radius: var(--radius-2);
+    color: var(--link);
+    text-decoration: none;
+  }
+
+  .ac-chars-row__listings:hover {
+    text-decoration: underline;
+  }
+
+  .ac-chars-row__none {
+    color: var(--text-tertiary);
+  }
+
+  .ac-chars-row__why-line {
+    margin: 0;
+    color: var(--text-tertiary);
+    @apply type-ui;
+  }
+
+  .ac-chars-row__actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0 var(--space-4);
+    margin-left: calc(var(--space-8) * -1);
+  }
+
+  .ac-chars-action {
+    min-height: var(--size-touch);
+    padding: 0 var(--space-8);
+    border: 0;
+    border-radius: var(--radius-8);
+    background: transparent;
+    color: var(--text-primary);
+    font: inherit;
+    cursor: pointer;
+    @apply type-field;
+  }
+
+  .ac-chars-action:hover:not(:disabled, [aria-disabled='true']) {
+    background: var(--bg-tertiary);
+  }
+
+  .ac-chars-action:disabled {
+    color: var(--text-quaternary);
+    cursor: progress;
+  }
+
+  .ac-chars-action--blocked {
+    color: var(--text-quaternary);
+    cursor: not-allowed;
+  }
+
+  /* On a phone a blocked «Quitar» is not drawn: the line above says why. */
+  .ac-chars-tip {
+    position: relative;
+    display: none;
+  }
+
+  .ac-chars-tip__panel {
+    position: absolute;
+    right: 0;
+    bottom: calc(100% + var(--space-4));
+    z-index: var(--z-listbox);
+    width: var(--size-tt-narrow);
+    padding: var(--space-8);
+    border: 1px solid var(--border-primary);
+    border-radius: var(--radius-8);
+    background: var(--bg-tertiary);
+    color: var(--text-primary);
+    visibility: hidden;
+    @apply type-ui;
+  }
+
+  .ac-chars-tip:hover > .ac-chars-tip__panel,
+  .ac-chars-tip:focus-within > .ac-chars-tip__panel {
+    visibility: visible;
+  }
+
+  /* «Añadir personaje» closed, or at the limit. */
+  .ac-chars-add {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-8) var(--space-16);
+    padding: var(--space-12) var(--space-16);
+  }
+
+  .ac-chars-add__limit {
+    flex: 1 1 200px; /* sin token: ancho base de la línea del límite */
+    margin: 0;
+    color: var(--text-secondary);
+    @apply type-ui;
+  }
+
+  .ac-chars-add__limit > strong {
+    color: var(--text-primary);
+  }
+
+  .ac-chars-count {
+    color: var(--text-tertiary);
+    white-space: nowrap;
+    @apply type-ui;
+  }
+
+  /* The inline form. */
+  .ac-chars-form {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-8);
+    padding: var(--space-16);
+  }
+
+  .ac-chars-form__head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: var(--space-8);
+  }
+
+  .ac-chars-form__title {
+    margin: 0;
+    color: var(--text-primary);
+    @apply type-body-strong;
+  }
+
+  .ac-chars-form__fields {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--space-12);
+  }
+
+  .ac-chars-form__player,
+  .ac-chars-form__world {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+    min-width: 0;
+    margin: 0;
+    padding: 0;
+    border: 0;
+  }
+
+  .ac-chars-form__label {
+    padding: 0;
+    color: var(--text-tertiary);
+    @apply type-ui;
+  }
+
+  .ac-chars-form__actions {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--space-8);
+  }
+
+  .ac-chars-form__help {
+    margin: 0;
+    color: var(--text-tertiary);
+    @apply type-ui;
+  }
+
+  /* From 768 the rows share their columns, so the listings line up. */
+  @media (width >= 48rem) {
+    .ac-chars {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto auto;
+    }
+
+    .ac-chars > li {
+      grid-column: 1 / -1;
+    }
+
+    .ac-chars-row {
+      grid-template-columns: subgrid;
+      align-items: center;
+      gap: var(--space-16);
+      padding: var(--space-8) var(--space-16);
+    }
+
+    .ac-chars-row__why-line {
+      display: none;
+    }
+
+    .ac-chars-row__actions {
+      justify-content: flex-end;
+      margin: 0 calc(var(--space-8) * -1) 0 0;
+    }
+
+    .ac-chars-action {
+      min-height: var(--size-cell);
+      @apply type-ui;
+    }
+
+    .ac-chars-tip {
+      display: inline-flex;
+    }
+  }
+
+  @media (width >= 80rem) {
+    .ac-chars-form__fields {
+      grid-template-columns: minmax(0, 1fr) auto auto;
+      align-items: end;
+    }
+
+    .ac-chars-form__actions {
+      display: flex;
+    }
+  }
+}

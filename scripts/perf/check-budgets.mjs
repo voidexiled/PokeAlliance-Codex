@@ -101,6 +101,8 @@ const RUTAS_PRESUPUESTO = [
   [/^pokedex\/[^/]+\/$/, 'lista'],
   [/^items\/$/, 'lista'],
   [/^items\/c\/[^/]+\/$/, 'lista'],
+  [/^items\/[^/]+\/$/, 'contenido'], // the page of one item: no island
+
   [/^buscar\/$/, 'lista'],
   [/^herramientas\/pokemon\/$/, 'comparar'],
   [/^herramientas\/guild\/$/, 'guild'],

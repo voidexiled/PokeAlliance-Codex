@@ -12,7 +12,7 @@
 import { createClient, type SupabaseClient } from '@supabase/supabase-js';
 
 import { getSupabasePublicConfig } from '@/lib/supabase/env';
-import { toAnuncio } from '@/lib/supabase/trade';
+import { LISTING_COLUMN_SETS, isMissingColumn, toAnuncio } from '@/lib/supabase/trade';
 
 import {
   comercioDemo,
@@ -44,8 +44,11 @@ const LISTADO_MAX = 200;
 /** Reviews read per seller for its reputation and its table (9.8). */
 const RESENAS_MAX = 100;
 
-const LISTING_COLUMNS =
-  'listing_id,seller_id,asset_type,world_key,status,asset,fiat_currency,fiat_amount,game_prices,negotiable,created_at,published_at,expires_at';
+/**
+ * The listing columns with the seller, newest schema first: the unit price (20260924200000) and
+ * the character (20260924190000), then without what a database has not reached yet.
+ */
+const LISTING_COLUMNS = LISTING_COLUMN_SETS.map((columns) => `seller_id,${columns}`);
 
 /** The channel kinds of `trade_contact_channels` as the channel types of the site (9.4). */
 const CANAL_DE_KIND: Readonly<Record<string, TipoCanal>> = {
@@ -218,6 +221,23 @@ async function sellersOf(
   return sellers;
 }
 
+type ListingQuery = PromiseLike<{ data: unknown; error: { code?: string } | null }>;
+
+/**
+ * Listing rows with their unit price and character; without those migrations, the same rows
+ * without them (see `isMissingColumn`).
+ */
+async function selectListings(query: (columns: string) => ListingQuery): Promise<unknown> {
+  let data: unknown = null;
+  let error: { code?: string } | null = null;
+  for (const columns of LISTING_COLUMNS) {
+    ({ data, error } = await query(columns));
+    if (!error || !isMissingColumn(error)) break;
+  }
+  if (error) throw new Error(`trade_listings: ${error.code ?? 'error'}`);
+  return data;
+}
+
 /** Listing rows as listings of 9.4, each with the handle of its visible seller. */
 function listingsOf(data: unknown, profiles: readonly Profile[]): Anuncio[] {
   const handles = new Map(profiles.map((profile) => [profile.userId, profile.handle]));
@@ -236,12 +256,13 @@ export async function loadListado(): Promise<ComercioData> {
   const sample = demo();
   const client = anonClient();
   if (!readsDatabase() || client === null) return sample;
-  const { data, error } = await client
-    .from('trade_listings')
-    .select(LISTING_COLUMNS)
-    .order('published_at', { ascending: false })
-    .limit(LISTADO_MAX);
-  if (error) throw new Error(`trade_listings: ${error.code ?? 'error'}`);
+  const data = await selectListings((columns) =>
+    client
+      .from('trade_listings')
+      .select(columns)
+      .order('published_at', { ascending: false })
+      .limit(LISTADO_MAX),
+  );
   const profiles = await profilesOf(
     client,
     rows(data).map((row) => String(row.seller_id)),
@@ -258,12 +279,9 @@ export async function loadAnuncio(
 ): Promise<{ anuncio: Anuncio | undefined; vendedores: Vendedor[] }> {
   const client = anonClient();
   if (readsDatabase() && client !== null && UUID.test(id)) {
-    const { data, error } = await client
-      .from('trade_listings')
-      .select(LISTING_COLUMNS)
-      .eq('listing_id', id)
-      .limit(1);
-    if (error) throw new Error(`trade_listings: ${error.code ?? 'error'}`);
+    const data = await selectListings((columns) =>
+      client.from('trade_listings').select(columns).eq('listing_id', id).limit(1),
+    );
     const profiles = await profilesOf(
       client,
       rows(data).map((row) => String(row.seller_id)),
@@ -293,15 +311,16 @@ export async function loadVendedor(
     const name = row === undefined ? null : text(row.username);
     if (userId !== null && name !== null) {
       const profile: Profile = { userId, handle: name, since: text(row?.member_since) };
-      const listings = await client
-        .from('trade_listings')
-        .select(LISTING_COLUMNS)
-        .eq('seller_id', userId)
-        .order('published_at', { ascending: false })
-        .limit(LISTADO_MAX);
-      if (listings.error) throw new Error(`trade_listings: ${listings.error.code ?? 'error'}`);
+      const listings = await selectListings((columns) =>
+        client
+          .from('trade_listings')
+          .select(columns)
+          .eq('seller_id', userId)
+          .order('published_at', { ascending: false })
+          .limit(LISTADO_MAX),
+      );
       const [vendedor] = await sellersOf(client, [profile], true);
-      return { vendedor, anuncios: listingsOf(listings.data, [profile]) };
+      return { vendedor, anuncios: listingsOf(listings, [profile]) };
     }
   }
   const sample = demo();

@@ -292,6 +292,33 @@
     @apply type-ui;
   }
 
+  /* Step 3's «Tu personaje principal» (Personajes.dc.html): its title and line, then the player
+     and the world in a bordered box. */
+  .ac-auth-character {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+  }
+  .ac-auth-character__title {
+    margin: 0;
+    color: var(--text-primary);
+    @apply type-body-strong;
+  }
+  .ac-auth-character__text {
+    margin: 0;
+    color: var(--text-tertiary);
+    @apply type-ui;
+  }
+  .ac-auth-character__box {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-16);
+    margin-top: var(--space-8);
+    padding: var(--space-16);
+    border: 1px solid var(--border-secondary);
+    border-radius: var(--radius-8);
+  }
+
   /* World slots (Direction C): one per world, the chosen one ringed in `selected`. */
   .ac-auth-slots {
     display: grid;

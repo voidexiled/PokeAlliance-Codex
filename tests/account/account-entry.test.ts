@@ -25,6 +25,7 @@ function account(overrides: Partial<CachedAccount> = {}): CachedAccount {
     username: 'kaiser',
     player: 'Kaiser',
     world: 'moon',
+    characters: 1,
     avatar: null,
     presence: 'en_juego',
     moderator: false,

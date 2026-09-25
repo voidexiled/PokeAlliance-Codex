@@ -250,6 +250,51 @@ describe('JSON Schemas and their Zod mirror', () => {
       ],
       ['moves', movesFileSchema, { movimientos: [{ ...move, elemento: 'fire' }] }],
       ['moves', movesFileSchema, { movimientos: [{ ...move, elemento: null }] }],
+      // The fields of the game's Pokédex the importer fills (importer_plan.md §2, §3).
+      [
+        'pokemon',
+        pokemonFileSchema,
+        {
+          pokemon: [
+            {
+              ...pokemon,
+              drops: [{ item: 'fire-stone', cantidad: { min: 2, max: 3 }, probabilidad: 40 }],
+              dropsPorZona: {
+                wildscape: [{ item: 'fire-stone', cantidad: null, probabilidad: null }],
+                primal: [],
+              },
+              movimientos: [
+                { movimiento: 'scratch', slot: 'M1', cooldownPve: 12, cooldownPvp: null },
+              ],
+              efectividad: {
+                muyDebil: [],
+                debil: ['fire'],
+                resiste: ['water'],
+                muyResistente: ['grass'],
+                inmune: [],
+              },
+              descripcion: { es: 'Texto del juego.' },
+              rapido: true,
+              pesado: null,
+            },
+          ],
+        },
+      ],
+      [
+        'moves',
+        movesFileSchema,
+        {
+          movimientos: [
+            {
+              ...move,
+              alcance: 'area',
+              efectos: ['damage', 'paralyze'],
+              descripcion: { en: 'Game text.' },
+              icono: null,
+            },
+          ],
+        },
+      ],
     ];
     for (const [name, schema, data] of documents) {
       expect(validateSchema(data, jsonSchema(name)), JSON.stringify(data)).toEqual([]);
@@ -269,6 +314,30 @@ describe('JSON Schemas and their Zod mirror', () => {
       { items: [{ ...stone, elemento: 'fire', uso }] },
       { items: [{ ...stone, elemento: null, uso: null }] },
       { items: [{ ...stone, elemento: 'steel' }] },
+      {
+        items: [
+          {
+            ...stone,
+            descripcion: { en: 'You see nothing.' },
+            obtencion: {
+              tiendas: [{ tienda: 'Diamond Shop', precio: 10, moneda: 'Diamonds', cantidad: 1 }],
+              pase: [{ temporada: 7, nivel: 12, pista: 'premium', cantidad: 2 }],
+              calendario: [
+                { mes: 9, dia: null, trasDia21: true, calendario: 'gratis', cantidad: null },
+              ],
+              tareas: [{ tipo: 'linked-task', nombre: 'Task', cantidad: 50 }],
+              recetas: [
+                {
+                  taller: null,
+                  cantidad: 1,
+                  tiempoSegundos: 30,
+                  materiales: [{ item: 'water-stone', cantidad: 2 }],
+                },
+              ],
+            },
+          },
+        ],
+      },
     ];
     for (const data of documents) {
       expect(validateSchema(data, jsonSchema('items')), JSON.stringify(data)).toEqual([]);
@@ -365,6 +434,47 @@ describe('JSON Schemas and their Zod mirror', () => {
         },
       ],
       ['pokemon', pokemonFileSchema, { pokemon: [{ ...pokemon, elementoMoveset: 'Fire' }] }],
+      ['pokemon', pokemonFileSchema, { pokemon: [{ ...pokemon, descripcion: {} }] }],
+      ['pokemon', pokemonFileSchema, { pokemon: [{ ...pokemon, descripcion: 'Texto' }] }],
+      [
+        'pokemon',
+        pokemonFileSchema,
+        {
+          pokemon: [
+            { ...pokemon, drops: [{ item: 'fire-stone', cantidad: null, probabilidad: 101 }] },
+          ],
+        },
+      ],
+      ['pokemon', pokemonFileSchema, { pokemon: [{ ...pokemon, dropsPorZona: { lava: [] } }] }],
+      [
+        'pokemon',
+        pokemonFileSchema,
+        { pokemon: [{ ...pokemon, movimientos: [{ movimiento: 'scratch', slot: 'M1' }] }] },
+      ],
+      [
+        'pokemon',
+        pokemonFileSchema,
+        { pokemon: [{ ...pokemon, efectividad: { muyDebil: ['lava'] } }] },
+      ],
+      ['moves', movesFileSchema, { movimientos: [{ ...move, efectos: ['Damage'] }] }],
+      ['items', itemsFileSchema, { items: [{ ...stone, descripcion: { pt: 'x' } }] }],
+      [
+        'items',
+        itemsFileSchema,
+        {
+          items: [
+            {
+              ...stone,
+              obtencion: { pase: [{ temporada: 1, nivel: 1, pista: 'vip', cantidad: 1 }] },
+            },
+          ],
+        },
+      ],
+      [
+        'items',
+        itemsFileSchema,
+        { items: [{ ...stone, obtencion: { recetas: [{ taller: null, materiales: [] }] } }] },
+      ],
       ['moves', movesFileSchema, { movimientos: [{ ...move, elemento: 'Normal' }] }],
       ['moves', movesFileSchema, { movimientos: [{ ...move, evidencia: [] }] }],
       ['moves', movesFileSchema, { movimientos: [{ ...move, cooldownSegundos: -1 }] }],

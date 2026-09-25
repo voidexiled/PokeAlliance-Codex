@@ -1,9 +1,10 @@
 ---
-// Comercio (spec 9.5, `Lienzo:Comercio`): the listings of phase A in template B of 8.0.2 —
-// breadcrumb «Comunidad › Comercio», PageTitle, the red InfoBanner and the list island (search
-// row with «Crear anuncio», type tabs, FilterBar with «Solo en el juego», results bar, the active
-// view and the pagination), the one discreet line of non-affiliation (9.15.2), then the footer
-// PageLayout adds. The 18+ gate (`AgeGate`, 9.15.2) opens every Comercio route, in both phases,
+// Comercio (spec 9.5, board Comercio-filtros «Variante 2», owner decision 2026-09-24): template B
+// of 8.0.2 — breadcrumb «Comunidad › Comercio», the PageTitle with «Publicar anuncio» at its right
+// (the one white button of the page), and the list island (the type rail with its counts, the
+// search with «Filtros», the order and the views, the panel, the tokens, the active view and the
+// pagination), the one discreet line of non-affiliation (9.15.2), then the footer PageLayout
+// adds. The boards have no banner: the listing page says «El sitio no procesa pagos.». The 18+ gate (`AgeGate`, 9.15.2) opens every Comercio route, in both phases,
 // except the empty list of a production phase A, which has no island (CA-9.1).
 //
 // Render (9.3). The page exports no `prerender`: src/integrations/comercio-fases.ts sets it by
@@ -45,16 +46,15 @@ import {
 import { getPokemon } from '@/lib/content/repository';
 import { buildNav } from '@/lib/nav/groups';
 import { COMERCIO_CACHE_CONTROL } from '@/lib/trade/limits';
-import { spriteOrNull } from '@/lib/sprites/resolve';
 import { comercioPublico } from '@/lib/trade/registry';
 import { loadListado } from '@/lib/trade/source';
 import { sortListings } from '@/lib/trade/sort';
 import { inGameFirst, isListed } from '@/lib/trade/types';
 import { EmptyState } from '@/components/content/EmptyState';
-import InfoBanner from '@/components/content/InfoBanner.astro';
 import { Button } from '@/components/controls/Button';
 import { PageTitle } from '@/components/layout/PageTitle';
 import { AgeGate } from '@/components/trade/AgeGate';
+import { TRADE_PANEL_TEXTS_ID } from '@/components/trade/TradeFilters';
 import {
   TRADE_PAGE_SIZE,
   TradeListRoot,
@@ -62,6 +62,7 @@ import {
   tradeData,
   tradeDiamonds,
   tradeLabels,
+  tradePanelTexts,
   tradeSprites,
   tradeUi,
   type TradeCatalog,
@@ -170,14 +171,14 @@ const inline = comercioPublico() ? listed : listed.slice(0, TRADE_PAGE_SIZE);
 const firstPage = JSON.stringify(tradeData(inline, catalog, locale));
 const worlds = catalog.mundos.map((world) => [world.id, world.nombre] as const);
 
-// 9.5.1 step 3: the banner speaks of verification and reviews, which only exist with phase B
-// or with listings to contact; the empty list of production has neither (R12).
+// Phase B publishes («Publicar anuncio»); phase A only drafts («Crear anuncio»). The 18+ gate
+// guards any list with an offer (R12): phase B, or listings to show.
 const publico = comercioPublico();
-const banner = publico || listed.length > 0;
-const diamond = spriteOrNull(registry, 'ui/diamond', { animado: true });
+const guarded = publico || listed.length > 0;
+const createLabel = publico ? trade.composer.publish : trade.create;
 
 // 9.5.10: the one action of the empty list, a link to the publish page.
-const create = createElement(Button, { href: publishHref(locale), children: trade.create });
+const create = createElement(Button, { href: publishHref(locale), children: createLabel });
 ---
 
 <PageLayout
@@ -187,15 +188,16 @@ const create = createElement(Button, { href: publishHref(locale), children: trad
   alternates={alternates}
   breadcrumb={[{ label: group.label }, { label: title }]}
 >
-  <PageTitle title={title} />
-  {
-    banner && (
-      <InfoBanner
-        sprite={diamond}
-        facts={[trade.banner.payments, trade.banner.contact, trade.banner.reviews]}
-      />
-    )
-  }
+  <div class="ac-trade-title">
+    <PageTitle title={title} />
+    {
+      listed.length > 0 && (
+        <Button href={publishHref(locale)} variant="solid">
+          {createLabel}
+        </Button>
+      )
+    }
+  </div>
   {
     listed.length > 0 ? (
       <TradeListRoot
@@ -212,18 +214,29 @@ const create = createElement(Button, { href: publishHref(locale), children: trad
         diamonds={tradeDiamonds(getMonedaDiamantes(), locale)}
         caption={trade.list.caption}
         ui={tradeUi(ui)}
-        pickers={pickers}
-        labels={tradeLabels(messages, publico)}
+        pickers
+        labels={tradeLabels(messages, publico, true)}
       />
     ) : (
       <EmptyState action={create}>{trade.list.empty}</EmptyState>
+    )
+  }
+  {
+    /* The texts of the «Filtros» panel, read by the island when the panel first opens (13.6:
+       out of its props). `<` is escaped so the JSON never closes the script. */
+    listed.length > 0 && (
+      <script
+        type="application/json"
+        id={TRADE_PANEL_TEXTS_ID}
+        set:html={JSON.stringify(tradePanelTexts(messages, pickers)).replaceAll('<', '\\u003c')}
+      />
     )
   }
   <p class="ac-trade-disclaimer">{trade.nonAffiliation}</p>
   {
     /* 9.15.2: the 18+ gate, a closed dialog until the island decides. The empty list of a
        production phase A has no offer to guard and no island (CA-9.1), so it has no gate. */
-    banner && (
+    guarded && (
       <AgeGate
         client:load
         locale={locale}

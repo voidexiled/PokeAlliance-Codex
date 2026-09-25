@@ -71,7 +71,7 @@ import type { Anuncio, EstadoAnuncio, SellerReputation, TipoActivo } from '@/lib
 //     «Anuncios»: every own listing, newest first, filtered by state with the count of each; the
 //       cards of 9.5.8 (`ListingCard`, one `CardGroup` per asset type) built with the preview
 //       builder of the publish page from the two PR5 data files, and under each card its state and
-//       the actions 9.7.8 allows in it. «Editar» waits for the composer of the next milestone.
+//       the actions 9.7.8 allows in it, and «Editar» while it is published or reserved.
 //     «Reseñas recibidas» and «Reseñas hechas»: 10 a page (`?pagina=`); a review the account
 //       wrote still in its edit window links to «Mis operaciones», where the deal is edited.
 //     «Operaciones»: the pending and confirmed counts and the link to «Mis operaciones».
@@ -176,6 +176,8 @@ export interface ProfileHubMessages {
     noneInState: string;
     /** «Crear anuncio». */
     create: string;
+    /** «Editar»: opens the composer on the listing. */
+    edit: string;
     /** The actions of 9.7.8. */
     actions: Record<ActionKey, string>;
     /** The name of each asset type, the title of its group. */
@@ -1005,6 +1007,13 @@ function ListingsPanel({
                       {listing.state === 'publicado' ? null : (
                         <Chip>{text.state[listing.state]}</Chip>
                       )}
+                      {listing.state === 'publicado' || listing.state === 'reservado' ? (
+                        <Button
+                          href={`/${locale}/comercio/publicar/?editar=${encodeURIComponent(listing.anuncio.id)}`}
+                        >
+                          {text.edit}
+                        </Button>
+                      ) : null}
                       {ACTIONS[listing.state].map(([key, status]) => (
                         <Button
                           key={key}

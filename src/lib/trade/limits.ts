@@ -46,6 +46,8 @@ export const EVIDENCIA_DIAS = 90;
 export const PRESENCIA_SIN_SENAL_MIN = 10;
 /** Hours without keyboard or pointer input after which «En el juego» shows as `ausente` (`PRESENCIA_INACTIVO_HORAS`). */
 export const PRESENCIA_INACTIVO_HORAS = 6;
+/** Game characters (player name + world) one account may hold (`PERSONAJES_MAX`, owner rule 2026-09-24). */
+export const PERSONAJES_MAX = 10;
 
 // ------------------------------------------------------------------ fixed by 9.9 to 9.15
 

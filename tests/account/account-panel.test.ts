@@ -23,6 +23,7 @@ describe('account panel sections', () => {
     expect(availableSections({ comercio: false, presence: false })).toEqual([
       'resumen',
       'perfil',
+      'personajes',
       'conexiones',
       'seguridad',
       'guilds',
@@ -38,6 +39,7 @@ describe('account panel sections', () => {
     const available = availableSections({ comercio: false, presence: false });
     expect(sectionFromHash('#conexiones', available)).toBe('conexiones');
     expect(sectionFromHash('#Perfil', available)).toBe('perfil');
+    expect(sectionFromHash('#personajes', available)).toBe('personajes');
     expect(sectionFromHash('#canales', available)).toBeNull();
     expect(sectionFromHash('#invitacion=abc', available)).toBeNull();
     expect(sectionFromHash('', available)).toBeNull();

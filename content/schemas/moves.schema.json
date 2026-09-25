@@ -20,6 +20,22 @@
       "description": "Minúsculas, números y guiones (kebab-case)."
     },
     "texto": { "type": ["string", "null"], "minLength": 1 },
+    "spriteKey": {
+      "type": "string",
+      "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*(?:/[a-z0-9]+(?:-[a-z0-9]+)*)*$",
+      "description": "Clave de public/sprites/sprites.json."
+    },
+    "textoJuego": {
+      "type": "object",
+      "description": "Texto del juego en el idioma o idiomas en que existe: { \"es\": \"…\" }, { \"en\": \"…\" } o los dos.",
+      "additionalProperties": false,
+      "properties": {
+        "es": { "type": "string", "pattern": "\\S" },
+        "en": { "type": "string", "pattern": "\\S" }
+      },
+      "if": { "required": ["es"] },
+      "else": { "required": ["en"] }
+    },
     "elemento": {
       "description": "id de un elemento de content/elementos.json, en su orden. pnpm content:check comprueba que esta lista sea la de elementos.schema.json.",
       "enum": [
@@ -75,6 +91,23 @@
           "type": ["string", "null"],
           "description": "Opcional (§16.2.2). Etiqueta del Pokédex del juego: \"area\" (aoe), \"objetivo\" (target) o \"pasivo\" (passive). null si no se conoce; usado por el importador para elegir elementoMoveset y por la ficha para marcar los movimientos de área.",
           "enum": ["area", "objetivo", "pasivo", null]
+        },
+        "efectos": {
+          "type": "array",
+          "description": "Opcional. Efectos del Pokédex del juego con su id en inglés (\"damage\", \"paralyze\", \"lifesteal\"…).",
+          "items": { "$ref": "#/$defs/slug" }
+        },
+        "descripcion": {
+          "type": ["object", "null"],
+          "description": "Opcional. Descripción del movimiento que enseña el juego. null si no se conoce.",
+          "if": { "type": "object" },
+          "then": { "$ref": "#/$defs/textoJuego" }
+        },
+        "icono": {
+          "type": ["string", "null"],
+          "description": "Opcional. Clave del icono del movimiento en public/sprites/sprites.json. null si no se conoce.",
+          "if": { "type": "string" },
+          "then": { "$ref": "#/$defs/spriteKey" }
         }
       }
     }

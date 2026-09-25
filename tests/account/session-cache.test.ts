@@ -51,6 +51,7 @@ const account: CachedAccount = {
   username: 'ash',
   player: 'Ash',
   world: 'kanto',
+  characters: 3,
   avatar: 'https://cdn.discordapp.com/avatars/1/a.png',
   presence: 'en_juego',
   moderator: false,
@@ -149,6 +150,7 @@ describe('profile cache', () => {
         presence: 'online',
         moderator: 'yes',
         username: 42,
+        characters: -1,
       }),
     );
     expect(readCachedAccount()).toEqual({
@@ -157,6 +159,7 @@ describe('profile cache', () => {
       presence: null,
       moderator: false,
       username: null,
+      characters: null,
     });
     expect(parseCachedAccount('[]')).toBeNull();
     expect(parseCachedAccount('{"username":"ash"}')).toBeNull();

@@ -1,0 +1,852 @@
+/* Entity pages (design «Pokemon-pagina» and «Item-pagina», 2026-09-24): the hero, the facts,
+   the sticky section bar of the Pokémon page, the tables, the zone tabs and the small cards
+   the two pages share. A per-page sheet (13.6, D-018): src/pages/[locale]/pokedex/[slug].astro
+   and src/pages/[locale]/items/[slug].astro import it, so it never reaches the shared sheet
+   of global.css.
+
+   The layer order is repeated before the block, so the `components` layer keeps its place
+   whichever sheet the browser reads first (3.6). */
+
+@reference '../theme.css';
+
+@layer properties, theme, base, components, utilities;
+
+@layer components {
+  /* ------------------------------------------------------------------------ hero */
+
+  /* Phone: one column. From md: the media, the body and, when there is one, the aside. */
+  .ac-entity-hero {
+    display: grid;
+    gap: var(--space-24);
+    grid-template-columns: minmax(0, 1fr);
+    scroll-margin-top: var(--layout-header);
+  }
+
+  @media (width >= 48rem) {
+    .ac-entity-hero {
+      grid-template-columns: auto minmax(0, 1fr);
+      align-items: start;
+    }
+
+    .ac-entity-hero--aside .ac-entity-hero__aside {
+      grid-column: 1 / -1;
+    }
+  }
+
+  @media (width >= 80rem) {
+    .ac-entity-hero--aside {
+      grid-template-columns: auto minmax(0, 1fr) minmax(0, 24rem); /* sin token: tarjeta de auras, ocho ranuras en una fila */
+    }
+
+    .ac-entity-hero--aside .ac-entity-hero__aside {
+      grid-column: auto;
+    }
+  }
+
+  /* Phone: the art beside the title block is the design's; the art keeps its column. */
+  .ac-entity-hero__media {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-8);
+    align-items: stretch;
+    width: 172px; /* sin token: panel de arte del tablero */
+  }
+
+  .ac-entity-hero__art {
+    position: relative;
+    display: flex;
+    min-height: 172px; /* sin token: panel de arte del tablero */
+    align-items: center;
+    justify-content: center;
+    border: 1px solid var(--border-secondary);
+    border-radius: var(--radius-12);
+    background: var(--bg-secondary);
+  }
+
+  .ac-entity-hero__art--slot {
+    min-height: 0;
+    width: auto;
+    padding: var(--space-8);
+    border: 0;
+    background: transparent;
+  }
+
+  .ac-entity-hero__media--slot {
+    width: auto;
+  }
+
+  .ac-entity-hero__body {
+    display: flex;
+    min-width: 0;
+    flex-direction: column;
+    gap: var(--space-12);
+  }
+
+  .ac-entity-hero__title {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: var(--space-8);
+    margin: 0;
+  }
+
+  .ac-entity-hero__title > h1,
+  h1.ac-entity-hero__title {
+    margin: 0;
+    @apply type-h1;
+  }
+
+  .ac-entity-hero__number {
+    color: var(--text-tertiary);
+    @apply type-h3;
+    font-weight: 400;
+  }
+
+  .ac-entity-hero__sub {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-8);
+    margin: 0;
+    color: var(--text-tertiary);
+    @apply type-ui;
+  }
+
+  .ac-entity-hero__sub a,
+  .ac-entity-panel a,
+  .ac-entity-link-card a,
+  .ac-entity-recipe a,
+  .ac-entity-table td a,
+  .ac-entity-table th a:not(.ac-entity-slot) {
+    color: var(--link);
+  }
+
+  .ac-entity-hero__chips,
+  .ac-entity-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-4);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .ac-entity-hero__chips > li,
+  .ac-entity-chips > li {
+    margin: 0;
+  }
+
+  .ac-entity-hero__text {
+    max-width: 60ch; /* sin token: medida de lectura */
+    margin: 0;
+    color: var(--text-secondary);
+    @apply type-body;
+  }
+
+  .ac-entity-hero__aside {
+    min-width: 0;
+  }
+
+  /* The Normal / Shiny links: one segmented control of two links, the current one outlined in
+     amber (5.2 «Actual» of a link is the current page). */
+  .ac-entity-segment {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-4);
+    padding: var(--space-4);
+    border: 1px solid var(--border-secondary);
+    border-radius: var(--radius-10);
+    background: var(--bg-secondary);
+  }
+
+  .ac-entity-segment > a {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: var(--size-control);
+    border: 1px solid transparent;
+    border-radius: var(--radius-8);
+    color: var(--text-secondary);
+    @apply type-ui-strong;
+    text-decoration: none;
+  }
+
+  .ac-entity-segment > a:hover {
+    background: var(--bg-tertiary);
+  }
+
+  .ac-entity-segment > a[aria-current='page'] {
+    border-color: var(--selected);
+    color: var(--text-primary);
+  }
+
+  /* The facts: label over value, three columns from md, two on a phone. */
+  .ac-entity-facts {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--space-12) var(--space-24);
+    margin: 0;
+  }
+
+  @media (width >= 48rem) {
+    .ac-entity-facts {
+      grid-template-columns: repeat(3, minmax(0, max-content));
+    }
+  }
+
+  .ac-entity-facts > div {
+    display: flex;
+    min-width: 0;
+    flex-direction: column;
+    gap: var(--space-2);
+  }
+
+  .ac-entity-facts dt {
+    color: var(--text-tertiary);
+    @apply type-ui;
+  }
+
+  .ac-entity-facts dd {
+    display: flex;
+    align-items: center;
+    min-height: var(--size-chip);
+    margin: 0;
+    color: var(--text-primary);
+    @apply type-body;
+  }
+
+  .ac-entity-facts > .ac-entity-facts__traits {
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    gap: var(--space-4);
+  }
+
+  /* The facts panel of the item hero: label and value on one line, one row per fact. */
+  .ac-entity-panel {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-8);
+    margin: 0;
+    padding: var(--space-16);
+    border: 1px solid var(--border-secondary);
+    border-radius: var(--radius-12);
+    background: var(--bg-secondary);
+  }
+
+  .ac-entity-panel > div {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-16);
+  }
+
+  .ac-entity-panel dt {
+    color: var(--text-tertiary);
+    @apply type-ui;
+  }
+
+  .ac-entity-panel dd {
+    margin: 0;
+    color: var(--text-primary);
+    @apply type-ui-strong;
+    text-align: right;
+  }
+
+  /* The tier chip: the pill as a button, with the dotted focus of every trigger. */
+  .ac-tier-chip {
+    display: inline-flex;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    cursor: help;
+  }
+
+  /* «Comercializable en el mercado». */
+  .ac-entity-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-4);
+    align-self: flex-start;
+    padding: var(--space-2) var(--space-8);
+    border: 1px solid var(--border-secondary);
+    border-radius: var(--radius-full);
+    background: var(--bg-tertiary);
+    color: var(--text-secondary);
+    @apply type-ui-strong;
+  }
+
+  .ac-entity-tag::before {
+    content: '✓';
+    color: var(--success);
+  }
+
+  /* Held tiers: one link per tier of the same effect, the current one outlined. */
+  .ac-entity-tiers {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-4);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    color: var(--text-tertiary);
+    @apply type-ui;
+  }
+
+  .ac-entity-tiers a,
+  .ac-entity-tiers strong {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: var(--size-control);
+    min-height: var(--size-control);
+    padding: 0 var(--space-8);
+    border: 1px solid var(--border-secondary);
+    border-radius: var(--radius-6);
+    color: var(--text-secondary);
+    @apply type-ui-strong;
+    text-decoration: none;
+  }
+
+  .ac-entity-tiers a:hover {
+    background: var(--bg-tertiary);
+  }
+
+  .ac-entity-tiers strong {
+    border-color: var(--selected);
+    color: var(--text-primary);
+  }
+
+  /* A card that links to one entity: the Pokémon of a Mega Stone. */
+  .ac-entity-link-card {
+    display: flex;
+    align-items: center;
+    gap: var(--space-12);
+    padding: var(--space-8) var(--space-12);
+    border: 1px solid var(--border-secondary);
+    border-radius: var(--radius-10);
+    background: var(--bg-secondary);
+  }
+
+  .ac-entity-link-card__text {
+    display: flex;
+    flex-direction: column;
+    color: var(--text-tertiary);
+    @apply type-ui;
+  }
+
+  /* ------------------------------------------------------------------------ section bar */
+
+  /* Sticky under the header; on a phone it scrolls sideways. */
+  .ac-section-bar {
+    position: sticky;
+    top: var(--layout-header);
+    z-index: 1;
+    margin: 0 calc(var(--space-16) * -1);
+    padding: var(--space-8) var(--space-16);
+    border-bottom: 1px solid var(--border-secondary);
+    background: var(--bg-primary);
+  }
+
+  .ac-section-bar > ul {
+    display: flex;
+    gap: var(--space-4);
+    margin: 0;
+    padding: 0;
+    overflow-x: auto;
+    list-style: none;
+    scrollbar-width: none;
+  }
+
+  .ac-section-bar li {
+    flex: none;
+    margin: 0;
+  }
+
+  .ac-section-bar a {
+    display: inline-flex;
+    align-items: center;
+    min-height: var(--size-control);
+    padding: 0 var(--space-12);
+    border-radius: var(--radius-8);
+    color: var(--text-secondary);
+    @apply type-ui-strong;
+    text-decoration: none;
+    white-space: nowrap;
+  }
+
+  .ac-section-bar a:hover {
+    background: var(--bg-tertiary);
+  }
+
+  .ac-section-bar a[aria-current='location'] {
+    background: var(--bg-tertiary);
+    color: var(--text-primary);
+  }
+
+  /* The sections leave room for the header and the bar when a link jumps to them. */
+  .ac-page-layout__main .ac-section {
+    scroll-margin-top: calc(var(--layout-header) + var(--space-48) + var(--space-8));
+  }
+
+  /* ------------------------------------------------------------------------ meta line */
+
+  .ac-entity-meta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-8) var(--space-16);
+    color: var(--text-tertiary);
+    @apply type-ui;
+  }
+
+  .ac-entity-meta__item {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-8);
+  }
+
+  .ac-entity-meta__count {
+    margin-left: auto;
+  }
+
+  .ac-entity-note,
+  .ac-entity-empty {
+    margin: 0;
+    color: var(--text-tertiary);
+    @apply type-ui;
+  }
+
+  .ac-entity-empty {
+    padding: var(--space-24);
+    border: 1px dashed var(--border-secondary);
+    border-radius: var(--radius-8);
+    text-align: center;
+  }
+
+  .ac-entity-muted {
+    color: var(--text-tertiary);
+    @apply type-ui;
+  }
+
+  /* ------------------------------------------------------------------------ tables */
+
+  .ac-entity-table {
+    overflow-x: auto;
+    border: 1px solid var(--border-secondary);
+    border-radius: var(--radius-8);
+    background: var(--bg-primary);
+  }
+
+  .ac-entity-table > table {
+    width: 100%;
+    border-collapse: collapse;
+    @apply type-body;
+  }
+
+  .ac-entity-table thead th {
+    height: var(--space-32);
+    padding: 0 var(--space-16);
+    background: var(--bg-tertiary);
+    @apply type-ui-strong;
+    text-align: left;
+    white-space: nowrap;
+  }
+
+  .ac-entity-table tbody th,
+  .ac-entity-table tbody td {
+    padding: var(--space-8) var(--space-16);
+    border-top: 1px solid var(--border-secondary);
+    font-weight: 400;
+    text-align: left;
+    vertical-align: middle;
+  }
+
+  .ac-entity-table .ac-num {
+    text-align: right;
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+  }
+
+  .ac-entity-table [data-col='slot'] {
+    color: var(--text-tertiary);
+  }
+
+  .ac-entity-table__label {
+    width: 1%;
+    white-space: nowrap;
+  }
+
+  .ac-entity-table__mult {
+    display: block;
+    color: var(--text-tertiary);
+    @apply type-ui;
+  }
+
+  /* A sortable header: the button of the column (the script of the item page moves rows). */
+  .ac-entity-sort {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-4);
+    padding: 0;
+    border: 0;
+    background: transparent;
+    color: inherit;
+    font: inherit;
+    cursor: pointer;
+  }
+
+  .ac-entity-sort::after {
+    content: '↕';
+    color: var(--text-quaternary);
+  }
+
+  [aria-sort='ascending'] > .ac-entity-sort::after {
+    content: '↑';
+    color: var(--text-primary);
+  }
+
+  [aria-sort='descending'] > .ac-entity-sort::after {
+    content: '↓';
+    color: var(--text-primary);
+  }
+
+  /* A move or an item: its slot, its name and, under it, the game's description. */
+  .ac-entity-move {
+    display: flex;
+    align-items: center;
+    gap: var(--space-12);
+  }
+
+  .ac-entity-move__text {
+    display: flex;
+    min-width: 0;
+    flex-direction: column;
+  }
+
+  .ac-entity-move__name {
+    @apply type-body-strong;
+  }
+
+  .ac-entity-move__desc {
+    max-width: 48ch; /* sin token: medida de lectura */
+    color: var(--text-tertiary);
+    @apply type-ui;
+  }
+
+  /* Phone: a move is a card — the name first, then its chips and its cooldowns. */
+  @media (width < 48rem) {
+    .ac-entity-table--moves {
+      overflow: visible;
+      border: 0;
+      background: transparent;
+    }
+
+    .ac-entity-table--moves thead {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      overflow: hidden;
+      clip-path: inset(50%);
+    }
+
+    .ac-entity-table--moves tbody {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-8);
+    }
+
+    .ac-entity-table--moves tr {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: var(--space-8);
+      padding: var(--space-12);
+      border: 1px solid var(--border-secondary);
+      border-radius: var(--radius-8);
+      background: var(--bg-secondary);
+    }
+
+    .ac-entity-table--moves tbody th,
+    .ac-entity-table--moves tbody td {
+      padding: 0;
+      border: 0;
+    }
+
+    .ac-entity-table--moves [data-col='move'] {
+      flex: 1 1 60%;
+    }
+
+    .ac-entity-table--moves td[data-col='slot'] {
+      display: none;
+    }
+
+    .ac-entity-table--moves td[data-col='pve']::before,
+    .ac-entity-table--moves td[data-col='pvp']::before {
+      content: attr(data-label) ' ';
+      color: var(--text-tertiary);
+      @apply type-ui;
+    }
+  }
+
+  /* The chance: the figure and a bar of 64. */
+  .ac-entity-chance {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-8);
+  }
+
+  .ac-entity-chance__bar {
+    display: block;
+    width: var(--size-art);
+    height: var(--space-4);
+    overflow: hidden;
+    border-radius: var(--radius-full);
+    background: var(--bg-quaternary);
+  }
+
+  .ac-entity-chance__bar > span {
+    display: block;
+    height: 100%;
+    background: var(--text-primary);
+  }
+
+  .ac-entity-icons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-4);
+  }
+
+  /* ------------------------------------------------------------------------ zone tabs */
+
+  /* Radios drawn as tabs; each panel (or each row, on the item page) shows with its zone. */
+  .ac-entity-tabs {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-12);
+  }
+
+  .ac-entity-tabs__list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-4);
+    margin: 0;
+    padding: 0;
+    border: 0;
+  }
+
+  .ac-entity-tabs__list > label {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-8);
+    min-height: var(--size-control);
+    padding: 0 var(--space-12);
+    border: 1px solid var(--border-secondary);
+    border-radius: var(--radius-8);
+    color: var(--text-secondary);
+    @apply type-ui-strong;
+    cursor: pointer;
+  }
+
+  .ac-entity-tabs__list > label:hover {
+    background: var(--bg-tertiary);
+  }
+
+  .ac-entity-tabs__list > label:has(:checked) {
+    border-color: var(--selected);
+    color: var(--text-primary);
+  }
+
+  .ac-entity-tabs__list > label:has(:focus-visible) {
+    outline: 2px solid var(--ring);
+    outline-offset: 2px;
+  }
+
+  .ac-entity-tabs__count {
+    color: var(--text-tertiary);
+    font-weight: 400;
+  }
+
+  /* Pokémon page: one panel per zone; without the list (one zone), the panel shows. */
+  .ac-entity-tabs__panel {
+    display: none;
+  }
+
+  .ac-entity-tabs:not(:has(.ac-entity-tabs__list)) .ac-entity-tabs__panel,
+  .ac-entity-tabs:has(input[value='base']:checked) .ac-entity-tabs__panel[data-zone='base'],
+  .ac-entity-tabs:has(input[value='wildscape']:checked)
+    .ac-entity-tabs__panel[data-zone='wildscape'],
+  .ac-entity-tabs:has(input[value='primal']:checked) .ac-entity-tabs__panel[data-zone='primal'] {
+    display: block;
+  }
+
+  /* Item page: one table, its rows filtered by zone («Todas» shows every row). */
+  .ac-entity-tabs:has(input[value='base']:checked) tr[data-zone]:not([data-zone='base']),
+  .ac-entity-tabs:has(input[value='wildscape']:checked) tr[data-zone]:not([data-zone='wildscape']),
+  .ac-entity-tabs:has(input[value='primal']:checked) tr[data-zone]:not([data-zone='primal']) {
+    display: none;
+  }
+
+  /* ------------------------------------------------------------------------ blocks */
+
+  /* Two columns from xl: Efectividad and the side column (abilities, variants). */
+  .ac-entity-duo {
+    display: grid;
+    gap: var(--space-48);
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  @media (width >= 80rem) {
+    .ac-entity-duo--two {
+      grid-template-columns: minmax(0, 1fr) minmax(0, 20rem); /* sin token: columna lateral del diseño */
+    }
+  }
+
+  .ac-entity-duo__side {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-48);
+  }
+
+  /* A block inside a section: an h3 with its count, then its content. */
+  .ac-entity-block {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-12);
+  }
+
+  .ac-entity-block + .ac-entity-block {
+    margin-top: var(--space-16);
+  }
+
+  .ac-entity-block__head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-8);
+  }
+
+  .ac-entity-block__title {
+    display: flex;
+    align-items: baseline;
+    gap: var(--space-8);
+    margin: 0;
+    @apply type-h3;
+  }
+
+  .ac-entity-block__count {
+    color: var(--text-tertiary);
+    @apply type-ui;
+  }
+
+  /* Small cards: the variants of a Pokémon, the recipes of an item. */
+  .ac-entity-cards {
+    display: grid;
+    gap: var(--space-8);
+    grid-template-columns: repeat(
+      auto-fill,
+      minmax(min(100%, 18rem), 1fr)
+    ); /* sin token: tarjeta mínima */
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .ac-entity-duo--two .ac-entity-duo__side .ac-entity-cards {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .ac-entity-card {
+    display: flex;
+    align-items: center;
+    gap: var(--space-12);
+    margin: 0;
+    padding: var(--space-12);
+    border: 1px solid var(--border-secondary);
+    border-radius: var(--radius-10);
+    background: var(--bg-secondary);
+  }
+
+  .ac-entity-card__text {
+    display: flex;
+    min-width: 0;
+    flex-direction: column;
+    gap: var(--space-2);
+    @apply type-body-strong;
+  }
+
+  .ac-entity-card__text a {
+    color: var(--link);
+  }
+
+  .ac-entity-recipe {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-12);
+    margin: 0;
+    padding: var(--space-12);
+    border: 1px solid var(--border-secondary);
+    border-radius: var(--radius-10);
+    background: var(--bg-secondary);
+  }
+
+  .ac-entity-recipe__materials {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .ac-entity-recipe__materials > li {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-8);
+    margin: 0;
+  }
+
+  .ac-entity-recipe__foot {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: var(--space-8);
+    margin: 0;
+  }
+
+  .ac-entity-recipe__foot > div {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .ac-entity-recipe__foot dt {
+    color: var(--text-tertiary);
+    @apply type-ui;
+  }
+
+  .ac-entity-recipe__foot dd {
+    margin: 0;
+    @apply type-body;
+  }
+
+  /* The one action of a section: a link drawn as a secondary button. */
+  .ac-entity-action {
+    display: inline-flex;
+    align-items: center;
+    align-self: flex-start;
+    gap: var(--space-8);
+    min-height: var(--size-control);
+    padding: 0 var(--space-16);
+    border: 1px solid var(--border-primary);
+    border-radius: var(--radius-8);
+    color: var(--text-primary);
+    @apply type-ui-strong;
+    text-decoration: none;
+  }
+
+  .ac-entity-action:hover {
+    background: var(--bg-tertiary);
+  }
+}

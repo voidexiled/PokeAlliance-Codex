@@ -74,8 +74,60 @@
               "description": "Mayor o igual que min."
             }
           }
+        },
+        "probabilidad": {
+          "type": ["number", "null"],
+          "minimum": 0,
+          "maximum": 100,
+          "description": "Opcional. Probabilidad en %, la que enseña el Pokédex del juego (chance / 1000). null si no se conoce."
         }
       }
+    },
+    "listaDrops": {
+      "type": "array",
+      "description": "Ítems que suelta en esa zona, en el orden del juego; cada ítem una sola vez. [] si el juego dice que no suelta nada.",
+      "items": { "$ref": "#/$defs/drop" }
+    },
+    "textoJuego": {
+      "type": "object",
+      "description": "Texto del juego en el idioma o idiomas en que existe: { \"es\": \"…\" }, { \"en\": \"…\" } o los dos. La página del otro idioma lo muestra en el que haya.",
+      "additionalProperties": false,
+      "properties": {
+        "es": { "type": "string", "pattern": "\\S" },
+        "en": { "type": "string", "pattern": "\\S" }
+      },
+      "if": { "required": ["es"] },
+      "else": { "required": ["en"] }
+    },
+    "movimientoPokemon": {
+      "type": "object",
+      "required": ["movimiento", "slot", "cooldownPve", "cooldownPvp"],
+      "additionalProperties": false,
+      "properties": {
+        "movimiento": {
+          "$ref": "#/$defs/slug",
+          "description": "id de un movimiento de content/moves.json."
+        },
+        "slot": {
+          "type": ["string", "null"],
+          "minLength": 1,
+          "description": "Tecla del movimiento en este Pokémon, por ejemplo \"M1\". null si no se conoce."
+        },
+        "cooldownPve": {
+          "type": ["number", "null"],
+          "minimum": 0,
+          "description": "Cooldown en PVE, en segundos, en este Pokémon. null si no se conoce."
+        },
+        "cooldownPvp": {
+          "type": ["number", "null"],
+          "minimum": 0,
+          "description": "Cooldown en PVP, en segundos, en este Pokémon. null si no se conoce."
+        }
+      }
+    },
+    "listaElementos": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/elemento" }
     },
     "evolucion": {
       "type": "object",
@@ -239,6 +291,47 @@
           "description": "Opcional. id del elemento de su moveset, de content/elementos.json. null si no se conoce.",
           "if": { "type": "string" },
           "then": { "$ref": "#/$defs/elemento" }
+        },
+        "descripcion": {
+          "type": ["object", "null"],
+          "description": "Opcional. Descripción del Pokédex del juego. null si no se conoce.",
+          "if": { "type": "object" },
+          "then": { "$ref": "#/$defs/textoJuego" }
+        },
+        "rapido": {
+          "type": ["boolean", "null"],
+          "description": "Opcional. true si el Pokédex del juego lo marca como Fast. null si no se conoce."
+        },
+        "pesado": {
+          "type": ["boolean", "null"],
+          "description": "Opcional. true si el Pokédex del juego lo marca como Heavy. null si no se conoce."
+        },
+        "movimientos": {
+          "type": "array",
+          "description": "Opcional. Sus movimientos en el orden del juego, con el slot y los cooldowns que tienen en este Pokémon. Mientras falte, la ficha lista los movimientos de content/moves.json que lo nombran.",
+          "items": { "$ref": "#/$defs/movimientoPokemon" }
+        },
+        "dropsPorZona": {
+          "type": "object",
+          "description": "Opcional. Loot de las otras zonas del Pokédex del juego; \"drops\" es el de Base. Una zona que falta no se muestra.",
+          "additionalProperties": false,
+          "properties": {
+            "wildscape": { "$ref": "#/$defs/listaDrops" },
+            "primal": { "$ref": "#/$defs/listaDrops" }
+          }
+        },
+        "efectividad": {
+          "type": "object",
+          "description": "Opcional. Daño que recibe según el elemento del ataque, como lo agrupa el Pokédex del juego: muyDebil ×2 (super), debil ×1,5 (effective), resiste ×0,5 (ineffective), muyResistente ×0,4 (superIneffective) e inmune ×0 (immune). Un elemento que no aparece recibe ×1.",
+          "required": ["muyDebil", "debil", "resiste", "muyResistente", "inmune"],
+          "additionalProperties": false,
+          "properties": {
+            "muyDebil": { "$ref": "#/$defs/listaElementos" },
+            "debil": { "$ref": "#/$defs/listaElementos" },
+            "resiste": { "$ref": "#/$defs/listaElementos" },
+            "muyResistente": { "$ref": "#/$defs/listaElementos" },
+            "inmune": { "$ref": "#/$defs/listaElementos" }
+          }
         }
       }
     }

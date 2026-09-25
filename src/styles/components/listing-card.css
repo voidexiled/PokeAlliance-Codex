@@ -48,3 +48,18 @@
   padding: 0;
   list-style: none;
 }
+
+/* A price per unit (owner rule 2026-09-24): the total of the row, and under it the unit price
+   with its unit, «MX$ 1,80 por 1kk», in 12/16 `text-tertiary`. */
+.ac-listing-card__priced {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: var(--space-2);
+}
+
+.ac-listing-card__unit {
+  color: var(--text-tertiary);
+  @apply type-ui;
+  text-align: right;
+}

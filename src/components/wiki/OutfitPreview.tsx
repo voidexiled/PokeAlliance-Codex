@@ -2,28 +2,25 @@ import { useEffect, useRef, useState } from 'react';
 
 import '@/styles/components/outfit-preview.css';
 
-import { ToggleGroup } from '@/components/controls/ToggleGroup';
-import type { ToggleGroupOption } from '@/components/controls/ToggleGroup';
+import { EntitySlotFace, entitySlotClasses } from '@/components/game/EntitySlot';
 import { Sprite } from '@/components/game/Sprite';
 import type { SpriteProps } from '@/components/game/Sprite';
 import { SpriteStage } from '@/components/game/SpriteStage';
-import { fill } from '@/i18n/messages/types';
+import type { Locale } from '@/i18n/config';
 import type { AuraShader } from '@/lib/content/registry-schema';
 
-// OutfitPreview (spec 8.3 step 3, R18, X11, 12.8 D-11 to D-16; DS:ToggleGroup, DS:guias/20):
-// the outfit panel of the Pokémon page and its «Aura» group. The page renders it only when
+// OutfitPreview (spec 8.3 step 3, R18, X11, 12.8 D-11 to D-16; design «Pokemon-pagina»):
+// the aura preview of the Pokémon page hero. The page renders it only when
 // `getOutfitForPokemon` has the record, and hydrates it with `client:visible`, so the shader
 // starts when the panel enters the screen.
 //
-//   - The panel: 176 wide on `bg-secondary`, radius 12, as tall as the head row it sits in
-//     (CGS §6.8), with the idle `sur` frame of the outfit (R18) at an integer scale — a 64
-//     frame at 2x fills the 128 box of DS:guias/20, a 32 frame at 4x — and, with an aura
-//     chosen, the outline its shader draws around the frame and the ball of the aura, 32 at
-//     1x, 12 px from the top right corner (`role="img"`, «Aura Alliance»). There is no
-//     direction selector (X11, Q11): the board shows the south frame alone.
-//   - «Aura»: `ToggleGroup variant="sprite" direction="column" strong`, its visible label
-//     naming the group (D-14): «Ninguna» and one option per aura of `getAuras()` with its
-//     ball and its name (D-15). The first aura of the registry is the initial choice.
+//   - The aura slots: one row of `aria-pressed` game slots over the outfit — «Ninguna» and
+//     one per aura of `getAuras()` with its ball; the name of each is its accessible name
+//     and its `title`. The first aura of the registry is the initial choice.
+//   - The stage: the idle `sur` frame of the outfit (R18) at an integer scale — a 64 frame at
+//     2x fills the 128 box of DS:guias/20, a 32 frame at 4x — and, with an aura chosen, the
+//     outline its shader draws around the frame. Under it, «Aura {name}» of the choice. There
+//     is no direction selector (X11, Q11).
 //
 // Two failures, two states (v1 point 18, D-12):
 //   - `imageError`: the frame does not load. The panel keeps its size and shows the missing
@@ -53,11 +50,11 @@ export interface OutfitAura {
 export interface OutfitPreviewLabels {
   /** «Outfit»: the name of the panel (D-11). */
   outfit: string;
-  /** «Aura»: the visible label that names the group (D-14). */
+  /** «Aura»: the accessible name of the group of slots (D-14). */
   aura: string;
   /** «Ninguna» / «None» (D-15). */
   none: string;
-  /** «Aura {name}» / «{name} aura»: the name of the ball over the panel. */
+  /** «Aura {name}» / «{name} aura»: the line under the stage with the chosen aura. */
   auraBall: string;
   /** «{name}, Sur» / «{name}, South»: the `alt` of the frame (D-13). */
   frame: string;
@@ -73,6 +70,8 @@ export interface OutfitPreviewProps {
   /** Name of the Pokémon, for the `alt` of the frame. */
   name: string;
   labels: OutfitPreviewLabels;
+  /** Picks the format of the slot marks (C-R3). */
+  locale: Locale;
 }
 
 /** The value of «Ninguna»: never an aura id, which is a kebab-case slug of the registry. */
@@ -213,7 +212,7 @@ function prepareAura(canvas: HTMLCanvasElement, image: HTMLImageElement, padding
   };
 }
 
-export function OutfitPreview({ frame, auras, name, labels }: OutfitPreviewProps) {
+export function OutfitPreview({ frame, auras, name, labels, locale }: OutfitPreviewProps) {
   const [auraId, setAuraId] = useState<string>(auras[0]?.id ?? NONE);
   const [imageError, setImageError] = useState(false);
   const [auraError, setAuraError] = useState(false);
@@ -267,75 +266,92 @@ export function OutfitPreview({ frame, auras, name, labels }: OutfitPreviewProps
     };
   }, [frame.src, shader]);
 
-  const options: ToggleGroupOption[] = [
-    { value: NONE, label: labels.none },
-    ...auras.map((candidate) => ({
-      value: candidate.id,
-      label: candidate.nombre,
-      sprite: candidate.icon ?? undefined,
-      disabled: auraError,
-    })),
-  ];
-
   // The outline travels one native pixel around the frame, drawn at the frame's scale.
   const canvasWidth = width + auraPadding * 2;
   const canvasHeight = height + auraPadding * 2;
 
+  // «Aura {name}»: the template split around the name, which is bold.
+  const [captionBefore, captionAfter = ''] = labels.auraBall.split('{name}');
+  const slots = [
+    { id: NONE, nombre: labels.none, icon: null as SpriteProps | null },
+    ...auras.map((candidate) => ({
+      id: candidate.id,
+      nombre: candidate.nombre,
+      icon: candidate.icon,
+    })),
+  ];
+  const chosen = aura?.id ?? NONE;
+
   return (
     <div className="ac-outfit-preview" data-testid="outfit-preview">
-      <div className="ac-outfit-preview__main">
-        <div className="ac-outfit-preview__panel" role="group" aria-label={labels.outfit}>
-          {imageError ? (
-            // The frame did not load: the missing mark of the 64 cell, and no text (8.3).
-            <SpriteStage sprite={null} size={64} framed={false} />
-          ) : (
-            <span className="ac-outfit-preview__stage">
-              <Sprite {...frame} scale={scale} alt={fill(labels.frame, { name })} />
-              {shader === null ? null : (
-                <canvas
-                  ref={canvasRef}
-                  className="ac-outfit-preview__aura"
-                  width={canvasWidth}
-                  height={canvasHeight}
-                  aria-hidden="true"
-                  // Geometry of the sprite (C-R2): the texture's padding, at the frame's scale.
-                  style={{
-                    left: -auraPadding * scale,
-                    top: -auraPadding * scale,
-                    width: canvasWidth * scale,
-                    height: canvasHeight * scale,
-                  }}
-                />
-              )}
-            </span>
-          )}
-          {aura?.icon ? (
-            <span
-              className="ac-outfit-preview__ball"
-              role="img"
-              aria-label={fill(labels.auraBall, { name: aura.nombre })}
-            >
-              <Sprite {...aura.icon} />
-            </span>
-          ) : null}
-        </div>
-        {auraError ? (
-          <p className="ac-outfit-preview__note" role="status">
-            {labels.unavailable}
-          </p>
-        ) : null}
-      </div>
       {auras.length > 0 ? (
-        <ToggleGroup
-          variant="sprite"
-          direction="column"
-          strong
-          labelHidden={false}
-          label={labels.aura}
-          options={options}
-          value={aura?.id ?? NONE}
-          onChange={(value) => setAuraId(value)}
-        />
+        <div className="ac-outfit-preview__slots" role="group" aria-label={labels.aura}>
+          {slots.map((slot) => {
+            const selected = slot.id === chosen;
+            const disabled = auraError && slot.id !== NONE;
+            return (
+              <button
+                key={slot.id || 'none'}
+                type="button"
+                className={entitySlotClasses(40, {
+                  selected,
+                  unavailable: disabled,
+                  none: slot.id === NONE,
+                })}
+                aria-pressed={selected}
+                aria-label={slot.nombre}
+                title={slot.nombre}
+                disabled={disabled}
+                onClick={() => setAuraId(slot.id)}
+              >
+                <EntitySlotFace
+                  sprite={slot.icon}
+                  none={slot.id === NONE}
+                  locale={locale}
+                  size={40}
+                />
+              </button>
+            );
+          })}
+        </div>
+      ) : null}
+      <div className="ac-outfit-preview__panel" role="group" aria-label={labels.outfit}>
+        {imageError ? (
+          // The frame did not load: the missing mark of the 64 cell, and no text (8.3).
+          <SpriteStage sprite={null} size={64} framed={false} />
+        ) : (
+          <span className="ac-outfit-preview__stage">
+            <Sprite {...frame} scale={scale} alt={labels.frame.replace('{name}', name)} />
+            {shader === null ? null : (
+              <canvas
+                ref={canvasRef}
+                className="ac-outfit-preview__aura"
+                width={canvasWidth}
+                height={canvasHeight}
+                aria-hidden="true"
+                // Geometry of the sprite (C-R2): the texture's padding, at the frame's scale.
+                style={{
+                  left: -auraPadding * scale,
+                  top: -auraPadding * scale,
+                  width: canvasWidth * scale,
+                  height: canvasHeight * scale,
+                }}
+              />
+            )}
+          </span>
+        )}
+      </div>
+      {aura ? (
+        <p className="ac-outfit-preview__caption">
+          {captionBefore}
+          <strong>{aura.nombre}</strong>
+          {captionAfter}
+        </p>
+      ) : null}
+      {auraError ? (
+        <p className="ac-outfit-preview__note" role="status">
+          {labels.unavailable}
+        </p>
       ) : null}
     </div>
   );

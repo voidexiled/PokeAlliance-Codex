@@ -75,6 +75,9 @@ interface PokemonRecord {
   habilidades?: string[];
   donde?: { hunts: EnlaceDato[]; linkedTasks: EnlaceDato[]; equiposNpc: EnlaceDato[] };
   elementoMoveset?: string | null;
+  movimientos?: { movimiento: string }[];
+  dropsPorZona?: { wildscape?: { item: string }[]; primal?: { item: string }[] };
+  efectividad?: Record<string, string[]>;
 }
 
 interface ElementRecord {
@@ -88,6 +91,7 @@ interface MoveRecord {
   elemento: string | null;
   slot: string | null;
   cooldownSegundos: number | null;
+  modo: string | null;
   pokemon: string[];
 }
 
@@ -253,32 +257,6 @@ function outfitOf(id: string): OutfitRecord | null {
   return outfit !== undefined && SPRITE_KEYS.has(`outfits/${outfit.outfitId}`) ? outfit : null;
 }
 
-/** «Tier list» (8.3, E15): the evolution line with its variants, or the records of one `numero`. */
-function familyOf(record: PokemonRecord): PokemonRecord[] {
-  const parents = new Map<string, PokemonRecord[]>();
-  for (const entry of POKEMON) {
-    for (const evolution of entry.evolucion ?? []) {
-      parents.set(evolution.a, [...(parents.get(evolution.a) ?? []), entry]);
-    }
-  }
-  const family = new Set<PokemonRecord>([record]);
-  const queue = [record];
-  for (let next = queue.shift(); next !== undefined; next = queue.shift()) {
-    const current = next;
-    const neighbours = [
-      ...(current.evolucion ?? []).flatMap((evolution) => BY_ID.get(evolution.a) ?? []),
-      ...(parents.get(current.id) ?? []),
-      ...POKEMON.filter((entry) => current.numero !== null && entry.numero === current.numero),
-    ];
-    for (const neighbour of neighbours) {
-      if (family.has(neighbour)) continue;
-      family.add(neighbour);
-      queue.push(neighbour);
-    }
-  }
-  return [...family];
-}
-
 function movesOf(record: PokemonRecord): MoveRecord[] {
   const collator = new Intl.Collator('es', { numeric: true });
   return MOVES.filter((move) => move.pokemon.includes(record.id)).sort((a, b) => {
@@ -289,46 +267,52 @@ function movesOf(record: PokemonRecord): MoveRecord[] {
   });
 }
 
-type SectionId = 'drops' | 'tier-list' | 'evolucion' | 'ataques' | 'donde';
+/** The records with the same `numero`: the «Variantes» section, drawn with two or more. */
+function variantsOf(record: PokemonRecord): PokemonRecord[] {
+  return record.numero === null ? [] : POKEMON.filter((entry) => entry.numero === record.numero);
+}
 
-/** 8.3 step 4: the sections a record has data for, in page order. */
+type SectionId =
+  | 'movimientos'
+  | 'loot'
+  | 'ubicaciones'
+  | 'evoluciones'
+  | 'efectividad'
+  | 'habilidades'
+  | 'variantes'
+  | 'comercio';
+
+/** The sections a record has data for, in page order; «Comercio» is always there. */
 function sectionsOf(record: PokemonRecord): SectionId[] {
   const evolves =
     (record.evolucion ?? []).some((evolution) => BY_ID.has(evolution.a)) ||
     POKEMON.some((entry) => (entry.evolucion ?? []).some((evolution) => evolution.a === record.id));
   const where = record.donde;
+  const drops = [
+    ...(record.drops ?? []),
+    ...(record.dropsPorZona?.wildscape ?? []),
+    ...(record.dropsPorZona?.primal ?? []),
+  ];
+  const moves =
+    record.movimientos === undefined
+      ? movesOf(record).length
+      : record.movimientos.filter((entry) => MOVES.some((move) => move.id === entry.movimiento))
+          .length;
   const sections: [SectionId, boolean][] = [
-    ['drops', (record.drops ?? []).some((drop) => ITEMS.has(drop.item))],
-    ['tier-list', familyOf(record).length > 1],
-    ['evolucion', evolves],
-    ['ataques', movesOf(record).length > 0 || (record.habilidades ?? []).some((a) => a !== '')],
+    ['movimientos', moves > 0],
+    ['loot', drops.some((drop) => ITEMS.has(drop.item))],
     [
-      'donde',
+      'ubicaciones',
       where !== undefined &&
         where.hunts.length + where.linkedTasks.length + where.equiposNpc.length > 0,
     ],
+    ['evoluciones', evolves],
+    ['efectividad', record.efectividad !== undefined],
+    ['habilidades', (record.habilidades ?? []).some((ability) => ability !== '')],
+    ['variantes', variantsOf(record).length > 1],
+    ['comercio', true],
   ];
   return sections.filter(([, present]) => present).map(([id]) => id);
-}
-
-/** 8.3 step 3 and FI3: the rows of the fixed sheet, in order and only with a value. */
-function sheetRows(record: PokemonRecord, locale: Locale): [string, string][] {
-  const { ui, pokemon } = MESSAGES[locale];
-  const labels = ui.tooltip;
-  const names = record.elementos.flatMap((id) => elementName(id, locale) ?? []);
-  const rows: [string, string | null][] = [
-    [
-      labels.requirement,
-      record.nivel === null ? null : fill(labels.level, { n: figure(record.nivel, locale) }),
-    ],
-    [labels.tier, record.tier === null ? null : tierText(record.tier)],
-    [labels.elements, names.length > 0 ? names.join(' / ') : null],
-    [labels.role, record.funcion],
-    [pokemon.hp, record.hp == null ? null : figure(record.hp, locale)],
-    [pokemon.experience, record.experiencia == null ? null : figure(record.experiencia, locale)],
-    [labels.generation, record.generacion === null ? null : String(record.generacion)],
-  ];
-  return rows.flatMap(([label, value]) => (value === null ? [] : [[`${label}:`, value]]));
 }
 
 /** The Pokémon pages this spec opens: the fixed sample of §14.4 and the three of FI2. */
@@ -463,15 +447,6 @@ async function tableRows(table: Locator): Promise<string[][]> {
       }),
     ),
   );
-}
-
-/** Text of the sheet rows (`GameTooltip variant="sheet"`), as label and value pairs. */
-async function sheetOf(page: Page, name: string, locale: Locale): Promise<Locator> {
-  const sheet = page.locator(
-    `[role="group"][aria-label="${fill(MESSAGES[locale].ui.sheet, { name })}"]`,
-  );
-  await expect(sheet, `8.3: the fixed sheet of ${name}`).toHaveCount(1);
-  return sheet;
 }
 
 // -------------------------------------------------------------------------- frame and grids
@@ -1084,7 +1059,7 @@ test.describe('Pokédex (8.2)', () => {
   });
 });
 
-test.describe('Ficha de Pokémon (8.3)', () => {
+test.describe('Ficha de Pokémon (8.3, diseño «Pokemon-pagina»)', () => {
   test.use({ viewport: { width: 1440, height: 900 } });
 
   test('FI1: un HTML por registro y por idioma; un id desconocido responde 404', async ({
@@ -1115,7 +1090,7 @@ test.describe('Ficha de Pokémon (8.3)', () => {
     for (const id of FICHAS) {
       const record = BY_ID.get(id) as PokemonRecord;
 
-      test(`${locale} ${id}: migas, título, ficha fija y secciones (8.3, FI2, FI3, §14.4)`, async ({
+      test(`${locale} ${id}: migas, encabezado, barra de secciones y secciones`, async ({
         page,
       }) => {
         const { ui, pokemon } = MESSAGES[locale];
@@ -1128,43 +1103,42 @@ test.describe('Ficha de Pokémon (8.3)', () => {
         await expect(crumbs.nth(1).locator('a')).toHaveAttribute('href', `/${locale}/pokedex/`);
         await expect(crumbs.nth(2).locator('[aria-current="page"]')).toHaveText(record.nombre);
 
-        // 2. The name and «Nº {numero}», without a subtitle when `numero` is null.
+        // 2. The hero: the h1 is the name; «Nº {numero}» beside it only when known.
         await expect(page.locator('h1')).toHaveCount(1);
         await expect(page.locator('h1')).toHaveText(record.nombre);
-        const subtitle = page.locator('.ac-page-title__sub');
-        if (record.numero === null) await expect(subtitle).toHaveCount(0);
-        else await expect(subtitle).toHaveText(fill(ui.cards.number, { n: String(record.numero) }));
+        const number = page.locator('.ac-entity-hero__number');
+        if (record.numero === null) await expect(number).toHaveCount(0);
+        else await expect(number).toHaveText(fill(ui.cards.number, { n: String(record.numero) }));
+        const art = page.locator('.ac-entity-hero__art');
+        if (record.imagen !== null)
+          await expect(art.locator('img').first()).toHaveAttribute('alt', '');
 
-        // 3. The art panel: the art with alt="", or the missing mark with no image.
-        const art = page.locator('.ac-detail-head__art');
-        if (record.imagen === null) {
-          await expect(art.locator('img')).toHaveCount(0);
-        } else {
-          await expect(art.locator('img')).toHaveAttribute('alt', '');
-        }
+        // The facts: Rol, Requisito, Tier, Generación, and Tipo de moveset with the field.
+        const facts = [
+          ui.tooltip.role,
+          ui.tooltip.requirement,
+          ui.tooltip.tier,
+          ui.tooltip.generation,
+          ...(record.elementoMoveset === undefined ? [] : [pokemon.movesetType]),
+        ];
+        await expect(page.locator('.ac-entity-facts dt')).toHaveText(facts);
 
-        // The fixed sheet: the rows of 8.3 in order and only with a value; no «—» (FI3).
-        const sheet = await sheetOf(page, record.nombre, locale);
-        const rows = sheetRows(record, locale);
-        await expect(sheet.locator('.ac-game-tooltip__label')).toHaveText(rows.map(([l]) => l));
-        await expect(sheet.locator('.ac-game-tooltip__value')).toHaveText(rows.map(([, v]) => v));
-        await expect(sheet).not.toContainText('—');
-
-        // The outfit panel and «Aura», only with an outfit in the registry (8.3 step 3).
-        const outfit = outfitOf(id);
+        // The aura preview, only with an outfit in the registry.
         await expect(page.locator('[data-testid="outfit-preview"]')).toHaveCount(
-          outfit === null ? 0 : 1,
+          outfitOf(id) === null ? 0 : 1,
         );
 
-        // 4. The sections with data, in page order, each with its entry in the Toc; with 0 or 1
-        // there is no Toc and the column measures 944 (8.0.2, FI2).
+        // 3. The sections with data, in page order; the section bar names them after «Resumen».
         const expected = sectionsOf(record);
         const titles: Record<SectionId, string> = {
-          drops: pokemon.sections.drops,
-          'tier-list': pokemon.sections.tierList,
-          evolucion: pokemon.sections.evolution,
-          ataques: pokemon.sections.moves,
-          donde: pokemon.sections.where,
+          movimientos: pokemon.sections.moves,
+          loot: pokemon.sections.loot,
+          ubicaciones: pokemon.sections.where,
+          evoluciones: pokemon.sections.evolution,
+          efectividad: pokemon.sections.effectiveness,
+          habilidades: pokemon.sections.fieldAbilities,
+          variantes: pokemon.sections.variants,
+          comercio: pokemon.sections.trade,
         };
         const sections = page.locator('main section.ac-section:not(.ac-section .ac-section)');
         await expect(sections).toHaveCount(expected.length);
@@ -1172,14 +1146,21 @@ test.describe('Ficha de Pokémon (8.3)', () => {
           await expect(sections.nth(index)).toHaveAttribute('id', section);
           await expect(sections.nth(index).locator('h2').first()).toHaveText(titles[section]);
         }
-        const toc = page.locator('aside.ac-toc');
+        const bar = page.locator('nav.ac-section-bar');
         if (expected.length >= 2) {
-          await expect(toc.locator('.ac-toc__link')).toHaveText(expected.map((s) => titles[s]));
+          await expect(bar.locator('a')).toHaveText([
+            pokemon.sections.summary,
+            ...expected.map((section) => titles[section]),
+          ]);
         } else {
-          await expect(toc).toHaveCount(0);
+          await expect(bar).toHaveCount(0);
         }
-        const main = await page.locator('main#contenido').boundingBox();
-        expect(main?.width, 'template C column').toBeCloseTo(expected.length >= 2 ? 896 : 944, 0);
+        // No rail: the section bar is the index of the page.
+        await expect(page.locator('aside.ac-toc')).toHaveCount(0);
+        await expect(page.locator('#comercio a')).toHaveAttribute(
+          'href',
+          `/${locale}/comercio/?pokemon=${id}`,
+        );
 
         // X11: no paginator between Pokémon and no «Volver a la Pokédex».
         await expect(page.locator('main .ac-pagination')).toHaveCount(0);
@@ -1190,51 +1171,37 @@ test.describe('Ficha de Pokémon (8.3)', () => {
     }
   }
 
-  test('FI2: charizard tiene solo «Tier list» con sus variantes; chimchar solo «Ataques»', async ({
-    page,
-  }) => {
-    const charizard = BY_ID.get('charizard');
-    test.skip(charizard === undefined, 'charizard is not in the registry');
-    const family = familyOf(charizard as PokemonRecord).sort(pokemonOrder('es'));
-    const withEvolution = family.some((entry) => (entry.evolucion ?? []).length > 0);
-    await openPokemon(page, 'es', 'charizard');
-    const root = listRoot(page, 'familia');
-    await listReady(page, root);
-    await expect(root.locator('table caption')).toHaveText(
-      withEvolution
-        ? fill(es.pokemon.familyCaption, { name: family[0].nombre })
-        : fill(es.pokemon.variantsCaption, { n: String(charizard?.numero) }),
-    );
-    const rows = await tableRows(root.locator('table'));
-    expect(
-      rows.map((cells) => cells.slice(0, 2)),
-      'FI2: the variants of the record, «Charizard · T3» and «Shiny Charizard · T1» today',
-    ).toEqual(
-      family.map((entry) => [entry.nombre, entry.tier === null ? '—' : tierText(entry.tier)]),
-    );
-    await expect(countOf(root)).toHaveText(counted(es.pokemon.familyCount, family.length, 'es'));
-
+  test('FI2: los movimientos de chimchar y las variantes de charizard', async ({ page }) => {
     const chimchar = BY_ID.get('chimchar');
     const moves = chimchar === undefined ? [] : movesOf(chimchar);
     test.skip(moves.length === 0, 'chimchar has no move in the registry');
     await openPokemon(page, 'es', 'chimchar');
-    const table = page.locator('#ataques table');
+    const table = page.locator('#movimientos table');
     await expect(table.locator('caption')).toHaveText(
       fill(es.pokemon.movesCaption, { name: 'Chimchar' }),
     );
+    const withElement = moves.some((move) => move.elemento !== null);
     expect(
       await tableRows(table),
-      'FI2: «M1 · Scratch · 12 s · Normal» with the registry of today',
+      'FI2: «M1 · Scratch · (icon) · 12 s» with the registry of today',
     ).toEqual(
       moves.map((move) => [
         move.slot ?? '—',
         move.nombre,
-        move.cooldownSegundos === null
+        ...(withElement ? [move.elemento === null ? '—' : ''] : []),
+        move.cooldownSegundos === null || move.modo !== 'PVE'
           ? '—'
           : fill(es.pokemon.cooldown, { n: figure(move.cooldownSegundos, 'es') }),
-        move.elemento === null ? '—' : (elementName(move.elemento, 'es') ?? '—'),
       ]),
     );
+
+    const charizard = BY_ID.get('charizard');
+    test.skip(charizard === undefined, 'charizard is not in the registry');
+    const variants = variantsOf(charizard as PokemonRecord);
+    test.skip(variants.length < 2, 'charizard has no variant');
+    await openPokemon(page, 'es', 'charizard');
+    await expect(page.locator('#variantes .ac-entity-card')).toHaveCount(variants.length);
+    await expect(page.locator('#variantes [aria-current="page"]')).toHaveText('Charizard');
   });
 
   test('FI4: con movimiento reducido el aura queda quieta y no hay animaciones', async ({
@@ -1262,68 +1229,7 @@ test.describe('Ficha de Pokémon (8.3)', () => {
     }
   });
 
-  test('FI5: la Tier list abre en Lista, Cards y Slots muestran lo mismo y la vista se guarda', async ({
-    page,
-  }) => {
-    const charizard = BY_ID.get('charizard');
-    test.skip(charizard === undefined, 'charizard is not in the registry');
-    const family = familyOf(charizard as PokemonRecord).sort(pokemonOrder('es'));
-    await openPokemon(page, 'es', 'charizard');
-    await forgetViews(page);
-    await page.reload();
-    let root = listRoot(page, 'familia');
-    await listReady(page, root);
-    await expect(viewButton(root, 'es', 'list')).toHaveAttribute('aria-pressed', 'true');
-    await expect(root.getByRole('group', { name: es.pokemon.familyView })).toHaveCount(1);
-
-    const names = family.map((entry) => entry.nombre);
-    const listNames = (await tableRows(root.locator('table'))).map((cells) => cells[0]);
-    expect(listNames).toEqual(names);
-
-    await chooseView(root, 'es', 'cards');
-    await expect(root.locator('[data-card-grid] article .ac-card__title')).toHaveText(names);
-    await chooseView(root, 'es', 'slots');
-    const slotNames = await root
-      .locator('.ac-entity-slot')
-      .evaluateAll((slots) =>
-        slots.map(
-          (slot) =>
-            slot.getAttribute('aria-label') ??
-            (slot.querySelector('.sr-only')?.textContent ?? '').trim(),
-        ),
-      );
-    expect(slotNames).toEqual(names);
-
-    await page.reload();
-    root = listRoot(page, 'familia');
-    await listReady(page, root);
-    await expect(viewButton(root, 'es', 'slots')).toHaveAttribute('aria-pressed', 'true');
-    expect(await page.evaluate(() => window.localStorage.getItem('ac:vista:familia'))).toBe(
-      'slots',
-    );
-
-    // The entry of the page itself: no link, no panel, no aria-describedby, in every view.
-    for (const view of ['slots', 'cards', 'list'] as ViewName[]) {
-      await chooseView(root, 'es', view);
-      // 8.3: `aria-current="page"` on its name, in the three views — not on its row.
-      const self = root.locator('[aria-current="page"]');
-      await expect(self, `${view}: one current entry`).toHaveCount(1);
-      await expect(self, `${view}: the attribute is on the name`).toHaveText('Charizard');
-      expect(await self.evaluate((node) => node.tagName), `${view}: not on the row`).not.toBe('TR');
-      const own = await root.evaluate(
-        (element, name) =>
-          [...element.querySelectorAll('a, [aria-describedby], [data-ac-tt]')].filter((node) => {
-            const text = (node.getAttribute('aria-label') ?? node.textContent ?? '').trim();
-            return text === name;
-          }).length,
-        'Charizard',
-      );
-      expect(own, `FI5: Charizard has no link or tooltip in ${view}`).toBe(0);
-    }
-    await forgetViews(page);
-  });
-
-  test('Outfit y Aura: opciones del registro, la primera elegida y la ball (8.3 paso 3, S19)', async ({
+  test('Aura: una ranura por aura del registro, la primera elegida y su nombre debajo', async ({
     page,
   }) => {
     const id = FICHAS.find((candidate) => outfitOf(candidate) !== null);
@@ -1334,27 +1240,24 @@ test.describe('Ficha de Pokémon (8.3)', () => {
     await expect(page.locator('astro-island[ssr]').filter({ has: preview })).toHaveCount(0, {
       timeout: READY_TIMEOUT,
     });
-    await expect(preview.locator('[role="group"]').first()).toHaveAttribute(
-      'aria-label',
-      es.pokemon.outfit,
-    );
-    const options = preview.locator('.ac-toggle-group button');
-    await expect(options).toHaveText([es.pokemon.auraNone, ...AURAS.map((aura) => aura.nombre)]);
-    await expect(options.nth(1)).toHaveAttribute('aria-pressed', 'true');
+    const slots = preview.getByRole('group', { name: es.pokemon.aura }).locator('button');
+    await expect(slots).toHaveCount(AURAS.length + 1);
+    await expect(slots.nth(0)).toHaveAttribute('aria-label', es.pokemon.auraNone);
+    await expect(slots.nth(1)).toHaveAttribute('aria-label', AURAS[0].nombre);
+    await expect(slots.nth(1)).toHaveAttribute('aria-pressed', 'true');
     const record = BY_ID.get(id as string) as PokemonRecord;
-    await expect(preview.locator('img').first()).toHaveAttribute(
+    await expect(preview.locator('.ac-outfit-preview__stage img').first()).toHaveAttribute(
       'alt',
       fill(es.pokemon.outfitAlt, { name: record.nombre }),
     );
-    const unavailable = preview.locator('[role="status"]');
-    if ((await unavailable.count()) === 0) {
-      await expect(
-        preview.getByRole('img', { name: fill(es.pokemon.auraBall, { name: AURAS[0].nombre }) }),
-      ).toHaveCount(1);
+    if ((await preview.locator('[role="status"]').count()) === 0) {
+      await expect(preview.locator('.ac-outfit-preview__caption')).toHaveText(
+        fill(es.pokemon.auraBall, { name: AURAS[0].nombre }),
+      );
     }
-    await options.nth(0).click();
-    await expect(options.nth(0)).toHaveAttribute('aria-pressed', 'true');
-    await expect(preview.locator('.ac-outfit-preview__ball')).toHaveCount(0);
+    await slots.nth(0).click();
+    await expect(slots.nth(0)).toHaveAttribute('aria-pressed', 'true');
+    await expect(preview.locator('.ac-outfit-preview__caption')).toHaveCount(0);
   });
 });
 
@@ -1378,24 +1281,8 @@ test.describe('WG1: el marco de §5.5 a 1440 y a 390', () => {
         for (const id of FICHAS) {
           const record = BY_ID.get(id) as PokemonRecord;
           await openPokemon(page, 'es', id);
-          await expectFrame(page, size.width, sectionsOf(record).length >= 2, `/es/pokedex/${id}/`);
-        }
-        // The Tier list of charizard in its three views: the table scrolls inside its border.
-        if (
-          BY_ID.has('charizard') &&
-          sectionsOf(BY_ID.get('charizard') as PokemonRecord).includes('tier-list')
-        ) {
-          await openPokemon(page, 'es', 'charizard');
-          const root = listRoot(page, 'familia');
-          await listReady(page, root);
-          for (const view of ['cards', 'slots', 'list'] as ViewName[]) {
-            await chooseView(root, 'es', view);
-            const frame = await readFrame(page);
-            expect
-              .soft(frame.scrollWidth, `charizard ${view}: no sideways scroll`)
-              .toBeLessThanOrEqual(size.width);
-          }
-          await forgetViews(page);
+          expect(record.id).toBe(id);
+          await expectFrame(page, size.width, false, `/es/pokedex/${id}/`);
         }
       });
     });
@@ -1413,7 +1300,7 @@ test.describe('WG4: rejillas a 1440, 1280, 1024, 768 y 390 (CGS §4)', () => {
     test.describe(`${size.width} px`, () => {
       test.use({ viewport: size });
 
-      test(`columnas de la Pokédex y de la Tier list a ${size.width}`, async ({ page }) => {
+      test(`columnas de la Pokédex a ${size.width}`, async ({ page }) => {
         const root = await openPokedex(page, 'es');
         const grid = await readGrid(root.locator('.ac-card-grid__grid').first());
         const main = MAIN_COLUMN[size.width].spacer;
@@ -1424,35 +1311,6 @@ test.describe('WG4: rejillas a 1440, 1280, 1024, 768 y 390 (CGS §4)', () => {
           .soft(grid.columns, `pokedex columns for ${grid.width}`)
           .toBe(expectedColumns('pokedex', grid.width));
         expect.soft(grid.spread, 'no ragged row (S2)').toBe(0);
-
-        const charizard = BY_ID.get('charizard');
-        if (charizard !== undefined && sectionsOf(charizard).includes('tier-list')) {
-          await openPokemon(page, 'es', 'charizard');
-          const family = listRoot(page, 'familia');
-          await listReady(page, family);
-          await chooseView(family, 'es', 'cards');
-          const familyGrid = await readGrid(family.locator('.ac-card-grid__grid').first());
-          expect
-            .soft(familyGrid.columns, `Tier list columns for ${familyGrid.width}`)
-            .toBe(expectedColumns('pokedex', familyGrid.width));
-          expect.soft(familyGrid.spread, 'no ragged row in the Tier list (S2)').toBe(0);
-          await forgetViews(page);
-        }
-        const withDrops = FICHAS.find((id) =>
-          sectionsOf(BY_ID.get(id) as PokemonRecord).includes('drops'),
-        );
-        if (withDrops !== undefined) {
-          await openPokemon(page, 'es', withDrops);
-          const drops = listRoot(page, 'drops');
-          await listReady(page, drops);
-          await chooseView(drops, 'es', 'cards');
-          const dropGrid = await readGrid(drops.locator('.ac-card-grid__grid').first());
-          expect
-            .soft(dropGrid.columns, `loot columns for ${dropGrid.width}`)
-            .toBe(expectedColumns('loot', dropGrid.width));
-          expect.soft(dropGrid.spread, 'no ragged row in the drops (S2)').toBe(0);
-          await forgetViews(page);
-        }
       });
     });
   }
@@ -1519,16 +1377,14 @@ test.describe('WA1: axe con un tooltip abierto y con la hoja móvil', () => {
         }
       });
 
-      test(`${locale}: charizard con un tooltip de la Tier list abierto`, async ({ page }) => {
+      test(`${locale}: charizard con un tooltip de las Variantes abierto`, async ({ page }) => {
         const charizard = BY_ID.get('charizard');
         test.skip(
-          charizard === undefined || !sectionsOf(charizard).includes('tier-list'),
-          'no Tier list',
+          charizard === undefined || !sectionsOf(charizard).includes('variantes'),
+          'no Variantes',
         );
         await openPokemon(page, locale, 'charizard');
-        const root = listRoot(page, 'familia');
-        await listReady(page, root);
-        await openTooltip(page, root);
+        await openTooltip(page, page.locator('#variantes'));
         await expectAxeClean(page, `/${locale}/pokedex/charizard/ with a tooltip open`);
       });
     });
@@ -1640,11 +1496,12 @@ test.describe('WL1: sin relleno (§12.7, §12.8, §12.22)', () => {
       for (const id of FICHAS) {
         await openPokemon(page, locale, id);
         await expectNoRemovedText(page, REMOVED_POKEMON[locale], pokemonPath(locale, id));
-        // D-09: the sheet is named «Ficha de {nombre}» and writes «Requisito:» and «Nivel {n}».
+        // D-09: the facts write «Requisito» and «Nivel {n}».
         const record = BY_ID.get(id) as PokemonRecord;
-        const sheet = await sheetOf(page, record.nombre, locale);
         if (record.nivel !== null) {
-          await expect(sheet).toContainText(`${MESSAGES[locale].ui.tooltip.requirement}:`);
+          await expect(page.locator('.ac-entity-facts')).toContainText(
+            fill(MESSAGES[locale].ui.tooltip.level, { n: figure(record.nivel, locale) }),
+          );
         }
       }
     });
