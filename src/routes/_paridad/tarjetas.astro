@@ -412,15 +412,18 @@ function listing(sample: Sample): ListingCardListing {
     world: sample.world,
     posted: sample.posted,
     facts,
-    helds:
+    // The held items of a sample are its held X and Y, in that order (16.4.5).
+    equipment:
       sample.helds === undefined
         ? null
-        : sample.helds.map((held) => ({
-            name: held.name,
-            tier: held.tier,
-            sprite: null,
-            tip: samplePanel('item', held.name, 300, held.rows),
-          })),
+        : (() => {
+            const [heldX, heldY] = sample.helds.map((held) => ({
+              name: held.name,
+              sprite: null,
+              tip: samplePanel('item', held.name, 300, held.rows),
+            }));
+            return { heldX: heldX ?? null, heldY: heldY ?? null };
+          })(),
     train: sample.train ?? null,
     fiat: sample.fiat,
     game: sample.game,
@@ -446,6 +449,7 @@ const listingLabels: ListingCardLabels = {
   contact: copy.listing.contact,
   negotiable: copy.listing.negotiable,
   reserved: copy.listing.reserved,
+  gear: dictionaries[locale].trade.listing.gear,
   money: ui.money,
 };
 

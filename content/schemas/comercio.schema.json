@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://alliance-codex.local/schemas/comercio.schema.json",
   "title": "Comercio de ejemplo (fase A)",
-  "description": "Anuncios y vendedores de ejemplo de Comercio: content/comercio/anuncios.json lleva { \"anuncios\": [...] } y content/comercio/vendedores.json { \"vendedores\": [...] }. Solo se leen con COMERCIO_DEMO=1 (servidor de desarrollo, pruebas y build visual), nunca en el build de producción. Son datos de demostración, no ofertas: cada registro lleva \"borrador\": true, los vendedores son ficticios y ningún texto ni cifra se copia de un tablero. pnpm content:check comprueba además las referencias, las reglas de precio y la Ditto Memory.",
+  "description": "Anuncios y vendedores de ejemplo de Comercio: tests/fixtures/comercio/anuncios.json lleva { \"anuncios\": [...] } y tests/fixtures/comercio/vendedores.json { \"vendedores\": [...] }. Solo se leen con COMERCIO_DEMO=1 (servidor de desarrollo, pruebas y build visual), nunca en el build de producción. Son datos de demostración, no ofertas: cada registro lleva \"borrador\": true, los vendedores son ficticios y ningún texto ni cifra se copia de un tablero. pnpm content:check comprueba además las referencias, las reglas de precio y la Ditto Memory.",
   "type": "object",
   "additionalProperties": false,
   "properties": {
@@ -411,7 +411,7 @@
         },
         "vendedor": {
           "$ref": "#/$defs/handle",
-          "description": "id de un vendedor de content/comercio/vendedores.json."
+          "description": "id de un vendedor de tests/fixtures/comercio/vendedores.json."
         },
         "mundo": {
           "$ref": "#/$defs/slug",
@@ -591,7 +591,7 @@
         },
         "anuncio": {
           "$ref": "#/$defs/slug",
-          "description": "id del anuncio de la operación, en content/comercio/anuncios.json."
+          "description": "id del anuncio de la operación, en tests/fixtures/comercio/anuncios.json."
         },
         "comprador": {
           "$ref": "#/$defs/handle",

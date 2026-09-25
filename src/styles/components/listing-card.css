@@ -38,8 +38,16 @@
   @apply type-body-strong;
 }
 
-/* EquipmentStrip (spec 16.4.5): the equipment of a listed Pokémon, 32 px slots 4 apart in the
-   order of the game, wrapping on narrow cards. */
+/* One head for every listing (owner rule 2026-09-25): the cards of a row share the head track,
+   so a card whose text is shorter (no Shiny line, a title on one line) would centre it lower
+   than the card beside it. At the top, the stage and the first line of the title start at
+   the same height in every card, and only the lines under the title vary. */
+.ac-card[data-anat='listing'] .ac-card__head {
+  align-items: flex-start;
+}
+
+/* EquipmentStrip (spec 16.4.5): one kind of equipment of a listed Pokémon, 32 px slots 4 apart
+   in the order of the game, wrapping on narrow cards. */
 .ac-equipment-strip {
   display: flex;
   flex-wrap: wrap;
@@ -47,6 +55,38 @@
   margin: 0;
   padding: 0;
   list-style: none;
+}
+
+/* The equipment of a Pokémon card (16.4.5): each kind under its 12/16 label, 4 above its slots.
+   The first line holds Ball, Held Items and Mega Stone, 16 apart; a group another card of the
+   grid has keeps its width here, invisible: one slot, two for the held X and Y, or its label
+   when that is wider. Auras and Addons take a zone each (ListingCard.tsx). */
+.ac-listing-gear {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-12) var(--space-16);
+}
+
+.ac-listing-gear__group {
+  display: flex;
+  min-width: var(--size-cell);
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.ac-listing-gear__group[data-gear='held'] {
+  min-width: calc(var(--size-cell) * 2 + var(--space-4));
+}
+
+.ac-listing-gear__group[data-empty] {
+  visibility: hidden;
+}
+
+.ac-listing-gear__label {
+  margin: 0;
+  color: var(--text-tertiary);
+  white-space: nowrap;
+  @apply type-ui;
 }
 
 /* A price per unit (owner rule 2026-09-24): the total of the row, and under it the unit price

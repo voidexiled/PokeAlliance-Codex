@@ -209,7 +209,7 @@ export function SystemItemsList({
             <LootCard
               key={item.id}
               id={anchor(item)}
-              drop={entry.card}
+              drop={{ ...entry.card, tip: entry.tip }}
               keys={keys}
               labels={labels.tooltip}
               locale={locale}

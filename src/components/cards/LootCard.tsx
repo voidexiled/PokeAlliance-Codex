@@ -48,9 +48,11 @@ import type { TipData } from '@/lib/game/tips';
 //     reads before the attribute (7.6.4).
 //   - `loading` is the `lazy` of 7.4.2 for a card from index 4 of its list on.
 //
-// The card is not a link and never opens a tooltip: its title is the link (items have no
-// page in this cut, §15, so theirs is text) and the entities of its facts are the triggers
-// (7.5.10).
+// The card is not a link and never opens a tooltip: its title is the link and the entities
+// nested in it are the triggers (7.5.10). The item itself is one of them: with `tip` its slot
+// opens the item's whole panel — its game text, a held item's slot and tier, a Ball's catch
+// rate, its shops — which the facts of the card only summarise (owner rule 2026-09-25: every
+// item shows all of its information wherever it is named).
 
 /** One Pokémon as the «Drop de» of a drop, with its Pokédex panel (`pokemonTip`, 7.5.3). */
 export interface LootCardEntity {
@@ -83,6 +85,8 @@ export interface LootCardDrop {
   shopPrice?: number | null;
   /** Language of «Uso» when it only exists in the other locale (8.0.5, T22). */
   useLang?: string;
+  /** The item's own panel (`itemTip`, 7.5.3), opened by its slot. None: a static slot (R2). */
+  tip?: TipData | null;
 }
 
 export interface LootCardProps extends Omit<HTMLAttributes<HTMLElement>, 'children'> {
@@ -187,14 +191,30 @@ export function LootCard({
   };
   const rows = keys.map(fact);
 
+  const stage = (
+    <SpriteStage
+      sprite={drop.sprite ? { ...drop.sprite, loading } : null}
+      size={40}
+      tone="primary"
+    />
+  );
   const head = (
     <Head
       stage={
-        <SpriteStage
-          sprite={drop.sprite ? { ...drop.sprite, loading } : null}
-          size={40}
-          tone="primary"
-        />
+        hasContent(drop.tip) ? (
+          <NestedEntity
+            tip={drop.tip}
+            variant="plain"
+            placement="side"
+            ariaLabel={drop.name}
+            locale={locale}
+            hint={hint}
+          >
+            {stage}
+          </NestedEntity>
+        ) : (
+          stage
+        )
       }
       title={
         <Title href={drop.href} clamp={2}>

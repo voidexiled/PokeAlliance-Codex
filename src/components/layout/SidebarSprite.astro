@@ -1,0 +1,58 @@
+---
+// The 16 px sprite box of a menu entry or group heading (DS:Sidebar, owner rule 2026-09-25):
+// the sprite `src/lib/nav/groups.ts` resolved for it, or the empty box, so every label of a
+// list starts at the same x. Only the links of «Destacados» bounce (6.2).
+//
+// - At 1x (no `width`), `Sprite` draws the pixel art. As in the reference (`spriteNode` of
+//   DS:Sidebar), it keeps its size and is centred in the box on whole pixels: an odd side gets
+//   a 1 px trailing margin, so it lands at floor((16 - side) / 2). The reference writes that
+//   margin inline; here the box names the odd side in `data-snap` and `sidebar.css` adds the
+//   margin, because 3.7 keeps literal lengths out of `style`.
+// - Scaled (`width` and `height`, see `spriteDeMenu`), the image is drawn smooth at that size,
+//   frame 0 of its sheet: the same `object-fit: cover` window over the strip `Sprite` uses,
+//   with its geometry as the one inline style (C-R2).
+import type { SidebarSprite } from '@/lib/nav/groups';
+import { Sprite } from '@/components/game/Sprite';
+
+interface Props {
+  sprite: SidebarSprite | null;
+  /** The sprite rises 3 px twice every turn (6.2): the links of «Destacados». */
+  bounce?: boolean;
+}
+
+const { sprite, bounce = false } = Astro.props;
+
+const scaled =
+  sprite && sprite.width !== undefined && sprite.height !== undefined
+    ? { width: sprite.width, height: sprite.height }
+    : null;
+const drawn = scaled ?? (sprite ? { width: sprite.size[0], height: sprite.size[1] } : null);
+const snap = drawn
+  ? [drawn.width % 2 === 1 ? 'x' : null, drawn.height % 2 === 1 ? 'y' : null]
+      .filter(Boolean)
+      .join(' ') || undefined
+  : undefined;
+---
+
+<span
+  class:list={['ac-sidebar__sprite', bounce && 'ac-bounce']}
+  aria-hidden="true"
+  data-snap={snap}
+>
+  {
+    sprite && scaled ? (
+      <img
+        class="ac-sprite ac-sprite--smooth ac-sidebar__scaled"
+        src={sprite.src}
+        width={scaled.width}
+        height={scaled.height}
+        alt=""
+        decoding="async"
+        draggable="false"
+        style={`width: ${scaled.width}px; height: ${scaled.height}px; object-position: 0% 0%`}
+      />
+    ) : sprite ? (
+      <Sprite {...sprite} />
+    ) : null
+  }
+</span>

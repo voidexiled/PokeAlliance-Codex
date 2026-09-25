@@ -3,7 +3,7 @@
 // listing and its live preview. Phase A publishes nothing — no Supabase, no account, no contact
 // (9.2) — and has no action (the copied text «para Discord» was removed by the owner on
 // 2026-09-24). The page exists in every build, production included: it reads no listing and no
-// seller of content/comercio/, so COMERCIO_DEMO changes nothing here (9.2, CA-9.1). In phase B
+// seller of tests/fixtures/comercio/, so COMERCIO_DEMO changes nothing here (9.2, CA-9.1). In phase B
 // `?editar={id}` opens the seller's listing in the same form (owner rule 2026-09-24): the page is
 // prerendered, so a small script names it «Editar anuncio» before the first paint.
 //
@@ -82,7 +82,9 @@ if (community === undefined || market === undefined) {
 // place shows the missing mark or no sprite at all, never another icon (R11). The Diamond
 // spins in Comercio (7.8), so it carries its animation.
 const registry = getSpriteRegistry();
-const diamond = spriteOrNull(registry, 'ui/diamond', { animado: true });
+const diamond = spriteOrNull(registry, 'ui/diamond', {
+  animado: registry['ui/diamond']?.modo === 'animacion',
+});
 const moneda = getMonedaDiamantes();
 const pokedolares = spriteOrNull(registry, 'ui/pokedolares');
 const sprites: ListingFormSprites = {
@@ -248,7 +250,7 @@ const form: ListingFormProps = {
           refusals: trade.refusals,
         },
         charactersHref: `/${locale}/cuenta/#personajes`,
-        listingsHref: `/${locale}/cuenta/perfil/?pestana=anuncios`,
+        listingsHref: `/${locale}/cuenta/anuncios/`,
         signInLine: trade.composer.signInToPublish,
         signIn: shell.account.signIn,
         contact: {

@@ -7,7 +7,48 @@
   },
   "sprite": "ui/sistemas/linked-tasks",
   "orden": 4,
-  "tooltip": [],
+  "tooltip": [
+    {
+      "etiqueta": {
+        "es": "Abrir",
+        "en": "Open"
+      },
+      "valor": {
+        "es": "Ctrl+L",
+        "en": "Ctrl+L"
+      }
+    },
+    {
+      "etiqueta": {
+        "es": "Activas",
+        "en": "Active"
+      },
+      "valor": {
+        "es": "1 a la vez",
+        "en": "1 at a time"
+      }
+    },
+    {
+      "etiqueta": {
+        "es": "Primera vez",
+        "en": "First time"
+      },
+      "valor": {
+        "es": "Recompensa principal, libera la siguiente",
+        "en": "Main reward, unlocks the next"
+      }
+    },
+    {
+      "etiqueta": {
+        "es": "Repetir",
+        "en": "Repeat"
+      },
+      "valor": {
+        "es": "Recompensa de Repeat",
+        "en": "Repeat reward"
+      }
+    }
+  ],
   "intro": [],
   "secciones": [],
   "borrador": true

@@ -43,6 +43,7 @@ import {
   type SearchSystemItem,
 } from '@/components/search/config';
 import { SearchResultsRoot } from '@/components/search/SearchResultsRoot';
+import { panelsUrl } from '@/lib/game/panels';
 import PageLayout from '@/layouts/PageLayout.astro';
 
 import { buildSearchIndex } from './indice.json.ts';
@@ -79,7 +80,7 @@ const systems: Record<string, SearchSystem> = Object.fromEntries(
       { id: system.id, titulo: system.titulo, sprite, tooltip: system.tooltip },
       locale,
     );
-    const entry: SearchSystem = tip.rows.length > 0 ? { sprite, tip } : { sprite };
+    const entry: SearchSystem = tip.rows.length > 0 ? { sprite, rows: tip.rows } : { sprite };
     return [system.id, entry];
   }),
 );
@@ -130,6 +131,7 @@ const island = {
   total: buildSearchIndex(locale).length,
   pokedexUrl: `/${locale}/pokedex/datos.json`,
   itemsUrl: `/${locale}/items/datos.json`,
+  panelsUrl: panelsUrl(locale),
   systems,
   systemItems,
   placeholder: messages.shell.searchHome,

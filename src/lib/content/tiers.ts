@@ -5,13 +5,14 @@
 // import this module without bundling Zod. Everything that shows a tier's maxBrokes (the tier
 // tooltip) or needs the tiers a Tier filter or a Tier list may offer (ULTIMATE hidden, spec
 // 16.2.1) reads this module instead of content/tiers.json directly.
-import tiersFile from '@content/tiers.json';
+// A named import: the bundle keeps the `tiers` array and drops the rest of the file (`$schema`).
+import { tiers as tiersJson } from '@content/tiers.json';
 
 import { tierKey } from './tier-rank';
 import type { PokemonTier } from './types';
 import type { TierRecord } from './registry-schema';
 
-const tiers = tiersFile.tiers as unknown as TierRecord[];
+const tiers = tiersJson as unknown as TierRecord[];
 
 /** content/tiers.json indexed by id (`t3`, `super-rare`, `ultimate`…), tierKey()'s own keys. */
 const byId = new Map(tiers.map((tier) => [tier.id, tier]));

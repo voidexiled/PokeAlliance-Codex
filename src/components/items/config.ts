@@ -2,6 +2,8 @@ import type { LootCardEntity } from '@/components/cards/LootCard';
 import type { ElementChipEntry } from '@/components/game/ElementChip';
 import type { Locale } from '@/i18n/config';
 import type { PokemonRecord } from '@/lib/content/types';
+import type { PanelElement, PanelItem, PanelPokemon } from '@/lib/game/panels';
+import { pokemonPanel } from '@/lib/game/pokemon-panel';
 import type {
   LocalizedText,
   TipData,
@@ -71,8 +73,9 @@ type ItemsField = (typeof ITEMS_FIELDS)[number];
  *   tienda»), whole Pokédólares (S8);
  * - `elemento`, the id of its element in `refs.elementos`, and `uso`, in the language of the
  *   file (both optional fields of §3.13);
- * - `dropDe`, the ids of the Pokémon whose `drops` hold it, in the order of 8.0.5 and each one
- *   in `refs.pokemon`: «Drop de» is the inverse of that field (7.5.3). Past
+ * - `dropDe`, the ids of the Pokémon whose loot holds it in any zone (`drops` and
+ *   `dropsPorZona`), in the order of 8.0.5 and each one in `refs.pokemon`: «Drop de» is the
+ *   inverse of those fields (7.5.3). Past
  *   `DROPPER_NAMES_MAX` Pokémon it is their number: «Drop de» only counts them (an Evolution
  *   Stone drops from a hundred), and the ids would only weigh on the props and the file.
  *
@@ -244,13 +247,17 @@ function localized(text: string, locale: Locale): LocalizedText {
   return { [locale]: text } as LocalizedText;
 }
 
-/** An element of `refs` as `ElementChip` takes it, with its panel (`elementTip`). */
+/**
+ * An element of `refs` as `ElementChip` takes it, with its panel (`elementTip`). `balls` are the
+ * Balls that favour it, from `/{l}/paneles.json` once it is here.
+ */
 export function elementChip(
   id: string,
   ref: ItemsElementRef,
   locale: Locale,
   labels: TipLabels,
   build: typeof elementTip,
+  balls?: readonly string[],
 ): ElementChipEntry {
   return {
     id,
@@ -263,6 +270,7 @@ export function elementChip(
         icono: ref.icono,
         stone: ref.stone,
         fragment: ref.fragment,
+        balls,
       },
       locale,
       labels,
@@ -272,7 +280,7 @@ export function elementChip(
 
 /**
  * The «Drop de» of an item that one Pokémon alone drops (7.5.3, LootCard): its name, its page
- * and its panel (`pokemonTip`).
+ * and its panel (`pokemonTip`), completed by its facts of `/{l}/paneles.json` once it is here.
  */
 export function dropperEntity(
   id: string,
@@ -280,6 +288,8 @@ export function dropperEntity(
   locale: Locale,
   labels: TipLabels,
   build: typeof pokemonTip,
+  extra?: PanelPokemon,
+  tipos?: readonly PanelElement[],
 ): LootCardEntity {
   return {
     name: ref.nombre,
@@ -289,6 +299,7 @@ export function dropperEntity(
         ...ref,
         id,
         elementos: ref.elementos.map((nombre) => ({ nombre: localized(nombre, locale) })),
+        ...pokemonPanel(extra, locale, tipos),
       },
       locale,
       labels,
@@ -297,9 +308,11 @@ export function dropperEntity(
 }
 
 /**
- * The panel of an item (`itemTip`, 7.5.3, 8.5): the same rows in every category — Categoría,
- * Drop de, Elemento, Uso, Precio NPC and Precio de tienda — each one only with a value.
- * `category` is the name of its Market category in the page's language.
+ * The panel of an item (`itemTip`, 7.5.3, 8.5): its game text and the same rows in every
+ * category — Categoría, the held slot and tier, the Mega Stone's Pokémon, Evoluciona, Elemento,
+ * the Ball's facts, Drop de, Se obtiene en, Uso, Precio NPC, Precio de tienda and Mercado — each
+ * one only with a value. `category` is the name of its Market category in the page's language;
+ * `extra` its facts of `/{l}/paneles.json` once it is here (the held slot and tier are the row's).
  */
 export function itemPanel(
   row: ItemsRow,
@@ -308,6 +321,7 @@ export function itemPanel(
   locale: Locale,
   labels: TipLabels,
   build: typeof itemTip,
+  extra?: PanelItem,
 ): TipData {
   const element = row.elemento === null ? undefined : refs.elementos[row.elemento];
   return build(
@@ -325,6 +339,8 @@ export function itemPanel(
           : (row.dropDe ?? []).flatMap((id) => refs.pokemon[id]?.nombre ?? []),
       nombreElemento: element === undefined ? null : localized(element.nombre, locale),
       uso: row.uso === null ? null : localized(row.uso, locale),
+      ...extra,
+      held: row.held ?? extra?.held ?? null,
     },
     locale,
     labels,

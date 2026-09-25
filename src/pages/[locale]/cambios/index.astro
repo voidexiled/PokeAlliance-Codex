@@ -43,8 +43,6 @@ import { en } from '@/i18n/messages/en';
 import { es } from '@/i18n/messages/es';
 import {
   getCambios,
-  getCategorias,
-  getElementos,
   getItem,
   getItemIncluidoBorrador,
   getSistema,
@@ -55,6 +53,7 @@ import {
 import type { Cambio, Item } from '@/lib/content/registry-schema';
 import { getPokemon, getQuests } from '@/lib/content/repository';
 import type { ContentRef, PokemonRecord } from '@/lib/content/types';
+import { itemTipRecord, pokemonTipRecord } from '@/lib/game/tip-records';
 import { itemTip, pokemonTip, systemTip, type TipData } from '@/lib/game/tips';
 import { buildNav } from '@/lib/nav/groups';
 import { spriteOrNull } from '@/lib/sprites/resolve';
@@ -68,7 +67,6 @@ import { EmptyState } from '@/components/content/EmptyState';
 import { PageTitle } from '@/components/layout/PageTitle';
 import { Section } from '@/components/layout/Section';
 import type { TocItem } from '@/components/layout/Toc.astro';
-import { pokedexOrder } from '@/components/pokedex/config';
 import PageLayout from '@/layouts/PageLayout.astro';
 
 export const prerender = true;
@@ -130,54 +128,19 @@ function monthTitle(id: string): string {
 // ------------------------------------------------------------------------------ entities
 // What `entidades` names, resolved once per page and only when a change names it.
 
-const elements = new Map(getElementos().map((element) => [element.id, element]));
 const pokemonById = new Map(getPokemon().map((record) => [record.id, record]));
 const questsById = new Map(getQuests().map((quest) => [quest.id, quest]));
-const categoryNames = new Map(getCategorias().map((category) => [category.id, category.nombre]));
-
-/** The Pokémon panel of 7.5.3, with the names of its elements (8.0.5). */
+/** The Pokémon panel of 7.5.3, every row its record has. */
 function pokemonTipOf(record: PokemonRecord): TipData {
-  const names = record.elementos.flatMap((id) => {
-    const element = elements.get(id);
-    return element === undefined ? [] : [{ nombre: element.nombre }];
-  });
-  return pokemonTip({ ...record, elementos: names }, locale, ui.tooltip);
+  return pokemonTip(pokemonTipRecord(record), locale, ui.tooltip);
 }
 
-// «Drop de» of an item (7.5.3): the Pokémon whose `drops` name it, each once, in the order of
-// 8.0.5 — the inverse of the field over every Pokémon, as on the item lists.
-let droppers: Map<string, PokemonRecord[]> | null = null;
-function droppedBy(item: string): string[] {
-  if (droppers === null) {
-    droppers = new Map();
-    for (const record of [...getPokemon()].sort(pokedexOrder(locale))) {
-      for (const drop of record.drops ?? []) {
-        const list = droppers.get(drop.item) ?? [];
-        if (!list.includes(record)) list.push(record);
-        droppers.set(drop.item, list);
-      }
-    }
-  }
-  return (droppers.get(item) ?? []).map((record) => record.nombre);
-}
-
-/** The item panel of 7.5.3. */
+/**
+ * The item panel of 7.5.3: its game text and every fact the registries give of it, «Drop de»
+ * in every zone included (src/lib/game/tip-records.ts).
+ */
 function itemTipOf(item: Item): TipData {
-  return itemTip(
-    {
-      id: item.id,
-      nombre: item.nombre,
-      categoria: item.categoria,
-      sprite: spriteOrNull(registry, item.sprite),
-      precioNpc: item.precioNpc,
-      nombreCategoria: categoryNames.get(item.categoria) ?? null,
-      dropDe: droppedBy(item.id),
-      nombreElemento: item.elemento ? (elements.get(item.elemento)?.nombre ?? null) : null,
-      uso: item.uso ?? null,
-    },
-    locale,
-    ui.tooltip,
-  );
+  return itemTip(itemTipRecord(item, locale), locale, ui.tooltip);
 }
 
 /** An entity of `entidades` (3.13) as its chip draws it, or `null` when content/ lacks it. */

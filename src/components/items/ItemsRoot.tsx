@@ -40,6 +40,8 @@ import { fill, isPluralMessage, plural } from '@/i18n/messages/types';
 import { lootKeys } from '@/lib/cards/layout';
 import type { LootKey } from '@/lib/cards/layout';
 import { formatInteger } from '@/lib/format/numbers';
+import { usePanels } from '@/lib/game/panels';
+import { withTipLabels } from '@/lib/game/tip-labels';
 import { elementTip, itemTip, pokemonTip } from '@/lib/game/tips';
 import type { EntityView, ListPage } from '@/lib/lists/state';
 
@@ -53,7 +55,8 @@ import type { EntityView, ListPage } from '@/lib/lists/state';
 //   - Ranuras is the inventory of `Lienzo:Items`: one panel of `EntitySlot` of 40, 4 apart, on
 //     columns that fill the panel and end flush; in «Todo» one block per Market category,
 //     headed by its name and its count. Each slot is the sprite only (the client «?» when the
-//     item has none) and opens the item's game tooltip (`itemTip`).
+//     item has none) and opens the item's game tooltip (`itemTip`), completed with the facts of
+//     `/{l}/paneles.json` once it is here (src/lib/game/panels.ts).
 //   - Lista: `DataTable` with Sprite · Ítem · (in «Todo») Categoría · the keys of the union.
 //     Its table and row components are the deferred part of the island (13.6).
 // Every view gives each item the anchor `item-{id}` (H7).
@@ -217,17 +220,29 @@ export function ItemsRoot({
   const controller = useListState(config, { items, total, decode, path });
   const view = controller.page.state.view;
 
+  // The rest of every panel (`/{l}/paneles.json`), and the labels of its rows, once here.
+  const panels = usePanels(locale);
+  const labelsOf = useMemo(
+    () => withTipLabels(ui.tooltip, panels?.etiquetas),
+    [ui.tooltip, panels],
+  );
+
   // Elements and «Drop de»: the props bring those of the first page; every other one is
-  // built from `refs` with the same builders.
+  // built from `refs` with the same builders, and every one again once the panels are here.
   const [chips, entities] = useMemo(() => {
     const own = new Map(elements.map((element) => [element.id, element]));
     const one = new Map(Object.entries(droppers));
     for (const [id, ref] of Object.entries(refs.elementos))
-      if (!own.has(id)) own.set(id, elementChip(id, ref, locale, ui.tooltip, elementTip));
+      if (!own.has(id) || panels !== null)
+        own.set(id, elementChip(id, ref, locale, labelsOf, elementTip, panels?.elementos[id]));
     for (const [id, ref] of Object.entries(refs.pokemon))
-      if (!one.has(id)) one.set(id, dropperEntity(id, ref, locale, ui.tooltip, pokemonTip));
+      if (!one.has(id) || panels !== null)
+        one.set(
+          id,
+          dropperEntity(id, ref, locale, labelsOf, pokemonTip, panels?.pokemon[id], panels?.tipos),
+        );
     return [own, one] as const;
-  }, [elements, droppers, refs, locale, ui.tooltip]);
+  }, [elements, droppers, refs, locale, labelsOf, panels]);
 
   /** The one Pokémon that drops a row's item, when it is only one. */
   const onlyDropper = (row: ItemsRow): string | undefined =>
@@ -302,9 +317,17 @@ export function ItemsRoot({
   /** The page of an item, `/{l}/items/{id}/`. */
   const itemHref = (row: ItemsRow) => `/${locale}/items/${row.id}/`;
 
-  /** The item panel of a slot and of a Lista name (7.5.3); only with the deferred part here. */
+  /** The item panel of a slot and of a Lista name (7.5.3), with its facts once they are here. */
   const panelOf = (row: ItemsRow) =>
-    itemPanel(row, refs, categoryName(row.categoria), locale, ui.tooltip, itemTip);
+    itemPanel(
+      row,
+      refs,
+      categoryName(row.categoria),
+      locale,
+      labelsOf,
+      itemTip,
+      panels?.items[row.id],
+    );
 
   // ------------------------------------------------------------------------------ views
   let position = 0;

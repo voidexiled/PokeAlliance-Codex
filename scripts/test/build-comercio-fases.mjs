@@ -2,7 +2,7 @@
 // node scripts/test/build-comercio-fases.mjs — CA-9.1 and CA-9.18 (spec 9.14; plan M12): builds
 // each phase of Comercio and checks what `.vercel/output` holds after it.
 //
-// The sample listings and sellers of content/comercio/ exist to try every branch of the pages and
+// The sample listings and sellers of tests/fixtures/comercio/ exist to try every branch of the pages and
 // are never offers (9.2, D-007, R12): src/lib/trade/registry.ts reads them only with COMERCIO_DEMO,
 // and src/integrations/comercio-fases.ts decides the render mode of each Comercio route by
 // COMERCIO_PUBLICO (9.3). This script is the third net of the plan against the one failure with
@@ -17,15 +17,17 @@
 //      and `config.json` sends none of them to the server function (CA-9.18);
 //   3. phase B with the sample registry (COMERCIO_DEMO=1, COMERCIO_PUBLICO=1): none of those files
 //      exists and `config.json` sends the list, the detail and the profile to the function
-//      (CA-9.18); `moderacion` goes there too and `operaciones` is a file, once the milestone that
-//      builds them (M14) adds their pages to src/routes/comercio/;
+//      (CA-9.18); `moderacion` goes there too, once the milestone that builds it (M14) adds its
+//      page to src/routes/comercio/. «Mis operaciones» is a page of the account,
+//      `/{l}/cuenta/operaciones/`: a file of phase B when the build has the public Supabase
+//      settings, and `/{l}/comercio/operaciones/` a 302 towards it in every build (9.16.3);
 //   4. production with OCULTAR_BORRADORES=1 and 5. production without it (CA-9.1: «con o sin
 //      OCULTAR_BORRADORES»): `/es/comercio/` and `/en/comercio/` are the empty state of 9.5.10
 //      alone, «Aún no hay anuncios.» / «No listings yet.» with the link «Crear anuncio» /
 //      «Create listing» to the publish page, with no card, slot, row, search, tab, filter, banner
 //      or results bar; there is no detail, profile or `datos.json` route; and no file of
 //      `.vercel/output`, the server function included, carries the id of a listing of
-//      content/comercio/anuncios.json or the handle or the name of a seller of vendedores.json.
+//      tests/fixtures/comercio/anuncios.json or the handle or the name of a seller of vendedores.json.
 //
 // The production build goes last, so the tree is left with the output `pnpm seo:check` and the
 // `prod` project of Playwright read. The two switches and OCULTAR_BORRADORES are passed to every
@@ -104,11 +106,16 @@ const FORBIDDEN_IN_EMPTY_LIST = [
   ['ac-pagination', 'la paginación'],
 ];
 
-/** The routes of phase B (9.10, 9.11) and the pages that build them, which M14 adds. */
+/** The routes of phase B under /{l}/comercio/ (9.11) and the pages that build them. */
 const PHASE_B_PAGES = {
-  operaciones: path.join(ROOT, 'src', 'routes', 'comercio', 'operaciones.astro'),
   moderacion: path.join(ROOT, 'src', 'routes', 'comercio', 'moderacion.astro'),
 };
+
+/**
+ * The old route of «Mis operaciones» (9.10), a 302 of astro.config.mjs towards the page of the
+ * account in every build (9.16.3).
+ */
+const OLD_OPERACIONES = 'comercio/operaciones/';
 
 /** The shortest id or name the leak scan accepts: a shorter one would match unrelated text. */
 const MIN_NEEDLE = 6;
@@ -137,8 +144,12 @@ function readJson(file) {
 
 // ---------------------------------------------------------------------- the sample registry
 
-const anuncios = readJson(path.join(ROOT, 'content', 'comercio', 'anuncios.json')).anuncios;
-const vendedores = readJson(path.join(ROOT, 'content', 'comercio', 'vendedores.json')).vendedores;
+const anuncios = readJson(
+  path.join(ROOT, 'tests', 'fixtures', 'comercio', 'anuncios.json'),
+).anuncios;
+const vendedores = readJson(
+  path.join(ROOT, 'tests', 'fixtures', 'comercio', 'vendedores.json'),
+).vendedores;
 
 /** 9.4: every state but `retirado` has a public detail. */
 const withDetail = anuncios.filter((anuncio) => anuncio.estado !== 'retirado');
@@ -294,6 +305,14 @@ function expectFile(routes, pathname) {
   problem(
     `${pathname}: config.json responde con ${describe(result)}, no con su archivo de static/`,
   );
+  return false;
+}
+
+/** A retired route: a redirection of `config.json`, never a file or a page. */
+function expectRedirect(routes, pathname) {
+  const result = answer(routes, pathname);
+  if (result.kind === 'redirect' && result.status === 302) return true;
+  problem(`${pathname}: config.json responde con ${describe(result)}, no con una redirección 302`);
   return false;
 }
 
@@ -458,6 +477,7 @@ function checkPhaseA() {
     for (const name of Object.keys(PHASE_B_PAGES)) {
       expectNotFound(routes, `/${locale}/comercio/${name}/`);
     }
+    expectRedirect(routes, `/${locale}/${OLD_OPERACIONES}`);
     if (answered === pages.length) {
       ok(
         `/${locale}/: la lista, la página de publicar, datos.json, ${withDetail.length} detalles y ` +
@@ -496,10 +516,8 @@ function checkPhaseB() {
     }
     const files = walk(path.join(STATIC, locale, 'comercio')).map((file) => shown(file));
     for (const file of files) {
-      if (!/\/comercio\/(?:publicar|operaciones)\/index\.html$/.test(file)) {
-        problem(
-          `${file}: con COMERCIO_PUBLICO solo la página de publicar y operaciones son archivos`,
-        );
+      if (!/\/comercio\/publicar\/index\.html$/.test(file)) {
+        problem(`${file}: con COMERCIO_PUBLICO solo la página de publicar es un archivo`);
         fine = false;
       }
     }
@@ -517,12 +535,17 @@ function checkPhaseB() {
     } else if (locale === LOCALES[0]) {
       notes.push('moderacion: su página aún no existe (M14); CA-9.18 la comprobará cuando exista');
     }
-    if (existsSync(PHASE_B_PAGES.operaciones)) {
-      if (expectFile(routes, `/${locale}/comercio/operaciones/`)) {
-        ok(`/${locale}/comercio/operaciones/ existe`);
+    // «Mis operaciones» lives in the account (9.16.3): a file whenever the account page is one,
+    // which needs the public Supabase settings, and the old route a 302 towards it.
+    if (expectRedirect(routes, `/${locale}/${OLD_OPERACIONES}`)) {
+      ok(`/${locale}/${OLD_OPERACIONES} es una redirección 302 a /${locale}/cuenta/operaciones/`);
+    }
+    if (staticFile(`/${locale}/cuenta/`) !== null) {
+      if (expectFile(routes, `/${locale}/cuenta/operaciones/`)) {
+        ok(`/${locale}/cuenta/operaciones/ existe`);
       }
     } else if (locale === LOCALES[0]) {
-      notes.push('operaciones: su página aún no existe (M14); CA-9.18 la comprobará cuando exista');
+      notes.push('cuenta/operaciones: el build no tiene la configuración pública de Supabase');
     }
   }
 }
@@ -589,10 +612,12 @@ function checkProduction() {
       ...anuncios.map((anuncio) => `/${locale}/comercio/anuncio/${anuncio.id}/`),
       ...vendedores.map((vendedor) => `/${locale}/comercio/vendedor/${vendedor.id}/`),
       ...Object.keys(PHASE_B_PAGES).map((name) => `/${locale}/comercio/${name}/`),
+      `/${locale}/cuenta/operaciones/`,
     ];
     if (absent.every((pathname) => expectNotFound(routes, pathname))) {
       ok(`/${locale}/: no hay datos.json, detalles, perfiles ni rutas de la fase B`);
     }
+    expectRedirect(routes, `/${locale}/${OLD_OPERACIONES}`);
     const files = walk(path.join(STATIC, locale, 'comercio')).map((file) => shown(file));
     for (const file of files) {
       if (!/\/comercio\/(?:publicar\/)?index\.html$/.test(file)) {
@@ -645,7 +670,7 @@ async function child(srcDir) {
 function main() {
   if (anuncios.length === 0 || vendedores.length === 0) {
     process.stderr.write(
-      'content/comercio/ no tiene anuncios o vendedores de ejemplo: CA-9.1 y CA-9.18 no tienen ' +
+      'tests/fixtures/comercio/ no tiene anuncios o vendedores de ejemplo: CA-9.1 y CA-9.18 no tienen ' +
         'nada que buscar.\n',
     );
     return 1;

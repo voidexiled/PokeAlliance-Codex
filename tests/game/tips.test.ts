@@ -299,7 +299,8 @@ describe('itemTip', () => {
       itemTip({ ...FIRE_STONE, categoria }, 'es', LABELS.es).width;
     expect(width('stones')).toBe(282);
     expect(width('general-items')).toBe(282);
-    expect(width('poke-balls')).toBe(240);
+    // A Ball shows its game text and facts: the default width since 2026-09-25.
+    expect(width('poke-balls')).toBe(282);
     expect(width('diamantes')).toBe(240);
     expect(width('helds')).toBe(300);
   });

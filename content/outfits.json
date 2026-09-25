@@ -4,15 +4,7 @@
     {
       "pokemon": "bulbasaur",
       "outfitId": 2,
-      "addons": [
-        {
-          "id": "bulbasaur-addon-1",
-          "nombre": "Nombre del addon",
-          "outfitId": 1005,
-          "sprite": "outfits/1005",
-          "borrador": true
-        }
-      ]
+      "addons": []
     },
     {
       "pokemon": "charmander",

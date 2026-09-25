@@ -1,6 +1,6 @@
 // §9.14 acceptance of phase A (M12): Comercio — the list `/{l}/comercio/`, the detail of a listing
 // `/{l}/comercio/anuncio/{id}/`, the profile of a seller `/{l}/comercio/vendedor/{handle}/` and the
-// form `/{l}/comercio/publicar/` — over the sample registry of content/comercio/, which the
+// form `/{l}/comercio/publicar/` — over the sample registry of tests/fixtures/comercio/, which the
 // development server of §14.3 reads because it runs with COMERCIO_DEMO=1 (playwright.config.ts).
 //
 // What it measures, by the ids of §9.14:
@@ -59,9 +59,11 @@ function readJson<T>(file: string): T {
 /** `hideDrafts` of src/lib/content/registry.ts, read from the environment of this run. */
 const HIDE_DRAFTS = /^(?:1|true)$/i.test(process.env.OCULTAR_BORRADORES ?? '');
 
-const ANUNCIOS = readJson<{ anuncios: Anuncio[] }>('content/comercio/anuncios.json').anuncios;
+const ANUNCIOS = readJson<{ anuncios: Anuncio[] }>(
+  'tests/fixtures/comercio/anuncios.json',
+).anuncios;
 const VENDEDORES = readJson<{ vendedores: Vendedor[] }>(
-  'content/comercio/vendedores.json',
+  'tests/fixtures/comercio/vendedores.json',
 ).vendedores;
 const SELLER = new Map(VENDEDORES.map((vendedor) => [vendedor.id, vendedor]));
 
@@ -403,7 +405,10 @@ const FIRST_SELLER = VENDEDORES[0];
 test.beforeAll(() => {
   // §9.4 asks the sample registry for one listing of each type and a Pokémon with a nickname,
   // among others; without them these tests would measure nothing.
-  expect(LISTED.length, 'content/comercio/anuncios.json has public listings').toBeGreaterThan(0);
+  expect(
+    LISTED.length,
+    'tests/fixtures/comercio/anuncios.json has public listings',
+  ).toBeGreaterThan(0);
   expect(
     new Set(LISTED.map((anuncio) => anuncio.tipo)).size,
     'the sample registry lists every asset type (9.4)',

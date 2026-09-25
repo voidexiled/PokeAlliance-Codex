@@ -109,6 +109,34 @@
         "tier": { "$ref": "#/$defs/heldTier" }
       }
     },
+    "ball": {
+      "type": "object",
+      "description": "Opcional: lo que el juego dice de una Poké Ball. pnpm content:datamine rellena «elementos» y «condicion» con el texto de su inspección; «tasa» y «aura» las escribe el propietario y el importador no las toca.",
+      "required": ["tasa", "elementos", "condicion", "aura"],
+      "additionalProperties": false,
+      "properties": {
+        "tasa": {
+          "type": ["number", "null"],
+          "minimum": 0,
+          "description": "Multiplicador de la ball («4» es ×4). null si no se conoce: el cliente no lo trae."
+        },
+        "elementos": {
+          "type": "array",
+          "description": "Elementos de los Pokémon con los que es más efectiva («more effective when attempting to catch FIRE or GROUND Pokémon»). Lista vacía si el juego no nombra ninguno.",
+          "items": { "$ref": "#/$defs/elemento" }
+        },
+        "condicion": {
+          "enum": ["rapido", "pesado", null],
+          "description": "Pokémon con los que es mejor: «rapido» (very fast Pokémon, el campo rapido de content/pokemon.json) o «pesado» (very heavy Pokémon, el campo pesado). null si no tiene."
+        },
+        "aura": {
+          "type": ["string", "null"],
+          "if": { "type": "string" },
+          "then": { "$ref": "#/$defs/slug" },
+          "description": "id de content/auras.json que la ball da al Pokémon que lleva dentro (el cliente desbloquea el aura con el nombre de su ball). null si no da ninguna."
+        }
+      }
+    },
     "mega": {
       "type": "object",
       "description": "Opcional en cualquier categoría (§16.2.3): marca una Mega Stone.",
@@ -338,6 +366,7 @@
         },
         "held": { "$ref": "#/$defs/held" },
         "mega": { "$ref": "#/$defs/mega" },
+        "ball": { "$ref": "#/$defs/ball" },
         "descripcion": {
           "type": ["object", "null"],
           "description": "Opcional. Texto de la inspección del ítem en el juego, sin la línea «You see …». null si no se conoce.",

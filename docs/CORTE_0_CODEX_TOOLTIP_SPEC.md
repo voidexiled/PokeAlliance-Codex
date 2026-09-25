@@ -336,7 +336,7 @@ D-B1–D-B7 (§9.13) no están aquí: bloquean el lanzamiento de la fase B de Co
 | S16 | Estabilidad y rendimiento | Presupuestos y métricas de laboratorio de §13.6 sobre el build de producción local: JS inicial, CSS, HTML y fuentes por página; LCP ≤ 2,5 s; CLS de página ≤ 0,02 y CLS en rejillas 0; INP ≤ 200 ms. | §14 |
 | S17 | Peso de CSS | Tras `pnpm build`, la hoja compartida que carga cada página mide como máximo 100.000 B sin comprimir, y el CSS de cada página, 30 KB con gzip (§13.6). Hoy mide 203.705 B (§3.1). | §14 |
 | S18 | Retiro del CSS actual | No existen `src/styles/legacy/` (los cinco CSS actuales, §3.10) ni `wiki-reference.css`, `home.css`, `trade.css` o `guides.css` en `src/styles/`; `src/styles/global.css` es solo la entrada nueva de §3.6. 0 clases `wiki-*` o `trade-*` en `src/`. | §14 |
-| S19 | Datos | `pnpm content:check` en verde. Cambiar un registro de prueba cambia la cifra o el conteo que lo muestra. Con `OCULTAR_BORRADORES=1`, ningún registro `borrador` aparece. Sin `COMERCIO_DEMO`, ningún anuncio ni vendedor de `content/comercio/` aparece. | §14 |
+| S19 | Datos | `pnpm content:check` en verde. Cambiar un registro de prueba cambia la cifra o el conteo que lo muestra. Con `OCULTAR_BORRADORES=1`, ningún registro `borrador` aparece. Sin `COMERCIO_DEMO`, ningún anuncio ni vendedor de `tests/fixtures/comercio/` aparece. | §14 |
 | S20 | Documentación | `DESIGN.md`, `.impeccable/design.json` y `docs/DESIGN_DIRECTION.md` describen este diseño, sin menciones de «Codex Tooltip», `--cx-` ni Inter como fuente. `docs/DECISION_LOG.md` registra el rediseño y que reemplaza la parte visual de D-010. `docs/CURRENT_STATUS.md` y `docs/ROADMAP.md` están al día. | revisión |
 | S21 | CI | `pnpm ci` y `pnpm test:e2e` pasan en local, y en GitHub Actions cuando el propietario suba los cambios. | §14 |
 | S22 | Aceptación del propietario | El propietario revisa la vista previa local (`pnpm build` y `pnpm preview`, que sirve `.vercel/output` con `scripts/test/serve-vercel-output.mjs`, §14.3) página por página frente a su tablero. `astro preview` no sirve este proyecto: `@astrojs/vercel` 11.0.10 no tiene `previewEntrypoint` y Astro lo rechaza (`node_modules/astro/dist/core/preview/index.js:45-51`). Hasta que la apruebe, el estado es «implementado y verificado técnicamente; aceptación visual pendiente». Las pruebas automáticas no la sustituyen. | revisión |
@@ -635,7 +635,7 @@ Convenciones: `Texto` = `{ "es": string, "en": string }`; `Ref` = `{ "tipo": "po
 | Actividad: `sprite` (opcional) | `SpriteKey \| null` | Índice y banner de Actividades (§8.9) |
 | Movimiento: `elemento` | pasa de texto («Normal») a `id` de elemento (`"normal"`) | Columna «Elemento» de «Ataques» (§8.3) |
 | Textos de `quests.json` y `rotations.json` | cada texto pasa a `Texto`; mientras siga en inglés, se muestra con `lang="en"` en `es` (§8.8, §8.9) | Actividades, Tier list |
-| `content/comercio/anuncios.json`, `content/comercio/vendedores.json` | §9.4. Solo se leen con `COMERCIO_DEMO=1` | Comercio, fase A (§9.2) |
+| `tests/fixtures/comercio/anuncios.json`, `tests/fixtures/comercio/vendedores.json` | §9.4. Solo se leen con `COMERCIO_DEMO=1` | Comercio, fase A (§9.2) |
 
 **Claves de sprite fijas** que usa el código, además de las de §9.5.1 y de `ui/pokedolares`, `ui/diamond` y `ui/comercio/item`: `ui/inicio` (`HomeIntro`, §8.1); `ui/indice/sistemas`, `ui/indice/items`, `ui/indice/actividades` y `ui/indice/pokedex` (cabeceras de los paneles del Inicio, 24 px); `ui/herramientas/guild` y `ui/herramientas/mapa` (índice de Herramientas, §8.10); `ui/cambios` (nodo de un cambio sin sprite, §8.7). El menú lateral no tiene claves propias: solo «Destacados» lleva sprites y salen de `content/destacados.json` (§8.0.3). Estas claves las añade el propietario a `sprites.json` (D-011). El adaptador las resuelve con `spriteOrNull(clave)`: una clave fija que aún no existe da `null` (celda vacía en navegación, marca de sprite faltante en una entidad) sin fallar el build; cualquier otra clave inexistente sigue fallando el build (§7.4.1).
 
@@ -1254,16 +1254,19 @@ Los constructores de `src/lib/tooltip/build.ts` reciben registros ya leídos (no
 
 | Constructor | Ancho | Cabeza | Filas | Registro |
 |---|---|---|---|---|
-| `pokemonTip(p, locale)` | 282 | `art` (70), `shiny` si `variante` es shiny | Requisito («Nivel N»), Tier, Elementos (nombres unidos con « / »), Generación, Rol | `content/pokemon.json`: `nivel`, `tier`, `elementos`, `generacion`, `funcion`, `imagen` |
-| `elementTip(e, locale)` | 240 | `icon` | Stone, Fragment | `content/elementos.json` (§8.0.5) |
-| `itemTip(i, locale)` | 282; 240 en `poke-balls` y `diamantes`; 300 en `helds` | `sprite` | Categoría (nombre localizado de `content/items/categorias.json`), Drop de (nombres de los Pokémon cuyo `drops` incluye el ítem, en el orden de §8.0.5), Elemento (`elemento`), Uso (`uso`), Precio NPC (`precioNpc.vende`) y Precio de tienda (`precioNpc.compra`), las mismas en todas las categorías (§8.5, Q12). Importes como `{ pd }`. | `content/items/<categoria>.json`; `drops` de `content/pokemon.json` (§3.13) |
+| `pokemonTip(p, locale)` | 282 | `art` (70), `shiny` si `variante` es shiny | Requisito («Nivel N»), Tier, Elementos (nombres unidos con « / »), Moveset (nombre del elemento de `elementoMoveset`), Nº, Generación, Rol, Rasgos (Fast, Heavy) y Habilidades (de campo) | `content/pokemon.json`: `nivel`, `tier`, `elementos`, `elementoMoveset`, `numero`, `generacion`, `funcion`, `rapido`, `pesado`, `habilidades`, `imagen` |
+| `elementTip(e, locale)` | 240 | `icon` | Stone, Fragment, Ball (las Balls cuyo `ball.elementos` lo nombra) | `content/elementos.json` (§8.0.5); `ball` de `content/items/poke-balls.json` |
+| `itemTip(i, locale)` | 282; 240 en `diamantes`; 300 en `helds` | `sprite` | Bajo la cabeza, el texto del juego (`descripcion`, «qué hace»; párrafo que se parte, con `lang` si no es el idioma de la página). Filas, en este orden y solo con valor: Categoría, Ranura y Tier (`held`), Mega Evolución de (`mega.pokemon`), Evoluciona (Pokémon cuya `evolucion` pide el ítem), Drop de (Pokémon cuyo loot lo incluye en Base, Wildscape o Primal, en el orden de §8.0.5), Se obtiene en (tiendas, Battle Pass, Calendario, tareas y Crafteo de `obtencion`), Elemento (`elemento`, o los elementos cuya Stone o Fragment es), Tasa de captura, Más efectiva con y Aura (`ball`), Uso (`uso`), Precio NPC (`precioNpc.vende`), Precio de tienda (`precioNpc.compra`) y Mercado (`mercado`). Las mismas en todas las categorías (§8.5, Q12). Importes como `{ pd }`. | `content/items/<categoria>.json`; `drops`, `dropsPorZona` y `evolucion` de `content/pokemon.json`; `content/elementos.json`; `content/auras.json` (§3.13) |
+| `gearTip(kind, g)` | 300 | `sprite` | Aura: Viene con (las Balls cuyo `ball.aura` es ella). Addon: Pokémon (el de su outfit) | `content/auras.json`, `content/outfits.json`, `ball` de las Balls |
 | `systemItemTip(o, locale)` | 282 | `sprite` (`sprite` del registro, o `null`) | Sistema (título de la página de `o.sistema`), Uso (`descripcion`, con `lang="en"` en `es` mientras solo exista en inglés) | `content/system-items.json` (E16) |
 | `diamondsTip(locale, animated)` | 240 | `sprite` del Diamond a 2x, animado solo en Comercio | «Se compran en», «Se usan en»: listas del objeto `moneda` (§8.5). El código no escribe esos valores. | `content/items/diamantes.json` |
 | `systemTip(s, locale)` | 282 | `sprite` del sistema | Las filas de tooltip del registro | `content/sistemas/` (§8.4) |
 | `listingTip(l, locale)` | 282, `grid` | `art` o `sprite` | Título: el nickname o `listingTitle(l, locale).texto` (§9.4). Claves de la familia del anuncio + `market` | §9 |
 | `chartDayTip(d, locale)` | 200 | `none` | Las cifras del día | §10 |
 
-Una prueba unitaria por constructor comprueba: sin `null` ni «—» en `rows`, etiquetas del diccionario del locale y el ancho de la tabla.
+Una prueba unitaria por constructor comprueba: sin `null` ni «—» en `rows`, etiquetas del diccionario del locale y el ancho de la tabla. `tests/game/tip-complete.test.ts` comprueba con registros reales que cada tipo de entidad muestra todas sus filas y que el panel de una lista es el mismo que el de su página.
+
+Regla del propietario (2026-09-25): todo tooltip completo en todas partes. Las páginas componen los registros de los constructores en el servidor con `src/lib/game/tip-records.ts` (hechos derivados en `src/lib/game/item-facts.ts`). Las islas de lista (Ítems, Pokédex, Tier list, búsqueda, publicar, «Mis anuncios») construyen sus paneles con sus `datos.json` y, para no pasar sus presupuestos (§13.6), reciben el resto de cada panel en un solo archivo por idioma, `/{l}/paneles.json` (`src/lib/game/panels.ts`): los hechos de cada ítem, el número, moveset, rasgos y habilidades de cada Pokémon, las Balls de cada elemento y aura, el Pokémon de cada addon y las etiquetas de esas filas. Hasta que llega, el panel muestra las filas que ya tenía. Comercio lleva los mismos hechos en sus `refs`. Un tooltip de tier sin `maxBrokes` no tiene fila (nunca «—»).
 
 #### 7.5.4 Controlador: comportamiento
 
@@ -2193,16 +2196,16 @@ Sale de la interfaz la intención «Comprar»: el tablero solo tiene anuncios de
 
 | Pieza | Fase A: estática, sin Supabase | Fase B: Supabase |
 |---|---|---|
-| Lista: búsqueda, tipo, filtros, orden, tres vistas | Sí, sobre `content/comercio/anuncios.json` con `COMERCIO_DEMO=1`; sin él, vacía | Sí, sobre `trade_listings` |
+| Lista: búsqueda, tipo, filtros, orden, tres vistas | Sí, sobre `tests/fixtures/comercio/anuncios.json` con `COMERCIO_DEMO=1`; sin él, vacía | Sí, sobre `trade_listings` |
 | Detalle del anuncio | Prerenderizado desde el registro, solo con `COMERCIO_DEMO=1` | SSR (§9.3) |
-| Perfil del vendedor | Prerenderizado desde `content/comercio/vendedores.json`, solo con `COMERCIO_DEMO=1` | SSR |
+| Perfil del vendedor | Prerenderizado desde `tests/fixtures/comercio/vendedores.json`, solo con `COMERCIO_DEMO=1` | SSR |
 | Crear anuncio | Formulario completo; la acción es «Copiar anuncio» | La acción es «Publicar» |
 | Contactar, operaciones, reseñas | No existen: ni botón ni ruta | Sí |
 | Reportes y moderación | No existen | Sí |
 | Cuenta y verificación | `/cuenta/` existe solo para Guild (§10.4), si Supabase está configurado. Sin secciones de Comercio | Añade teléfono, perfil de Comercio y canales (§9.9) |
 
 - **Interruptor de fase:** la fase B se activa con la variable `COMERCIO_PUBLICO` (`1` o `true`), leída en build y en servidor igual que `hideDrafts` (`src/lib/content/registry.ts:35-51`). Sin ella, ninguna ruta, botón ni texto de la fase B existe en el HTML (S11). Cómo cambia el modo de render de cada ruta: §9.3.
-- **Interruptor de demostración:** los anuncios y vendedores de la fase A los escribe el equipo para probar cada rama (§9.4), así que son datos de demostración, no ofertas. `src/lib/trade/registry.ts` solo lee `content/comercio/*` con `COMERCIO_DEMO=1` (o `true`), leída como las anteriores; sin ella devuelve listas vacías. `COMERCIO_DEMO=1` va en el servidor de desarrollo de las pruebas (§14.3) y en el build visual (`VISUAL=1` la implica y lee el fixture de §14.5); nunca en el build de producción (lo comprueba `seo:check`, §13.5). `OCULTAR_BORRADORES` no afecta a Comercio: así un build de producción conserva los registros `borrador` de la wiki (los 30 ítems del registro actual lo son) sin publicar ofertas inventadas. `pnpm content:check` valida `content/comercio/*` siempre.
+- **Interruptor de demostración:** los anuncios y vendedores de la fase A los escribe el equipo para probar cada rama (§9.4), así que son datos de demostración, no ofertas. `src/lib/trade/registry.ts` solo lee `tests/fixtures/comercio/*` con `COMERCIO_DEMO=1` (o `true`), leída como las anteriores; sin ella devuelve listas vacías. `COMERCIO_DEMO=1` va en el servidor de desarrollo de las pruebas (§14.3) y en el build visual (`VISUAL=1` la implica y lee el fixture de §14.5); nunca en el build de producción (lo comprueba `seo:check`, §13.5). `OCULTAR_BORRADORES` no afecta a Comercio: así un build de producción conserva los registros `borrador` de la wiki (los 30 ítems del registro actual lo son) sin publicar ofertas inventadas. `pnpm content:check` valida `tests/fixtures/comercio/*` siempre.
 - **En producción, fase A:** muestra el estado vacío de §9.5.10 y «Crear anuncio», y no genera páginas de detalle ni de perfil. Nunca muestra ofertas ni reseñas ficticias (D-007, R12).
 - **Gate de lanzamiento público de la fase B** (D-007, D-009, R13):
   1. términos de PokeAlliance revalidados;
@@ -2221,9 +2224,10 @@ Sale de la interfaz la intención «Comprar»: el tablero solo tiene anuncios de
 | `/{locale}/comercio/anuncio/[id]/` | Detalle (§9.6), plantilla F | A: prerender con `getStaticPaths` sobre el registro (vacío sin `COMERCIO_DEMO`). B: SSR | No (`noindex`) | A, B |
 | `/{locale}/comercio/vendedor/[handle]/` | Perfil (§9.8), plantilla H | Como el detalle | No | A, B |
 | `/{locale}/comercio/publicar/` | Crear / publicar / editar (§9.7), plantilla G | Prerender del marco e isla | No | A, B |
-| `/{locale}/comercio/operaciones/` | Mis operaciones (§9.10), plantilla H | Prerender del marco e isla con sesión | No | B |
+| `/{locale}/comercio/operaciones/` | Retirada (dueño, 2026-09-25): 302 a `/{locale}/cuenta/operaciones/` en todos los builds | Redirección de `astro.config.mjs` | No | — |
 | `/{locale}/comercio/moderacion/` | Cola de moderación (§9.11), plantilla H | SSR; 404 si la cuenta no es moderadora | No | B |
 | `/{locale}/cuenta/` | Acceso y guilds (§10.4). En B, además verificación de teléfono, perfil de Comercio y canales (§9.9). Plantilla H | Prerender del marco e isla con sesión. Existe si `getSupabasePublicConfig()` (`src/lib/supabase/env.ts`) no es `null` | No | Guild; B para Comercio |
+| `/{locale}/cuenta/perfil/`, `/{locale}/cuenta/anuncios/`, `/{locale}/cuenta/operaciones/` | «Mi perfil» (reputación y reseñas), «Mis anuncios» y «Mis operaciones» (§9.16.3, §9.10), en el marco de `/{locale}/cuenta/` | Prerender del marco e isla con sesión. Existen con la configuración pública de Supabase y `COMERCIO_PUBLICO` | No | B |
 
 Migas: «Comunidad › Comercio», seguidas del título del anuncio o del nombre del vendedor. «Cuenta» no lleva padre.
 
@@ -2306,7 +2310,7 @@ type Anuncio = {
 - Detalle (§9.6): todo estado salvo `retirado`, que da 404 al público; `completado` y `expirado` (también por tiempo) muestran su línea de estado y ninguna acción de compra. Las reseñas (§9.8) enlazan a estos detalles.
 
 **Registro de la fase A** (solo se lee con `COMERCIO_DEMO=1`, §9.2).
-- `content/comercio/anuncios.json` (`{ "anuncios": Anuncio[] }`) y `content/comercio/vendedores.json`.
+- `tests/fixtures/comercio/anuncios.json` (`{ "anuncios": Anuncio[] }`) y `tests/fixtures/comercio/vendedores.json`.
 - `vendedores.json` tiene la forma `{ "vendedores": [{ id, nombre, desde, canales: [{ tipo, etiqueta }], resenas: [{ puntuacion, comentario, fecha, anuncio, comprador }], borrador }] }`.
 - Esquemas en `content/schemas/comercio-anuncios.schema.json` y `comercio-vendedores.schema.json` (draft 2020-12, claves en español, R7).
 - `pnpm content:check` (`scripts/content/check.mjs`) comprueba:
@@ -2703,7 +2707,7 @@ Mundo: Sun
 
 Plantilla H (§8.0.2). Con «Todos», los grupos de tipo de «Anuncios» son `h3` y los títulos de tarjeta `h4` (7.6.2).
 
-**Fase A:** los datos salen de `content/comercio/vendedores.json` (solo con `COMERCIO_DEMO=1`). La valoración se calcula de sus `resenas`.
+**Fase A:** los datos salen de `tests/fixtures/comercio/vendedores.json` (solo con `COMERCIO_DEMO=1`). La valoración se calcula de sus `resenas`.
 
 **Fase B:** el público no lee `trade_transactions` ni `reviewer_id` (§9.12.2). La fila de datos y la tabla de puntuaciones salen de `trade_seller_stats(seller_id)` (reseñas, media, `d0`…`d5` y operaciones confirmadas como vendedor); la lista, de `trade_public_reviews(seller_id)`, que da cada reseña visible con el handle del comprador («Cuenta eliminada» / «Deleted account» si ya no existe) y el tipo y el activo del anuncio para «Operación: {título}» (§9.12.3). El detalle del anuncio toma «Operaciones confirmadas: N» de la misma función.
 
@@ -2779,7 +2783,7 @@ La reseña pertenece a una operación, no al vendedor (`TRADE_PRODUCT_PLAN.md:50
   - como máximo una operación abierta por anuncio y comprador;
   - el anuncio está `publicado` o `reservado`;
   - como máximo 20 operaciones nuevas por comprador en 24 h.
-- `/{locale}/comercio/operaciones/`:
+- «Mis operaciones», `/{locale}/cuenta/operaciones/` (antes `/{locale}/comercio/operaciones/`, que ahora es un 302):
   - `ToggleGroup` «Compras» / «Ventas»;
   - `DataTable` con columnas «Anuncio» (`NestedEntity`), «Contraparte», «Estado», «Fecha», «Contacto» y «Acciones». La columna «Contacto» tiene los valores revelados como texto, cada uno con el botón «Copiar». «Acciones» tiene los botones válidos para ese estado y ese rol.
 - **Reseña:**
@@ -2959,7 +2963,7 @@ No bloquean la fase A. Sí bloquean el lanzamiento de la fase B.
    - no tienen búsqueda, pestañas, filtros, `InfoBanner` ni barra de resultados;
    - tienen «Aún no hay anuncios.» / «No listings yet.» y un enlace «Crear anuncio» / «Create listing» a `/comercio/publicar/`.
    - No se generan rutas `/comercio/anuncio/*` ni `/comercio/vendedor/*`, ni `/comercio/datos.json`.
-   - Ningún archivo de `.vercel/output/` contiene un `id` de `content/comercio/anuncios.json` ni un nombre de `vendedores.json`.
+   - Ningún archivo de `.vercel/output/` contiene un `id` de `tests/fixtures/comercio/anuncios.json` ni un nombre de `vendedores.json`.
 2. **CA-9.2** Con `COMERCIO_DEMO=1`, en Cards con «Todos»:
    - los grupos aparecen en el orden Pokémon, Items, Diamonds, Pokédólares, y un tipo sin anuncios en la página no aparece;
    - cada rejilla cumple S2.
@@ -2982,7 +2986,7 @@ No bloquean la fase A. Sí bloquean el lanzamiento de la fase B.
     - un anuncio de Diamonds con una opción en Diamonds da el error de opción no válida;
     - al pulsar la acción con errores, el foco va al primer campo inválido.
 12. **CA-9.12** «Copiar anuncio» copia exactamente el texto de §9.7.7 para el anuncio de prueba (prueba unitaria de `listingText`). El `textarea` no existe mientras la copia funciona.
-13. **CA-9.13** Con `COMERCIO_PUBLICO` desactivado, el HTML de todas las rutas de Comercio no tiene «Contactar al vendedor», «Reportar», «Publicar» ni enlaces a `/cuenta/`, `/comercio/operaciones/` o `/comercio/moderacion/`.
+13. **CA-9.13** Con `COMERCIO_PUBLICO` desactivado, el HTML de todas las rutas de Comercio no tiene «Contactar al vendedor», «Reportar», «Publicar» ni enlaces a `/cuenta/` (que incluye `/cuenta/operaciones/`) o `/comercio/moderacion/`.
 14. **CA-9.14** (fase B) Pasan todas las pruebas RLS de §9.12.2 con las seis personas.
 15. **CA-9.15** (fase B) Una reseña solo se crea con la operación `confirmada`, por el comprador y dentro de 30 días. La media, la distribución y «Operaciones confirmadas» que muestra el perfil a un visitante anónimo coinciden con `trade_seller_stats` y excluyen reseñas ocultas; cada reseña muestra el handle del comprador de `trade_public_reviews`.
 16. **CA-9.16** (fase B) Tras «Contactar al vendedor», el comprador ve los valores de los canales visibles del vendedor. Un tercero autenticado, en el mismo anuncio, solo ve etiquetas.
@@ -3124,21 +3128,22 @@ Patrón de botón de menú: se abre con clic, Intro, Espacio o flecha abajo; Esc
 
 1. **Cabecera:** avatar, nombre de usuario, «{jugador} · {mundo}» y la etiqueta del estado.
 2. **«Estado»** (solo con `COMERCIO_PUBLICO`): tres `menuitemradio` «En el juego», «Ausente», «Desconectado». Elegir uno cambia el estado de §9.15.6 al momento y el punto del chip lo refleja.
-3. **Enlaces:** «Mi perfil» (`/{l}/cuenta/perfil/`), «Mis anuncios» (`/{l}/cuenta/perfil/?pestana=anuncios`), «Mis operaciones» (`/{l}/comercio/operaciones/`), «Crear anuncio» (`/{l}/comercio/publicar/`), «Mis guilds» (`/{l}/cuenta/#guilds`), «Ajustes de la cuenta» (`/{l}/cuenta/`) y «Moderación» (`/{l}/comercio/moderacion/`, solo moderadores). Los de Comercio solo con `COMERCIO_PUBLICO`.
+3. **Enlaces:** «Mi perfil» (`/{l}/cuenta/perfil/`; sin `COMERCIO_PUBLICO`, la sección «Perfil», `/{l}/cuenta/#perfil`), «Mis anuncios» (`/{l}/cuenta/anuncios/`), «Mis operaciones» (`/{l}/cuenta/operaciones/`), «Mis guilds» (`/{l}/cuenta/#guilds`), «Ajustes de la cuenta» (`/{l}/cuenta/`) y «Moderación» (`/{l}/comercio/moderacion/`, solo moderadores). Los de Comercio solo con `COMERCIO_PUBLICO`. Todos abren la misma interfaz de cuenta (dueño, 2026-09-25): «Crear anuncio» está junto a la búsqueda de Comercio, no en el menú.
 4. Separador y **«Cerrar sesión»**, que pone `desconectado` (§9.15.6), cierra la sesión y deja la página en el estado «Sin sesión».
 
-#### 9.16.3 «Mi perfil» (`/{l}/cuenta/perfil/`)
+#### 9.16.3 Las páginas de Comercio de la cuenta
 
-Página prerenderizada con una isla. Sin sesión: `Notice` «Inicia sesión para ver tu perfil.» y el botón «Iniciar sesión». Con registro sin terminar: el botón «Completar registro».
+Decisión del dueño (2026-09-25): «Mi perfil», «Mis anuncios» y «Mis operaciones» viven en la misma interfaz que «Ajustes de la cuenta» (Cuenta-panel.dc.html): la tarjeta de cabecera y la navegación por secciones, donde cada una es una entrada del grupo Comercio. Son páginas propias, prerenderizadas con una isla (`AccountPage.tsx`), que existen con la configuración pública de Supabase y `COMERCIO_PUBLICO`; la entrada de la navegación solo aparece para una cuenta de 18 años o más (§9.15.2), como «Estado en línea». Sin sesión: la línea de la página («Inicia sesión para ver tu perfil.») y «Iniciar sesión». Con registro sin terminar: «Completar registro». Menor de 18 según la fecha de nacimiento guardada: «Comercio es solo para mayores de 18 años.» y el enlace a la cuenta. Migas: «Inicio › Cuenta › {página}»; el h1 es solo para lectores de pantalla.
 
-1. **Tarjeta de cabecera:** avatar, nombre de usuario, «{jugador} · {mundo}», país con su nombre (`Intl.DisplayNames`), «Miembro desde 09/2026», las identidades vinculadas (Discord, Google, Twitch) como chips y el control de estado (`ToggleGroup` de §9.15.6, con `COMERCIO_PUBLICO`). Acciones: «Editar perfil» (lleva a la sección de perfil de `/{l}/cuenta/`) y «Ver perfil público» (`/{l}/comercio/vendedor/{usuario}/`, con `COMERCIO_PUBLICO`).
-2. **Reputación** (con `COMERCIO_PUBLICO`): dos bloques, «Como vendedor» y «Como comprador», cada uno con «★ 4,8 · 50 operaciones · 5 compradores distintos» (o «vendedores distintos») según §9.15.4 y la barra de reparto de 1 a 5 estrellas; sin reseñas, «Sin reseñas todavía.»
-3. **Pestañas** (estado en la URL, `?pestana=`), con `COMERCIO_PUBLICO`:
-   - **«Anuncios»:** todos los anuncios propios en cualquier estado, del más reciente al más antiguo, con filtros de estado como chips con su cuenta («Publicados», «Reservados», «Expirados», «Completados», «Retirados»), las vistas y tarjetas de §9.5.8 y en cada anuncio las acciones que §9.7.8 permite en su estado («Editar», «Renovar», «Reservar» / «Quitar reserva», «Marcar completado», «Retirar»). Es el historial de lo publicado: el sitio no sabe si algo se vendió fuera de una operación confirmada.
-   - **«Reseñas recibidas»:** estrellas, comentario, la contraparte (su usuario), el papel («como vendedor» / «como comprador»), el número de operación y la fecha; 10 por página.
-   - **«Reseñas hechas»:** lo mismo desde el otro lado, con «Editar» mientras siga abierto el plazo de 30 días (§9.15.4).
-   - **«Operaciones»:** las cuentas de pendientes y confirmadas y el enlace a `/{l}/comercio/operaciones/`.
-4. Sin `COMERCIO_PUBLICO` la página solo tiene la tarjeta de cabecera y el enlace «Mis guilds».
+- **Navegación:** Cuenta (Resumen, Perfil, Personajes, Conexiones, Seguridad), Comercio (Reputación, Anuncios, Operaciones, Canales de contacto, Estado en línea), Guild (Guilds) y aparte «Eliminar cuenta». En `/{l}/cuenta/` las secciones son fragmentos (`#perfil`); desde una página, `/{l}/cuenta/#perfil`. En el teléfono la página ocupa la pantalla bajo «‹ Cuenta» y el índice de `/{l}/cuenta/` tiene una fila por página.
+- **Tarjeta:** el botón es «Ver perfil público» (`/{l}/comercio/vendedor/{usuario}/`), con Comercio y 18 años o más; «Mi perfil» es la entrada «Reputación» de la navegación.
+
+1. **«Mi perfil»** (`/{l}/cuenta/perfil/`, entrada «Reputación»):
+   - **Reputación:** dos cajas, «Como vendedor» y «Como comprador», cada una con «★ 4,8 · 50 operaciones · 5 compradores distintos» (o «vendedores distintos») según §9.15.4 y las barras de 5 a 1 estrellas; sin reseñas, «Sin reseñas todavía.»
+   - **Reseñas:** «Recibidas» / «Hechas» (`?resenas=hechas`), 10 por página (`?pagina=`): estrellas, la contraparte (enlazada a su perfil de vendedor), el papel («como vendedor» / «como comprador»), el número de operación, la fecha y el comentario; «Oculta por moderación» cuando corresponde y «Editar» mientras siga abierto el plazo de 30 días (§9.15.4), que lleva a «Mis operaciones».
+   - Un enlace antiguo con `?pestana=` sigue a la página que tiene esa pestaña ahora.
+2. **«Mis anuncios»** (`/{l}/cuenta/anuncios/`): «Crear anuncio» y los filtros de estado con su cuenta («Todos», «Publicados», «Reservados», «Expirados», «Completados», «Retirados»; `?estado=`), y todos los anuncios propios, del más reciente al más antiguo, con las tarjetas de §9.5.8 por tipo de activo. Bajo cada tarjeta, su estado cuando la tarjeta no lo dice, «Editar» mientras esté publicado o reservado y las acciones que §9.7.8 permite («Renovar», «Reservar» / «Quitar reserva», «Marcar completado», «Retirar»). «Marcar completado» y «Retirar» no se deshacen: piden confirmación (diálogo de alerta con el foco en «Volver»). Es el historial de lo publicado: el sitio no sabe si algo se vendió fuera de una operación confirmada.
+3. **«Mis operaciones»** (`/{l}/cuenta/operaciones/`, §9.10): «Compras» / «Ventas», la tabla y los diálogos de cada acción y de la reseña. `/{l}/comercio/operaciones/` responde un 302 hacia ella.
 
 **Editar la información propia** (sección «Perfil» de `/{l}/cuenta/`): el país, el nombre de jugador y el mundo (con la comprobación de unicidad de §9.15.1) y qué canales se muestran en los anuncios (§9.9). El nombre de usuario no cambia después del primer anuncio y la fecha de nacimiento no cambia una vez guardada.
 
@@ -4095,7 +4100,7 @@ Los tableros usan datos de ejemplo y algunos controles sin acción. Nada de eso 
 | PZ-05 | Columna «En línea» de la tabla «Mundos» del Inicio (1911, 1882…) | No hay fuente de población hasta `/api/mundos` (§15). Una columna sin ningún valor contradice G7. | La tabla lista los mundos de `content/mundos.json` solo con la columna «Mundo» (X3, §8.1); desviación DV3. |
 | PZ-06 | «910 variantes…», «526 normales», «384 Shiny» | Se calculan de los datos del build. | — |
 | PZ-07 | «Mantén Shift para fijar» | El fijado con Shift existe con las condiciones de la guía del tooltip; si un tooltip no se puede fijar, su franja no se muestra. | — |
-| PZ-08 | «Publicar anuncio», vendedor «Kaiser 4.6 (23)», chips de contacto verificado | Solo con los flujos de §9: cuenta con correo y teléfono verificados, reseñas ligadas a una operación. El build de producción no incluye vendedores, reseñas ni anuncios de ejemplo: `content/comercio/*` solo se lee con `COMERCIO_DEMO=1`, que no existe en producción (§9.2, CA-9.1). | La fase A dice «Crear anuncio» (DV9). |
+| PZ-08 | «Publicar anuncio», vendedor «Kaiser 4.6 (23)», chips de contacto verificado | Solo con los flujos de §9: cuenta con correo y teléfono verificados, reseñas ligadas a una operación. El build de producción no incluye vendedores, reseñas ni anuncios de ejemplo: `tests/fixtures/comercio/*` solo se lee con `COMERCIO_DEMO=1`, que no existe en producción (§9.2, CA-9.1). | La fase A dice «Crear anuncio» (DV9). |
 | PZ-09 | Cifras de Guild («23 de 25», «−8,4%», «Meta diaria: 10.536») | Se calculan de los exports que importa el usuario; ninguna viene del tablero. | — |
 | PZ-10 | «HP: 1.700», «Experiencia: 54.000» en la ficha | Solo si `content/pokemon.json` tiene el campo; si no, la fila no aparece. | — |
 | PZ-11 | «+N», secciones plegables «Held Items: 2», «Paginación» | Son controles reales: `aria-expanded` y `aria-controls`, y enlaces que navegan. | — |
@@ -4281,7 +4286,7 @@ Todos viven en `src/lib/format/` y no dependen de `@js-temporal/polyfill`. Las f
 | JS inicial de páginas de contenido (Inicio, Sistemas y páginas de sistema, Actividades, Cambios, Herramientas, 404, marcador del mapa) | ≤ 90 KB gzip | Suma gzip -9 de los `script[type=module][src]` y de `component-url` y `renderer-url` de cada `astro-island` con `client:load` o `client:idle`, más sus `import` estáticos recursivos. |
 | JS inicial de la Pokédex, Tier list, Ítems, Buscar y la ficha | ≤ 110 KB gzip | igual |
 | JS inicial de Comparar | ≤ 120 KB gzip | igual |
-| JS inicial de Comercio, de `/{l}/cuenta/` y de «Mi perfil» (`/{l}/cuenta/perfil/`) | ≤ 140 KB gzip | igual |
+| JS inicial de Comercio, de `/{l}/cuenta/` y de sus páginas de Comercio (`/{l}/cuenta/perfil/`, `/{l}/cuenta/anuncios/`, `/{l}/cuenta/operaciones/`) | ≤ 140 KB gzip | igual |
 | JS inicial que añade la entrada de cuenta de la cabecera (§9.16.1) a cada página | ≤ 4 KB gzip | Suma gzip -9 de los archivos que alcanza el script de `AccountEntry` y ningún otro script inicial de la página. Solo existe en un build con los ajustes públicos de Supabase. |
 | JS inicial de Guild | ≤ 200 KB gzip, polyfill de Temporal incluido (45,3 KB hoy; §3.13) | igual |
 | Cada chunk diferido (`client:visible`, `client:only` tras interacción, `import()` dinámico: vista de outfit WebGL, gráficos) | ≤ 60 KB gzip | por archivo |
@@ -4624,7 +4629,7 @@ type UnidadPokemon = {
 
 - Los nombres declarados de texto libre desaparecen (R2 queda solo para registros viejos): ball, held, addon e ítem se eligen del registro. El tier de un held sale de su ítem.
 - La fase B valida esta forma en el servidor con una migración nueva que reemplaza la validación del activo de §9.12.3 (nunca se reescribe una migración ya creada).
-- El registro de demostración (`content/comercio/`), su esquema, `content:check`, `listingTitle`, `listingText`, la búsqueda y el fixture visual pasan a la forma nueva.
+- El registro de demostración (`tests/fixtures/comercio/`), su esquema, `content:check`, `listingTitle`, `listingText`, la búsqueda y el fixture visual pasan a la forma nueva.
 
 ### 16.3 Componentes
 

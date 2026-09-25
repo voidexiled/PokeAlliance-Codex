@@ -13,7 +13,6 @@ Guía para editar a mano los datos del juego que usa el sitio: categorías e ite
 | `content/destacados.json`        | Las páginas de «Destacados» del Inicio y del menú lateral           |
 | `content/mundos.json`            | Los mundos del juego (tabla «Mundos» del Inicio)                    |
 | `content/cambios.json`           | Los cambios del juego y de la wiki (página Cambios)                 |
-| `content/comercio/`              | Anuncios y vendedores de ejemplo de Comercio: solo con `COMERCIO_DEMO=1`, nunca en producción |
 | `public/sprites/`                | Las imágenes, en carpetas por tipo                                  |
 | `public/sprites/sprites.json`    | El registro de sprites: qué imagen usa cada clave y cómo se recorta |
 | `content/pokemon.json`           | Los 910 Pokémon y variantes de la Pokédex                           |
@@ -102,6 +101,21 @@ Cada item de `content/items/helds.json` (`categoria: "helds"`) necesita `held`: 
 - Un item de **cualquier** categoría puede llevar `mega`, que lo marca como Mega Stone: `"mega": { "pokemon": ["charizard"] }`. `pokemon` son `id` de `content/pokemon.json`; deja `[]` si no sabes cuál Pokémon la usa. `pnpm content:check` comprueba que cada `id` exista.
 - `src/lib/content/registry.ts` tiene `getHeldsBySlot("x" | "y")` (la matriz de `HeldPicker`) y `getMegaStones(pokemonId?)` (las Mega Stones de un Pokémon primero).
 
+### Poké Balls
+
+Cada ball de `content/items/poke-balls.json` es el item «Empty X Ball» del inventario del juego (el que compras al NPC y lanzas), con su `clientId` y su hoja de cantidad. Puede llevar `ball`, lo que el juego dice de ella:
+
+```json
+"ball": { "tasa": null, "elementos": ["fire", "ground"], "condicion": null, "aura": null }
+```
+
+- `elementos`: los elementos de los Pokémon con los que es más efectiva («more effective when attempting to catch FIRE or GROUND Pokémon»). `[]` si el juego no nombra ninguno.
+- `condicion`: `"rapido"` (Fast Ball, «very fast Pokémon»: el campo `rapido` de `content/pokemon.json`), `"pesado"` (Heavy Ball, «very heavy Pokémon»: el campo `pesado`) o `null`.
+- `aura`: el `id` de `content/auras.json` que da la ball al Pokémon que lleva dentro (el cliente desbloquea el aura que se llama como la ball: Premier Ball → `premier`, Alliance Ball → `alliance`), o `null`. `pnpm content:check` comprueba que exista.
+- `tasa`: el multiplicador de la ball («4» es ×4), o `null`. El cliente y la exportación no lo traen; escríbelo tú si lo confirmas. Mientras sea `null`, el tooltip y la página de la ball no tienen la fila «Tasa de captura»: aparece en cuanto escribes el número.
+
+`pnpm content:datamine` rellena `elementos` y `condicion` con el texto de la inspección y no toca `tasa` ni `aura`.
+
 ### Dónde se compran y en qué se usan los Diamonds
 
 `content/items/diamantes.json` lleva, además de sus items, el objeto `moneda`: dónde se compran los Diamonds y en qué se usan, una lista por idioma. Son las filas «Se compran en» y «Se usan en» del panel de los Diamonds y de un anuncio de Diamonds en Comercio.
@@ -112,6 +126,8 @@ Cada item de `content/items/helds.json` (`categoria: "helds"`) necesita `held`: 
   "seUsanEn": null
 }
 ```
+
+Mientras `seUsanEn` sea `null`, el sitio muestra las tiendas que cobran en Diamonds según `obtencion.tiendas` de los items (hoy, Diamond Shop). Escribe la lista si quieres otra.
 
 - Cuando lo sepas, cada `null` pasa a `{ "es": [...], "en": [...] }`: los mismos lugares en los dos idiomas y en el mismo orden, los nombres del juego en inglés y sin importes del juego.
 - Una lista en `null` o vacía no genera fila; sin ninguna fila, un importe de Diamonds no abre panel.
@@ -146,7 +162,7 @@ Cada item de `content/items/helds.json` (`categoria: "helds"`) necesita `held`: 
 
 ### Item con hoja de cantidad
 
-La Alliance Ball tiene 8 frames: 1, 2, 3, 4, 5, 10, 25 y 100 unidades.
+Cada Poké Ball tiene 8 frames, los de su pila en el juego: 1, 2, 3, 4, 5, 10, 25 y 50 unidades (los umbrales con los que OTClient elige el dibujo de una pila).
 
 ```json
 "items/poke-balls/alliance-ball": {
@@ -154,7 +170,7 @@ La Alliance Ball tiene 8 frames: 1, 2, 3, 4, 5, 10, 25 y 100 unidades.
   "frame": [32, 32],
   "frames": 8,
   "modo": "cantidad",
-  "umbrales": [1, 2, 3, 4, 5, 10, 25, 100]
+  "umbrales": [1, 2, 3, 4, 5, 10, 25, 50]
 }
 ```
 
@@ -162,23 +178,25 @@ La Alliance Ball tiene 8 frames: 1, 2, 3, 4, 5, 10, 25 y 100 unidades.
 
 ### Item animado
 
-El Diamond tiene 7 frames de 110 ms cada uno.
+La Boost Stone del sistema Boost tiene 9 frames de 110 ms cada uno.
 
 ```json
-"ui/diamond": {
-  "archivo": "ui/diamond.png",
+"ui/sistemas/boost": {
+  "archivo": "ui/sistemas/boost.png",
   "frame": [32, 32],
-  "frames": 7,
+  "frames": 9,
   "modo": "animacion",
-  "duracionMs": [110, 110, 110, 110, 110, 110, 110]
+  "duracionMs": [110, 110, 110, 110, 110, 110, 110, 110, 110]
 }
 ```
+
+El Diamond (`ui/diamond`) es la gema del juego, la del Market y la Diamond Shop: un frame quieto de 32 × 32 (`modo: estatico`). La moneda antigua que giraba ya no es la del juego.
 
 `duracionMs` lleva una duración por frame, así que cada frame puede durar distinto. Añade `"loop": false` para reproducirla una sola vez. Quien tenga activado «reducir movimiento» en su sistema ve el frame 0 quieto.
 
 ### Arte de relleno
 
-Un sprite puede apuntar a una imagen de otro mientras no tengas la real; márcalo con `"borrador": true`. Cuando tengas la imagen, cópiala con su nombre, cambia `archivo` y quita `borrador`. Las claves `ui/categorias/<categoria>` (iconos de las categorías) y los items de ejemplo están así.
+Un sprite puede apuntar a una imagen de otro mientras no tengas la real; márcalo con `"borrador": true`. Cuando tengas la imagen, cópiala con su nombre, cambia `archivo` y quita `borrador`. Hoy quedan así `ui/comercio/item` y los anillos de `ui/auras/<id>`.
 
 Comercio usa estas claves: `outfits/5`, `items/stones/fire-stone`, `ui/diamond` y `ui/pokedolares` en las pestañas «Pokémon», «Items», «Diamonds» y «Pokédólares», y `ui/comercio/item` para un item que no está en el registro. `ui/comercio/item` es un dibujo de relleno (`borrador`) hasta que vuelques el sprite real. Si en «Crear anuncio» escribes el nombre exacto de un item del Market, se ve su sprite; si es una hoja de cantidad, el frame de la cantidad escrita.
 
@@ -186,7 +204,8 @@ Comercio usa estas claves: `outfits/5`, `items/stones/fire-stone`, `ui/diamond` 
 
 `node scripts/assets/extract-game-sprites.mjs` (uso en `scripts/assets/README.md`) registra dos tipos de clave que no hace falta escribir a mano:
 
-- `items/cliente/<clientId>`: el sprite de inventario de un item. Lo pone en el `sprite` de los items que aún tienen `ui/comercio/item`. Si quieres otro sprite para un item, escribe tu clave en su `sprite`: el script ya no lo toca.
+- `items/cliente/<clientId>`: el sprite de inventario de un item. Lo pone en el `sprite` de los items que aún tienen `ui/comercio/item`. Si quieres otro sprite para un item, escribe tu clave en su `sprite`: el script ya no lo toca. De paso, un `apilable` en `null` toma el valor del cliente (si el item se apila).
+- `items/poke-balls/<id>`: la hoja de cantidad de cada Poké Ball con `clientId`, sacada de su item del cliente (paso `balls`).
 - `outfits/<outfitId>` con un solo archivo `outfits/<outfitId>/sur.png`: el Pokémon mirando al sur, quieto. Si el cliente lo anima quieto, es una tira con `modo: animacion`. La página del Pokémon lo dibuja igual que un outfit con cuatro direcciones.
 
 ## Añadir el outfit de un Pokémon y sus addons
@@ -212,6 +231,7 @@ En `content/outfits.json`:
 - `pokemon` es el `id` de `content/pokemon.json`.
 - `outfitId` es el ID del outfit en el `.dat` del cliente. Su sprite es siempre `outfits/<outfitId>`.
 - Los addons también son outfits: cada uno tiene su `outfitId` y su sprite `outfits/<outfitId>`.
+- El bloque de arriba es solo un ejemplo del formato: hoy ningún Pokémon tiene addons en el registro (el addon de relleno «Nombre del addon» se quitó el 2026-09-25). La exportación del cliente nombra 826 items de addon («Addon for <Pokémon>. Rarity: …») y la Diamond Shop 103 addons con su `lookType`; importarlos es una decisión pendiente.
 
 Los sprites de outfits tienen un PNG por dirección en `public/sprites/outfits/<outfitId>/` (`norte.png`, `este.png`, `sur.png`, `oeste.png`):
 
@@ -265,7 +285,7 @@ Las siete auras del cliente ya están en `content/auras.json`: Premier, Alliance
 ```
 
 - `ruta` es la dirección de la página sin el idioma y con barra final. Tiene que ser una página que el sitio ya publica, y dos entradas no pueden llevar a la misma. El Inicio, Buscar y el menú muestran siempre las mismas entradas.
-- `sprite` es una clave de `sprites.json`, o `null` para dejar la caja vacía. En «Destacados» se dibuja a la mayor escala entera que no pasa de 32, y nunca por encima de 3x (un sprite de 16 a 2x, uno de 32 a 1x, uno de 8 a 3x); un sprite de más de 32 detiene el build. En el menú va a 1x, centrado en una caja de 16: el diseño pide ahí sprites de 16, y uno más grande sobresale de la caja. El Diamond (`ui/diamond`) gira en «Destacados» y en el menú queda quieto y a la mitad, la única reducción de un sprite.
+- `sprite` es una clave de `sprites.json`, o `null` para dejar la caja vacía. En «Destacados» se dibuja a la mayor escala entera que no pasa de 32, y nunca por encima de 3x (un sprite de 16 a 2x, uno de 32 a 1x, uno de 8 a 3x); un sprite de más de 32 detiene el build. En el menú va a 1x, centrado en una caja de 16: el diseño pide ahí sprites de 16, y uno más grande sobresale de la caja. El Diamond (`ui/diamond`) es la gema quieta del juego: no gira en ningún sitio.
 - Con `"borrador": true`, la entrada no aparece en un build con `OCULTAR_BORRADORES=1`. Una entrada publicada no puede llevar a la página de un sistema en borrador, porque ese build no la escribe.
 - Sin el archivo, el Inicio no muestra «Destacados» y el menú no tiene ese grupo.
 
@@ -341,7 +361,7 @@ Estos archivos siguen las mismas reglas comunes; VS Code muestra qué va en cada
 
 **El cliente manda en los datos del juego** (decisión del propietario 2026-09-25: las actualizaciones llegan primero al cliente). Si un valor ya escrito no coincide con la exportación —`tier`, `nivel`, `elementos`, `numero`, drops, evoluciones, movimientos, `precioNpc`, efectividad, descripciones del juego…—, el importador lo reemplaza y lista cada cambio. No toca nunca los campos del propietario: `categoria` (mueves tú los items de «Otros»), `sprite`, `borrador`, `imagen`, `funcion`, `generacion`, `nombre`, `uso`, `apilable`, `mercado` y los alias, ni el texto editorial. Una descripción del juego solo reemplaza su idioma (`es` de la Pokédex, `en` de la inspección de items) y deja el otro. Un valor desconocido del juego nunca borra uno conocido. `--conservar tier,nivel` protege más campos en una ejecución.
 
-Crea un registro para cada ficha de la Pokédex que no tenga uno (Mega, formas de Castform y Smeargle, shinies…) con `imagen` del arte del cliente solo cuando es el mismo Pokémon (su especie o su shiny); una Mega o una forma de Castform queda en `null` («?») hasta que pongas su arte. Crea en «Otros» los items que el juego nombra y aún no existen. Nunca borra registros.
+Crea un registro para cada ficha de la Pokédex que no tenga uno (Mega, formas de Castform y Smeargle, shinies…) con `imagen` del arte del cliente solo cuando es el mismo Pokémon (su especie o su shiny); una Mega o una forma de Castform queda en `null` («?») hasta que pongas su arte. Crea en «Otros» los items que el juego nombra y aún no existen; su nombre es el título de su inspección sin el artículo («a starly feather» → «starly feather») o, si el título empieza por una cantidad (una pila, «5 Minor XP Boosts»), el nombre que le dan las otras exportaciones. En las Poké Balls escribe `ball.elementos` y `ball.condicion`. Nunca borra registros.
 
 ### Jerarquía de tiers (§16.2.1)
 
@@ -352,7 +372,7 @@ Del mejor al peor: **ULTIMATE, Mythic, Legendary, Ultra Rare, Super Rare, T1, T2
 Un registro por tier, en el mismo orden de la jerarquía de arriba: `ultimate`, `mythic`, `legendary`, `ultra-rare`, `super-rare`, `t1`…`t7`. El esquema (`content/schemas/tiers.schema.json`) exige los 12, en ese orden exacto; no se añaden ni se quitan tiers desde este archivo — un tier nuevo del juego se añade primero en `$defs.tierEspecial` de `pokemon.schema.json` (arriba) y después aquí, en su posición.
 
 - `id`, `nombre` y `orden` no se tocan: son los 12 fijos de la jerarquía. `nombre` es el nombre del juego tal cual (`"ULTIMATE"`, `"Mythic"`… `"T1"`), igual en los dos idiomas.
-- `maxBrokes`: el máximo de brokes del tier, un entero. Se rellena a mano cuando se conoce el dato; mientras no se conoce va `null` (nunca `0`, que significaría «cero brokes»). Lo muestra la tira de filtros y el valor «Tier» de las Cards y de la Lista, en su tooltip («Max brokes: —» hasta que este campo tiene un número).
+- `maxBrokes`: el máximo de brokes del tier, un entero. Se rellena a mano cuando se conoce el dato; mientras no se conoce va `null` (nunca `0`, que significaría «cero brokes»). Lo muestra la tira de filtros y el valor «Tier» de las Cards y de la Lista, en su tooltip; mientras sea `null` el tier no tiene tooltip (solo repetiría el nombre) y se dibuja como texto normal.
 - `visible`: `false` saca el tier de la Tier list y de las opciones del filtro «Tier», sin tocar sus datos — los Pokémon de ese tier siguen existiendo y su ficha sigue mostrando su tier. Hoy solo `ultimate` está en `false`, porque ULTIMATE todavía no se usa en la Tier list. Para que ULTIMATE vuelva a aparecer, cambia su `"visible"` a `true`; no hace falta tocar ningún otro archivo.
 - `pnpm content:check` exige que cada `tier` de `content/pokemon.json` tenga su registro aquí (el mismo id que calcula `tierKey` de `tier-rank.ts`); un tier sin registro es un error, no un borrador.
 

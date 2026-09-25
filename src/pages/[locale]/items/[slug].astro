@@ -35,21 +35,15 @@ import {
   compareChance,
   itemLoot,
   itemUses,
-  lootZonesOf,
 } from '@/lib/content/item-sources';
 import { resolvePokemonImage } from '@/lib/content/pokemon-media';
-import {
-  getCategorias,
-  getElementos,
-  getItem,
-  getItems,
-  getSpriteRegistry,
-} from '@/lib/content/registry';
+import { getCategorias, getElementos, getItems, getSpriteRegistry } from '@/lib/content/registry';
 import type { Item } from '@/lib/content/registry-schema';
 import { getPokemon } from '@/lib/content/repository';
 import type { GameText, PokemonRecord } from '@/lib/content/types';
 import { formatDecimal, formatInteger, formatPercent } from '@/lib/format/numbers';
 import { present, UNKNOWN } from '@/lib/format/unknown';
+import { elementTipRecord, itemTipRecord, pokemonTipRecord } from '@/lib/game/tip-records';
 import { elementTip, itemTip, pokemonTip, type TipData } from '@/lib/game/tips';
 import { buildNav } from '@/lib/nav/groups';
 import { spriteOrNull, type SpriteData } from '@/lib/sprites/resolve';
@@ -118,7 +112,6 @@ const count = (value: number | null) =>
 
 const elementRecords = getElementos();
 const elements = new Map(elementRecords.map((element) => [element.id, element]));
-const itemName = (id: string | null) => (id === null ? null : (getItem(id)?.nombre ?? null));
 
 function elementEntry(id: string | null | undefined): ElementChipEntry | null {
   if (!id) return null;
@@ -129,68 +122,46 @@ function elementEntry(id: string | null | undefined): ElementChipEntry | null {
     id,
     name: element.nombre[locale],
     icon,
-    tip: elementTip(
-      {
-        id,
-        nombre: element.nombre,
-        icono: icon,
-        stone: itemName(element.stone),
-        fragment: itemName(element.fragment),
-      },
-      locale,
-      labels,
-    ),
+    // Every row of its panel (7.5.3): Stone, Fragment and the Balls that favour it.
+    tip: elementTip(elementTipRecord(element, locale), locale, labels),
   };
 }
 
+/** The Pokémon panel (7.5.3), every row its record has. */
 const tipOfPokemon = (entry: PokemonRecord): TipData =>
-  pokemonTip(
-    {
-      ...entry,
-      elementos: entry.elementos.flatMap((id) => {
-        const element = elements.get(id);
-        return element === undefined ? [] : [{ nombre: element.nombre }];
-      }),
-    },
-    locale,
-    labels,
-  );
+  pokemonTip(pokemonTipRecord(entry), locale, labels);
 
-// «Drop de» of every item, for the item panels this page opens.
-const droppers = new Map<string, PokemonRecord[]>();
-for (const entry of allPokemon) {
-  for (const { drops } of lootZonesOf(entry)) {
-    for (const drop of drops) {
-      const list = droppers.get(drop.item) ?? [];
-      if (!list.includes(entry)) list.push(entry);
-      droppers.set(drop.item, list);
-    }
-  }
-}
-
+/**
+ * An item's slot sprite and its panel (7.5.3): its game text and every fact the registries give
+ * of it, «Drop de» in every zone included (src/lib/game/tip-records.ts).
+ */
 function itemEntry(entry: Item): { sprite: SpriteData | null; tip: TipData } {
   const sprite = spriteOrNull(registry, entry.sprite);
-  return {
-    sprite,
-    tip: itemTip(
-      {
-        id: entry.id,
-        nombre: entry.nombre,
-        categoria: entry.categoria,
-        sprite,
-        precioNpc: entry.precioNpc,
-        nombreCategoria: categoryNames.get(entry.categoria) ?? null,
-        dropDe: (droppers.get(entry.id) ?? []).map((pokemon) => pokemon.nombre),
-        nombreElemento: entry.elemento ? (elements.get(entry.elemento)?.nombre ?? null) : null,
-        uso: entry.uso ?? null,
-      },
-      locale,
-      labels,
-    ),
-  };
+  return { sprite, tip: itemTip(itemTipRecord(entry, locale, { sprite }), locale, labels) };
 }
 
 const self = itemEntry(item);
+
+// The rows of the item's own panel that the hero has no other place for (owner rule 2026-09-25:
+// every fact of the panel is on the page too): a held item's Ranura and Tier, a Ball's Tasa de
+// captura (only once the registry knows it), Más efectiva con and Aura.
+const panelLabels = new Set(
+  [labels.slot, labels.catchRate, labels.bestAgainst, labels.aura].filter(
+    (label): label is string => label !== undefined,
+  ),
+);
+if (item.held) panelLabels.add(labels.tier);
+const panelFacts = self.tip.rows
+  .filter((row) => panelLabels.has(row.label))
+  .map((row) => ({
+    label: row.label,
+    value:
+      typeof row.value === 'string'
+        ? row.value
+        : 'list' in row.value
+          ? row.value.list.join(', ')
+          : UNKNOWN,
+  }));
 
 // ------------------------------------------------------------------------------ hero
 
@@ -386,6 +357,14 @@ const pageDescription = fill(copy.description, { name: pageName, category: categ
           <dt>{labels.shopPrice}</dt>
           <dd><PokedolaresAmount amount={item.precioNpc.compra} locale={locale} /></dd>
         </div>
+        {
+          panelFacts.map((fact) => (
+            <div>
+              <dt>{fact.label}</dt>
+              <dd>{fact.value}</dd>
+            </div>
+          ))
+        }
         {
           item.elemento !== undefined && (
             <div>

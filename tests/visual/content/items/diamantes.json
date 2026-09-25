@@ -23,7 +23,7 @@
       "nombre": "Item de ejemplo 1",
       "clientId": null,
       "categoria": "diamantes",
-      "sprite": "items/diamantes/diamantes-ejemplo-1",
+      "sprite": "ui/balls/premier-ball",
       "apilable": null,
       "precioNpc": {
         "vende": null,

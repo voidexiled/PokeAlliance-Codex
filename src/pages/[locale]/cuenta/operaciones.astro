@@ -1,0 +1,64 @@
+---
+// «Mis operaciones» (spec 9.10 with 9.15.4; Cuenta-panel.dc.html): `/{l}/cuenta/operaciones/`, the
+// account's purchases and sales, in the frame of `/{l}/cuenta/` — the header card and the section
+// nav, where it is «Operaciones» (AccountPage.tsx, pages/OperationsPage.tsx, OperationsPanel.tsx).
+// The header menu's «Mis operaciones» opens it; the old `/{l}/comercio/operaciones/` answers a
+// 302 towards it (astro.config.mjs). `noindex` (9.3, 13.5); the crumbs are «Inicio › Cuenta ›
+// Mis operaciones» and the h1 is for assistive tech only.
+//
+// Render (9.3): the prerendered frame and the island, which reads the session once hydrated. The
+// page exists only with the public Supabase settings and COMERCIO_PUBLICO (page-props.ts):
+// without them it answers 404 (S11, CA-9.13). Comercio is for 18 or more (9.15.2): the island
+// shows the deals only to an account whose stored birth date says so.
+//
+// Data (13.2): the island gets `trade.operations`, `trade.review`, `trade.channels` (the labels
+// of the revealed contact values, 9.9) and the texts of the frame. No registry travels in the
+// props: the titles of the listings read their names from the search index, loaded only when a
+// row needs it (OperationsPanel.tsx).
+import { getLocale } from '@/i18n/config';
+
+import { AccountPage } from '@/components/account/AccountPage';
+import {
+  accountCrumbs,
+  accountDictionary,
+  accountPageBase,
+  accountPagePaths,
+  alternatesOf,
+} from '@/components/account/pages/page-props';
+import PageLayout from '@/layouts/PageLayout.astro';
+
+import '@/styles/components/account.css';
+import '@/styles/components/account-panel.css';
+import '@/styles/components/account-pages.css';
+import '@/styles/components/trade-operations.css';
+
+export const prerender = true;
+
+export function getStaticPaths() {
+  return accountPagePaths();
+}
+
+const locale = getLocale(Astro.params.locale);
+const alternates = alternatesOf(Astro.url.pathname);
+const { trade } = accountDictionary(locale);
+const operations = trade.operations;
+---
+
+<PageLayout
+  locale={locale}
+  title={operations.title}
+  description={operations.description}
+  alternates={alternates}
+  breadcrumb={accountCrumbs(locale, operations.title)}
+  noindex
+>
+  <h1 class="sr-only">{operations.title}</h1>
+  <AccountPage
+    client:load
+    {...accountPageBase(locale, operations.signIn)}
+    body={{
+      page: 'operaciones',
+      texts: { messages: operations, review: trade.review, channels: trade.channels },
+    }}
+  />
+</PageLayout>

@@ -23,6 +23,7 @@ import { en } from '@/i18n/messages/en';
 import { es } from '@/i18n/messages/es';
 import { fill } from '@/i18n/messages/types';
 import { formatInteger } from '@/lib/format/numbers';
+import { leanTipLabels, type ListUi } from '@/lib/game/tip-labels';
 import { tierInfo } from '@/lib/content/tiers';
 import { buildNav } from '@/lib/nav/groups';
 import { PageTitle } from '@/components/layout/PageTitle';
@@ -70,10 +71,12 @@ const firstDrops = Object.fromEntries(
 const description = fill(messages.pokedex.description, {
   n: formatInteger(records.length, locale),
 });
-// The list islands use no money text: `money` stays out of their props (§13.6, 20 KB).
-const listUi = Object.fromEntries(
-  Object.entries(messages.ui).filter(([key]) => key !== 'money'),
-) as Omit<Messages['ui'], 'money'>;
+// The list islands use no money text: `money` stays out of their props (§13.6, 20 KB). The
+// labels of the panel rows `/{l}/paneles.json` completes travel with that file, not here.
+const listUi = {
+  ...Object.fromEntries(Object.entries(messages.ui).filter(([key]) => key !== 'money')),
+  tooltip: leanTipLabels(messages.ui.tooltip),
+} as ListUi<Messages['ui']>;
 ---
 
 <PageLayout

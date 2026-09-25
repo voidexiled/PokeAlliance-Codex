@@ -5,9 +5,70 @@
     "es": "Held Items",
     "en": "Held Items"
   },
-  "sprite": null,
+  "sprite": "ui/categorias/helds",
   "orden": 2,
-  "tooltip": [],
+  "tooltip": [
+    {
+      "etiqueta": {
+        "es": "Fusión",
+        "en": "Fusion"
+      },
+      "valor": {
+        "es": "3 Helds del mismo tier",
+        "en": "3 Helds of one tier"
+      }
+    },
+    {
+      "etiqueta": {
+        "es": "Si sale",
+        "en": "On success"
+      },
+      "valor": {
+        "es": "Held Ticket del tier siguiente",
+        "en": "Held Ticket of the next tier"
+      }
+    },
+    {
+      "etiqueta": {
+        "es": "Chance",
+        "en": "Chance"
+      },
+      "valor": {
+        "es": "25%",
+        "en": "25%"
+      }
+    },
+    {
+      "etiqueta": {
+        "es": "Si falla",
+        "en": "On failure"
+      },
+      "valor": {
+        "es": "Held Ticket del mismo tier, 1 Relic Point",
+        "en": "Held Ticket of the same tier, 1 Relic Point"
+      }
+    },
+    {
+      "etiqueta": {
+        "es": "Tier máximo",
+        "en": "Top tier"
+      },
+      "valor": {
+        "es": "T7",
+        "en": "T7"
+      }
+    },
+    {
+      "etiqueta": {
+        "es": "Retirar",
+        "en": "Remove"
+      },
+      "valor": {
+        "es": "Rosemary, Trade Center",
+        "en": "Rosemary, Trade Center"
+      }
+    }
+  ],
   "intro": [],
   "secciones": [],
   "borrador": true

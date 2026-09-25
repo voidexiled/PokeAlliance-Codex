@@ -5,9 +5,60 @@
     "es": "Prey",
     "en": "Prey"
   },
-  "sprite": "outfits/2",
+  "sprite": "ui/sistemas/prey",
   "orden": 9,
-  "tooltip": [],
+  "tooltip": [
+    {
+      "etiqueta": {
+        "es": "Espacios",
+        "en": "Slots"
+      },
+      "valor": {
+        "es": "6",
+        "en": "6"
+      }
+    },
+    {
+      "etiqueta": {
+        "es": "Activar",
+        "en": "Activate"
+      },
+      "valor": {
+        "es": "1 Prey Wildcard",
+        "en": "1 Prey Wildcard"
+      }
+    },
+    {
+      "etiqueta": {
+        "es": "Bonos",
+        "en": "Bonuses"
+      },
+      "valor": {
+        "es": "Experience +30%, Attack +30%, Capture +30%, Loot +25%, Dodge +5%",
+        "en": "Experience +30%, Attack +30%, Capture +30%, Loot +25%, Dodge +5%"
+      }
+    },
+    {
+      "etiqueta": {
+        "es": "Meta",
+        "en": "Goal"
+      },
+      "valor": {
+        "es": "1.000 puntos, sin límite de tiempo",
+        "en": "1,000 points, no time limit"
+      }
+    },
+    {
+      "etiqueta": {
+        "es": "Shiny",
+        "en": "Shiny"
+      },
+      "valor": {
+        "es": "No aplica",
+        "en": "Does not apply"
+      }
+    }
+  ],
   "intro": [],
   "secciones": [],
   "borrador": true

@@ -48,8 +48,13 @@ import type { ProfileValues, RegistrationStep } from './RegistrationSteps';
 //   a server log; the token is only sent to `accept_guild_invitation` after the account presses
 //   «Aceptar invitación», and is removed from the address once accepted.
 
-/** The `account` namespace as the island gets it: «Personajes» apart (panel/texts.ts). */
-export type AccountMessages = Omit<Messages['account'], 'panel'> & { panel: AccountPanelTexts };
+/**
+ * The `account` namespace as the island gets it: «Personajes», «Canales de contacto» and
+ * «Seguridad» travel beside it (panel/texts.ts).
+ */
+export type AccountMessages = Omit<Messages['account'], 'panel' | 'channels'> & {
+  panel: AccountPanelTexts;
+};
 
 export interface UiLabels {
   /** `ui.close`: the close button of the dialogs. */

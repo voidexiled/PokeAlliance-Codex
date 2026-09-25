@@ -30,8 +30,7 @@ import { TrainingMeter } from '@/components/money/TrainingMeter';
 import type { TrainingMeterLabels } from '@/components/money/TrainingMeter';
 import type { Locale } from '@/i18n/config';
 import { trackCount } from '@/lib/cards/layout';
-import type { ListingKey, ListingLayout, ListingType } from '@/lib/cards/layout';
-import { fill } from '@/i18n/messages/types';
+import type { ListingGear, ListingKey, ListingLayout, ListingType } from '@/lib/cards/layout';
 import { formatInteger } from '@/lib/format/numbers';
 import { present } from '@/lib/format/unknown';
 import type { TipData } from '@/lib/game/tips';
@@ -40,7 +39,7 @@ import type { EstadoPresencia } from '@/lib/trade/types';
 // ListingCard (spec 7.2.6, 7.5.5, 7.5.10, 7.6.2, 7.6.3, 9.4, 9.5.8; CARD_GRID_SYSTEM §6.1;
 // DS:ListingCard, DS:guias/30, DS:guias/40): the card of a Comercio listing — the 72 stage,
 // the title, the Shiny line and the meta «{mundo} · {publicado}», the facts of its asset
-// type, Held Items and Entrenamiento in Pokémon grids, and a footer with the price, the
+// type, the equipment and Entrenamiento in Pokémon grids, and a footer with the price, the
 // seller and the verified contact channels — built on the card kit of `Card.tsx`, inside
 // `CardGrid family="listing"`, and in Comercio «Todos» inside one `CardGroup` per type.
 //
@@ -72,19 +71,28 @@ import type { EstadoPresencia } from '@/lib/trade/types';
 //     «Dinero real» row when one of its listings is «A convenir», so the text always has a
 //     row to sit in.
 //   - Placement of the panels (7.5.5): the facts open `down` lined up with their right edge;
-//     Held Items open `up` (HeldStrip), and in the footer the Diamonds of a price open `up` +
-//     `end` and the «+N» of the channels `up` + `start`.
+//     the equipment slots place themselves (EquipmentStrip), and in the footer the Diamonds of
+//     a price open `up` + `end` and the «+N» of the channels `up` + `start`.
+//   - The equipment of a Pokémon (16.4.5, owner rule 2026-09-25): each kind has its own place
+//     and its label. The first line holds the Ball, the Held Items (X, Y) and the Mega Stone;
+//     the Auras and the Addons take a line each. Every line is a zone of the layout, so it
+//     starts at the same height in every card of the row, and a group of the first line that
+//     another card of the grid has keeps its column, empty. A kind no card carries is not drawn.
 //   - `loading` is the `lazy` of 7.4.2 for a card from index 4 of its list on.
 //   - The seller's online status (9.15.6): `SellerPresence`, a small dot with its label, next to
 //     the seller in the footer, and under it when the row has no room for both. The Lista row and
 //     the detail draw the same piece (TradeListRoot.tsx, SellerCard.tsx); trade-presence.css
 //     holds its look, a per-page sheet (D-018) that only the pages drawing a seller load.
-//   - «Dinero real» (9.15.2): with `labels.realMoney`, which the page passes only in phase B, a
-//     listing with a real-money price carries that tag, a `Chip` under the meta line.
+//   - The head has one structure for every listing (owner rule 2026-09-25): the stage and the
+//     first line of the title sit at the top (listing-card.css), so a Shiny line or a title on
+//     two lines never moves the title of the cards beside it. Real money is only a price: the
+//     «Dinero real» row of the footer, never a tag in the head.
 //
-// The card is not a link and never opens a tooltip: it already shows what the tooltip of its
-// listing would (§9.5.9 is for Slots and Lista); its title links to the detail and its
-// nested entities are the triggers (7.5.10). No payment gateway and no buy button: the
+// The card is not a link and never opens the tooltip of its listing (§9.5.9 is for Slots and
+// Lista); its title links to the detail and its nested entities are the triggers (7.5.10). The
+// traded asset is one of them: with `tip` the stage opens the panel of the item or the Pokémon
+// — the game text, a held item's slot and tier, a Ball's catch rate, the shops, the moveset and
+// abilities — which the facts of the card only summarise (owner rule 2026-09-25). No payment gateway and no buy button: the
 // contact goes through the verified channels (DS:ListingCard «No hacer»).
 
 /** A fact that is another entity: the Ball, or the one Pokémon of «Drop de». */
@@ -147,6 +155,32 @@ export function SellerPresence({ state, label, className }: SellerPresenceProps)
   );
 }
 
+/** The equipment of a listed Pokémon by kind (16.4.5), each piece resolved by the adapter. */
+export interface ListingCardEquipment {
+  ball?: EquipmentStripItem | null;
+  auras?: readonly EquipmentStripItem[] | null;
+  addons?: readonly EquipmentStripItem[] | null;
+  heldX?: EquipmentStripItem | null;
+  heldY?: EquipmentStripItem | null;
+  mega?: EquipmentStripItem | null;
+}
+
+/** The label of each kind of equipment, game terms that read the same in both locales (13.4). */
+export interface ListingGearLabels {
+  /** «Ball». */
+  ball: string;
+  /** «Held Items»: the held X and the held Y. */
+  held: string;
+  /** «Mega Stone». */
+  mega: string;
+  /** «Auras». */
+  auras: string;
+  /** «Addons». */
+  addons: string;
+  /** «Ditto Memory»: the row of a Ditto's memories in its listing panel (9.5.9). */
+  memory?: string;
+}
+
 /** The first declared training of a Pokémon (§9.5.8): «Attack 16 (53%)». */
 export interface ListingCardTraining {
   stat: string;
@@ -173,6 +207,8 @@ export interface ListingCardListing {
   sprite: SpriteProps | null;
   /** Stack count on the stage of an items or Diamonds listing. */
   qty?: number | null;
+  /** Panel of the traded item or Pokémon (`itemTip`, `pokemonTip`), opened by the stage. */
+  tip?: TipData | null;
   shiny?: boolean;
   /** Name of the world, in the meta; none when the seller row names the character's world. */
   world?: string | null;
@@ -184,11 +220,8 @@ export interface ListingCardListing {
   reserved?: boolean;
   /** Facts by key; an unknown value is `null` or absent. */
   facts?: Readonly<Partial<Record<ListingKey, ListingFactValue>>> | null;
-  /**
-   * Equipment of a Pokémon (16.4.5): ball, auras, addons, held X, held Y and Mega Stone as 32 px
-   * slots (EquipmentStrip). The name stays `helds`: the card layout reads it for its zone.
-   */
-  helds?: readonly EquipmentStripItem[] | null;
+  /** Equipment of a Pokémon by kind (16.4.5), each piece a 32 px slot (EquipmentStrip). */
+  equipment?: ListingCardEquipment | null;
   /** Training shown on the card, or `null`: «—». */
   train?: ListingCardTraining | null;
   /** Real-money price, written by `formatRealMoney` («R$ 90»), or `null`. */
@@ -222,13 +255,8 @@ export interface ListingCardLabels {
   negotiable: string;
   /** «Reservado» / «Reserved». */
   reserved: string;
-  /**
-   * «Dinero real» / «Real money», the tag of a listing with a real-money price (9.15.2). Only
-   * phase B passes it; without it no card carries the tag.
-   */
-  realMoney?: string;
-  /** «Equipo» / «Equipment»: the accessible name of the equipment row (16.4.5). */
-  equipment?: string;
+  /** The label of each kind of equipment (16.4.5). */
+  gear: ListingGearLabels;
   /** `ui.money`: Held Items, Entrenamiento, the score and the «+N» of the channels. */
   money: HeldStripLabels & TrainingMeterLabels & RatingLabels & ChipRowLabels;
 }
@@ -419,14 +447,32 @@ export function ListingCard({
       value
     );
   let unitShown = false;
+  const stage = (
+    <SpriteStage
+      sprite={listing.sprite ? { ...listing.sprite, loading } : null}
+      size={72}
+      qty={known(count) && count > 0 ? formatInteger(count, locale) : undefined}
+    />
+  );
   const head = (
     <Head
       stage={
-        <SpriteStage
-          sprite={listing.sprite ? { ...listing.sprite, loading } : null}
-          size={72}
-          qty={known(count) && count > 0 ? formatInteger(count, locale) : undefined}
-        />
+        hasContent(listing.tip) ? (
+          <NestedEntity
+            tip={listing.tip}
+            variant="plain"
+            placement="side"
+            ariaLabel={listing.tip.title}
+            locale={locale}
+            hint={hint}
+            shinyLabel={labels.shiny}
+            orLabel={orLabel}
+          >
+            {stage}
+          </NestedEntity>
+        ) : (
+          stage
+        )
       }
       title={
         <Title href={listing.href} clamp={2}>
@@ -447,15 +493,36 @@ export function ListingCard({
               ))}
             </Meta>
           ) : null}
-          {labels.realMoney !== undefined && present(listing.fiat) ? (
-            <p className="ac-listing-card__tag">
-              <Chip>{labels.realMoney}</Chip>
-            </p>
-          ) : null}
         </>
       }
     />
   );
+
+  // ----------------------------------------------------------------------------- equipment
+  const equipment = listing.equipment ?? {};
+  const one = (item: EquipmentStripItem | null | undefined): EquipmentStripItem[] =>
+    item ? [item] : [];
+  const gearItems: Record<ListingGear, EquipmentStripItem[]> = {
+    ball: one(equipment.ball),
+    held: [...one(equipment.heldX), ...one(equipment.heldY)],
+    mega: one(equipment.mega),
+  };
+  /** One kind under its label; the label is the name of the list, so it is read once. */
+  const group = (key: string, label: string, items: readonly EquipmentStripItem[]): ReactNode => (
+    <div key={key} className="ac-listing-gear__group" data-gear={key}>
+      <p className="ac-listing-gear__label" aria-hidden="true">
+        {label}
+      </p>
+      <EquipmentStrip items={items} label={label} locale={locale} hint={hint} orLabel={orLabel} />
+    </div>
+  );
+  /** A zone of Auras or Addons: the kind, or the empty track of a card without it. */
+  const line = (zone: 'auras' | 'addons'): ReactNode => {
+    const items = equipment[zone] ?? [];
+    return (
+      <Zone name={zone}>{items.length > 0 ? group(zone, labels.gear[zone], items) : null}</Zone>
+    );
+  };
 
   // -------------------------------------------------------------------------------- footer
   const diamondsLink: DiamondsLink | undefined = diamonds?.tip
@@ -564,20 +631,28 @@ export function ListingCard({
     >
       {head}
       {layout.keys.length > 0 ? <FactList rows={layout.keys.map(fact)} /> : null}
-      {layout.zones.includes('held') ? (
-        <Zone name="held">
-          <EquipmentStrip
-            items={listing.helds ?? []}
-            label={
-              labels.equipment ??
-              fill(labels.money.heldItems, { n: String(listing.helds?.length ?? 0) })
-            }
-            locale={locale}
-            hint={hint}
-            orLabel={orLabel}
-          />
+      {layout.zones.includes('gear') ? (
+        <Zone name="gear" className="ac-listing-gear">
+          {layout.gear.map((gear) =>
+            gearItems[gear].length > 0 ? (
+              group(gear, labels.gear[gear], gearItems[gear])
+            ) : (
+              // Another card of the grid has this kind: its column stays, empty (16.4.5).
+              <div
+                key={gear}
+                className="ac-listing-gear__group"
+                data-gear={gear}
+                data-empty=""
+                aria-hidden="true"
+              >
+                <p className="ac-listing-gear__label">{labels.gear[gear]}</p>
+              </div>
+            ),
+          )}
         </Zone>
       ) : null}
+      {layout.zones.includes('auras') ? line('auras') : null}
+      {layout.zones.includes('addons') ? line('addons') : null}
       {layout.zones.includes('train') ? (
         <Zone name="train">
           <TrainingMeter

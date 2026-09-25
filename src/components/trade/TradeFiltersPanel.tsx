@@ -294,9 +294,9 @@ function usePickers(pickers: PanelPickers | null, locale: Locale) {
               .map(([id, ref]) => ({
                 id,
                 name: ref.nombre,
-                number: null,
+                number: ref.numero ?? null,
                 types: [...ref.elementos],
-                elementoMoveset: null,
+                elementoMoveset: ref.elementoMoveset ?? null,
                 tier: ref.tier,
                 shiny: ref.variante === 'shiny',
                 generation: ref.generacion,

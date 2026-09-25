@@ -3,23 +3,31 @@ import '@/styles/components/element-icon.css';
 import { useId } from 'react';
 
 import type { ElementChipEntry } from '@/components/game/ElementChip';
+import { GameTooltip } from '@/components/game/GameTooltip';
 import type { NestedEntityPlacement } from '@/components/game/NestedEntity';
 import { Sprite } from '@/components/game/Sprite';
+import type { Locale } from '@/i18n/config';
 
 // ElementIcon (plan «Cards» and «Filtros», boards Pokedex-Cards and Direccion-C): an element
 // drawn as its icon alone — the 100 px illustration of `ui/elementos/<id>`, smooth at 24 —
 // whose name is a small game tooltip on hover and keyboard focus. It is the «Tipo» and
 // «Moveset» value of a Pokédex card and of a Lista row.
 //
-// The name panel is a `.ac-game-tooltip` popover of the delegated controller of 7.5.4
+// The panel is a `.ac-game-tooltip` popover of the delegated controller of 7.5.4
 // (src/scripts/game-tooltip.ts), like every panel of the site, so it lives in the top layer,
-// out of card and table overflow, and closes on Escape. The trigger's accessible name is the
-// element's name, so the panel repeats it for sighted users only and is not a description.
-// An element whose registry has no icon yet falls back to its name as text.
+// out of card and table overflow, and closes on Escape. With the element's own panel
+// (`element.tip`, `elementTip`: Stone, Fragment and Ball) it is that panel, so the icon says
+// everything its chip says (owner rule 2026-09-25, every tooltip complete); without a row it is
+// the name alone. The trigger's accessible name is the element's name, so the name panel repeats
+// it for sighted users only. An element whose registry has no icon yet falls back to its name.
 
 export interface ElementIconProps {
-  /** The element as the page adapter hands it over (`ElementChipEntry`). */
-  element: Pick<ElementChipEntry, 'id' | 'name' | 'icon'>;
+  /** The element as the page adapter hands it over (`ElementChipEntry`), its panel included. */
+  element: Pick<ElementChipEntry, 'id' | 'name' | 'icon'> & Partial<Pick<ElementChipEntry, 'tip'>>;
+  /** Picks the format of the panel's figures; the element's panel needs it (C-R3). */
+  locale?: Locale;
+  /** `ui.pinHint`, the strip of the element's panel. */
+  hint?: string;
   /** Page of the element; without it the trigger is a button (7.5.7). */
   href?: string;
   /** Size of the icon: 24 in the card facts and the Lista, as the boards draw it. */
@@ -33,6 +41,8 @@ export interface ElementIconProps {
 
 export function ElementIcon({
   element,
+  locale,
+  hint,
   href,
   size = 24,
   placement = 'above-center',
@@ -68,6 +78,9 @@ export function ElementIcon({
   }
 
   const trigger = ['ac-nested-entity__trigger', ...classes].join(' ');
+  // The element's own panel describes the icon (7.5.7); the name panel only repeats its name.
+  const full = element.tip && element.tip.rows.length > 0 && locale !== undefined;
+  const described = full ? tipId : undefined;
   return (
     <span
       className="ac-nested-entity"
@@ -76,22 +89,38 @@ export function ElementIcon({
       data-ac-tt-align="auto"
     >
       {href === undefined ? (
-        <button type="button" className={trigger} aria-label={element.name}>
+        <button
+          type="button"
+          className={trigger}
+          aria-label={element.name}
+          aria-describedby={described}
+        >
           {face}
         </button>
       ) : (
-        <a href={href} className={trigger} aria-label={element.name}>
+        <a href={href} className={trigger} aria-label={element.name} aria-describedby={described}>
           {face}
         </a>
       )}
-      <span
-        id={tipId}
-        role="tooltip"
-        popover="manual"
-        className="ac-game-tooltip ac-game-tooltip--name ac-game-tooltip--animate"
-      >
-        {element.name}
-      </span>
+      {full && element.tip ? (
+        <GameTooltip
+          tip={element.tip}
+          id={tipId}
+          popover="manual"
+          locale={locale}
+          hint={hint}
+          inline
+        />
+      ) : (
+        <span
+          id={tipId}
+          role="tooltip"
+          popover="manual"
+          className="ac-game-tooltip ac-game-tooltip--name ac-game-tooltip--animate"
+        >
+          {element.name}
+        </span>
+      )}
     </span>
   );
 }

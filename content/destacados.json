@@ -7,7 +7,7 @@
         "en": "Pokédex"
       },
       "ruta": "/pokedex/",
-      "sprite": "ui/balls/alliance-ball",
+      "sprite": "ui/nav/pokedex",
       "borrador": true
     },
     {
@@ -16,7 +16,7 @@
         "en": "Tier list"
       },
       "ruta": "/pokedex/tiers/",
-      "sprite": "ui/balls/ultra-ball",
+      "sprite": "ui/nav/tier-list",
       "borrador": true
     },
     {

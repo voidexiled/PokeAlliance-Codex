@@ -1,92 +1,48 @@
 ---
-// «Mi perfil» (spec 9.16.3; template H of 8.0.2): `/{l}/cuenta/perfil/`, the account's own profile.
-// `noindex` like the rest of `/{l}/cuenta/` (9.3, 13.5), and no crumbs: «Cuenta» belongs to no
-// group of the menu (8.0.4).
+// «Mi perfil» (spec 9.16.3, 9.15.4; Cuenta-panel.dc.html): `/{l}/cuenta/perfil/`, the account's
+// reputation as a seller and as a buyer and the reviews it received and gave, in the frame of
+// `/{l}/cuenta/` — the header card and the section nav, where it is «Reputación» (AccountPage.tsx,
+// pages/ProfilePage.tsx). The header menu's «Mi perfil» opens it. `noindex` (9.3, 13.5); the
+// crumbs are «Inicio › Cuenta › Mi perfil» and the h1 is for assistive tech only, as on
+// `/{l}/cuenta/`.
 //
-// Render: the prerendered frame and one island, ProfileHub.tsx, which reads the session once
-// hydrated; every account datum comes from src/lib/supabase/trade.ts under the database's rules.
-// The route exists only when getSupabasePublicConfig() is not null, as `/{l}/cuenta/`: without the
-// Supabase variables `getStaticPaths` gives no path and the build writes no page (S11). With
-// COMERCIO_PUBLICO the island adds the reputation and the tabs of 9.16.3; without it the page has
-// the header card and «Mis guilds».
+// Render (9.3): the prerendered frame and the island, which reads the session once hydrated. The
+// page exists only with the public Supabase settings and COMERCIO_PUBLICO (page-props.ts):
+// without them `getStaticPaths` gives no path and the header menu's «Mi perfil» goes to the
+// «Perfil» section of `/{l}/cuenta/`. An old `?pestana=` link goes on to the page that has that
+// tab now (AccountPage.tsx).
 //
-// Data (13.2, 13.6). The island gets the texts it reads, gathered here into its own shape (the one
-// place of the page that knows the dictionary's paths), the worlds of content/mundos.json in the
-// language of the page, and with COMERCIO_PUBLICO what the cards of the own listings are built
-// from, as on the publish page: the small registries (auras, Market categories), the sprites the
-// adapter resolves here (DP2), the Diamonds panel and the URLs of the two PR5 data files, which
-// the island reads only when the account has listings. JS budget: the Comercio row of 13.6.
-import { getAlternatePath, getLocale, locales, type Locale } from '@/i18n/config';
-import type { Messages } from '@/i18n/messages/en';
-import { en } from '@/i18n/messages/en';
-import { es } from '@/i18n/messages/es';
-import {
-  getAuras,
-  getCategorias,
-  getMonedaDiamantes,
-  getMundos,
-  getSpriteRegistry,
-} from '@/lib/content/registry';
-import { diamondsTip } from '@/lib/game/tips';
-import { spriteOrNull } from '@/lib/sprites/resolve';
-import { getSupabasePublicConfig } from '@/lib/supabase/env';
-import { comercioPublico } from '@/lib/trade/registry';
+// Data (13.2, 13.6): the texts of the frame and of the two sections, gathered here into the
+// island's shape, and the worlds of content/mundos.json. JS budget: the Comercio row of 13.6.
+import { getLocale } from '@/i18n/config';
 
+import { AccountPage } from '@/components/account/AccountPage';
 import {
-  ProfileHub,
-  type ProfileHubMessages,
-  type ProfileHubUi,
-  type ProfileListingsData,
-} from '@/components/account/ProfileHub';
-import { PageTitle } from '@/components/layout/PageTitle';
+  accountCrumbs,
+  accountDictionary,
+  accountPageBase,
+  accountPagePaths,
+  alternatesOf,
+} from '@/components/account/pages/page-props';
+import type { ProfilePageTexts } from '@/components/account/pages/types';
 import PageLayout from '@/layouts/PageLayout.astro';
 
-import '@/styles/components/profile-hub.css';
+import '@/styles/components/account.css';
+import '@/styles/components/account-panel.css';
+import '@/styles/components/account-pages.css';
 
 export const prerender = true;
 
 export function getStaticPaths() {
-  if (getSupabasePublicConfig() === null) return [];
-  return locales.map((locale) => ({ params: { locale } }));
+  return accountPagePaths();
 }
 
-const dictionaries: Record<Locale, Messages> = { es, en };
-
 const locale = getLocale(Astro.params.locale);
-const path = Astro.url.pathname;
-const alternates = Object.fromEntries(
-  locales.map((option) => [option, getAlternatePath(path, option)]),
-) as Record<Locale, string>;
+const alternates = alternatesOf(Astro.url.pathname);
+const { profile, trade, ui } = accountDictionary(locale);
 
-const { profile, shell, account, trade, ui } = dictionaries[locale];
-const comercio = comercioPublico();
-const worlds = Object.fromEntries(getMundos(locale).map((world) => [world.id, world.nombre]));
-
-const messages: ProfileHubMessages = {
-  signInNotice: profile.signInNotice,
-  signIn: shell.account.signIn,
-  unfinished: shell.account.incomplete,
-  finish: shell.account.completeRegistration,
-  retry: account.retry,
-  memberSince: profile.memberSince,
-  country: profile.country,
-  identities: profile.identities,
-  providers: {
-    discord: trade.channels.discord,
-    google: trade.channels.google,
-    twitch: trade.channels.twitch,
-  },
-  editProfile: profile.editProfile,
-  publicProfile: profile.publicProfile,
-  guilds: profile.myGuilds,
-  presence: {
-    label: trade.presence.label,
-    en_juego: trade.presence.en_juego,
-    ausente: trade.presence.ausente,
-    desconectado: trade.presence.desconectado,
-  },
+const texts: ProfilePageTexts = {
   reputation: {
-    title: profile.reputation,
     asSeller: trade.reputation.asSeller,
     asBuyer: trade.reputation.asBuyer,
     outOf: ui.money.outOf,
@@ -97,37 +53,11 @@ const messages: ProfileHubMessages = {
     distribution: profile.distribution,
     stars: trade.review.star,
   },
-  tabs: {
-    label: profile.tabsLabel,
-    anuncios: profile.tabs.listings,
-    recibidas: profile.tabs.received,
-    hechas: profile.tabs.given,
-    operaciones: profile.tabs.deals,
-  },
-  listings: {
-    filter: profile.listings.filtersLabel,
-    all: trade.types.all,
-    states: profile.listings.filters,
-    state: trade.states,
-    none: profile.listings.empty,
-    noneInState: profile.listings.emptyFilter,
-    create: shell.account.createListing,
-    edit: trade.manage.edit,
-    actions: {
-      reserve: trade.manage.reserve,
-      release: trade.manage.release,
-      complete: trade.manage.complete,
-      withdraw: trade.manage.withdraw,
-      renew: trade.manage.renew,
-    },
-    types: {
-      pokemon: trade.types.pokemon,
-      items: trade.types.items,
-      diamonds: trade.types.diamonds,
-      pokedolares: trade.types.pokedolares,
-    },
-  },
   reviews: {
+    title: profile.reviews.title,
+    filterLabel: profile.reviews.filterLabel,
+    received: profile.reviews.received,
+    given: profile.reviews.given,
     score: trade.seller.reviewScore,
     role: { seller: profile.reviews.asSeller, buyer: profile.reviews.asBuyer },
     deal: profile.reviews.deal,
@@ -137,62 +67,9 @@ const messages: ProfileHubMessages = {
     noneReceived: profile.reviews.emptyReceived,
     noneGiven: profile.reviews.emptyGiven,
   },
-  deals: profile.deals,
-};
-
-const hubUi: ProfileHubUi = {
-  dismiss: ui.dismiss,
-  dataError: ui.dataError,
-  pagination: ui.pagination,
   pages: { prev: ui.prev, next: ui.next, page: ui.page },
-  pinHint: ui.pinHint,
-  or: ui.or,
-  tooltip: ui.tooltip,
+  pagination: ui.pagination,
 };
-
-// DP2: every sprite through the adapter. The keys are the fixed ones of 9.5.1 and 9.7.3
-// (FIXED_SPRITE_KEYS): a registry without one gives `null`, and the place shows the missing mark
-// or no sprite at all. The Diamond spins in Comercio (7.8), so it carries its animation.
-let listings: ProfileListingsData | null = null;
-if (comercio) {
-  const registry = getSpriteRegistry();
-  const diamond = spriteOrNull(registry, 'ui/diamond', { animado: true });
-  const pokedolares = spriteOrNull(registry, 'ui/pokedolares');
-  const moneda = getMonedaDiamantes();
-  listings = {
-    pokedexUrl: `/${locale}/pokedex/datos.json`,
-    itemsUrl: `/${locale}/items/datos.json`,
-    categories: Object.fromEntries(
-      getCategorias()
-        .filter((category) => !category.virtual)
-        .map((category) => [category.id, category.nombre[locale]]),
-    ),
-    auras: Object.fromEntries(getAuras().map((aura) => [aura.id, aura.nombre])),
-    sprites: { item: spriteOrNull(registry, 'ui/comercio/item'), diamond, pokedolares },
-    // The `moneda` object of content/items/diamantes.json (§3.13): the Diamonds panel of a price
-    // and the facts «Se compran en» and «Se usan en»; a list the owner has not filled makes no row.
-    diamonds: {
-      tip: diamondsTip(moneda, locale, ui.tooltip, { sprite: diamond, animated: true }),
-      boughtAt: moneda?.seCompranEn?.[locale] ?? [],
-      usedFor: moneda?.seUsanEn?.[locale] ?? [],
-    },
-    typeSprites: {
-      pokemon: spriteOrNull(registry, 'outfits/5'),
-      items: spriteOrNull(registry, 'items/stones/fire-stone'),
-      diamonds: diamond,
-      pokedolares,
-    },
-    // The card of the list (9.5.8) with the tag «Dinero real» of phase B (9.15.2).
-    card: {
-      ...trade.listing,
-      reserved: trade.states.reservado,
-      realMoney: trade.listing.fiat,
-      shiny: ui.shiny,
-      money: ui.money,
-    },
-    unsellable: trade.unsellable,
-  };
-}
 ---
 
 <PageLayout
@@ -200,16 +77,13 @@ if (comercio) {
   title={profile.title}
   description={profile.description}
   alternates={alternates}
+  breadcrumb={accountCrumbs(locale, profile.title)}
   noindex
 >
-  <PageTitle title={profile.title} />
-  <ProfileHub
+  <h1 class="sr-only">{profile.title}</h1>
+  <AccountPage
     client:load
-    locale={locale}
-    comercio={comercio}
-    worlds={worlds}
-    messages={messages}
-    ui={hubUi}
-    listings={listings}
+    {...accountPageBase(locale, profile.signInNotice)}
+    body={{ page: 'reputacion', texts }}
   />
 </PageLayout>

@@ -12,12 +12,7 @@ import {
   writeAgeAnswer,
 } from '@/components/trade/AgeGate';
 import { contactBlocker } from '@/components/trade/RealMoneyConsent';
-import {
-  DATOS_PATTERN,
-  MODERACION_PATTERN,
-  OPERACIONES_PATTERN,
-  comercioFases,
-} from '@/integrations/comercio-fases';
+import { DATOS_PATTERN, MODERACION_PATTERN, comercioFases } from '@/integrations/comercio-fases';
 import { inGameFirst, sellerReputation } from '@/lib/trade/types';
 import type { EstadoPresencia } from '@/lib/trade/types';
 
@@ -221,23 +216,16 @@ describe('the routes of each phase (src/integrations/comercio-fases.ts, 9.3)', (
     return routes;
   }
 
-  it('injects «Mis operaciones» prerendered and the moderation on demand, only in phase B', () => {
+  // «Mis operaciones» is a page of the account (`/{l}/cuenta/operaciones/`), not an injection.
+  it('injects the moderation on demand, only in phase B', () => {
     expect(injected('', '1')).toEqual([
-      {
-        pattern: OPERACIONES_PATTERN,
-        prerender: true,
-        entrypoint: 'routes/comercio/operaciones.astro',
-      },
       {
         pattern: MODERACION_PATTERN,
         prerender: false,
         entrypoint: 'routes/comercio/moderacion.astro',
       },
     ]);
-    expect(injected('1', 'true').map((route) => route.pattern)).toEqual([
-      OPERACIONES_PATTERN,
-      MODERACION_PATTERN,
-    ]);
+    expect(injected('1', 'true').map((route) => route.pattern)).toEqual([MODERACION_PATTERN]);
   });
 
   it('injects nothing of phase B without COMERCIO_PUBLICO (S11, CA-9.13)', () => {

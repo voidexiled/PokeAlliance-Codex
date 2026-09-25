@@ -1,6 +1,6 @@
 // The model of a Comercio listing (spec 9.4): the types every module of src/lib/trade/ and every
 // Comercio page reads, the constants the model fixes and the few rules that only depend on it.
-// In phase A the sample registry of content/comercio/ fills them (./registry.ts, read only with
+// In phase A the sample registry of tests/fixtures/comercio/ fills them (./registry.ts, read only with
 // COMERCIO_DEMO=1, 9.2); in phase B the rows of 9.12.1 will.
 //
 // Client-safe on purpose: nothing here imports code, so an island (the list, the form) takes its
@@ -198,7 +198,7 @@ export type Anuncio = {
   /** kebab-case; the `[id]` of `/{l}/comercio/anuncio/[id]/`. */
   id: string;
   tipo: TipoActivo;
-  /** The seller's handle: the `id` of a record of content/comercio/vendedores.json. */
+  /** The seller's handle: the `id` of a record of tests/fixtures/comercio/vendedores.json. */
   vendedor: string;
   /**
    * `id` of content/mundos.json: the world of `character` (the database derives it). Listings

@@ -508,9 +508,28 @@ describe('reads', () => {
         review_id: null,
         reviewable: true,
       },
+      {
+        transaction_id: ID,
+        number: 124,
+        role: 'seller',
+        status: 'contacto',
+        listing_id: USER,
+        asset_type: 'items',
+        // 16.2.5: the registry id alone, no declared name.
+        asset: { item: 'great-ball', cantidad: 500 },
+        listing_public: true,
+        counterpart_handle: 'misty',
+        created_at: '2026-09-22T10:00:00Z',
+        updated_at: '2026-09-22T10:00:00Z',
+        confirmed_at: null,
+        review_id: null,
+        reviewable: true,
+      },
       { transaction_id: 'broken' },
     ]);
-    expect((await listMyTransactions(client)).data).toEqual([
+    const deals = (await listMyTransactions(client)).data ?? [];
+    expect(deals[1]?.listing.item).toEqual({ item: 'great-ball', nombre: '' });
+    expect(deals.slice(0, 1)).toEqual([
       {
         id: ID,
         number: 123,

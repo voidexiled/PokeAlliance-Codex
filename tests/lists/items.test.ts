@@ -20,6 +20,7 @@ import {
 } from '@/components/items/config';
 import { pokedexOrder } from '@/components/pokedex/config';
 import { es } from '@/i18n/messages/es';
+import { lootZonesOf } from '@/lib/content/item-sources';
 import { getCategorias, getElementos, getItems } from '@/lib/content/registry';
 import { getPokemon } from '@/lib/content/repository';
 import { DROPPER_NAMES_MAX } from '@/lib/game/dropper-limit';
@@ -42,10 +43,13 @@ function marketOrder(): string[] {
 }
 
 /** «Drop de» of an item (7.5.3): the Pokémon whose `drops` name it, in the order of 8.0.5. */
+/** The Pokémon whose loot holds `id` in any zone (Base, Wildscape, Primal), in the order of 8.0.5. */
 function droppersOf(id: string): string[] {
   return [...getPokemon()]
     .sort(pokedexOrder('es'))
-    .filter((record) => (record.drops ?? []).some((drop) => drop.item === id))
+    .filter((record) =>
+      lootZonesOf(record).some(({ drops }) => drops.some((drop) => drop.item === id)),
+    )
     .map((record) => record.id);
 }
 

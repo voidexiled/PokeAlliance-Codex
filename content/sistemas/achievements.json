@@ -7,7 +7,58 @@
   },
   "sprite": "ui/sistemas/achievements",
   "orden": 8,
-  "tooltip": [],
+  "tooltip": [
+    {
+      "etiqueta": {
+        "es": "Dónde",
+        "en": "Where"
+      },
+      "valor": {
+        "es": "Trainer, Conquistas",
+        "en": "Trainer, Achievements"
+      }
+    },
+    {
+      "etiqueta": {
+        "es": "Logros",
+        "en": "Achievements"
+      },
+      "valor": {
+        "es": "110, 3 secretos",
+        "en": "110, 3 secret"
+      }
+    },
+    {
+      "etiqueta": {
+        "es": "Recompensa",
+        "en": "Reward"
+      },
+      "valor": {
+        "es": "Experiencia, ítems",
+        "en": "Experience, items"
+      }
+    },
+    {
+      "etiqueta": {
+        "es": "Se recoge con",
+        "en": "Claimed with"
+      },
+      "valor": {
+        "es": "Collect",
+        "en": "Collect"
+      }
+    },
+    {
+      "etiqueta": {
+        "es": "Progreso",
+        "en": "Progress"
+      },
+      "valor": {
+        "es": "Por personaje",
+        "en": "Per character"
+      }
+    }
+  ],
   "intro": [],
   "secciones": [],
   "borrador": true

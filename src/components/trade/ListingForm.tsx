@@ -3,6 +3,7 @@ import '@/styles/components/listing-form.css';
 import {
   Suspense,
   lazy,
+  useCallback,
   useEffect,
   useId,
   useLayoutEffect,
@@ -49,7 +50,9 @@ import {
 import type { Locale } from '@/i18n/config';
 import type { Messages } from '@/i18n/messages/en';
 import { fill } from '@/i18n/messages/types';
-import { itemTip, pokemonTip } from '@/lib/game/tips';
+import { usePanels } from '@/lib/game/panels';
+import { pokemonPanel } from '@/lib/game/pokemon-panel';
+import { gearTip, itemTip, pokemonTip } from '@/lib/game/tips';
 import type { PickerLabels } from '@/lib/pickers/labels';
 import { itemOptions, pokemonOptions } from '@/lib/pickers/options';
 import { readStoredSession } from '@/lib/account/session-cache';
@@ -61,6 +64,7 @@ import {
   itemPickerRecords,
   rosterPickerRecords,
   slotRecords,
+  type SlotEntity,
 } from '@/lib/trade/pickers';
 import {
   formatDiamonds,
@@ -313,7 +317,7 @@ export interface ListingFormPublish {
   view: string;
   sellAs: ListingFormSellAs;
   publishing: ListingFormPublishing;
-  /** `/{l}/cuenta/#personajes`, `/{l}/cuenta/perfil/?pestana=anuncios`, `/{l}/cuenta/`. */
+  /** `/{l}/cuenta/#personajes`, `/{l}/cuenta/anuncios/`, `/{l}/cuenta/`. */
   charactersHref: string;
   listingsHref: string;
   /** «Inicia sesión para publicar». */
@@ -1406,6 +1410,8 @@ export function ListingForm(props: ListingFormProps) {
   const items = useData(props.itemsUrl, readItems);
   const rosterData = roster.state === 'ready' ? roster.data : null;
   const itemsData = items.state === 'ready' ? items.data : null;
+  // The rest of every panel of the pickers and the preview (`/{l}/paneles.json`), once here.
+  const panels = usePanels(locale);
 
   const [draft, setDraft] = useState<Draft>(emptyDraft);
   const [submitted, setSubmitted] = useState(false);
@@ -1631,13 +1637,14 @@ export function ListingForm(props: ListingFormProps) {
                     const nombre = rosterData.elements[element]?.nombre ?? element;
                     return { nombre: { es: nombre, en: nombre } };
                   }),
+                  ...pokemonPanel(panels?.pokemon[row.id], locale, panels?.tipos),
                 },
                 locale,
                 tipLabels,
               ),
             ),
           ),
-    [rosterData, locale, tipLabels],
+    [rosterData, locale, tipLabels, panels],
   );
   const itemChoices = useMemo(
     () =>
@@ -1652,10 +1659,11 @@ export function ListingForm(props: ListingFormProps) {
                 locale,
                 tipLabels,
                 itemTip,
+                panels?.items[row.id],
               ),
             ),
           ),
-    [itemsData, props.categories, locale, tipLabels],
+    [itemsData, props.categories, locale, tipLabels, panels],
   );
   const ballChoices = useMemo(
     () => itemChoices.filter((option) => option.facets?.categoria?.includes(BALL_CATEGORY)),
@@ -1665,7 +1673,24 @@ export function ListingForm(props: ListingFormProps) {
     () => Object.entries(rosterData?.elements ?? {}).map(([id, ref]) => ({ id, name: ref.nombre })),
     [rosterData],
   );
-  const auraSlots = useMemo(() => slotRecords(auras), [auras]);
+  // The panel of an aura or an addon (16.4.5): with the panels file, the Balls that unlock the
+  // aura and the Pokémon of the addon.
+  const gearOf = useCallback(
+    (kind: 'aura' | 'addon') => (entity: SlotEntity) =>
+      gearTip(
+        kind,
+        {
+          id: entity.id,
+          nombre: entity.nombre,
+          sprite: entity.icono,
+          balls: kind === 'aura' ? panels?.auras[entity.id] : undefined,
+          pokemon: kind === 'addon' ? panels?.addons[entity.id] : undefined,
+        },
+        tipLabels,
+      ),
+    [panels, tipLabels],
+  );
+  const auraSlots = useMemo(() => slotRecords(auras, gearOf('aura')), [auras, gearOf]);
 
   const previewLabels = useMemo<ListingPreviewLabels>(
     () => ({
@@ -1691,8 +1716,10 @@ export function ListingForm(props: ListingFormProps) {
       worlds: worldNames,
       sprites,
       diamonds: props.diamonds,
+      panels,
     }),
     [
+      panels,
       rosterData,
       itemsData,
       props.categories,
@@ -2153,6 +2180,7 @@ export function ListingForm(props: ListingFormProps) {
             pokemonId={unit.pokemon}
             options={slotRecords(
               ownAddons.map((addon) => ({ ...addon, icono: addon.icono ?? null })),
+              gearOf('addon'),
             )}
             value={unit.addons}
             onChange={(ids) => setUnit((current) => ({ ...current, addons: ids }))}

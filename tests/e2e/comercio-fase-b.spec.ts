@@ -309,7 +309,7 @@ test('registration, contact, confirmations, reviews, report, moderation and «Mi
   });
   expect(confirmed.error).toBeNull();
 
-  await page.goto('/es/comercio/operaciones/');
+  await page.goto('/es/cuenta/operaciones/');
   await (
     await hydrated(
       page,
@@ -352,14 +352,15 @@ test('registration, contact, confirmations, reviews, report, moderation and «Mi
   ).toBeNull();
   await shareEmail(buyer.client, emails.buyer);
   await publish(buyer, { game_prices: [{ tipo: 'pokedolares', cantidad: 5_000_000 }] });
-  await page.goto('/es/cuenta/perfil/');
-  await expect(page.getByRole('heading', { name: profile.title, level: 1 })).toBeVisible();
-  // «Anuncios» is the first tab.
+  // «Mis anuncios» and «Mi perfil» are pages of the account frame (§9.16.3).
+  await page.goto('/es/cuenta/anuncios/');
+  await expect(
+    page.getByRole('heading', { name: profile.listings.title, level: 1 }),
+  ).toBeAttached();
   await expect(page.getByRole('main').getByText('Fire Stone').first()).toBeVisible();
-  await page
-    .getByRole('main')
-    .getByRole('button', { name: profile.tabs.received, exact: true })
-    .click();
+  await page.goto('/es/cuenta/perfil/');
+  await expect(page.getByRole('heading', { name: profile.title, level: 1 })).toBeAttached();
+  // «Recibidas» is the first choice of «Reseñas».
   await expect(page.getByText(fill(trade.seller.reviewScore, { n: '4' })).first()).toBeVisible();
 
   // The moderator sees the report in the queue (§9.11).

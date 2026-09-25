@@ -105,6 +105,23 @@ export const megaSchema = z.strictObject({
   pokemon: z.array(slug),
 });
 
+/**
+ * `ball`: what the game says of a Poké Ball. `elementos` and `condicion` come from its inspection
+ * (pnpm content:datamine); `tasa` (its multiplier, which the client does not carry) and `aura`
+ * (the id of content/auras.json the ball unlocks) are the owner's. `pnpm content:check` checks
+ * that the aura exists.
+ */
+export const ballSchema = z.strictObject({
+  tasa: z.number().min(0).nullable(),
+  elementos: z.array(
+    z.custom<string>((value) => itemElementIds.includes(value as string), {
+      message: `Debe ser uno de: ${itemElementIds.join(', ')}.`,
+    }),
+  ),
+  condicion: z.enum(['rapido', 'pesado']).nullable(),
+  aura: slug.nullable(),
+});
+
 /** `textoJuego`: a text of the game in the language or languages it exists in, one at least. */
 const itemGameText = z
   .strictObject({ es: itemProse.optional(), en: itemProse.optional() })
@@ -214,6 +231,8 @@ const itemShape = z.strictObject({
   held: heldSchema.optional(),
   /** Optional en cualquier categoría (§16.2.3): marca una Mega Stone. */
   mega: megaSchema.optional(),
+  /** Optional: the facts of a Poké Ball (see `ballSchema`). */
+  ball: ballSchema.optional(),
   /** Optional: the text of the item's inspection in the game, without «You see …». */
   descripcion: itemGameText.nullable().optional(),
   /** Optional: the ways to get it besides loot and the NPC (see `obtencionSchema`). */
@@ -735,6 +754,8 @@ export type Item = z.infer<typeof itemSchema>;
 export type Held = z.infer<typeof heldSchema>;
 /** `mega` de una Mega Stone (§16.2.3). */
 export type Mega = z.infer<typeof megaSchema>;
+/** `ball` of a Poké Ball. */
+export type Ball = z.infer<typeof ballSchema>;
 /** `obtencion` of an item. */
 export type Obtencion = z.infer<typeof obtencionSchema>;
 export type Addon = z.infer<typeof addonSchema>;

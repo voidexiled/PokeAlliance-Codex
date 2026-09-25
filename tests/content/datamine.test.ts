@@ -5,12 +5,14 @@ import { describe, expect, it } from 'vitest';
 
 import {
   applyExport,
+  ballFacts,
   dropChance,
   evolutionTargets,
   inspectDescription,
   inspectPrice,
   movesetElement,
   parseHeld,
+  titleName,
 } from '../../scripts/content/lib/datamine.mjs';
 
 // Synthetic fixture (not game data): the shapes of the export, with made-up values.
@@ -125,6 +127,44 @@ describe('datamine helpers', () => {
     expect(inspectPrice(rows)).toBe(1500);
     expect(inspectDescription(rows)).toBe('A test item.');
     expect(inspectDescription([{ section: 'header', text: 'You see Test.' }])).toBeNull();
+  });
+
+  it('turns an inspection title into a name: no article, no stack count', () => {
+    expect(titleName('a starly feather')).toBe('starly feather');
+    expect(titleName('an Ancient Stone')).toBe('Ancient Stone');
+    expect(titleName('Ancient Stone')).toBe('Ancient Stone');
+    expect(titleName('5 Minor XP Boosts')).toBeNull();
+    expect(titleName('')).toBeNull();
+    expect(titleName(undefined)).toBeNull();
+  });
+
+  it('reads what a Poké Ball is good at from its inspection', () => {
+    const elements = new Set(ELEMENTS);
+    const text = (line: string) => [{ section: 'header', text: `You see a Test Ball.\n${line}` }];
+    expect(
+      ballFacts(
+        text(
+          'A Poke Ball that is more effective when attempting to catch FIRE or PSYCHIC Pokémon.',
+        ),
+        elements,
+      ),
+    ).toEqual({ elementos: ['fire', 'psychic'], condicion: null });
+    // An element outside the enum is left out.
+    expect(
+      ballFacts(text('more effective when attempting to catch FIRE or STEEL Pokémon.'), elements),
+    ).toEqual({ elementos: ['fire'], condicion: null });
+    expect(ballFacts(text('It makes it easier to catch very fast Pokémon.'), elements)).toEqual({
+      elementos: [],
+      condicion: 'rapido',
+    });
+    expect(ballFacts(text('Better than usual at catching very heavy Pokémon.'), elements)).toEqual({
+      elementos: [],
+      condicion: 'pesado',
+    });
+    expect(ballFacts([{ section: 'header', text: 'You see a Test Ball.' }], elements)).toEqual({
+      elementos: [],
+      condicion: null,
+    });
   });
 
   it('takes the moveset element from the area moves, the first one on a tie', () => {
@@ -405,6 +445,82 @@ describe('applyExport', () => {
     expect((data.pokemon[0] as Rec).drops).toEqual([
       { item: 'test-leaf', cantidad: { min: 1, max: 2 }, probabilidad: 33 },
     ]);
+  });
+
+  it('names a new item after its title without the article, or after the export that names it', () => {
+    const types = emptyTypes();
+    types.pokedex_detail = [
+      detail('Test A', {
+        loot: [
+          {
+            region: 'Base',
+            drops: [
+              { itemId: 100, name: 'test leaf', countMin: 1, countMax: 1, chance: 1000 },
+              { itemId: 101, name: 'Test Boost', countMin: 1, countMax: 1, chance: 1000 },
+            ],
+          },
+        ],
+      }),
+    ];
+    types.items = [
+      { clientId: 100, title: 'a test leaf', rows: [] },
+      { clientId: 101, title: '5 Test Boosts', rows: [] },
+    ];
+    const data = content();
+    applyExport(types, data);
+    expect(data.items.otros.map((item: Rec) => [item.id, item.nombre])).toEqual([
+      ['test-leaf', 'test leaf'],
+      ['test-boost', 'Test Boost'],
+    ]);
+  });
+
+  it('fills `ball` of a Poké Ball from its inspection and keeps the owner tasa and aura', () => {
+    const types = emptyTypes();
+    types.items = [
+      {
+        clientId: 200,
+        title: 'a Empty Test Ball',
+        rows: [
+          {
+            section: 'header',
+            text: 'You see a Empty Test Ball.\nA Poke Ball that is more effective when attempting to catch WATER or GRASS Pokémon.',
+          },
+        ],
+      },
+      {
+        clientId: 201,
+        title: 'a Empty Plain Ball',
+        rows: [{ section: 'header', text: 'You see a Empty Plain Ball.' }],
+      },
+    ];
+    const ball = (id: string, clientId: number, extra: Rec = {}): Rec => ({
+      id,
+      nombre: id,
+      clientId,
+      categoria: 'poke-balls',
+      sprite: `items/poke-balls/${id}`,
+      apilable: true,
+      precioNpc: { vende: null, compra: null },
+      ...extra,
+    });
+    const data = content({
+      items: {
+        'poke-balls': [
+          ball('test-ball', 200, {
+            ball: { tasa: 5, elementos: [], condicion: null, aura: 'premier' },
+          }),
+          ball('plain-ball', 201),
+        ],
+      },
+    });
+    applyExport(types, data);
+    expect(data.items['poke-balls'].map((item: Rec) => item.ball)).toEqual([
+      { tasa: 5, elementos: ['water', 'grass'], condicion: null, aura: 'premier' },
+      { tasa: null, elementos: [], condicion: null, aura: null },
+    ]);
+    // Idempotent: a second run changes nothing.
+    const again = applyExport(types, data);
+    expect(again.changes.items.size).toBe(0);
   });
 
   it('keeps an owner mark and the fields of `keep`', () => {

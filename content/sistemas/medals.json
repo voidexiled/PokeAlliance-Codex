@@ -7,7 +7,58 @@
   },
   "sprite": "ui/sistemas/medals",
   "orden": 6,
-  "tooltip": [],
+  "tooltip": [
+    {
+      "etiqueta": {
+        "es": "Requisito",
+        "en": "Requirement"
+      },
+      "valor": {
+        "es": "Nivel 350, Professor Helena",
+        "en": "Level 350, Professor Helena"
+      }
+    },
+    {
+      "etiqueta": {
+        "es": "Medallas",
+        "en": "Medals"
+      },
+      "valor": {
+        "es": "Pokémon de Kanto, 1 a 151",
+        "en": "Kanto Pokémon, 1 to 151"
+      }
+    },
+    {
+      "etiqueta": {
+        "es": "Rangos",
+        "en": "Ranks"
+      },
+      "valor": {
+        "es": "Bronze, Silver, Gold, Diamond, Emerald, Orichalcum",
+        "en": "Bronze, Silver, Gold, Diamond, Emerald, Orichalcum"
+      }
+    },
+    {
+      "etiqueta": {
+        "es": "Cada Medal",
+        "en": "Each Medal"
+      },
+      "valor": {
+        "es": "+100 XP a la de su especie",
+        "en": "+100 XP to its species"
+      }
+    },
+    {
+      "etiqueta": {
+        "es": "Se obtienen en",
+        "en": "Found in"
+      },
+      "valor": {
+        "es": "Medal Box",
+        "en": "Medal Box"
+      }
+    }
+  ],
   "intro": [],
   "secciones": [],
   "borrador": true

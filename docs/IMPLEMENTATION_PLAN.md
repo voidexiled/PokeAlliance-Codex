@@ -874,7 +874,7 @@ Las dos devuelven **0 coincidencias** (`comercio/index.astro` y `herramientas/gu
 
 **Crear**
 
-- `content/comercio/anuncios.json`, `content/comercio/vendedores.json` + `content/schemas/comercio.schema.json`.
+- `tests/fixtures/comercio/anuncios.json`, `tests/fixtures/comercio/vendedores.json` + `content/schemas/comercio.schema.json`.
 - `src/lib/trade/types.ts` (modelo de §9.4), `src/lib/trade/registry.ts` (solo lee con `COMERCIO_DEMO=1`), `src/lib/trade/search.ts` (`searchText`, `matches`), `src/lib/trade/sort.ts` (`sortListings`), `src/lib/trade/title.ts` (`listingTitle`), `src/lib/trade/text.ts` (`listingText`).
 - `src/integrations/comercio-fases.ts` (§9.3: `astro:route:setup` fija `prerender` por fase y **falla el build** si una página de Comercio exporta `prerender`).
 - `src/pages/[locale]/comercio/anuncio/[id].astro` (plantilla F), `src/pages/[locale]/comercio/vendedor/[handle].astro` (plantilla H), `src/pages/[locale]/comercio/publicar.astro` (plantilla G).
@@ -903,7 +903,7 @@ Las dos devuelven **0 coincidencias** (`comercio/index.astro` y `herramientas/gu
 
 | Carril | Archivos |
 |---|---|
-| A | `src/lib/trade/types.ts`, `registry.ts`, `content/comercio/*` + esquema |
+| A | `src/lib/trade/types.ts`, `registry.ts`, `tests/fixtures/comercio/*` + esquema |
 | B | `src/lib/trade/search.ts`, `sort.ts`, `title.ts`, `text.ts` + sus pruebas |
 | C | `comercio/index.astro`, `TradeListRoot.tsx`, borrado de `TradeDesk.tsx` |
 | D | `comercio/anuncio/[id].astro` (plantilla F) |
@@ -1030,7 +1030,7 @@ pnpm exec playwright test tests/e2e/guild.spec.ts tests/e2e/cuenta.spec.ts
 **Crear**
 
 - `supabase/migrations/<AAAAMMDDhhmmss>_trade_phase_b.sql` — tablas de §9.12.1, RLS de §9.12.2, funciones de §9.12.3, vistas `trade_public_reviews` y `trade_seller_stats`, parámetros de §9.12.6.
-- `src/routes/comercio/operaciones.astro`, `src/routes/comercio/moderacion.astro` (inyectadas solo con `COMERCIO_PUBLICO`; `moderacion` con `prerender: false`).
+- `src/routes/comercio/moderacion.astro` (inyectada solo con `COMERCIO_PUBLICO`, con `prerender: false`). «Mis operaciones» pasó a `src/pages/[locale]/cuenta/operaciones.astro` (D-030 del registro de decisiones; antes `src/routes/comercio/operaciones.astro`).
 - `src/lib/supabase/trade.ts`.
 - `src/components/trade/`: `ChannelsPanel.tsx`, `OperationsPanel.tsx`, `ReviewForm.tsx`, `ReportDialog.tsx`, `ModerationQueue.tsx`.
 - Pruebas: `tests/supabase/trade-rls.test.ts` (seis personas de §9.12.2), `tests/e2e/comercio-fase-b.spec.ts`.
@@ -1057,7 +1057,7 @@ pnpm exec playwright test tests/e2e/guild.spec.ts tests/e2e/cuenta.spec.ts
 | C (serie tras B) | `tests/supabase/trade-rls.test.ts` |
 | D | `src/lib/supabase/trade.ts` |
 | E | `cuenta/index.astro`, `AccountPanel.tsx`, `ChannelsPanel.tsx` |
-| F | `src/routes/comercio/operaciones.astro`, `OperationsPanel.tsx`, `ReviewForm.tsx` |
+| F | `src/pages/[locale]/cuenta/operaciones.astro` (antes `src/routes/comercio/operaciones.astro`), `OperationsPanel.tsx`, `ReviewForm.tsx` |
 | G | `src/routes/comercio/moderacion.astro`, `ModerationQueue.tsx`, `ReportDialog.tsx` |
 | H | `comercio-fases.ts`, `supabase/config.toml`, `.env.example` |
 | I | diccionarios |
@@ -1078,7 +1078,7 @@ node scripts/test/build-comercio-fases.mjs
 - **CA-9.14**: todas las pruebas RLS de §9.12.2 con las seis personas.
 - **CA-9.15**: una reseña solo se crea con la operación `confirmada`, por el comprador y dentro de 30 días; la media, la distribución y «Operaciones confirmadas» coinciden con `trade_seller_stats` y excluyen reseñas ocultas; cada reseña muestra el handle de `trade_public_reviews`.
 - **CA-9.16**: tras «Contactar al vendedor», el comprador ve los valores de los canales visibles; un tercero autenticado solo ve etiquetas.
-- **CA-9.13**: con `COMERCIO_PUBLICO` desactivado, el HTML de todas las rutas de Comercio no contiene «Contactar al vendedor», «Reportar», «Publicar» ni enlaces a `/cuenta/`, `/comercio/operaciones/` o `/comercio/moderacion/`.
+- **CA-9.13**: con `COMERCIO_PUBLICO` desactivado, el HTML de todas las rutas de Comercio no contiene «Contactar al vendedor», «Reportar», «Publicar» ni enlaces a `/cuenta/` (que incluye `/cuenta/operaciones/`) o `/comercio/moderacion/`.
 - **CA-9.9 / §9.9**: el bloque de mercado del tooltip tiene «Contacto:» con etiquetas públicas y **nunca** un valor (correo, número o usuario).
 - **CA-10.14** se repite con «Eliminar cuenta».
 - G3 con la lista extra de §12.22 para Comercio y cuenta en `es`: 0 «confiable», «seguro», «garantizado» como palabra.
@@ -1265,7 +1265,7 @@ Ninguno de estos bloquea un hito. Cada fila dice **qué desbloquea**, **qué se 
 | **OG-9** | **Aprobación de las líneas base de 390 px** de las rutas sin tablero y de **cualquier regeneración de goldens** (§14.5) | Que esas comparaciones visuales sean bloqueantes | Se generan y se comparan como informativas | M11 en adelante |
 | **OG-10** | **Subir un presupuesto de §13.6** si el prototipo medido de la Pokédex no cabe | Continuar F2 sin reducir el HTML | Un límite **solo baja** con la medida; si no cabe, se reduce el HTML hasta cumplirlo. Ningún agente sube un límite | M6 |
 | **OG-11** | **Tablero de Comparar Pokémon** (R15) | Empezar M16 con fidelidad medible | La ruta es un marcador con la plantilla E (E18); el corte cierra sin F5 | M16 |
-| **OG-12** | **Registros que escribe el propietario** (D-011): `content/destacados.json`, `content/mundos.json`, `content/elementos.json`, `content/cambios.json`, `content/sistemas/*.json`, `content/comercio/*`, los campos nuevos de Pokémon (`hp`, `experiencia`, `drops`, `evolucion`, `habilidades`, `donde`, `elementoMoveset`), de ítems (`elemento`, `uso`), de ítems de sistema y de actividades (`sprite`), y las claves fijas de `public/sprites/sprites.json` que hoy faltan: `ui/inicio`, `ui/indice/*`, `ui/herramientas/*` y `ui/cambios` (comprobado; `ui/categorias/*`, `ui/pokedolares`, `ui/diamond` y `ui/comercio/*` ya están) | Contenido real en cada página | Marcadores `borrador: true`; `null` se muestra «—» o se omite según X13; una clave fija ausente da `null` sin fallar el build (`spriteOrNull`) | M4, M8, M9, M10, M12 |
+| **OG-12** | **Registros que escribe el propietario** (D-011): `content/destacados.json`, `content/mundos.json`, `content/elementos.json`, `content/cambios.json`, `content/sistemas/*.json`, `tests/fixtures/comercio/*`, los campos nuevos de Pokémon (`hp`, `experiencia`, `drops`, `evolucion`, `habilidades`, `donde`, `elementoMoveset`), de ítems (`elemento`, `uso`), de ítems de sistema y de actividades (`sprite`), y las claves fijas de `public/sprites/sprites.json` que hoy faltan: `ui/inicio`, `ui/indice/*`, `ui/herramientas/*` y `ui/cambios` (comprobado; `ui/categorias/*`, `ui/pokedolares`, `ui/diamond` y `ui/comercio/*` ya están) | Contenido real en cada página | Marcadores `borrador: true`; `null` se muestra «—» o se omite según X13; una clave fija ausente da `null` sin fallar el build (`spriteOrNull`) | M4, M8, M9, M10, M12 |
 | **OG-13** | **Publicar en el sistema de diseño los 10 tokens nuevos de §3.3** (grupo `motion`, `z-header`, `layout-main-max`) y cualquier cambio de valor (R16) | Que `src/design/tokens.json` y el `tokens.json` publicado coincidan | El repositorio los lleva; la revisión del cambio comprueba la coincidencia a mano (el sistema de diseño no vive en el repositorio, así que CI no puede compararlos) | M1 |
 
 ### Preguntas abiertas que no bloquean (§1.7)

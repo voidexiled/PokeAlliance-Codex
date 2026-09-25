@@ -113,17 +113,13 @@ describe('pnpm content:check on content/mundos.json', () => {
   const scratch = mkdtempSync(path.join(tmpdir(), 'content-mundos-'));
   afterAll(() => rmSync(scratch, { recursive: true, force: true }));
 
-  // The copy leaves out the sample data of Comercio (content/comercio/, §9.4): its listings name
-  // worlds of the owner's file, so the worlds each case writes here would fail them, and that
-  // folder has its own checks (tests/trade/registry.test.ts). content:check accepts a repository
-  // without it (§9.2).
-  const comercio = path.join(repoRoot, 'content', 'comercio');
+  // The copy is content/ alone, without the sample data of Comercio (tests/fixtures/comercio/,
+  // §9.4): its listings name worlds of the owner's file, so the worlds each case writes here
+  // would fail them, and that folder has its own checks (tests/trade/registry.test.ts).
+  // content:check accepts a repository without it (§9.2).
   function copyRepo() {
     const root = path.join(scratch, `repo-${Math.random().toString(36).slice(2)}`);
-    cpSync(path.join(repoRoot, 'content'), path.join(root, 'content'), {
-      recursive: true,
-      filter: (source) => path.relative(comercio, source).startsWith('..'),
-    });
+    cpSync(path.join(repoRoot, 'content'), path.join(root, 'content'), { recursive: true });
     copyPublicForCheck(repoRoot, root);
     return root;
   }

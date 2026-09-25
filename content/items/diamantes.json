@@ -8,36 +8,10 @@
     {
       "id": "diamond",
       "nombre": "Diamond",
-      "clientId": null,
-      "categoria": "diamantes",
-      "sprite": "ui/diamond",
-      "apilable": null,
-      "precioNpc": {
-        "vende": null,
-        "compra": null
-      },
-      "borrador": true
-    },
-    {
-      "id": "diamantes-ejemplo-1",
-      "nombre": "Item de ejemplo 1",
-      "clientId": null,
-      "categoria": "diamantes",
-      "sprite": "items/diamantes/diamantes-ejemplo-1",
-      "apilable": null,
-      "precioNpc": {
-        "vende": null,
-        "compra": null
-      },
-      "borrador": true
-    },
-    {
-      "id": "diamond-3028",
-      "nombre": "diamond",
       "clientId": 3028,
       "categoria": "diamantes",
-      "sprite": "items/cliente/3028",
-      "apilable": null,
+      "sprite": "ui/diamond",
+      "apilable": true,
       "precioNpc": {
         "vende": null,
         "compra": null

@@ -89,19 +89,21 @@ describe('registry loaders', () => {
       getCategorias().reduce((total, categoria) => total + getItems(categoria.id).length, 0) -
         getItems('todo').length,
     );
+    // One Diamond: the client's item 3028 with the game's gem as its sprite (P3, P4).
     expect(getItem('diamond')).toMatchObject({
       nombre: 'Diamond',
       sprite: 'ui/diamond',
-      clientId: null,
+      clientId: 3028,
+      mercado: true,
       precioNpc: { vende: null, compra: null },
     });
+    expect(getItem('diamond-3028')).toBeUndefined();
+    expect(getItems('diamantes')).toHaveLength(1);
   });
 
   it('reads outfits with their addons and the auras', () => {
-    expect(getOutfitForPokemon('bulbasaur')).toMatchObject({
-      outfitId: 2,
-      addons: [{ id: 'bulbasaur-addon-1', outfitId: 1005, sprite: 'outfits/1005' }],
-    });
+    // The placeholder addon «Nombre del addon» is gone (P4): no record has addons yet.
+    expect(getOutfitForPokemon('bulbasaur')).toMatchObject({ outfitId: 2, addons: [] });
     expect(getPokemonOutfit('shiny-charizard')).toEqual({
       slug: 'shiny-charizard',
       outfitId: 509,
@@ -124,7 +126,12 @@ describe('registry loaders', () => {
       ['Digimon Red Aura', 'outfit_rainbow'],
       ['Killua God Speed', 'outfit_rainbow'],
     ]);
-    expect(getSpriteRegistry()['ui/diamond']).toMatchObject({ frames: 7, modo: 'animacion' });
+    // The game's current Diamond is the still gem of its Market (P3).
+    expect(getSpriteRegistry()['ui/diamond']).toMatchObject({
+      frame: [32, 32],
+      frames: 1,
+      modo: 'estatico',
+    });
   });
 
   it('reads the 18 elements in the order of 8.0.5, with both names', () => {
@@ -168,17 +175,24 @@ describe('registry loaders', () => {
 
   it('names a hidden draft only through the readers that include drafts (3.12, SI4)', () => {
     const draftSystem = getSistemas().find((sistema) => sistema.borrador === true);
+    // content/items/ has no draft since the «Item de ejemplo» records went (P4): a real item is
+    // seen by both readers, and a draft, when there is one, only by the one that includes drafts.
     const draftItem = getItems().find((item) => item.borrador === true);
+    const realItem = getItems().find((item) => item.borrador !== true);
     expect(draftSystem, 'content/sistemas/ has a draft').toBeDefined();
-    expect(draftItem, 'content/items/ has a draft').toBeDefined();
-    if (draftSystem === undefined || draftItem === undefined) return;
+    expect(realItem, 'content/items/ has a record').toBeDefined();
+    if (draftSystem === undefined || realItem === undefined) return;
 
     vi.stubEnv('OCULTAR_BORRADORES', '1');
     try {
       expect(getSistema(draftSystem.id)).toBeUndefined();
-      expect(getItem(draftItem.id)).toBeUndefined();
       expect(getSistemaIncluidoBorrador(draftSystem.id)?.titulo).toEqual(draftSystem.titulo);
-      expect(getItemIncluidoBorrador(draftItem.id)?.nombre).toBe(draftItem.nombre);
+      expect(getItem(realItem.id)?.id).toBe(realItem.id);
+      expect(getItemIncluidoBorrador(realItem.id)?.id).toBe(realItem.id);
+      if (draftItem !== undefined) {
+        expect(getItem(draftItem.id)).toBeUndefined();
+        expect(getItemIncluidoBorrador(draftItem.id)?.nombre).toBe(draftItem.nombre);
+      }
     } finally {
       vi.unstubAllEnvs();
     }
@@ -191,6 +205,7 @@ describe('JSON Schemas and their Zod mirror', () => {
   const cases: [string, string, z.ZodType][] = [
     ['categorias', 'content/items/categorias.json', categoriasFileSchema],
     ['items', 'content/items/stones.json', itemsFileSchema],
+    ['items', 'content/items/poke-balls.json', itemsFileSchema],
     ['outfits', 'content/outfits.json', outfitsFileSchema],
     ['auras', 'content/auras.json', aurasFileSchema],
     ['elementos', 'content/elementos.json', elementosFileSchema],
@@ -353,9 +368,44 @@ describe('JSON Schemas and their Zod mirror', () => {
     expect(parsed?.uso).toEqual(uso);
   });
 
+  it('both accept and reject the same `ball` of a Poké Ball', () => {
+    const [ball] = readJson('content/items/poke-balls.json').items;
+    const facts = { tasa: null, elementos: [], condicion: null, aura: null };
+    const accepted = [
+      { items: [{ ...ball, ball: facts }] },
+      {
+        items: [
+          {
+            ...ball,
+            ball: { tasa: 4.5, elementos: ['fire', 'ground'], condicion: null, aura: 'premier' },
+          },
+        ],
+      },
+      { items: [{ ...ball, ball: { ...facts, condicion: 'rapido' } }] },
+      { items: [{ ...ball, ball: { ...facts, condicion: 'pesado' } }] },
+    ];
+    for (const data of accepted) {
+      expect(validateSchema(data, jsonSchema('items')), JSON.stringify(data)).toEqual([]);
+      expect(itemsFileSchema.safeParse(data).success, JSON.stringify(data)).toBe(true);
+    }
+    const rejected = [
+      { items: [{ ...ball, ball: { ...facts, tasa: -1 } }] },
+      { items: [{ ...ball, ball: { ...facts, elementos: ['Fire'] } }] },
+      { items: [{ ...ball, ball: { ...facts, condicion: 'lento' } }] },
+      { items: [{ ...ball, ball: { ...facts, aura: 'Premier Aura' } }] },
+      { items: [{ ...ball, ball: { tasa: null, elementos: [], condicion: null } }] },
+      { items: [{ ...ball, ball: { ...facts, fuente: 'faq' } }] },
+    ];
+    for (const data of rejected) {
+      expect(validateSchema(data, jsonSchema('items')), JSON.stringify(data)).not.toEqual([]);
+      expect(itemsFileSchema.safeParse(data).success, JSON.stringify(data)).toBe(false);
+    }
+  });
+
   it('both reject the same broken documents', () => {
     const stone = readJson('content/items/stones.json').items[0];
-    const diamond = readJson('public/sprites/sprites.json').sprites['ui/diamond'];
+    // A real animation of the registry (the Diamond was one until it became the still gem).
+    const animation = readJson('public/sprites/sprites.json').sprites['ui/sistemas/boost'];
     const { categorias } = readJson('content/items/categorias.json');
     const swapped = structuredClone(categorias);
     [swapped[1].orden, swapped[2].orden] = [swapped[2].orden, swapped[1].orden];
@@ -561,20 +611,20 @@ describe('JSON Schemas and their Zod mirror', () => {
         elementosFileSchema,
         { elementos: [{ ...elementos[0], icono: 'Tipos/Normal' }, ...elementos.slice(1)] },
       ],
-      ['sprites', spritesFileSchema, { sprites: { 'UI/Diamond': diamond } }],
+      ['sprites', spritesFileSchema, { sprites: { 'UI/Diamond': animation } }],
       [
         'sprites',
         spritesFileSchema,
-        { sprites: { 'ui/x': { ...diamond, duracionMs: undefined } } },
+        { sprites: { 'ui/x': { ...animation, duracionMs: undefined } } },
       ],
       [
         'sprites',
         spritesFileSchema,
-        { sprites: { 'ui/x': { ...diamond, modo: 'variante', duracionMs: [1] } } },
+        { sprites: { 'ui/x': { ...animation, modo: 'variante', duracionMs: [1] } } },
       ],
-      ['sprites', spritesFileSchema, { sprites: { 'ui/x': { ...diamond, modo: 'estatico' } } }],
-      ['sprites', spritesFileSchema, { sprites: { 'ui/x': { ...diamond, frame: [32] } } }],
-      ['sprites', spritesFileSchema, { sprites: { 'ui/x': { ...diamond, archivo: 'x.gif' } } }],
+      ['sprites', spritesFileSchema, { sprites: { 'ui/x': { ...animation, modo: 'estatico' } } }],
+      ['sprites', spritesFileSchema, { sprites: { 'ui/x': { ...animation, frame: [32] } } }],
+      ['sprites', spritesFileSchema, { sprites: { 'ui/x': { ...animation, archivo: 'x.gif' } } }],
       [
         'sprites',
         spritesFileSchema,
@@ -617,7 +667,7 @@ describe('pnpm content:check', () => {
     expect(result.summary.find((row) => row.file === 'content/items/stones.json')).toEqual({
       file: 'content/items/stones.json',
       registros: '37 items',
-      borradores: 20,
+      borradores: 0,
     });
     expect(formatReport(result)).toMatch(/Resultado: sin errores/);
   });
@@ -626,8 +676,8 @@ describe('pnpm content:check', () => {
     const root = copyRepo();
     edit(root, 'public/sprites/sprites.json', (data: { sprites: Record<string, never> }) => {
       const sprites = data.sprites as Record<string, Record<string, unknown>>;
-      sprites['ui/diamond'].frames = 6;
-      sprites['ui/diamond'].duracionMs = [110, 110, 110, 110, 110, 110];
+      sprites['ui/sistemas/boost'].frames = 8;
+      sprites['ui/sistemas/boost'].duracionMs = [110, 110, 110, 110, 110, 110, 110, 110];
       sprites['items/poke-balls/alliance-ball'].umbrales = [1, 2, 3, 4, 5, 10, 10, 100];
       sprites['items/stones/fire-stone'].archivo = 'items/stones/missing.png';
     });
@@ -649,7 +699,7 @@ describe('pnpm content:check', () => {
       (entry) => `${entry.file} · ${entry.path ?? ''} · ${entry.message}`,
     );
     const expected = [
-      /sprites\.json · sprites\["ui\/diamond"\]\.archivo · public\/sprites\/ui\/diamond\.png mide 224×32 y se esperaba 192×32/,
+      /sprites\.json · sprites\["ui\/sistemas\/boost"\]\.archivo · public\/sprites\/ui\/sistemas\/boost\.png mide 288×32 y se esperaba 256×32/,
       /umbrales debe ir de menor a mayor/,
       /la imagen public\/sprites\/items\/stones\/missing\.png no existe/,
       /stones\.json · items\[1\]\.id · id repetido: "fire-stone"/,

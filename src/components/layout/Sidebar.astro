@@ -11,18 +11,14 @@
 //   (C-R7), and CSS shows the one the `[open]` state asks for, with no
 //   animation (6.2);
 // - the pinned «Destacados» group is a heading with no button and no chevron,
-//   as in the reference, and it is the only group with sprites (8.0.3, 7.10.2).
-//   `src/lib/nav/groups.ts` fills it from `content/destacados.json` (M10) and
-//   gives each of its links the sprite of its record, already resolved by the
-//   adapter: frame 0 and no animation, the Diamond with `half` (R11, 6.3). Each
-//   link draws it in the 16 px box of `sidebar.css`, which bounces; a record
-//   with no sprite yet keeps the box, empty, so every label of the group starts
-//   at the same x. As in the reference (`spriteNode` of DS:Sidebar), a pixel
-//   sprite keeps its size and is centred in the box on whole pixels: an odd side
-//   gets a 1 px trailing margin, so it lands at floor((16 - side) / 2). The
-//   reference writes that margin inline; here the box names the odd side in
-//   `data-snap` and `sidebar.css` adds the margin, because 3.7 keeps literal
-//   lengths out of `style`.
+//   as in the reference, filled from `content/destacados.json` (M10).
+//
+// Sprites (owner rule 2026-09-25, where 7.10.2 kept them to «Destacados»): every
+// link and every group heading draws the sprite `src/lib/nav/groups.ts` resolved
+// for it, frame 0 and no animation (6.3), in the 16 px box of `SidebarSprite.astro`,
+// which also picks its drawn size. An entry with no sprite yet keeps the box,
+// empty, so every label of a list starts at the same x. Only the links of
+// «Destacados» bounce.
 //
 // What the links are, and which ones exist, is `src/lib/nav/groups.ts` (8.0.3,
 // WG5). This component paints what it is given and never decides a route.
@@ -42,12 +38,12 @@
 // remembers every group the reader opens or closes (both instances share it) and
 // applies it before the first paint; the group of the current page always opens.
 import type { Locale } from '@/i18n/config';
-import type { SidebarLink, SidebarNav } from '@/lib/nav/groups';
+import type { SidebarNav } from '@/lib/nav/groups';
 import type { Messages } from '@/i18n/messages/en';
 import { en } from '@/i18n/messages/en';
 import { es } from '@/i18n/messages/es';
-import { Sprite } from '@/components/game/Sprite';
 import { Glyph } from '@/components/icons/Glyph';
+import SidebarSprite from './SidebarSprite.astro';
 
 interface Props {
   /** Page locale: picks the dictionary. */
@@ -70,22 +66,6 @@ const dictionaries: Record<Locale, Messages> = { es, en };
 
 const { locale, nav, touch = false, idPrefix = 'nav', class: className } = Astro.props;
 const shell = dictionaries[locale].shell;
-
-/**
- * The odd sides of the sprite of a pinned link, which `sidebar.css` follows with 1 px
- * so the box of 16 centres it on whole pixels (DS:Sidebar `spriteNode`): `x` for an
- * odd width, `y` for an odd height, nothing when both are even. The drawn size is the
- * illustration's own, or the frame at 1x, or at 0.5x for `half`.
- */
-function snap(item: SidebarLink): string | undefined {
-  const sprite = item.sprite;
-  if (!sprite) return undefined;
-  const factor = item.half ? 0.5 : Math.max(1, Math.trunc(sprite.scale ?? 1));
-  const width = sprite.smooth ? (sprite.width ?? 0) : Math.round(sprite.size[0] * factor);
-  const height = sprite.smooth ? (sprite.height ?? 0) : Math.round(sprite.size[1] * factor);
-  const sides = [width % 2 === 1 ? 'x' : null, height % 2 === 1 ? 'y' : null].filter(Boolean);
-  return sides.length > 0 ? sides.join(' ') : undefined;
-}
 ---
 
 <nav
@@ -104,6 +84,7 @@ function snap(item: SidebarLink): string | undefined {
                 aria-current={item.current}
                 data-astro-prefetch
               >
+                <SidebarSprite sprite={item.sprite} />
                 {item.label}
               </a>
             </li>
@@ -116,6 +97,7 @@ function snap(item: SidebarLink): string | undefined {
         group.pinned ? (
           <div class="ac-sidebar__group">
             <p id={`${idPrefix}-${group.id}-t`} class="ac-sidebar__heading">
+              <SidebarSprite sprite={group.sprite} />
               {group.label}
             </p>
             <ul class="ac-sidebar__list" aria-labelledby={`${idPrefix}-${group.id}-t`}>
@@ -127,15 +109,7 @@ function snap(item: SidebarLink): string | undefined {
                     aria-current={item.current}
                     data-astro-prefetch
                   >
-                    {item.sprite !== undefined && (
-                      <span
-                        class="ac-sidebar__sprite ac-bounce"
-                        aria-hidden="true"
-                        data-snap={snap(item)}
-                      >
-                        {item.sprite !== null && <Sprite {...item.sprite} half={item.half} />}
-                      </span>
-                    )}
+                    <SidebarSprite sprite={item.sprite} bounce />
                     {item.label}
                   </a>
                 </li>
@@ -150,7 +124,10 @@ function snap(item: SidebarLink): string | undefined {
             data-current={group.open ? '' : undefined}
           >
             <summary class="ac-sidebar__toggle">
-              {group.label}
+              <span class="ac-sidebar__toggle-label">
+                <SidebarSprite sprite={group.sprite} />
+                {group.label}
+              </span>
               <Glyph
                 name="chevron-up"
                 size={16}
@@ -171,6 +148,7 @@ function snap(item: SidebarLink): string | undefined {
                     aria-current={item.current}
                     data-astro-prefetch
                   >
+                    <SidebarSprite sprite={item.sprite} />
                     {item.label}
                   </a>
                 </li>

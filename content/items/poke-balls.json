@@ -4,217 +4,1130 @@
     {
       "id": "poke-ball",
       "nombre": "Poké Ball",
-      "clientId": null,
+      "clientId": 3032,
       "categoria": "poke-balls",
       "sprite": "items/poke-balls/poke-ball",
-      "apilable": null,
+      "apilable": true,
       "precioNpc": {
         "vende": null,
-        "compra": null
+        "compra": 5
+      },
+      "ball": {
+        "tasa": null,
+        "elementos": [],
+        "condicion": null,
+        "aura": null
       }
     },
     {
       "id": "great-ball",
       "nombre": "Great Ball",
-      "clientId": null,
+      "clientId": 3551,
       "categoria": "poke-balls",
       "sprite": "items/poke-balls/great-ball",
-      "apilable": null,
+      "apilable": true,
       "precioNpc": {
         "vende": null,
-        "compra": null
+        "compra": 20
+      },
+      "ball": {
+        "tasa": null,
+        "elementos": [],
+        "condicion": null,
+        "aura": null
       }
     },
     {
       "id": "super-ball",
       "nombre": "Super Ball",
-      "clientId": null,
+      "clientId": 3554,
       "categoria": "poke-balls",
       "sprite": "items/poke-balls/super-ball",
-      "apilable": null,
+      "apilable": true,
       "precioNpc": {
         "vende": null,
-        "compra": null
+        "compra": 50
+      },
+      "ball": {
+        "tasa": null,
+        "elementos": [],
+        "condicion": null,
+        "aura": null
       }
     },
     {
       "id": "ultra-ball",
       "nombre": "Ultra Ball",
-      "clientId": null,
+      "clientId": 3552,
       "categoria": "poke-balls",
       "sprite": "items/poke-balls/ultra-ball",
-      "apilable": null,
+      "apilable": true,
       "precioNpc": {
         "vende": null,
-        "compra": null
+        "compra": 130
+      },
+      "ball": {
+        "tasa": null,
+        "elementos": [],
+        "condicion": null,
+        "aura": null
+      },
+      "obtencion": {
+        "pase": [
+          {
+            "temporada": null,
+            "nivel": 2,
+            "pista": "gratis",
+            "cantidad": 100
+          },
+          {
+            "temporada": null,
+            "nivel": 8,
+            "pista": "gratis",
+            "cantidad": 100
+          },
+          {
+            "temporada": null,
+            "nivel": 14,
+            "pista": "gratis",
+            "cantidad": 100
+          },
+          {
+            "temporada": null,
+            "nivel": 21,
+            "pista": "gratis",
+            "cantidad": 100
+          },
+          {
+            "temporada": null,
+            "nivel": 24,
+            "pista": "gratis",
+            "cantidad": 100
+          },
+          {
+            "temporada": null,
+            "nivel": 28,
+            "pista": "gratis",
+            "cantidad": 100
+          },
+          {
+            "temporada": null,
+            "nivel": 35,
+            "pista": "gratis",
+            "cantidad": 100
+          }
+        ],
+        "calendario": [
+          {
+            "mes": 9,
+            "dia": 1,
+            "trasDia21": false,
+            "calendario": "gratis",
+            "cantidad": 100
+          }
+        ],
+        "tareas": [
+          {
+            "tipo": "linked-task",
+            "nombre": "Ratpack Rumble",
+            "cantidad": 4
+          },
+          {
+            "tipo": "linked-task",
+            "nombre": "Uprooted Menace",
+            "cantidad": 40
+          }
+        ]
       }
     },
     {
       "id": "safari-ball",
       "nombre": "Safari Ball",
-      "clientId": null,
+      "clientId": 3553,
       "categoria": "poke-balls",
       "sprite": "items/poke-balls/safari-ball",
-      "apilable": null,
+      "apilable": true,
       "precioNpc": {
         "vende": null,
-        "compra": null
+        "compra": 20
+      },
+      "ball": {
+        "tasa": null,
+        "elementos": [],
+        "condicion": null,
+        "aura": null
       }
     },
     {
       "id": "moon-ball",
       "nombre": "Moon Ball",
-      "clientId": null,
+      "clientId": 15647,
       "categoria": "poke-balls",
       "sprite": "items/poke-balls/moon-ball",
-      "apilable": null,
+      "apilable": true,
       "precioNpc": {
         "vende": null,
         "compra": null
+      },
+      "ball": {
+        "tasa": null,
+        "elementos": ["dark", "ghost"],
+        "condicion": null,
+        "aura": null
+      },
+      "mercado": true,
+      "descripcion": {
+        "en": "A somewhat different Poke Ball that is more effective when attempting to catch DARK or GHOST Pokémon."
+      },
+      "obtencion": {
+        "tiendas": [
+          {
+            "tienda": "Diamond Shop",
+            "precio": 5,
+            "moneda": "Diamonds",
+            "cantidad": 100
+          },
+          {
+            "tienda": "Diamond Shop",
+            "precio": 45,
+            "moneda": "Diamonds",
+            "cantidad": 1000
+          },
+          {
+            "tienda": "Online Shop",
+            "precio": 100,
+            "moneda": "Online Points",
+            "cantidad": 5
+          }
+        ],
+        "pase": [
+          {
+            "temporada": null,
+            "nivel": 18,
+            "pista": "gratis",
+            "cantidad": 3
+          },
+          {
+            "temporada": null,
+            "nivel": 18,
+            "pista": "premium",
+            "cantidad": 10
+          }
+        ]
       }
     },
     {
       "id": "tinker-ball",
       "nombre": "Tinker Ball",
-      "clientId": null,
+      "clientId": 15651,
       "categoria": "poke-balls",
       "sprite": "items/poke-balls/tinker-ball",
-      "apilable": null,
+      "apilable": true,
       "precioNpc": {
         "vende": null,
         "compra": null
+      },
+      "ball": {
+        "tasa": null,
+        "elementos": ["electric", "steel"],
+        "condicion": null,
+        "aura": null
+      },
+      "mercado": true,
+      "descripcion": {
+        "en": "A somewhat different Poke Ball that is more effective when attempting to catch ELECTRIC or STEEL Pokémon."
+      },
+      "obtencion": {
+        "tiendas": [
+          {
+            "tienda": "Diamond Shop",
+            "precio": 5,
+            "moneda": "Diamonds",
+            "cantidad": 100
+          },
+          {
+            "tienda": "Diamond Shop",
+            "precio": 45,
+            "moneda": "Diamonds",
+            "cantidad": 1000
+          },
+          {
+            "tienda": "Online Shop",
+            "precio": 100,
+            "moneda": "Online Points",
+            "cantidad": 5
+          }
+        ],
+        "pase": [
+          {
+            "temporada": null,
+            "nivel": 31,
+            "pista": "gratis",
+            "cantidad": 3
+          },
+          {
+            "temporada": null,
+            "nivel": 31,
+            "pista": "premium",
+            "cantidad": 10
+          }
+        ]
       }
     },
     {
       "id": "yume-ball",
       "nombre": "Yume Ball",
-      "clientId": null,
+      "clientId": 15642,
       "categoria": "poke-balls",
       "sprite": "items/poke-balls/yume-ball",
-      "apilable": null,
+      "apilable": true,
       "precioNpc": {
         "vende": null,
         "compra": null
+      },
+      "ball": {
+        "tasa": null,
+        "elementos": ["normal", "psychic"],
+        "condicion": null,
+        "aura": null
+      },
+      "mercado": true,
+      "descripcion": {
+        "en": "A somewhat different Poke Ball that is more effective when attempting to catch NORMAL or PSYCHIC Pokémon."
+      },
+      "obtencion": {
+        "tiendas": [
+          {
+            "tienda": "Diamond Shop",
+            "precio": 5,
+            "moneda": "Diamonds",
+            "cantidad": 100
+          },
+          {
+            "tienda": "Diamond Shop",
+            "precio": 45,
+            "moneda": "Diamonds",
+            "cantidad": 1000
+          },
+          {
+            "tienda": "Online Shop",
+            "precio": 100,
+            "moneda": "Online Points",
+            "cantidad": 5
+          }
+        ],
+        "pase": [
+          {
+            "temporada": null,
+            "nivel": 10,
+            "pista": "gratis",
+            "cantidad": 3
+          },
+          {
+            "temporada": null,
+            "nivel": 10,
+            "pista": "premium",
+            "cantidad": 10
+          }
+        ]
       }
     },
     {
       "id": "dusk-ball",
       "nombre": "Dusk Ball",
-      "clientId": null,
+      "clientId": 15643,
       "categoria": "poke-balls",
       "sprite": "items/poke-balls/dusk-ball",
-      "apilable": null,
+      "apilable": true,
       "precioNpc": {
         "vende": null,
         "compra": null
+      },
+      "ball": {
+        "tasa": null,
+        "elementos": ["rock", "fighting"],
+        "condicion": null,
+        "aura": null
+      },
+      "mercado": true,
+      "descripcion": {
+        "en": "A somewhat different Poke Ball that is more effective when attempting to catch ROCK or FIGHTING Pokémon."
+      },
+      "obtencion": {
+        "tiendas": [
+          {
+            "tienda": "Diamond Shop",
+            "precio": 5,
+            "moneda": "Diamonds",
+            "cantidad": 100
+          },
+          {
+            "tienda": "Diamond Shop",
+            "precio": 45,
+            "moneda": "Diamonds",
+            "cantidad": 1000
+          },
+          {
+            "tienda": "Online Shop",
+            "precio": 100,
+            "moneda": "Online Points",
+            "cantidad": 5
+          }
+        ],
+        "pase": [
+          {
+            "temporada": null,
+            "nivel": 12,
+            "pista": "gratis",
+            "cantidad": 3
+          },
+          {
+            "temporada": null,
+            "nivel": 12,
+            "pista": "premium",
+            "cantidad": 10
+          }
+        ]
       }
     },
     {
       "id": "heavy-ball",
       "nombre": "Heavy Ball",
-      "clientId": null,
+      "clientId": 15645,
       "categoria": "poke-balls",
       "sprite": "items/poke-balls/heavy-ball",
-      "apilable": null,
+      "apilable": true,
       "precioNpc": {
         "vende": null,
         "compra": null
+      },
+      "ball": {
+        "tasa": null,
+        "elementos": [],
+        "condicion": "pesado",
+        "aura": null
+      },
+      "mercado": true,
+      "descripcion": {
+        "en": "A Poke Ball that is better than usual at catching very heavy Pokémon."
+      },
+      "obtencion": {
+        "tiendas": [
+          {
+            "tienda": "Diamond Shop",
+            "precio": 5,
+            "moneda": "Diamonds",
+            "cantidad": 100
+          },
+          {
+            "tienda": "Diamond Shop",
+            "precio": 45,
+            "moneda": "Diamonds",
+            "cantidad": 1000
+          },
+          {
+            "tienda": "Online Shop",
+            "precio": 100,
+            "moneda": "Online Points",
+            "cantidad": 5
+          }
+        ],
+        "pase": [
+          {
+            "temporada": null,
+            "nivel": 41,
+            "pista": "gratis",
+            "cantidad": 3
+          },
+          {
+            "temporada": null,
+            "nivel": 41,
+            "pista": "premium",
+            "cantidad": 10
+          }
+        ],
+        "calendario": [
+          {
+            "mes": 9,
+            "dia": 10,
+            "trasDia21": false,
+            "calendario": "gratis",
+            "cantidad": 5
+          }
+        ]
       }
     },
     {
       "id": "janguru-ball",
       "nombre": "Janguru Ball",
-      "clientId": null,
+      "clientId": 15649,
       "categoria": "poke-balls",
       "sprite": "items/poke-balls/janguru-ball",
-      "apilable": null,
+      "apilable": true,
       "precioNpc": {
         "vende": null,
         "compra": null
+      },
+      "ball": {
+        "tasa": null,
+        "elementos": ["poison", "grass"],
+        "condicion": null,
+        "aura": null
+      },
+      "mercado": true,
+      "descripcion": {
+        "en": "A somewhat different Poke Ball that is more effective when attempting to catch POISON or GRASS Pokémon."
+      },
+      "obtencion": {
+        "tiendas": [
+          {
+            "tienda": "Diamond Shop",
+            "precio": 5,
+            "moneda": "Diamonds",
+            "cantidad": 100
+          },
+          {
+            "tienda": "Diamond Shop",
+            "precio": 45,
+            "moneda": "Diamonds",
+            "cantidad": 1000
+          },
+          {
+            "tienda": "Online Shop",
+            "precio": 100,
+            "moneda": "Online Points",
+            "cantidad": 5
+          }
+        ],
+        "pase": [
+          {
+            "temporada": null,
+            "nivel": 26,
+            "pista": "gratis",
+            "cantidad": 3
+          },
+          {
+            "temporada": null,
+            "nivel": 26,
+            "pista": "premium",
+            "cantidad": 10
+          }
+        ]
       }
     },
     {
       "id": "magu-ball",
       "nombre": "Magu Ball",
-      "clientId": null,
+      "clientId": 15640,
       "categoria": "poke-balls",
       "sprite": "items/poke-balls/magu-ball",
-      "apilable": null,
+      "apilable": true,
       "precioNpc": {
         "vende": null,
         "compra": null
+      },
+      "ball": {
+        "tasa": null,
+        "elementos": ["fire", "ground"],
+        "condicion": null,
+        "aura": null
+      },
+      "mercado": true,
+      "descripcion": {
+        "en": "A somewhat different Poke Ball that is more effective when attempting to catch FIRE or GROUND Pokémon."
+      },
+      "obtencion": {
+        "tiendas": [
+          {
+            "tienda": "Diamond Shop",
+            "precio": 5,
+            "moneda": "Diamonds",
+            "cantidad": 100
+          },
+          {
+            "tienda": "Diamond Shop",
+            "precio": 45,
+            "moneda": "Diamonds",
+            "cantidad": 1000
+          },
+          {
+            "tienda": "Online Shop",
+            "precio": 100,
+            "moneda": "Online Points",
+            "cantidad": 5
+          }
+        ],
+        "pase": [
+          {
+            "temporada": null,
+            "nivel": 4,
+            "pista": "gratis",
+            "cantidad": 3
+          },
+          {
+            "temporada": null,
+            "nivel": 4,
+            "pista": "premium",
+            "cantidad": 10
+          }
+        ]
       }
     },
     {
       "id": "net-ball",
       "nombre": "Net Ball",
-      "clientId": null,
+      "clientId": 15648,
       "categoria": "poke-balls",
       "sprite": "items/poke-balls/net-ball",
-      "apilable": null,
+      "apilable": true,
       "precioNpc": {
         "vende": null,
         "compra": null
+      },
+      "ball": {
+        "tasa": null,
+        "elementos": ["bug", "water"],
+        "condicion": null,
+        "aura": null
+      },
+      "mercado": true,
+      "descripcion": {
+        "en": "A somewhat different Poke Ball that is more effective when attempting to catch BUG or WATER Pokémon."
+      },
+      "obtencion": {
+        "tiendas": [
+          {
+            "tienda": "Diamond Shop",
+            "precio": 5,
+            "moneda": "Diamonds",
+            "cantidad": 100
+          },
+          {
+            "tienda": "Diamond Shop",
+            "precio": 45,
+            "moneda": "Diamonds",
+            "cantidad": 1000
+          },
+          {
+            "tienda": "Online Shop",
+            "precio": 100,
+            "moneda": "Online Points",
+            "cantidad": 5
+          }
+        ],
+        "pase": [
+          {
+            "temporada": null,
+            "nivel": 23,
+            "pista": "gratis",
+            "cantidad": 3
+          },
+          {
+            "temporada": null,
+            "nivel": 23,
+            "pista": "premium",
+            "cantidad": 10
+          }
+        ]
       }
     },
     {
       "id": "sora-ball",
       "nombre": "Sora Ball",
-      "clientId": null,
+      "clientId": 15641,
       "categoria": "poke-balls",
       "sprite": "items/poke-balls/sora-ball",
-      "apilable": null,
+      "apilable": true,
       "precioNpc": {
         "vende": null,
         "compra": null
+      },
+      "ball": {
+        "tasa": null,
+        "elementos": ["ice", "flying"],
+        "condicion": null,
+        "aura": null
+      },
+      "mercado": true,
+      "descripcion": {
+        "en": "A somewhat different Poke Ball that is more effective when attempting to catch ICE or FLYING Pokémon."
+      },
+      "obtencion": {
+        "tiendas": [
+          {
+            "tienda": "Diamond Shop",
+            "precio": 5,
+            "moneda": "Diamonds",
+            "cantidad": 100
+          },
+          {
+            "tienda": "Diamond Shop",
+            "precio": 45,
+            "moneda": "Diamonds",
+            "cantidad": 1000
+          },
+          {
+            "tienda": "Online Shop",
+            "precio": 100,
+            "moneda": "Online Points",
+            "cantidad": 5
+          }
+        ],
+        "pase": [
+          {
+            "temporada": null,
+            "nivel": 6,
+            "pista": "gratis",
+            "cantidad": 3
+          },
+          {
+            "temporada": null,
+            "nivel": 6,
+            "pista": "premium",
+            "cantidad": 10
+          }
+        ]
       }
     },
     {
       "id": "tale-ball",
       "nombre": "Tale Ball",
-      "clientId": null,
+      "clientId": 15646,
       "categoria": "poke-balls",
       "sprite": "items/poke-balls/tale-ball",
-      "apilable": null,
+      "apilable": true,
       "precioNpc": {
         "vende": null,
         "compra": null
+      },
+      "ball": {
+        "tasa": null,
+        "elementos": ["dragon", "fairy"],
+        "condicion": null,
+        "aura": null
+      },
+      "mercado": true,
+      "descripcion": {
+        "en": "A somewhat different Poke Ball that is more effective when attempting to catch DRAGON or FAIRY Pokémon."
+      },
+      "obtencion": {
+        "tiendas": [
+          {
+            "tienda": "Diamond Shop",
+            "precio": 5,
+            "moneda": "Diamonds",
+            "cantidad": 100
+          },
+          {
+            "tienda": "Diamond Shop",
+            "precio": 45,
+            "moneda": "Diamonds",
+            "cantidad": 1000
+          },
+          {
+            "tienda": "Online Shop",
+            "precio": 100,
+            "moneda": "Online Points",
+            "cantidad": 5
+          }
+        ],
+        "pase": [
+          {
+            "temporada": null,
+            "nivel": 16,
+            "pista": "gratis",
+            "cantidad": 3
+          },
+          {
+            "temporada": null,
+            "nivel": 16,
+            "pista": "premium",
+            "cantidad": 10
+          }
+        ]
       }
     },
     {
       "id": "fast-ball",
       "nombre": "Fast Ball",
-      "clientId": null,
+      "clientId": 15644,
       "categoria": "poke-balls",
       "sprite": "items/poke-balls/fast-ball",
-      "apilable": null,
+      "apilable": true,
       "precioNpc": {
         "vende": null,
         "compra": null
+      },
+      "ball": {
+        "tasa": null,
+        "elementos": [],
+        "condicion": "rapido",
+        "aura": null
+      },
+      "mercado": true,
+      "descripcion": {
+        "en": "A Poke Ball that makes it easier to catch very fast Pokémon."
+      },
+      "obtencion": {
+        "tiendas": [
+          {
+            "tienda": "Diamond Shop",
+            "precio": 5,
+            "moneda": "Diamonds",
+            "cantidad": 100
+          },
+          {
+            "tienda": "Diamond Shop",
+            "precio": 45,
+            "moneda": "Diamonds",
+            "cantidad": 1000
+          },
+          {
+            "tienda": "Online Shop",
+            "precio": 100,
+            "moneda": "Online Points",
+            "cantidad": 5
+          }
+        ],
+        "pase": [
+          {
+            "temporada": null,
+            "nivel": 33,
+            "pista": "gratis",
+            "cantidad": 3
+          },
+          {
+            "temporada": null,
+            "nivel": 33,
+            "pista": "premium",
+            "cantidad": 10
+          }
+        ],
+        "calendario": [
+          {
+            "mes": 9,
+            "dia": 18,
+            "trasDia21": false,
+            "calendario": "gratis",
+            "cantidad": 10
+          }
+        ]
       }
     },
     {
       "id": "premier-ball",
       "nombre": "Premier Ball",
-      "clientId": null,
+      "clientId": 15650,
       "categoria": "poke-balls",
       "sprite": "items/poke-balls/premier-ball",
-      "apilable": null,
+      "apilable": true,
       "precioNpc": {
         "vende": null,
         "compra": null
+      },
+      "ball": {
+        "tasa": null,
+        "elementos": [],
+        "condicion": null,
+        "aura": "premier"
+      },
+      "mercado": true,
+      "descripcion": {
+        "en": "A rare Ball that has been specially made to commemorate an event of some sort, this Ball has unique particle effects."
+      },
+      "obtencion": {
+        "tiendas": [
+          {
+            "tienda": "Diamond Shop",
+            "precio": 5,
+            "moneda": "Diamonds",
+            "cantidad": 100
+          },
+          {
+            "tienda": "Diamond Shop",
+            "precio": 22,
+            "moneda": "Diamonds",
+            "cantidad": 500
+          },
+          {
+            "tienda": "Diamond Shop",
+            "precio": 40,
+            "moneda": "Diamonds",
+            "cantidad": 1000
+          },
+          {
+            "tienda": "Online Shop",
+            "precio": 100,
+            "moneda": "Online Points",
+            "cantidad": 3
+          }
+        ],
+        "pase": [
+          {
+            "temporada": null,
+            "nivel": 3,
+            "pista": "gratis",
+            "cantidad": 3
+          },
+          {
+            "temporada": null,
+            "nivel": 9,
+            "pista": "gratis",
+            "cantidad": 3
+          },
+          {
+            "temporada": null,
+            "nivel": 15,
+            "pista": "gratis",
+            "cantidad": 6
+          },
+          {
+            "temporada": null,
+            "nivel": 22,
+            "pista": "gratis",
+            "cantidad": 6
+          },
+          {
+            "temporada": null,
+            "nivel": 29,
+            "pista": "gratis",
+            "cantidad": 9
+          },
+          {
+            "temporada": null,
+            "nivel": 36,
+            "pista": "gratis",
+            "cantidad": 9
+          },
+          {
+            "temporada": null,
+            "nivel": 43,
+            "pista": "gratis",
+            "cantidad": 9
+          },
+          {
+            "temporada": null,
+            "nivel": 47,
+            "pista": "gratis",
+            "cantidad": 20
+          },
+          {
+            "temporada": null,
+            "nivel": 3,
+            "pista": "premium",
+            "cantidad": 10
+          },
+          {
+            "temporada": null,
+            "nivel": 9,
+            "pista": "premium",
+            "cantidad": 10
+          },
+          {
+            "temporada": null,
+            "nivel": 15,
+            "pista": "premium",
+            "cantidad": 20
+          },
+          {
+            "temporada": null,
+            "nivel": 22,
+            "pista": "premium",
+            "cantidad": 20
+          },
+          {
+            "temporada": null,
+            "nivel": 29,
+            "pista": "premium",
+            "cantidad": 30
+          },
+          {
+            "temporada": null,
+            "nivel": 36,
+            "pista": "premium",
+            "cantidad": 30
+          },
+          {
+            "temporada": null,
+            "nivel": 43,
+            "pista": "premium",
+            "cantidad": 30
+          },
+          {
+            "temporada": null,
+            "nivel": 47,
+            "pista": "premium",
+            "cantidad": 50
+          }
+        ],
+        "calendario": [
+          {
+            "mes": 9,
+            "dia": 7,
+            "trasDia21": false,
+            "calendario": "gratis",
+            "cantidad": 5
+          },
+          {
+            "mes": 9,
+            "dia": 16,
+            "trasDia21": false,
+            "calendario": "gratis",
+            "cantidad": 25
+          },
+          {
+            "mes": 9,
+            "dia": null,
+            "trasDia21": true,
+            "calendario": "gratis",
+            "cantidad": 5
+          },
+          {
+            "mes": 9,
+            "dia": 7,
+            "trasDia21": false,
+            "calendario": "premium",
+            "cantidad": 25
+          },
+          {
+            "mes": 9,
+            "dia": 16,
+            "trasDia21": false,
+            "calendario": "premium",
+            "cantidad": 100
+          },
+          {
+            "mes": 9,
+            "dia": null,
+            "trasDia21": true,
+            "calendario": "premium",
+            "cantidad": 25
+          }
+        ]
       }
     },
     {
       "id": "alliance-ball",
       "nombre": "Alliance Ball",
-      "clientId": null,
+      "clientId": 45310,
       "categoria": "poke-balls",
       "sprite": "items/poke-balls/alliance-ball",
       "apilable": true,
       "precioNpc": {
         "vende": null,
         "compra": null
+      },
+      "ball": {
+        "tasa": null,
+        "elementos": [],
+        "condicion": null,
+        "aura": "alliance"
+      },
+      "mercado": true,
+      "descripcion": {
+        "en": "A prestigious Ball created exclusively for the trainers of Alliance. This Ball represents unity and strength, featuring dazzling effects to showcase its rarity."
+      },
+      "obtencion": {
+        "tiendas": [
+          {
+            "tienda": "Diamond Shop",
+            "precio": 6,
+            "moneda": "Diamonds",
+            "cantidad": 100
+          },
+          {
+            "tienda": "Diamond Shop",
+            "precio": 50,
+            "moneda": "Diamonds",
+            "cantidad": 1000
+          }
+        ],
+        "pase": [
+          {
+            "temporada": null,
+            "nivel": 20,
+            "pista": "gratis",
+            "cantidad": 10
+          },
+          {
+            "temporada": null,
+            "nivel": 30,
+            "pista": "gratis",
+            "cantidad": 10
+          },
+          {
+            "temporada": null,
+            "nivel": 40,
+            "pista": "gratis",
+            "cantidad": 10
+          },
+          {
+            "temporada": null,
+            "nivel": 45,
+            "pista": "gratis",
+            "cantidad": 10
+          },
+          {
+            "temporada": null,
+            "nivel": 49,
+            "pista": "gratis",
+            "cantidad": 20
+          },
+          {
+            "temporada": null,
+            "nivel": 2,
+            "pista": "premium",
+            "cantidad": 10
+          },
+          {
+            "temporada": null,
+            "nivel": 8,
+            "pista": "premium",
+            "cantidad": 10
+          },
+          {
+            "temporada": null,
+            "nivel": 14,
+            "pista": "premium",
+            "cantidad": 15
+          },
+          {
+            "temporada": null,
+            "nivel": 21,
+            "pista": "premium",
+            "cantidad": 15
+          },
+          {
+            "temporada": null,
+            "nivel": 24,
+            "pista": "premium",
+            "cantidad": 20
+          },
+          {
+            "temporada": null,
+            "nivel": 28,
+            "pista": "premium",
+            "cantidad": 20
+          },
+          {
+            "temporada": null,
+            "nivel": 35,
+            "pista": "premium",
+            "cantidad": 30
+          },
+          {
+            "temporada": null,
+            "nivel": 42,
+            "pista": "premium",
+            "cantidad": 30
+          },
+          {
+            "temporada": null,
+            "nivel": 49,
+            "pista": "premium",
+            "cantidad": 40
+          }
+        ]
       }
     }
   ]

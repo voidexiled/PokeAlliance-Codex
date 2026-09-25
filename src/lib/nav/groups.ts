@@ -27,6 +27,15 @@
 // (`registro`): it runs on every call, so a build with OCULTAR_BORRADORES=1 reads
 // the records that build keeps, and each entry it returns goes through the same
 // WG5 test as a fixed one.
+//
+// Sprites (owner rule 2026-09-25, replacing «only Destacados carries sprites» of 7.10.2):
+// every link and every group heading draws a game sprite in the 16 px box of sidebar.css.
+// An entry filled from a registry takes the sprite of its record (`sprite` of a system,
+// `icono` of a category, `sprite` of an activity, `sprite` of a Destacados entry); a fixed
+// page linked by «Destacados» takes the sprite of that record, so one page has one sprite
+// in the whole menu; the other fixed entries and the group headings name their key in
+// `ICONOS`. A key the registry does not hold fails the build (7.4.1); `null` keeps the box
+// empty, so every label of a list starts at the same x.
 import { esRutaDelSitio, normalizarRuta } from '../../../scripts/lib/rutas-migradas.mjs';
 
 import type { Locale } from '@/i18n/config';
@@ -37,11 +46,13 @@ import {
   getSpriteRegistry,
 } from '@/lib/content/registry';
 import { getQuests } from '@/lib/content/repository';
+import { menuSpriteSize } from '@/lib/nav/menu-sprites';
 import { spriteOrNull, type SpriteData } from '@/lib/sprites/resolve';
 
 /**
- * The sprite of a «Destacados» link, as the props of `Sprite` take it (7.4.1, DP2): what the
- * adapter returns for the key of its record, plus the drawn size of an illustration.
+ * The sprite of a menu entry, as the props of `Sprite` take it (7.4.1, DP2): what the adapter
+ * returns for its key, plus its drawn size when the menu scales it (`spriteDeMenu`). Without
+ * `width` the sprite is drawn at 1x.
  */
 export type SidebarSprite = SpriteData & { width?: number; height?: number };
 
@@ -59,27 +70,22 @@ export interface SidebarLink {
    */
   current?: 'page' | 'true';
   /**
-   * Only on the links of the pinned «Destacados» group, the one group with sprites (8.0.3,
-   * 7.10.2, DS:Sidebar): the sprite of the entry in its box of 16, which bounces. `null` while
-   * the record has no sprite yet (D-011): the box stays, empty, so the labels of the group
-   * start at the same x. The other groups never carry the key.
+   * The sprite of the entry in its box of 16 (owner rule 2026-09-25, DS:Sidebar). `null` while
+   * the entry has no sprite yet (D-011): the box stays, empty, so the labels of the list start
+   * at the same x. The links of «Destacados» bounce; the others rest.
    *
-   * A pixel sprite keeps its 1x size and is centred in the box (`DS:Sidebar`, sidebar.css); it
-   * rests on frame 0 and never animates there, the Diamond included (6.3). An illustration is
-   * drawn smooth at 16.
+   * The sprite is centred in the box and rests on frame 0 (6.3); `spriteDeMenu` picks its
+   * drawn size.
    */
-  sprite?: SidebarSprite | null;
-  /**
-   * The Diamond of «Destacados» (R11, 7.10.2): drawn at 0.5x, the one pixel sprite the site
-   * shrinks. `Sidebar.astro` passes it to `Sprite` as `half`, and no other file does (C7-15).
-   */
-  half?: true;
+  sprite: SidebarSprite | null;
 }
 
 /** A rendered group of the menu. */
 export interface SidebarGroup {
   id: string;
   label: string;
+  /** The sprite of the heading, in the same box of 16 as the links (owner rule 2026-09-25). */
+  sprite: SidebarSprite | null;
   /** The fixed «Destacados» group: a heading with no button and no chevron (7.10.2). */
   pinned: boolean;
   /** `<details open>`: a group starts open when it holds the current page (7.10.2). */
@@ -107,10 +113,11 @@ interface EntradaDeclarada {
    * mark it `aria-current="true"` (E10).
    */
   seccion?: boolean;
-  /** «Destacados» alone: its sprite, or `null` for the empty box (see `SidebarLink`). */
-  sprite?: SidebarSprite | null;
-  /** «Destacados» alone: the Diamond, drawn at half (R11). */
-  half?: true;
+  /**
+   * The key of its sprite in public/sprites/sprites.json, or `null` for the empty box. A fixed
+   * entry leaves it out: `ICONOS` names it, or the «Destacados» record of its page.
+   */
+  icono?: string | null;
 }
 
 interface GrupoDeclarado {
@@ -122,30 +129,46 @@ interface GrupoDeclarado {
   registro?: () => EntradaDeclarada[];
 }
 
-/** The fixed key of the Diamond (3.13), the one sprite «Destacados» draws at half (R11). */
+/** The fixed key of the Diamond (3.13). */
 const DIAMOND = 'ui/diamond';
 
-/** The box of a «Destacados» sprite: `--size-sprite-nav` (DS:Sidebar, sidebar.css). */
-const SPRITE_NAV = 16;
+/**
+ * The sprites of the fixed entries and of the group headings, by id (owner rule 2026-09-25):
+ * keys of public/sprites/sprites.json, chosen from the client's own art (Pokédex, gold medal
+ * and Poké Lens items, its top-bar buttons for Pokémon, Quest Log, Analyzer and VIP list). A
+ * group heading is `grupo:{id}`. A fixed page that «Destacados» links takes the sprite of that
+ * record instead of this table.
+ */
+const ICONOS: Readonly<Record<string, string | null>> = {
+  inicio: 'ui/inicio',
+  pokedex: 'ui/nav/pokedex',
+  tiers: 'ui/nav/tier-list',
+  comparar: 'ui/nav/comparar',
+  guild: 'ui/herramientas/guild',
+  mapa: 'ui/herramientas/mapa',
+  comercio: DIAMOND,
+  cambios: 'ui/cambios',
+  'grupo:destacados': 'ui/nav/destacados',
+  'grupo:pokemon': 'ui/nav/pokemon',
+  'grupo:sistemas': 'ui/indice/sistemas',
+  'grupo:items': 'ui/indice/items',
+  'grupo:actividades': 'ui/nav/actividades',
+  'grupo:herramientas': 'ui/nav/herramientas',
+  'grupo:comunidad': 'ui/nav/comunidad',
+};
 
 /**
- * The sprite of a «Destacados» entry (7.10.2, DS:Sidebar): the key of its record through the
- * adapter, with no option, so a sheet rests on frame 0 and the Diamond does not turn in the
- * menu (6.3) — it turns in the cards of the section, whose composer asks for the animation.
- * An illustration gets its drawn size, the largest that fits the box of 16; a pixel sprite
- * keeps its 1x size and `Sidebar.astro` centres it in the box. An unknown key fails the build
- * here, as it does in every other composer (7.4.1).
+ * The sprite of a menu entry (DS:Sidebar): its key through the adapter, with no option, so a
+ * sheet rests on frame 0 in the menu (6.3), and the size `menuSpriteSize` gives it: 1x for art
+ * up to 20, scaled down to 18 for larger art (src/lib/nav/menu-sprites.ts). `SidebarSprite.astro`
+ * centres it in the box. An unknown key fails the build here, as it does in every other
+ * composer (7.4.1).
  */
-function spriteDeDestacado(key: string | null): SidebarSprite | null {
+function spriteDeMenu(key: string | null): SidebarSprite | null {
   const sprite = spriteOrNull(getSpriteRegistry(), key);
-  if (sprite === null || sprite.smooth !== true) return sprite;
-  const [width, height] = sprite.size;
-  const side = Math.max(width, height);
-  return {
-    ...sprite,
-    width: Math.round((width * SPRITE_NAV) / side),
-    height: Math.round((height * SPRITE_NAV) / side),
-  };
+  if (key === null || sprite === null) return null;
+  const drawn = menuSpriteSize(key, sprite.size, sprite.smooth === true);
+  return drawn === null ? sprite : { ...sprite, ...drawn };
 }
 
 /**
@@ -175,15 +198,14 @@ function entradasDeDestacados(): EntradaDeclarada[] {
     id: idDeRuta(destacado.ruta),
     label: destacado.etiqueta,
     href: `/{l}${destacado.ruta}`,
-    sprite: spriteDeDestacado(destacado.sprite),
-    ...(destacado.sprite === DIAMOND ? { half: true as const } : {}),
+    icono: destacado.sprite,
   }));
 }
 
 /**
  * «Sistemas» (8.0.3, 8.4): one entry per system page of `content/sistemas/`, in the order
- * of the registry (`orden`), labelled with its `titulo` in each locale and without a sprite
- * (only «Destacados» carries sprites, 7.10.2). `getSistemas` is also what writes the pages
+ * of the registry (`orden`), labelled with its `titulo` in each locale, with the `sprite` of
+ * its record. `getSistemas` is also what writes the pages
  * (`getStaticPaths` of `src/pages/[locale]/sistemas/[id].astro`), so a draft that
  * OCULTAR_BORRADORES=1 hides has no page and no entry (SI4). With no system, the group has no
  * link and is not rendered (WG5, 8.4 risk 2).
@@ -193,13 +215,14 @@ function entradasDeSistemas(): EntradaDeclarada[] {
     id: sistema.id,
     label: sistema.titulo,
     href: `/{l}/sistemas/${sistema.id}/`,
+    icono: sistema.sprite,
   }));
 }
 
 /**
  * «Ítems» (8.0.3, 8.5): one entry per category of `content/items/categorias.json`, in the
- * order of the registry (`orden`), labelled with its `nombre` in each locale and without a
- * sprite (only «Destacados» carries sprites, 7.10.2). «Todo», the virtual category, comes
+ * order of the registry (`orden`), labelled with its `nombre` in each locale, with the `icono`
+ * of its record (the icon of its tab in the client). «Todo», the virtual category, comes
  * first and is `/{l}/items/`; each of the other 13 is `/{l}/items/c/{id}/`, the page
  * `getStaticPaths` of `src/pages/[locale]/items/c/[categoria].astro` writes. The schema
  * fixes the 14 categories and their order, and no category is a draft, so the group is the
@@ -212,13 +235,14 @@ function entradasDeItems(): EntradaDeclarada[] {
     id: categoria.id,
     label: categoria.nombre,
     href: categoria.virtual === true ? '/{l}/items/' : `/{l}/items/c/${categoria.id}/`,
+    icono: categoria.icono,
   }));
 }
 
 /**
  * «Actividades» (8.0.3, 8.9): one entry per activity of `content/quests.json`, in the order of
- * the file, to its page `/{l}/actividades/{id}/` (8.9.2) and without a sprite (only
- * «Destacados» carries sprites, 7.10.2). The label is `nombre`, the name the game gives the
+ * the file, to its page `/{l}/actividades/{id}/` (8.9.2), with the `sprite` of its record.
+ * The label is `nombre`, the name the game gives the
  * activity, the same in both locales (T23, 13.4). An activity has no `borrador` field
  * (content/schemas/quests.schema.json), so every record of the file is published and has its
  * page (`getStaticPaths` of `src/pages/[locale]/actividades/[id].astro`), which the WG5 test of
@@ -231,6 +255,7 @@ function entradasDeActividades(): EntradaDeclarada[] {
     id: actividad.id,
     label: { es: actividad.nombre, en: actividad.nombre },
     href: `/{l}/actividades/${actividad.id}/`,
+    icono: actividad.sprite,
   }));
 }
 
@@ -244,7 +269,7 @@ const ARRIBA: EntradaDeclarada[] = [
  * the theme entry of the boards is not a menu entry at all.
  */
 const GRUPOS: GrupoDeclarado[] = [
-  // From `content/destacados.json`, with its 16 px sprites (M10, 7.10.2).
+  // From `content/destacados.json`, with the sprites of its records (M10, 7.10.2).
   {
     id: 'destacados',
     label: { es: 'Destacados', en: 'Featured' },
@@ -317,6 +342,11 @@ const GRUPOS: GrupoDeclarado[] = [
     ],
   },
 ];
+
+/** The sprite of a key, as the menu draws it. */
+function conSprite(key: string | null): { sprite: SidebarSprite | null } {
+  return { sprite: spriteDeMenu(key) };
+}
 
 /** `/{l}/pokedex/` -> `/es/pokedex/`. */
 function conIdioma(plantilla: string, locale: Locale): string {
@@ -400,16 +430,25 @@ export function buildNav(locale: Locale, currentPath: string): SidebarNav {
   }
 
   const actual = entradaActual(vivas, currentPath);
-  const enlace = (entrada: EntradaViva): SidebarLink => ({
-    id: entrada.id,
-    label: entrada.label[locale],
-    href: entrada.ruta,
-    ...(entrada === actual
-      ? { current: entrada.ruta === normalizarRuta(currentPath) ? 'page' : 'true' }
-      : {}),
-    ...(entrada.sprite !== undefined ? { sprite: entrada.sprite } : {}),
-    ...(entrada.half === true ? { half: true as const } : {}),
-  });
+  // One page, one sprite: a fixed entry whose page «Destacados» links takes that record's.
+  const destacadas = new Map(
+    vivas.filter((entrada) => entrada.fijada).map((entrada) => [entrada.ruta, entrada.icono]),
+  );
+  const enlace = (entrada: EntradaViva): SidebarLink => {
+    const key =
+      entrada.icono !== undefined
+        ? entrada.icono
+        : (destacadas.get(entrada.ruta) ?? ICONOS[entrada.id] ?? null);
+    return {
+      id: entrada.id,
+      label: entrada.label[locale],
+      href: entrada.ruta,
+      ...(entrada === actual
+        ? { current: entrada.ruta === normalizarRuta(currentPath) ? 'page' : 'true' }
+        : {}),
+      ...conSprite(key),
+    };
+  };
 
   const deGrupo = (id: string) => vivas.filter((entrada) => entrada.grupo === id);
 
@@ -420,6 +459,7 @@ export function buildNav(locale: Locale, currentPath: string): SidebarNav {
       return {
         id: grupo.id,
         label: grupo.label[locale],
+        ...conSprite(ICONOS[`grupo:${grupo.id}`] ?? null),
         pinned: grupo.pinned === true,
         open: actual !== null && actual.grupo === grupo.id,
         items: items.map(enlace),

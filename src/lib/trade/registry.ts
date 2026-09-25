@@ -1,5 +1,5 @@
 // The Comercio registry of phase A (spec 9.2, 9.4; D-007, R12, E6): the sample listings and
-// sellers of content/comercio/, which exist to try every branch of the pages and are never offers.
+// sellers of tests/fixtures/comercio/, which exist to try every branch of the pages and are never offers.
 //
 // Nothing of them may reach a production build (CA-9.1, PZ-08), so this module never imports them:
 //
@@ -10,7 +10,7 @@
 //     put the records in a bundle even when nothing reads them;
 //   - the folder comes in as an argument (`projectRoot()` gives the default), because the tracer
 //     of @astrojs/vercel follows any path written as a literal next to `process.cwd()` and would
-//     copy content/comercio/ into the server function of a build that bundles this module.
+//     copy tests/fixtures/comercio/ into the server function of a build that bundles this module.
 //
 // The visual build (VISUAL=1, 14.5) sets COMERCIO_DEMO and COMERCIO_FIXTURE, the absolute path of
 // tests/visual/fixtures/comercio.json (astro.config.mjs): then the listings are those the
@@ -19,7 +19,7 @@
 // Every file is parsed with the Zod mirror of content/schemas/comercio.schema.json, which reads
 // its patterns from that schema and refuses to load when a list of ./types.ts differs from it.
 // `pnpm content:check` adds what a schema cannot see: references, price rules, Ditto Memory and
-// `"borrador": true` on every record. Pages read content/comercio/ only through this module (3.12).
+// `"borrador": true` on every record. Pages read tests/fixtures/comercio/ only through this module (3.12).
 import { readFileSync, statSync } from 'node:fs';
 import { join } from 'node:path';
 
@@ -225,13 +225,13 @@ export const vendedorSchema: z.ZodType<Vendedor> = z.strictObject({
   borrador,
 });
 
-/** content/comercio/anuncios.json. */
+/** tests/fixtures/comercio/anuncios.json. */
 export const anunciosFileSchema = z.strictObject({
   $schema: schemaRef,
   anuncios: z.array(anuncioSchema),
 });
 
-/** content/comercio/vendedores.json. */
+/** tests/fixtures/comercio/vendedores.json. */
 export const vendedoresFileSchema = z.strictObject({
   $schema: schemaRef,
   vendedores: z.array(vendedorSchema),
@@ -271,9 +271,9 @@ function projectRoot(): string {
   return process.cwd();
 }
 
-/** The two files of content/comercio/ under `root`. */
+/** The two files of tests/fixtures/comercio/ under `root`. */
 function demoFiles(root: string): { anuncios: string; vendedores: string } {
-  const folder = join(root, 'content', 'comercio');
+  const folder = join(root, 'tests', 'fixtures', 'comercio');
   return { anuncios: join(folder, 'anuncios.json'), vendedores: join(folder, 'vendedores.json') };
 }
 
@@ -356,7 +356,7 @@ function sourcesOf(env: TradeEnv, root: string): string[] {
 
 /**
  * The phase A registry for these switches: empty without COMERCIO_DEMO, without reading anything;
- * with it, the fixture of COMERCIO_FIXTURE or the two files of content/comercio/ under `root`.
+ * with it, the fixture of COMERCIO_FIXTURE or the two files of tests/fixtures/comercio/ under `root`.
  * Throws when a file is missing or does not follow content/schemas/comercio.schema.json.
  */
 export function readTradeRegistry(

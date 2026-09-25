@@ -11,7 +11,7 @@
 // phase (prerendered in phase A, rendered on demand in phase B) and fails the build if a Comercio
 // page exports one, so the hook never wins in silence.
 //
-// Data (9.2, D-007, R12). The listings are the sample registry of content/comercio/, which
+// Data (9.2, D-007, R12). The listings are the sample registry of tests/fixtures/comercio/, which
 // src/lib/trade/registry.ts reads only with COMERCIO_DEMO=1: a production build has none, and
 // then the page is the empty state of 9.5.10 alone — «Aún no hay anuncios.» and «Crear anuncio» —
 // with no search, tab, filter, banner or results bar (CA-9.1, S11). With listings, the public
@@ -215,7 +215,7 @@ const create = createElement(Button, { href: publishHref(locale), children: crea
         caption={trade.list.caption}
         ui={tradeUi(ui)}
         pickers
-        labels={tradeLabels(messages, publico, true)}
+        labels={tradeLabels(messages, true)}
       />
     ) : (
       <EmptyState action={create}>{trade.list.empty}</EmptyState>

@@ -127,6 +127,16 @@
     object-fit: contain;
   }
 
+  /* The art opens the panel of the traded item or Pokémon: the trigger fills the frame. */
+  .ac-listing-hero__tip,
+  .ac-listing-hero__trigger {
+    display: flex;
+    width: 100%;
+    height: 100%;
+    align-items: center;
+    justify-content: center;
+  }
+
   .ac-listing-hero__main {
     display: flex;
     min-width: 0;
@@ -144,6 +154,13 @@
     margin: 0;
     color: var(--text-tertiary);
     @apply type-ui;
+  }
+
+  .ac-listing-hero__text {
+    max-width: 60ch; /* sin token: medida de lectura */
+    margin: var(--space-8) 0 0;
+    color: var(--text-secondary);
+    @apply type-body;
   }
 
   .ac-listing-hero__tags,
@@ -229,8 +246,7 @@
     @apply type-ui;
   }
 
-  .ac-listing-equipment__slots,
-  .ac-listing-equipment__none {
+  .ac-listing-equipment__slots {
     display: flex;
     align-items: center;
     gap: var(--space-8);
@@ -239,19 +255,6 @@
 
   .ac-listing-equipment__name {
     @apply type-ui-strong;
-  }
-
-  .ac-listing-equipment__none {
-    color: var(--text-tertiary);
-    @apply type-ui;
-  }
-
-  .ac-listing-equipment__empty {
-    width: var(--size-slot);
-    height: var(--size-slot);
-    flex: none;
-    border: 1px dashed var(--border-primary);
-    border-radius: var(--radius-6);
   }
 
   @media (width < 48rem) {

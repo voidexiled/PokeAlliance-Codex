@@ -104,18 +104,27 @@ export interface SlotEntity {
   icono: SpriteProps | null;
 }
 
-export function slotRecords(entities: readonly SlotEntity[]) {
+/**
+ * The slots of `entities`, each with its panel: `tipOf` builds it (`gearTip`, with the Balls of
+ * an aura or the Pokémon of an addon); without it, the panel is the name over the sprite.
+ */
+export function slotRecords(
+  entities: readonly SlotEntity[],
+  tipOf?: (entity: SlotEntity) => TipData,
+) {
   return entities.map((entity) => ({
     id: entity.id,
     name: entity.nombre,
     sprite: entity.icono,
-    tip: {
-      key: `slot:${entity.id}`,
-      title: entity.nombre,
-      width: 300,
-      head: { type: 'sprite' as const, sprite: entity.icono },
-      rows: [],
-    } satisfies TipData,
+    tip:
+      tipOf?.(entity) ??
+      ({
+        key: `slot:${entity.id}`,
+        title: entity.nombre,
+        width: 300,
+        head: { type: 'sprite' as const, sprite: entity.icono },
+        rows: [],
+      } satisfies TipData),
   }));
 }
 

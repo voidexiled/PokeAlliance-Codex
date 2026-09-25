@@ -1,8 +1,8 @@
 // The Comercio registry of phase A (spec 9.2, 9.4; D-007, R12, CA-9.1): the sample listings and
-// sellers of content/comercio/ are read only with COMERCIO_DEMO, so a production build, which never
+// sellers of tests/fixtures/comercio/ are read only with COMERCIO_DEMO, so a production build, which never
 // sets it, has none of them. Also here: the JSON Schema content/schemas/comercio.schema.json and its
 // Zod mirror, the lists of src/lib/trade/types.ts against that schema, the rules of the model, the
-// fixture of the visual build (14.5), what `pnpm content:check` adds for content/comercio/, the
+// fixture of the visual build (14.5), what `pnpm content:check` adds for tests/fixtures/comercio/, the
 // minimum content of 9.4, the `trade` namespace against the model, and the `moneda` object of
 // content/items/diamantes.json (3.13).
 import { cpSync, mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
@@ -60,10 +60,10 @@ const repoRoot = fileURLToPath(new URL('../../', import.meta.url));
 const readJson = (file: string) => JSON.parse(readFileSync(path.join(repoRoot, file), 'utf8'));
 const schema = readJson('content/schemas/comercio.schema.json');
 const anunciosDoc: { $schema: string; anuncios: Anuncio[] } = readJson(
-  'content/comercio/anuncios.json',
+  'tests/fixtures/comercio/anuncios.json',
 );
 const vendedoresDoc: { $schema: string; vendedores: Vendedor[] } = readJson(
-  'content/comercio/vendedores.json',
+  'tests/fixtures/comercio/vendedores.json',
 );
 const { anuncios } = anunciosDoc;
 const { vendedores } = vendedoresDoc;
@@ -84,10 +84,10 @@ function folder(): string {
   return dir;
 }
 
-/** Writes content/comercio/ under a new folder and returns that folder, the `root` of the reader. */
+/** Writes tests/fixtures/comercio/ under a new folder and returns that folder, the `root` of the reader. */
 function demoRoot(anunciosData: unknown, vendedoresData: unknown): string {
   const root = folder();
-  const dir = path.join(root, 'content', 'comercio');
+  const dir = path.join(root, 'tests', 'fixtures', 'comercio');
   mkdirSync(dir, { recursive: true });
   writeFileSync(path.join(dir, 'anuncios.json'), JSON.stringify(anunciosData));
   writeFileSync(path.join(dir, 'vendedores.json'), JSON.stringify(vendedoresData));
@@ -177,7 +177,7 @@ describe('without COMERCIO_DEMO the registry is empty (CA-9.1)', () => {
     for (const vendedor of vendedores) expect(getVendedor(vendedor.id)).toBeUndefined();
   });
 
-  it('never imports content/comercio/: a build would bundle it even unread', () => {
+  it('never imports tests/fixtures/comercio/: a build would bundle it even unread', () => {
     const source = readFileSync(path.join(repoRoot, 'src', 'lib', 'trade', 'registry.ts'), 'utf8')
       .replace(/\/\*[\s\S]*?\*\//g, '')
       .replace(/^\s*\/\/.*$/gm, '');
@@ -193,7 +193,7 @@ describe('without COMERCIO_DEMO the registry is empty (CA-9.1)', () => {
 });
 
 describe('with COMERCIO_DEMO', () => {
-  it('reads the two files of content/comercio/', () => {
+  it('reads the two files of tests/fixtures/comercio/', () => {
     const registry = readTradeRegistry({ COMERCIO_DEMO: '1' }, repoRoot);
     expect(registry.anuncios).toEqual(anuncios);
     expect(registry.vendedores).toEqual(vendedores);
@@ -222,7 +222,10 @@ describe('with COMERCIO_DEMO', () => {
     expect(() => readTradeRegistry({ COMERCIO_DEMO: '1' }, folder())).toThrow(/anuncios\.json/);
 
     const broken = demoRoot(anunciosDoc, vendedoresDoc);
-    writeFileSync(path.join(broken, 'content', 'comercio', 'vendedores.json'), '{ "vendedores": ');
+    writeFileSync(
+      path.join(broken, 'tests', 'fixtures', 'comercio', 'vendedores.json'),
+      '{ "vendedores": ',
+    );
     expect(() => readTradeRegistry({ COMERCIO_DEMO: '1' }, broken)).toThrow(/vendedores\.json/);
 
     const invalid = demoRoot(
@@ -665,10 +668,12 @@ describe('the minimum content of the demo registry (9.4)', () => {
   });
 });
 
-describe('pnpm content:check on content/comercio/', () => {
+describe('pnpm content:check on tests/fixtures/comercio/', () => {
   function copyRepo(): string {
     const root = folder();
     cpSync(path.join(repoRoot, 'content'), path.join(root, 'content'), { recursive: true });
+    const fixtures = path.join('tests', 'fixtures', 'comercio');
+    cpSync(path.join(repoRoot, fixtures), path.join(root, fixtures), { recursive: true });
     copyPublicForCheck(repoRoot, root);
     return root;
   }
@@ -682,19 +687,19 @@ describe('pnpm content:check on content/comercio/', () => {
     entries.map((entry) => `${entry.file} · ${entry.path ?? ''} · ${entry.message}`);
   const comercioErrors = (root: string) =>
     lines(checkContent(root).errors).filter(
-      (line) => line.startsWith('content/comercio/') || line.startsWith('content/items/'),
+      (line) => line.startsWith('tests/fixtures/comercio/') || line.startsWith('content/items/'),
     );
 
   it('passes on the repository and counts every record as a draft', () => {
     const result = checkContent(repoRoot);
     expect(result.errors).toEqual([]);
     expect(result.summary).toContainEqual({
-      file: 'content/comercio/anuncios.json',
+      file: 'tests/fixtures/comercio/anuncios.json',
       registros: `${anuncios.length} anuncios`,
       borradores: anuncios.length,
     });
     expect(result.summary).toContainEqual({
-      file: 'content/comercio/vendedores.json',
+      file: 'tests/fixtures/comercio/vendedores.json',
       registros: `${vendedores.length} vendedores`,
       borradores: vendedores.length,
     });
@@ -702,13 +707,13 @@ describe('pnpm content:check on content/comercio/', () => {
 
   it('checks nothing of Comercio without the folder, and both files with it', () => {
     const root = copyRepo();
-    rmSync(path.join(root, 'content', 'comercio'), { recursive: true });
+    rmSync(path.join(root, 'tests', 'fixtures', 'comercio'), { recursive: true });
     expect(comercioErrors(root)).toEqual([]);
 
     const half = copyRepo();
-    rmSync(path.join(half, 'content', 'comercio', 'vendedores.json'));
+    rmSync(path.join(half, 'tests', 'fixtures', 'comercio', 'vendedores.json'));
     expect(comercioErrors(half)).toContain(
-      'content/comercio/vendedores.json ·  · el archivo no existe',
+      'tests/fixtures/comercio/vendedores.json ·  · el archivo no existe',
     );
   });
 
@@ -716,7 +721,7 @@ describe('pnpm content:check on content/comercio/', () => {
     const root = copyRepo();
     type Listings = { anuncios: Anuncio[] };
     type Sellers = { vendedores: Vendedor[] };
-    edit<Listings>(root, 'content/comercio/anuncios.json', (data) => {
+    edit<Listings>(root, 'tests/fixtures/comercio/anuncios.json', (data) => {
       const unit = (index: number) =>
         data.anuncios[index].pokemon as NonNullable<Anuncio['pokemon']>;
       delete data.anuncios[ITEMS].borrador;
@@ -750,7 +755,7 @@ describe('pnpm content:check on content/comercio/', () => {
       plain.pokemon = plain.pokemon === 'bulbasaur' ? 'ivysaur' : plain.pokemon;
       data.anuncios.push({ ...data.anuncios[ITEMS], borrador: true });
     });
-    edit<Sellers>(root, 'content/comercio/vendedores.json', (data) => {
+    edit<Sellers>(root, 'tests/fixtures/comercio/vendedores.json', (data) => {
       const first = data.vendedores[0];
       delete first.borrador;
       first.canales = [
@@ -822,7 +827,7 @@ describe('pnpm content:check on content/comercio/', () => {
       /vendedores\.json · vendedores\[0\]\.resenas\[0\]\.comprador · un vendedor no se reseña a sí mismo/,
       /vendedores\.json · vendedores\[0\]\.resenas\[0\]\.comentario · importe del juego en texto libre \(«50kk»\)/,
       /vendedores\.json · vendedores\[0\]\.resenas\[1\]\.anuncio · ".+" es un anuncio de ".+": una reseña es de una operación de este vendedor/,
-      /vendedores\.json · vendedores\[0\]\.resenas\[2\]\.anuncio · "no-such-listing" no existe en content\/comercio\/anuncios\.json/,
+      /vendedores\.json · vendedores\[0\]\.resenas\[2\]\.anuncio · "no-such-listing" no existe en tests\/fixtures\/comercio\/anuncios\.json/,
       /vendedores\.json · vendedores\[0\]\.resenas\[3\]\.fecha · la reseña es anterior a la publicación de su anuncio/,
     ];
     for (const pattern of expected)
@@ -834,13 +839,13 @@ describe('pnpm content:check on content/comercio/', () => {
 
   it('asks a Ditto for its Memory Slots and refuses the other list in a file', () => {
     const root = copyRepo();
-    edit<{ anuncios: Anuncio[] }>(root, 'content/comercio/anuncios.json', (data) => {
+    edit<{ anuncios: Anuncio[] }>(root, 'tests/fixtures/comercio/anuncios.json', (data) => {
       const ditto = data.anuncios[DITTO].pokemon as NonNullable<Anuncio['pokemon']>;
       ditto.memorySlots = null;
       ditto.memorias = [];
     });
     writeFileSync(
-      path.join(root, 'content', 'comercio', 'vendedores.json'),
+      path.join(root, 'tests', 'fixtures', 'comercio', 'vendedores.json'),
       JSON.stringify({ $schema: '../schemas/comercio.schema.json', anuncios: [] }),
     );
     const errors = comercioErrors(root);
@@ -848,7 +853,7 @@ describe('pnpm content:check on content/comercio/', () => {
       expect.stringMatching(/\.pokemon\.memorySlots · un Ditto declara sus Memory Slots, de 1 a 6/),
     );
     expect(errors).toContain(
-      'content/comercio/vendedores.json ·  · este archivo lleva la lista "vendedores"',
+      'tests/fixtures/comercio/vendedores.json ·  · este archivo lleva la lista "vendedores"',
     );
   });
 });

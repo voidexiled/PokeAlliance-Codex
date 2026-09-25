@@ -502,12 +502,18 @@ describe('DiamondsAmount', () => {
     expect(html).toBe(`<span class="ac-diamonds-amount">${UNKNOWN}</span>`);
   });
 
-  it('spins through Sprite, with the keyframes of the registry, only when asked', () => {
+  it('spins only when asked and its registry entry is an animation; the gem stays still', () => {
     const html = markup(
       createElement(DiamondsAmount, { amount: 10, locale: 'es', animated: true }),
     );
-    expect(html).toMatch(/<img class="ac-sprite"[^>]*data-anim="ac-sprite-7-110(?:-110){6}"/);
-    expect(html).not.toContain('ac-diamonds-amount__frame');
+    if (spriteRegistry['ui/diamond'].modo === 'animacion') {
+      expect(html).toMatch(/<img class="ac-sprite"[^>]*data-anim="ac-sprite-/);
+      expect(html).not.toContain('ac-diamonds-amount__frame');
+    } else {
+      // The game's current Diamond is one still frame (P3): `animated` changes nothing.
+      expect(html).not.toContain('data-anim');
+      expect(html).toBe(markup(createElement(DiamondsAmount, { amount: 10, locale: 'es' })));
+    }
   });
 
   it('is the price link of the Diamonds panel with `link`, and plain text without rows (R2)', () => {
@@ -827,7 +833,6 @@ describe('the figures of the other money components (§13.3)', () => {
   it('HeldStrip counts the held items over its line', () => {
     const held = {
       name: 'X-Attack',
-      tier: 'T5',
       sprite: null,
       tip: {
         key: 'item:x-attack',
@@ -842,7 +847,7 @@ describe('the figures of the other money components (§13.3)', () => {
     const two = markup(
       createElement(HeldStrip, {
         ...strip,
-        items: [held, { ...held, name: 'X-Lucky', tier: 'T3' }],
+        items: [held, { ...held, name: 'X-Lucky' }],
       }),
     );
     expect(two).toContain('<p class="ac-held-strip__label">Held Items: 2</p>');

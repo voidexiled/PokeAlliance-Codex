@@ -73,6 +73,15 @@
     text-decoration-style: solid;
   }
 
+  /* A tier with no tooltip yet (no «Max brokes»): the same cell as plain text. */
+  .ac-tier-rows__trigger--plain {
+    cursor: default;
+  }
+
+  .ac-tier-rows__trigger--plain .ac-tier-rows__name {
+    text-decoration: none;
+  }
+
   .ac-tier-rows__count {
     color: var(--text-secondary);
     @apply type-ui;

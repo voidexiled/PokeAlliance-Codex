@@ -5,9 +5,60 @@
     "es": "Entrenamiento",
     "en": "Training"
   },
-  "sprite": null,
+  "sprite": "ui/sistemas/punching-bag-training",
   "orden": 5,
-  "tooltip": [],
+  "tooltip": [
+    {
+      "etiqueta": {
+        "es": "Dónde",
+        "en": "Where"
+      },
+      "valor": {
+        "es": "Punching Bag, en una house",
+        "en": "Punching Bag, in a house"
+      }
+    },
+    {
+      "etiqueta": {
+        "es": "Atributos",
+        "en": "Stats"
+      },
+      "valor": {
+        "es": "Attack, Defense, HP, Precision, Evasion, Critical Damage, Critical Chance, Critical Resistance",
+        "en": "Attack, Defense, HP, Precision, Evasion, Critical Damage, Critical Chance, Critical Resistance"
+      }
+    },
+    {
+      "etiqueta": {
+        "es": "Carga",
+        "en": "Charge"
+      },
+      "valor": {
+        "es": "20.000 cargas, máx. 100.000",
+        "en": "20,000 charges, max. 100,000"
+      }
+    },
+    {
+      "etiqueta": {
+        "es": "Premium",
+        "en": "Premium"
+      },
+      "valor": {
+        "es": "+20% de XP de entrenamiento",
+        "en": "+20% training XP"
+      }
+    },
+    {
+      "etiqueta": {
+        "es": "Consumo",
+        "en": "Use"
+      },
+      "valor": {
+        "es": "1 carga cada 2 s",
+        "en": "1 charge every 2 s"
+      }
+    }
+  ],
   "intro": [],
   "secciones": [],
   "borrador": true

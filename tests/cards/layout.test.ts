@@ -108,16 +108,37 @@ describe('listingLayout (DS:guias/30 «Claves de una rejilla»)', () => {
   });
 
   it('has the optional zones only when at least one listing has them', () => {
-    const none = listingLayout([pokemon(), pokemon({ helds: [] })]);
-    const held = listingLayout([pokemon({ helds: [{ name: 'X-Attack' }] }), pokemon()]);
+    const none = listingLayout([
+      pokemon(),
+      pokemon({ equipment: { ball: null, auras: [], addons: [] } }),
+    ]);
+    const held = listingLayout([
+      pokemon({ equipment: { heldX: { name: 'X-Attack' } } }),
+      pokemon(),
+    ]);
     const both = listingLayout([
       pokemon({ train: { stat: 'Critical Damage', level: 12, percent: 40 } }),
-      pokemon({ helds: [{ name: 'X-Attack' }], train: null }),
+      pokemon({ equipment: { heldY: { name: 'X-Defense' } }, train: null }),
     ]);
 
     expect(none.zones).toEqual([]);
-    expect(held.zones).toEqual(['held']);
-    expect(both.zones).toEqual(['held', 'train']);
+    expect(none.gear).toEqual([]);
+    expect(held.zones).toEqual(['gear']);
+    expect(held.gear).toEqual(['held']);
+    expect(both.zones).toEqual(['gear', 'train']);
+  });
+
+  it('gives each kind of equipment its own place (16.4.5, owner rule 2026-09-25)', () => {
+    const layout = listingLayout([
+      pokemon({ equipment: { ball: { name: 'Premier Ball' }, auras: [{ name: 'Alliance' }] } }),
+      pokemon({ equipment: { mega: { name: 'Charizardite X' }, addons: [{ name: 'Hat' }] } }),
+      pokemon(),
+    ]);
+
+    // The Ball, the held items and the Mega Stone share one line: one zone, with a column for
+    // each group some listing has, in the order of the game.
+    expect(layout.zones).toEqual(['gear', 'auras', 'addons']);
+    expect(layout.gear).toEqual(['ball', 'mega']);
   });
 
   it('has the price rows only when at least one listing has that price', () => {
@@ -147,19 +168,21 @@ describe('listingLayout (DS:guias/30 «Claves de una rejilla»)', () => {
   });
 
   it('is recomputed from the cards a grid shows: another page gives another layout', () => {
-    const page1 = [pokemon({ facts: { tier: 'T3' }, helds: [{ name: 'X-Defense' }] })];
+    const page1 = [pokemon({ facts: { tier: 'T3' }, equipment: { heldY: { name: 'X-Defense' } } })];
     const page2 = [pokemon({ facts: { requirement: 'Nivel 40' } })];
 
     expect(listingLayout(page1)).toEqual({
       type: 'pokemon',
       keys: ['tier'],
-      zones: ['held'],
+      zones: ['gear'],
+      gear: ['held'],
       price: [],
     });
     expect(listingLayout(page2)).toEqual({
       type: 'pokemon',
       keys: ['requirement'],
       zones: [],
+      gear: [],
       price: [],
     });
   });
@@ -200,7 +223,13 @@ describe('listingLayout (DS:guias/30 «Claves de una rejilla»)', () => {
   });
 
   it('lays out nothing for an empty set', () => {
-    expect(listingLayout([])).toEqual({ type: 'pokemon', keys: [], zones: [], price: [] });
+    expect(listingLayout([])).toEqual({
+      type: 'pokemon',
+      keys: [],
+      zones: [],
+      gear: [],
+      price: [],
+    });
   });
 });
 
@@ -295,15 +324,31 @@ describe('trackCount (spec 7.6.2)', () => {
     const layout = listingLayout([
       pokemon({
         facts: FULL_FACTS,
-        helds: [{ name: 'X-Attack' }, { name: 'X-Defense' }],
+        equipment: { heldX: { name: 'X-Attack' }, heldY: { name: 'X-Defense' } },
         train: { stat: 'Critical Damage', level: 12, percent: 40 },
         fiat: 'R$ 90',
         game: [{ kind: 'pd', amount: 150_000_000 }],
       }),
     ]);
 
-    // head 1 + 10 keys + Held Items + Entrenamiento + Dinero real + En el juego + Vendedor + Contacto
+    // head 1 + 10 keys + gear line + Entrenamiento + Dinero real + En el juego + Vendedor + Contacto
     expect(trackCount('listing', layout)).toBe(17);
+  });
+
+  it('adds one track per line of equipment: gear, Auras and Addons', () => {
+    const layout = listingLayout([
+      pokemon({
+        equipment: {
+          ball: { name: 'Premier Ball' },
+          heldX: { name: 'X-Attack' },
+          auras: [{ name: 'Alliance' }],
+          addons: [{ name: 'Hat' }],
+        },
+      }),
+    ]);
+
+    // head 1 + gear + Auras + Addons + Vendedor + Contacto
+    expect(trackCount('listing', layout)).toBe(6);
   });
 
   it('spans 10 for items, 8 for Diamonds and 5 for Pokédólares with the rows of the board', () => {
@@ -368,7 +413,7 @@ describe('every card of a grid has the same grid-row (C7-04)', () => {
 
   it('builds every card of a page from one layout, whatever each card has', () => {
     const page: ListingLayoutInput[] = [
-      pokemon({ facts: FULL_FACTS, helds: [{ name: 'X-Attack' }], fiat: 'R$ 90' }),
+      pokemon({ facts: FULL_FACTS, equipment: { heldX: { name: 'X-Attack' } }, fiat: 'R$ 90' }),
       pokemon({ facts: { requirement: 'Nivel 20' } }),
       pokemon({ train: { stat: 'Attack', level: 16, percent: 53 }, game: [{}] }),
       pokemon(),

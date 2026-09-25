@@ -103,6 +103,12 @@ export const RETIRED_ROUTES = [
   // E2, A7: the quests live in the Actividades of §8.9 (M11); `/guias/` comes back with the
   // first editorial guide (§15).
   { pattern: /\/guias\b/, from: '/{l}/guias/', to: '/{l}/actividades/' },
+  // §9.16.3 (owner, 2026-09-25): «Mis operaciones» moved into the account frame.
+  {
+    pattern: /\/comercio\/operaciones\b/,
+    from: '/{l}/comercio/operaciones/',
+    to: '/{l}/cuenta/operaciones/',
+  },
 ] as const;
 
 function readOutput(): string[] {

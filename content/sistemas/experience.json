@@ -7,7 +7,48 @@
   },
   "sprite": "ui/sistemas/experience",
   "orden": 10,
-  "tooltip": [],
+  "tooltip": [
+    {
+      "etiqueta": {
+        "es": "XP recibida",
+        "en": "XP received"
+      },
+      "valor": {
+        "es": "100% hasta el nivel 99, 1% desde el 400",
+        "en": "100% up to level 99, 1% from 400"
+      }
+    },
+    {
+      "etiqueta": {
+        "es": "Pérdida al morir",
+        "en": "Death loss"
+      },
+      "valor": {
+        "es": "Desde el nivel 50",
+        "en": "From level 50"
+      }
+    },
+    {
+      "etiqueta": {
+        "es": "Bless",
+        "en": "Bless"
+      },
+      "valor": {
+        "es": "−70% de pérdida",
+        "en": "−70% loss"
+      }
+    },
+    {
+      "etiqueta": {
+        "es": "Bless Plus",
+        "en": "Bless Plus"
+      },
+      "valor": {
+        "es": "−92% de pérdida",
+        "en": "−92% loss"
+      }
+    }
+  ],
   "intro": [],
   "secciones": [],
   "borrador": true

@@ -7,7 +7,58 @@
   },
   "sprite": "ui/sistemas/gamepass",
   "orden": 7,
-  "tooltip": [],
+  "tooltip": [
+    {
+      "etiqueta": {
+        "es": "Pistas",
+        "en": "Tracks"
+      },
+      "valor": {
+        "es": "Free, Premium",
+        "en": "Free, Premium"
+      }
+    },
+    {
+      "etiqueta": {
+        "es": "Premium",
+        "en": "Premium"
+      },
+      "valor": {
+        "es": "Se compra con Diamonds",
+        "en": "Bought with Diamonds"
+      }
+    },
+    {
+      "etiqueta": {
+        "es": "Cada nivel",
+        "en": "Each level"
+      },
+      "valor": {
+        "es": "300 XP de GamePass",
+        "en": "300 GamePass XP"
+      }
+    },
+    {
+      "etiqueta": {
+        "es": "Comprar nivel",
+        "en": "Buy a level"
+      },
+      "valor": {
+        "es": "Con Diamonds, hasta 50",
+        "en": "With Diamonds, up to 50"
+      }
+    },
+    {
+      "etiqueta": {
+        "es": "Progreso",
+        "en": "Progress"
+      },
+      "valor": {
+        "es": "Por personaje",
+        "en": "Per character"
+      }
+    }
+  ],
   "intro": [],
   "secciones": [],
   "borrador": true

@@ -16,6 +16,7 @@ import { CardGrid } from '@/components/cards/CardGrid';
 import { CardGroup } from '@/components/cards/CardGroup';
 import { ListingCard, SellerPresence } from '@/components/cards/ListingCard';
 import type {
+  ListingCardEquipment,
   ListingCardLabels,
   ListingCardListing,
   ListingFactValue,
@@ -42,6 +43,7 @@ import { EntityList } from '@/components/lists/EntityList';
 import type { EntityListLabels } from '@/components/lists/EntityList';
 import { URL_EVENT, useListState } from '@/components/lists/useListState';
 import type { ListController } from '@/components/lists/useListState';
+import type { EquipmentStripItem } from '@/components/money/EquipmentStrip';
 import { PriceOptions } from '@/components/money/PriceOptions';
 import type { PriceOption } from '@/components/money/PriceOptions';
 import { Rating } from '@/components/money/Rating';
@@ -49,7 +51,6 @@ import type { Locale } from '@/i18n/config';
 import type { Messages } from '@/i18n/messages/en';
 import type { MessageLeaf } from '@/i18n/messages/types';
 import { fill, isPluralMessage, plural } from '@/i18n/messages/types';
-import { pokedexOrder } from '@/components/pokedex/config';
 import { listingLayout } from '@/lib/cards/layout';
 import type { ListingKey } from '@/lib/cards/layout';
 import { formatTier } from '@/lib/content/format';
@@ -76,9 +77,19 @@ import {
   formatSigned,
 } from '@/lib/format/numbers';
 import { present } from '@/lib/format/unknown';
-import { diamondsTip, elementTip, itemTip, pokemonTip } from '@/lib/game/tips';
+import { droppersOf, itemFactsIndex, itemTipFacts } from '@/lib/game/item-facts';
+import {
+  TRAIT_NAMES,
+  diamondsTip,
+  elementTip,
+  gameText,
+  gearTip,
+  itemTip,
+  pokemonTip,
+} from '@/lib/game/tips';
 import type {
   CurrencyTipRecord,
+  ItemTipFacts,
   TipData,
   TipHead,
   TipRow,
@@ -108,7 +119,6 @@ import {
   SIMBOLOS_MONEDA,
   TIPOS_ACTIVO,
   channelLabel,
-  equipmentOf,
   inGameFirst,
   isListed,
   listedInWorld,
@@ -160,7 +170,7 @@ import type {
 //     `comercio-vendedor`): `Count`, `ViewToggle` and the same three views, with no filter, no
 //     search and one order, «Recientes».
 //
-// Data (PR5, 9.2). A row is a public listing of `content/comercio/anuncios.json` (read only
+// Data (PR5, 9.2). A row is a public listing of `tests/fixtures/comercio/anuncios.json` (read only
 // with COMERCIO_DEMO=1, never in production, 9.2), in the language of the page: the fields of
 // the `Anuncio` of 9.4 the views and the filters read, its `listingTitle` in both forms and its
 // `searchText` (9.4, 9.5.2). What the catalogue says of the assets (the Pokémon record, the
@@ -313,6 +323,17 @@ export interface TradePokemonRef {
   elementos: string[];
   /** `imagen` of the record, resolved in the browser by `resolvePokemonImage`. */
   imagen: string | null;
+  /**
+   * The rest of its panel (7.5.3): its number, the element id of its moveset (in
+   * `refs.elementos`), its traits Fast and Heavy and its field abilities.
+   */
+  numero?: number | null;
+  elementoMoveset?: string | null;
+  rapido?: boolean | null;
+  pesado?: boolean | null;
+  habilidades?: string[] | null;
+  /** A Mega form: the name of its Mega Stone. */
+  megaStone?: string | null;
 }
 
 /** An item a listing names (the traded item, a Ball, a held item), as `itemTip` reads it. */
@@ -328,12 +349,22 @@ export interface TradeItemRef {
   elemento: string | null;
   /** `uso` in the language of the file, or `null`. */
   uso: string | null;
-  /** Names of the Pokémon whose `drops` hold it, in the order of 8.0.5. */
+  /** Names of the Pokémon whose loot holds it in any zone, in the order of 8.0.5. */
   dropDe: string[];
   /** The one Pokémon that drops it, when it is one: the entity of «Drop de». */
   dropper: string | null;
-  /** Tier of a held item (16.2.3): the mini badge of its slot; `null` for any other item. */
+  /**
+   * Tier of a held item (16.2.3), `null` for any other item. No slot draws it (owner rule
+   * 2026-09-25: the tier is in the held's name and panel); the search text reads it
+   * («… t3», src/lib/trade/search.ts).
+   */
   heldTier: number | null;
+  /**
+   * The rest of its panel (`itemTipFacts`, src/lib/game/item-facts.ts): its game text, held slot
+   * and tier, Mega Stone Pokémon, evolutions, elements, Ball facts, Market flag and ways to
+   * obtain it, names in the language of the page.
+   */
+  facts?: ItemTipFacts | null;
 }
 
 /** An element of content/elementos.json in the language of the file (8.0.5). */
@@ -343,12 +374,18 @@ export interface TradeElementRef {
   /** Names of the items of its `stone` and `fragment`, which do not translate (13.4). */
   stone: string | null;
   fragment: string | null;
+  /** Names of the Balls that favour it (`ball.elementos`). */
+  balls?: string[] | null;
 }
 
 /** An aura of content/auras.json: its name and its ball (9.5.9). */
 export interface TradeAuraRef {
   nombre: string;
   icono: SpriteData | null;
+  /** An aura: the names of the Balls that unlock it (`ball.aura`). */
+  balls?: string[] | null;
+  /** An addon: the name of the Pokémon of its outfit. */
+  pokemon?: string | null;
 }
 
 /**
@@ -569,10 +606,10 @@ export interface TradeContext {
  * The texts of a Comercio list from the dictionary of the page's locale (DP1, 13.2): the page
  * composes them and the island receives these and `ui`, never the dictionary. A search with no
  * result says `search.empty` (9.5.10) and «Drop de» of several Pokémon is `items.droppedByCount`,
- * the words the other lists use. `publico` is phase B (9.2): only then does a listing with a
- * real-money price carry the tag «Dinero real», the word of its price row (9.15.2).
+ * the words the other lists use. Real money is only a price row, «Dinero real», never a tag
+ * (owner rule 2026-09-25); `market` adds the labels of the filters.
  */
-export function tradeLabels(messages: Messages, publico = false, market = false): TradeListLabels {
+export function tradeLabels(messages: Messages, market = false): TradeListLabels {
   const { trade } = messages;
   const ratings = {
     '4.5': fill(trade.filters.ratingAtLeast, { score: formatRating(4.5) }),
@@ -619,7 +656,7 @@ export function tradeLabels(messages: Messages, publico = false, market = false)
       contact: trade.listing.contact,
       negotiable: trade.listing.negotiable,
       reserved: trade.states.reservado,
-      ...(publico ? { realMoney: trade.listing.fiat } : {}),
+      gear: trade.listing.gear,
     },
     unsellable: trade.unsellable,
     training: trade.tip.training,
@@ -767,6 +804,12 @@ const POKEMON_REF_FIELDS = fieldList<WithId<TradePokemonRef>>()([
   'funcion',
   'elementos',
   'imagen',
+  'numero',
+  'elementoMoveset',
+  'rapido',
+  'pesado',
+  'habilidades',
+  'megaStone',
 ]);
 const ITEM_REF_FIELDS = fieldList<WithId<TradeItemRef>>()([
   'id',
@@ -780,6 +823,7 @@ const ITEM_REF_FIELDS = fieldList<WithId<TradeItemRef>>()([
   'dropDe',
   'dropper',
   'heldTier',
+  'facts',
 ]);
 const NPC_PRICE_FIELDS = fieldList<TradeItemRef['precioNpc']>()(['vende', 'compra']);
 const ELEMENT_REF_FIELDS = fieldList<WithId<TradeElementRef>>()([
@@ -788,8 +832,15 @@ const ELEMENT_REF_FIELDS = fieldList<WithId<TradeElementRef>>()([
   'icono',
   'stone',
   'fragment',
+  'balls',
 ]);
-const AURA_REF_FIELDS = fieldList<WithId<TradeAuraRef>>()(['id', 'nombre', 'icono']);
+const AURA_REF_FIELDS = fieldList<WithId<TradeAuraRef>>()([
+  'id',
+  'nombre',
+  'icono',
+  'balls',
+  'pokemon',
+]);
 const SELLER_REF_FIELDS = fieldList<WithId<TradeSellerRef>>()([
   'id',
   'nombre',
@@ -1182,7 +1233,10 @@ export function tradeSprites(registry: SpriteRegistry): TradeSprites {
     types: {
       pokemon: spriteOrNull(registry, 'outfits/5'),
       items: spriteOrNull(registry, 'items/stones/fire-stone'),
-      diamonds: spriteOrNull(registry, 'ui/diamond', { animado: true }),
+      // It turns while its registry entry is an animation; the game's current gem is still.
+      diamonds: spriteOrNull(registry, 'ui/diamond', {
+        animado: registry['ui/diamond']?.modo === 'animacion',
+      }),
       pokedolares: spriteOrNull(registry, 'ui/pokedolares'),
     },
     item: spriteOrNull(registry, 'ui/comercio/item'),
@@ -1221,6 +1275,8 @@ export function tradeRecords(
   const worldName = new Map(catalog.mundos.map((world) => [world.id, world.nombre]));
   const sellerById = new Map(catalog.vendedores.map((seller) => [seller.id, seller]));
   const sprite = (key: string | null) => spriteOrNull(catalog.sprites, key);
+  // What the registries say of each item, element and aura besides its own record (7.5.3).
+  const facts = itemFactsIndex(catalog, locale);
 
   const listings: TradeListing[] = anuncios.map((anuncio) => {
     const unit = anuncio.pokemon;
@@ -1270,10 +1326,8 @@ export function tradeRecords(
   for (const id of itemIds) {
     const item = itemById.get(id);
     if (item === undefined) continue;
-    // «Drop de» (7.5.3): the Pokémon whose `drops` hold the item, in the order of 8.0.5.
-    const droppers = catalog.pokemon
-      .filter((record) => record.drops?.some((drop) => drop.item === id))
-      .sort(pokedexOrder(locale));
+    // «Drop de» (7.5.3): the Pokémon whose loot holds the item in any zone, in the order of 8.0.5.
+    const droppers = droppersOf(id, facts);
     const dropper = droppers.length === 1 ? droppers[0].id : null;
     if (dropper !== null) pokemonIds.add(dropper);
     if (item.elemento) elementIds.add(item.elemento);
@@ -1288,6 +1342,7 @@ export function tradeRecords(
       dropDe: droppers.map((record) => record.nombre),
       dropper,
       heldTier: heldTierOf(item),
+      facts: itemTipFacts(item, facts),
     };
   }
 
@@ -1296,6 +1351,7 @@ export function tradeRecords(
     const record = pokemonById.get(id);
     if (record === undefined) continue;
     for (const element of record.elementos) elementIds.add(element);
+    if (record.elementoMoveset) elementIds.add(record.elementoMoveset);
     pokemon[id] = {
       nombre: record.nombre,
       variante: record.variante,
@@ -1305,6 +1361,12 @@ export function tradeRecords(
       funcion: record.funcion,
       elementos: record.elementos,
       imagen: record.imagen,
+      numero: record.numero,
+      elementoMoveset: record.elementoMoveset ?? null,
+      rapido: record.rapido ?? null,
+      pesado: record.pesado ?? null,
+      habilidades: record.habilidades ?? null,
+      megaStone: facts.megaStoneOf.get(id) ?? null,
     };
   }
 
@@ -1319,19 +1381,34 @@ export function tradeRecords(
       icono: sprite(element.icono),
       stone: stone?.nombre ?? null,
       fragment: fragment?.nombre ?? null,
+      balls: [...(facts.ballsByElement.get(id) ?? [])],
     };
   }
 
   const auras: Record<string, TradeAuraRef> = {};
   for (const id of auraIds) {
     const aura = auraById.get(id);
-    if (aura !== undefined) auras[id] = { nombre: aura.nombre, icono: sprite(aura.icono) };
+    if (aura !== undefined)
+      auras[id] = {
+        nombre: aura.nombre,
+        icono: sprite(aura.icono),
+        balls: [...(facts.ballsByAura.get(id) ?? [])],
+      };
   }
 
   const addons: Record<string, TradeAuraRef> = {};
+  const addonPokemon = new Map(
+    catalog.outfits.flatMap((outfit) => outfit.addons.map((addon) => [addon.id, outfit.pokemon])),
+  );
   for (const id of addonIds) {
     const addon = addonById.get(id);
-    if (addon !== undefined) addons[id] = { nombre: addon.nombre, icono: sprite(addon.sprite) };
+    const owner = addonPokemon.get(id);
+    if (addon !== undefined)
+      addons[id] = {
+        nombre: addon.nombre,
+        icono: sprite(addon.sprite),
+        pokemon: owner === undefined ? null : (facts.pokemonName.get(owner) ?? null),
+      };
   }
 
   const mundos: Record<string, string> = {};
@@ -1638,6 +1715,7 @@ export function itemPanel(id: string, ref: TradeItemRef, context: TradeContext):
       dropDe: ref.dropDe,
       nombreElemento: element === null ? null : localized(locale, element),
       uso: ref.uso === null ? null : localized(locale, ref.uso),
+      ...ref.facts,
     },
     locale,
     context.ui.tooltip,
@@ -1652,7 +1730,11 @@ export function pokemonPanel(id: string, ref: TradePokemonRef, context: TradeCon
       ? [{ nombre: localized(locale, context.refs.elementos[element].nombre) }]
       : [],
   );
-  return pokemonTip({ id, ...ref, elementos }, locale, context.ui.tooltip);
+  const moveset =
+    ref.elementoMoveset && Object.hasOwn(context.refs.elementos, ref.elementoMoveset)
+      ? { nombre: localized(locale, context.refs.elementos[ref.elementoMoveset].nombre) }
+      : null;
+  return pokemonTip({ id, ...ref, elementos, moveset }, locale, context.ui.tooltip);
 }
 
 /** «Drop de» of an item (7.5.3): its one Pokémon with its page and panel, «{n} Pokémon», or nothing. */
@@ -1721,41 +1803,51 @@ function listingFacts(
   return { quantity: row.cantidad };
 }
 
-/** The panel of an aura or an addon: its name over its sprite (16.4.5). */
-function refTip(kind: 'aura' | 'addon', id: string, ref: TradeAuraRef): TipData {
-  return {
-    key: `${kind}:${id}`,
-    title: ref.nombre,
-    width: 300,
-    head: { type: 'sprite', sprite: ref.icono },
-    rows: [],
-  };
+/**
+ * The panel of an aura or an addon (16.4.5, `gearTip`): its name over its sprite, the Balls that
+ * unlock the aura or the Pokémon of the addon.
+ */
+function refTip(
+  kind: 'aura' | 'addon',
+  id: string,
+  ref: TradeAuraRef,
+  context: TradeContext,
+): TipData {
+  return gearTip(
+    kind,
+    { id, nombre: ref.nombre, sprite: ref.icono, balls: ref.balls, pokemon: ref.pokemon },
+    context.ui.tooltip,
+  );
 }
 
 /**
- * The equipment of a Pokémon (16.4.5): ball, auras, addons, held X, held Y and Mega Stone as
- * slots, in the order of the game. An id the refs do not hold is left out.
+ * The equipment of a Pokémon by kind (16.4.5): its Ball, its Auras and Addons in the order it
+ * declares them, its held X and Y and its Mega Stone, each a slot with its panel. An id the refs
+ * do not hold is left out.
  */
-function equipmentItems(unit: UnidadPokemon, context: TradeContext): ListingCardListing['helds'] {
-  return equipmentOf(unit).flatMap(({ kind, id }) => {
-    if (kind === 'aura' || kind === 'addon') {
-      const table = kind === 'aura' ? context.refs.auras : context.refs.addons;
+export function equipmentItems(unit: UnidadPokemon, context: TradeContext): ListingCardEquipment {
+  const item = (id: string | null): EquipmentStripItem | null => {
+    const ref = itemRef(id, context);
+    return id === null || ref === null
+      ? null
+      : { id, name: ref.nombre, sprite: ref.sprite, tip: itemPanel(id, ref, context) };
+  };
+  const kind = (key: 'aura' | 'addon', ids: readonly string[]): EquipmentStripItem[] => {
+    const table = key === 'aura' ? context.refs.auras : context.refs.addons;
+    return ids.flatMap((id) => {
       if (!Object.hasOwn(table, id)) return [];
       const ref = table[id];
-      return [{ id, name: ref.nombre, sprite: ref.icono, tip: refTip(kind, id, ref) }];
-    }
-    const ref = itemRef(id, context);
-    if (ref === null) return [];
-    return [
-      {
-        id,
-        name: ref.nombre,
-        sprite: ref.sprite,
-        tip: itemPanel(id, ref, context),
-        tier: ref.heldTier,
-      },
-    ];
-  });
+      return [{ id, name: ref.nombre, sprite: ref.icono, tip: refTip(key, id, ref, context) }];
+    });
+  };
+  return {
+    ball: item(unit.ball),
+    auras: kind('aura', unit.auras),
+    addons: kind('addon', unit.addons),
+    heldX: item(unit.heldX),
+    heldY: item(unit.heldY),
+    mega: item(unit.mega),
+  };
 }
 
 /** Requisito, «Nivel 120» (13.3), or `null` while the record has no level. */
@@ -1871,6 +1963,23 @@ export function sellerPresence(
   return state === null ? null : { state, label: context.labels.presence[state] };
 }
 
+/**
+ * The panel of what a listing trades (7.5.3): the item's own panel, or the Pokémon's. The card's
+ * stage and the detail's hero open it, so the facts a card has no room for — the game text, a
+ * held item's slot and tier, a Ball's catch rate, the shops, the moveset — are one hover away.
+ */
+export function assetPanel(row: TradeRow, context: TradeContext): TipData | null {
+  if (row.tipo === 'items' && row.item !== null) {
+    const ref = itemRef(row.item.item, context);
+    return ref === null ? null : itemPanel(row.item.item, ref, context);
+  }
+  if (row.tipo === 'pokemon' && row.pokemon !== null) {
+    const ref = pokemonRef(row, context);
+    return ref === null ? null : pokemonPanel(row.pokemon.pokemon, ref, context);
+  }
+  return null;
+}
+
 /** A listing as `ListingCard` reads it (9.5.8). `posted` is the text of its `<time>`. */
 export function listingCard(
   row: TradeRow,
@@ -1889,6 +1998,7 @@ export function listingCard(
     href: listingHref(locale, row.id),
     sprite: listingSprite(row, context),
     qty: stackOf(row),
+    tip: assetPanel(row, context),
     shiny: isShiny(row, context),
     // Board Personajes «Variante 1»: the character and its world go in «Vendedor»; the head
     // only marks the exception, «Cualquier mundo» of the Pokédólares.
@@ -1897,7 +2007,7 @@ export function listingCard(
     posted: { datetime: row.publicado, text: posted },
     reserved: row.estado === 'reservado',
     facts: listingFacts(row, context),
-    helds: row.pokemon === null ? null : equipmentItems(row.pokemon, context),
+    equipment: row.pokemon === null ? null : equipmentItems(row.pokemon, context),
     train: first === undefined ? null : trainingOf(first),
     fiat: fiatText(row.precio, locale),
     game: gameOptions(row.precio),
@@ -1935,13 +2045,16 @@ export interface ListingSheetLabels {
  * The panel of a listing (9.5.9, `listingTip` of 7.5.3): 282 wide in two columns. Its head is
  * the art of the Pokémon with its aura ball and the Shiny mark, or the asset's sprite at 2x
  * (the Diamond turns); its title the nickname, or the listing's title. The rows are the card's
- * keys that have a value — «Pokémon:» first when the nickname is the title — then «Held Items:
- * N» and «Entrenamiento: N» as sections, and the market block: «Dinero real:», «En el juego:»,
+ * keys that have a value — «Pokémon:» first when the nickname is the title — the rest of the
+ * Pokémon's own panel (Moveset, Nº, Generación, Rol, Rasgos, Habilidades and a Mega form's
+ * Mega Stone), a row for each kind of equipment (Ball, Aura, Addons, the equipped Mega Stone
+ * when it is not that one), then «Held Items: N» (X and Y) and
+ * «Entrenamiento: N» as sections, and the market block: «Dinero real:», «En el juego:»,
  * «Mundo:», «Vendedor:» and «Contacto:» with the public labels of the channels, never a value
  * (CA-9.9).
  *
- * With `sheet` it is the fixed sheet of the detail (9.6): the same head and rows plus «Addon:»
- * and «Next Boost chance:», every held item, no training section (the page draws every trained
+ * With `sheet` it is the fixed sheet of the detail (9.6): the same head and rows, the Addons
+ * named «Addon:», plus «Next Boost chance:», no training section (the page draws every trained
  * skill under the sheet, beside the Ditto Memory links a section of `TipData` cannot hold) and
  * no market block.
  */
@@ -1960,6 +2073,7 @@ export function listingTip(
   const unit = row.pokemon;
   const pokemon = pokemonRef(row, context);
   const nickname = unit !== null && present(unit.nickname) ? (unit.nickname as string) : null;
+  let text: TipData['text'];
   if (nickname !== null) push(labels.types.pokemon, tipText(pokemon?.nombre ?? row.titulo));
 
   const sections: TipSection[] = [];
@@ -1973,12 +2087,50 @@ export function listingTip(
       Object.hasOwn(refs.addons, id) ? [refs.addons[id].nombre] : [],
     );
     const npc = unit.precioNpc;
+    const moveset =
+      pokemon?.elementoMoveset && Object.hasOwn(refs.elementos, pokemon.elementoMoveset)
+        ? refs.elementos[pokemon.elementoMoveset].nombre
+        : null;
     push(keys.requirement, levelText(pokemon, context));
     push(keys.tier, tierText(pokemon));
     // Elements read as one value in a panel: «Fuego / Volador» (8.0.5).
     push(keys.elements, tipText(elements.join(' / ')));
+    // The rest of the Pokémon's own panel (7.5.3): its moveset, generation and role.
+    if (ui.tooltip.moveset !== undefined) push(ui.tooltip.moveset, tipText(moveset));
+    if (ui.tooltip.number !== undefined)
+      push(
+        ui.tooltip.number,
+        pokemon?.numero === null || pokemon?.numero === undefined ? null : String(pokemon.numero),
+      );
+    push(
+      ui.tooltip.generation,
+      pokemon?.generacion === null || pokemon?.generacion === undefined
+        ? null
+        : String(pokemon.generacion),
+    );
+    push(ui.tooltip.role, tipText(pokemon?.funcion));
+    // Its traits and field abilities, as the Pokémon's own panel shows them (pokemonTip).
+    const traits = [
+      ...(pokemon?.rapido === true ? [TRAIT_NAMES.rapido] : []),
+      ...(pokemon?.pesado === true ? [TRAIT_NAMES.pesado] : []),
+    ];
+    if (ui.tooltip.traits !== undefined && traits.length > 0)
+      push(ui.tooltip.traits, { list: traits });
+    const abilities = pokemon?.habilidades ?? [];
+    if (ui.tooltip.abilities !== undefined && abilities.length > 0)
+      push(ui.tooltip.abilities, { list: [...abilities] });
+    // A Mega form: the Mega Stone that gives it, as its own panel ends (pokemonTip).
+    const formStone = tipText(pokemon?.megaStone);
+    if (ui.tooltip.megaStone !== undefined) push(ui.tooltip.megaStone, formStone);
     push(keys.ball, tipText(ball));
     push(keys.aura, tipText(auras.join(', ')));
+    // Each kind of equipment has its own row (16.4.5): the Addons and the Mega Stone apart from
+    // the held X and Y of the section below.
+    push(sheet?.addon ?? labels.card.gear.addons, tipText(addons.join(', ')));
+    // The equipped Mega Stone, unless it is the one the form's row above already names.
+    const equippedStone = tipText(itemRef(unit.mega, context)?.nombre);
+    if (equippedStone !== formStone || ui.tooltip.megaStone === undefined)
+      push(labels.card.gear.mega, equippedStone);
     push(keys.boost, unit.boost === null ? null : formatSigned(unit.boost, locale));
     push(keys.nickname, tipText(nickname));
     push(
@@ -1991,15 +2143,25 @@ export function listingTip(
       npc === null ? null : npc.tipo === 'unsellable' ? labels.unsellable : { pd: npc.cantidad },
     );
     if (sheet !== undefined) {
-      push(sheet.addon, tipText(addons.join(', ')));
       push(sheet.nextBoostChance, chanceText(unit.nextBoostChance, locale));
+    } else {
+      // A Ditto's memories by name; the sheet of a detail draws them as links under it (9.6).
+      const memories = unit.memorias.flatMap((id) =>
+        id !== null && Object.hasOwn(refs.pokemon, id) ? [refs.pokemon[id].nombre] : [],
+      );
+      if (memories.length > 0 && labels.card.gear.memory !== undefined)
+        push(labels.card.gear.memory, { list: memories });
     }
 
-    const helds = [unit.heldX, unit.heldY, unit.mega].flatMap((id) => {
+    // The held X and Y by the names of the client, which carry the tier («X-Attack (Tier: 1)»).
+    // Each with the game's text of what it does (owner rule 2026-09-25).
+    const helds = [unit.heldX, unit.heldY].flatMap((id) => {
       const ref = itemRef(id, context);
       if (ref === null) return [];
-      const name = ref.heldTier === null ? ref.nombre : `${ref.nombre} ${formatTier(ref.heldTier)}`;
-      return [{ name, sprite: ref.sprite }];
+      const effect = gameText(ref.facts?.descripcion, locale);
+      return [
+        { name: ref.nombre, sprite: ref.sprite, ...(effect === null ? {} : { text: effect }) },
+      ];
     });
     if (helds.length > 0) {
       sections.push({
@@ -2020,23 +2182,13 @@ export function listingTip(
     }
   } else if (row.tipo === 'items' && row.item !== null) {
     const ref = itemRef(row.item.item, context);
-    const element =
-      ref?.elemento && Object.hasOwn(refs.elementos, ref.elemento)
-        ? refs.elementos[ref.elemento].nombre
-        : null;
-    const droppers = ref?.dropDe ?? [];
     push(keys.quantity, formatInteger(row.item.cantidad, locale));
-    push(keys.category, tipText(ref?.nombreCategoria));
-    push(keys.element, tipText(element));
-    push(keys.use, tipText(ref?.uso));
-    push(
-      keys.droppedBy,
-      droppers.length === 0
-        ? null
-        : droppers.length === 1
-          ? droppers[0]
-          : counted(labels.droppedByCount, droppers.length, locale),
-    );
+    // The item's own panel after its quantity (7.5.3): its game text and every row it has.
+    if (ref !== null) {
+      const panel = itemPanel(row.item.item, ref, context);
+      text = panel.text;
+      rows.push(...panel.rows);
+    }
   } else if (row.tipo === 'diamonds') {
     push(keys.quantity, row.cantidad === null ? null : { dia: row.cantidad });
     push(keys.boughtAt, context.diamonds ? { list: [...context.diamonds.seCompranEn] } : null);
@@ -2102,6 +2254,7 @@ export function listingTip(
     width: 282,
     head,
     ...(isShiny(row, context) ? { shiny: true } : {}),
+    ...(text === undefined ? {} : { text }),
     rows,
     grid: true,
     ...(sections.length > 0 ? { sections } : {}),
@@ -2917,15 +3070,9 @@ export function TradeListRoot({
           const presence = sellerPresence(seller, context);
           const sub = listSub(row, context);
           const unit = unitText(row, context);
-          // 9.15.2: in phase B the tag «Dinero real» follows what the row declares; a
-          // Pokédólares listing carries «Cualquier mundo» (board Personajes, Lista V1).
-          const tags = [
-            tradesAcrossWorlds(row.tipo) ? <Chip key="world">{labels.anyWorld}</Chip> : null,
-            card.realMoney !== undefined && fiat !== null ? (
-              <Chip key="money">{card.realMoney}</Chip>
-            ) : null,
-          ].filter((tag) => tag !== null);
-          const tag = tags.length > 0 ? tags : null;
+          // A Pokédólares listing carries «Cualquier mundo» (board Personajes, Lista V1). Real
+          // money is only its «Dinero real» column (owner rule 2026-09-25).
+          const tag = tradesAcrossWorlds(row.tipo) ? <Chip>{labels.anyWorld}</Chip> : null;
           const loading = lazy();
           let art: ReactNode;
           if (sprite === null) art = <MissingSprite size={pokemon ? 40 : 16} />;

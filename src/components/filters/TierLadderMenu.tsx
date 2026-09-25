@@ -3,7 +3,7 @@ import { useId } from 'react';
 import { useRovingOptions } from './listbox';
 import { tierLadderRows } from './menu-model';
 import type { FilterOption } from './model';
-import { TierTip } from './TierTip';
+import { TierTip, hasTierTip } from './TierTip';
 
 // TierLadderMenu (plan «Dirección C», «Tier»): one ladder, best to worst — the named tiers
 // (Mythic, Legendary, Ultra Rare, Super Rare) on the first row and T1 … T7 on the second, the
@@ -51,7 +51,7 @@ export function TierLadderMenu({
             const position = index;
             index += 1;
             const selected = values.includes(option.id);
-            const tipId = `${baseId}-${position}`;
+            const tipId = hasTierTip(option.maxBrokes) ? `${baseId}-${position}` : undefined;
             return (
               <div
                 key={option.id}
@@ -63,13 +63,15 @@ export function TierLadderMenu({
                 {...bind(position, () => onToggle(option.id))}
               >
                 {option.label}
-                <TierTip
-                  id={tipId}
-                  name={option.label}
-                  maxBrokes={option.maxBrokes ?? null}
-                  label={maxBrokesLabel}
-                  placement="down"
-                />
+                {tipId === undefined ? null : (
+                  <TierTip
+                    id={tipId}
+                    name={option.label}
+                    maxBrokes={option.maxBrokes ?? null}
+                    label={maxBrokesLabel}
+                    placement="down"
+                  />
+                )}
               </div>
             );
           })}

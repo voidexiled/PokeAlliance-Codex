@@ -12,33 +12,63 @@
         "en": "Complete the computer sequence and defeat Giant Porygon within 45 minutes, then return to Dr. Vektor."
       },
       "requisitos": [
-        { "en": "Speak with Dr. Vektor" },
-        { "en": "Accept to help with the research" }
+        {
+          "en": "Speak with Dr. Vektor"
+        },
+        {
+          "en": "Accept to help with the research"
+        }
       ],
       "pasos": [
-        { "en": "Accept the mission" },
-        { "en": "Use the computer beside Dr. Vektor" },
-        { "en": "Solve the computer-color sequence" },
-        { "en": "Activate the final room" },
-        { "en": "Defeat Giant Porygon" },
-        { "en": "Return to Dr. Vektor" }
+        {
+          "en": "Accept the mission"
+        },
+        {
+          "en": "Use the computer beside Dr. Vektor"
+        },
+        {
+          "en": "Solve the computer-color sequence"
+        },
+        {
+          "en": "Activate the final room"
+        },
+        {
+          "en": "Defeat Giant Porygon"
+        },
+        {
+          "en": "Return to Dr. Vektor"
+        }
       ],
       "recompensas": [
-        { "en": "5,000,000 experience" },
-        { "en": "50 Empty Alliance Ball" },
-        { "en": "50 Empty Yume Ball" },
-        { "en": "4 Enhanced Normal Stone" },
-        { "en": "Permanent access to the Porygon-area computer" }
+        {
+          "en": "5,000,000 experience"
+        },
+        {
+          "en": "50 Empty Alliance Ball"
+        },
+        {
+          "en": "50 Empty Yume Ball"
+        },
+        {
+          "en": "4 Enhanced Normal Stone"
+        },
+        {
+          "en": "Permanent access to the Porygon-area computer"
+        }
       ],
       "npcs": ["Dr. Vektor"],
       "lugares": ["Digital World", "Porygon area", "Dr. Vektor laboratory"],
       "pokemon": ["Giant Porygon", "Porygon"],
       "sistemas": ["time-limited instance", "computer puzzle", "permanent area access"],
       "notas": [
-        { "en": "The instance accepts one player at a time." },
-        { "en": "The computer positions change on a new attempt." }
+        {
+          "en": "The instance accepts one player at a time."
+        },
+        {
+          "en": "The computer positions change on a new attempt."
+        }
       ],
-      "sprite": "ui/actividades/porygon-quest-dr-vektor"
+      "sprite": "outfits/138"
     }
   ]
 }

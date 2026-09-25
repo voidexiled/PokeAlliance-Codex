@@ -10,7 +10,7 @@ import { PokedolaresAmount } from '@/components/money/PokedolaresAmount';
 import { PriceOptions } from '@/components/money/PriceOptions';
 import { TrainingMeter } from '@/components/money/TrainingMeter';
 import type { Locale } from '@/i18n/config';
-import { present } from '@/lib/format/unknown';
+import { present, UNKNOWN } from '@/lib/format/unknown';
 import type { TipData, TipHead, TipRow, TipSection, TipValue } from '@/lib/game/tips';
 
 // GameTooltip (spec 7.5, DS:GameTooltip, DS:guias/10): the in-game panel of the
@@ -31,9 +31,14 @@ import type { TipData, TipHead, TipRow, TipSection, TipValue } from '@/lib/game/
 // - `variant="sheet"` (7.5.9): the static sheet of a detail page, in the flow of
 //   the page, `role="group"` with its own `aria-label`, no strip and no animation.
 //
+// Under the head, `tip.text` is the game's own text of the entity (an item's inspection, «What
+// it does»), the only text of the panel that wraps: a paragraph with the `lang` of its language
+// when it is not the page's.
+//
 // A row with no value never reaches this component: the constructors of 7.5.3 only
 // emit rows that have one, and a row that gets here without one is dropped. "—" is
-// never written inside a tooltip (X13/T32, C-R5).
+// written only for `{ unknown: true }`, a value every entity of its kind has and the
+// registry does not know yet (a Poké Ball's catch rate); never for a missing key (X13/T32).
 //
 // Every amount of a row is a money component of 7.2.5 (S8, 7.8): `{ pd }` is a
 // `PokedolaresAmount`, `{ dia }` a `DiamondsAmount` without a link and `{ price }` a
@@ -108,7 +113,9 @@ function phrase(text: string): ReactNode {
 function shows(value: TipValue): boolean {
   if (typeof value === 'string') return present(value);
   if ('list' in value) return value.list.some((entry) => present(entry));
+  if ('icons' in value) return value.icons.length > 0;
   if ('price' in value) return value.price.some((option) => Number.isFinite(option.amount));
+  if ('unknown' in value) return true;
   if ('pd' in value) return Number.isFinite(value.pd);
   return Number.isFinite(value.dia);
 }
@@ -120,6 +127,32 @@ function shows(value: TipValue): boolean {
 function valueNode(value: TipValue, locale: Locale, orLabel: string | undefined): ReactNode {
   if (typeof value === 'string') return phrase(value);
   if ('list' in value) return phrase(value.list.filter((entry) => present(entry)).join(', '));
+  if ('icons' in value) {
+    // Element icons of 16, smooth, each named by its `alt`; a missing icon writes its name.
+    // Lazy: a closed panel must not preload its icons (React hoists eager images).
+    return (
+      <span className="ac-game-tooltip__icons">
+        {value.icons.map((icon) =>
+          icon.sprite === null ? (
+            <span key={icon.name} className="ac-game-tooltip__nw">
+              {icon.name}
+            </span>
+          ) : (
+            <Sprite
+              key={icon.name}
+              {...icon.sprite}
+              smooth
+              width={16}
+              height={16}
+              alt={icon.name}
+              loading="lazy"
+            />
+          ),
+        )}
+      </span>
+    );
+  }
+  if ('unknown' in value) return phrase(UNKNOWN);
   if ('pd' in value) return <PokedolaresAmount amount={value.pd} locale={locale} />;
   // A Diamonds amount inside a panel is never a link (7.5.2: «DiamondsAmount sin enlace»).
   if ('dia' in value) return <DiamondsAmount amount={value.dia} locale={locale} />;
@@ -236,11 +269,20 @@ function Section({
         <Chevron />
       </summary>
       {section.kind === 'held' ? (
+        // Each held item with its sprite and name and, when the registry has it, the game's text
+        // of what it does under the name (owner rule 2026-09-25: a held item is never a bare name).
         <div className="ac-game-tooltip__held">
           {section.items.map((item, index) => (
             <span key={index} className="ac-game-tooltip__held-item">
               <SpriteStage sprite={item.sprite} size={32} framed={false} />
-              {item.name}
+              <span className="ac-game-tooltip__held-body">
+                {item.name}
+                {item.text ? (
+                  <span className="ac-game-tooltip__held-text" lang={item.text.lang}>
+                    {item.text.value}
+                  </span>
+                ) : null}
+              </span>
             </span>
           ))}
         </div>
@@ -347,6 +389,7 @@ export function GameTooltip({
   const Divider = tags.div;
   const Footer = tags.p;
   const Day = tags.p;
+  const Text = tags.p;
 
   const chart = tip.width === 200;
   // The strip belongs to the panel that Shift can pin. The sheet of a detail page is
@@ -384,6 +427,12 @@ export function GameTooltip({
           tags={tags}
         />
       )}
+      {/* The game's text of the entity (an item's inspection): it wraps, unlike a value. */}
+      {tip.text && present(tip.text.value) ? (
+        <Text className="ac-game-tooltip__text" lang={tip.text.lang}>
+          {tip.text.value}
+        </Text>
+      ) : null}
       {/* Day of the Guild chart: «Viernes 18/09, en curso» over its figures (7.5.2). */}
       {tip.dayTitle ? <Day className="ac-game-tooltip__day">{tip.dayTitle}</Day> : null}
       <Rows rows={rows} grid={tip.grid === true} tags={tags} locale={locale} orLabel={orLabel} />

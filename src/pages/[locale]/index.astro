@@ -75,7 +75,8 @@ import {
 } from '@/lib/content/registry';
 import { getPokemon, getQuests } from '@/lib/content/repository';
 import { formatInteger } from '@/lib/format/numbers';
-import { systemTip } from '@/lib/game/tips';
+import { elementTipRecord } from '@/lib/game/tip-records';
+import { elementTip, systemTip } from '@/lib/game/tips';
 import { buildFeatured } from '@/lib/nav/groups';
 import { spriteOrNull } from '@/lib/sprites/resolve';
 
@@ -143,12 +144,18 @@ const activityLinks: IndexPanelLink[] = getQuests()
   }))
   .filter((link) => esRutaDelSitio(link.href));
 
-const elementLinks: IndexPanelLink[] = getElementos().map((element) => ({
-  id: element.id,
-  label: element.nombre[locale],
-  href: `/${locale}/pokedex/?elemento=${element.id}`,
-  icon: spriteOrNull(registry, element.icono),
-}));
+// Each element opens its panel (7.5.3), as its chip does everywhere else: its Stone, its
+// Fragment and the Balls that favour it.
+const elementLinks: IndexPanelLink[] = getElementos().map((element) => {
+  const tip = elementTip(elementTipRecord(element, locale), locale, messages.ui.tooltip);
+  return {
+    id: element.id,
+    label: element.nombre[locale],
+    href: `/${locale}/pokedex/?elemento=${element.id}`,
+    icon: spriteOrNull(registry, element.icono),
+    ...(tip.rows.length > 0 ? { tip } : {}),
+  };
+});
 
 const worlds = getMundos(locale).map((world) => ({ id: world.id, name: world.nombre }));
 
@@ -290,6 +297,7 @@ const featured = buildFeatured(locale);
             links={elementLinks}
             countLabel={home.elementCount}
             locale={locale}
+            hint={messages.ui.pinHint}
           />
           <WorldsTable
             id="inicio-mundos"

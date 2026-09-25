@@ -4,9 +4,8 @@
     "ui/diamond": {
       "archivo": "ui/diamond.png",
       "frame": [32, 32],
-      "frames": 7,
-      "modo": "animacion",
-      "duracionMs": [110, 110, 110, 110, 110, 110, 110]
+      "frames": 1,
+      "modo": "estatico"
     },
     "ui/balls/alliance-ball": {
       "archivo": "ui/balls/alliance-ball.png",
@@ -235,11 +234,10 @@
       "modo": "estatico"
     },
     "ui/categorias/otros": {
-      "archivo": "ui/categorias/general-items.png",
-      "frame": [22, 22],
+      "archivo": "ui/categorias/otros.png",
+      "frame": [28, 28],
       "frames": 1,
-      "modo": "estatico",
-      "borrador": true
+      "modo": "estatico"
     },
     "ui/elementos/normal": {
       "archivo": "ui/elementos/normal.png",
@@ -358,39 +356,31 @@
     },
     "ui/sistemas/achievements": {
       "archivo": "ui/sistemas/achievements.png",
-      "frame": [32, 32],
+      "frame": [28, 28],
       "frames": 1,
       "modo": "estatico"
     },
     "ui/sistemas/experience": {
-      "archivo": "ui/indice/sistemas.png",
-      "frame": [32, 32],
+      "archivo": "ui/sistemas/experience.png",
+      "frame": [15, 15],
       "frames": 1,
       "modo": "estatico"
     },
     "ui/sistemas/gamepass": {
       "archivo": "ui/sistemas/gamepass.png",
-      "frame": [32, 32],
+      "frame": [28, 28],
       "frames": 1,
       "modo": "estatico"
     },
     "ui/sistemas/linked-tasks": {
       "archivo": "ui/sistemas/linked-tasks.png",
-      "frame": [32, 32],
-      "frames": 8,
-      "modo": "animacion",
-      "duracionMs": [110, 110, 110, 110, 110, 110, 110, 110]
+      "frame": [28, 28],
+      "frames": 1,
+      "modo": "estatico"
     },
     "ui/sistemas/medals": {
-      "archivo": "ui/indice/actividades.png",
-      "frame": [32, 32],
-      "frames": 6,
-      "modo": "animacion",
-      "duracionMs": [110, 110, 110, 110, 110, 110]
-    },
-    "ui/actividades/porygon-quest-dr-vektor": {
-      "archivo": "ui/actividades/porygon-quest-dr-vektor.png",
-      "frame": [32, 32],
+      "archivo": "ui/sistemas/medals.png",
+      "frame": [28, 28],
       "frames": 1,
       "modo": "estatico"
     },
@@ -399,111 +389,126 @@
       "frame": [32, 32],
       "frames": 8,
       "modo": "cantidad",
-      "umbrales": [1, 2, 3, 4, 5, 10, 25, 100]
+      "umbrales": [1, 2, 3, 4, 5, 10, 25, 50]
     },
     "items/poke-balls/premier-ball": {
       "archivo": "items/poke-balls/premier-ball.png",
       "frame": [32, 32],
-      "frames": 5,
-      "modo": "animacion",
-      "duracionMs": [110, 110, 110, 110, 110]
+      "frames": 8,
+      "modo": "cantidad",
+      "umbrales": [1, 2, 3, 4, 5, 10, 25, 50]
     },
     "items/poke-balls/ultra-ball": {
       "archivo": "items/poke-balls/ultra-ball.png",
       "frame": [32, 32],
-      "frames": 5,
-      "modo": "animacion",
-      "duracionMs": [110, 110, 110, 110, 110]
+      "frames": 8,
+      "modo": "cantidad",
+      "umbrales": [1, 2, 3, 4, 5, 10, 25, 50]
     },
     "items/poke-balls/poke-ball": {
       "archivo": "items/poke-balls/poke-ball.png",
-      "frame": [20, 20],
-      "frames": 1,
-      "modo": "estatico"
+      "frame": [32, 32],
+      "frames": 8,
+      "modo": "cantidad",
+      "umbrales": [1, 2, 3, 4, 5, 10, 25, 50]
     },
     "items/poke-balls/great-ball": {
       "archivo": "items/poke-balls/great-ball.png",
-      "frame": [20, 20],
-      "frames": 1,
-      "modo": "estatico"
+      "frame": [32, 32],
+      "frames": 8,
+      "modo": "cantidad",
+      "umbrales": [1, 2, 3, 4, 5, 10, 25, 50]
     },
     "items/poke-balls/super-ball": {
       "archivo": "items/poke-balls/super-ball.png",
-      "frame": [21, 21],
-      "frames": 1,
-      "modo": "estatico"
+      "frame": [32, 32],
+      "frames": 8,
+      "modo": "cantidad",
+      "umbrales": [1, 2, 3, 4, 5, 10, 25, 50]
     },
     "items/poke-balls/safari-ball": {
       "archivo": "items/poke-balls/safari-ball.png",
-      "frame": [20, 20],
-      "frames": 1,
-      "modo": "estatico"
+      "frame": [32, 32],
+      "frames": 8,
+      "modo": "cantidad",
+      "umbrales": [1, 2, 3, 4, 5, 10, 25, 50]
     },
     "items/poke-balls/moon-ball": {
       "archivo": "items/poke-balls/moon-ball.png",
-      "frame": [20, 20],
-      "frames": 1,
-      "modo": "estatico"
+      "frame": [32, 32],
+      "frames": 8,
+      "modo": "cantidad",
+      "umbrales": [1, 2, 3, 4, 5, 10, 25, 50]
     },
     "items/poke-balls/tinker-ball": {
       "archivo": "items/poke-balls/tinker-ball.png",
-      "frame": [21, 20],
-      "frames": 1,
-      "modo": "estatico"
+      "frame": [32, 32],
+      "frames": 8,
+      "modo": "cantidad",
+      "umbrales": [1, 2, 3, 4, 5, 10, 25, 50]
     },
     "items/poke-balls/yume-ball": {
       "archivo": "items/poke-balls/yume-ball.png",
-      "frame": [20, 20],
-      "frames": 1,
-      "modo": "estatico"
+      "frame": [32, 32],
+      "frames": 8,
+      "modo": "cantidad",
+      "umbrales": [1, 2, 3, 4, 5, 10, 25, 50]
     },
     "items/poke-balls/dusk-ball": {
       "archivo": "items/poke-balls/dusk-ball.png",
-      "frame": [20, 20],
-      "frames": 1,
-      "modo": "estatico"
+      "frame": [32, 32],
+      "frames": 8,
+      "modo": "cantidad",
+      "umbrales": [1, 2, 3, 4, 5, 10, 25, 50]
     },
     "items/poke-balls/heavy-ball": {
       "archivo": "items/poke-balls/heavy-ball.png",
-      "frame": [20, 20],
-      "frames": 1,
-      "modo": "estatico"
+      "frame": [32, 32],
+      "frames": 8,
+      "modo": "cantidad",
+      "umbrales": [1, 2, 3, 4, 5, 10, 25, 50]
     },
     "items/poke-balls/janguru-ball": {
       "archivo": "items/poke-balls/janguru-ball.png",
-      "frame": [20, 20],
-      "frames": 1,
-      "modo": "estatico"
+      "frame": [32, 32],
+      "frames": 8,
+      "modo": "cantidad",
+      "umbrales": [1, 2, 3, 4, 5, 10, 25, 50]
     },
     "items/poke-balls/magu-ball": {
       "archivo": "items/poke-balls/magu-ball.png",
-      "frame": [21, 21],
-      "frames": 1,
-      "modo": "estatico"
+      "frame": [32, 32],
+      "frames": 8,
+      "modo": "cantidad",
+      "umbrales": [1, 2, 3, 4, 5, 10, 25, 50]
     },
     "items/poke-balls/net-ball": {
       "archivo": "items/poke-balls/net-ball.png",
-      "frame": [21, 21],
-      "frames": 1,
-      "modo": "estatico"
+      "frame": [32, 32],
+      "frames": 8,
+      "modo": "cantidad",
+      "umbrales": [1, 2, 3, 4, 5, 10, 25, 50]
     },
     "items/poke-balls/sora-ball": {
       "archivo": "items/poke-balls/sora-ball.png",
-      "frame": [20, 20],
-      "frames": 1,
-      "modo": "estatico"
+      "frame": [32, 32],
+      "frames": 8,
+      "modo": "cantidad",
+      "umbrales": [1, 2, 3, 4, 5, 10, 25, 50]
     },
     "items/poke-balls/tale-ball": {
       "archivo": "items/poke-balls/tale-ball.png",
-      "frame": [20, 20],
-      "frames": 1,
-      "modo": "estatico"
+      "frame": [32, 32],
+      "frames": 8,
+      "modo": "cantidad",
+      "umbrales": [1, 2, 3, 4, 5, 10, 25, 50]
     },
     "items/poke-balls/fast-ball": {
       "archivo": "items/poke-balls/fast-ball.png",
-      "frame": [20, 20],
-      "frames": 1,
-      "modo": "estatico"
+      "frame": [32, 32],
+      "frames": 8,
+      "modo": "cantidad",
+      "umbrales": [1, 2, 3, 4, 5, 10, 25, 50]
     },
     "items/stones/fire-stone": {
       "archivo": "items/stones/fire-stone.png",
@@ -732,153 +737,6 @@
       "frames": 1,
       "modo": "estatico"
     },
-    "items/diamantes/diamantes-ejemplo-1": {
-      "archivo": "ui/balls/premier-ball.png",
-      "frame": [32, 32],
-      "frames": 1,
-      "modo": "estatico",
-      "borrador": true
-    },
-    "items/pokemon/pokemon-ejemplo-1": {
-      "archivo": "ui/balls/ultra-ball.png",
-      "frame": [32, 32],
-      "frames": 1,
-      "modo": "estatico",
-      "borrador": true
-    },
-    "items/pokemon/pokemon-ejemplo-2": {
-      "archivo": "ui/balls/ultra-ball.png",
-      "frame": [32, 32],
-      "frames": 1,
-      "modo": "estatico",
-      "borrador": true
-    },
-    "items/helds/helds-ejemplo-1": {
-      "archivo": "ui/balls/premier-ball.png",
-      "frame": [32, 32],
-      "frames": 1,
-      "modo": "estatico",
-      "borrador": true
-    },
-    "items/helds/helds-ejemplo-2": {
-      "archivo": "ui/balls/premier-ball.png",
-      "frame": [32, 32],
-      "frames": 1,
-      "modo": "estatico",
-      "borrador": true
-    },
-    "items/orbs/orbs-ejemplo-1": {
-      "archivo": "ui/balls/alliance-ball.png",
-      "frame": [32, 32],
-      "frames": 1,
-      "modo": "estatico",
-      "borrador": true
-    },
-    "items/orbs/orbs-ejemplo-2": {
-      "archivo": "ui/balls/alliance-ball.png",
-      "frame": [32, 32],
-      "frames": 1,
-      "modo": "estatico",
-      "borrador": true
-    },
-    "items/creature-items/creature-items-ejemplo-1": {
-      "archivo": "ui/balls/ultra-ball.png",
-      "frame": [32, 32],
-      "frames": 1,
-      "modo": "estatico",
-      "borrador": true
-    },
-    "items/creature-items/creature-items-ejemplo-2": {
-      "archivo": "ui/balls/ultra-ball.png",
-      "frame": [32, 32],
-      "frames": 1,
-      "modo": "estatico",
-      "borrador": true
-    },
-    "items/general-items/general-items-ejemplo-1": {
-      "archivo": "ui/balls/premier-ball.png",
-      "frame": [32, 32],
-      "frames": 1,
-      "modo": "estatico",
-      "borrador": true
-    },
-    "items/general-items/general-items-ejemplo-2": {
-      "archivo": "ui/balls/premier-ball.png",
-      "frame": [32, 32],
-      "frames": 1,
-      "modo": "estatico",
-      "borrador": true
-    },
-    "items/utilities/utilities-ejemplo-1": {
-      "archivo": "ui/balls/premier-ball.png",
-      "frame": [32, 32],
-      "frames": 1,
-      "modo": "estatico",
-      "borrador": true
-    },
-    "items/utilities/utilities-ejemplo-2": {
-      "archivo": "ui/balls/premier-ball.png",
-      "frame": [32, 32],
-      "frames": 1,
-      "modo": "estatico",
-      "borrador": true
-    },
-    "items/addons/addons-ejemplo-1": {
-      "archivo": "ui/balls/alliance-ball.png",
-      "frame": [32, 32],
-      "frames": 1,
-      "modo": "estatico",
-      "borrador": true
-    },
-    "items/addons/addons-ejemplo-2": {
-      "archivo": "ui/balls/alliance-ball.png",
-      "frame": [32, 32],
-      "frames": 1,
-      "modo": "estatico",
-      "borrador": true
-    },
-    "items/consumable/consumable-ejemplo-1": {
-      "archivo": "ui/balls/ultra-ball.png",
-      "frame": [32, 32],
-      "frames": 1,
-      "modo": "estatico",
-      "borrador": true
-    },
-    "items/consumable/consumable-ejemplo-2": {
-      "archivo": "ui/balls/ultra-ball.png",
-      "frame": [32, 32],
-      "frames": 1,
-      "modo": "estatico",
-      "borrador": true
-    },
-    "items/foods/foods-ejemplo-1": {
-      "archivo": "ui/balls/premier-ball.png",
-      "frame": [32, 32],
-      "frames": 1,
-      "modo": "estatico",
-      "borrador": true
-    },
-    "items/foods/foods-ejemplo-2": {
-      "archivo": "ui/balls/premier-ball.png",
-      "frame": [32, 32],
-      "frames": 1,
-      "modo": "estatico",
-      "borrador": true
-    },
-    "items/furnitures/furnitures-ejemplo-1": {
-      "archivo": "ui/balls/alliance-ball.png",
-      "frame": [32, 32],
-      "frames": 1,
-      "modo": "estatico",
-      "borrador": true
-    },
-    "items/furnitures/furnitures-ejemplo-2": {
-      "archivo": "ui/balls/alliance-ball.png",
-      "frame": [32, 32],
-      "frames": 1,
-      "modo": "estatico",
-      "borrador": true
-    },
     "outfits/2": {
       "archivo": "outfits/2/sur.png",
       "frame": [32, 32],
@@ -938,19 +796,6 @@
         "sur": "outfits/509/sur.png",
         "oeste": "outfits/509/oeste.png"
       }
-    },
-    "outfits/1005": {
-      "archivo": "outfits/2/sur.png",
-      "frame": [32, 32],
-      "frames": 1,
-      "modo": "estatico",
-      "direcciones": {
-        "norte": "outfits/2/norte.png",
-        "este": "outfits/2/este.png",
-        "sur": "outfits/2/sur.png",
-        "oeste": "outfits/2/oeste.png"
-      },
-      "borrador": true
     },
     "outfits/125": {
       "archivo": "outfits/125/sur.png",
@@ -2460,12 +2305,6 @@
     },
     "items/cliente/31388": {
       "archivo": "items/cliente/31388.png",
-      "frame": [32, 32],
-      "frames": 1,
-      "modo": "estatico"
-    },
-    "items/cliente/3028": {
-      "archivo": "items/cliente/3028.png",
       "frame": [32, 32],
       "frames": 1,
       "modo": "estatico"
@@ -9478,84 +9317,6 @@
       "frames": 1,
       "modo": "estatico"
     },
-    "items/cliente/45310": {
-      "archivo": "items/cliente/45310.png",
-      "frame": [32, 32],
-      "frames": 1,
-      "modo": "estatico"
-    },
-    "items/cliente/15650": {
-      "archivo": "items/cliente/15650.png",
-      "frame": [32, 32],
-      "frames": 1,
-      "modo": "estatico"
-    },
-    "items/cliente/15640": {
-      "archivo": "items/cliente/15640.png",
-      "frame": [32, 32],
-      "frames": 1,
-      "modo": "estatico"
-    },
-    "items/cliente/15641": {
-      "archivo": "items/cliente/15641.png",
-      "frame": [32, 32],
-      "frames": 1,
-      "modo": "estatico"
-    },
-    "items/cliente/15642": {
-      "archivo": "items/cliente/15642.png",
-      "frame": [32, 32],
-      "frames": 1,
-      "modo": "estatico"
-    },
-    "items/cliente/15643": {
-      "archivo": "items/cliente/15643.png",
-      "frame": [32, 32],
-      "frames": 1,
-      "modo": "estatico"
-    },
-    "items/cliente/15646": {
-      "archivo": "items/cliente/15646.png",
-      "frame": [32, 32],
-      "frames": 1,
-      "modo": "estatico"
-    },
-    "items/cliente/15647": {
-      "archivo": "items/cliente/15647.png",
-      "frame": [32, 32],
-      "frames": 1,
-      "modo": "estatico"
-    },
-    "items/cliente/15648": {
-      "archivo": "items/cliente/15648.png",
-      "frame": [32, 32],
-      "frames": 1,
-      "modo": "estatico"
-    },
-    "items/cliente/15649": {
-      "archivo": "items/cliente/15649.png",
-      "frame": [32, 32],
-      "frames": 1,
-      "modo": "estatico"
-    },
-    "items/cliente/15651": {
-      "archivo": "items/cliente/15651.png",
-      "frame": [32, 32],
-      "frames": 1,
-      "modo": "estatico"
-    },
-    "items/cliente/15644": {
-      "archivo": "items/cliente/15644.png",
-      "frame": [32, 32],
-      "frames": 1,
-      "modo": "estatico"
-    },
-    "items/cliente/15645": {
-      "archivo": "items/cliente/15645.png",
-      "frame": [32, 32],
-      "frames": 1,
-      "modo": "estatico"
-    },
     "items/cliente/23312": {
       "archivo": "items/cliente/23312.png",
       "frame": [32, 32],
@@ -9852,12 +9613,6 @@
     },
     "items/cliente/42285": {
       "archivo": "items/cliente/42285.png",
-      "frame": [32, 32],
-      "frames": 1,
-      "modo": "estatico"
-    },
-    "items/cliente/3552": {
-      "archivo": "items/cliente/3552.png",
       "frame": [32, 32],
       "frames": 1,
       "modo": "estatico"
@@ -13290,7 +13045,7 @@
     },
     "outfits/1757": {
       "archivo": "outfits/1757/sur.png",
-      "frame": [64, 64],
+      "frame": [32, 64],
       "frames": 1,
       "modo": "estatico"
     },
@@ -14137,7 +13892,7 @@
     },
     "outfits/1898": {
       "archivo": "outfits/1898/sur.png",
-      "frame": [64, 64],
+      "frame": [32, 64],
       "frames": 1,
       "modo": "estatico"
     },
@@ -14679,8 +14434,9 @@
     "outfits/2002": {
       "archivo": "outfits/2002/sur.png",
       "frame": [64, 64],
-      "frames": 1,
-      "modo": "estatico"
+      "frames": 5,
+      "modo": "animacion",
+      "duracionMs": [200, 200, 200, 200, 200]
     },
     "outfits/2003": {
       "archivo": "outfits/2003/sur.png",
@@ -14794,8 +14550,9 @@
     "outfits/2021": {
       "archivo": "outfits/2021/sur.png",
       "frame": [64, 64],
-      "frames": 1,
-      "modo": "estatico"
+      "frames": 4,
+      "modo": "animacion",
+      "duracionMs": [250, 250, 250, 250]
     },
     "outfits/2022": {
       "archivo": "outfits/2022/sur.png",
@@ -14872,8 +14629,9 @@
     "outfits/2034": {
       "archivo": "outfits/2034/sur.png",
       "frame": [64, 64],
-      "frames": 1,
-      "modo": "estatico"
+      "frames": 3,
+      "modo": "animacion",
+      "duracionMs": [333, 333, 333]
     },
     "outfits/2035": {
       "archivo": "outfits/2035/sur.png",
@@ -15069,9 +14827,10 @@
     },
     "outfits/2067": {
       "archivo": "outfits/2067/sur.png",
-      "frame": [96, 96],
-      "frames": 1,
-      "modo": "estatico"
+      "frame": [64, 64],
+      "frames": 4,
+      "modo": "animacion",
+      "duracionMs": [250, 250, 250, 250]
     },
     "outfits/2068": {
       "archivo": "outfits/2068/sur.png",
@@ -15112,8 +14871,9 @@
     "outfits/2074": {
       "archivo": "outfits/2074/sur.png",
       "frame": [64, 64],
-      "frames": 1,
-      "modo": "estatico"
+      "frames": 6,
+      "modo": "animacion",
+      "duracionMs": [166, 166, 166, 166, 166, 166]
     },
     "outfits/2076": {
       "archivo": "outfits/2076/sur.png",
@@ -15292,8 +15052,9 @@
     "outfits/2124": {
       "archivo": "outfits/2124/sur.png",
       "frame": [64, 64],
-      "frames": 1,
-      "modo": "estatico"
+      "frames": 5,
+      "modo": "animacion",
+      "duracionMs": [200, 200, 200, 200, 200]
     },
     "outfits/2125": {
       "archivo": "outfits/2125/sur.png",
@@ -15353,8 +15114,9 @@
     "outfits/2143": {
       "archivo": "outfits/2143/sur.png",
       "frame": [64, 64],
-      "frames": 1,
-      "modo": "estatico"
+      "frames": 4,
+      "modo": "animacion",
+      "duracionMs": [250, 250, 250, 250]
     },
     "outfits/2144": {
       "archivo": "outfits/2144/sur.png",
@@ -15371,8 +15133,9 @@
     "outfits/2156": {
       "archivo": "outfits/2156/sur.png",
       "frame": [64, 64],
-      "frames": 1,
-      "modo": "estatico"
+      "frames": 4,
+      "modo": "animacion",
+      "duracionMs": [250, 250, 250, 250]
     },
     "outfits/2169": {
       "archivo": "outfits/2169/sur.png",
@@ -15388,7 +15151,7 @@
     },
     "outfits/2171": {
       "archivo": "outfits/2171/sur.png",
-      "frame": [96, 96],
+      "frame": [64, 96],
       "frames": 1,
       "modo": "estatico"
     },
@@ -15430,9 +15193,10 @@
     },
     "outfits/2189": {
       "archivo": "outfits/2189/sur.png",
-      "frame": [96, 96],
-      "frames": 1,
-      "modo": "estatico"
+      "frame": [64, 64],
+      "frames": 4,
+      "modo": "animacion",
+      "duracionMs": [250, 250, 250, 250]
     },
     "outfits/2190": {
       "archivo": "outfits/2190/sur.png",
@@ -15454,7 +15218,7 @@
     },
     "outfits/2195": {
       "archivo": "outfits/2195/sur.png",
-      "frame": [64, 64],
+      "frame": [32, 64],
       "frames": 1,
       "modo": "estatico"
     },
@@ -15496,7 +15260,7 @@
     },
     "outfits/2279": {
       "archivo": "outfits/2279/sur.png",
-      "frame": [64, 64],
+      "frame": [32, 32],
       "frames": 1,
       "modo": "estatico"
     },
@@ -15508,7 +15272,7 @@
     },
     "outfits/2281": {
       "archivo": "outfits/2281/sur.png",
-      "frame": [64, 64],
+      "frame": [96, 96],
       "frames": 1,
       "modo": "estatico"
     },
@@ -15539,7 +15303,7 @@
     },
     "outfits/2445": {
       "archivo": "outfits/2445/sur.png",
-      "frame": [64, 64],
+      "frame": [32, 32],
       "frames": 1,
       "modo": "estatico"
     },
@@ -15953,6 +15717,270 @@
     "outfits/3578": {
       "archivo": "outfits/3578/sur.png",
       "frame": [64, 64],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "ui/nav/pokedex": {
+      "archivo": "ui/nav/pokedex.png",
+      "frame": [20, 16],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "ui/nav/tier-list": {
+      "archivo": "ui/nav/tier-list.png",
+      "frame": [22, 20],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "ui/nav/comparar": {
+      "archivo": "ui/nav/comparar.png",
+      "frame": [22, 18],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "ui/sistemas/punching-bag-training": {
+      "archivo": "ui/sistemas/punching-bag-training.png",
+      "frame": [25, 29],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "ui/nav/destacados": {
+      "archivo": "ui/nav/destacados.png",
+      "frame": [24, 30],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "ui/nav/pokemon": {
+      "archivo": "ui/nav/pokemon.png",
+      "frame": [28, 28],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "ui/nav/actividades": {
+      "archivo": "ui/nav/actividades.png",
+      "frame": [28, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "ui/nav/herramientas": {
+      "archivo": "ui/nav/herramientas.png",
+      "frame": [28, 28],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "ui/nav/comunidad": {
+      "archivo": "ui/nav/comunidad.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "ui/sistemas/prey": {
+      "archivo": "ui/sistemas/prey.png",
+      "frame": [28, 28],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "ui/sistemas/stars": {
+      "archivo": "ui/sistemas/stars.png",
+      "frame": [13, 12],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/50752": {
+      "archivo": "items/cliente/50752.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/50748": {
+      "archivo": "items/cliente/50748.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/50749": {
+      "archivo": "items/cliente/50749.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/50794": {
+      "archivo": "items/cliente/50794.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/50796": {
+      "archivo": "items/cliente/50796.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/50754": {
+      "archivo": "items/cliente/50754.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/50798": {
+      "archivo": "items/cliente/50798.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/50743": {
+      "archivo": "items/cliente/50743.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/50744": {
+      "archivo": "items/cliente/50744.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/50767": {
+      "archivo": "items/cliente/50767.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/50769": {
+      "archivo": "items/cliente/50769.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/50750": {
+      "archivo": "items/cliente/50750.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/50765": {
+      "archivo": "items/cliente/50765.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/50751": {
+      "archivo": "items/cliente/50751.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/50775": {
+      "archivo": "items/cliente/50775.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/50745": {
+      "archivo": "items/cliente/50745.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/50746": {
+      "archivo": "items/cliente/50746.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/50747": {
+      "archivo": "items/cliente/50747.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/50763": {
+      "archivo": "items/cliente/50763.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/50762": {
+      "archivo": "items/cliente/50762.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/50795": {
+      "archivo": "items/cliente/50795.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/50797": {
+      "archivo": "items/cliente/50797.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/50756": {
+      "archivo": "items/cliente/50756.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/50759": {
+      "archivo": "items/cliente/50759.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/50764": {
+      "archivo": "items/cliente/50764.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/50768": {
+      "archivo": "items/cliente/50768.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/50770": {
+      "archivo": "items/cliente/50770.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/50758": {
+      "archivo": "items/cliente/50758.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/50760": {
+      "archivo": "items/cliente/50760.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/50771": {
+      "archivo": "items/cliente/50771.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/50801": {
+      "archivo": "items/cliente/50801.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/50757": {
+      "archivo": "items/cliente/50757.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/50800": {
+      "archivo": "items/cliente/50800.png",
+      "frame": [32, 32],
       "frames": 1,
       "modo": "estatico"
     }

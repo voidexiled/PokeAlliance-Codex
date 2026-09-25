@@ -217,13 +217,29 @@ export function searchPendingScript(config: ListConfig<SearchEntry>): string {
 
 /**
  * A system page of the «Sistemas» group (8.4, 8.6): its sprite as the adapter resolved it
- * (DP2), the one the systems index draws, and its panel when the record has tooltip rows
- * (`systemTip`, R2). The page builds both; the index only carries a static frame of the
- * sprite, which is the fallback.
+ * (DP2), the one the systems index draws, and the rows of its panel when the record has tooltip
+ * rows (`systemTip`, R2). The page builds both; the index only carries a static frame of the
+ * sprite, which is the fallback. Only the rows travel (13.6: the props are at their budget):
+ * `systemPanel` puts the head and the title the page already has around them.
  */
 export interface SearchSystem {
   sprite: SpriteProps | null;
-  tip?: TipData;
+  rows?: TipData['rows'];
+}
+
+/** `size-tt`, the width of a system panel (`systemTip`, 7.5.2). */
+const SYSTEM_TIP_WIDTH = 282;
+
+/** The panel of a system page, as `systemTip` builds it: its sprite, its title and its rows. */
+export function systemPanel(id: string, title: string, system: SearchSystem): TipData | undefined {
+  if (system.rows === undefined) return undefined;
+  return {
+    key: `sistema:${id}`,
+    title,
+    width: SYSTEM_TIP_WIDTH,
+    head: { type: 'sprite', sprite: system.sprite },
+    rows: system.rows,
+  };
 }
 
 /**

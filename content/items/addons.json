@@ -1,31 +1,4 @@
 {
   "$schema": "../schemas/items.schema.json",
-  "items": [
-    {
-      "id": "addons-ejemplo-1",
-      "nombre": "Item de ejemplo 1",
-      "clientId": null,
-      "categoria": "addons",
-      "sprite": "items/addons/addons-ejemplo-1",
-      "apilable": null,
-      "precioNpc": {
-        "vende": null,
-        "compra": null
-      },
-      "borrador": true
-    },
-    {
-      "id": "addons-ejemplo-2",
-      "nombre": "Item de ejemplo 2",
-      "clientId": null,
-      "categoria": "addons",
-      "sprite": "items/addons/addons-ejemplo-2",
-      "apilable": null,
-      "precioNpc": {
-        "vende": null,
-        "compra": null
-      },
-      "borrador": true
-    }
-  ]
+  "items": []
 }

@@ -62,14 +62,6 @@
     --tier-c: var(--tier-t7);
   }
 
-  /* The corner mark of a slot: 14 high, the short form, opaque so it reads over a sprite. */
-  .ac-tier-badge--mini {
-    height: 14px; /* sin token: pixel-exact game slot geometry */
-    padding: 0 3px; /* sin token: pixel-exact game slot geometry */
-    border-radius: var(--radius-2);
-    background: var(--bg-primary);
-  }
-
   /* The tier tooltip: 184 wide, padding 10 10 6, the name over one «Max brokes:» row 6 below. */
   .ac-game-tooltip.ac-game-tooltip--tier {
     width: var(--size-tt-tier);

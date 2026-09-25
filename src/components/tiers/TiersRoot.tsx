@@ -11,7 +11,7 @@ import { FilterToolbar } from '@/components/filters/FilterToolbar';
 import { PerPageSelect } from '@/components/filters/PerPageSelect';
 import { filterText } from '@/components/filters/text';
 import type { FilterText } from '@/components/filters/text';
-import { TierTip } from '@/components/filters/TierTip';
+import { TierTip, hasTierTip } from '@/components/filters/TierTip';
 import { EntitySlot } from '@/components/game/EntitySlot';
 import { EntityList } from '@/components/lists/EntityList';
 import type { EntityListLabels } from '@/components/lists/EntityList';
@@ -36,6 +36,8 @@ import type { DexLayout } from '@/lib/cards/layout';
 import { formatTier } from '@/lib/content/format';
 import { resolvePokemonImage } from '@/lib/content/pokemon-media';
 import { formatInteger } from '@/lib/format/numbers';
+import { usePanels } from '@/lib/game/panels';
+import { withTipLabels, type ListUi } from '@/lib/game/tip-labels';
 import { pageSizeOf, perPageSpec } from '@/lib/lists/state';
 import type { EntityView, ListPage, ListState } from '@/lib/lists/state';
 import type { SpriteData } from '@/lib/sprites/resolve';
@@ -105,7 +107,7 @@ export interface TiersRootProps {
   /** «Tier list», the h1: the name of the Slots panel and the caption of the Lista (8.8). */
   title: string;
   /** `messages.ui` of the page's locale: the components' texts, the card texts in `cards`. */
-  ui: Omit<Messages['ui'], 'money'>;
+  ui: ListUi<Messages['ui']>;
   /**
    * `messages.pokedex` of the page's locale: the texts of 8.2 this list shares (8.8) — the
    * label and first option of each filter, the count by Variante, the empty state and the
@@ -189,10 +191,20 @@ interface TierLabelProps {
 /**
  * The label cell of a tier row (plan board Tier-list): the tier's name with a dotted underline
  * over the count, on the row colour of its tier; hover or focus shows the tier tooltip at its
- * right («LEGENDARY · Max brokes: —»).
+ * right («LEGENDARY · Max brokes: 3»). While the «Max brokes» is unknown the tooltip would only
+ * repeat the name, so the label is plain text: no button, no underline.
  */
 function TierLabel({ tierKey, name, count, maxBrokes, text }: TierLabelProps) {
   const tipId = useId();
+  if (!hasTierTip(maxBrokes))
+    return (
+      <h2 className={`ac-tier-rows__label ac-tier-rows__label--${tierKey}`}>
+        <span className="ac-tier-rows__trigger ac-tier-rows__trigger--plain">
+          <span className="ac-tier-rows__name">{name}</span>
+          <span className="ac-tier-rows__count">{count}</span>
+        </span>
+      </h2>
+    );
   return (
     <h2 className={`ac-tier-rows__label ac-tier-rows__label--${tierKey}`}>
       <button type="button" className="ac-tier-rows__trigger" aria-describedby={tipId}>
@@ -277,6 +289,12 @@ export function TiersRoot({
   // the Pokémon panel, is always in `ids`.
   const later = deferred;
   const names = useMemo(() => new Map(ids.elements), [ids]);
+  // The rest of every panel (`/{l}/paneles.json`) and the labels of its rows, once here.
+  const panels = usePanels(locale);
+  const tipUi = useMemo(
+    () => (panels === null ? ui : { ...ui, tooltip: withTipLabels(ui.tooltip, panels.etiquetas) }),
+    [ui, panels],
+  );
   const [byId, byItem] = useMemo(() => {
     const own = new Map<string, ElementChipEntry>();
     for (const id of new Set(items.flatMap((row) => row.elementos))) {
@@ -285,14 +303,15 @@ export function TiersRoot({
     }
     const dropped = new Map(Object.entries(drops));
     if (refs !== null && later !== undefined) {
+      const labels = tipUi.tooltip;
       for (const [id, ref] of Object.entries(refs.elementos))
-        own.set(id, later.elementEntry(id, ref, locale, ui.tooltip));
+        own.set(id, later.elementEntry(id, ref, locale, labels, panels?.elementos[id]));
       for (const [id, ref] of Object.entries(refs.items))
-        if (!dropped.has(id))
-          dropped.set(id, later.itemEntry(id, ref, refs.rows, locale, ui.tooltip));
+        if (!dropped.has(id) || panels !== null)
+          dropped.set(id, later.itemEntry(id, ref, refs.rows, locale, labels, panels?.items[id]));
     }
     return [own, dropped] as const;
-  }, [items, names, icons, drops, refs, later, locale, ui.tooltip]);
+  }, [items, names, icons, drops, refs, later, locale, tipUi, panels]);
   const elementsOf = (row: PokedexRow) => rowElements(row, byId);
 
   // Whether the state needs the deferred part (see above), and whether it is here.
@@ -365,7 +384,8 @@ export function TiersRoot({
   const lazy = (index: number) => (index >= EAGER_ART ? 'lazy' : undefined);
   const context: ViewsModule.PokedexViewContext = {
     locale,
-    ui,
+    ui: tipUi,
+    panels,
     pokedex,
     title,
     names,

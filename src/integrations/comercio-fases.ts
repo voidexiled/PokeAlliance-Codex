@@ -18,13 +18,13 @@
 //    without COMERCIO_PUBLICO. A production build has neither, so the route does not exist there
 //    (CA-9.1); phase B reads the list from Supabase and has no such file.
 //
-// 4. `/{l}/comercio/operaciones/` and `/{l}/comercio/moderacion/`, the two routes of phase B
-//    (9.10, 9.11), live outside src/pages/ too, in src/routes/comercio/, and are injected only
-//    with COMERCIO_PUBLICO: without it they do not exist and answer 404 (S11, CA-9.13). A file
-//    outside src/pages/ exports no `prerender`, so the injection sets it: «Mis operaciones» is a
-//    prerendered frame whose island reads the session (one HTML per locale from its
-//    `getStaticPaths`), and the moderation queue renders on demand, because it answers 404 to an
-//    account that does not moderate (9.3).
+// 4. `/{l}/comercio/moderacion/`, the moderation queue of phase B (9.11), lives outside
+//    src/pages/ too, in src/routes/comercio/, and is injected only with COMERCIO_PUBLICO: without
+//    it the route does not exist and answers 404 (S11, CA-9.13). A file outside src/pages/
+//    exports no `prerender`, so the injection sets it: the queue renders on demand, because it
+//    answers 404 to an account that does not moderate (9.3). «Mis operaciones» (9.10) is a page
+//    of the account now, `/{l}/cuenta/operaciones/`, whose own `getStaticPaths` gives no path
+//    without COMERCIO_PUBLICO; the old `/{l}/comercio/operaciones/` is a 302 of astro.config.mjs.
 //
 // The switches (9.2) are read the way the pages read them (src/lib/trade/registry.ts, and
 // `hideDrafts` of src/lib/content/registry.ts): the shell or Vercel first, then the `.env` files
@@ -41,7 +41,7 @@ import type { AstroIntegration } from 'astro';
 
 /** The two switches of 9.2. */
 export interface ComercioSwitches {
-  /** COMERCIO_DEMO: the pages read the sample registry of content/comercio/ (phase A). */
+  /** COMERCIO_DEMO: the pages read the sample registry of tests/fixtures/comercio/ (phase A). */
   demo: boolean;
   /** COMERCIO_PUBLICO: phase B. */
   publico: boolean;
@@ -117,9 +117,6 @@ function componentPath(rootPath: string, file: string): string {
 /** The route of the list data of phase A (PR5), one prerendered file per locale. */
 export const DATOS_PATTERN = '/[locale]/comercio/datos.json';
 
-/** «Mis operaciones» (9.10), phase B only: a prerendered frame and an island with the session. */
-export const OPERACIONES_PATTERN = '/[locale]/comercio/operaciones';
-
 /** The moderation queue (9.11), phase B only, rendered on demand: 404 to a non-moderator. */
 export const MODERACION_PATTERN = '/[locale]/comercio/moderacion';
 
@@ -151,11 +148,6 @@ export function comercioFases(): AstroIntegration {
         }
 
         if (switches.publico) {
-          injectRoute({
-            pattern: OPERACIONES_PATTERN,
-            entrypoint: new URL('routes/comercio/operaciones.astro', config.srcDir),
-            prerender: true,
-          });
           injectRoute({
             pattern: MODERACION_PATTERN,
             entrypoint: new URL('routes/comercio/moderacion.astro', config.srcDir),

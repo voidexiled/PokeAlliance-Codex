@@ -279,9 +279,12 @@ describe('pnpm content:check on content/sistemas/', () => {
     );
     for (const [index, name] of sistemaFiles.entries())
       expect(records[index].id).toBe(path.basename(name, '.json'));
-    // A draft carries its menu title and its sprite and nothing else yet (D-011).
-    for (const record of records.filter((entry) => entry.borrador === true))
-      expect(record).toMatchObject({ tooltip: [], intro: [], secciones: [] });
+    // A draft carries its menu title, its sprite and the rows of its tooltip (D-011, D-031),
+    // and no page body yet.
+    for (const record of records.filter((entry) => entry.borrador === true)) {
+      expect(record).toMatchObject({ intro: [], secciones: [] });
+      expect(record.tooltip.length, record.id).toBeGreaterThan(0);
+    }
   });
 
   it('accepts links, entities, amounts, element cells and the item anchors of a system', () => {

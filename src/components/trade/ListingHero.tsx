@@ -51,6 +51,13 @@ export interface ListingHeroProps {
   orLabel: string;
   /** «Star Level {n} de 5» for the stars. */
   starsLabel?: (n: number) => string;
+  /**
+   * Panel of the traded item or Pokémon (`assetPanel`), opened by the art: every fact of the
+   * entity, what the hero's facts leave out included (owner rule 2026-09-25).
+   */
+  tip?: TipData | null;
+  /** The game's text of the traded item (what it does), under the meta; `lang` when it differs. */
+  text?: { value: string; lang?: string } | null;
 }
 
 function isElement(value: unknown): value is ElementChipEntry {
@@ -176,28 +183,53 @@ export function ListingHero(props: ListingHeroProps) {
     return drawn === null ? [] : [{ fact, drawn }];
   });
 
+  const artNode = props.pokemon ? (
+    props.art === null ? null : (
+      <Sprite {...props.art} smooth alt="" />
+    )
+  ) : (
+    <SpriteStage
+      sprite={props.art}
+      size={72}
+      qty={
+        typeof props.qty === 'number' && props.qty > 1
+          ? formatInteger(props.qty, locale)
+          : undefined
+      }
+    />
+  );
+
   return (
     <section className="ac-listing-hero" aria-label={props.label}>
       <div className="ac-listing-hero__art" data-pokemon={props.pokemon ? '' : undefined}>
-        {props.pokemon ? (
-          props.art === null ? null : (
-            <Sprite {...props.art} smooth alt="" />
-          )
+        {hasTip(props.tip) ? (
+          <NestedEntity
+            tip={props.tip}
+            variant="plain"
+            placement="side"
+            align="start"
+            ariaLabel={props.tip.title}
+            locale={locale}
+            hint={hint}
+            shinyLabel={shinyLabel}
+            orLabel={orLabel}
+            wrapperClassName="ac-listing-hero__tip"
+            className="ac-listing-hero__trigger"
+          >
+            {artNode}
+          </NestedEntity>
         ) : (
-          <SpriteStage
-            sprite={props.art}
-            size={72}
-            qty={
-              typeof props.qty === 'number' && props.qty > 1
-                ? formatInteger(props.qty, locale)
-                : undefined
-            }
-          />
+          artNode
         )}
       </div>
       <div className="ac-listing-hero__main">
         <h1 className="ac-listing-hero__title">{props.title}</h1>
         <p className="ac-listing-hero__meta">{props.meta}</p>
+        {props.text ? (
+          <p className="ac-listing-hero__text" lang={props.text.lang}>
+            {props.text.value}
+          </p>
+        ) : null}
         {props.tags ? <p className="ac-listing-hero__tags">{props.tags}</p> : null}
         {shown.length > 0 ? (
           <dl className="ac-listing-hero__facts">
@@ -216,13 +248,14 @@ export function ListingHero(props: ListingHeroProps) {
 
 // ------------------------------------------------------------------------------ equipment
 
-/** One group of the «Equipo» panel: its label and its slots; an empty one reads `none`. */
+/**
+ * One group of the «Equipo» panel: its label and its slots. The page passes only the kinds the
+ * Pokémon carries (owner rule 2026-09-25): an empty group is not drawn.
+ */
 export interface EquipmentGroup {
   key: string;
   label: string;
   items: readonly EquipmentStripItem[];
-  /** «Ninguno» / «Ninguna» when the group is empty; with it, a single slot shows its name. */
-  none: string;
   /** Show the name beside a single slot (Ball, Held X, Held Y, Mega Stone). */
   named?: boolean;
   /** Takes the whole row (Auras). */
@@ -249,25 +282,18 @@ export function ListingEquipment({ title, groups, locale, hint, orLabel }: Listi
             data-wide={group.wide ? '' : undefined}
           >
             <p className="ac-listing-equipment__label">{group.label}</p>
-            {group.items.length === 0 ? (
-              <p className="ac-listing-equipment__none">
-                <span className="ac-listing-equipment__empty" aria-hidden="true" />
-                {group.none}
-              </p>
-            ) : (
-              <div className="ac-listing-equipment__slots">
-                <EquipmentStrip
-                  items={group.items}
-                  locale={locale}
-                  label={group.label}
-                  hint={hint}
-                  orLabel={orLabel}
-                />
-                {group.named && group.items.length === 1 ? (
-                  <span className="ac-listing-equipment__name">{group.items[0].name}</span>
-                ) : null}
-              </div>
-            )}
+            <div className="ac-listing-equipment__slots">
+              <EquipmentStrip
+                items={group.items}
+                locale={locale}
+                label={group.label}
+                hint={hint}
+                orLabel={orLabel}
+              />
+              {group.named && group.items.length === 1 ? (
+                <span className="ac-listing-equipment__name">{group.items[0].name}</span>
+              ) : null}
+            </div>
           </div>
         ))}
       </div>

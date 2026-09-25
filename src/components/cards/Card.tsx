@@ -37,7 +37,8 @@ export type CardHeadingLevel = 2 | 3 | 4;
 export type CardAnatomy = 'listing' | 'dex' | 'loot';
 
 /** `data-zone` of a zone: one direct child of the card per track (CARD_GRID_SYSTEM §5.2). */
-export type CardZoneName = 'head' | 'facts' | 'held' | 'train' | 'footer' | 'elements' | 'drops';
+export type CardZoneName =
+  'head' | 'facts' | 'gear' | 'auras' | 'addons' | 'train' | 'footer' | 'elements' | 'drops';
 
 /**
  * Level of the card titles below it. `CardGrid` (and a `CardGroup` around it) provide it for the

@@ -5,7 +5,8 @@
 //            shows a placeholder (`ui/comercio/item` or a sprite marked `borrador`) becomes
 //            `items/cliente/<clientId>`: the first frame of the item as the inventory draws it
 //            (pattern 0, the single-count frame of a stackable item, phase 0, every layer,
-//            the visible `exactSize` square). A sprite the owner set is never replaced.
+//            the visible `exactSize` square). A sprite the owner set is never replaced. An
+//            `apilable` still null becomes the DAT's `stackable` flag of that item.
 //   Pokémon  each record of content/pokemon.json without an outfit gets one in
 //            content/outfits.json, from the lookType of the client's cyclopedia export (and,
 //            for the forms it does not list, the lookType the other exports name with the same
@@ -18,6 +19,12 @@
 //            data/images/pokemons has one that no other record uses (NNN.png, NNN.1.png for a
 //            shiny, and the forms of FORM_PORTRAITS); run scripts/assets/pokemon-thumbs.py
 //            afterwards to build its WebP thumbnails.
+//   Balls    each record of content/items/*.json whose sprite is an `items/poke-balls/<id>` key
+//            and that has a `clientId` gets that key re-rendered from the DAT: a stackable item
+//            with 4 × 2 count patterns becomes the strip of its eight count frames (pattern 0 to
+//            7, phase 0, every layer), `modo: cantidad` with the thresholds of OTClient's
+//            `Item::calculatePatterns` (COUNT_THRESHOLDS); any other item, its inventory frame.
+//            The key and the file name stay, so no record or page changes.
 //
 // Rerunning after a client update re-renders every sprite this script owns (the keys
 // `items/cliente/*` and the one-file `outfits/<id>` entries) and drops the ones nothing uses.
@@ -27,7 +34,8 @@
 //
 // Usage:
 //   node scripts/assets/extract-game-sprites.mjs --client <decrypted client root>
-//        --datamine <datamine folder | run folder> [--solo items,pokemon,retratos] [--dry-run]
+//        --datamine <datamine folder | run folder> [--solo items,pokemon,retratos,balls]
+//        [--dry-run]
 //   --client     folder with data/things/things.{dat,spr,otfi} and data/images/pokemons/
 //   --things     the things folder, when it is not <client>/data/things
 //   --datamine   the game_datamine export (needed for the Pokémon step)
@@ -62,7 +70,16 @@ const outfitsPath = path.join(repoRoot, 'content', 'outfits.json');
 
 const PLACEHOLDER = 'ui/comercio/item';
 const ITEM_PREFIX = 'items/cliente/';
+const BALL_PREFIX = 'items/poke-balls/';
 const SOUTH = 2;
+
+/**
+ * The count a stackable item with 4 × 2 patterns needs to show each pattern, as OTClient's
+ * `Item::calculatePatterns` picks it: 1–4 → patterns 0–3, 5–9 → 4, 10–24 → 5, 25–49 → 6,
+ * 50 or more → 7. They are the `umbrales` of a `modo: cantidad` entry.
+ */
+const COUNT_THRESHOLDS = [1, 2, 3, 4, 5, 10, 25, 50];
+const STEPS = ['items', 'pokemon', 'retratos', 'balls'];
 
 /**
  * Pokédex portraits of forms that do not follow NNN.png / NNN.1.png. Each one was checked by
@@ -154,7 +171,7 @@ const HELP = `Uso: node scripts/assets/extract-game-sprites.mjs --client <carpet
   --client <carpeta>    Cliente descifrado (con data/things y data/images/pokemons).
   --things <carpeta>    Carpeta del things.dat/things.spr si no es <client>/data/things.
   --datamine <carpeta>  Exportación de game_datamine (carpeta con run_* o una run_*).
-  --solo <lista>        items, pokemon, retratos (por defecto, los tres).
+  --solo <lista>        items, pokemon, retratos, balls (por defecto, los cuatro).
   --dry-run             Informa sin escribir nada.
 `;
 
@@ -163,7 +180,7 @@ class CliError extends Error {}
 // ------------------------------------------------------------------------------ arguments
 
 function parseArgs(argv) {
-  const options = { solo: new Set(['items', 'pokemon', 'retratos']), dryRun: false };
+  const options = { solo: new Set(STEPS), dryRun: false };
   for (let index = 0; index < argv.length; index++) {
     const arg = argv[index];
     const value = () => {
@@ -181,8 +198,7 @@ function parseArgs(argv) {
         .split(/[,\s]+/)
         .filter(Boolean);
       for (const step of list)
-        if (!['items', 'pokemon', 'retratos'].includes(step))
-          throw new CliError(`Paso desconocido en --solo: ${step}`);
+        if (!STEPS.includes(step)) throw new CliError(`Paso desconocido en --solo: ${step}`);
       options.solo = new Set(list);
     } else throw new CliError(`Opción desconocida: ${arg}`);
   }
@@ -290,12 +306,15 @@ function cropBottomRight(pixels, width, height, w, h) {
   return out;
 }
 
-/** The item as the inventory draws it (UIItem): first frame, every layer, exactSize square. */
-function renderItem(thing, readSprite) {
+/**
+ * The item as the inventory draws it (UIItem): first frame, every layer, exactSize square. `x`
+ * and `y` pick another pattern (the count patterns of a stackable item).
+ */
+function renderItem(thing, readSprite, x = 0, y = 0) {
   const group = thing.frameGroups[0];
   let frame = null;
   for (let layer = 0; layer < group.layers; layer++) {
-    const composed = composeFrame(group, { layer, x: 0, y: 0, z: 0, phase: 0 }, readSprite);
+    const composed = composeFrame(group, { layer, x, y, z: 0, phase: 0 }, readSprite);
     if (!frame) frame = composed;
     else blendOver(frame.pixels, composed.pixels);
   }
@@ -307,6 +326,31 @@ function renderItem(thing, readSprite) {
     width: w,
     height: h,
   };
+}
+
+/**
+ * A stackable item with 4 × 2 count patterns as the strip of its eight count frames, in the
+ * order of COUNT_THRESHOLDS; `null` for any other item.
+ */
+function renderCountStrip(thing, readSprite) {
+  const group = thing.frameGroups[0];
+  const stackable = thing.attributes.some((attribute) => attribute.name === 'stackable');
+  if (!stackable || group.patternX !== 4 || group.patternY !== 2) return null;
+  const frames = COUNT_THRESHOLDS.map((_, pattern) =>
+    renderItem(thing, readSprite, pattern % 4, Math.floor(pattern / 4)),
+  );
+  const { width, height } = frames[0];
+  const pixels = Buffer.alloc(width * frames.length * height * 4);
+  frames.forEach((frame, index) => {
+    for (let y = 0; y < height; y++)
+      frame.pixels.copy(
+        pixels,
+        (y * width * frames.length + index * width) * 4,
+        y * width * 4,
+        (y + 1) * width * 4,
+      );
+  });
+  return { pixels, width, height, frames: frames.length };
 }
 
 /** South-facing idle frame of an outfit (phase 0, layer 0, no addon, no mount). */
@@ -495,11 +539,21 @@ function main() {
       let wired = 0;
       let kept = 0;
       let noClientId = 0;
+      let stacked = 0;
       for (const file of files) {
         const full = path.join(itemsDir, file);
         const data = readJson(full);
         let changed = false;
         for (const item of data.items ?? []) {
+          // `apilable` while unknown: whether the DAT item stacks. A value the owner wrote stays.
+          if (item.apilable == null && item.clientId != null) {
+            const thing = dat.things.items.get(item.clientId);
+            if (thing) {
+              item.apilable = thing.attributes.some((attribute) => attribute.name === 'stackable');
+              stacked++;
+              changed = true;
+            }
+          }
           if (!isPlaceholder(item.sprite)) {
             kept++;
             continue;
@@ -554,7 +608,8 @@ function main() {
       }
       console.log(
         `Items: ${wired} con sprite del cliente (${[...rendered.values()].filter(Boolean).length} imágenes), ` +
-          `${kept} con sprite propio sin tocar, ${noClientId} sin clientId.`,
+          `${kept} con sprite propio sin tocar, ${noClientId} sin clientId; ` +
+          `${stacked} con apilable leído del DAT.`,
       );
       if (notFound.length)
         console.log(
@@ -562,6 +617,44 @@ function main() {
         );
       if (empty.length)
         console.log(`  clientId sin píxeles visibles (${empty.length}): ${empty.join(', ')}`);
+    }
+
+    // ---------------------------------------------------------------- balls
+    if (options.solo.has('balls')) {
+      const files = readdirSync(itemsDir).filter(
+        (file) => file.endsWith('.json') && file !== 'categorias.json',
+      );
+      const done = [];
+      const missing = [];
+      for (const file of files)
+        for (const item of readJson(path.join(itemsDir, file)).items ?? []) {
+          if (!item.sprite.startsWith(BALL_PREFIX) || item.clientId == null) continue;
+          const thing = dat.things.items.get(item.clientId);
+          if (!thing) {
+            missing.push(`${item.id} (${item.clientId})`);
+            continue;
+          }
+          const strip = renderCountStrip(thing, readSprite);
+          const frame = strip ?? { ...renderItem(thing, readSprite), frames: 1 };
+          const png = encodeSmallPng(frame.pixels, frame.width * frame.frames, frame.height);
+          writeBinary(path.join(spritesDir, `${item.sprite}.png`), png, dryRun);
+          report.bytes += png.length;
+          report.files++;
+          sprites[item.sprite] = {
+            archivo: `${item.sprite}.png`,
+            frame: [frame.width, frame.height],
+            frames: frame.frames,
+            ...(strip
+              ? { modo: 'cantidad', umbrales: [...COUNT_THRESHOLDS] }
+              : { modo: 'estatico' }),
+          };
+          done.push(`${item.id}${strip ? '' : ' (sin hoja de cantidad)'}`);
+        }
+      console.log(`Balls: ${done.length} sprites del cliente: ${done.join(', ')}`);
+      if (missing.length)
+        console.log(
+          `  clientId que no existe en el DAT (${missing.length}): ${missing.join(', ')}`,
+        );
     }
 
     // ---------------------------------------------------------------- pokémon outfits

@@ -18,6 +18,9 @@ import { fill } from '@/i18n/messages/types';
 import type { DexKey, DexLayout } from '@/lib/cards/layout';
 import { resolvePokemonImage } from '@/lib/content/pokemon-media';
 import { formatInteger } from '@/lib/format/numbers';
+import type { PanelItem, PanelsData } from '@/lib/game/panels';
+import { decodeEffectiveness } from '@/lib/game/pokemon-panel';
+import type { ListUi } from '@/lib/game/tip-labels';
 import { elementTip, itemTip, pokemonTip } from '@/lib/game/tips';
 import type { LocalizedText, TipData, TipLabels } from '@/lib/game/tips';
 import type { ListPage } from '@/lib/lists/state';
@@ -46,8 +49,13 @@ import { expandListSprite } from '@/lib/sprites/resolve';
 /** What both views take from the island: its state, its texts and its helpers. */
 export interface PokedexViewContext {
   locale: Locale;
-  /** `messages.ui` of the page's locale. */
-  ui: Omit<Messages['ui'], 'money'>;
+  /**
+   * `messages.ui` of the page's locale; its `tooltip` also has the labels of `/{l}/paneles.json`
+   * once the file is here.
+   */
+  ui: ListUi<Messages['ui']>;
+  /** `/{l}/paneles.json` once it is here: the rest of each Pokémon panel (7.5.3). */
+  panels?: PanelsData | null;
   /** `messages.pokedex` of the page's locale: the captions and the column headers. */
   pokedex: Messages['pokedex'];
   /** «Pokédex», the name of the page: the name of the Slots panel. */
@@ -94,27 +102,31 @@ const href = (row: PokedexRow, locale: Locale) => `/${locale}/pokedex/${row.id}/
 
 /**
  * An element of `refs` (PR5) as `ElementChip` takes it, with its panel (7.5.3): the name is in
- * the language of the file, the only one the builder reads.
+ * the language of the file, the only one the builder reads; `balls`, the Balls that favour it,
+ * come with `/{l}/paneles.json`.
  */
 export function elementEntry(
   id: string,
   ref: PokedexElementRef,
   locale: Locale,
   labels: TipLabels,
+  balls?: readonly string[],
 ): ElementChipEntry {
   const nombre = { [locale]: ref.nombre } as LocalizedText;
   return {
     id,
     name: ref.nombre,
     icon: ref.icono,
-    tip: elementTip({ ...ref, id, nombre }, locale, labels),
+    tip: elementTip({ ...ref, id, nombre, balls }, locale, labels),
   };
 }
 
 /**
  * An item of `refs` (PR5) as the zone «Drops» of `DexCard` takes it, with its panel (7.5.3):
  * its «Drop de» is the names of the rows whose `drops` hold it, in the order of the rows,
- * which is the order of 8.0.5 — the one the build writes into the panels of the first page.
+ * which is the order of 8.0.5 — the one the build writes into the panels of the first page —
+ * until `extra`, its facts of `/{l}/paneles.json`, brings the rest of the panel and the Pokémon
+ * that drop it in every zone.
  */
 export function itemEntry(
   id: string,
@@ -122,6 +134,7 @@ export function itemEntry(
   rows: readonly PokedexRow[],
   locale: Locale,
   labels: TipLabels,
+  extra?: PanelItem,
 ): DexCardDrop {
   const nombreCategoria =
     ref.nombreCategoria === null ? null : ({ [locale]: ref.nombreCategoria } as LocalizedText);
@@ -130,7 +143,7 @@ export function itemEntry(
   return {
     name: ref.nombre,
     sprite,
-    tip: itemTip({ ...ref, sprite, id, nombreCategoria, dropDe }, locale, labels),
+    tip: itemTip({ ...ref, sprite, id, nombreCategoria, dropDe, ...extra }, locale, labels),
   };
 }
 
@@ -140,11 +153,14 @@ export function clearFilters(path: string, label: string): ReactNode {
 }
 
 /**
- * The panel of a slot and of a Lista name (7.5.3): Requisito, Tier, Elementos, Generación and
- * Rol. A name here is already in the page's language, the only one the builder reads.
+ * The panel of a slot and of a Lista name (7.5.3): Requisito, Tier, Elementos, Moveset, Nº,
+ * Generación and Rol, and with `/{l}/paneles.json` its effectiveness, traits and field abilities. A name here is
+ * already in the page's language, the only one the builder reads.
  */
 export function tipOf(row: PokedexRow, context: PokedexViewContext): TipData {
   const { locale, names, ui } = context;
+  const moveset = row.elementoMoveset ? names.get(row.elementoMoveset) : undefined;
+  const extra = context.panels?.pokemon[row.id];
   return pokemonTip(
     {
       ...row,
@@ -152,6 +168,12 @@ export function tipOf(row: PokedexRow, context: PokedexViewContext): TipData {
         const name = names.get(id);
         return name === undefined ? [] : [{ nombre: { [locale]: name } as LocalizedText }];
       }),
+      moveset: moveset === undefined ? null : { nombre: { [locale]: moveset } as LocalizedText },
+      rapido: extra?.rapido,
+      pesado: extra?.pesado,
+      habilidades: extra?.habilidades,
+      megaStone: extra?.megaStone,
+      efectividadIconos: decodeEffectiveness(extra?.efectividad, context.panels?.tipos, locale),
     },
     locale,
     ui.tooltip,
@@ -221,7 +243,12 @@ export function pokedexList(page: ListPage<PokedexRow>, context: PokedexViewCont
     return (
       <span className="inline-flex gap-4">
         {own.map((element) => (
-          <ElementIcon key={element.id} element={element} />
+          <ElementIcon
+            key={element.id}
+            element={element}
+            locale={context.locale}
+            hint={context.ui.pinHint}
+          />
         ))}
       </span>
     );

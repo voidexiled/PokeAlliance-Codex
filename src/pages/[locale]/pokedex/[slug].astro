@@ -45,7 +45,6 @@ import {
 import { resolvePokemonImage } from '@/lib/content/pokemon-media';
 import {
   getAuras,
-  getCategorias,
   getElementos,
   getItem,
   getOutfitForPokemon,
@@ -63,6 +62,7 @@ import type {
 } from '@/lib/content/types';
 import { formatDecimal, formatInteger, formatPercent } from '@/lib/format/numbers';
 import { present, UNKNOWN } from '@/lib/format/unknown';
+import { elementTipRecord, itemTipRecord, pokemonTipRecord } from '@/lib/game/tip-records';
 import { elementTip, itemTip, pokemonTip, type TipData } from '@/lib/game/tips';
 import { buildNav } from '@/lib/nav/groups';
 import { spriteData, spriteOrNull, type SpriteData } from '@/lib/sprites/resolve';
@@ -165,7 +165,6 @@ function variantOrder(a: PokemonRecord, b: PokemonRecord): number {
 // Elements (8.0.5): the records of `content/elementos.json`, keyed by id, in their order.
 const elementRecords = getElementos();
 const elements = new Map(elementRecords.map((element) => [element.id, element]));
-const itemName = (id: string | null) => (id === null ? null : (getItem(id)?.nombre ?? null));
 
 /** An element as `ElementChip` takes it, with its panel (7.5.3); `null` when unknown. */
 function elementEntry(id: string | null | undefined): ElementChipEntry | null {
@@ -177,46 +176,14 @@ function elementEntry(id: string | null | undefined): ElementChipEntry | null {
     id,
     name: element.nombre[locale],
     icon,
-    tip: elementTip(
-      {
-        id,
-        nombre: element.nombre,
-        icono: icon,
-        stone: itemName(element.stone),
-        fragment: itemName(element.fragment),
-      },
-      locale,
-      labels,
-    ),
+    // Every row of its panel (7.5.3): Stone, Fragment and the Balls that favour it.
+    tip: elementTip(elementTipRecord(element, locale), locale, labels),
   };
 }
 
-/** The Pokémon panel of 7.5.3. */
+/** The Pokémon panel of 7.5.3, every row its record has. */
 const tipOf = (entry: PokemonRecord): TipData =>
-  pokemonTip(
-    {
-      ...entry,
-      elementos: entry.elementos.flatMap((id) => {
-        const element = elements.get(id);
-        return element === undefined ? [] : [{ nombre: element.nombre }];
-      }),
-    },
-    locale,
-    labels,
-  );
-
-// Items (7.5.3): the category names, and «Drop de», the Pokémon whose loot has the item.
-const categoryNames = new Map(getCategorias().map((category) => [category.id, category.nombre]));
-const droppers = new Map<string, PokemonRecord[]>();
-for (const entry of allPokemon) {
-  for (const { drops } of lootZonesOf(entry)) {
-    for (const drop of drops) {
-      const list = droppers.get(drop.item) ?? [];
-      if (!list.includes(entry)) list.push(entry);
-      droppers.set(drop.item, list);
-    }
-  }
-}
+  pokemonTip(pokemonTipRecord(entry), locale, labels);
 
 /** An item of the registry with its sprite, or `null` when the id is not in it. */
 function itemOf(id: string): { item: Item; sprite: SpriteData | null } | null {
@@ -224,23 +191,12 @@ function itemOf(id: string): { item: Item; sprite: SpriteData | null } | null {
   return item === undefined ? null : { item, sprite: spriteOrNull(registry, item.sprite) };
 }
 
-/** The item panel of 7.5.3. */
+/**
+ * The item panel of 7.5.3: its game text and every fact the registries give of it, «Drop de»
+ * in every zone included (src/lib/game/tip-records.ts).
+ */
 function itemTipOf(item: Item, sprite: SpriteData | null): TipData {
-  return itemTip(
-    {
-      id: item.id,
-      nombre: item.nombre,
-      categoria: item.categoria,
-      sprite,
-      precioNpc: item.precioNpc,
-      nombreCategoria: categoryNames.get(item.categoria) ?? null,
-      dropDe: (droppers.get(item.id) ?? []).map((entry) => entry.nombre),
-      nombreElemento: item.elemento ? (elements.get(item.elemento)?.nombre ?? null) : null,
-      uso: item.uso ?? null,
-    },
-    locale,
-    labels,
-  );
+  return itemTip(itemTipRecord(item, locale, { sprite }), locale, labels);
 }
 
 /** The idle south frame of a Pokémon's outfit (R18), or `null` without one. */
@@ -861,7 +817,16 @@ const description =
                     </th>
                     {moveCols.element && (
                       <td data-col="element">
-                        {element ? <ElementIcon element={element} size={24} /> : UNKNOWN}
+                        {element ? (
+                          <ElementIcon
+                            element={element}
+                            size={24}
+                            locale={locale}
+                            hint={ui.pinHint}
+                          />
+                        ) : (
+                          UNKNOWN
+                        )}
                       </td>
                     )}
                     {moveCols.range && (
@@ -1063,7 +1028,12 @@ const description =
                         ) : (
                           <span class="ac-entity-icons">
                             {row.entries.map((element) => (
-                              <ElementIcon element={element} size={24} />
+                              <ElementIcon
+                                element={element}
+                                size={24}
+                                locale={locale}
+                                hint={ui.pinHint}
+                              />
                             ))}
                           </span>
                         )}

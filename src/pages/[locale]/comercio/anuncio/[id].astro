@@ -49,6 +49,7 @@ import {
 import { getPokemon } from '@/lib/content/repository';
 import { resolvePokemonImage } from '@/lib/content/pokemon-media';
 import { formatDate } from '@/lib/format/dates';
+import { UNKNOWN } from '@/lib/format/unknown';
 import { formatInteger, formatPercent, formatRating, formatRealMoney } from '@/lib/format/numbers';
 import { diamondsTip } from '@/lib/game/tips';
 import { buildNav } from '@/lib/nav/groups';
@@ -70,7 +71,13 @@ import { PriceOptions } from '@/components/money/PriceOptions';
 import { TrainingMeter } from '@/components/money/TrainingMeter';
 import { SellerPresence } from '@/components/cards/ListingCard';
 import { AgeGate } from '@/components/trade/AgeGate';
-import { ListingEquipment, ListingHero, type HeroFact } from '@/components/trade/ListingHero';
+import {
+  ListingEquipment,
+  ListingHero,
+  type EquipmentGroup,
+  type HeroFact,
+} from '@/components/trade/ListingHero';
+import type { EquipmentStripItem } from '@/components/money/EquipmentStrip';
 import {
   realMoneyConsentLabels,
   type ContactSellerLabels,
@@ -78,6 +85,7 @@ import {
 import { ReportAction } from '@/components/trade/ReportDialog';
 import { TradeBox, type TradeBoxLabels } from '@/components/trade/TradeBox';
 import {
+  assetPanel,
   listingCard,
   listingHref,
   listingSprite,
@@ -165,7 +173,7 @@ const context: TradeContext = {
   sprites,
   diamonds: tradeDiamonds(moneda, locale),
   ui,
-  labels: tradeLabels(messages, publico),
+  labels: tradeLabels(messages),
 };
 // The Diamond turns in Comercio (7.8). Without a row there is no panel (R2).
 const diamondsPanel = diamondsTip(moneda, locale, ui.tooltip, {
@@ -250,6 +258,36 @@ if (row.tipo === 'pokemon') {
     if (key in cardFacts) facts.push({ key, label: keys[key], value: cardFacts[key] ?? null });
   }
 }
+// What the traded item or Pokémon is (7.5.3): its panel opens from the art, and for an item the
+// rest of that panel is on the page too — its game text under the meta and every row the facts
+// above do not already draw: a held item's Ranura and Tier, a Ball's Tasa de captura (once
+// known), Más efectiva con and Aura, its shops, Battle Pass, prices and Mercado (owner rule
+// 2026-09-25: someone selling a held item or a Ball shows all of it).
+const asset = assetPanel(row, context);
+const heroText = row.tipo === 'items' && asset?.text ? asset.text : null;
+if (row.tipo === 'items' && asset !== null) {
+  const drawn = new Set(
+    [ui.tooltip.category, ui.tooltip.element, ui.tooltip.use, ui.tooltip.droppedBy].filter(
+      (label) => label !== undefined,
+    ),
+  );
+  asset.rows.forEach((tipRow, index) => {
+    if (drawn.has(tipRow.label)) return;
+    const shown = tipRow.value;
+    const key = `panel-${index}`;
+    if (typeof shown === 'string') facts.push({ key, label: tipRow.label, value: shown });
+    else if ('list' in shown)
+      facts.push({ key, label: tipRow.label, value: shown.list.join(', ') });
+    else if ('pd' in shown)
+      facts.push({ key, label: tipRow.label, value: shown.pd, kind: 'pokedolares' });
+    else if ('dia' in shown)
+      facts.push({ key, label: tipRow.label, value: shown.dia, kind: 'diamonds' });
+    // A value every Ball has and the registry does not know yet: «—», kept as a node because
+    // the hero drops a bare dash as it drops every unknown fact.
+    else if ('unknown' in shown)
+      facts.push({ key, label: tipRow.label, value: createElement('span', null, UNKNOWN) });
+  });
+}
 const art =
   row.tipo === 'pokemon'
     ? (() => {
@@ -258,57 +296,24 @@ const art =
       })()
     : listingSprite(row, context);
 
-// «Equipo» (16.4.5): the card's slots, grouped by kind.
+// «Equipo» (16.4.5): the card's slots by kind, each group under its label. A kind the Pokémon
+// does not carry is not drawn (owner rule 2026-09-25), and with none the section is not either.
 const unit = row.pokemon;
-const byId = new Map((card.helds ?? []).map((item) => [item.id ?? item.name, item]));
-const slots = (ids: readonly (string | null)[]) =>
-  ids.flatMap((id) => (id === null ? [] : (byId.get(id) ?? [])));
-const equipment =
-  unit === null
-    ? []
-    : [
-        {
-          key: 'ball',
-          label: keys.ball,
-          items: slots([unit.ball]),
-          none: trade.box.none,
-          named: true,
-        },
-        {
-          key: 'auras',
-          label: fill(trade.box.auras, { n: formatInteger(unit.auras.length, locale) }),
-          items: slots(unit.auras),
-          none: trade.box.noneFeminine,
-          wide: true,
-        },
-        {
-          key: 'addons',
-          label: trade.detail.addon,
-          items: slots(unit.addons),
-          none: trade.box.none,
-        },
-        {
-          key: 'heldX',
-          label: 'Held X',
-          items: slots([unit.heldX]),
-          none: trade.box.none,
-          named: true,
-        },
-        {
-          key: 'heldY',
-          label: 'Held Y',
-          items: slots([unit.heldY]),
-          none: trade.box.none,
-          named: true,
-        },
-        {
-          key: 'mega',
-          label: 'Mega Stone',
-          items: slots([unit.mega]),
-          none: trade.box.noneFeminine,
-          named: true,
-        },
-      ];
+const gear = card.equipment ?? {};
+const lone = (item: EquipmentStripItem | null | undefined) => (item ? [item] : []);
+const equipment: EquipmentGroup[] = [
+  { key: 'ball', label: keys.ball, items: lone(gear.ball), named: true },
+  {
+    key: 'auras',
+    label: fill(trade.box.auras, { n: formatInteger(gear.auras?.length ?? 0, locale) }),
+    items: gear.auras ?? [],
+    wide: true,
+  },
+  { key: 'addons', label: trade.detail.addon, items: gear.addons ?? [] },
+  { key: 'heldX', label: 'Held X', items: lone(gear.heldX), named: true },
+  { key: 'heldY', label: 'Held Y', items: lone(gear.heldY), named: true },
+  { key: 'mega', label: trade.listing.gear.mega, items: lone(gear.mega), named: true },
+].filter((group) => group.items.length > 0);
 const trained = (unit?.entrenamiento ?? []).flatMap((entry) => {
   const percent = entry.progreso === null ? Number.NaN : Number(entry.progreso);
   return entry.nivel === null || !Number.isFinite(percent)
@@ -330,7 +335,6 @@ const memories = (unit?.memorias ?? []).flatMap((id) => {
 
 // The price (9.6): real money first, «o en el juego» after it; the unit price under them.
 const precio = row.precio;
-const realMoney = publico && precio.real !== null;
 const importe = precio.real === null ? Number.NaN : Number(precio.real.importe);
 const fiat =
   precio.real !== null && Number.isFinite(importe)
@@ -479,18 +483,19 @@ const contactable = status === 'publicado' || status === 'reservado';
           : state === null
             ? meta
             : `${meta} · ${state}`}
-        tags={realMoney || anyWorld
+        tags={anyWorld
           ? createElement(
               'span',
               { className: 'ac-listing-hero__tag-row' },
-              realMoney ? createElement(Chip, null, trade.listing.fiat) : null,
-              anyWorld ? createElement(Chip, null, trade.anyWorld) : null,
+              createElement(Chip, null, trade.anyWorld),
             )
           : null}
         art={art}
         pokemon={row.tipo === 'pokemon'}
         qty={card.qty ?? null}
         facts={facts}
+        tip={asset}
+        text={heroText}
         locale={locale}
         hint={ui.pinHint}
         shinyLabel={ui.shiny}
@@ -693,7 +698,7 @@ const contactable = status === 'publicado' || status === 'reservado';
             hrefs={{
               characters: `/${locale}/cuenta/#personajes`,
               edit: `/${locale}/comercio/publicar/?editar=${anuncio.id}`,
-              deals: `/${locale}/comercio/operaciones/`,
+              deals: `/${locale}/cuenta/operaciones/`,
             }}
             labels={boxLabels}
             contact={contactLabels}

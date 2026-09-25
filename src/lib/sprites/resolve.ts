@@ -47,12 +47,21 @@ export type ResolvedSprite = {
   animation: string | null;
 };
 
+/**
+ * A registry or option the adapter cannot draw. The server, the build and the tests read the
+ * full Spanish message; a browser bundle only gets «sprite» (every throw writes
+ * `import.meta.env.SSR ? message : SPRITE`), because the islands of the lists load this module
+ * and the messages would weigh on their initial JS (§13.6) for errors the build already stops.
+ */
 export class SpriteError extends Error {
   constructor(message: string) {
     super(message);
     this.name = 'SpriteError';
   }
 }
+
+/** The message of a `SpriteError` in a browser bundle. */
+const SPRITE = 'sprite';
 
 export const SPRITES_BASE_URL = '/sprites/';
 
@@ -65,14 +74,19 @@ export function spriteUrl(archivo: string): string {
 
 export function getSpriteEntry(registry: SpriteRegistry, key: string): SpriteEntry {
   const entry = Object.hasOwn(registry, key) ? registry[key] : undefined;
-  if (!entry) throw new SpriteError(`El sprite "${key}" no existe en public/sprites/sprites.json.`);
+  if (!entry)
+    throw new SpriteError(
+      import.meta.env.SSR ? `El sprite "${key}" no existe en public/sprites/sprites.json.` : SPRITE,
+    );
   return entry;
 }
 
 function assertFrame(key: string, entry: SpriteEntry, frame: number): number {
   if (!Number.isInteger(frame) || frame < 0 || frame >= entry.frames) {
     throw new SpriteError(
-      `Frame ${frame} fuera de rango para "${key}": tiene ${entry.frames} frame(s) (0–${entry.frames - 1}).`,
+      import.meta.env.SSR
+        ? `Frame ${frame} fuera de rango para "${key}": tiene ${entry.frames} frame(s) (0–${entry.frames - 1}).`
+        : SPRITE,
     );
   }
   return frame;
@@ -81,7 +95,11 @@ function assertFrame(key: string, entry: SpriteEntry, frame: number): number {
 /** Index of the last threshold that `cantidad` reaches; below the first one shows frame 0. */
 export function frameForQuantity(umbrales: readonly number[], cantidad: number): number {
   if (!Number.isInteger(cantidad) || cantidad < 0) {
-    throw new SpriteError(`Cantidad inválida: ${cantidad}. Usa un entero mayor o igual a 0.`);
+    throw new SpriteError(
+      import.meta.env.SSR
+        ? `Cantidad inválida: ${cantidad}. Usa un entero mayor o igual a 0.`
+        : SPRITE,
+    );
   }
   let frame = 0;
   umbrales.forEach((minimo, index) => {
@@ -94,7 +112,9 @@ export function frameForQuantity(umbrales: readonly number[], cantidad: number):
 export function resolveFrame(key: string, entry: SpriteEntry, options: SpriteOptions = {}): number {
   if (options.cantidad !== undefined) {
     if (entry.modo !== 'cantidad' || !entry.umbrales) {
-      throw new SpriteError(`"${key}" no es un sprite de cantidad (modo ${entry.modo}).`);
+      throw new SpriteError(
+        import.meta.env.SSR ? `"${key}" no es un sprite de cantidad (modo ${entry.modo}).` : SPRITE,
+      );
     }
     return frameForQuantity(entry.umbrales, options.cantidad);
   }
@@ -164,16 +184,24 @@ export function animationTimeline(
   entry: SpriteEntry,
 ): { totalMs: number; steps: TimelineStep[] } {
   if (entry.modo !== 'animacion' || !entry.duracionMs) {
-    throw new SpriteError(`"${key}" no es una animación (modo ${entry.modo}).`);
+    throw new SpriteError(
+      import.meta.env.SSR ? `"${key}" no es una animación (modo ${entry.modo}).` : SPRITE,
+    );
   }
   if (entry.duracionMs.length !== entry.frames) {
     throw new SpriteError(
-      `"${key}": duracionMs tiene ${entry.duracionMs.length} valores y la hoja ${entry.frames} frames.`,
+      import.meta.env.SSR
+        ? `"${key}": duracionMs tiene ${entry.duracionMs.length} valores y la hoja ${entry.frames} frames.`
+        : SPRITE,
     );
   }
   entry.duracionMs.forEach((durationMs, frame) => {
     if (!Number.isInteger(durationMs) || durationMs < 1) {
-      throw new SpriteError(`"${key}": duración inválida en el frame ${frame}: ${durationMs}.`);
+      throw new SpriteError(
+        import.meta.env.SSR
+          ? `"${key}": duración inválida en el frame ${frame}: ${durationMs}.`
+          : SPRITE,
+      );
     }
   });
   return scheduleOf(entry.duracionMs);
@@ -211,17 +239,23 @@ export type AnimationSignature = {
 function assertSignature(signature: AnimationSignature): void {
   const { frames, durations } = signature;
   if (!Number.isInteger(frames) || frames < 1) {
-    throw new SpriteError(`Firma de animación inválida: ${frames} fotograma(s).`);
+    throw new SpriteError(
+      import.meta.env.SSR ? `Firma de animación inválida: ${frames} fotograma(s).` : SPRITE,
+    );
   }
   if (durations.length !== frames) {
     throw new SpriteError(
-      `Firma de animación inválida: ${durations.length} duraciones para ${frames} fotograma(s).`,
+      import.meta.env.SSR
+        ? `Firma de animación inválida: ${durations.length} duraciones para ${frames} fotograma(s).`
+        : SPRITE,
     );
   }
   durations.forEach((durationMs, frame) => {
     if (!Number.isInteger(durationMs) || durationMs < 1) {
       throw new SpriteError(
-        `Firma de animación inválida: duración ${durationMs} en el fotograma ${frame}.`,
+        import.meta.env.SSR
+          ? `Firma de animación inválida: duración ${durationMs} en el fotograma ${frame}.`
+          : SPRITE,
       );
     }
   });
@@ -307,8 +341,10 @@ export function assertRegisteredAnimation(registry: SpriteRegistry, name: string
   }
   if (names.has(name)) return;
   throw new SpriteError(
-    `La animación "${name}" no es la de ninguna entrada de sprites.json: sus fotogramas y ` +
-      'duraciones salen del registro, no del código (7.4.2).',
+    import.meta.env.SSR
+      ? `La animación "${name}" no es la de ninguna entrada de sprites.json: sus fotogramas y ` +
+          'duraciones salen del registro, no del código (7.4.2).'
+      : SPRITE,
   );
 }
 
@@ -361,13 +397,19 @@ const fixedSpriteKeys = new Set(FIXED_SPRITE_KEYS);
 
 function assertScale(key: string, escala: number): void {
   if (!Number.isInteger(escala) || escala < 1 || escala > 16) {
-    throw new SpriteError(`Escala inválida para "${key}": ${escala}. Usa un entero de 1 a 16.`);
+    throw new SpriteError(
+      import.meta.env.SSR
+        ? `Escala inválida para "${key}": ${escala}. Usa un entero de 1 a 16.`
+        : SPRITE,
+    );
   }
 }
 
 function fileOf(key: string, entry: SpriteEntry, direccion?: SpriteDirection): string {
   if (!direccion) return entry.archivo;
-  if (!entry.direcciones) throw new SpriteError(`"${key}" no tiene direcciones.`);
+  if (!entry.direcciones) {
+    throw new SpriteError(import.meta.env.SSR ? `"${key}" no tiene direcciones.` : SPRITE);
+  }
   return entry.direcciones[direccion];
 }
 

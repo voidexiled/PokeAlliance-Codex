@@ -1,0 +1,196 @@
+{
+  "$schema": "../../../content/schemas/comercio.schema.json",
+  "vendedores": [
+    {
+      "id": "ejemplo-norte",
+      "nombre": "Ejemplo Norte",
+      "desde": "2026-02-11T15:00:00Z",
+      "presencia": "en_juego",
+      "canales": [
+        { "tipo": "discord", "etiqueta": null },
+        { "tipo": "correo", "etiqueta": null },
+        { "tipo": "telefono", "etiqueta": "+55" }
+      ],
+      "resenas": [
+        {
+          "puntuacion": 5,
+          "comentario": "Entrega en el mundo acordado, sin demoras.",
+          "fecha": "2026-08-24T15:00:00Z",
+          "anuncio": "ejemplo-snorlax-expirado",
+          "comprador": "comprador-ejemplo-01"
+        },
+        {
+          "puntuacion": 5,
+          "comentario": null,
+          "fecha": "2026-08-27T21:10:00Z",
+          "anuncio": "ejemplo-snorlax-expirado",
+          "comprador": "comprador-ejemplo-02"
+        },
+        {
+          "puntuacion": 4,
+          "comentario": "Respondió rápido por Discord.",
+          "fecha": "2026-09-01T12:45:00Z",
+          "anuncio": "ejemplo-snorlax-expirado",
+          "comprador": "comprador-ejemplo-03"
+        },
+        {
+          "puntuacion": 5,
+          "comentario": null,
+          "fecha": "2026-09-18T07:40:00Z",
+          "anuncio": "ejemplo-alliance-ball",
+          "comprador": "comprador-ejemplo-04"
+        },
+        {
+          "puntuacion": 3,
+          "comentario": "Tardó un día en conectarse.",
+          "fecha": "2026-09-18T10:20:00Z",
+          "anuncio": "ejemplo-alliance-ball",
+          "comprador": "comprador-ejemplo-05"
+        },
+        {
+          "puntuacion": 5,
+          "comentario": null,
+          "fecha": "2026-09-18T11:05:00Z",
+          "anuncio": "ejemplo-bulbasaur",
+          "comprador": "comprador-ejemplo-06"
+        }
+      ],
+      "borrador": true
+    },
+    {
+      "id": "ejemplo-sur",
+      "nombre": "Ejemplo Sur",
+      "desde": "2025-11-03T12:00:00Z",
+      "presencia": "desconectado",
+      "canales": [
+        { "tipo": "discord", "etiqueta": null },
+        { "tipo": "twitch", "etiqueta": null },
+        { "tipo": "correo", "etiqueta": null },
+        { "tipo": "telefono", "etiqueta": "+54" }
+      ],
+      "resenas": [
+        {
+          "puntuacion": 5,
+          "comentario": "Trato claro de principio a fin.",
+          "fecha": "2026-09-02T17:00:00Z",
+          "anuncio": "ejemplo-gengar-vencido",
+          "comprador": "comprador-ejemplo-07"
+        },
+        {
+          "puntuacion": 4,
+          "comentario": null,
+          "fecha": "2026-09-05T20:30:00Z",
+          "anuncio": "ejemplo-gengar-vencido",
+          "comprador": "comprador-ejemplo-08"
+        },
+        {
+          "puntuacion": 4,
+          "comentario": "Las Stones llegaron completas.",
+          "fecha": "2026-09-18T13:15:00Z",
+          "anuncio": "ejemplo-fire-stone",
+          "comprador": "comprador-ejemplo-09"
+        },
+        {
+          "puntuacion": 5,
+          "comentario": null,
+          "fecha": "2026-09-18T16:00:00Z",
+          "anuncio": "ejemplo-shiny-gyarados",
+          "comprador": "comprador-ejemplo-10"
+        }
+      ],
+      "borrador": true
+    },
+    {
+      "id": "ejemplo-este",
+      "nombre": "Ejemplo Este",
+      "desde": null,
+      "presencia": "ausente",
+      "canales": [
+        { "tipo": "correo", "etiqueta": null },
+        { "tipo": "telefono", "etiqueta": "+52" }
+      ],
+      "resenas": [
+        {
+          "puntuacion": 4,
+          "comentario": null,
+          "fecha": "2026-09-11T10:00:00Z",
+          "anuncio": "ejemplo-umbreon-retirado",
+          "comprador": "comprador-ejemplo-11"
+        },
+        {
+          "puntuacion": 3,
+          "comentario": "El item tardó en llegar.",
+          "fecha": "2026-09-17T09:30:00Z",
+          "anuncio": "ejemplo-item-declarado",
+          "comprador": "comprador-ejemplo-12"
+        },
+        {
+          "puntuacion": 5,
+          "comentario": null,
+          "fecha": "2026-09-18T17:10:00Z",
+          "anuncio": "ejemplo-pokedolares-75kk",
+          "comprador": "comprador-ejemplo-13"
+        }
+      ],
+      "borrador": true
+    },
+    {
+      "id": "ejemplo-oeste",
+      "nombre": "Ejemplo Oeste",
+      "desde": "2026-06-20T18:30:00Z",
+      "presencia": "desconectado",
+      "canales": [
+        { "tipo": "discord", "etiqueta": null },
+        { "tipo": "telefono", "etiqueta": "+1" },
+        { "tipo": "otra", "etiqueta": "Facebook" }
+      ],
+      "resenas": [
+        {
+          "puntuacion": 1,
+          "comentario": "El Pokémon no tenía el Boost del anuncio.",
+          "fecha": "2026-09-05T19:00:00Z",
+          "anuncio": "ejemplo-shiny-kingdra-completado",
+          "comprador": "comprador-ejemplo-14"
+        },
+        {
+          "puntuacion": 3,
+          "comentario": null,
+          "fecha": "2026-09-08T14:20:00Z",
+          "anuncio": "ejemplo-shiny-kingdra-completado",
+          "comprador": "comprador-ejemplo-15"
+        },
+        {
+          "puntuacion": 4,
+          "comentario": "Pago y entrega sin problemas.",
+          "fecha": "2026-09-15T08:00:00Z",
+          "anuncio": "ejemplo-pokedolares-1234567",
+          "comprador": "comprador-ejemplo-16"
+        },
+        {
+          "puntuacion": 2,
+          "comentario": null,
+          "fecha": "2026-09-16T12:30:00Z",
+          "anuncio": "ejemplo-dragonite-reservado",
+          "comprador": "comprador-ejemplo-17"
+        },
+        {
+          "puntuacion": 5,
+          "comentario": null,
+          "fecha": "2026-09-18T15:00:00Z",
+          "anuncio": "ejemplo-diamonds-1200",
+          "comprador": "comprador-ejemplo-18"
+        }
+      ],
+      "borrador": true
+    },
+    {
+      "id": "ejemplo-centro",
+      "nombre": "Ejemplo Centro",
+      "desde": "2026-09-01T10:00:00Z",
+      "presencia": "en_juego",
+      "canales": [{ "tipo": "correo", "etiqueta": null }],
+      "resenas": [],
+      "borrador": true
+    }
+  ]
+}

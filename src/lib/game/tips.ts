@@ -5,10 +5,11 @@
 //
 // Two rules shape every builder:
 //
-//   - X13 / T32. A row exists only when its value does. No builder ever writes
-//     "—": inside a tooltip the whole row is dropped instead, and a key that no
-//     record carries simply never appears. The dash belongs to cards, tables
-//     and lists (§8.0.5), where the grid keeps a key some other entity has.
+//   - X13 / T32. A row exists only when its value does: inside a tooltip the
+//     whole row is dropped instead, and a key that no record carries simply
+//     never appears. The dash belongs to cards, tables and lists (§8.0.5); a
+//     builder may still pass `{ unknown: true }` for a value every entity of its
+//     kind has, which the panel writes as «—».
 //   - X4 / R7. No copy and no figure is invented. Names, amounts and lists come
 //     from the registries; labels come from the dictionary.
 //
@@ -25,16 +26,25 @@ import { DROPPER_NAMES_MAX } from '@/lib/game/dropper-limit';
 import { resolvePokemonImage } from '@/lib/content/pokemon-media';
 import { tierInfo } from '@/lib/content/tiers';
 import type { PokemonRecord, SystemItemRecord } from '@/lib/content/types';
-import { formatInteger } from '@/lib/format/numbers';
+import { formatDecimal, formatInteger } from '@/lib/format/numbers';
 import { present } from '@/lib/format/unknown';
+import type { TipExtraLabels } from '@/lib/game/tip-labels';
+
+export {
+  TIP_EXTRA_LABELS,
+  leanTipLabels,
+  tipExtraLabels,
+  withTipLabels,
+  type TipExtraLabels,
+} from '@/lib/game/tip-labels';
 
 /** `Texto` of §3.13: a registry value written in both locales. */
 export type LocalizedText = Record<Locale, string>;
 
 /**
- * The four panel widths of §7.5.2, the `size-tt*` tokens: 282 by default, 240
- * narrow (elements, balls, currencies), 300 wide (held items) and 200 for the
- * compact chart panel of §10.
+ * The four panel widths of §7.5.2, the `size-tt*` tokens: 282 by default (balls
+ * too, since they show their game text), 240 narrow (elements, currencies), 300
+ * wide (held items) and 200 for the compact chart panel of §10.
  */
 export type TipWidth = 282 | 240 | 300 | 200;
 
@@ -58,13 +68,23 @@ export type TipHead =
   /** Compact chart panel (§10). */
   | { type: 'none' };
 
-/** Value of a row (§7.5.2). A plain string never wraps; a list wraps only between its entries. */
+/** An element drawn as its icon in a row (a Pokémon's effectiveness), named for screen readers. */
+export type TipIcon = { name: string; sprite: TipSprite | null };
+
+/**
+ * Value of a row (§7.5.2). A plain string never wraps; a list wraps only between its entries;
+ * `icons` is a row of small element icons (the name stands in for a missing sprite).
+ * `{ unknown: true }` is a value every entity of its kind has and the registry does not know
+ * yet, which the panel writes as «—» (AGENTS.md: unknown is «—») instead of dropping the row.
+ */
 export type TipValue =
   | string
   | { list: string[] }
+  | { icons: TipIcon[] }
   | { pd: number }
   | { dia: number }
-  | { price: { kind: 'pd' | 'dia'; amount: number }[] };
+  | { price: { kind: 'pd' | 'dia'; amount: number }[] }
+  | { unknown: true };
 
 /**
  * One row. `label` carries no colon: `GameTooltip` adds it. `lang` is the language of a
@@ -80,8 +100,21 @@ export type TipTraining = { stat: string; level: number; percent: number };
  * panel lists every trained skill under «Entrenamiento: N» (§9.5.9).
  */
 export type TipSection =
-  | { kind: 'held'; label: string; items: { name: string; sprite: TipSprite | null }[] }
+  | {
+      kind: 'held';
+      label: string;
+      /** Each held item; `text` is the game's text of what it does, when the registry has it. */
+      items: { name: string; sprite: TipSprite | null; text?: TipText }[];
+    }
   | { kind: 'train'; label: string; skills: TipTraining[] };
+
+/**
+ * The game's own text of an entity, drawn under the head and over the rows: an item's
+ * inspection text («Increase the Pokémon attack by 8%.»). Unlike a row value it wraps. `lang`
+ * is its language when it differs from the page's (the registry holds most of them in English
+ * only, T22).
+ */
+export type TipText = { value: string; lang?: Locale };
 
 /** Everything `GameTooltip` needs to paint a panel (§7.5.2). */
 export type TipData = {
@@ -96,6 +129,8 @@ export type TipData = {
   width: TipWidth;
   head: TipHead;
   shiny?: boolean;
+  /** The game's text of the entity, when the registry has one (see `TipText`). */
+  text?: TipText;
   /** Only rows that have a value (X13/T32). */
   rows: TipRow[];
   /** Listing panels lay their rows out in two columns (§9). */
@@ -160,18 +195,21 @@ export type TipLabels = {
   diamonds: string;
   /** «Pokédólares» / «Pokédollars» (R5). */
   pokedolares: string;
-};
+} & Partial<TipExtraLabels>;
 
 /** `size-tt` (§3, §7.5.2). */
 const WIDTH_DEFAULT = 282;
-/** `size-tt-narrow`: elements, balls and currencies. */
+/** `size-tt-narrow`: elements and currencies. */
 const WIDTH_NARROW = 240;
 /** `size-tt-wide`: held items. */
 const WIDTH_WIDE = 300;
 
-/** Item categories whose panel is not the default width (§7.5.3). */
+/**
+ * Item categories whose panel is not the default width (§7.5.3). A Poké Ball takes the default
+ * since it shows its game text, what it favours and where to get it (owner rule 2026-09-25):
+ * at 240 each of those rows broke into three or four lines.
+ */
 const ITEM_WIDTHS: Record<string, TipWidth | undefined> = {
-  'poke-balls': WIDTH_NARROW,
   diamantes: WIDTH_NARROW,
   helds: WIDTH_WIDE,
 };
@@ -201,7 +239,9 @@ function rowValue(value: TipValue | null | undefined): TipValue | null {
     const list = value.list.filter((entry) => present(entry));
     return list.length > 0 ? { list } : null;
   }
+  if ('icons' in value) return value.icons.length > 0 ? value : null;
   if ('price' in value) return value.price.length > 0 ? value : null;
+  if ('unknown' in value) return value;
   if ('pd' in value) return Number.isFinite(value.pd) ? value : null;
   return Number.isFinite(value.dia) ? value : null;
 }
@@ -253,11 +293,50 @@ export type PokemonTipRecord = Pick<
   elementos: readonly { nombre: LocalizedText }[];
   /** Aura ball over the corner of the art, when the Pokémon has one. */
   aura?: { sprite: TipSprite; label: string } | null;
+  /** `numero`: its number in the Pokédex. */
+  numero?: number | null;
+  /** The element record of its `elementoMoveset` (16.2.2), the element of its area moves. */
+  moveset?: { nombre: LocalizedText } | null;
+  /** `rapido` and `pesado` of its Pokédex: the traits Fast and Heavy (a Fast / Heavy Ball's). */
+  rapido?: boolean | null;
+  pesado?: boolean | null;
+  /** `habilidades`: its field abilities, game terms (Fly, Surf, Dig…). */
+  habilidades?: readonly string[] | null;
+  /** A Mega form: the name of the Mega Stone that gives it (`megaStoneByForm`). */
+  megaStone?: string | null;
+  /**
+   * Its `efectividad` as element icons, grouped compactly: Débil a (×2 and ×1,5), Resiste
+   * (×0,5 and ×0,4) and Inmune (×0). Lists read it from `/{l}/paneles.json` (`pokemonPanel`).
+   */
+  efectividadIconos?: TipEffectiveness | null;
 };
+
+/** An element of an effectiveness group: its name and its icon (`ui/elementos/<id>`). */
+export type TipElementIcon = { nombre: LocalizedText; sprite: TipSprite | null };
+
+/** The three effectiveness rows of a Pokémon panel, each one its elements. */
+export type TipEffectiveness = {
+  debil: readonly TipElementIcon[];
+  resiste: readonly TipElementIcon[];
+  inmune: readonly TipElementIcon[];
+};
+
+/** A row of element icons named in `locale`, or nothing for an empty group. */
+function iconRow(icons: readonly TipElementIcon[] | undefined, locale: Locale): TipValue | null {
+  const shown = (icons ?? []).flatMap((icon) => {
+    const name = text(icon.nombre, locale);
+    return name === null ? [] : [{ name, sprite: icon.sprite }];
+  });
+  return shown.length === 0 ? null : { icons: shown };
+}
+
+/** The game's names of the two traits of its Pokédex, the same in both locales (13.4). */
+export const TRAIT_NAMES = { rapido: 'Fast', pesado: 'Heavy' } as const;
 
 /**
  * Pokémon panel (§7.5.3): art of 70, the Shiny mark on a shiny variant and the
- * rows Requisito, Tier, Elementos, Generación and Rol.
+ * rows Requisito, Tier, Elementos, Moveset, its effectiveness as element icons (Débil a, Resiste,
+ * Inmune), Nº, Generación, Rol, Rasgos, Habilidades and, for a Mega form, its Mega Stone.
  */
 export function pokemonTip(pokemon: PokemonTipRecord, locale: Locale, labels: TipLabels): TipData {
   const elements = pokemon.elementos
@@ -268,6 +347,9 @@ export function pokemonTip(pokemon: PokemonTipRecord, locale: Locale, labels: Ti
     src: resolvePokemonImage(pokemon.imagen),
     ...(pokemon.aura ? { aura: pokemon.aura } : {}),
   };
+  const traits: string[] = [];
+  if (pokemon.rapido === true) traits.push(TRAIT_NAMES.rapido);
+  if (pokemon.pesado === true) traits.push(TRAIT_NAMES.pesado);
   return {
     key: `pokemon:${pokemon.id}`,
     title: pokemon.nombre,
@@ -279,8 +361,16 @@ export function pokemonTip(pokemon: PokemonTipRecord, locale: Locale, labels: Ti
       // A tier content/tiers.json hides (ULTIMATE for now) reads as an unknown one: «—».
       [labels.tier, formatTier(tierInfo(pokemon.tier)?.visible === false ? null : pokemon.tier)],
       [labels.elements, elements.join(ELEMENT_JOINER)],
+      [labels.moveset ?? '', text(pokemon.moveset?.nombre, locale)],
+      [labels.weakTo ?? '', iconRow(pokemon.efectividadIconos?.debil, locale)],
+      [labels.resists ?? '', iconRow(pokemon.efectividadIconos?.resiste, locale)],
+      [labels.immune ?? '', iconRow(pokemon.efectividadIconos?.inmune, locale)],
+      [labels.number ?? '', present(pokemon.numero) ? String(pokemon.numero) : null],
       [labels.generation, present(pokemon.generacion) ? String(pokemon.generacion) : null],
       [labels.role, pokemon.funcion],
+      [labels.traits ?? '', { list: traits }],
+      [labels.abilities ?? '', { list: [...(pokemon.habilidades ?? [])] }],
+      [labels.megaStone ?? '', pokemon.megaStone ?? null],
     ]),
   };
 }
@@ -295,9 +385,11 @@ export type ElementTipRecord = {
   stone: string | null;
   /** Name of the item in the registry's `fragment` id, or `null`. */
   fragment: string | null;
+  /** Names of the Balls whose `ball.elementos` name it (a Magu Ball for Fire). */
+  balls?: readonly string[] | null;
 };
 
-/** Element panel (§7.5.3): icon head, 240 wide, rows Stone and Fragment. */
+/** Element panel (§7.5.3): icon head, 240 wide, rows Stone, Fragment and Ball. */
 export function elementTip(element: ElementTipRecord, locale: Locale, labels: TipLabels): TipData {
   return {
     key: `elemento:${element.id}`,
@@ -307,6 +399,7 @@ export function elementTip(element: ElementTipRecord, locale: Locale, labels: Ti
     rows: tipRows([
       [labels.stone, element.stone],
       [labels.fragment, element.fragment],
+      [labels.ball ?? '', { list: [...(element.balls ?? [])] }],
     ]),
   };
 }
@@ -335,32 +428,246 @@ export type ItemTipRecord = {
   nombreElemento?: LocalizedText | null;
   /** `uso` of the item (§3.13). */
   uso?: LocalizedText | null;
+} & ItemTipFacts;
+
+/**
+ * What an item panel shows besides its name, category, sprite, «Drop de» and NPC prices: the
+ * facts of `content/items/` and those derived from the other registries, every name already
+ * in the page's language (Pokémon and item names do not translate, 13.4). The server derives
+ * them once (`itemTipFacts` of src/lib/game/item-facts.ts) and the data files and props carry
+ * them as they are, so each surface draws the same panel. A missing fact makes no row.
+ */
+export type ItemTipFacts = {
+  /** `descripcion`: the game's inspection text (what the item does), in the languages it has. */
+  descripcion?: Partial<Record<Locale, string>> | null;
+  /** `held` of a held item (16.2.3): its slot and tier; the effect is in `descripcion`. */
+  held?: { ranura: 'x' | 'y'; tier: number } | null;
+  /** The names of the Pokémon a Mega Stone evolves (`mega.pokemon`). */
+  megaDe?: readonly string[] | null;
+  /**
+   * The Pokémon whose evolution asks for the item (`evolucion[].items` of content/pokemon.json),
+   * by name, or how many they are past `DROPPER_NAMES_MAX`.
+   */
+  evoluciona?: readonly string[] | number | null;
+  /** The elements whose Stone or Fragment it is (content/elementos.json), by name. */
+  elementos?: readonly string[] | null;
+  /** `mercado`: whether the game's Market takes it. */
+  mercado?: boolean | null;
+  /**
+   * `obtencion`, by kind: each game shop with its offers, the tasks by their names, the Battle
+   * Pass levels, the calendar days and each crafting recipe with its workshop and materials.
+   */
+  obtencion?: {
+    tiendas?: readonly ItemTipShop[];
+    tareas?: readonly string[];
+    /** The Battle Pass levels that give it, ascending; empty when the registry has none. */
+    pase?: readonly number[];
+    /** The calendar days that give it, and whether every day after the 21st does. */
+    calendario?: { dias: readonly number[]; trasDia21?: boolean };
+    recetas?: readonly ItemTipRecipe[];
+  } | null;
+  /** A currency item: the shops that sell for it (the Diamond: «Se usan en: Diamond Shop»). */
+  seUsaEn?: readonly string[] | null;
+  /**
+   * `ball` of a Poké Ball: its multiplier, the elements it favours by name or the trait of the
+   * Pokémon it favours, and the name of the aura it unlocks.
+   */
+  ball?: {
+    tasa?: number | null;
+    elementos?: readonly string[];
+    condicion?: 'rapido' | 'pesado' | null;
+    aura?: string | null;
+  } | null;
+};
+
+/** A game shop of `obtencion.tiendas` and what it asks for the item: «100 por 5 Diamonds». */
+export type ItemTipShop = {
+  /** The shop as the game writes it: «Diamond Shop». */
+  tienda: string;
+  /** Each offer: price, the game's currency («Diamonds», «Online Points») and the quantity. */
+  ofertas: readonly { precio: number | null; moneda: string | null; cantidad: number | null }[];
+};
+
+/** A crafting recipe of `obtencion.recetas`: its workshop and its materials by name. */
+export type ItemTipRecipe = {
+  /** The workshop as the game writes it («Boost Stone Workshop»), or `null`. */
+  taller: string | null;
+  materiales: readonly { nombre: string; cantidad: number | null }[];
 };
 
 /**
- * Item panel (§7.5.3, §8.5): item cell at 2x and the same six rows in every
- * category (Q12). With today's registry — every price `null` and none of the
- * new fields written — the panel is the sprite and the name, and not one row.
+ * `value` in the page's language, or in the other one with its `lang` (T22): a game text the
+ * registry holds in English only is still shown on a Spanish page, marked as English.
+ */
+export function gameText(
+  value: Partial<Record<Locale, string>> | null | undefined,
+  locale: Locale,
+): TipText | null {
+  if (!value) return null;
+  const own = value[locale];
+  if (own !== undefined && present(own)) return { value: own };
+  for (const [other, candidate] of Object.entries(value) as [Locale, string | undefined][]) {
+    if (other !== locale && candidate !== undefined && present(candidate))
+      return { value: candidate, lang: other };
+  }
+  return null;
+}
+
+/** A list of Pokémon names, or «{n} Pokémon» past `DROPPER_NAMES_MAX` (an Evolution Stone). */
+function pokemonList(
+  names: readonly string[] | number | null | undefined,
+  locale: Locale,
+  labels: TipLabels,
+): TipValue | null {
+  const all = names ?? [];
+  const count = typeof all === 'number' ? all : all.length;
+  if (count > DROPPER_NAMES_MAX && labels.pokemonCount !== undefined)
+    return fill(labels.pokemonCount, { n: formatInteger(count, locale) });
+  return { list: typeof all === 'number' ? [] : [...all] };
+}
+
+/** One offer of a shop: «5 Diamonds», or «100 por 5 Diamonds» for a pack; `null` without a price. */
+function offerText(
+  offer: ItemTipShop['ofertas'][number],
+  locale: Locale,
+  labels: TipLabels,
+): string | null {
+  if (offer.precio === null || !Number.isFinite(offer.precio)) return null;
+  const price = [formatInteger(offer.precio, locale), offer.moneda ?? ''].join(' ').trim();
+  if (offer.cantidad === null || offer.cantidad <= 1 || labels.offer === undefined) return price;
+  return fill(labels.offer, { count: formatInteger(offer.cantidad, locale), price });
+}
+
+/** «Nivel 4, 18»: the Battle Pass levels, the first one with its word (13.3). */
+function passLevels(levels: readonly number[], locale: Locale, labels: TipLabels): string | null {
+  if (levels.length === 0) return null;
+  const [first, ...rest] = levels.map((level) => formatInteger(level, locale));
+  return [fill(labels.level, { n: first }), ...rest].join(', ');
+}
+
+/** «Día 7, 16, tras el día 21»: the calendar days, the first one with its word. */
+function calendarDays(
+  calendario: { dias: readonly number[]; trasDia21?: boolean },
+  locale: Locale,
+  labels: TipLabels,
+): string | null {
+  const parts: string[] = [];
+  if (calendario.dias.length > 0 && labels.day !== undefined) {
+    const [first, ...rest] = calendario.dias.map((day) => formatInteger(day, locale));
+    parts.push(fill(labels.day, { n: first }), ...rest);
+  }
+  if (calendario.trasDia21 === true && labels.afterDay21 !== undefined)
+    parts.push(labels.afterDay21);
+  return parts.length > 0 ? parts.join(', ') : null;
+}
+
+/**
+ * The rows of how an item is obtained besides its droppers (§8.5): one per game shop with its
+ * offers («Diamond Shop: 100 por 5 Diamonds, 1000 por 45 Diamonds»), the Battle Pass levels,
+ * the calendar days, one per crafting recipe with its materials, and «Se obtiene en» with the
+ * tasks and every way whose details the registry lacks.
+ */
+function obtainRows(
+  obtencion: ItemTipFacts['obtencion'],
+  locale: Locale,
+  labels: TipLabels,
+): (readonly [string, TipValue | null])[] {
+  if (!obtencion) return [];
+  const rows: (readonly [string, TipValue | null])[] = [];
+  const bare: string[] = [];
+  for (const shop of obtencion.tiendas ?? []) {
+    const offers = shop.ofertas.flatMap((offer) => offerText(offer, locale, labels) ?? []);
+    if (offers.length > 0) rows.push([shop.tienda, { list: offers }]);
+    else bare.push(shop.tienda);
+  }
+  if (obtencion.pase !== undefined && labels.battlePass !== undefined) {
+    const levels = passLevels(obtencion.pase, locale, labels);
+    if (levels === null) bare.push(labels.battlePass);
+    else rows.push([labels.battlePass, levels]);
+  }
+  if (obtencion.calendario !== undefined && labels.calendar !== undefined) {
+    const days = calendarDays(obtencion.calendario, locale, labels);
+    if (days === null) bare.push(labels.calendar);
+    else rows.push([labels.calendar, days]);
+  }
+  for (const recipe of obtencion.recetas ?? []) {
+    const materials = recipe.materiales.map((material) =>
+      material.cantidad === null
+        ? material.nombre
+        : `${formatInteger(material.cantidad, locale)} ${material.nombre}`,
+    );
+    const label = recipe.taller ?? labels.crafting;
+    if (label === undefined) continue;
+    if (materials.length > 0) rows.push([label, { list: materials }]);
+    else bare.push(label);
+  }
+  bare.push(...(obtencion.tareas ?? []));
+  rows.push([labels.obtainedFrom ?? '', { list: [...new Set(bare)] }]);
+  return rows;
+}
+
+/**
+ * «Tasa de captura» of a Ball: «×4»; no row while the registry does not know it (neither the
+ * client nor the export carries catch rates, so the owner fills `ball.tasa` by hand).
+ */
+function catchRate(ball: ItemTipFacts['ball'], locale: Locale): TipValue | null {
+  const tasa = ball?.tasa;
+  if (tasa === null || tasa === undefined || !Number.isFinite(tasa)) return null;
+  return `×${Number.isInteger(tasa) ? formatInteger(tasa, locale) : formatDecimal(tasa, locale)}`;
+}
+
+/** «Más efectiva con» of a Ball: its elements, or «Pokémon Fast» / «Heavy Pokémon». */
+function bestAgainst(ball: ItemTipFacts['ball'], labels: TipLabels): TipValue | null {
+  if (!ball) return null;
+  if ((ball.elementos ?? []).length > 0) return { list: [...(ball.elementos ?? [])] };
+  if (!ball.condicion || labels.traitPokemon === undefined) return null;
+  return fill(labels.traitPokemon, { trait: TRAIT_NAMES[ball.condicion] });
+}
+
+/** «Mercado»: «Comercializable» or «No vendible»; nothing while the registry does not know. */
+function marketValue(mercado: boolean | null | undefined, labels: TipLabels): string | null {
+  if (mercado === true) return labels.tradeable ?? null;
+  if (mercado === false) return labels.notTradeable ?? null;
+  return null;
+}
+
+/**
+ * Item panel (§7.5.3, §8.5): item cell at 2x, the game's text of the item (what it does) and
+ * the rows that have a value, in every category the same order (Q12), the six of §8.5 in
+ * theirs: Categoría; Ranura and Tier of a held item; Mega Evolución de; Evoluciona; Drop de;
+ * each shop with its offers, Battle Pass, Calendario, each recipe and Se obtiene en; Elemento;
+ * a currency's Se usan en; the Ball's Tasa de captura (only once the registry knows it),
+ * Más efectiva con and Aura; Uso; Precio NPC; Precio de tienda; Mercado.
  */
 export function itemTip(item: ItemTipRecord, locale: Locale, labels: TipLabels): TipData {
-  const droppers = item.dropDe ?? [];
-  const count = typeof droppers === 'number' ? droppers : droppers.length;
-  const droppedBy =
-    count > DROPPER_NAMES_MAX && labels.pokemonCount !== undefined
-      ? fill(labels.pokemonCount, { n: formatInteger(count, locale) })
-      : { list: typeof droppers === 'number' ? [] : [...droppers] };
+  const elements =
+    (item.elementos ?? []).length > 0
+      ? (item.elementos ?? []).join(ELEMENT_JOINER)
+      : text(item.nombreElemento, locale);
+  const description = gameText(item.descripcion, locale);
   return {
     key: `item:${item.id}`,
     title: item.nombre,
     width: ITEM_WIDTHS[item.categoria] ?? WIDTH_DEFAULT,
     head: { type: 'sprite', sprite: item.sprite },
+    ...(description === null ? {} : { text: description }),
     rows: tipRows([
       [labels.category, text(item.nombreCategoria, locale)],
-      [labels.droppedBy, droppedBy],
-      [labels.element, text(item.nombreElemento, locale)],
+      [labels.slot ?? '', item.held ? item.held.ranura.toUpperCase() : null],
+      [labels.tier, item.held ? formatInteger(item.held.tier, locale) : null],
+      [labels.megaOf ?? '', { list: [...(item.megaDe ?? [])] }],
+      [labels.evolves ?? '', pokemonList(item.evoluciona, locale, labels)],
+      [labels.droppedBy, pokemonList(item.dropDe, locale, labels)],
+      ...obtainRows(item.obtencion, locale, labels),
+      [labels.element, elements],
+      [labels.usedFor, { list: [...(item.seUsaEn ?? [])] }],
+      [labels.catchRate ?? '', catchRate(item.ball, locale)],
+      [labels.bestAgainst ?? '', bestAgainst(item.ball, labels)],
+      [labels.aura ?? '', item.ball?.aura ?? null],
       [labels.use, text(item.uso, locale)],
       [labels.npcPrice, item.precioNpc.vende === null ? null : { pd: item.precioNpc.vende }],
       [labels.shopPrice, item.precioNpc.compra === null ? null : { pd: item.precioNpc.compra }],
+      [labels.market ?? '', marketValue(item.mercado, labels)],
     ]),
   };
 }
@@ -423,6 +730,39 @@ export function systemTip(system: SystemTipRecord, locale: Locale): TipData {
         (row) => [text(row.etiqueta, locale) ?? '', text(row.valor, locale)] as const,
       ),
     ),
+  };
+}
+
+/**
+ * An aura of content/auras.json (16.4.5) or an addon of content/outfits.json, as a slot of the
+ * equipment shows it: its name, its sprite (the aura's ball, the addon's outfit), and what the
+ * registries say of it besides — the Balls that unlock an aura, the Pokémon an addon dresses.
+ */
+export type GearTipRecord = {
+  id: string;
+  nombre: string;
+  sprite: TipSprite | null;
+  /** An aura: the names of the Balls whose `ball.aura` is it (a Premier Ball for Premier). */
+  balls?: readonly string[] | null;
+  /** An addon: the name of the Pokémon of its outfit. */
+  pokemon?: string | null;
+};
+
+/**
+ * Aura or addon panel (16.4.5), 300 wide like a held item: the sprite at 2x, the name and,
+ * with a value, «Viene con: Premier Ball» (an aura) or «Pokémon: Bulbasaur» (an addon). The
+ * game's own tooltip of an aura is its name only.
+ */
+export function gearTip(kind: 'aura' | 'addon', gear: GearTipRecord, labels: TipLabels): TipData {
+  return {
+    key: `${kind}:${gear.id}`,
+    title: gear.nombre,
+    width: WIDTH_WIDE,
+    head: { type: 'sprite', sprite: gear.sprite },
+    rows: tipRows([
+      [labels.comesWith ?? '', { list: [...(gear.balls ?? [])] }],
+      [labels.pokemon ?? '', gear.pokemon ?? null],
+    ]),
   };
 }
 

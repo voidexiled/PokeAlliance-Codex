@@ -39,7 +39,7 @@ const schemasRoot = fileURLToPath(new URL('./content/schemas', import.meta.url))
 );
 
 // Spec 3.13: VISUAL implies COMERCIO_DEMO, and point 2 of 14.5 makes Comercio
-// read tests/visual/fixtures/comercio.json instead of content/comercio/*. Both
+// read tests/visual/fixtures/comercio.json instead of tests/fixtures/comercio/*. Both
 // travel as environment variables, like OCULTAR_BORRADORES and COMERCIO_PUBLICO,
 // so the phase A registry reads them with the same helper in the build and on
 // the server. `COMERCIO_FIXTURE` is the absolute path of the fixture file.
@@ -343,6 +343,9 @@ const RETIRED_ROUTES = [
   // E2, A7: the quests live in Actividades (8.9); `/guias/` comes back with the first
   // editorial guide (15).
   { from: '/{l}/guias', to: '/{l}/actividades/' },
+  // 9.16.3 (owner, 2026-09-25): «Mis operaciones» is a page of the account frame. Without
+  // COMERCIO_PUBLICO the destination does not exist either, as the old route did not.
+  { from: '/{l}/comercio/operaciones', to: '/{l}/cuenta/operaciones/' },
 ];
 
 /**
@@ -383,10 +386,12 @@ const NOINDEX_ROUTES = new Set(
     '/{l}/mapa/',
     '/{l}/herramientas/pokemon/',
     '/{l}/comercio/publicar/',
-    // Prerendered only with COMERCIO_PUBLICO or the public Supabase settings (9.3, 9.16.3).
-    '/{l}/comercio/operaciones/',
+    // Prerendered only with the public Supabase settings, and the last three also with
+    // COMERCIO_PUBLICO (9.3, 9.16.3).
     '/{l}/cuenta/',
     '/{l}/cuenta/perfil/',
+    '/{l}/cuenta/anuncios/',
+    '/{l}/cuenta/operaciones/',
   ].flatMap((route) => LOCALES.map((locale) => route.replaceAll('{l}', locale))),
 );
 

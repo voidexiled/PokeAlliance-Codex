@@ -216,6 +216,39 @@ export function inspectDescription(rows) {
 }
 
 /**
+ * An inspection title as an item name: «a starly feather» → «starly feather», «an …» the same;
+ * a title that starts with a count («5 Minor XP Boosts», a stack) is not a name → null, so the
+ * name comes from the export that references the item.
+ */
+export function titleName(title) {
+  const text = String(title ?? '').trim();
+  if (!text || /^\d+ /.test(text)) return null;
+  return text.replace(/^an? /i, '') || null;
+}
+
+/**
+ * What the inspection of a Poké Ball says it is good at: the two elements of «more effective
+ * when attempting to catch FIRE or GROUND Pokémon», and «very fast» / «very heavy» Pokémon
+ * (the `rapido` / `pesado` of content/pokemon.json). Elements outside `elements` are left out.
+ */
+export function ballFacts(rows, elements) {
+  const text = (rows ?? [])
+    .filter((row) => row.section === 'header' || row.section === 'info')
+    .map((row) => String(row.text ?? ''))
+    .join(' ');
+  const catchOf = /more effective when attempting to catch ([A-Z]+) or ([A-Z]+) Pok/.exec(text);
+  const elementos = catchOf
+    ? [catchOf[1], catchOf[2]].map((name) => name.toLowerCase()).filter((id) => elements.has(id))
+    : [];
+  const condicion = /\bvery fast Pok/i.test(text)
+    ? 'rapido'
+    : /\bvery heavy Pok/i.test(text)
+      ? 'pesado'
+      : null;
+  return { elementos, condicion };
+}
+
+/**
  * The evolution stages of a Pokédex chain: an entry with `branch: true` right after another
  * `branch: true` entry is a sibling of it; any other entry opens a new stage. (Eevee: stage 0
  * Eevee, stage 1 every Eeveelution; Oddish: Oddish, Gloom, Vileplume + Bellossom.)
@@ -311,6 +344,9 @@ export const OWNER_FIELDS = new Set([
 
 /** `textoJuego` fields: the export writes its own language and leaves the other one. */
 const GAME_TEXT_FIELDS = new Set(['descripcion']);
+
+/** The client's placeholder for a Pokémon with no Pokédex text: an unknown description. */
+const NO_DESCRIPTION = new Set(['Sin descripción.', 'Sin descripción']);
 
 /** Category of the items the game names outside the Market catalog (owner, 2026-09-25). */
 export const OTHER_CATEGORY = 'otros';
@@ -499,7 +535,7 @@ export function applyExport(types, content, options = {}) {
     }
     for (const [clientId, referenced] of wanted) {
       if (itemByClient.has(clientId)) continue;
-      const name = String(inspect.get(clientId)?.title ?? referenced ?? '').trim();
+      const name = String(titleName(inspect.get(clientId)?.title) ?? referenced ?? '').trim();
       if (!name) {
         report.unnamedItems.push(clientId);
         continue;
@@ -559,6 +595,13 @@ export function applyExport(types, content, options = {}) {
     const inspection = inspect.get(item.clientId);
     const description = inspection ? inspectDescription(inspection.rows) : null;
     if (description) fill('items', item, 'descripcion', { en: description });
+
+    // A Poké Ball: the elements and the kind of Pokémon its inspection names. `tasa` and `aura`
+    // are the owner's and stay as they are.
+    if (item.categoria === 'poke-balls' && inspection) {
+      const current = item.ball ?? { tasa: null, elementos: [], condicion: null, aura: null };
+      fill('items', item, 'ball', { ...current, ...ballFacts(inspection.rows, elementSet) });
+    }
 
     // NPC prices: a shop of an NPC first; its `sellPrice` is what the NPC pays (`vende`), its
     // `buyPrice` what it charges (`compra`); 0 = that side does not exist → null.
@@ -741,8 +784,13 @@ export function applyExport(types, content, options = {}) {
       fill('pokemon', record, 'elementos', elementos);
     }
 
+    // The client's Pokédex writes «Sin descripción.» for a Pokémon it has no text for: that is an
+    // unknown description (null, AGENTS.md), not a text of the game. A record that still holds
+    // it from an earlier import goes back to null.
     const description = String(detail.description ?? '').trim();
-    if (description) fill('pokemon', record, 'descripcion', { es: description });
+    if (NO_DESCRIPTION.has(description)) {
+      if (NO_DESCRIPTION.has(record.descripcion?.es ?? '')) record.descripcion = null;
+    } else if (description) fill('pokemon', record, 'descripcion', { es: description });
     if (typeof detail.fast === 'boolean') fill('pokemon', record, 'rapido', detail.fast);
     if (typeof detail.heavy === 'boolean') fill('pokemon', record, 'pesado', detail.heavy);
     if (Array.isArray(detail.habilities))

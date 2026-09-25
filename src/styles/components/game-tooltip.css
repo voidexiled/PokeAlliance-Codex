@@ -110,6 +110,16 @@
   text-align: center;
 }
 
+/* The game's text of the entity (an item's inspection): under the head, 8 px apart, the one
+   text of the panel that wraps. */
+.ac-game-tooltip__text {
+  display: block;
+  margin: var(--space-8) 0 0;
+  color: var(--tt-value);
+  @apply type-tt-row;
+  overflow-wrap: break-word;
+}
+
 /* Rows: `tt-label` label, white value, 12 px apart. */
 .ac-game-tooltip__rows {
   display: block;
@@ -147,6 +157,15 @@
 /* A value never breaks inside itself; a comma list breaks only between its entries. */
 .ac-game-tooltip__nw {
   white-space: nowrap;
+}
+
+/* A row of element icons (a Pokémon's Débil a / Resiste / Inmune): 16 px, wrapping between icons. */
+.ac-game-tooltip__icons {
+  display: inline-flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: var(--space-2);
+  vertical-align: middle;
 }
 
 /* Collapsible sections ("Held Items: 2", "Entrenamiento: 1"). */
@@ -215,6 +234,27 @@
   align-items: center;
   gap: var(--space-8);
   @apply type-tt-row;
+}
+
+/* Held items with the game's text of what they do: one per line, the text under the name. */
+.ac-game-tooltip__held:has(.ac-game-tooltip__held-text) {
+  flex-direction: column;
+}
+
+.ac-game-tooltip__held:has(.ac-game-tooltip__held-text) .ac-game-tooltip__held-item {
+  align-items: flex-start;
+}
+
+.ac-game-tooltip__held-body {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.ac-game-tooltip__held-text {
+  color: var(--tt-value);
+  overflow-wrap: break-word;
 }
 
 /* Free section body (the Entrenamiento meter). */

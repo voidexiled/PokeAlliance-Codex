@@ -18,9 +18,9 @@
      `DS:PageLayout` says the frame does not do it (5.7). What belongs to the frame is
      hiding the whole column below 1280.
 
-   The pinned group, «Destacados», is the only one that carries sprites: M10 fills it from
-   `content/destacados.json`, and each of its links draws the sprite of its record in the
-   16 px box below, which bounces (6.2). */
+   Every link and every group heading draws a game sprite in the 16 px box below (owner rule
+   2026-09-25, where 7.10.2 kept them to «Destacados»); only the links of «Destacados», which
+   M10 fills from `content/destacados.json`, bounce (6.2). */
 
 .ac-sidebar {
   width: var(--layout-sidebar);
@@ -76,6 +76,13 @@
   text-decoration: none;
 }
 
+/* A top-level link («Inicio») sits beside the group headings, whose sprite box starts at the
+   left edge of the column: the link moves its own left padding out into the gutter, so its
+   sprite lines up with theirs while its hover background keeps the padding of every link. */
+.ac-sidebar__top .ac-sidebar__link {
+  margin-left: calc(-1 * var(--space-8));
+}
+
 /* The entry of the section of a child route carries `aria-current="true"` and looks the
    same as the entry of the page itself (E10). */
 .ac-sidebar__link:hover,
@@ -84,7 +91,7 @@
   background: var(--bg-tertiary);
 }
 
-/* 16 px sprite box of the pinned group; the sprite keeps its 1x size, centred. */
+/* 16 px sprite box of a link or a heading; the sprite keeps its 1x size, centred. */
 .ac-sidebar__sprite {
   display: flex;
   width: var(--size-sprite-nav);
@@ -105,13 +112,31 @@
   margin-bottom: 1px;
 }
 
+/* Art larger than the box is drawn scaled down (src/lib/nav/menu-sprites.ts): smoothly
+   (`ac-sprite--smooth`), since a pixel grid at a fraction of its size would drop whole rows of
+   pixels, and through the window of frame 0 of its sheet, as `.ac-sprite` draws one. */
+.ac-sidebar__sprite > .ac-sidebar__scaled {
+  object-fit: cover;
+}
+
 /* «Destacados»: 700 with no uppercase and no chevron (C7-12). The `ui-caps` of the
    home page is another heading. */
 .ac-sidebar__heading {
+  display: flex;
+  align-items: center;
+  gap: var(--space-8);
   margin: 0;
   padding: var(--space-8) 0;
   font-weight: 700;
   text-transform: none;
+}
+
+/* The sprite and the label of a collapsible group, 8 apart as in a link. */
+.ac-sidebar__toggle-label {
+  display: flex;
+  min-width: 0;
+  align-items: center;
+  gap: var(--space-8);
 }
 
 .ac-sidebar__toggle {

@@ -2552,9 +2552,7 @@
       "funcion": null,
       "elementos": ["fire", "dragon"],
       "imagen": null,
-      "descripcion": {
-        "es": "Sin descripción."
-      },
+      "descripcion": null,
       "rapido": false,
       "pesado": false,
       "habilidades": [],
@@ -2827,9 +2825,7 @@
       "funcion": null,
       "elementos": ["fire", "flying"],
       "imagen": null,
-      "descripcion": {
-        "es": "Sin descripción."
-      },
+      "descripcion": null,
       "rapido": false,
       "pesado": false,
       "habilidades": [],
@@ -4058,9 +4054,7 @@
       "funcion": null,
       "elementos": ["water"],
       "imagen": null,
-      "descripcion": {
-        "es": "Sin descripción."
-      },
+      "descripcion": null,
       "rapido": false,
       "pesado": false,
       "habilidades": ["Rock Smash", "Surf", "Headbutt", "Strength", "Dig"],
@@ -12682,7 +12676,7 @@
           "muyRaro": true
         },
         {
-          "item": "a-clefablite",
+          "item": "clefablite",
           "cantidad": {
             "min": 1,
             "max": 1
@@ -12719,7 +12713,7 @@
             "muyRaro": true
           },
           {
-            "item": "a-clefablite",
+            "item": "clefablite",
             "cantidad": {
               "min": 1,
               "max": 1
@@ -12755,7 +12749,7 @@
             "muyRaro": true
           },
           {
-            "item": "a-clefablite",
+            "item": "clefablite",
             "cantidad": {
               "min": 1,
               "max": 1
@@ -50830,9 +50824,7 @@
       "funcion": "PVE",
       "elementos": ["psychic"],
       "imagen": "/pokemon/150.png",
-      "descripcion": {
-        "es": "Sin descripción."
-      },
+      "descripcion": null,
       "rapido": true,
       "pesado": true,
       "habilidades": ["Rock Smash", "Strength", "Fly"],
@@ -50893,9 +50885,7 @@
       "funcion": "PVE",
       "elementos": ["psychic"],
       "imagen": "/pokemon/151.png",
-      "descripcion": {
-        "es": "Sin descripción."
-      },
+      "descripcion": null,
       "rapido": true,
       "pesado": false,
       "habilidades": ["Rock Smash", "Strength", "Fly"],
@@ -69259,7 +69249,7 @@
               "cantidad": 1
             },
             {
-              "item": "a-blue-gliscor-wings",
+              "item": "blue-gliscor-wings",
               "cantidad": 1
             }
           ]
@@ -148382,9 +148372,7 @@
       "funcion": "PVE",
       "elementos": ["grass"],
       "imagen": "/pokemon/387.png",
-      "descripcion": {
-        "es": "Sin descripción."
-      },
+      "descripcion": null,
       "rapido": false,
       "pesado": false,
       "habilidades": [],
@@ -148527,9 +148515,7 @@
       "funcion": null,
       "elementos": ["grass"],
       "imagen": "/pokemon/387.1.png",
-      "descripcion": {
-        "es": "Sin descripción."
-      },
+      "descripcion": null,
       "rapido": false,
       "pesado": false,
       "habilidades": [],
@@ -148690,9 +148676,7 @@
       "funcion": "PVE",
       "elementos": ["grass"],
       "imagen": "/pokemon/388.png",
-      "descripcion": {
-        "es": "Sin descripción."
-      },
+      "descripcion": null,
       "rapido": false,
       "pesado": false,
       "habilidades": [],
@@ -148851,9 +148835,7 @@
       "funcion": null,
       "elementos": ["grass"],
       "imagen": "/pokemon/388.1.png",
-      "descripcion": {
-        "es": "Sin descripción."
-      },
+      "descripcion": null,
       "rapido": false,
       "pesado": false,
       "habilidades": [],
@@ -149044,9 +149026,7 @@
       "funcion": "PVE",
       "elementos": ["grass", "ground"],
       "imagen": "/pokemon/389.png",
-      "descripcion": {
-        "es": "Sin descripción."
-      },
+      "descripcion": null,
       "rapido": false,
       "pesado": false,
       "habilidades": [],
@@ -149229,9 +149209,7 @@
       "funcion": null,
       "elementos": ["grass", "ground"],
       "imagen": "/pokemon/389.1.png",
-      "descripcion": {
-        "es": "Sin descripción."
-      },
+      "descripcion": null,
       "rapido": false,
       "pesado": false,
       "habilidades": [],
@@ -149412,9 +149390,7 @@
       "funcion": "PVE",
       "elementos": ["fire"],
       "imagen": "/pokemon/390.png",
-      "descripcion": {
-        "es": "Sin descripción."
-      },
+      "descripcion": null,
       "rapido": false,
       "pesado": false,
       "habilidades": [],
@@ -150098,9 +150074,7 @@
       "funcion": "PVE",
       "elementos": ["fire", "fighting"],
       "imagen": "/pokemon/392.png",
-      "descripcion": {
-        "es": "Sin descripción."
-      },
+      "descripcion": null,
       "rapido": true,
       "pesado": false,
       "habilidades": [],
@@ -150485,9 +150459,7 @@
       "funcion": null,
       "elementos": ["normal", "flying"],
       "imagen": "/pokemon/396.png",
-      "descripcion": {
-        "es": "Sin descripción."
-      },
+      "descripcion": null,
       "rapido": false,
       "pesado": false,
       "habilidades": [],
@@ -150517,7 +150489,7 @@
           "probabilidad": 30
         },
         {
-          "item": "a-starly-feather",
+          "item": "starly-feather",
           "cantidad": {
             "min": 1,
             "max": 1
@@ -150562,7 +150534,7 @@
             "probabilidad": 90
           },
           {
-            "item": "a-starly-feather",
+            "item": "starly-feather",
             "cantidad": {
               "min": 1,
               "max": 1
@@ -150674,9 +150646,7 @@
       "funcion": null,
       "elementos": ["normal", "flying"],
       "imagen": "/pokemon/396.1.png",
-      "descripcion": {
-        "es": "Sin descripción."
-      },
+      "descripcion": null,
       "rapido": false,
       "pesado": false,
       "habilidades": [],
@@ -150706,7 +150676,7 @@
           "probabilidad": 100
         },
         {
-          "item": "a-amber-starly-feather",
+          "item": "amber-starly-feather",
           "cantidad": {
             "min": 1,
             "max": 1
@@ -150757,7 +150727,7 @@
             "probabilidad": 100
           },
           {
-            "item": "a-amber-starly-feather",
+            "item": "amber-starly-feather",
             "cantidad": {
               "min": 1,
               "max": 1
@@ -150875,9 +150845,7 @@
       "funcion": null,
       "elementos": ["normal", "flying"],
       "imagen": "/pokemon/397.png",
-      "descripcion": {
-        "es": "Sin descripción."
-      },
+      "descripcion": null,
       "rapido": true,
       "pesado": false,
       "habilidades": [],
@@ -150907,7 +150875,7 @@
           "probabilidad": 30
         },
         {
-          "item": "a-staravia-wing",
+          "item": "staravia-wing",
           "cantidad": {
             "min": 1,
             "max": 1
@@ -150952,7 +150920,7 @@
             "probabilidad": 90
           },
           {
-            "item": "a-staravia-wing",
+            "item": "staravia-wing",
             "cantidad": {
               "min": 1,
               "max": 1
@@ -151064,9 +151032,7 @@
       "funcion": null,
       "elementos": ["normal", "flying"],
       "imagen": "/pokemon/397.1.png",
-      "descripcion": {
-        "es": "Sin descripción."
-      },
+      "descripcion": null,
       "rapido": true,
       "pesado": false,
       "habilidades": [],
@@ -151096,7 +151062,7 @@
           "probabilidad": 100
         },
         {
-          "item": "a-amber-staravia-wing",
+          "item": "amber-staravia-wing",
           "cantidad": {
             "min": 1,
             "max": 1
@@ -151147,7 +151113,7 @@
             "probabilidad": 100
           },
           {
-            "item": "a-amber-staravia-wing",
+            "item": "amber-staravia-wing",
             "cantidad": {
               "min": 1,
               "max": 1
@@ -151265,9 +151231,7 @@
       "funcion": null,
       "elementos": ["normal", "flying"],
       "imagen": "/pokemon/398.png",
-      "descripcion": {
-        "es": "Sin descripción."
-      },
+      "descripcion": null,
       "rapido": true,
       "pesado": false,
       "habilidades": [],
@@ -151297,7 +151261,7 @@
           "probabilidad": 100
         },
         {
-          "item": "a-staraptor-talon",
+          "item": "staraptor-talon",
           "cantidad": {
             "min": 1,
             "max": 1
@@ -151351,7 +151315,7 @@
             "probabilidad": 100
           },
           {
-            "item": "a-staraptor-talon",
+            "item": "staraptor-talon",
             "cantidad": {
               "min": 1,
               "max": 1
@@ -151404,7 +151368,7 @@
             "probabilidad": 100
           },
           {
-            "item": "a-staraptor-talon",
+            "item": "staraptor-talon",
             "cantidad": {
               "min": 2,
               "max": 4
@@ -151522,9 +151486,7 @@
       "funcion": null,
       "elementos": ["normal", "flying"],
       "imagen": "/pokemon/398.1.png",
-      "descripcion": {
-        "es": "Sin descripción."
-      },
+      "descripcion": null,
       "rapido": true,
       "pesado": false,
       "habilidades": [],
@@ -151819,9 +151781,7 @@
       "funcion": null,
       "elementos": ["electric"],
       "imagen": "/pokemon/403.png",
-      "descripcion": {
-        "es": "Sin descripción."
-      },
+      "descripcion": null,
       "rapido": true,
       "pesado": false,
       "habilidades": [],
@@ -151958,9 +151918,7 @@
       "funcion": null,
       "elementos": ["electric"],
       "imagen": "/pokemon/403.1.png",
-      "descripcion": {
-        "es": "Sin descripción."
-      },
+      "descripcion": null,
       "rapido": true,
       "pesado": false,
       "habilidades": [],
@@ -152115,9 +152073,7 @@
       "funcion": null,
       "elementos": ["electric"],
       "imagen": "/pokemon/404.png",
-      "descripcion": {
-        "es": "Sin descripción."
-      },
+      "descripcion": null,
       "rapido": false,
       "pesado": false,
       "habilidades": [],
@@ -152270,9 +152226,7 @@
       "funcion": null,
       "elementos": ["electric"],
       "imagen": "/pokemon/404.1.png",
-      "descripcion": {
-        "es": "Sin descripción."
-      },
+      "descripcion": null,
       "rapido": false,
       "pesado": false,
       "habilidades": [],
@@ -152457,9 +152411,7 @@
       "funcion": "PVE",
       "elementos": ["electric"],
       "imagen": "/pokemon/405.png",
-      "descripcion": {
-        "es": "Sin descripción."
-      },
+      "descripcion": null,
       "rapido": true,
       "pesado": false,
       "habilidades": [],
@@ -152613,9 +152565,7 @@
       "funcion": null,
       "elementos": ["electric"],
       "imagen": "/pokemon/405.1.png",
-      "descripcion": {
-        "es": "Sin descripción."
-      },
+      "descripcion": null,
       "rapido": true,
       "pesado": false,
       "habilidades": [],
@@ -152800,9 +152750,7 @@
       "funcion": "PVE",
       "elementos": ["rock"],
       "imagen": "/pokemon/408.png",
-      "descripcion": {
-        "es": "Sin descripción."
-      },
+      "descripcion": null,
       "rapido": false,
       "pesado": false,
       "habilidades": [],
@@ -152937,9 +152885,7 @@
       "funcion": null,
       "elementos": ["rock"],
       "imagen": "/pokemon/408.1.png",
-      "descripcion": {
-        "es": "Sin descripción."
-      },
+      "descripcion": null,
       "rapido": false,
       "pesado": false,
       "habilidades": [],
@@ -153090,9 +153036,7 @@
       "funcion": "PVE",
       "elementos": ["rock"],
       "imagen": "/pokemon/409.png",
-      "descripcion": {
-        "es": "Sin descripción."
-      },
+      "descripcion": null,
       "rapido": false,
       "pesado": false,
       "habilidades": [],
@@ -153284,9 +153228,7 @@
       "funcion": null,
       "elementos": ["rock"],
       "imagen": "/pokemon/409.1.png",
-      "descripcion": {
-        "es": "Sin descripción."
-      },
+      "descripcion": null,
       "rapido": false,
       "pesado": false,
       "habilidades": [],
@@ -153471,9 +153413,7 @@
       "funcion": null,
       "elementos": ["rock", "steel"],
       "imagen": "/pokemon/410.png",
-      "descripcion": {
-        "es": "Sin descripción."
-      },
+      "descripcion": null,
       "rapido": false,
       "pesado": false,
       "habilidades": [],
@@ -153655,9 +153595,7 @@
       "funcion": null,
       "elementos": ["rock", "steel"],
       "imagen": "/pokemon/410.1.png",
-      "descripcion": {
-        "es": "Sin descripción."
-      },
+      "descripcion": null,
       "rapido": false,
       "pesado": false,
       "habilidades": [],
@@ -153851,9 +153789,7 @@
       "funcion": null,
       "elementos": ["rock", "steel"],
       "imagen": "/pokemon/411.png",
-      "descripcion": {
-        "es": "Sin descripción."
-      },
+      "descripcion": null,
       "rapido": false,
       "pesado": false,
       "habilidades": [],
@@ -154037,9 +153973,7 @@
       "funcion": null,
       "elementos": ["rock", "steel"],
       "imagen": "/pokemon/411.1.png",
-      "descripcion": {
-        "es": "Sin descripción."
-      },
+      "descripcion": null,
       "rapido": false,
       "pesado": false,
       "habilidades": [],
@@ -154599,9 +154533,7 @@
       "funcion": null,
       "elementos": ["bug", "flying"],
       "imagen": "/pokemon/416.png",
-      "descripcion": {
-        "es": "Sin descripción."
-      },
+      "descripcion": null,
       "rapido": false,
       "pesado": false,
       "habilidades": [],
@@ -154850,9 +154782,7 @@
       "funcion": null,
       "elementos": ["bug", "flying"],
       "imagen": "/pokemon/416.1.png",
-      "descripcion": {
-        "es": "Sin descripción."
-      },
+      "descripcion": null,
       "rapido": false,
       "pesado": false,
       "habilidades": [],
@@ -155093,9 +155023,7 @@
       "funcion": "PVE",
       "elementos": ["electric"],
       "imagen": "/pokemon/417.png",
-      "descripcion": {
-        "es": "Sin descripción."
-      },
+      "descripcion": null,
       "rapido": false,
       "pesado": false,
       "habilidades": [],
@@ -155232,9 +155160,7 @@
       "funcion": null,
       "elementos": ["electric"],
       "imagen": "/pokemon/417.1.png",
-      "descripcion": {
-        "es": "Sin descripción."
-      },
+      "descripcion": null,
       "rapido": false,
       "pesado": false,
       "habilidades": [],
@@ -155256,7 +155182,7 @@
           "probabilidad": 100
         },
         {
-          "item": "a-electric-pink-tail",
+          "item": "electric-pink-tail",
           "cantidad": {
             "min": 1,
             "max": 1
@@ -155293,7 +155219,7 @@
             "probabilidad": 100
           },
           {
-            "item": "a-electric-pink-tail",
+            "item": "electric-pink-tail",
             "cantidad": {
               "min": 1,
               "max": 1
@@ -155510,9 +155436,7 @@
       "funcion": null,
       "elementos": ["normal"],
       "imagen": "/pokemon/428.png",
-      "descripcion": {
-        "es": "Sin descripción."
-      },
+      "descripcion": null,
       "rapido": false,
       "pesado": false,
       "habilidades": [],
@@ -155643,9 +155567,7 @@
       "funcion": null,
       "elementos": ["normal"],
       "imagen": "/pokemon/428.1.png",
-      "descripcion": {
-        "es": "Sin descripción."
-      },
+      "descripcion": null,
       "rapido": false,
       "pesado": false,
       "habilidades": [],
@@ -155794,9 +155716,7 @@
       "funcion": null,
       "elementos": ["ghost"],
       "imagen": "/pokemon/429.png",
-      "descripcion": {
-        "es": "Sin descripción."
-      },
+      "descripcion": null,
       "rapido": true,
       "pesado": false,
       "habilidades": [],
@@ -155993,9 +155913,7 @@
       "funcion": null,
       "elementos": ["ghost"],
       "imagen": "/pokemon/429.1.png",
-      "descripcion": {
-        "es": "Sin descripción."
-      },
+      "descripcion": null,
       "rapido": true,
       "pesado": false,
       "habilidades": [],
@@ -156342,9 +156260,7 @@
       "funcion": null,
       "elementos": ["dragon", "ground"],
       "imagen": "/pokemon/443.png",
-      "descripcion": {
-        "es": "Sin descripción."
-      },
+      "descripcion": null,
       "rapido": false,
       "pesado": false,
       "habilidades": [],
@@ -156374,7 +156290,7 @@
           "probabilidad": 30
         },
         {
-          "item": "a-gible-fang",
+          "item": "gible-fang",
           "cantidad": {
             "min": 1,
             "max": 1
@@ -156419,7 +156335,7 @@
             "probabilidad": 90
           },
           {
-            "item": "a-gible-fang",
+            "item": "gible-fang",
             "cantidad": {
               "min": 1,
               "max": 1
@@ -156526,9 +156442,7 @@
       "funcion": null,
       "elementos": ["dragon", "ground"],
       "imagen": "/pokemon/443.1.png",
-      "descripcion": {
-        "es": "Sin descripción."
-      },
+      "descripcion": null,
       "rapido": false,
       "pesado": false,
       "habilidades": [],
@@ -156558,7 +156472,7 @@
           "probabilidad": 100
         },
         {
-          "item": "a-azure-gible-fang",
+          "item": "azure-gible-fang",
           "cantidad": {
             "min": 1,
             "max": 1
@@ -156609,7 +156523,7 @@
             "probabilidad": 100
           },
           {
-            "item": "a-azure-gible-fang",
+            "item": "azure-gible-fang",
             "cantidad": {
               "min": 1,
               "max": 1
@@ -156653,7 +156567,7 @@
               "cantidad": 1
             },
             {
-              "item": "a-azure-gabite-claw",
+              "item": "azure-gabite-claw",
               "cantidad": 1
             }
           ]
@@ -156722,9 +156636,7 @@
       "funcion": null,
       "elementos": ["dragon", "ground"],
       "imagen": "/pokemon/444.png",
-      "descripcion": {
-        "es": "Sin descripción."
-      },
+      "descripcion": null,
       "rapido": false,
       "pesado": false,
       "habilidades": [],
@@ -156754,7 +156666,7 @@
           "probabilidad": 30
         },
         {
-          "item": "a-gabite-claw",
+          "item": "gabite-claw",
           "cantidad": {
             "min": 1,
             "max": 1
@@ -156799,7 +156711,7 @@
             "probabilidad": 90
           },
           {
-            "item": "a-gabite-claw",
+            "item": "gabite-claw",
             "cantidad": {
               "min": 1,
               "max": 1
@@ -156906,9 +156818,7 @@
       "funcion": null,
       "elementos": ["dragon", "ground"],
       "imagen": "/pokemon/444.1.png",
-      "descripcion": {
-        "es": "Sin descripción."
-      },
+      "descripcion": null,
       "rapido": false,
       "pesado": false,
       "habilidades": [],
@@ -156938,7 +156848,7 @@
           "probabilidad": 100
         },
         {
-          "item": "a-azure-gabite-claw",
+          "item": "azure-gabite-claw",
           "cantidad": {
             "min": 1,
             "max": 1
@@ -156989,7 +156899,7 @@
             "probabilidad": 100
           },
           {
-            "item": "a-azure-gabite-claw",
+            "item": "azure-gabite-claw",
             "cantidad": {
               "min": 1,
               "max": 1
@@ -157102,9 +157012,7 @@
       "funcion": null,
       "elementos": ["dragon", "ground"],
       "imagen": "/pokemon/445.png",
-      "descripcion": {
-        "es": "Sin descripción."
-      },
+      "descripcion": null,
       "rapido": true,
       "pesado": false,
       "habilidades": [],
@@ -157134,7 +157042,7 @@
           "probabilidad": 100
         },
         {
-          "item": "a-garchomp-tail",
+          "item": "garchomp-tail",
           "cantidad": {
             "min": 1,
             "max": 1
@@ -157188,7 +157096,7 @@
             "probabilidad": 100
           },
           {
-            "item": "a-garchomp-tail",
+            "item": "garchomp-tail",
             "cantidad": {
               "min": 1,
               "max": 1
@@ -157288,9 +157196,7 @@
       "funcion": null,
       "elementos": ["dragon", "ground"],
       "imagen": "/pokemon/445.1.png",
-      "descripcion": {
-        "es": "Sin descripción."
-      },
+      "descripcion": null,
       "rapido": true,
       "pesado": false,
       "habilidades": [],
@@ -157484,9 +157390,7 @@
       "funcion": "PVE",
       "elementos": ["fighting"],
       "imagen": "/pokemon/447.png",
-      "descripcion": {
-        "es": "Sin descripción."
-      },
+      "descripcion": null,
       "rapido": true,
       "pesado": false,
       "habilidades": [],
@@ -157633,9 +157537,7 @@
       "funcion": null,
       "elementos": ["fighting"],
       "imagen": "/pokemon/447.1.png",
-      "descripcion": {
-        "es": "Sin descripción."
-      },
+      "descripcion": null,
       "rapido": true,
       "pesado": false,
       "habilidades": [],
@@ -157780,9 +157682,7 @@
       "funcion": "PVE",
       "elementos": ["fighting", "steel"],
       "imagen": "/pokemon/448.png",
-      "descripcion": {
-        "es": "Sin descripción."
-      },
+      "descripcion": null,
       "rapido": true,
       "pesado": false,
       "habilidades": [],
@@ -158001,9 +157901,7 @@
       "funcion": null,
       "elementos": ["fighting", "steel"],
       "imagen": "/pokemon/448.1.png",
-      "descripcion": {
-        "es": "Sin descripción."
-      },
+      "descripcion": null,
       "rapido": true,
       "pesado": false,
       "habilidades": [],
@@ -158256,9 +158154,7 @@
       "funcion": null,
       "elementos": ["fighting", "steel"],
       "imagen": "/pokemon/448.2.png",
-      "descripcion": {
-        "es": "Sin descripción."
-      },
+      "descripcion": null,
       "rapido": true,
       "pesado": false,
       "habilidades": [],
@@ -158538,9 +158434,7 @@
       "funcion": null,
       "elementos": ["poison", "bug"],
       "imagen": "/pokemon/451.png",
-      "descripcion": {
-        "es": "Sin descripción."
-      },
+      "descripcion": null,
       "rapido": false,
       "pesado": false,
       "habilidades": [],
@@ -158568,9 +158462,7 @@
       "funcion": null,
       "elementos": ["poison", "bug"],
       "imagen": "/pokemon/451.1.png",
-      "descripcion": {
-        "es": "Sin descripción."
-      },
+      "descripcion": null,
       "rapido": false,
       "pesado": false,
       "habilidades": [],
@@ -158598,9 +158490,7 @@
       "funcion": null,
       "elementos": ["poison", "dark"],
       "imagen": "/pokemon/452.png",
-      "descripcion": {
-        "es": "Sin descripción."
-      },
+      "descripcion": null,
       "rapido": false,
       "pesado": false,
       "habilidades": [],
@@ -158628,9 +158518,7 @@
       "funcion": null,
       "elementos": ["poison", "dark"],
       "imagen": null,
-      "descripcion": {
-        "es": "Sin descripción."
-      },
+      "descripcion": null,
       "rapido": false,
       "pesado": false,
       "habilidades": [],
@@ -158658,9 +158546,7 @@
       "funcion": null,
       "elementos": ["poison", "fighting"],
       "imagen": "/pokemon/453.png",
-      "descripcion": {
-        "es": "Sin descripción."
-      },
+      "descripcion": null,
       "rapido": false,
       "pesado": false,
       "habilidades": [],
@@ -159100,9 +158986,7 @@
       "funcion": null,
       "elementos": ["grass", "ice"],
       "imagen": "/pokemon/459.png",
-      "descripcion": {
-        "es": "Sin descripción."
-      },
+      "descripcion": null,
       "rapido": false,
       "pesado": false,
       "habilidades": [],
@@ -159289,9 +159173,7 @@
       "funcion": null,
       "elementos": ["grass", "ice"],
       "imagen": "/pokemon/459.1.png",
-      "descripcion": {
-        "es": "Sin descripción."
-      },
+      "descripcion": null,
       "rapido": false,
       "pesado": false,
       "habilidades": [],
@@ -159490,9 +159372,7 @@
       "funcion": "PVE",
       "elementos": ["grass", "ice"],
       "imagen": "/pokemon/460.png",
-      "descripcion": {
-        "es": "Sin descripción."
-      },
+      "descripcion": null,
       "rapido": false,
       "pesado": false,
       "habilidades": [],
@@ -159708,9 +159588,7 @@
       "funcion": null,
       "elementos": ["grass", "ice"],
       "imagen": "/pokemon/460.1.png",
-      "descripcion": {
-        "es": "Sin descripción."
-      },
+      "descripcion": null,
       "rapido": false,
       "pesado": false,
       "habilidades": [],
@@ -159957,9 +159835,7 @@
       "funcion": null,
       "elementos": ["grass", "ice"],
       "imagen": "/pokemon/460.2.png",
-      "descripcion": {
-        "es": "Sin descripción."
-      },
+      "descripcion": null,
       "rapido": false,
       "pesado": false,
       "habilidades": [],
@@ -160262,9 +160138,7 @@
       "funcion": "PVE",
       "elementos": ["ground", "rock"],
       "imagen": "/pokemon/464.png",
-      "descripcion": {
-        "es": "Sin descripción."
-      },
+      "descripcion": null,
       "rapido": false,
       "pesado": true,
       "habilidades": [],
@@ -160506,9 +160380,7 @@
       "funcion": null,
       "elementos": ["ground", "rock"],
       "imagen": "/pokemon/464.1.png",
-      "descripcion": {
-        "es": "Sin descripción."
-      },
+      "descripcion": null,
       "rapido": false,
       "pesado": true,
       "habilidades": [],
@@ -160750,9 +160622,7 @@
       "funcion": "PVE",
       "elementos": ["grass"],
       "imagen": "/pokemon/465.png",
-      "descripcion": {
-        "es": "Sin descripción."
-      },
+      "descripcion": null,
       "rapido": false,
       "pesado": false,
       "habilidades": [],
@@ -160906,9 +160776,7 @@
       "funcion": null,
       "elementos": ["grass"],
       "imagen": "/pokemon/465.1.png",
-      "descripcion": {
-        "es": "Sin descripción."
-      },
+      "descripcion": null,
       "rapido": false,
       "pesado": false,
       "habilidades": [],
@@ -161075,9 +160943,7 @@
       "funcion": null,
       "elementos": ["fire"],
       "imagen": "/pokemon/467.png",
-      "descripcion": {
-        "es": "Sin descripción."
-      },
+      "descripcion": null,
       "rapido": false,
       "pesado": false,
       "habilidades": [],
@@ -161168,9 +161034,7 @@
       "funcion": null,
       "elementos": ["fire"],
       "imagen": null,
-      "descripcion": {
-        "es": "Sin descripción."
-      },
+      "descripcion": null,
       "rapido": false,
       "pesado": false,
       "habilidades": [],
@@ -161355,9 +161219,7 @@
       "funcion": null,
       "elementos": ["bug", "flying"],
       "imagen": "/pokemon/469.png",
-      "descripcion": {
-        "es": "Sin descripción."
-      },
+      "descripcion": null,
       "rapido": true,
       "pesado": false,
       "habilidades": [],
@@ -161387,7 +161249,7 @@
           "probabilidad": 100
         },
         {
-          "item": "a-red-insectoid-wing",
+          "item": "red-insectoid-wing",
           "cantidad": {
             "min": 1,
             "max": 1
@@ -161441,7 +161303,7 @@
             "probabilidad": 100
           },
           {
-            "item": "a-red-insectoid-wing",
+            "item": "red-insectoid-wing",
             "cantidad": {
               "min": 1,
               "max": 1
@@ -161494,7 +161356,7 @@
             "probabilidad": 100
           },
           {
-            "item": "a-red-insectoid-wing",
+            "item": "red-insectoid-wing",
             "cantidad": {
               "min": 2,
               "max": 4
@@ -161606,9 +161468,7 @@
       "funcion": null,
       "elementos": ["bug", "flying"],
       "imagen": "/pokemon/469.1.png",
-      "descripcion": {
-        "es": "Sin descripción."
-      },
+      "descripcion": null,
       "rapido": true,
       "pesado": false,
       "habilidades": [],
@@ -161849,9 +161709,7 @@
       "funcion": "PVE",
       "elementos": ["grass"],
       "imagen": "/pokemon/470.png",
-      "descripcion": {
-        "es": "Sin descripción."
-      },
+      "descripcion": null,
       "rapido": false,
       "pesado": false,
       "habilidades": [],
@@ -162015,9 +161873,7 @@
       "funcion": null,
       "elementos": ["grass"],
       "imagen": "/pokemon/470.1.png",
-      "descripcion": {
-        "es": "Sin descripción."
-      },
+      "descripcion": null,
       "rapido": false,
       "pesado": false,
       "habilidades": [],
@@ -162213,9 +162069,7 @@
       "funcion": "PVE",
       "elementos": ["ice"],
       "imagen": "/pokemon/471.png",
-      "descripcion": {
-        "es": "Sin descripción."
-      },
+      "descripcion": null,
       "rapido": false,
       "pesado": false,
       "habilidades": [],
@@ -162385,9 +162239,7 @@
       "funcion": "PVE",
       "elementos": ["ice"],
       "imagen": "/pokemon/471.1.png",
-      "descripcion": {
-        "es": "Sin descripción."
-      },
+      "descripcion": null,
       "rapido": false,
       "pesado": false,
       "habilidades": [],
@@ -162578,9 +162430,7 @@
       "funcion": "PVE",
       "elementos": ["ground", "flying"],
       "imagen": "/pokemon/472.png",
-      "descripcion": {
-        "es": "Sin descripción."
-      },
+      "descripcion": null,
       "rapido": true,
       "pesado": false,
       "habilidades": [],
@@ -162763,9 +162613,7 @@
       "funcion": null,
       "elementos": ["ground", "flying"],
       "imagen": "/pokemon/472.1.png",
-      "descripcion": {
-        "es": "Sin descripción."
-      },
+      "descripcion": null,
       "rapido": true,
       "pesado": false,
       "habilidades": [],
@@ -162795,7 +162643,7 @@
           "probabilidad": 100
         },
         {
-          "item": "a-blue-gliscor-wings",
+          "item": "blue-gliscor-wings",
           "cantidad": {
             "min": 1,
             "max": 1
@@ -162848,7 +162696,7 @@
             "probabilidad": 100
           },
           {
-            "item": "a-blue-gliscor-wings",
+            "item": "blue-gliscor-wings",
             "cantidad": {
               "min": 1,
               "max": 1
@@ -162976,9 +162824,7 @@
       "funcion": null,
       "elementos": ["psychic", "fighting"],
       "imagen": "/pokemon/475.png",
-      "descripcion": {
-        "es": "Sin descripción."
-      },
+      "descripcion": null,
       "rapido": true,
       "pesado": false,
       "habilidades": [],
@@ -163228,9 +163074,7 @@
       "funcion": null,
       "elementos": ["psychic", "fighting"],
       "imagen": "/pokemon/475.1.png",
-      "descripcion": {
-        "es": "Sin descripción."
-      },
+      "descripcion": null,
       "rapido": true,
       "pesado": false,
       "habilidades": [],
@@ -163472,9 +163316,7 @@
       "funcion": null,
       "elementos": ["rock", "steel"],
       "imagen": "/pokemon/476.png",
-      "descripcion": {
-        "es": "Sin descripción."
-      },
+      "descripcion": null,
       "rapido": false,
       "pesado": false,
       "habilidades": [],
@@ -163624,9 +163466,7 @@
       "funcion": null,
       "elementos": ["rock", "steel"],
       "imagen": null,
-      "descripcion": {
-        "es": "Sin descripción."
-      },
+      "descripcion": null,
       "rapido": false,
       "pesado": false,
       "habilidades": [],
@@ -163790,9 +163630,7 @@
       "funcion": "PVE",
       "elementos": ["ghost"],
       "imagen": "/pokemon/477.png",
-      "descripcion": {
-        "es": "Sin descripción."
-      },
+      "descripcion": null,
       "rapido": false,
       "pesado": false,
       "habilidades": [],
@@ -163940,9 +163778,7 @@
       "funcion": null,
       "elementos": ["ghost"],
       "imagen": "/pokemon/477.1.png",
-      "descripcion": {
-        "es": "Sin descripción."
-      },
+      "descripcion": null,
       "rapido": false,
       "pesado": false,
       "habilidades": [],
@@ -164283,9 +164119,7 @@
       "funcion": "PVE",
       "elementos": ["normal"],
       "imagen": "/pokemon/531.png",
-      "descripcion": {
-        "es": "Sin descripción."
-      },
+      "descripcion": null,
       "rapido": false,
       "pesado": true,
       "habilidades": ["Rock Smash", "Headbutt", "Strength"],
@@ -164457,9 +164291,7 @@
       "funcion": null,
       "elementos": ["normal", "fairy"],
       "imagen": null,
-      "descripcion": {
-        "es": "Sin descripción."
-      },
+      "descripcion": null,
       "rapido": false,
       "pesado": true,
       "habilidades": ["Headbutt", "Rock Smash", "Strength"],
@@ -164675,9 +164507,7 @@
       "funcion": null,
       "elementos": ["fighting"],
       "imagen": "/pokemon/532.png",
-      "descripcion": {
-        "es": "Sin descripción."
-      },
+      "descripcion": null,
       "rapido": false,
       "pesado": false,
       "habilidades": [],
@@ -164820,9 +164650,7 @@
       "funcion": null,
       "elementos": ["fighting"],
       "imagen": "/pokemon/532.1.png",
-      "descripcion": {
-        "es": "Sin descripción."
-      },
+      "descripcion": null,
       "rapido": false,
       "pesado": false,
       "habilidades": [],
@@ -164983,9 +164811,7 @@
       "funcion": null,
       "elementos": ["fighting"],
       "imagen": "/pokemon/533.png",
-      "descripcion": {
-        "es": "Sin descripción."
-      },
+      "descripcion": null,
       "rapido": false,
       "pesado": false,
       "habilidades": [],
@@ -165132,9 +164958,7 @@
       "funcion": null,
       "elementos": ["fighting"],
       "imagen": "/pokemon/533.1.png",
-      "descripcion": {
-        "es": "Sin descripción."
-      },
+      "descripcion": null,
       "rapido": false,
       "pesado": false,
       "habilidades": [],
@@ -165297,9 +165121,7 @@
       "funcion": null,
       "elementos": ["fighting"],
       "imagen": "/pokemon/534.png",
-      "descripcion": {
-        "es": "Sin descripción."
-      },
+      "descripcion": null,
       "rapido": false,
       "pesado": false,
       "habilidades": [],
@@ -165447,9 +165269,7 @@
       "funcion": null,
       "elementos": ["fighting"],
       "imagen": "/pokemon/534.1.png",
-      "descripcion": {
-        "es": "Sin descripción."
-      },
+      "descripcion": null,
       "rapido": false,
       "pesado": false,
       "habilidades": [],
@@ -165598,9 +165418,7 @@
       "funcion": "PVE",
       "elementos": ["bug", "poison"],
       "imagen": "/pokemon/545.png",
-      "descripcion": {
-        "es": "Sin descripción."
-      },
+      "descripcion": null,
       "rapido": true,
       "pesado": false,
       "habilidades": [],
@@ -165822,9 +165640,7 @@
       "funcion": null,
       "elementos": ["bug", "poison"],
       "imagen": null,
-      "descripcion": {
-        "es": "Sin descripción."
-      },
+      "descripcion": null,
       "rapido": true,
       "pesado": false,
       "habilidades": [],
@@ -166090,9 +165906,7 @@
       "funcion": null,
       "elementos": ["poison"],
       "imagen": "/pokemon/568.png",
-      "descripcion": {
-        "es": "Sin descripción."
-      },
+      "descripcion": null,
       "rapido": false,
       "pesado": false,
       "habilidades": [],
@@ -166209,9 +166023,7 @@
       "funcion": null,
       "elementos": ["poison"],
       "imagen": "/pokemon/568.1.png",
-      "descripcion": {
-        "es": "Sin descripción."
-      },
+      "descripcion": null,
       "rapido": false,
       "pesado": false,
       "habilidades": [],
@@ -166372,9 +166184,7 @@
       "funcion": null,
       "elementos": ["poison"],
       "imagen": "/pokemon/569.png",
-      "descripcion": {
-        "es": "Sin descripción."
-      },
+      "descripcion": null,
       "rapido": false,
       "pesado": false,
       "habilidades": [],
@@ -166565,9 +166375,7 @@
       "funcion": null,
       "elementos": ["poison"],
       "imagen": "/pokemon/569.1.png",
-      "descripcion": {
-        "es": "Sin descripción."
-      },
+      "descripcion": null,
       "rapido": false,
       "pesado": false,
       "habilidades": [],
@@ -166757,9 +166565,7 @@
       "funcion": "PVE",
       "elementos": ["dragon"],
       "imagen": "/pokemon/621.png",
-      "descripcion": {
-        "es": "Sin descripción."
-      },
+      "descripcion": null,
       "rapido": false,
       "pesado": false,
       "habilidades": [],
@@ -166880,9 +166686,7 @@
       "funcion": "PVE",
       "elementos": ["dragon"],
       "imagen": "/pokemon/621.1.png",
-      "descripcion": {
-        "es": "Sin descripción."
-      },
+      "descripcion": null,
       "rapido": true,
       "pesado": false,
       "habilidades": [],
@@ -167001,9 +166805,7 @@
       "funcion": "PVE",
       "elementos": ["dark", "dragon"],
       "imagen": "/pokemon/633.png",
-      "descripcion": {
-        "es": "Sin descripción."
-      },
+      "descripcion": null,
       "rapido": false,
       "pesado": false,
       "habilidades": [],
@@ -167122,9 +166924,7 @@
       "funcion": "PVE",
       "elementos": ["dark", "dragon"],
       "imagen": "/pokemon/633.1.png",
-      "descripcion": {
-        "es": "Sin descripción."
-      },
+      "descripcion": null,
       "rapido": false,
       "pesado": false,
       "habilidades": [],
@@ -167279,9 +167079,7 @@
       "funcion": "PVE",
       "elementos": ["dark", "dragon"],
       "imagen": "/pokemon/634.png",
-      "descripcion": {
-        "es": "Sin descripción."
-      },
+      "descripcion": null,
       "rapido": false,
       "pesado": false,
       "habilidades": [],
@@ -167404,9 +167202,7 @@
       "funcion": "PVE",
       "elementos": ["dark", "dragon"],
       "imagen": "/pokemon/634.1.png",
-      "descripcion": {
-        "es": "Sin descripción."
-      },
+      "descripcion": null,
       "rapido": false,
       "pesado": false,
       "habilidades": [],
@@ -167561,9 +167357,7 @@
       "funcion": "PVE",
       "elementos": ["dark", "dragon"],
       "imagen": "/pokemon/635.png",
-      "descripcion": {
-        "es": "Sin descripción."
-      },
+      "descripcion": null,
       "rapido": false,
       "pesado": false,
       "habilidades": [],
@@ -167706,9 +167500,7 @@
       "funcion": "PVE",
       "elementos": ["dark", "dragon"],
       "imagen": "/pokemon/635.1.png",
-      "descripcion": {
-        "es": "Sin descripción."
-      },
+      "descripcion": null,
       "rapido": true,
       "pesado": false,
       "habilidades": [],
@@ -169303,9 +169095,7 @@
       "funcion": null,
       "elementos": ["grass"],
       "imagen": "/pokemon/673.1.png",
-      "descripcion": {
-        "es": "Sin descripción."
-      },
+      "descripcion": null,
       "rapido": false,
       "pesado": false,
       "habilidades": [],
@@ -169460,9 +169250,7 @@
       "funcion": "PVE",
       "elementos": ["poison", "dragon"],
       "imagen": "/pokemon/691.png",
-      "descripcion": {
-        "es": "Sin descripción."
-      },
+      "descripcion": null,
       "rapido": false,
       "pesado": false,
       "habilidades": [],
@@ -169691,9 +169479,7 @@
       "funcion": null,
       "elementos": ["poison", "dragon"],
       "imagen": null,
-      "descripcion": {
-        "es": "Sin descripción."
-      },
+      "descripcion": null,
       "rapido": false,
       "pesado": false,
       "habilidades": [],
@@ -170678,9 +170464,7 @@
       "funcion": null,
       "elementos": ["fighting", "poison"],
       "imagen": "/pokemon/903.png",
-      "descripcion": {
-        "es": "Sin descripción."
-      },
+      "descripcion": null,
       "rapido": false,
       "pesado": false,
       "habilidades": [],
@@ -170759,9 +170543,7 @@
       "funcion": null,
       "elementos": ["fighting", "poison"],
       "imagen": "/pokemon/903.1.png",
-      "descripcion": {
-        "es": "Sin descripción."
-      },
+      "descripcion": null,
       "rapido": false,
       "pesado": false,
       "habilidades": [],

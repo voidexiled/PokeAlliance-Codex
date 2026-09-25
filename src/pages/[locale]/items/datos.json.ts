@@ -12,12 +12,13 @@
 // src/components/items/config.ts: the island reads them back with `decodeItems` from the same
 // list, so the two cannot drift apart. The sprite is already resolved by the adapter (DP2);
 // `uso` is the `Texto` of the record in the language of the file; `dropDe` is the inverse of the
-// `drops` of every Pokémon (7.5.3), in the Pokémon order of 8.0.5. `refs` holds what the panels
-// of the rows need besides the row (7.5.3): each element an item names, with its icon and the
-// names of its Stone and Fragment, and each Pokémon that drops an item, with what its panel
-// shows. Names and data are the registries'; the labels are not here, they come from the
-// dictionary (DP1). An optional field of §3.13 that a record does not write is `null`, like
-// the registry's unknown: the views show neither (8.0.5).
+// loot of every Pokémon in any zone (7.5.3), in the Pokémon order of 8.0.5. `refs` holds what
+// the panels of the rows need besides the row (7.5.3): each element an item names, with its icon
+// and the names of its Stone and Fragment, and each Pokémon that drops an item, with what its
+// panel shows. The rest of each panel (the game text, the Ball facts…) is in `/{l}/paneles.json`,
+// which every list loads once (src/lib/game/panels.ts). Names and data are the registries'; the
+// labels are not here, they come from the dictionary (DP1). An optional field of §3.13 that a
+// record does not write is `null`, like the registry's unknown: the views show neither (8.0.5).
 //
 // Budget (13.6): at most 60 KB gzip and 400 KB uncompressed; `pnpm perf:budget` measures it.
 //
@@ -43,7 +44,6 @@ import {
   type ItemsRow,
   type ItemsTab,
 } from '@/components/items/config';
-import { pokedexOrder } from '@/components/pokedex/config';
 import { getLocale, locales, type Locale } from '@/i18n/config';
 import {
   getCategorias,
@@ -53,9 +53,10 @@ import {
   getSpriteRegistry,
 } from '@/lib/content/registry';
 import type { Elemento } from '@/lib/content/registry-schema';
-import { getPokemon } from '@/lib/content/repository';
 import type { PokemonRecord } from '@/lib/content/types';
 import { DROPPER_NAMES_MAX } from '@/lib/game/dropper-limit';
+import { droppersOf } from '@/lib/game/item-facts';
+import { tipIndex } from '@/lib/game/tip-records';
 import { elementTip, pokemonTip, type TipLabels } from '@/lib/game/tips';
 import { listItemSprite, spriteOrNull } from '@/lib/sprites/resolve';
 
@@ -101,29 +102,13 @@ function pokemonRef(
 }
 
 /**
- * «Drop de» of every item (7.5.3): the Pokémon whose `drops` name it, each one once, in the
- * order of 8.0.5 in the page's language.
- */
-function droppersByItem(locale: Locale): Map<string, PokemonRecord[]> {
-  const byItem = new Map<string, PokemonRecord[]>();
-  for (const record of [...getPokemon()].sort(pokedexOrder(locale))) {
-    for (const drop of record.drops ?? []) {
-      const list = byItem.get(drop.item) ?? [];
-      if (!list.includes(record)) list.push(record);
-      byItem.set(drop.item, list);
-    }
-  }
-  return byItem;
-}
-
-/**
  * Every item of one locale, in the Market order (8.5). The pages take their first page from
  * here as well, so the prerendered rows are the first rows of this file (or of its category).
  */
 export function buildItemsData(locale: Locale): ItemsData {
   const registry = getSpriteRegistry();
   const elements = new Map(getElementos().map((element) => [element.id, element]));
-  const droppers = droppersByItem(locale);
+  const index = tipIndex(locale);
   const records = getItems();
 
   const elementIds = new Set<string>();
@@ -134,7 +119,8 @@ export function buildItemsData(locale: Locale): ItemsData {
         ? record.elemento
         : null;
     if (elemento !== null) elementIds.add(elemento);
-    const by = droppers.get(record.id) ?? [];
+    // «Drop de»: the Pokémon whose loot holds it in any zone, in the order of 8.0.5.
+    const by = droppersOf(record.id, index);
     // Past DROPPER_NAMES_MAX the row carries how many they are, not who (config.ts, `dropDe`).
     const many = by.length > DROPPER_NAMES_MAX;
     if (!many) for (const entry of by) pokemon.set(entry.id, entry);

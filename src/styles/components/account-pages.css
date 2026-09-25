@@ -1,0 +1,186 @@
+/* The Comercio pages of the account (spec 9.16.3, 9.10; Cuenta-panel.dc.html): the bodies of
+   src/components/account/pages/ on /{l}/cuenta/perfil/, /{l}/cuenta/anuncios/ and
+   /{l}/cuenta/operaciones/, in the main column of the account frame (account-panel.css draws the
+   card, the nav and the column). No board designs the bodies themselves, so they are the
+   frame's own boxes and lists and the design-system components (R16).
+
+   Per-page stylesheet (D-018, 13.6): only these pages draw these blocks, so global.css does not
+   import it; each page imports it. It repeats the layer order of global.css before its block.
+
+   - A page is a column of `Section`s 48 apart, the rhythm of the page (5.9).
+   - «Reputación»: two boxes (1 px `border-secondary`, radius 12, `bg-secondary`) side by side
+     when the column holds two of 256, one above the other otherwise. Each has its title, the
+     line «★ 4.8 · 50 operaciones · 5 compradores distintos» and the distribution, five rows from
+     5 to 1 stars: the label, a 4 tall track (the meter height) filled as far as the share of the
+     largest row (`--ac-share`), and the count.
+   - «Reseñas»: the frame's list, one row per review with its head in `ui`, the comment in
+     `body` and «Editar» under it.
+   - «Anuncios»: the state filter and «Crear anuncio» on one row that wraps, then one
+     `CardGroup` per asset type. Each card sits with its state and its actions in a box that spans
+     the tracks of the card plus one, on subgrid rows like the card itself (card.css), so the
+     cards of a row keep their shared tracks and the actions line up under them. */
+
+@reference '../theme.css';
+
+@layer properties, theme, base, components, utilities;
+
+@layer components {
+  .ac-account-page {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-48);
+    min-width: 0;
+  }
+
+  .ac-account-count {
+    color: var(--text-quaternary);
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* ------------------------------------------------------------------ «Reputación» */
+
+  .ac-account-reputation {
+    --ac-reputation-min: 16rem; /* sin token: ancho mínimo de una caja de reputación */
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, var(--ac-reputation-min)), 1fr));
+    gap: var(--space-16);
+  }
+
+  .ac-account-reputation__block {
+    gap: var(--space-12);
+  }
+
+  .ac-account-reputation__score {
+    margin: 0;
+    color: var(--text-primary);
+    @apply type-body;
+  }
+
+  .ac-account-bars {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-6);
+    margin: 0;
+  }
+
+  .ac-account-bars__row {
+    display: grid;
+    grid-template-columns: 96px minmax(0, 1fr); /* sin token: la etiqueta «5 estrellas» */
+    align-items: center;
+    gap: var(--space-12);
+    color: var(--text-secondary);
+    @apply type-ui;
+  }
+
+  .ac-account-bars__row > dd {
+    display: flex;
+    align-items: center;
+    gap: var(--space-8);
+    margin: 0;
+  }
+
+  .ac-account-bars__track {
+    flex: 1;
+    height: var(--size-meter);
+    border-radius: var(--radius-full);
+    background: var(--bg-tertiary);
+    overflow: hidden;
+  }
+
+  .ac-account-bars__fill {
+    display: block;
+    width: var(--ac-share, 0%);
+    height: 100%;
+    border-radius: var(--radius-full);
+    background: var(--amber);
+  }
+
+  .ac-account-bars__count {
+    flex: none;
+    min-width: var(--space-24);
+    text-align: end;
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* ------------------------------------------------------------------ «Reseñas» */
+
+  .ac-account-review {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--space-8);
+    padding: var(--space-16);
+    min-width: 0;
+  }
+
+  .ac-account-review__head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: var(--space-4) var(--space-8);
+    margin: 0;
+    color: var(--text-secondary);
+    @apply type-ui;
+  }
+
+  .ac-account-review__score {
+    color: var(--text-primary);
+    @apply type-ui-strong;
+  }
+
+  .ac-account-review__comment {
+    margin: 0;
+    color: var(--text-primary);
+    overflow-wrap: anywhere;
+    white-space: pre-line;
+    @apply type-body;
+  }
+
+  /* ------------------------------------------------------------------ «Anuncios» */
+
+  .ac-account-toolbar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-12) var(--space-16);
+    min-width: 0;
+  }
+
+  /* A card and its actions on the subgrid rows of the grid (card.css). The card's own footer
+     ends with «Vendedor» and «Contacto verificado», which say nothing of the account's own
+     listing: both rows leave the layout and the accessibility tree, as on the publish page
+     (listing-preview.css). */
+
+  .ac-account-listing {
+    display: grid;
+    grid-template-rows: subgrid;
+    min-width: 0;
+  }
+
+  .ac-account-listing [data-zone='footer'] > .ac-fact-list__row:nth-last-child(-n + 2) {
+    display: none;
+  }
+
+  .ac-account-listing__actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    align-self: start;
+    gap: var(--space-8);
+  }
+
+  @supports not (grid-template-rows: subgrid) {
+    .ac-account-listing {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-12);
+    }
+  }
+
+  @media (width >= 48rem) {
+    .ac-account-review {
+      padding: var(--space-16) var(--space-20);
+    }
+  }
+}

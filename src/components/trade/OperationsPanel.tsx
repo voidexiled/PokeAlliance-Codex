@@ -1,12 +1,11 @@
 import { useEffect, useMemo, useState } from 'react';
 import type { ReactNode } from 'react';
-import type { Session, SupabaseClient } from '@supabase/supabase-js';
+import type { SupabaseClient } from '@supabase/supabase-js';
 
 import type { Locale } from '@/i18n/config';
 import { fill } from '@/i18n/messages/types';
 import { formatDate } from '@/lib/format/dates';
 import { formatInteger } from '@/lib/format/numbers';
-import { getSupabaseBrowserClient } from '@/lib/supabase/client';
 import { mapSupabaseError, type SupabaseFailure } from '@/lib/supabase/errors';
 import {
   cancelTransaction,
@@ -42,10 +41,10 @@ import { ToggleGroup } from '@/components/controls/ToggleGroup';
 import { formatOperationNumber } from './ReportDialog';
 import { ReviewForm, pairCapText, type ReviewFormMessages, type ReviewValue } from './ReviewForm';
 
-// «Mis operaciones» (spec 9.10 with 9.15.4; template H): the island of
-// `/{l}/comercio/operaciones/`, which src/integrations/comercio-fases.ts injects only with
-// COMERCIO_PUBLICO (9.3). The frame is prerendered; the account's deals arrive here, from
-// Supabase, once the session is known.
+// «Mis operaciones» (spec 9.10 with 9.15.4): the body of `/{l}/cuenta/operaciones/`, a page of the
+// account frame (src/components/account/AccountPage.tsx, loaded on demand by
+// src/components/account/pages/OperationsPage.tsx) built only with COMERCIO_PUBLICO. The page
+// has the session and the account; the account's deals arrive here, from Supabase.
 //
 // - `ToggleGroup` «Compras» / «Ventas» and one `DataTable`: «Operación» (the deal number,
 //   `OP-000123`, 9.15.4), «Anuncio», «Contraparte», «Estado», «Fecha», «Contacto» and
@@ -69,8 +68,8 @@ import { ReviewForm, pairCapText, type ReviewFormMessages, type ReviewValue } fr
 // the evidence of 9.15.3 (src/lib/supabase/trade.ts sends the device id). What this island hides
 // is only what would fail; a failure shows `mapSupabaseError` (12.14.1) inside the dialog, which
 // stays open (10.4), except a second review of the deal (23505) and a review whose window closed
-// while the dialog was open, which say so. Until the session is known the region paints nothing
-// and carries `aria-busy`.
+// while the dialog was open, which say so. Until the deals arrive the region carries
+// `aria-busy`.
 
 export type OperationRole = 'buyer' | 'seller';
 
@@ -286,9 +285,6 @@ export interface OperationsMessages {
   /** The empty tables: «Aún no tienes compras.», «Aún no tienes ventas.». */
   emptyPurchases: string;
   emptySales: string;
-  /** Without a session: «Entra en tu cuenta para ver tus operaciones.» and the link. */
-  signIn: string;
-  account: string;
   /** The author of a deal whose account no longer exists (9.9): «Cuenta eliminada». */
   deletedAccount: string;
   /** «Copiar», its accessible name «Copiar {channel}», and the two notices. */
@@ -447,13 +443,15 @@ interface UiLabels {
 }
 
 export interface OperationsPanelProps {
+  /** The browser client of the page, with the account's session. */
+  client: SupabaseClient;
+  /** The account's user id: a new account (after signing in as another) reads its own deals. */
+  userId: string;
   locale: Locale;
   messages: OperationsMessages;
   review: OperationReviewMessages;
   channels: ContactLabels;
   ui: UiLabels;
-  /** `/{l}/cuenta/`, or `null` when the build has no account page. */
-  accountHref: string | null;
 }
 
 type Pending =
@@ -481,17 +479,14 @@ function ErrorNotice({
 }
 
 export function OperationsPanel({
+  client,
+  userId,
   locale,
   messages,
   review,
   channels,
   ui,
-  accountHref,
 }: OperationsPanelProps) {
-  // `undefined` while supabase-js loads (client.ts loads it on demand).
-  const [client, setClient] = useState<SupabaseClient | null | undefined>(undefined);
-  // `undefined` while the session is unknown, `null` without one.
-  const [session, setSession] = useState<Session | null | undefined>(undefined);
   const [loadError, setLoadError] = useState<unknown>(null);
   const [attempt, setAttempt] = useState(0);
   const [refresh, setRefresh] = useState(0);
@@ -507,56 +502,8 @@ export function OperationsPanel({
   const [working, setWorking] = useState(false);
   const [disputeDetail, setDisputeDetail] = useState('');
 
-  useEffect(() => {
-    if (client !== undefined) return undefined;
-    let active = true;
-    getSupabaseBrowserClient().then(
-      (loaded) => {
-        if (active) setClient(loaded);
-      },
-      (error: unknown) => {
-        if (active) setLoadError(error);
-      },
-    );
-    return () => {
-      active = false;
-    };
-  }, [client, attempt]);
-
-  useEffect(() => {
-    if (client === undefined) return undefined;
-    if (client === null) {
-      setSession(null);
-      return undefined;
-    }
-    let active = true;
-    client.auth.getSession().then(
-      ({ data, error }) => {
-        if (!active) return;
-        if (error) setLoadError(error);
-        else setSession(data.session);
-      },
-      (error: unknown) => {
-        if (active) setLoadError(error);
-      },
-    );
-    const { data } = client.auth.onAuthStateChange((_event, next) => {
-      if (active) setSession(next);
-    });
-    return () => {
-      active = false;
-      data.subscription.unsubscribe();
-    };
-  }, [client, attempt]);
-
-  const userId = session?.user.id ?? null;
-
   // The deals of the account; a reload after every action keeps the table the server's.
   useEffect(() => {
-    if (!client || userId === null) {
-      setRows(undefined);
-      return undefined;
-    }
     let active = true;
     setLoadError(null);
     listMyTransactions(client).then(
@@ -597,7 +544,7 @@ export function OperationsPanel({
 
   // The revealed contact values of each deal the other party can be reached for.
   useEffect(() => {
-    if (!client || rows === undefined || now === null) return undefined;
+    if (rows === undefined || now === null) return undefined;
     let active = true;
     const reachable = rows.filter((row) => {
       const status = effectiveStatus(row, now);
@@ -655,7 +602,7 @@ export function OperationsPanel({
     action: (supabase: SupabaseClient) => Promise<{ error: SupabaseFailure | null }>,
     done: string | null = null,
   ) {
-    if (working || !client) return;
+    if (working) return;
     setWorking(true);
     setPendingError(null);
     try {
@@ -675,7 +622,7 @@ export function OperationsPanel({
   }
 
   async function sendReview(value: ReviewValue): Promise<string | null> {
-    if (!client || pending?.kind !== 'review') return null;
+    if (pending?.kind !== 'review') return null;
     const target = pending.row;
     try {
       const { error } =
@@ -697,10 +644,7 @@ export function OperationsPanel({
     }
   }
 
-  const signedIn = Boolean(client) && Boolean(session);
-  const busy =
-    (client === undefined || session === undefined || (signedIn && rows === undefined)) &&
-    loadError === null;
+  const busy = rows === undefined && loadError === null;
 
   const columns: DataTableColumn[] = [
     { key: 'number', label: messages.columns.number, align: 'left', nowrap: true, numeric: true },
@@ -851,50 +795,33 @@ export function OperationsPanel({
           closeLabel={ui.dismiss}
         />
       ) : null}
-      {client !== undefined && session === null ? (
-        <EmptyState
-          action={
-            accountHref === null ? undefined : (
-              <Button href={accountHref}>{messages.account}</Button>
-            )
-          }
-        >
-          {messages.signIn}
-        </EmptyState>
+      <ToggleGroup
+        label={messages.roles}
+        options={[
+          { value: 'buyer', label: messages.purchases },
+          { value: 'seller', label: messages.sales },
+        ]}
+        value={role}
+        onChange={(value) => setRole(value === 'seller' ? 'seller' : 'buyer')}
+      />
+      {notice !== null ? (
+        <Notice open onClose={() => setNotice(null)} closeLabel={ui.dismiss}>
+          {notice}
+        </Notice>
       ) : null}
-      {signedIn ? (
-        <>
-          <ToggleGroup
-            label={messages.roles}
-            options={[
-              { value: 'buyer', label: messages.purchases },
-              { value: 'seller', label: messages.sales },
-            ]}
-            value={role}
-            onChange={(value) => setRole(value === 'seller' ? 'seller' : 'buyer')}
-          />
-          {notice !== null ? (
-            <Notice open onClose={() => setNotice(null)} closeLabel={ui.dismiss}>
-              {notice}
-            </Notice>
-          ) : null}
-          {rows === undefined ? null : shown.length === 0 ? (
-            <EmptyState>
-              {role === 'buyer' ? messages.emptyPurchases : messages.emptySales}
-            </EmptyState>
-          ) : (
-            <DataTable
-              caption={role === 'buyer' ? messages.captionPurchases : messages.captionSales}
-              columns={columns}
-              rows={tableRows}
-              locale={locale}
-              scroll
-              wrap
-              className="ac-trade-ops__table"
-            />
-          )}
-        </>
-      ) : null}
+      {rows === undefined ? null : shown.length === 0 ? (
+        <EmptyState>{role === 'buyer' ? messages.emptyPurchases : messages.emptySales}</EmptyState>
+      ) : (
+        <DataTable
+          caption={role === 'buyer' ? messages.captionPurchases : messages.captionSales}
+          columns={columns}
+          rows={tableRows}
+          locale={locale}
+          scroll
+          wrap
+          className="ac-trade-ops__table"
+        />
+      )}
 
       {pending !== null && pending.kind === 'confirm' ? (
         <Dialog

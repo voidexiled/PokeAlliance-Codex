@@ -62,6 +62,40 @@ export const es = {
       usedFor: 'Se usan en',
       diamonds: 'Diamonds',
       pokedolares: 'Pokédólares',
+      // The rows of a complete panel (owner rule 2026-09-25, `TipExtraLabels`): a held item's
+      // slot, a Mega Stone's Pokémon, an evolution item's Pokémon, the Market flag, how it is
+      // obtained, a Ball's catch rate, favoured elements or trait and aura, a Pokémon's number,
+      // moveset, traits, field abilities and effectiveness (as element icons), an element's Ball,
+      // an aura's Ball and an addon's Pokémon. `traitPokemon` fills `{trait}` with Fast or Heavy,
+      // game terms (13.4).
+      slot: 'Ranura',
+      megaOf: 'Mega Evolución de',
+      evolves: 'Evoluciona',
+      market: 'Mercado',
+      tradeable: 'Comercializable',
+      notTradeable: 'No vendible',
+      obtainedFrom: 'Se obtiene en',
+      battlePass: 'Battle Pass',
+      calendar: 'Calendario',
+      crafting: 'Crafteo',
+      offer: '{count} por {price}',
+      day: 'Día {n}',
+      afterDay21: 'tras el día 21',
+      catchRate: 'Tasa de captura',
+      bestAgainst: 'Más efectiva con',
+      traitPokemon: 'Pokémon {trait}',
+      aura: 'Aura',
+      comesWith: 'Viene con',
+      ball: 'Ball',
+      number: 'Nº',
+      moveset: 'Moveset',
+      traits: 'Rasgos',
+      abilities: 'Habilidades',
+      pokemon: 'Pokémon',
+      megaStone: 'Mega Stone',
+      weakTo: 'Débil a',
+      resists: 'Resiste',
+      immune: 'Inmune',
     },
     // `ViewToggle`: the name of the group and one label per view, picked by
     // the view id (declared in `src/i18n/dynamic-keys.ts`).
@@ -1167,10 +1201,20 @@ export const es = {
         seguridad: 'Seguridad',
         canales: 'Canales de contacto',
         estado: 'Estado en línea',
+        // The Comercio pages of the account, in the same frame (`/{l}/cuenta/perfil/`,
+        // `/{l}/cuenta/anuncios/`, `/{l}/cuenta/operaciones/`): «Mi perfil» is «Reputación».
+        reputacion: 'Reputación',
+        anuncios: 'Anuncios',
+        operaciones: 'Operaciones',
         guilds: 'Guilds',
         eliminar: 'Eliminar cuenta',
       },
-      card: { label: 'Tu cuenta', memberSince: 'Miembro desde {date}', myProfile: 'Mi perfil' },
+      // `publicProfile` goes to the seller page of the account (Comercio, 18 or more).
+      card: {
+        label: 'Tu cuenta',
+        memberSince: 'Miembro desde {date}',
+        publicProfile: 'Ver perfil público',
+      },
       summary: {
         requirements: 'Requisitos de Comercio',
         ready: 'Puedes publicar y contactar',
@@ -1262,42 +1306,28 @@ export const es = {
       manage: 'Gestionar',
     },
   },
-  // «Mi perfil» (`/{l}/cuenta/perfil/`, §9.16.3): prerendered, one island. `title` is the h1 and
-  // the `<title>`. Without a session the page shows `signInNotice` with `shell.account.signIn`,
-  // and an account with registration steps missing gets `shell.account.completeRegistration`.
-  // The header card: «{jugador} · {mundo}», the country name from `Intl.DisplayNames`,
-  // `memberSince` (`{date}` as «09/2026»), the linked identities as chips (`trade.channels`) and
-  // the status control (`trade.presence`, with COMERCIO_PUBLICO). Only with COMERCIO_PUBLICO:
-  // `publicProfile`, the reputation (the blocks and counts of `trade.reputation`, the bar named
-  // `distribution`) and the tabs, whose state is `?pestana=` (`tabs` by id). A listing's actions
-  // are `trade.manage` and its state line `trade.states`; a review shows its stars as
-  // `trade.seller.reviewScore`, its deal as `reviews.deal` and a deleted counterpart as
-  // `trade.review.deletedAuthor`. Without COMERCIO_PUBLICO the page has the header card and
-  // `myGuilds`.
+  // The Comercio pages of the account (§9.16.3), in the frame of `/{l}/cuenta/` (the card and the
+  // section nav, AccountPage.tsx), only with COMERCIO_PUBLICO and for an account of 18 or more:
+  // «Mi perfil» (`/{l}/cuenta/perfil/`: the reputation and the reviews), «Mis anuncios»
+  // (`listings`) and «Mis operaciones» (`trade.operations`). `title` is the page's `<title>` and its
+  // hidden h1; the visible headings are the nav entries (`account.panel.sections`). Without a
+  // session a page shows its `signInNotice` with `shell.account.signIn`.
+  //
+  // The reputation: the blocks and counts of `trade.reputation`, the bars named `distribution`.
   profile: {
     title: 'Mi perfil',
     description:
-      'Tu nombre de usuario, tu jugador y mundo de PokeAlliance y las cuentas vinculadas a tu perfil.',
+      'Tu reputación en el Comercio de PokeAlliance como vendedor y como comprador, y las reseñas que recibiste e hiciste.',
     signInNotice: 'Inicia sesión para ver tu perfil.',
-    memberSince: 'Miembro desde {date}',
-    country: 'País',
-    identities: 'Cuentas vinculadas',
-    editProfile: 'Editar perfil',
-    publicProfile: 'Ver perfil público',
-    myGuilds: 'Mis guilds',
-    reputation: 'Reputación',
     noReviews: 'Sin reseñas todavía.',
     distribution: 'Reseñas por estrellas',
-    tabsLabel: 'Secciones del perfil',
-    tabs: {
-      listings: 'Anuncios',
-      received: 'Reseñas recibidas',
-      given: 'Reseñas hechas',
-      deals: 'Operaciones',
-    },
-    // «Anuncios»: every own listing in any state, newest first, with one filter chip per state
-    // (by `estado`, with its count).
+    // «Mis anuncios»: every own listing in any state, newest first, with one filter per state
+    // (by `estado`, with its count, `?estado=`). A listing's actions are `trade.manage`; «Retirar»
+    // (`trade.box.withdrawTitle`) and «Marcar completado» cannot be undone and ask first.
     listings: {
+      title: 'Mis anuncios',
+      description: 'Tus anuncios del Comercio de PokeAlliance en cada estado, con sus acciones.',
+      signInNotice: 'Inicia sesión para ver tus anuncios.',
       filtersLabel: 'Estado del anuncio',
       filters: {
         publicado: 'Publicados',
@@ -1308,23 +1338,23 @@ export const es = {
       },
       empty: 'Aún no publicaste anuncios.',
       emptyFilter: 'Ningún anuncio en este estado.',
+      completeTitle: '¿Marcar este anuncio como completado?',
+      completeText: 'Deja de verse en Comercio y no se puede publicar de nuevo.',
     },
-    // «Reseñas recibidas» and «Reseñas hechas», 10 per page: the role of the reviewed account,
-    // the deal number (`{number}`, «OP-000123») and «Editar» while the author may still edit.
+    // «Reseñas» of «Mi perfil», 10 per page (`?resenas=hechas`, `?pagina=`): the role of the
+    // reviewed account, the deal number (`{number}`, «OP-000123») and «Editar» while the author
+    // may still edit, which opens «Mis operaciones».
     reviews: {
+      title: 'Reseñas',
+      filterLabel: 'Reseñas recibidas o hechas',
+      received: 'Recibidas',
+      given: 'Hechas',
       asSeller: 'como vendedor',
       asBuyer: 'como comprador',
       deal: 'Operación {number}',
       edit: 'Editar',
       emptyReceived: 'Aún no recibiste reseñas.',
       emptyGiven: 'Aún no hiciste reseñas.',
-    },
-    // «Operaciones»: the counts of pending and confirmed deals and the link to
-    // `/{l}/comercio/operaciones/`.
-    deals: {
-      pending: { one: '{n} operación pendiente', other: '{n} operaciones pendientes' },
-      confirmed: { one: '{n} operación confirmada', other: '{n} operaciones confirmadas' },
-      link: 'Ver mis operaciones',
     },
   },
   // Comercio (§9), phase A: sample data, no account and no contact (9.2). The list
@@ -1393,6 +1423,15 @@ export const es = {
     // real», «En el juego» and «Vendedor».
     listing: {
       equipment: 'Equipo',
+      // The groups of the equipment of a Pokémon card (16.4.5): game terms, the same in es and en.
+      gear: {
+        ball: 'Ball',
+        held: 'Held Items',
+        mega: 'Mega Stone',
+        auras: 'Auras',
+        addons: 'Addons',
+        memory: 'Ditto Memory',
+      },
       keys: {
         requirement: 'Requisito',
         tier: 'Tier',
@@ -1680,7 +1719,6 @@ export const es = {
       variant: 'Variante',
       auras: 'Auras {n}',
       none: 'Ninguno',
-      noneFeminine: 'Ninguna',
       orInGame: 'o en el juego',
       noPayments: 'El sitio no procesa pagos.',
       character: 'Personaje',
@@ -1759,15 +1797,15 @@ export const es = {
     contactSeller: 'Contactar al vendedor',
     dealStarted: 'Operación {number} iniciada.',
     goToDeals: 'Ver mis operaciones',
-    // «Operaciones» (`/{l}/comercio/operaciones/`, 9.10, noindex), for `OperationsPanel`: h1 and
-    // description, the «Compras» / «Ventas» group (`roles`) with the hidden captions of its two
-    // tables, the columns, the states by `status` (read by the enum), the empty tables, the line
-    // without a session with its link, the «Copiar» button of each revealed contact value
+    // «Mis operaciones» (`/{l}/cuenta/operaciones/`, 9.10, noindex), for `OperationsPanel`: the
+    // `<title>` and hidden h1 and the description, the «Compras» / «Ventas» group (`roles`) with the
+    // hidden captions of its two tables, the columns, the states by `status` (read by the enum), the
+    // empty tables, the line without a session (`signIn`), the «Copiar» button of each revealed contact value
     // (`{channel}` its public label), the actions valid for each state and role, the reviewer's own
     // score (`{score}`), and the three dialogs, whose safe button is `back` (`{number}` the deal
     // number, `{max}` the length of the dispute detail).
     operations: {
-      title: 'Operaciones',
+      title: 'Mis operaciones',
       description:
         'Tus compras y ventas en el Comercio de PokeAlliance: estado, contacto y reseñas.',
       roles: 'Compras o ventas',
@@ -1795,8 +1833,7 @@ export const es = {
       },
       emptyPurchases: 'Aún no tienes compras.',
       emptySales: 'Aún no tienes ventas.',
-      signIn: 'Entra en tu cuenta para ver tus operaciones.',
-      account: 'Ir a mi cuenta',
+      signIn: 'Inicia sesión para ver tus operaciones.',
       deletedAccount: 'Cuenta eliminada',
       copy: 'Copiar',
       copyLabel: 'Copiar {channel}',

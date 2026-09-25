@@ -4,6 +4,7 @@ import { useState } from 'react';
 
 import { ListingCard } from '@/components/cards/ListingCard';
 import type {
+  ListingCardEquipment,
   ListingCardLabels,
   ListingCardListing,
   ListingFactValue,
@@ -26,16 +27,19 @@ import { formatTier } from '@/lib/content/format';
 import { resolvePokemonImage } from '@/lib/content/pokemon-media';
 import { formatInteger, formatRealMoney, formatSigned } from '@/lib/format/numbers';
 import { UNKNOWN, present } from '@/lib/format/unknown';
-import { elementTip, itemTip, pokemonTip, type TipData, type TipLabels } from '@/lib/game/tips';
+import type { PanelsData } from '@/lib/game/panels';
+import {
+  elementTip,
+  gearTip,
+  itemTip,
+  pokemonTip,
+  type TipData,
+  type TipLabels,
+} from '@/lib/game/tips';
 import type { SpriteData } from '@/lib/sprites/resolve';
 import { parsePrice } from '@/lib/trade/draft';
 import { knownAmount, listingTitle } from '@/lib/trade/title';
-import {
-  equipmentOf,
-  tradesAcrossWorlds,
-  type Anuncio,
-  type UnidadPokemon,
-} from '@/lib/trade/types';
+import { tradesAcrossWorlds, type Anuncio, type UnidadPokemon } from '@/lib/trade/types';
 import { unitPriceText, type UnitPriceLabels } from '@/lib/trade/unit-price';
 
 // ListingPreview (spec 9.7.6, template G of 8.0.2): the live preview of the publish page. It is
@@ -91,6 +95,12 @@ export interface ListingPreviewData {
   sprites: ListingPreviewSprites;
   /** The Diamonds of the registry: their panel and the two lists of their `moneda` object. */
   diamonds: ListingPreviewDiamonds;
+  /**
+   * `/{l}/paneles.json` once it is here (src/lib/game/panels.ts): the rest of every panel the
+   * card opens — an item's game text and facts, an element's and an aura's Balls, a Pokémon's
+   * traits. Without it the panels draw what the two data files give.
+   */
+  panels?: PanelsData | null;
 }
 
 /** An aura or an addon as a slot draws it (16.4.5). */
@@ -148,18 +158,28 @@ export interface ListingPreviewProps {
   character?: string | null;
 }
 
-/** The 300 wide panel of a held item (7.5.3). */
-const HELD_WIDTH = 300;
-
-/** The panel of an aura or an addon: its name over its sprite (16.4.5). */
-function plainTip(name: string, sprite: SpriteData | null): TipData {
-  return {
-    key: `slot:${name}`,
-    title: name,
-    width: HELD_WIDTH,
-    head: { type: 'sprite', sprite },
-    rows: [],
-  };
+/**
+ * The panel of an aura or an addon (16.4.5, `gearTip`): its name over its sprite, and the Balls
+ * that unlock the aura or the Pokémon of the addon once the panels file is here.
+ */
+function gearTipOf(
+  kind: 'aura' | 'addon',
+  id: string,
+  entity: ListingPreviewEntity,
+  props: ListingPreviewProps,
+): TipData {
+  const panels = props.data.panels;
+  return gearTip(
+    kind,
+    {
+      id,
+      nombre: entity.nombre,
+      sprite: entity.icono,
+      balls: kind === 'aura' ? panels?.auras[id] : undefined,
+      pokemon: kind === 'addon' ? panels?.addons[id] : undefined,
+    },
+    props.labels.tooltip,
+  );
 }
 
 /** A declared amount of a card: a whole number the draft already checked, or `null`. */
@@ -172,7 +192,7 @@ interface Built {
   sprite: SpriteProps | null;
   qty?: number | null;
   shiny?: boolean;
-  helds?: EquipmentStripItem[];
+  equipment?: ListingCardEquipment;
   train?: ListingCardListing['train'];
 }
 
@@ -185,6 +205,7 @@ function itemTipOf(row: ItemsRow, data: ListingPreviewData, props: ListingPrevie
     props.locale,
     props.labels.tooltip,
     itemTip,
+    data.panels?.items[row.id],
   );
 }
 
@@ -203,7 +224,9 @@ function pokemonCard(unit: UnidadPokemon, props: ListingPreviewProps): Built {
     tier: row === undefined ? null : formatTier(row.tier),
     elements: (row?.elementos ?? []).flatMap((id) => {
       const ref = data.elements[id];
-      return ref === undefined ? [] : [elementChip(id, ref, locale, labels.tooltip, elementTip)];
+      return ref === undefined
+        ? []
+        : [elementChip(id, ref, locale, labels.tooltip, elementTip, data.panels?.elementos[id])];
     }),
     boost: unit.boost === null ? null : formatSigned(unit.boost, locale),
     nickname: unit.nickname,
@@ -213,10 +236,17 @@ function pokemonCard(unit: UnidadPokemon, props: ListingPreviewProps): Built {
       npc === null ? null : npc.tipo === 'unsellable' ? labels.unsellable : units(npc.cantidad),
   };
 
-  // 16.4.5: ball, auras, addons, held X, held Y and Mega Stone as slots, in the game's order.
-  const helds = equipmentOf(unit).flatMap(({ kind, id }): EquipmentStripItem[] => {
-    if (kind === 'aura' || kind === 'addon') {
-      const found = (kind === 'aura' ? data.auras : (data.addons ?? {}))[id];
+  // 16.4.5: the equipment by kind, as the cards of the list draw it; an id the data of the
+  // page does not hold is left out.
+  const item = (id: string | null): EquipmentStripItem | null => {
+    const record = id === null ? undefined : data.items.get(id);
+    return id === null || record === undefined
+      ? null
+      : { id, name: record.nombre, sprite: record.sprite, tip: itemTipOf(record, data, props) };
+  };
+  const kind = (key: 'aura' | 'addon', ids: readonly string[]): EquipmentStripItem[] =>
+    ids.flatMap((id) => {
+      const found = (key === 'aura' ? data.auras : (data.addons ?? {}))[id];
       if (found === undefined) return [];
       const entity = typeof found === 'string' ? { nombre: found, icono: null } : found;
       return [
@@ -224,23 +254,18 @@ function pokemonCard(unit: UnidadPokemon, props: ListingPreviewProps): Built {
           id,
           name: entity.nombre,
           sprite: entity.icono,
-          tip: plainTip(entity.nombre, entity.icono),
+          tip: gearTipOf(key, id, entity, props),
         },
       ];
-    }
-    const record = data.items.get(id);
-    if (record === undefined) return [];
-    const tier = (record as { held?: { tier?: unknown } | null }).held?.tier;
-    return [
-      {
-        id,
-        name: record.nombre,
-        sprite: record.sprite,
-        tip: itemTipOf(record, data, props),
-        tier: typeof tier === 'number' ? tier : null,
-      },
-    ];
-  });
+    });
+  const equipment: ListingCardEquipment = {
+    ball: item(unit.ball),
+    auras: kind('aura', unit.auras),
+    addons: kind('addon', unit.addons),
+    heldX: item(unit.heldX),
+    heldY: item(unit.heldY),
+    mega: item(unit.mega),
+  };
 
   // The card shows the first declared skill, in the order of `Habilidad` (§9.5.8), as
   // «Attack 16 (53%)»: the one whose level and progress are both known, since the meter cannot
@@ -258,7 +283,7 @@ function pokemonCard(unit: UnidadPokemon, props: ListingPreviewProps): Built {
     facts,
     sprite: art === null ? null : { src: art, smooth: true },
     shiny: row?.variante === 'shiny',
-    helds,
+    equipment,
     train,
   };
 }
@@ -281,7 +306,16 @@ function itemsCard(
   } else if (droppers.length === 1) {
     const id = droppers[0];
     const ref = data.itemRefs.pokemon[id];
-    if (ref !== undefined) droppedBy = dropperEntity(id, ref, locale, labels.tooltip, pokemonTip);
+    if (ref !== undefined)
+      droppedBy = dropperEntity(
+        id,
+        ref,
+        locale,
+        labels.tooltip,
+        pokemonTip,
+        data.panels?.pokemon[id],
+        data.panels?.tipos,
+      );
   } else if (droppers.length > 1) {
     droppedBy = droppers.flatMap((id) => data.itemRefs.pokemon[id]?.nombre ?? []);
   }
@@ -304,7 +338,14 @@ function itemsCard(
       element:
         element === null || elementRef === undefined
           ? null
-          : elementChip(element, elementRef, locale, labels.tooltip, elementTip),
+          : elementChip(
+              element,
+              elementRef,
+              locale,
+              labels.tooltip,
+              elementTip,
+              data.panels?.elementos[element],
+            ),
       use: record?.uso ?? null,
       droppedBy,
     },
@@ -375,7 +416,7 @@ export function previewListing(
     anyWorld: tradesAcrossWorlds(draft.tipo) ? (labels.anyWorld ?? null) : null,
     posted,
     facts: built.facts,
-    helds: built.helds,
+    equipment: built.equipment,
     train: built.train,
     fiat:
       real === null || fiatValue === null ? null : formatRealMoney(fiatValue, real.moneda, locale),

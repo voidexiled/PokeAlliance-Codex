@@ -1,11 +1,13 @@
 ---
 // Cuenta (spec 9.9 with the owner decisions of 9.15 and 9.16, 10.4; Cuenta-panel.dc.html):
 // `/{l}/cuenta/`, the access and registration flow of 9.15.1 and, for a complete account, the
-// structured page — the header card, the section nav (Cuenta: Resumen, Perfil, Conexiones,
-// Seguridad; Comercio: Canales de contacto, Estado en línea; Guild: Guilds; «Eliminar cuenta»)
-// and one section at a time. It is what opens account mode for Guild and Comercio. `noindex`
-// (9.3, 13.5); the crumbs are «Inicio › Cuenta» and the h1 is for assistive tech only: the
-// island's cards carry the visible headings.
+// structured page — the header card, the section nav (Cuenta: Resumen, Perfil, Personajes,
+// Conexiones, Seguridad; Comercio: Reputación, Anuncios, Operaciones, Canales de contacto, Estado
+// en línea; Guild: Guilds; «Eliminar cuenta») and one section at a time. «Reputación», «Anuncios»
+// and «Operaciones» are pages of their own in the same frame (`/{l}/cuenta/perfil/`,
+// `/{l}/cuenta/anuncios/`, `/{l}/cuenta/operaciones/`, AccountPage.tsx). It is what opens account
+// mode for Guild and Comercio. `noindex` (9.3, 13.5); the crumbs are «Inicio › Cuenta» and the h1
+// is for assistive tech only: the island's cards carry the visible headings.
 //
 // Render (9.3): the prerendered frame and the island, which reads the session once hydrated. The
 // route exists only when getSupabasePublicConfig() is not null: without Supabase variables
@@ -22,7 +24,8 @@
 //
 // Data: the island gets the worlds of content/mundos.json in the language of the page (the
 // «Mundo» Selects and the world of each guild), the `account` namespace, the leaves of `trade`
-// and `ui` it reads (13.2).
+// and `ui` it reads (13.2). The texts of «Personajes», «Canales de contacto» and «Seguridad» go
+// beside it as JSON (panel/texts.ts): only those sections read them, when they open.
 import { getAlternatePath, getLocale, locales, type Locale } from '@/i18n/config';
 import type { Messages } from '@/i18n/messages/en';
 import { en } from '@/i18n/messages/en';
@@ -33,7 +36,11 @@ import { telefonoObligatorio } from '@/lib/trade/limits';
 import { comercioPublico } from '@/lib/trade/registry';
 
 import { AccountPanel, type AccountConfig } from '@/components/account/AccountPanel';
-import { CHARACTER_TEXTS_ID, panelWithoutCharacters } from '@/components/account/panel/texts';
+import {
+  SECTION_TEXTS_ID,
+  panelWithoutCharacters,
+  sectionTexts,
+} from '@/components/account/panel/texts';
 import PageLayout from '@/layouts/PageLayout.astro';
 
 import '@/styles/components/account.css';
@@ -78,11 +85,13 @@ const alternates = Object.fromEntries(
 
 const { account, trade, ui } = dictionaries[locale];
 // The island never reads `account.description` (the page's meta): it stays out of the props (13.6).
-// «Personajes» goes beside the island as JSON: only its section and «Perfil» read it, when they
-// open (panel/texts.ts), so the props stay within 13.6.
-const characterTexts = account.panel.characters;
+// «Personajes», «Canales de contacto» and «Seguridad» go beside the island as JSON: only their
+// sections (and «Perfil», for the main character) read them, when they open (panel/texts.ts), so
+// the props stay within 13.6.
+const { channels: _channels, ...accountTexts } = account;
+void _channels;
 const panelTexts = panelWithoutCharacters(account.panel);
-const characterJson = JSON.stringify(characterTexts).replace(/</g, '\\u003c');
+const sectionJson = JSON.stringify(sectionTexts(account)).replace(/</g, '\\u003c');
 const worlds = getMundos(locale).map((world) => ({ id: world.id, nombre: world.nombre }));
 const captchaSiteKey = text(variables.turnstile);
 const config: AccountConfig = {
@@ -120,10 +129,10 @@ const tradeTexts = {
     client:load
     locale={locale}
     worlds={worlds}
-    messages={{ ...account, description: '', panel: panelTexts }}
+    messages={{ ...accountTexts, description: '', panel: panelTexts }}
     trade={tradeTexts}
     ui={{ close: ui.close, dismiss: ui.dismiss }}
     config={config}
   />
-  <script is:inline type="application/json" id={CHARACTER_TEXTS_ID} set:html={characterJson} />
+  <script is:inline type="application/json" id={SECTION_TEXTS_ID} set:html={sectionJson} />
 </PageLayout>

@@ -756,11 +756,17 @@ export function toListingRef(
   if (kind === null || typeof id !== 'string') return null;
   const record = assetRecord(asset);
   const nombre = text(record.nombre);
+  // Since 16.2.5 an item listing carries only the registry id (`ItemAnunciado`); older rows also
+  // carry the declared name. Either one names the item.
+  const itemId = text(record.item);
   return {
     id,
     tipo: kind,
     pokemon: kind === 'pokemon' ? text(record.pokemon) : null,
-    item: kind === 'items' && nombre !== null ? { item: text(record.item), nombre } : null,
+    item:
+      kind === 'items' && (itemId !== null || nombre !== null)
+        ? { item: itemId, nombre: nombre ?? '' }
+        : null,
     cantidad: kind === 'diamonds' || kind === 'pokedolares' ? numberOf(record.cantidad) : null,
     detail,
   };

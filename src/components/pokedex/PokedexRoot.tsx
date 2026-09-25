@@ -38,6 +38,8 @@ import { dexLayout } from '@/lib/cards/layout';
 import type { DexLayout } from '@/lib/cards/layout';
 import { resolvePokemonImage } from '@/lib/content/pokemon-media';
 import { formatInteger } from '@/lib/format/numbers';
+import { usePanels } from '@/lib/game/panels';
+import { withTipLabels, type ListUi } from '@/lib/game/tip-labels';
 import { pageSizeOf, perPageSpec } from '@/lib/lists/state';
 import type { EntityView, ListPage, ListState } from '@/lib/lists/state';
 
@@ -100,9 +102,10 @@ export interface PokedexRootProps {
   title: string;
   /**
    * `messages.ui` of the page's locale: the components' texts, the card texts in `cards`. The
-   * list uses no money text, so the page leaves `money` out of the props (§13.6, 20 KB).
+   * list uses no money text, so the page leaves `money` out of the props (§13.6, 20 KB), and the
+   * labels of the rows `/{l}/paneles.json` completes travel with that file (`leanTipLabels`).
    */
-  ui: Omit<Messages['ui'], 'money'>;
+  ui: ListUi<Messages['ui']>;
   /**
    * `messages.pokedex` of the page's locale (8.2): the label and the first option of each
    * filter, the count by Variante, the empty state, and the captions and fixed column headers
@@ -241,21 +244,30 @@ export function PokedexRoot({
   // of an element, for the filter and for the Pokémon panel, is always in `ids`.
   const later = deferred;
   const names = useMemo(() => new Map(ids.elements), [ids]);
+  // The rest of every panel (`/{l}/paneles.json`) and the labels of its rows, once here: then
+  // every element and item panel is built again with them.
+  const panels = usePanels(locale);
+  const tipUi = useMemo(
+    () => (panels === null ? ui : { ...ui, tooltip: withTipLabels(ui.tooltip, panels.etiquetas) }),
+    [ui, panels],
+  );
   const [byId, byItem] = useMemo(() => {
     const own = new Map(elements.map((element) => [element.id, element]));
     const dropped = new Map<string, DexCardDrop>(
       Object.entries(drops).map(([id, drop]) => [id, dropOfProp(drop)]),
     );
     if (refs !== null && later !== undefined) {
+      const labels = tipUi.tooltip;
       for (const [id, ref] of Object.entries(refs.elementos))
-        if (!own.has(id)) own.set(id, later.elementEntry(id, ref, locale, ui.tooltip));
+        if (!own.has(id) || panels !== null)
+          own.set(id, later.elementEntry(id, ref, locale, labels, panels?.elementos[id]));
       // The first page's drops come without a panel (index.astro): they get it here too.
       for (const [id, ref] of Object.entries(refs.items))
-        if (!dropped.get(id)?.tip)
-          dropped.set(id, later.itemEntry(id, ref, refs.rows, locale, ui.tooltip));
+        if (!dropped.get(id)?.tip || panels !== null)
+          dropped.set(id, later.itemEntry(id, ref, refs.rows, locale, labels, panels?.items[id]));
     }
     return [own, dropped] as const;
-  }, [elements, drops, refs, later, locale, ui.tooltip]);
+  }, [elements, drops, refs, later, locale, tipUi, panels]);
   const elementsOf = (row: PokedexRow) => rowElements(row, byId);
 
   // Whether the state needs the deferred part (see above), and whether it is here.
@@ -332,7 +344,8 @@ export function PokedexRoot({
   const lazy = (index: number) => (index >= EAGER_ART ? 'lazy' : undefined);
   const viewContext: ViewsModule.PokedexViewContext = {
     locale,
-    ui,
+    ui: tipUi,
+    panels,
     pokedex,
     title,
     names,

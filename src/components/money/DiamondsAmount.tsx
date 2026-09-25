@@ -40,7 +40,7 @@ import moneySprites from 'virtual:ac-money-sprites';
 // returns `null` while it has none: the amount then stays plain text. DP3: no `open`,
 // `defaultOpen` or `onOpenChange`; the controller of 7.5.4 owns the panel.
 
-/** `ui/diamond` through the adapter (DP2): seven frames of 32 × 32, shown still. */
+/** `ui/diamond` through the adapter (DP2): the frame of 32 × 32 (frame 0 of a sheet), still. */
 const STILL = spriteOrNull(moneySprites, 'ui/diamond');
 
 /** The Diamonds panel a price opens, with the copy it needs (DP1). */
@@ -68,7 +68,7 @@ export interface DiamondsAmountProps {
   word?: boolean;
   /** The figure in 700. */
   strong?: boolean;
-  /** The Diamond spins (the registry's 7 × 110 ms): only in Comercio (7.8). */
+  /** The Diamond spins when its registry entry is an animation: only in Comercio (7.8). */
   animated?: boolean;
   /** The price link that opens the Diamonds panel (DS `link`). */
   link?: DiamondsLink;
@@ -87,9 +87,9 @@ function classes(...values: (string | false | undefined)[]): string {
 
 /** Frame 0 of the Diamond at 32, still or spinning. */
 function diamond(animated: boolean): ReactNode {
-  if (animated) {
-    // Fails the build when the registry entry cannot animate, as the adapter does for any
-    // other sheet (7.4.1).
+  // The Diamond turns only while its registry entry is an animation: the game's current gem
+  // is one still frame. A broken animation still fails the build (7.4.1).
+  if (animated && STILL?.mode === 'animacion') {
     const spinning = spriteOrNull(moneySprites, 'ui/diamond', { animado: true });
     if (spinning) return <Sprite {...spinning} alt="" />;
   }

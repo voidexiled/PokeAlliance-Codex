@@ -213,15 +213,29 @@ export function getMegaStones(pokemon?: string): Item[] {
   return [...own, ...rest];
 }
 
+/** The game's name of the premium currency in a shop price (`obtencion.tiendas[].moneda`). */
+const DIAMONDS = 'Diamonds';
+
 /**
  * The `moneda` object of content/items/diamantes.json (§3.13): where players buy Diamonds and what
  * they spend them on, one list per locale. Its lists are the rows of the Diamonds panel
  * (`diamondsTip`, §7.5.3) and the facts «Se compran en» and «Se usan en» of a Diamonds listing
  * (§9.5.8). `null` when the file has no such object; a list is `null` while the owner has not
- * filled it, and then it makes no row (R2).
+ * filled it, and then it makes no row (R2) — except «Se usan en», which the registries already
+ * answer while the owner has not written it: the game shops whose `obtencion.tiendas` price items
+ * in Diamonds (Diamond Shop), game names that read the same in both locales (13.4).
  */
 export function getMonedaDiamantes(): Moneda | null {
-  return monedaDiamantes;
+  if (monedaDiamantes === null || monedaDiamantes.seUsanEn !== null) return monedaDiamantes;
+  const shops = new Set<string>();
+  for (const item of getItems()) {
+    for (const shop of item.obtencion?.tiendas ?? []) {
+      if (shop.moneda === DIAMONDS) shops.add(shop.tienda);
+    }
+  }
+  if (shops.size === 0) return monedaDiamantes;
+  const list = [...shops];
+  return { ...monedaDiamantes, seUsanEn: { es: list, en: list } };
 }
 
 /** Pokémon outfits with their addons; drafts follow OCULTAR_BORRADORES. */

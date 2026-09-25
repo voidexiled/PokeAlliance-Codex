@@ -49,7 +49,6 @@ import { en } from '@/i18n/messages/en';
 import { es } from '@/i18n/messages/es';
 import { fill, type MessageLeaf } from '@/i18n/messages/types';
 import {
-  getCategorias,
   getElementos,
   getItem,
   getItemIncluidoBorrador,
@@ -61,6 +60,7 @@ import type { EnLinea, Item, Ref, Sistema } from '@/lib/content/registry-schema'
 import { getPokemon, getQuests, getSystemItemsOf } from '@/lib/content/repository';
 import type { PokemonRecord } from '@/lib/content/types';
 import { formatDiamonds, formatPokedolaresLabel } from '@/lib/format/numbers';
+import { elementTipRecord, itemTipRecord, pokemonTipRecord } from '@/lib/game/tip-records';
 import { elementTip, itemTip, pokemonTip, systemTip, type TipData } from '@/lib/game/tips';
 import { spriteOrNull, type SpriteData } from '@/lib/sprites/resolve';
 
@@ -113,9 +113,6 @@ interface SystemPageCopy {
 const DESCRIPTION_MIN = 50;
 const DESCRIPTION_MAX = 160;
 
-/** 8.0.5: the `variante` of a shiny record. */
-const SHINY = 'shiny';
-
 const dictionaries: Record<Locale, Messages> = { es, en };
 
 const locale = getLocale(Astro.params.locale);
@@ -137,23 +134,9 @@ const sprite = (key: string | null): SpriteData | null => spriteOrNull(registry,
 // ------------------------------------------------------------------------------ entities
 // What a block names, resolved once per page and only when a block names it.
 
-/** 8.0.5: `numero` ascending (unknown last), `normal` before `shiny`, then `nombre`. */
-const collator = new Intl.Collator(locale);
-function pokemonOrder(a: PokemonRecord, b: PokemonRecord): number {
-  if (a.numero !== b.numero) {
-    if (a.numero === null) return 1;
-    if (b.numero === null) return -1;
-    return a.numero - b.numero;
-  }
-  const rank = (entry: PokemonRecord) =>
-    entry.variante === 'normal' ? 0 : entry.variante === SHINY ? 1 : 2;
-  return rank(a) - rank(b) || collator.compare(a.nombre, b.nombre);
-}
-
 const allPokemon = getPokemon();
 const pokemonById = new Map(allPokemon.map((entry) => [entry.id, entry]));
 const elements = new Map(getElementos().map((element) => [element.id, element]));
-const itemName = (id: string | null) => (id === null ? null : (getItem(id)?.nombre ?? null));
 
 /** An element as `ElementChip` takes it, with its panel (7.5.3); `null` when unknown. */
 function elementEntry(id: string): ElementChipEntry | null {
@@ -164,67 +147,22 @@ function elementEntry(id: string): ElementChipEntry | null {
     id,
     name: element.nombre[locale],
     icon,
-    tip: elementTip(
-      {
-        id,
-        nombre: element.nombre,
-        icono: icon,
-        stone: itemName(element.stone),
-        fragment: itemName(element.fragment),
-      },
-      locale,
-      labels,
-    ),
+    // Every row of its panel (7.5.3): Stone, Fragment and the Balls that favour it.
+    tip: elementTip({ ...elementTipRecord(element, locale), icono: icon }, locale, labels),
   };
 }
 
-/** The Pokémon panel of 7.5.3. */
+/** The Pokémon panel of 7.5.3, every row its record has. */
 function pokemonTipOf(entry: PokemonRecord): TipData {
-  const names = entry.elementos.flatMap((id) => {
-    const element = elements.get(id);
-    return element === undefined ? [] : [{ nombre: element.nombre }];
-  });
-  return pokemonTip({ ...entry, elementos: names }, locale, labels);
+  return pokemonTip(pokemonTipRecord(entry), locale, labels);
 }
 
-// «Drop de» of an item (7.5.3): the Pokémon whose `drops` name it, in the order of 8.0.5.
-let droppers: Map<string, string[]> | null = null;
-function droppedBy(id: string): string[] {
-  if (droppers === null) {
-    const byItem = new Map<string, PokemonRecord[]>();
-    for (const entry of allPokemon) {
-      for (const drop of entry.drops ?? []) {
-        const list = byItem.get(drop.item) ?? [];
-        if (!list.includes(entry)) list.push(entry);
-        byItem.set(drop.item, list);
-      }
-    }
-    droppers = new Map(
-      [...byItem].map(([item, list]) => [item, list.sort(pokemonOrder).map((p) => p.nombre)]),
-    );
-  }
-  return droppers.get(id) ?? [];
-}
-
-const categoryNames = new Map(getCategorias().map((category) => [category.id, category.nombre]));
-
-/** The item panel of 7.5.3. */
+/**
+ * The item panel of 7.5.3: its game text and every fact the registries give of it, «Drop de»
+ * in every zone included (src/lib/game/tip-records.ts).
+ */
 function itemTipOf(item: Item, itemSprite: SpriteData | null): TipData {
-  return itemTip(
-    {
-      id: item.id,
-      nombre: item.nombre,
-      categoria: item.categoria,
-      sprite: itemSprite,
-      precioNpc: item.precioNpc,
-      nombreCategoria: categoryNames.get(item.categoria) ?? null,
-      dropDe: droppedBy(item.id),
-      nombreElemento: item.elemento ? (elements.get(item.elemento)?.nombre ?? null) : null,
-      uso: item.uso ?? null,
-    },
-    locale,
-    labels,
-  );
+  return itemTip(itemTipRecord(item, locale, { sprite: itemSprite }), locale, labels);
 }
 
 /** The system panel of 7.5.3: the record's own rows. */

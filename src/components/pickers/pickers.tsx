@@ -2,6 +2,7 @@ import { useCallback, useMemo } from 'react';
 
 import { EntityPicker } from '@/components/pickers/EntityPicker';
 import type { EntityPickerProps, PickerFilter } from '@/components/pickers/EntityPicker';
+import { hasTierTip } from '@/components/filters/TierTip';
 import { elementChips, heldTierChips, variantChips } from '@/components/pickers/filters';
 import type { NamedElement } from '@/components/pickers/filters';
 import { InlineSlotPicker } from '@/components/pickers/InlineSlotPicker';
@@ -38,7 +39,7 @@ export interface PokemonFilterLabels {
   movesetRule?: string;
   /** «De mejor a peor.» / «Best to worst.» */
   tierRule?: string;
-  /** «Max brokes»: the row of the tier tooltip, «Max brokes: —» until the data exists. */
+  /** «Max brokes»: the row of the tier tooltip; a tier without the figure has no tooltip. */
   maxBrokes?: string;
   /** «Todas» / «All»: the leading slot of the Variante menu. */
   all?: string;
@@ -53,8 +54,8 @@ export interface PokemonPickerProps extends BaseProps {
 /**
  * Filters of `Lienzo:Selector-Pokemon` (Direction C): Tipo (AND, at most 2), Tipo de moveset
  * (OR; hidden without data), Tier (content/tiers.json best first: a hidden tier such as
- * ULTIMATE is not offered, each with its «Max brokes» tooltip) and Variante. The grid is of 72:
- * the art at 64.
+ * ULTIMATE is not offered; a tier has its «Max brokes» tooltip only once the figure is known)
+ * and Variante. The grid is of 72: the art at 64.
  */
 export function PokemonPicker({ elements, filterLabels, ...props }: PokemonPickerProps) {
   const filters = useCallback(
@@ -64,7 +65,8 @@ export function PokemonPicker({ elements, filterLabels, ...props }: PokemonPicke
       const tips: Record<string, string> = {};
       if (filterLabels.maxBrokes) {
         for (const tier of tiers) {
-          tips[tier.id] = `${filterLabels.maxBrokes}: ${tier.maxBrokes ?? '—'}`;
+          if (hasTierTip(tier.maxBrokes))
+            tips[tier.id] = `${filterLabels.maxBrokes}: ${tier.maxBrokes}`;
         }
       }
       return [

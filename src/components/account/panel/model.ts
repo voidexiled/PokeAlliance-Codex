@@ -1,7 +1,8 @@
-// The pure pieces of the account page (`/{l}/cuenta/`, Cuenta-panel.dc.html): which sections a
-// build and an account have, the section of an address fragment, the rows of «Conexiones», the
-// Comercio requirements of «Resumen» and the short values of the phone index. No React, no
-// supabase-js: tests/account/account-panel.test.ts reads them as they are.
+// The pure pieces of the account pages (`/{l}/cuenta/` and its Comercio pages, Cuenta-panel.dc.html):
+// which sections and pages a build and an account have, the section of an address fragment, the
+// link of each nav entry, the rows of «Conexiones», the Comercio requirements of «Resumen» and the
+// short values of the phone index. No React, no supabase-js: tests/account/account-panel.test.ts
+// reads them as they are.
 import { isAnchorProvider, type IdentityLike } from '@/lib/account/registration';
 import { DISCORD_EDAD_MIN_DIAS } from '@/lib/trade/limits';
 
@@ -19,19 +20,43 @@ export const PANEL_SECTIONS = [
 ] as const;
 export type PanelSection = (typeof PANEL_SECTIONS)[number];
 
+/**
+ * The Comercio pages of the account, each a route of its own under `/{l}/cuenta/` in the same
+ * frame (the card and the section nav): «Reputación» is «Mi perfil» (`/{l}/cuenta/perfil/`, the
+ * reputation and the reviews), «Anuncios» the account's listings and «Operaciones» its deals.
+ */
+export const PANEL_PAGES = ['reputacion', 'anuncios', 'operaciones'] as const;
+export type PanelPage = (typeof PANEL_PAGES)[number];
+
+/** An entry of the nav: a section of `/{l}/cuenta/` or a page of its own. */
+export type PanelEntry = PanelSection | PanelPage;
+
+/** The folder of each page under `/{l}/cuenta/`. */
+export const PAGE_SLUGS: Readonly<Record<PanelPage, string>> = {
+  reputacion: 'perfil',
+  anuncios: 'anuncios',
+  operaciones: 'operaciones',
+};
+
 export type PanelGroup = 'cuenta' | 'comercio' | 'guild';
 
 /** The groups of the nav; «Eliminar cuenta» stands apart, after them. */
-export const PANEL_GROUPS: readonly { group: PanelGroup; sections: readonly PanelSection[] }[] = [
+export const PANEL_GROUPS: readonly { group: PanelGroup; sections: readonly PanelEntry[] }[] = [
   { group: 'cuenta', sections: ['resumen', 'perfil', 'personajes', 'conexiones', 'seguridad'] },
-  { group: 'comercio', sections: ['canales', 'estado'] },
+  {
+    group: 'comercio',
+    sections: ['reputacion', 'anuncios', 'operaciones', 'canales', 'estado'],
+  },
   { group: 'guild', sections: ['guilds'] },
 ];
 
 export interface PanelFeatures {
   /** COMERCIO_PUBLICO: the contact channels. */
   comercio: boolean;
-  /** COMERCIO_PUBLICO and an account of 18 or more: the online status (9.15.6). */
+  /**
+   * COMERCIO_PUBLICO and an account of 18 or more: the online status (9.15.6) and the Comercio
+   * pages (reputation, listings, deals).
+   */
   presence: boolean;
 }
 
@@ -44,14 +69,42 @@ export function availableSections(features: PanelFeatures): PanelSection[] {
   });
 }
 
-/** The groups with at least one available section. */
+/** The pages this build and this account have: Comercio's, for an account of 18 or more. */
+export function availablePages(features: PanelFeatures): PanelPage[] {
+  return features.presence ? [...PANEL_PAGES] : [];
+}
+
+/** Every nav entry this build and this account have: the sections and the pages. */
+export function availableEntries(features: PanelFeatures): PanelEntry[] {
+  return [...availableSections(features), ...availablePages(features)];
+}
+
+/** The groups with at least one available entry, each in nav order. */
 export function visibleGroups(
-  available: readonly PanelSection[],
-): { group: PanelGroup; sections: PanelSection[] }[] {
+  available: readonly PanelEntry[],
+): { group: PanelGroup; sections: PanelEntry[] }[] {
   return PANEL_GROUPS.map(({ group, sections }) => ({
     group,
     sections: sections.filter((section) => available.includes(section)),
   })).filter(({ sections }) => sections.length > 0);
+}
+
+export function isPanelPage(entry: PanelEntry): entry is PanelPage {
+  return (PANEL_PAGES as readonly string[]).includes(entry);
+}
+
+/** `/{l}/cuenta/perfil/`: the route of a page. */
+export function pageHref(page: PanelPage, locale: string): string {
+  return `/${locale}/cuenta/${PAGE_SLUGS[page]}/`;
+}
+
+/**
+ * The link of a nav entry: a page is its route; a section is its fragment on `/{l}/cuenta/`
+ * itself (`onRoot`) and `/{l}/cuenta/#perfil` from a page.
+ */
+export function entryHref(entry: PanelEntry, locale: string, onRoot: boolean): string {
+  if (isPanelPage(entry)) return pageHref(entry, locale);
+  return onRoot ? `#${entry}` : `/${locale}/cuenta/#${entry}`;
 }
 
 /** The section of `#perfil`…; null for no fragment or one that is no available section. */

@@ -44,7 +44,7 @@ import type { SellerReputation } from '@/lib/trade/types';
 // asks for another page. The reviews are not entities with three views (7.7.4), so this block
 // draws its own articles and pagination instead of `EntityList`.
 //
-// Data (9.8 «Fase A»): content/comercio/vendedores.json, read only with COMERCIO_DEMO=1 (9.2).
+// Data (9.8 «Fase A»): tests/fixtures/comercio/vendedores.json, read only with COMERCIO_DEMO=1 (9.2).
 // The page computes the reputation from the reviews (`sellerReputation`, 9.15.4) and hands over
 // each traded listing once, in `operations`, with its title (9.4) and the panel of its asset
 // (7.5.3), built in the build. Every visible text arrives by props (DP1).
@@ -134,7 +134,7 @@ export function SellerCard({ name, href, presence, reputation, locale, labels }:
 
 // --------------------------------------------------------------------- SellerReviews
 
-/** One review of `content/comercio/vendedores.json` (9.4), as the profile shows it. */
+/** One review of `tests/fixtures/comercio/vendedores.json` (9.4), as the profile shows it. */
 export interface SellerReview {
   /** 1 to 5 (9.15.4). */
   puntuacion: number;

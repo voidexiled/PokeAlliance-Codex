@@ -108,8 +108,9 @@ const RUTAS_PRESUPUESTO = [
   [/^herramientas\/guild\/$/, 'guild'],
   [/^herramientas\/$/, 'contenido'],
   [/^comercio\/(?:.*\/)?$/, 'comercio'],
-  // /{l}/cuenta/, «Mi perfil» and the new password of a recovery link (§9.9, §9.16.3)
-  [/^cuenta\/(?:perfil\/|restablecer\/)?$/, 'comercio'],
+  // /{l}/cuenta/, its Comercio pages («Mi perfil», «Mis anuncios», «Mis operaciones») and the
+  // new password of a recovery link (§9.9, §9.16.3)
+  [/^cuenta\/(?:perfil\/|anuncios\/|operaciones\/|restablecer\/)?$/, 'comercio'],
 ];
 
 /**
@@ -128,6 +129,9 @@ const DATOS_POR_RUTA = [
   ['items/', '{l}/items/datos.json', 'datos'],
   ['buscar/', '{l}/buscar/indice.json', 'indice'],
   ['comercio/', '{l}/comercio/datos.json', 'datos'],
+  // The rest of every game tooltip of the lists (src/lib/game/panels.ts), loaded once per page.
+  ['pokedex/', '{l}/paneles.json', 'datos'],
+  ['items/', '{l}/paneles.json', 'datos'],
 ];
 
 /**

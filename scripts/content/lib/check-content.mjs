@@ -533,6 +533,8 @@ export function checkContent(root) {
   const megaChecks = [];
   /** @type {Array<{ file: string, at: string, kind: 'item' | 'actividad', id: string }>} references of `obtencion`, checked once every registry is read. */
   const obtencionChecks = [];
+  /** @type {Array<{ file: string, at: string, id: string }>} `ball.aura` of every Poké Ball with one, checked once content/auras.json is read. */
+  const ballAuraChecks = [];
   /** @type {Map<string, { file: string, at: string }>} element id -> the first item that names it. */
   const itemElements = new Map();
   // The `moneda` object of content/items/diamantes.json (spec 3.13): its two lists name the same
@@ -608,6 +610,17 @@ export function checkContent(root) {
       // Mega Stone (§16.2.3): its `pokemon` ids are checked once content/pokemon.json is read.
       if (isObject(item.mega) && Array.isArray(item.mega.pokemon))
         megaChecks.push({ file, at: `${at}.mega.pokemon`, pokemon: item.mega.pokemon });
+      // Poké Ball: the aura it unlocks is checked once content/auras.json is read; an element
+      // named twice is a mistake the schema cannot see.
+      if (isObject(item.ball)) {
+        if (text(item.ball.aura))
+          ballAuraChecks.push({ file, at: `${at}.ball.aura`, id: item.ball.aura });
+        if (
+          Array.isArray(item.ball.elementos) &&
+          new Set(item.ball.elementos).size !== item.ball.elementos.length
+        )
+          error(file, 'un elemento repetido', `${at}.ball.elementos`);
+      }
       // `obtencion`: the materials of its recipes and the activities of its tasks resolve.
       if (isObject(item.obtencion)) {
         const { recetas, tareas } = item.obtencion;
@@ -1449,6 +1462,9 @@ export function checkContent(root) {
       }
       requireSprite(aurasFile, aura.icono, `${at}.icono`);
     });
+    for (const check of ballAuraChecks)
+      if (!seen.has(check.id))
+        error(check.file, `"${check.id}" no existe en content/auras.json`, check.at);
     summary.push({
       file: rel(aurasFile),
       registros: plural(auras.length, 'aura', 'auras'),
@@ -1665,7 +1681,7 @@ export function checkContent(root) {
       });
   }
 
-  // Comercio, phase A (spec 9.2, 9.4): the sample listings and sellers of content/comercio/.
+  // Comercio, phase A (spec 9.2, 9.4): the sample listings and sellers of tests/fixtures/comercio/.
   // Only COMERCIO_DEMO=1 reads them (the dev server of the tests, a demo or a visual build) and
   // never a production build (CA-9.1). They are demo data, not offers, so every record carries
   // "borrador": true, whatever OCULTAR_BORRADORES says. The folder may be missing; when one of its
@@ -1674,7 +1690,7 @@ export function checkContent(root) {
   // listings the records name; the name of a declared entity against the id it stores (9.4); the
   // other price rules of 9.7.4; the Ditto Memory (9.7.2); one entry per training skill; the days
   // of the calendar; one channel per type; and the reviews (9.10).
-  const comercioDir = path.join(contentDir, 'comercio');
+  const comercioDir = path.join(root, 'tests', 'fixtures', 'comercio');
   const anunciosFile = path.join(comercioDir, 'anuncios.json');
   const vendedoresFile = path.join(comercioDir, 'vendedores.json');
   if (existsSync(anunciosFile) || existsSync(vendedoresFile)) {
@@ -1787,7 +1803,7 @@ export function checkContent(root) {
       if (vendedores && text(anuncio.vendedor) && !sellers.has(anuncio.vendedor))
         error(
           anunciosFile,
-          `"${anuncio.vendedor}" no existe en content/comercio/vendedores.json`,
+          `"${anuncio.vendedor}" no existe en tests/fixtures/comercio/vendedores.json`,
           `${at}.vendedor`,
         );
       if (text(anuncio.mundo)) {
@@ -1979,7 +1995,7 @@ export function checkContent(root) {
           if (!listing)
             error(
               vendedoresFile,
-              `"${resena.anuncio}" no existe en content/comercio/anuncios.json`,
+              `"${resena.anuncio}" no existe en tests/fixtures/comercio/anuncios.json`,
               `${where}.anuncio`,
             );
           else if (listing.vendedor !== vendedor.id)

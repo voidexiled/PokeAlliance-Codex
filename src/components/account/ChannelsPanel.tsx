@@ -24,7 +24,7 @@ import { Section } from '@/components/layout/Section';
 
 import type { AccountMessages, AccountTradeTexts, UiLabels } from './AccountPanel';
 import { LetterTile, ProviderTile } from './panel/brand';
-import type { AccountPanelTexts } from './panel/texts';
+import type { AccountPanelTexts, ChannelTexts } from './panel/texts';
 import { Field, dialCodeOf, focusField, invalidProps } from './RegistrationSteps';
 
 // «Canales de contacto» of `/{l}/cuenta/` (spec 9.9, 9.15.1; Cuenta-panel.dc.html), only with
@@ -75,6 +75,8 @@ export interface ChannelsPanelProps {
   client: SupabaseClient;
   locale: Locale;
   messages: AccountMessages;
+  /** `account.channels`, which the page writes beside the island (panel/texts.ts). */
+  texts: ChannelTexts;
   panel: AccountPanelTexts;
   labels: AccountTradeTexts['channels'];
   ui: UiLabels;
@@ -107,12 +109,12 @@ export function ChannelsPanel({
   client,
   locale,
   messages,
+  texts: text,
   panel,
   labels,
   ui,
   onChanged,
 }: ChannelsPanelProps) {
-  const text = messages.channels;
   const [adding, setAdding] = useState(false);
   const [channels, setChannels] = useState<TradeChannel[] | undefined>(undefined);
   const [loadError, setLoadError] = useState<unknown>(null);
@@ -206,7 +208,7 @@ export function ChannelsPanel({
 
   return (
     <Section id="cuenta-canales" title={panel.sections.canales}>
-      <p className="ac-panel-intro">{panel.channelsIntro}</p>
+      <p className="ac-panel-intro">{text.intro}</p>
       {loadError !== null ? (
         <Notice open onClose={() => setLoadError(null)} closeLabel={ui.dismiss}>
           {mapSupabaseError(loadError, locale)} <Button onClick={reload}>{messages.retry}</Button>
@@ -288,14 +290,14 @@ export function ChannelsPanel({
           >
             {text.addOther}
           </Button>
-          <p className="ac-panel-setting__help">{panel.channelsFooter}</p>
+          <p className="ac-panel-setting__help">{text.footer}</p>
         </li>
       </ul>
       {adding ? (
         <OtherPlatformForm
           client={client}
           locale={locale}
-          messages={messages}
+          text={text}
           ui={ui}
           onAdded={(id, code) => {
             if (code !== null) setCodes((current) => ({ ...current, [id]: code }));
@@ -312,15 +314,14 @@ export function ChannelsPanel({
 interface OtherPlatformFormProps {
   client: SupabaseClient;
   locale: Locale;
-  messages: AccountMessages;
+  text: ChannelTexts;
   ui: UiLabels;
   /** The channel exists; `code` is null when it could not be generated yet. */
   onAdded: (id: string, code: string | null) => void;
 }
 
 /** «Añadir otra plataforma» (9.9, D-B5): the platform and the user, then its code. */
-function OtherPlatformForm({ client, locale, messages, ui, onAdded }: OtherPlatformFormProps) {
-  const text = messages.channels;
+function OtherPlatformForm({ client, locale, text, ui, onAdded }: OtherPlatformFormProps) {
   const uid = fieldId(useId());
   const ids = { platform: `${uid}-platform`, user: `${uid}-user` };
   const [platform, setPlatform] = useState('');

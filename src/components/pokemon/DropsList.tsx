@@ -268,7 +268,7 @@ export function DropsList({ locale, path, drops, caption, labels }: DropsListPro
             <LootCard
               key={drop.id}
               id={anchor(drop)}
-              drop={card}
+              drop={{ ...card, tip: drop.tip }}
               keys={keys}
               labels={labels.facts}
               locale={locale}

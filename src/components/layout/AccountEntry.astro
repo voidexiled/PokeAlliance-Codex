@@ -44,7 +44,10 @@
 // when the account has more than one; the three statuses as ordinary rows with their dot in the
 // icon column and a check on the chosen one; then Mi perfil, Mis anuncios, Mis operaciones, Mis
 // guilds (and Moderación) | Ajustes de la cuenta | Cerrar sesión. «Crear anuncio» is not in the
-// menu: Comercio has it beside its search.
+// menu: Comercio has it beside its search. Every account item opens the one account interface
+// (9.16.3): «Mi perfil», «Mis anuncios» and «Mis operaciones» are the pages `/{l}/cuenta/perfil/`,
+// `/{l}/cuenta/anuncios/` and `/{l}/cuenta/operaciones/` of its frame, which exist only with
+// COMERCIO_PUBLICO; without it «Mi perfil» is the «Perfil» section of `/{l}/cuenta/`.
 import type { Locale } from '@/i18n/config';
 import type { Messages } from '@/i18n/messages/en';
 import { en } from '@/i18n/messages/en';
@@ -89,9 +92,9 @@ const texts = {
 const base = `/${locale}`;
 const links = {
   account: `${base}/cuenta/`,
-  profile: `${base}/cuenta/perfil/`,
-  listings: `${base}/cuenta/perfil/?pestana=anuncios`,
-  deals: `${base}/comercio/operaciones/`,
+  profile: comercio ? `${base}/cuenta/perfil/` : `${base}/cuenta/#perfil`,
+  listings: `${base}/cuenta/anuncios/`,
+  deals: `${base}/cuenta/operaciones/`,
   characters: `${base}/cuenta/#personajes`,
   guilds: `${base}/cuenta/#guilds`,
   moderation: `${base}/comercio/moderacion/`,

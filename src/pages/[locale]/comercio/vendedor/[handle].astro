@@ -23,7 +23,7 @@
 // fails the build on one. In phase A the build writes one HTML per seller from `getStaticPaths`,
 // empty without COMERCIO_DEMO (9.2, CA-9.1): src/lib/trade/registry.ts gives no seller.
 //
-// Data (9.8 «Fase A»). The seller and its reviews are content/comercio/vendedores.json; the
+// Data (9.8 «Fase A»). The seller and its reviews are tests/fixtures/comercio/vendedores.json; the
 // reputation and the table come from its reviews (`sellerReputation`, 9.15.4). The listings
 // travel whole in the island's props (PR5: a profile has few). Each reviewed trade is named once,
 // with its title (9.4), the panel of its Pokémon or its item and its detail, when it has one
@@ -135,7 +135,7 @@ const catalog: TradeCatalog = {
 const sprites = tradeSprites(registry);
 // Phase B (9.2): «Reportar vendedor» and the tag «Dinero real» of the cards (S11).
 const publico = comercioPublico();
-const labels = tradeLabels(messages, publico);
+const labels = tradeLabels(messages);
 // The `moneda` lists of the Diamonds (§3.13): the facts of a Diamonds listing and the rows of the
 // Diamonds panel a price opens.
 const diamonds = tradeDiamonds(getMonedaDiamantes(), locale);

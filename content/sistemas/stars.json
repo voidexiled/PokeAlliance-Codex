@@ -5,9 +5,70 @@
     "es": "Star Machine",
     "en": "Star Machine"
   },
-  "sprite": "ui/diamond",
+  "sprite": "ui/sistemas/stars",
   "orden": 3,
-  "tooltip": [],
+  "tooltip": [
+    {
+      "etiqueta": {
+        "es": "Éxito",
+        "en": "Success"
+      },
+      "valor": {
+        "es": "100%",
+        "en": "100%"
+      }
+    },
+    {
+      "etiqueta": {
+        "es": "Máximo",
+        "en": "Maximum"
+      },
+      "valor": {
+        "es": "5 Stars",
+        "en": "5 Stars"
+      }
+    },
+    {
+      "etiqueta": {
+        "es": "Material",
+        "en": "Material"
+      },
+      "valor": {
+        "es": "Misma especie, tier y Stars",
+        "en": "Same species, tier and Stars"
+      }
+    },
+    {
+      "etiqueta": {
+        "es": "Tiers",
+        "en": "Tiers"
+      },
+      "valor": {
+        "es": "T3, T2, T1, Super Rare, Ultra Rare, Legendary",
+        "en": "T3, T2, T1, Super Rare, Ultra Rare, Legendary"
+      }
+    },
+    {
+      "etiqueta": {
+        "es": "Daño por Star",
+        "en": "Damage per Star"
+      },
+      "valor": {
+        "es": "+2% (T3), +15% (Legendary)",
+        "en": "+2% (T3), +15% (Legendary)"
+      }
+    },
+    {
+      "etiqueta": {
+        "es": "Mega Stone",
+        "en": "Mega Stone"
+      },
+      "valor": {
+        "es": "Incompatible",
+        "en": "Incompatible"
+      }
+    }
+  ],
   "intro": [],
   "secciones": [],
   "borrador": true

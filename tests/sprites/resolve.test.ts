@@ -272,21 +272,26 @@ describe('animation timeline', () => {
   });
 
   it('lets Sprite render only the animations of the registry (spec 7.4.2)', () => {
-    const diamond = spriteRegistry['ui/diamond'];
-    expect(diamond?.modo, 'the real registry animates the Diamond').toBe('animacion');
+    // A real animation of the registry: the Boost stone (the Diamond is the still gem now).
+    const boost = spriteRegistry['ui/sistemas/boost'];
+    expect(boost?.modo, 'the real registry animates the Boost stone').toBe('animacion');
     const html = renderToStaticMarkup(
       createElement(Sprite, {
-        src: '/sprites/ui/diamond.png',
-        frames: diamond?.frames,
-        durations: diamond?.duracionMs,
+        src: '/sprites/ui/sistemas/boost.png',
+        frames: boost?.frames,
+        durations: boost?.duracionMs,
       }),
     );
     expect(html).toContain(
-      `data-anim="${animationName({ frames: diamond?.frames ?? 0, durations: diamond?.duracionMs ?? [], loop: true })}"`,
+      `data-anim="${animationName({ frames: boost?.frames ?? 0, durations: boost?.duracionMs ?? [], loop: true })}"`,
     );
     expect(() =>
       renderToStaticMarkup(
-        createElement(Sprite, { src: '/sprites/ui/diamond.png', frames: 2, durations: [50, 70] }),
+        createElement(Sprite, {
+          src: '/sprites/ui/sistemas/boost.png',
+          frames: 2,
+          durations: [50, 70],
+        }),
       ),
     ).toThrow(SpriteError);
   });

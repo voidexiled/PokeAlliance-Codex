@@ -118,8 +118,19 @@ export const listingKeys = {
   pokedolares: ['quantity'],
 } as const satisfies Record<ListingType, readonly ListingKey[]>;
 
-/** Optional zones of a listing card, in anatomy order: Held Items, Entrenamiento. */
-export type ListingZone = 'held' | 'train';
+/**
+ * Optional zones of a listing card, in anatomy order (16.4.5, owner rule 2026-09-25): the line of
+ * the Ball, the held items and the Mega Stone (`gear`), the Auras, the Addons and Entrenamiento.
+ * Each kind of equipment has its own place: a grid where one listing has Auras gives every card
+ * the Auras track, and a card without them leaves it empty, so the next zone starts at the same
+ * height in the whole row.
+ */
+export type ListingZone = 'gear' | 'auras' | 'addons' | 'train';
+/**
+ * The groups of the `gear` line, in order: Ball, Held Items (X, Y) and Mega Stone. A group one
+ * listing of the grid has keeps its column in every card, empty where a card lacks it.
+ */
+export type ListingGear = 'ball' | 'held' | 'mega';
 /** Price rows of the footer, in anatomy order: Dinero real, En el juego. */
 export type ListingPriceRow = 'fiat' | 'game';
 
@@ -130,6 +141,8 @@ export interface ListingLayout {
   keys: ListingKey[];
   /** Optional zones present in the grid. */
   zones: ListingZone[];
+  /** Groups of the `gear` zone present in the grid; empty when the zone is absent. */
+  gear: ListingGear[];
   /** Price rows present in the grid. */
   price: ListingPriceRow[];
 }
@@ -142,8 +155,8 @@ export interface ListingLayoutInput {
   type: ListingType;
   /** Facts by key; unknown values are `null` or absent. */
   facts?: Readonly<Partial<Record<ListingKey, unknown>>> | null;
-  /** Held items; the zone exists when one listing of the grid has at least one. */
-  helds?: readonly unknown[] | null;
+  /** Equipment of a Pokémon by kind; each zone or group exists when one listing has it. */
+  equipment?: ListingEquipmentInput | null;
   /** Training shown on the card, or `null`. */
   train?: unknown;
   /** Real-money price, or `null`. */
@@ -154,7 +167,18 @@ export interface ListingLayoutInput {
   negotiable?: boolean;
 }
 
-const LISTING_ZONES: readonly ListingZone[] = ['held', 'train'];
+/** What `listingLayout` reads of the equipment of a listing: which kinds it carries. */
+export interface ListingEquipmentInput {
+  ball?: unknown;
+  auras?: readonly unknown[] | null;
+  addons?: readonly unknown[] | null;
+  heldX?: unknown;
+  heldY?: unknown;
+  mega?: unknown;
+}
+
+const LISTING_ZONES: readonly ListingZone[] = ['gear', 'auras', 'addons', 'train'];
+const LISTING_GEAR: readonly ListingGear[] = ['ball', 'held', 'mega'];
 const LISTING_PRICE_ROWS: readonly ListingPriceRow[] = ['fiat', 'game'];
 /** «Vendedor» and «Contacto verificado» close every listing footer (7.6.2). */
 const LISTING_FIXED_FOOTER_ROWS = 2;
@@ -163,9 +187,17 @@ function isListingType(value: unknown): value is ListingType {
   return typeof value === 'string' && Object.hasOwn(listingKeys, value);
 }
 
+function hasGear(listing: ListingLayoutInput, gear: ListingGear): boolean {
+  const equipment = listing.equipment;
+  if (!equipment) return false;
+  if (gear === 'held') return present(equipment.heldX) || present(equipment.heldY);
+  return present(equipment[gear]);
+}
+
 function hasZone(listing: ListingLayoutInput, zone: ListingZone): boolean {
-  // The reference tests `x.helds && x.helds.length` and `!!x.train`.
-  return zone === 'held' ? present(listing.helds) : Boolean(listing.train);
+  if (zone === 'train') return Boolean(listing.train);
+  if (zone === 'gear') return LISTING_GEAR.some((gear) => hasGear(listing, gear));
+  return present(listing.equipment?.[zone]);
 }
 
 function hasPrice(listing: ListingLayoutInput, row: ListingPriceRow): boolean {
@@ -199,6 +231,7 @@ export function listingLayout(listings: readonly ListingLayoutInput[]): ListingL
       (listing) => listing.facts,
     ),
     zones: LISTING_ZONES.filter((zone) => listings.some((listing) => hasZone(listing, zone))),
+    gear: LISTING_GEAR.filter((gear) => listings.some((listing) => hasGear(listing, gear))),
     price: priceRows(listings),
   };
 }
@@ -354,8 +387,8 @@ const KPI_TRACKS = 3;
  * Z, the row tracks a card spans (`grid-row: span Z`, 7.6.2). It depends on the layout only,
  * never on the card, so every card of a grid spans the same tracks:
  *
- * - `listing`: head + keys + Held Items + Entrenamiento + the footer rows (Dinero real, En el
- *   juego, Vendedor, Contacto verificado);
+ * - `listing`: head + keys + the equipment zones (gear line, Auras, Addons) + Entrenamiento +
+ *   the footer rows (Dinero real, En el juego, Vendedor, Contacto verificado);
  * - `pokedex`: head + keys + element chips + drops;
  * - `loot`: head + keys (the `lootKeys` of the grid);
  * - `kpi`: 3.

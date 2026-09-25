@@ -51,6 +51,7 @@ import type { Locator, Page } from '@playwright/test';
 import { en } from '../../src/i18n/messages/en';
 import type { Messages } from '../../src/i18n/messages/en';
 import { es } from '../../src/i18n/messages/es';
+import { menuSpriteSize } from '../../src/lib/nav/menu-sprites';
 import { esRutaDelSitio, idiomas } from '../../scripts/lib/rutas-migradas.mjs';
 import { expect, test } from './fixtures';
 import { RETIRED_ROUTES } from './routes';
@@ -1346,20 +1347,15 @@ test.describe('v1 punto 9 y A3: el Inicio no lleva buscador en la cabecera', () 
 });
 
 test.describe('Destacados en el menú (8.0.3, 7.10.2)', () => {
-  /** What `Sprite` draws for an entry in the box of 16: its size, or nothing. */
+  /** What the menu draws for an entry in the box of 16: its size, or nothing. */
   function drawnSprite(key: string | null): { width: number; height: number } | null {
     if (key === null) return null;
     const entry = SPRITES[key];
     if (entry === undefined) return null;
     const [width, height] = entry.frame;
-    if (Math.max(width, height) > 64) {
-      // An illustration, fitted to 16.
-      const side = Math.max(width, height);
-      return { width: Math.round((width * 16) / side), height: Math.round((height * 16) / side) };
-    }
-    // R11: the Diamond is the one sprite drawn at half; the others keep their 1x size.
-    const factor = key === 'ui/diamond' ? 0.5 : 1;
-    return { width: Math.round(width * factor), height: Math.round(height * factor) };
+    // 1x for art up to 20, larger art scaled down to 18, an illustration fitted to 16
+    // (src/lib/nav/menu-sprites.ts, owner rule 2026-09-25).
+    return menuSpriteSize(key, [width, height], Math.max(width, height) > 64) ?? { width, height };
   }
 
   async function expectPinnedGroup(scope: Locator, locale: Locale, label: string): Promise<void> {

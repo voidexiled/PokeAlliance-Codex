@@ -87,6 +87,10 @@ export interface FamilyEntry extends Pick<
   drops?: readonly string[];
   /** `elementoMoveset` (§3.13), a key of `elements`, or `null`: the Moveset column. */
   moveset: string | null;
+  /** Its traits Fast and Heavy and its field abilities: rows of its panel (7.5.3). */
+  rapido?: boolean | null;
+  pesado?: boolean | null;
+  habilidades?: readonly string[];
 }
 
 /** Every text of the list (DP1), from `ui` and the page's namespace. */
@@ -250,17 +254,21 @@ export function FamilyList({
 
   // The panel of a variant (7.5.3). A name of `elements` is already in the page's language,
   // the only one the builder reads.
-  const tipOf = (entry: FamilyEntry): TipData =>
-    pokemonTip(
+  const tipOf = (entry: FamilyEntry): TipData => {
+    const moveset = entry.moveset === null ? undefined : elements[entry.moveset];
+    return pokemonTip(
       {
         ...entry,
         elementos: pick(elements, entry.elementos).map((element) => ({
           nombre: { [locale]: element.name } as LocalizedText,
         })),
+        moveset:
+          moveset === undefined ? null : { nombre: { [locale]: moveset.name } as LocalizedText },
       },
       locale,
       labels.tooltip,
     );
+  };
 
   const href = (entry: FamilyEntry) => `/${locale}/pokedex/${entry.id}/`;
   const anchor = (entry: FamilyEntry) => config.anchorId?.(entry);

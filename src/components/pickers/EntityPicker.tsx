@@ -32,7 +32,7 @@ export interface PickerFilter {
   rule?: string;
   /** A leading «Todas» slot of a text menu, chosen while nothing is. */
   all?: string;
-  /** Tooltip of a text slot by value: the tier's «Max brokes: —». */
+  /** Tooltip of a text slot by value: the tier's «Max brokes», only once it is known. */
   tips?: Readonly<Record<string, string>>;
 }
 

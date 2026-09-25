@@ -3,8 +3,7 @@ import type { MouseEvent, ReactNode } from 'react';
 import type { SupabaseClient } from '@supabase/supabase-js';
 
 import { fill, plural } from '@/i18n/messages/types';
-import { discordAccountAgeDays, discordIdOf, identityAvatar } from '@/lib/account/registration';
-import { GAME_ZONE } from '@/lib/format/dates';
+import { discordAccountAgeDays, discordIdOf } from '@/lib/account/registration';
 import { listUserGuilds, type SupabaseGuild } from '@/lib/supabase/account';
 import { mapSupabaseError } from '@/lib/supabase/errors';
 import { listMyChannels, setPresenceState, type TradeChannel } from '@/lib/supabase/trade';
@@ -12,27 +11,30 @@ import type { EstadoPresencia } from '@/lib/trade/limits';
 
 import { Glyph } from '@/components/icons/Glyph';
 
+import { AccountFrame, useWide } from './AccountFrame';
 import { ProviderTile } from './brand';
 import { Presence } from './Presence';
-import { countryName, guildName, monthYear } from './format';
+import { guildName } from './format';
 import {
+  availableEntries,
   availableSections,
   comercioReady,
   comercioRequirements,
   connectionRows,
   guildsSummary,
-  initialOf,
   sectionFromHash,
   visibleGroups,
+  type PanelEntry,
   type PanelSection,
 } from './model';
 import { SummarySection } from './SummarySection';
 import type { LinkReturn, PanelContext } from './types';
 
 // The structured account page of a complete account (Cuenta-panel.dc.html and its phone board):
-// the header card, the grouped section nav (Cuenta, Comercio, Guild, then «Eliminar cuenta»
-// apart) and one section at a time, chosen by the address fragment (`#perfil`, `#personajes`,
-// `#conexiones`…).
+// in the frame of AccountFrame.tsx (the header card, the grouped nav — Cuenta, Comercio, Guild,
+// then «Eliminar cuenta» apart), one section at a time, chosen by the address fragment
+// (`#perfil`, `#personajes`, `#conexiones`…). With Comercio and an account of 18 or more the nav
+// also links the pages «Reputación», «Anuncios» and «Operaciones» (AccountPage.tsx).
 //
 // - From 768 the nav is a sticky column beside the card and the section, and no fragment means
 //   «Resumen». Below 768 no fragment is the index (the card and the grouped rows, each with its
@@ -53,9 +55,6 @@ const PresenceSection = lazy(() => import('./PresenceSection'));
 const GuildsSection = lazy(() => import('./GuildsSection'));
 const DeleteSection = lazy(() => import('./DeleteSection'));
 
-/** The width from which the nav is a column (the `md` breakpoint, 48rem). */
-const WIDE_QUERY = '(min-width: 48rem)';
-
 export interface AccountShellProps extends PanelContext {
   /** The chosen online status changed here: the page updates the account and the header cache. */
   onPresence: (value: EstadoPresencia) => void;
@@ -64,18 +63,6 @@ export interface AccountShellProps extends PanelContext {
   linkReturn: LinkReturn | null;
   onLinkReturnDone: () => void;
   onDeleted: () => void;
-}
-
-function useWide(): boolean {
-  const [wide, setWide] = useState(() => window.matchMedia(WIDE_QUERY).matches);
-  useEffect(() => {
-    const query = window.matchMedia(WIDE_QUERY);
-    const update = () => setWide(query.matches);
-    update();
-    query.addEventListener('change', update);
-    return () => query.removeEventListener('change', update);
-  }, []);
-  return wide;
 }
 
 /** A read the shell keeps: `undefined` while it runs, its error apart, and a way to repeat it. */
@@ -150,7 +137,10 @@ export function AccountShell(props: AccountShellProps) {
     () => availableSections({ comercio: config.comercio, presence: presenceOn }),
     [config.comercio, presenceOn],
   );
-  const groups = useMemo(() => visibleGroups(available), [available]);
+  const groups = useMemo(
+    () => visibleGroups(availableEntries({ comercio: config.comercio, presence: presenceOn })),
+    [config.comercio, presenceOn],
+  );
   const wide = useWide();
 
   // The fragment's section; a pending invitation opens «Guilds». It stays where it is when the
@@ -286,8 +276,8 @@ export function AccountShell(props: AccountShellProps) {
     }
   }
 
-  /** The short value of a row of the phone index. */
-  function indexValue(current: PanelSection): ReactNode {
+  /** The short value of a row of the phone index; a page has none. */
+  function indexValue(current: PanelEntry): ReactNode {
     switch (current) {
       case 'resumen':
         return config.comercio && ready ? (
@@ -337,146 +327,24 @@ export function AccountShell(props: AccountShellProps) {
 
   const worldName = worlds.find((world) => world.id === account.world)?.nombre ?? null;
   const playerLine = [account.player, worldName].filter(Boolean).join(' · ') || null;
-  const since =
-    account.memberSince === null ? null : monthYear(account.memberSince, locale, GAME_ZONE);
-  const avatar = identityAvatar(user.identities);
-  const meta: ReactNode[] = [];
-  if (presenceOn) {
-    meta.push(
-      <Presence key="p" value={account.presence} label={trade.presence[account.presence]} />,
-    );
-  }
-  if (account.country) meta.push(<span key="c">{countryName(account.country, locale)}</span>);
-  if (since !== null && wide) {
-    meta.push(<span key="s">{fill(panel.card.memberSince, { date: since })}</span>);
-  }
-
-  const card = (
-    <section className="ac-panel-card" aria-label={panel.card.label}>
-      <div className="ac-panel-card__who">
-        <span className="ac-panel-avatar" aria-hidden="true">
-          {avatar !== null ? (
-            <img
-              className="ac-panel-avatar__image"
-              src={avatar}
-              alt=""
-              referrerPolicy="no-referrer"
-            />
-          ) : (
-            initialOf(account.username)
-          )}
-          {presenceOn ? (
-            <span className="ac-panel-avatar__dot" data-presence={account.presence} />
-          ) : null}
-        </span>
-        <div className="ac-panel-card__text">
-          <h2 className="ac-panel-card__name">{account.username}</h2>
-          {playerLine !== null ? <p className="ac-panel-card__player">{playerLine}</p> : null}
-          {meta.length > 0 ? (
-            <p className="ac-panel-card__meta">
-              {meta.map((item, index) => (
-                <span key={index} className="ac-panel-card__meta-item">
-                  {index > 0 ? (
-                    <span className="ac-panel-sep" aria-hidden="true">
-                      ·
-                    </span>
-                  ) : null}
-                  {item}
-                </span>
-              ))}
-            </p>
-          ) : null}
-        </div>
-      </div>
-      <a className="ac-panel-link-button" href={`/${locale}/cuenta/perfil/`}>
-        {panel.card.myProfile}
-        <Glyph name="arrow-right" size={12} />
-      </a>
-    </section>
-  );
-
-  const link = (current: PanelSection, className: string, children: ReactNode) => (
-    <a
-      className={className}
-      href={`#${current}`}
-      aria-current={wide && current === section ? 'page' : undefined}
-    >
-      {children}
-    </a>
-  );
-
-  const nav = wide ? (
-    <nav className="ac-panel-nav" aria-label={panel.nav}>
-      {groups.map(({ group, sections }) => (
-        <div key={group} className="ac-panel-nav__group">
-          <p className="ac-panel-nav__title" id={`cuenta-nav-${group}`}>
-            {panel.groups[group]}
-          </p>
-          <ul className="ac-panel-nav__list" aria-labelledby={`cuenta-nav-${group}`}>
-            {sections.map((current) => (
-              <li key={current}>{link(current, 'ac-panel-nav__link', panel.sections[current])}</li>
-            ))}
-          </ul>
-        </div>
-      ))}
-      <div role="none" className="ac-panel-nav__rule" />
-      <ul className="ac-panel-nav__list">
-        <li>{link('eliminar', 'ac-panel-nav__link', panel.sections.eliminar)}</li>
-      </ul>
-    </nav>
-  ) : (
-    <nav className="ac-panel-index" aria-label={panel.nav}>
-      {groups.map(({ group, sections }) => (
-        <div key={group} className="ac-panel-index__group">
-          <p className="ac-panel-index__title" id={`cuenta-nav-${group}`}>
-            {panel.groups[group]}
-          </p>
-          <ul className="ac-panel-index__list" aria-labelledby={`cuenta-nav-${group}`}>
-            {sections.map((current) => (
-              <li key={current}>{indexRow(current)}</li>
-            ))}
-          </ul>
-        </div>
-      ))}
-      <ul className="ac-panel-index__list">
-        <li>{indexRow('eliminar')}</li>
-      </ul>
-    </nav>
-  );
-
-  function indexRow(current: PanelSection) {
-    const value = indexValue(current);
-    return link(
-      current,
-      'ac-panel-index__row',
-      <>
-        <span className="ac-panel-index__label">{panel.sections[current]}</span>
-        {value !== null ? <span className="ac-panel-index__value">{value}</span> : null}
-        <span className="ac-panel-index__chevron">
-          <Glyph name="chevron-right" size={16} />
-        </span>
-      </>,
-    );
-  }
 
   return (
-    <div className={wide ? 'ac-panel ac-panel--wide' : 'ac-panel'}>
-      {wide || section === null ? card : null}
-      {wide || section === null ? (
-        nav
-      ) : (
-        <a className="ac-panel-back" href={window.location.pathname} onClick={backToIndex}>
-          <span className="ac-panel-back__glyph">
-            <Glyph name="chevron-right" size={18} />
-          </span>
-          {messages.title}
-        </a>
-      )}
-      {section !== null ? (
-        <div ref={main} className="ac-panel__main" tabIndex={-1}>
-          <Suspense fallback={busy}>{sectionNode(section)}</Suspense>
-        </div>
-      ) : null}
-    </div>
+    <AccountFrame
+      locale={locale}
+      texts={{ title: messages.title, panel, presence: trade.presence }}
+      worlds={worlds}
+      identities={user.identities}
+      account={account}
+      presenceOn={presenceOn}
+      groups={groups}
+      current={section}
+      wide={wide}
+      onRoot
+      indexValue={indexValue}
+      back={{ href: window.location.pathname, onClick: backToIndex }}
+      mainRef={main}
+    >
+      {section !== null ? <Suspense fallback={busy}>{sectionNode(section)}</Suspense> : null}
+    </AccountFrame>
   );
 }

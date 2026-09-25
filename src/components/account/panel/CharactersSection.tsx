@@ -368,7 +368,7 @@ function Characters({
     }
     const block = removeBlock(character);
     const whyId = `${uid}-why-${character.id}`;
-    const listingsHref = `/${locale}/cuenta/perfil/?pestana=anuncios`;
+    const listingsHref = `/${locale}/cuenta/anuncios/`;
     const listings =
       character.listings > 0 ? (
         <a className="ac-chars-row__listings" href={listingsHref}>

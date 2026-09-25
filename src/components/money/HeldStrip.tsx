@@ -5,10 +5,10 @@ import { fill } from '@/i18n/messages/types';
 import { formatInteger } from '@/lib/format/numbers';
 import type { TipData } from '@/lib/game/tips';
 
-// HeldStrip (spec 7.2.5, 7.5.5, 9.5.8; DS:HeldStrip): the «Held Items: N» zone of a Pokémon
-// listing — the held items two per line, each a 32 slot and its name with the tier
-// («X-Attack T5»), each opening its own game tooltip, 300 wide (`itemTip` of a held,
-// 7.5.3), above the strip.
+// HeldStrip (spec 7.2.5, 7.5.5, 9.5.8; DS:HeldStrip): a «Held Items: N» line over the held
+// items of a Pokémon, each a 32 slot opening its own game tooltip, 300 wide (`itemTip` of a
+// held, 7.5.3). The listing card draws its held items in its own «Held Items» group
+// (ListingCard.tsx); this strip stays for the surfaces that show the held items alone.
 //
 // Markup of the reference (`bundle.js` HeldStrip): the label line, then a `ul` of items
 // whose trigger is a `NestedEntity` with `variant="plain"` and the `__link` shape, so the
@@ -29,10 +29,8 @@ import type { TipData } from '@/lib/game/tips';
 
 /** One held item of a Pokémon (spec 7.2.5). */
 export interface HeldStripItem {
-  /** «X-Attack». */
+  /** «X-Attack (Tier: 5)», the name the client gives it. */
   name: string;
-  /** «T5», already written by the caller. */
-  tier?: string;
   /** Sprite of the held item as the adapter resolves it (DP2); `null`: the missing mark. */
   sprite: SpriteProps | null;
   /** Its panel, built by `itemTip` (7.5.3): 300 wide. */
@@ -67,7 +65,8 @@ export interface HeldStripProps {
 
 /**
  * Since 16.4.5 the held items are drawn by `EquipmentStrip`: 32 px slots without names, each with
- * its tooltip and its tier as the mini badge. `columns` and `shinyLabel` are kept for old callers.
+ * its tooltip, and no tier mark over the slot (owner rule 2026-09-25). `columns` and
+ * `shinyLabel` are kept for old callers.
  */
 export function HeldStrip({ items, labels, locale, hint, orLabel, className }: HeldStripProps) {
   const label = fill(labels.heldItems, { n: formatInteger(items.length, locale) });

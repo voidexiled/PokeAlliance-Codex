@@ -1,7 +1,7 @@
-/* The seller's online status and the «Dinero real» tag of Comercio (spec 9.15.2, 9.15.6):
-   `SellerPresence` and the tag of `ListingCard` (src/components/cards/ListingCard.tsx), which
-   the card, the Lista row (TradeListRoot.tsx) and the detail (SellerCard.tsx) draw. There is no
-   board for either: they are composed only of tokens and of pieces of the design system (R16).
+/* The seller's online status of Comercio (spec 9.15.6): `SellerPresence` of `ListingCard`
+   (src/components/cards/ListingCard.tsx), which the card, the Lista row (TradeListRoot.tsx) and
+   the detail (SellerCard.tsx) draw. There is no board for it: it is composed only of tokens and
+   of pieces of the design system (R16).
 
    Per-page stylesheet (plan M14, D-018, §13.6): only the pages that draw a seller load it, so
    global.css does not import it; ListingCard.tsx imports it and the build writes it next to
@@ -14,8 +14,7 @@
      `text-tertiary`. The design system has no colour of success yet: the dot reads `--success`
      and falls back to `text-secondary` until src/design/tokens.json names one.
    - The seller of a card footer: the `Rating` and the status on one line when they fit, the
-     status under the rating when they do not, both to the right as every value of the footer.
-   - The tag of a card: a `Chip` on its own line under the meta, 4 below it. */
+     status under the rating when they do not, both to the right as every value of the footer. */
 
 @reference '../theme.css';
 
@@ -59,10 +58,5 @@
     align-items: center;
     justify-content: flex-end;
     gap: var(--space-2) var(--space-8);
-  }
-
-  .ac-listing-card__tag {
-    display: flex;
-    margin: var(--space-4) 0 0;
   }
 }

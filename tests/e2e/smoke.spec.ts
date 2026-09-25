@@ -116,10 +116,10 @@ function activities(locale: Locale): { id: string; nombre: string }[] {
 
 /** The sample registry of Comercio (§9.4), which the development server reads (§14.3). */
 const COMERCIO_LISTINGS = readJson<{ anuncios: { id: string; vendedor: string }[] }>(
-  'content/comercio/anuncios.json',
+  'tests/fixtures/comercio/anuncios.json',
 ).anuncios;
 const COMERCIO_SELLERS = readJson<{ vendedores: { id: string; nombre: string }[] }>(
-  'content/comercio/vendedores.json',
+  'tests/fixtures/comercio/vendedores.json',
 ).vendedores;
 
 const MESSAGES: Record<Locale, Messages> = { es, en };
@@ -786,7 +786,10 @@ test.describe('flows of the site', () => {
     const id = new URL(page.url()).pathname.split('/').at(-2) ?? '';
     const handle = COMERCIO_LISTINGS.find((anuncio) => anuncio.id === id)?.vendedor;
     const sellerName = COMERCIO_SELLERS.find((vendedor) => vendedor.id === handle)?.nombre ?? '';
-    expect(sellerName, `the seller of ${id} is in content/comercio/vendedores.json`).not.toBe('');
+    expect(
+      sellerName,
+      `the seller of ${id} is in tests/fixtures/comercio/vendedores.json`,
+    ).not.toBe('');
     await page
       .getByRole('region', { name: trade.listing.seller, exact: true })
       .getByRole('link', { name: sellerName, exact: true })

@@ -1,0 +1,160 @@
+---
+// «Mis anuncios» (spec 9.16.3, 9.7.8; Cuenta-panel.dc.html): `/{l}/cuenta/anuncios/`, every
+// listing of the account in any state, in the frame of `/{l}/cuenta/` — the header card and the
+// section nav, where it is «Anuncios» (AccountPage.tsx, pages/ListingsPage.tsx). The header
+// menu's «Mis anuncios» opens it. `noindex` (9.3, 13.5); the crumbs are «Inicio › Cuenta › Mis
+// anuncios» and the h1 is for assistive tech only.
+//
+// Render (9.3): the prerendered frame and the island, which reads the session once hydrated. The
+// page exists only with the public Supabase settings and COMERCIO_PUBLICO (page-props.ts).
+//
+// Data (13.2, 13.6): the texts, and what the cards are built from, as on the publish page: the
+// small registries (auras and addons with their sprites, Market categories, worlds), the sprites
+// the adapter resolves here (DP2), the Diamonds panel and the URLs of the two PR5 data files,
+// which the island reads only when the account has listings.
+import { getLocale } from '@/i18n/config';
+import {
+  getAuras,
+  getCategorias,
+  getMonedaDiamantes,
+  getMundos,
+  getOutfits,
+  getSpriteRegistry,
+} from '@/lib/content/registry';
+import { diamondsTip } from '@/lib/game/tips';
+import { spriteOrNull } from '@/lib/sprites/resolve';
+
+import { AccountPage } from '@/components/account/AccountPage';
+import {
+  accountCrumbs,
+  accountDictionary,
+  accountPageBase,
+  accountPagePaths,
+  alternatesOf,
+} from '@/components/account/pages/page-props';
+import type { ListingsPageData, ListingsPageTexts } from '@/components/account/pages/types';
+import PageLayout from '@/layouts/PageLayout.astro';
+
+import '@/styles/components/account.css';
+import '@/styles/components/account-panel.css';
+import '@/styles/components/account-pages.css';
+
+export const prerender = true;
+
+export function getStaticPaths() {
+  return accountPagePaths();
+}
+
+const locale = getLocale(Astro.params.locale);
+const alternates = alternatesOf(Astro.url.pathname);
+const { profile, shell, trade, ui } = accountDictionary(locale);
+const listings = profile.listings;
+
+const texts: ListingsPageTexts = {
+  filter: listings.filtersLabel,
+  all: trade.types.all,
+  states: listings.filters,
+  state: trade.states,
+  none: listings.empty,
+  noneInState: listings.emptyFilter,
+  create: shell.account.createListing,
+  edit: trade.manage.edit,
+  actions: {
+    reserve: trade.manage.reserve,
+    release: trade.manage.release,
+    complete: trade.manage.complete,
+    withdraw: trade.manage.withdraw,
+    renew: trade.manage.renew,
+  },
+  types: {
+    pokemon: trade.types.pokemon,
+    items: trade.types.items,
+    diamonds: trade.types.diamonds,
+    pokedolares: trade.types.pokedolares,
+  },
+  confirm: {
+    withdrawTitle: trade.box.withdrawTitle,
+    withdrawText: trade.box.withdrawText,
+    completeTitle: listings.completeTitle,
+    completeText: listings.completeText,
+    back: trade.operations.back,
+  },
+  dataError: ui.dataError,
+  pinHint: ui.pinHint,
+  or: ui.or,
+  tooltip: ui.tooltip,
+};
+
+// DP2: every sprite through the adapter. The keys are the fixed ones of 9.5.1 and 9.7.3: a
+// registry without one gives `null`, and the place shows the missing mark or no sprite at all.
+// The Diamond spins in Comercio (7.8), so it carries its animation.
+const registry = getSpriteRegistry();
+const diamond = spriteOrNull(registry, 'ui/diamond', {
+  animado: registry['ui/diamond']?.modo === 'animacion',
+});
+const pokedolares = spriteOrNull(registry, 'ui/pokedolares');
+const moneda = getMonedaDiamantes();
+const data: ListingsPageData = {
+  pokedexUrl: `/${locale}/pokedex/datos.json`,
+  itemsUrl: `/${locale}/items/datos.json`,
+  categories: Object.fromEntries(
+    getCategorias()
+      .filter((category) => !category.virtual)
+      .map((category) => [category.id, category.nombre[locale]]),
+  ),
+  auras: Object.fromEntries(
+    getAuras().map((aura) => [
+      aura.id,
+      { nombre: aura.nombre, icono: spriteOrNull(registry, aura.icono) },
+    ]),
+  ),
+  // 9.7.2: an addon is known by its own id, whatever Pokémon record owns it.
+  addons: Object.fromEntries(
+    getOutfits().flatMap((outfit) =>
+      outfit.addons.map((addon) => [
+        addon.id,
+        { nombre: addon.nombre, icono: spriteOrNull(registry, addon.sprite) },
+      ]),
+    ),
+  ),
+  worlds: Object.fromEntries(getMundos(locale).map((world) => [world.id, world.nombre])),
+  sprites: { item: spriteOrNull(registry, 'ui/comercio/item'), diamond, pokedolares },
+  // The `moneda` object of content/items/diamantes.json (3.13): the Diamonds panel of a price.
+  diamonds: {
+    tip: diamondsTip(moneda, locale, ui.tooltip, { sprite: diamond, animated: true }),
+    boughtAt: moneda?.seCompranEn?.[locale] ?? [],
+    usedFor: moneda?.seUsanEn?.[locale] ?? [],
+  },
+  typeSprites: {
+    pokemon: spriteOrNull(registry, 'outfits/5'),
+    items: spriteOrNull(registry, 'items/stones/fire-stone'),
+    diamonds: diamond,
+    pokedolares,
+  },
+  card: {
+    ...trade.listing,
+    reserved: trade.states.reservado,
+    shiny: ui.shiny,
+    money: ui.money,
+  },
+  unsellable: trade.unsellable,
+  unitPrice: trade.unitPrice,
+  anyWorld: trade.anyWorld,
+};
+---
+
+<PageLayout
+  locale={locale}
+  title={listings.title}
+  description={listings.description}
+  alternates={alternates}
+  breadcrumb={accountCrumbs(locale, listings.title)}
+  noindex
+>
+  <h1 class="sr-only">{listings.title}</h1>
+  <AccountPage
+    client:load
+    {...accountPageBase(locale, listings.signInNotice)}
+    body={{ page: 'anuncios', texts, data }}
+  />
+</PageLayout>

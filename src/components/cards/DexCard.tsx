@@ -392,7 +392,7 @@ export function DexCard({
     return (
       <span className="ac-dex-card__icons">
         {list.map((element) => (
-          <ElementIcon key={element.id} element={element} />
+          <ElementIcon key={element.id} element={element} locale={locale} hint={hint} />
         ))}
       </span>
     );

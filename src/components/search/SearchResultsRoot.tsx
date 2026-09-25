@@ -16,7 +16,6 @@ import '@/styles/components/search-results.css';
 
 import { CardGrid } from '@/components/cards/CardGrid';
 import { CardGroup } from '@/components/cards/CardGroup';
-import { DexCard } from '@/components/cards/DexCard';
 import type { DexCardDrop, DexCardEntry, DexCardLabels } from '@/components/cards/DexCard';
 import type * as ListRowModule from '@/components/cards/ListRow';
 import type { LootCardDrop, LootCardEntity } from '@/components/cards/LootCard';
@@ -53,6 +52,7 @@ import {
   searchConfig,
   searchPendingScript,
 } from '@/components/search/config';
+import { systemPanel } from '@/components/search/config';
 import type { SearchSystem, SearchSystemItem } from '@/components/search/config';
 import type { Locale } from '@/i18n/config';
 import type { Messages } from '@/i18n/messages/en';
@@ -63,8 +63,9 @@ import type { LootKey } from '@/lib/cards/layout';
 import { formatTier } from '@/lib/content/format';
 import { resolvePokemonImage } from '@/lib/content/pokemon-media';
 import { formatInteger } from '@/lib/format/numbers';
+import type { PanelsData } from '@/lib/game/panels';
 import type * as TipsModule from '@/lib/game/tips';
-import type { LocalizedText, TipData } from '@/lib/game/tips';
+import type { TipData } from '@/lib/game/tips';
 import { PENDING_ATTRIBUTE, applyListState, listSearch, parseListState } from '@/lib/lists/state';
 import type { EntityView, ListPage } from '@/lib/lists/state';
 import type { SearchEntry, SearchIcon, SearchKind } from '@/lib/search/rank';
@@ -198,6 +199,8 @@ export interface SearchResultsRootProps {
   pokedexUrl: string;
   /** `/es/items/datos.json`: what the cards of a Market item draw (8.5, PR5). */
   itemsUrl: string;
+  /** `/es/paneles.json`: the rest of every panel (src/lib/game/panels.ts), once it is here. */
+  panelsUrl: string;
   /** Every system page by `id`, with its sprite and its panel (8.4, `systemTip`). */
   systems: Readonly<Record<string, SearchSystem>>;
   /** Every item of a system whose page exists, by `id` (E16). */
@@ -221,11 +224,6 @@ function counted(template: MessageLeaf, n: number, locale: Locale): string {
   return fill(chosen, { n: formatInteger(n, locale) });
 }
 
-/** A text of the page's language as the `Texto` a tooltip builder reads (13.4). */
-function localized(text: string, locale: Locale): LocalizedText {
-  return { [locale]: text } as LocalizedText;
-}
-
 /** The icon of an index entry (7.9.1) as the 32 cell of `IndexLinks` draws it. */
 function iconSprite(icon: SearchIcon | null): SpriteProps | null {
   return icon === null ? null : { ...icon };
@@ -245,7 +243,7 @@ interface Parts {
   EntitySlot: typeof EntitySlotModule.EntitySlot;
   DataTable: typeof DataTableModule.DataTable;
   ListRow: typeof ListRowModule.ListRow;
-  views: Pick<typeof PokedexViewsModule, 'pokedexList' | 'elementEntry' | 'itemEntry'>;
+  views: Pick<typeof PokedexViewsModule, 'pokedexList' | 'elementEntry' | 'itemEntry' | 'tipOf'>;
   tips: Pick<typeof TipsModule, 'elementTip' | 'itemTip' | 'pokemonTip'>;
   items: Pick<typeof ItemsConfigModule, 'dropperEntity' | 'elementChip' | 'itemPanel'>;
 }
@@ -310,6 +308,12 @@ async function readItems(json: unknown): Promise<ItemsFile> {
   const { decodeItems, decodeItemsRefs } = await import('@/components/items/config');
   const rows = decodeItems(json);
   return { byId: new Map(rows.map((row) => [row.id, row])), refs: decodeItemsRefs(json) };
+}
+
+/** `/{l}/paneles.json`, the rest of every panel, read with its decoder, a deferred module. */
+async function readPanels(json: unknown): Promise<PanelsData> {
+  const { decodePanels } = await import('@/lib/game/panels');
+  return decodePanels(json);
 }
 
 // The JSON files of PR5 this list reads besides the index, kept in the memory of the module by
@@ -399,6 +403,11 @@ const LootCard = lazyComponent(() =>
   import('@/components/cards/LootCard').then((module) => ({ default: module.LootCard })),
 );
 
+/** The Pokémon cards, a chunk of their own for the same reason. */
+const DexCard = lazyComponent(() =>
+  import('@/components/cards/DexCard').then((module) => ({ default: module.DexCard })),
+);
+
 export function SearchResultsRoot({
   locale,
   path,
@@ -406,6 +415,7 @@ export function SearchResultsRoot({
   total,
   pokedexUrl,
   itemsUrl,
+  panelsUrl,
   systems,
   systemItems,
   placeholder,
@@ -478,6 +488,7 @@ export function SearchResultsRoot({
 
   const loadPokedex = useCallback(() => loadJson(pokedexUrl, readPokedex), [pokedexUrl]);
   const loadItems = useCallback(() => loadJson(itemsUrl, readItems), [itemsUrl]);
+  const loadPanelsFile = useCallback(() => loadJson(panelsUrl, readPanels), [panelsUrl]);
   const partsResource = useResource(
     loadParts,
     () => loadedParts,
@@ -496,9 +507,17 @@ export function SearchResultsRoot({
     idle || needsItems,
     deferredQuery,
   );
+  // The rest of every panel: never waited for, a panel draws what it has until it is here.
+  const panelsResource = useResource(
+    loadPanelsFile,
+    () => jsonValues.get(panelsUrl) as PanelsData | undefined,
+    idle || needsParts,
+    deferredQuery,
+  );
   const parts = partsResource.value;
   const dexData = pokedexResource.value;
   const itemData = itemsResource.value;
+  const panels = panelsResource.value;
 
   const missing =
     (needsParts && parts === undefined) ||
@@ -566,12 +585,15 @@ export function SearchResultsRoot({
     const drops = new Map<string, DexCardDrop>();
     if (parts !== undefined && dexData !== undefined) {
       for (const [id, ref] of Object.entries(dexData.refs.elementos))
-        chips.set(id, parts.views.elementEntry(id, ref, locale, ui.tooltip));
+        chips.set(id, parts.views.elementEntry(id, ref, locale, ui.tooltip, panels?.elementos[id]));
       for (const [id, ref] of Object.entries(dexData.refs.items))
-        drops.set(id, parts.views.itemEntry(id, ref, dexData.rows, locale, ui.tooltip));
+        drops.set(
+          id,
+          parts.views.itemEntry(id, ref, dexData.rows, locale, ui.tooltip, panels?.items[id]),
+        );
     }
     return [chips, drops] as const;
-  }, [parts, dexData, locale, ui.tooltip]);
+  }, [parts, dexData, locale, ui.tooltip, panels]);
 
   const elementNames = useMemo(
     () =>
@@ -613,36 +635,40 @@ export function SearchResultsRoot({
 
       if (view === 'cards') {
         return (
-          <CardGrid family="pokedex">
-            {cards.map(([row, entry], index) => (
-              <DexCard
-                key={row.id}
-                entry={entry}
-                layout={layout}
-                labels={dexLabels}
-                locale={locale}
-                hint={ui.pinHint}
-                loading={lazy(index)}
-              />
-            ))}
-          </CardGrid>
+          <Suspense fallback={null}>
+            <CardGrid family="pokedex">
+              {cards.map(([row, entry], index) => (
+                <DexCard
+                  key={row.id}
+                  entry={entry}
+                  layout={layout}
+                  labels={dexLabels}
+                  locale={locale}
+                  hint={ui.pinHint}
+                  loading={lazy(index)}
+                />
+              ))}
+            </CardGrid>
+          </Suspense>
         );
       }
 
+      // What the Pokédex views read: the Lista of the group, and the panel of a slot.
+      const context = {
+        locale,
+        ui,
+        panels,
+        pokedex,
+        title: label,
+        names: elementNames,
+        layout,
+        elementsOf,
+        anchor: () => undefined,
+        lazy,
+        caption: label,
+      };
+
       if (view === 'slots') {
-        // The panel of a slot (7.5.3): Requisito, Tier, Elementos, Generación and Rol.
-        const panelOf = (row: PokedexRow): TipData =>
-          parts.tips.pokemonTip(
-            {
-              ...row,
-              elementos: row.elementos.flatMap((id) => {
-                const name = elementNames.get(id);
-                return name === undefined ? [] : [{ nombre: localized(name, locale) }];
-              }),
-            },
-            locale,
-            ui.tooltip,
-          );
         return (
           <SlotsPanel label={label}>
             {rows.map((row, index) => {
@@ -655,7 +681,7 @@ export function SearchResultsRoot({
                     sprite={
                       source === null ? null : { src: source, smooth: true, loading: lazy(index) }
                     }
-                    tip={panelOf(row)}
+                    tip={parts.views.tipOf(row, context)}
                     shiny={row.variante === 'shiny'}
                     href={pokemonHref(row)}
                     locale={locale}
@@ -671,18 +697,7 @@ export function SearchResultsRoot({
 
       return parts.views.pokedexList(
         { state: page.state, items: rows, groups: [], total: rows.length, pageCount: 1 },
-        {
-          locale,
-          ui,
-          pokedex,
-          title: label,
-          names: elementNames,
-          layout,
-          elementsOf,
-          anchor: () => undefined,
-          lazy,
-          caption: label,
-        },
+        context,
       );
     };
 
@@ -697,7 +712,15 @@ export function SearchResultsRoot({
       const [one] = ids;
       const ref = one === undefined ? undefined : refs.pokemon[one];
       if (one === undefined || ref === undefined) return null;
-      return parts.items.dropperEntity(one, ref, locale, ui.tooltip, parts.tips.pokemonTip);
+      return parts.items.dropperEntity(
+        one,
+        ref,
+        locale,
+        ui.tooltip,
+        parts.tips.pokemonTip,
+        panels?.pokemon[one],
+        panels?.tipos,
+      );
     };
 
     /** The items of the group: Market items from their data, system items from the props. */
@@ -736,13 +759,22 @@ export function SearchResultsRoot({
                       locale,
                       ui.tooltip,
                       parts.tips.elementTip,
+                      panels?.elementos[row.elemento],
                     ),
               use: row.uso,
               npcPrice: row.vende,
               shopPrice: row.compra,
             },
             sprite: row.sprite,
-            tip: parts.items.itemPanel(row, refs, category, locale, ui.tooltip, parts.tips.itemTip),
+            tip: parts.items.itemPanel(
+              row,
+              refs,
+              category,
+              locale,
+              ui.tooltip,
+              parts.tips.itemTip,
+              panels?.items[row.id],
+            ),
             category,
           },
         ];
@@ -759,7 +791,7 @@ export function SearchResultsRoot({
               {results.map((result, index) => (
                 <LootCard
                   key={result.id}
-                  drop={result.card}
+                  drop={{ ...result.card, tip: result.tip }}
                   keys={keys}
                   labels={ui.tooltip}
                   locale={locale}
@@ -882,12 +914,13 @@ export function SearchResultsRoot({
     /** E5: a link of the index with its sprite and, for a system, its panel (8.4). */
     const linkOf = (entry: SearchEntry): IndexLinkEntry => {
       const system = entry.kind === 'sistema' ? systems[entry.id] : undefined;
+      const tip = system === undefined ? undefined : systemPanel(entry.id, entry.name, system);
       return {
         id: entry.id,
         label: entry.name,
         href: entry.href,
         sprite: system === undefined ? iconSprite(entry.icon) : system.sprite,
-        ...(system?.tip === undefined ? {} : { tip: system.tip }),
+        ...(tip === undefined ? {} : { tip }),
       };
     };
 

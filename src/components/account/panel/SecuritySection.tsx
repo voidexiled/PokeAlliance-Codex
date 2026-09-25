@@ -13,6 +13,7 @@ import { Glyph } from '@/components/icons/Glyph';
 import { Section } from '@/components/layout/Section';
 
 import { PhoneVerification } from './auth-flow';
+import { readSectionTexts } from './texts';
 import type { PanelContext } from './types';
 
 // «Seguridad» (Cuenta-panel.dc.html): settings rows — the email and whether it is confirmed, a
@@ -30,7 +31,8 @@ export default function SecuritySection({
   account,
   reload,
 }: PanelContext) {
-  const text = panel.security;
+  // The texts of «Seguridad» travel beside the island, not in its props (panel/texts.ts).
+  const text = readSectionTexts()?.security ?? null;
   const [changing, setChanging] = useState(false);
   const [password, setPassword] = useState('');
   const [shown, setShown] = useState(false);
@@ -76,6 +78,8 @@ export default function SecuritySection({
       setPending(false);
     }
   }
+
+  if (text === null) return null;
 
   return (
     <Section id="cuenta-seguridad" title={panel.sections.seguridad}>

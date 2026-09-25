@@ -4,12 +4,15 @@ import { monthYear } from '@/components/account/panel/format';
 
 import {
   accountAge,
+  availableEntries,
   availableSections,
   comercioReady,
   comercioRequirements,
   connectionRows,
+  entryHref,
   guildsSummary,
   initialOf,
+  pageHref,
   sectionFromHash,
   visibleGroups,
   type RequirementFacts,
@@ -43,6 +46,31 @@ describe('account panel sections', () => {
     expect(sectionFromHash('#canales', available)).toBeNull();
     expect(sectionFromHash('#invitacion=abc', available)).toBeNull();
     expect(sectionFromHash('', available)).toBeNull();
+  });
+
+  it('links the Comercio pages only with Comercio and an account of 18 or more', () => {
+    expect(availableEntries({ comercio: true, presence: false })).not.toContain('reputacion');
+    expect(availableEntries({ comercio: false, presence: false })).not.toContain('anuncios');
+    const adult = visibleGroups(availableEntries({ comercio: true, presence: true }));
+    expect(adult.find(({ group }) => group === 'comercio')?.sections).toEqual([
+      'reputacion',
+      'anuncios',
+      'operaciones',
+      'canales',
+      'estado',
+    ]);
+  });
+
+  it('gives each entry its link, on the account page and on a page of its own', () => {
+    expect(pageHref('reputacion', 'es')).toBe('/es/cuenta/perfil/');
+    expect(entryHref('anuncios', 'en', true)).toBe('/en/cuenta/anuncios/');
+    expect(entryHref('operaciones', 'es', false)).toBe('/es/cuenta/operaciones/');
+    expect(entryHref('perfil', 'es', true)).toBe('#perfil');
+    expect(entryHref('guilds', 'es', false)).toBe('/es/cuenta/#guilds');
+    // A page is never a fragment of the account page.
+    expect(
+      sectionFromHash('#anuncios', availableSections({ comercio: true, presence: true })),
+    ).toBeNull();
   });
 
   it('draws the initial of the name', () => {

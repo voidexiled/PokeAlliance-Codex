@@ -1,6 +1,6 @@
-/* «Mis operaciones» (spec 9.10 with 9.15.4; template H of 8.0.2): the island of
-   src/components/trade/OperationsPanel.tsx on src/routes/comercio/operaciones.astro, with the
-   review dialog of ReviewForm.tsx. There is no board for this page, so the blocks are composed
+/* «Mis operaciones» (spec 9.10 with 9.15.4): src/components/trade/OperationsPanel.tsx, the body
+   of src/pages/[locale]/cuenta/operaciones.astro in the account frame, with the review dialog of
+   ReviewForm.tsx. There is no board for this page, so the blocks are composed
    only of design-system components and tokens (R16).
 
    Per-page stylesheet (D-018, 13.6): only this page draws these blocks, so global.css does not

@@ -32,9 +32,12 @@
     min-width: 0;
   }
 
+  /* The nav spans both rows; the second row is the flexible one, so a nav taller than the card
+     and a short section together leaves the room under the section, never under the card. */
   .ac-panel--wide {
     display: grid;
     grid-template-columns: var(--layout-sidebar) minmax(0, 1fr);
+    grid-template-rows: auto 1fr;
     align-items: start;
     gap: var(--space-32) var(--layout-gap);
   }

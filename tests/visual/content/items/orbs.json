@@ -6,7 +6,7 @@
       "nombre": "Item de ejemplo 1",
       "clientId": null,
       "categoria": "orbs",
-      "sprite": "items/orbs/orbs-ejemplo-1",
+      "sprite": "ui/balls/alliance-ball",
       "apilable": null,
       "precioNpc": {
         "vende": null,
@@ -19,7 +19,7 @@
       "nombre": "Item de ejemplo 2",
       "clientId": null,
       "categoria": "orbs",
-      "sprite": "items/orbs/orbs-ejemplo-2",
+      "sprite": "ui/balls/alliance-ball",
       "apilable": null,
       "precioNpc": {
         "vende": null,

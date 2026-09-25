@@ -6,7 +6,7 @@
       "nombre": "Item de ejemplo 1",
       "clientId": null,
       "categoria": "utilities",
-      "sprite": "items/utilities/utilities-ejemplo-1",
+      "sprite": "ui/balls/premier-ball",
       "apilable": null,
       "precioNpc": {
         "vende": null,
@@ -19,7 +19,7 @@
       "nombre": "Item de ejemplo 2",
       "clientId": null,
       "categoria": "utilities",
-      "sprite": "items/utilities/utilities-ejemplo-2",
+      "sprite": "ui/balls/premier-ball",
       "apilable": null,
       "precioNpc": {
         "vende": null,

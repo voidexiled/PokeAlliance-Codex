@@ -73,14 +73,6 @@
     content: '';
   }
 
-  /* Mini tier badge, top left. */
-  .ac-entity-slot__tier {
-    position: absolute;
-    top: 2px;
-    left: 2px;
-    display: flex;
-  }
-
   /* Check, top right: an accent disc with a white tick. */
   .ac-entity-slot__check {
     position: absolute;

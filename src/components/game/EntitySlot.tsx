@@ -7,9 +7,7 @@ import { PokemonArt } from '@/components/game/ShinyMark';
 import { Sprite } from '@/components/game/Sprite';
 import type { SpriteProps } from '@/components/game/Sprite';
 import { SpriteStage } from '@/components/game/SpriteStage';
-import { TierBadge } from '@/components/game/TierBadge';
 import type { Locale } from '@/i18n/config';
-import type { PokemonTier } from '@/lib/content/types';
 import { formatInteger } from '@/lib/format/numbers';
 import type { TipData } from '@/lib/game/tips';
 import { uiSpriteProps } from '@/lib/sprites/ui-sprites';
@@ -29,9 +27,9 @@ import { uiSpriteProps } from '@/lib/sprites/ui-sprites';
 //
 // States (16.3.1, plan Direction C): rest, hover (the one bg-tertiary tint), focus ring
 // (base.css), `selected` (the flat amber ring), `unavailable` (dimmed, with a padlock).
-// Corner marks, each optional: check top right (chosen in a multiple choice), mini TierBadge
-// top left (a held item only: a grid or picker slot never carries a tier), stack count
-// bottom right.
+// Corner marks, each optional: check top right (chosen in a multiple choice) and stack count
+// bottom right. No slot carries a tier mark (owner rule 2026-09-25): a held item's tier is in
+// its name and its tooltip.
 //
 // Pokémon art (plan «Shiny» and «?»): a Pokémon slot draws `PokemonArt` — the art 8 px
 // smaller than the slot, with the golden glow when it is shiny and no mark over it, and the
@@ -62,8 +60,6 @@ export interface EntitySlotFaceProps {
   art?: boolean;
   /** Check mark, top right: chosen in a multiple choice. It hides the Shiny mark. */
   check?: boolean;
-  /** Mini tier badge, top left: a held item's tier. Never on a grid or picker slot. */
-  tier?: PokemonTier | null;
   /** The «none» slot of a picker: the no-choice icon instead of a sprite. */
   none?: boolean;
 }
@@ -114,7 +110,6 @@ export function EntitySlotFace({
   known = true,
   shiny = false,
   check = false,
-  tier,
   none = false,
   art = false,
 }: EntitySlotFaceProps) {
@@ -150,11 +145,6 @@ export function EntitySlotFace({
   return (
     <>
       {cell}
-      {tier !== undefined && tier !== null ? (
-        <span className="ac-entity-slot__tier" aria-hidden="true">
-          <TierBadge tier={tier} size="mini" />
-        </span>
-      ) : null}
       {stack === null ? null : (
         <span className="ac-entity-slot__qty" aria-hidden="true">
           {stack}
