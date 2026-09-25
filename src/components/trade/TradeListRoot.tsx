@@ -1233,10 +1233,7 @@ export function tradeSprites(registry: SpriteRegistry): TradeSprites {
     types: {
       pokemon: spriteOrNull(registry, 'outfits/5'),
       items: spriteOrNull(registry, 'items/stones/fire-stone'),
-      // It turns while its registry entry is an animation; the game's current gem is still.
-      diamonds: spriteOrNull(registry, 'ui/diamond', {
-        animado: registry['ui/diamond']?.modo === 'animacion',
-      }),
+      diamonds: spriteOrNull(registry, 'ui/diamond'),
       pokedolares: spriteOrNull(registry, 'ui/pokedolares'),
     },
     item: spriteOrNull(registry, 'ui/comercio/item'),
@@ -2599,7 +2596,7 @@ export function TradeListRoot({
             },
             locale,
             ui.tooltip,
-            { sprite: sprites.types.diamonds, animated: true },
+            { sprite: sprites.types.diamonds },
           ),
     [diamonds, locale, ui.tooltip, sprites.types.diamonds],
   );

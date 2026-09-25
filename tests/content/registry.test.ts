@@ -126,11 +126,11 @@ describe('registry loaders', () => {
       ['Digimon Red Aura', 'outfit_rainbow'],
       ['Killua God Speed', 'outfit_rainbow'],
     ]);
-    // The game's current Diamond is the still gem of its Market (P3).
+    // The game's Diamond is item 3028 of the client, which turns through 22 phases.
     expect(getSpriteRegistry()['ui/diamond']).toMatchObject({
       frame: [32, 32],
-      frames: 1,
-      modo: 'estatico',
+      frames: 22,
+      modo: 'animacion',
     });
   });
 

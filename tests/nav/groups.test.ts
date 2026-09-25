@@ -224,7 +224,7 @@ describe('«Destacados»: the pinned group of content/destacados.json (8.0.3, 7.
     }
   });
 
-  it('gives each entry the sprite of its record at rest (6.3)', () => {
+  it('gives each entry the sprite of its record, animated when its sheet is (owner rule 2026-09-25)', () => {
     const registry = getSpriteRegistry();
     const group = groupOf(buildNav('es', '/es/'), 'destacados');
     for (const [index, entry] of destacados.entries()) {
@@ -236,8 +236,8 @@ describe('«Destacados»: the pinned group of content/destacados.json (8.0.3, 7.
       } else {
         expect(link?.sprite?.src, entry.ruta).toBe(expected.src);
         expect(link?.sprite?.size, entry.ruta).toEqual(expected.size);
-        // Frame 0 and no animation in the menu, the Diamond included (6.3).
-        expect(link?.sprite?.durations, entry.ruta).toBeUndefined();
+        // An animated sheet turns in the menu too, the Diamond included.
+        expect(link?.sprite?.durations, entry.ruta).toEqual(expected.durations);
       }
     }
     // Every other link and every heading carries its sprite too (owner rule 2026-09-25).
@@ -363,17 +363,15 @@ describe('«Destacados» of the pages: the entries of the pinned group (8.1 step
     }
   });
 
-  it('turns an animated sheet in the cards, where the menu keeps it on frame 0 (6.3)', () => {
+  it('turns an animated sheet in the cards, as in the menu (owner rule 2026-09-25)', () => {
     const registry = getSpriteRegistry();
     const featured = buildFeatured('es');
     for (const entry of getDestacados().filter((item) => enlazaDestacado(item.ruta, 'es'))) {
       const card = featured.find((link) => link.href === `/es${entry.ruta}`);
-      const still = spriteOrNull(registry, entry.sprite);
-      const expected =
-        still?.mode === 'animacion'
-          ? spriteOrNull(registry, entry.sprite, { animado: true })
-          : still;
+      const expected = spriteOrNull(registry, entry.sprite);
       expect(card?.sprite, entry.ruta).toEqual(expected);
+      if (expected?.mode === 'animacion')
+        expect(card?.sprite?.durations, entry.ruta).toHaveLength(expected.frames);
     }
   });
 

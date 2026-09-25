@@ -367,17 +367,31 @@ function pokedolares(html: string) {
   }));
 }
 
-/** Every `DiamondsAmount` of `html`: its still Diamond (frame 0 of the sheet) before the figure. */
+/**
+ * Every `DiamondsAmount` of `html`: its Diamond before the figure — the window over frame 0 of
+ * a still sheet, or the `Sprite` of an animated one (owner rule 2026-09-25).
+ */
 const DIAMONDS =
-  /<(?:span|a|button)\b[^>]*\bclass="[^"]*\bac-diamonds-amount\b[^"]*"[^>]*><span class="ac-diamonds-amount__sprite" aria-hidden="true"><span class="ac-diamonds-amount__frame"><img class="ac-diamonds-amount__sheet" src="([^"]*)" alt="" width="(\d+)" height="(\d+)"[^>]*><\/span><\/span>([^<]*)(?:<span class="sr-only">([^<]*)<\/span>)?<\/(?:span|a|button)>/g;
+  /<(?:span|a|button)\b[^>]*\bclass="[^"]*\bac-diamonds-amount\b[^"]*"[^>]*><span class="ac-diamonds-amount__sprite" aria-hidden="true">(?:<span class="ac-diamonds-amount__frame"><img class="ac-diamonds-amount__sheet" src="([^"]*)" alt="" width="(\d+)" height="(\d+)"[^>]*><\/span>|<img class="ac-sprite" src="([^"]*)" width="(\d+)" height="(\d+)"[^>]*data-anim="ac-sprite-[^"]+"[^>]*>)<\/span>([^<]*)(?:<span class="sr-only">([^<]*)<\/span>)?<\/(?:span|a|button)>/g;
+
+/** The drawn size of the Diamond: the whole still sheet in its window, or one animated frame. */
+const DIAMOND_SIZE =
+  spriteRegistry['ui/diamond'].modo === 'animacion' ? [32, 32] : [32 * DIAMOND_FRAMES, 32];
 
 function diamonds(html: string) {
-  return [...html.matchAll(DIAMONDS)].map(([, src, width, height, visible, hidden]) => ({
-    src,
-    size: [Number(width), Number(height)],
-    visible,
-    spoken: `${visible}${hidden ?? ''}`,
-  }));
+  return [...html.matchAll(DIAMONDS)]
+    .map((match) => ({
+      src: match[1] ?? match[4],
+      size: [Number(match[2] ?? match[5]), Number(match[3] ?? match[6])],
+      visible: match[7],
+      hidden: match[8],
+    }))
+    .map(({ src, size, visible, hidden }) => ({
+      src,
+      size,
+      visible,
+      spoken: `${visible}${hidden ?? ''}`,
+    }));
 }
 
 /** A k/kk figure written as text outside a `PokedolaresAmount` (G6). */
@@ -481,7 +495,7 @@ describe('DiamondsAmount', () => {
     expect(diamonds(spanish)).toEqual([
       {
         src: DIAMOND_SRC,
-        size: [32 * DIAMOND_FRAMES, 32],
+        size: DIAMOND_SIZE,
         visible: formatDiamonds(2_400, 'es'),
         spoken: '2.400 Diamonds',
       },
@@ -492,7 +506,7 @@ describe('DiamondsAmount', () => {
   it('keeps the word for screen readers only on the Cantidad of a Diamonds listing', () => {
     const html = markup(createElement(DiamondsAmount, { amount: 300, locale: 'es', word: false }));
     expect(diamonds(html)).toEqual([
-      { src: DIAMOND_SRC, size: [32 * DIAMOND_FRAMES, 32], visible: '300', spoken: '300 Diamonds' },
+      { src: DIAMOND_SRC, size: DIAMOND_SIZE, visible: '300', spoken: '300 Diamonds' },
     ]);
     expect(visibleText(html)).toBe('300');
   });
@@ -502,17 +516,13 @@ describe('DiamondsAmount', () => {
     expect(html).toBe(`<span class="ac-diamonds-amount">${UNKNOWN}</span>`);
   });
 
-  it('spins only when asked and its registry entry is an animation; the gem stays still', () => {
-    const html = markup(
-      createElement(DiamondsAmount, { amount: 10, locale: 'es', animated: true }),
-    );
+  it('spins wherever its registry entry is an animation (owner rule 2026-09-25)', () => {
+    const html = markup(createElement(DiamondsAmount, { amount: 10, locale: 'es' }));
     if (spriteRegistry['ui/diamond'].modo === 'animacion') {
       expect(html).toMatch(/<img class="ac-sprite"[^>]*data-anim="ac-sprite-/);
       expect(html).not.toContain('ac-diamonds-amount__frame');
     } else {
-      // The game's current Diamond is one still frame (P3): `animated` changes nothing.
       expect(html).not.toContain('data-anim');
-      expect(html).toBe(markup(createElement(DiamondsAmount, { amount: 10, locale: 'es' })));
     }
   });
 

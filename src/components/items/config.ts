@@ -216,8 +216,11 @@ export function decodeItems(data: unknown): ItemsRow[] {
           : SHAPES[field] === 'o?'
             ? null
             : undefined;
-      // The file writes a client item sprite as its client id (`listItemSprite`).
-      const value = field === 'sprite' && typeof cell === 'number' ? expandListSprite(cell) : cell;
+      // The file writes a client item sprite as its client id, and frames (`listItemSprite`).
+      const value =
+        field === 'sprite' && (typeof cell === 'number' || typeof cell === 'string')
+          ? expandListSprite(cell)
+          : cell;
       if (!fits(value, SHAPES[field])) throw new Error(`items/datos.json: bad «${field}»`);
       row[field] = value;
     }

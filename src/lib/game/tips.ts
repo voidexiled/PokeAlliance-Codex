@@ -271,15 +271,6 @@ function levelRequirement(
   return fill(labels.level, { n: formatInteger(level, locale) });
 }
 
-/** A sprite that holds frame 0: the Diamond only animates in Comercio (§7.5.3). */
-function stillSprite(sprite: TipSprite | null | undefined): TipSprite | null {
-  if (!sprite) return null;
-  if (sprite.durations === undefined) return sprite;
-  const still = { ...sprite };
-  delete still.durations;
-  return still;
-}
-
 /**
  * A Pokémon as the pages read it, plus the two things the tooltip needs that
  * the record only names: the element records of its `elementos` ids, in the
@@ -780,10 +771,12 @@ export type CurrencyTipRecord = {
 
 /** Head of a currency panel: the coin sprite the adapter resolved for the fixed key. */
 export type CurrencyTipOptions = {
-  /** `ui/diamond` or `ui/pokedolares` as `SpriteProps`, or `null` while the key is missing. */
+  /**
+   * `ui/diamond` or `ui/pokedolares` as `SpriteProps`, or `null` while the key is missing. An
+   * animated sheet turns in every panel (owner rule 2026-09-25: what the client animates, the
+   * site animates everywhere).
+   */
   sprite?: TipSprite | null;
-  /** The Diamond animates only in Comercio (§7.5.3); everywhere else it holds frame 0. */
-  animated?: boolean;
 };
 
 function currencyTip(
@@ -801,7 +794,7 @@ function currencyTip(
   // R2: with no row the mention is not a trigger at all, so there is no panel
   // to build — an empty list makes no row, and no row makes no tooltip (§8.5).
   if (rows.length === 0) return null;
-  const sprite = options.animated === true ? (options.sprite ?? null) : stillSprite(options.sprite);
+  const sprite = options.sprite ?? null;
   return { key, title, width: WIDTH_NARROW, head: { type: 'sprite', sprite }, rows };
 }
 

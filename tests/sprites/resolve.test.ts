@@ -12,11 +12,14 @@ import {
   animationName,
   animationSignature,
   animationTimeline,
+  CLIENT_ITEM_PHASE_MS,
   cellPlacement,
+  expandListSprite,
   frameAt,
   frameForQuantity,
   frameObjectPosition,
   isIllustration,
+  listItemSprite,
   registryAnimationCss,
   resolveFrame,
   resolveSprite,
@@ -95,7 +98,7 @@ const ultra = registry['items/poke-balls/ultra-ball'];
 const diamond = registry['ui/diamond'];
 const intro = registry['ui/intro'];
 
-const DIAMOND_ANIM = 'ac-sprite-7-110-110-110-110-110-110-110';
+const DIAMOND_ANIM = 'ac-sprite-7x110';
 const INTRO_ANIM = 'ac-sprite-3-100-300-50-once';
 
 describe('frame selection', () => {
@@ -241,9 +244,13 @@ describe('animation timeline', () => {
     expect(css).toContain('@media (prefers-reduced-motion:no-preference)');
     expect(css).toContain(`.ac-sprite[data-anim='${INTRO_ANIM}']`);
     expect(css).toContain(`animation:${INTRO_ANIM} 450ms steps(1,end) 1 forwards`);
-    expect(animationCss(animationSignature('ui/diamond', diamond))).toContain(
-      '770ms steps(1,end) infinite',
+    // Equal durations: one move over the strip in steps that include both ends.
+    const even = animationCss(animationSignature('ui/diamond', diamond));
+    expect(even).toContain(
+      `@keyframes ${DIAMOND_ANIM}{from{object-position:0% 0%}to{object-position:100% 0%}}`,
     );
+    expect(even).toContain('770ms steps(7,jump-none) infinite');
+    expect(even).toContain('@media (prefers-reduced-motion:no-preference)');
   });
 
   it('writes one block per distinct signature of the registry', () => {
@@ -327,7 +334,7 @@ describe('spriteData', () => {
     expect(spriteData(registry, 'items/poke-balls/alliance-ball').quantity).toBeUndefined();
   });
 
-  it('sends the durations only when the animation was asked for', () => {
+  it('sends the durations of an animation unless a still frame is asked for', () => {
     expect(spriteData(registry, 'ui/diamond', { animado: true, escala: 2 })).toEqual({
       src: '/sprites/ui/diamond.png',
       size: [32, 32],
@@ -336,8 +343,11 @@ describe('spriteData', () => {
       durations: [110, 110, 110, 110, 110, 110, 110],
       scale: 2,
     });
-    // Still on frame 0 in front of an amount and in the menu (spec 6.3).
-    expect(spriteData(registry, 'ui/diamond').durations).toBeUndefined();
+    // An animation plays by default (owner rule 2026-09-25); `animado: false` or a frame
+    // keeps it still.
+    expect(spriteData(registry, 'ui/diamond').durations).toHaveLength(7);
+    expect(spriteData(registry, 'ui/diamond', { animado: false }).durations).toBeUndefined();
+    expect(spriteData(registry, 'ui/diamond', { frame: 3 })).toMatchObject({ frame: 3 });
     expect(spriteData(registry, 'ui/intro', { animado: true })).toMatchObject({
       durations: [100, 300, 50],
       loop: false,
@@ -436,5 +446,46 @@ describe('resolveSprite', () => {
     expect(() => resolveSprite(registry, 'ui/missing')).toThrow(/no existe/);
     expect(() => resolveSprite(registry, 'ui/diamond', { escala: 1.5 })).toThrow(/Escala/);
     expect(() => resolveSprite(registry, 'ui/diamond', { escala: 0 })).toThrow(/Escala/);
+  });
+});
+
+describe('listItemSprite and expandListSprite', () => {
+  const items: SpriteRegistry = {
+    'items/cliente/3070': {
+      archivo: 'items/cliente/3070.png',
+      frame: [32, 32],
+      frames: 1,
+      modo: 'estatico',
+    },
+    'items/cliente/3028': {
+      archivo: 'items/cliente/3028.png',
+      frame: [32, 32],
+      frames: 22,
+      modo: 'animacion',
+      duracionMs: Array<number>(22).fill(CLIENT_ITEM_PHASE_MS),
+    },
+    'items/cliente/40000': {
+      archivo: 'items/cliente/40000.png',
+      frame: [32, 32],
+      frames: 3,
+      modo: 'animacion',
+      duracionMs: [100, 200, 100],
+    },
+  };
+
+  it('writes a still client sprite as its id and an animated one as its id and frames', () => {
+    expect(listItemSprite(items, 'items/cliente/3070')).toBe(3070);
+    expect(listItemSprite(items, 'items/cliente/3028')).toBe('3028x22');
+    // Other durations than the client's: the sprite in full.
+    expect(listItemSprite(items, 'items/cliente/40000')).toEqual(
+      spriteData(items, 'items/cliente/40000'),
+    );
+    expect(listItemSprite(items, 'ui/comercio/item')).toBeNull();
+  });
+
+  it('turns both back into the sprite the adapter gives, animation included', () => {
+    for (const key of ['items/cliente/3070', 'items/cliente/3028', 'items/cliente/40000'])
+      expect(expandListSprite(listItemSprite(items, key)), key).toEqual(spriteData(items, key));
+    expect(expandListSprite(null)).toBeNull();
   });
 });

@@ -74,8 +74,9 @@ export interface SidebarLink {
    * the entry has no sprite yet (D-011): the box stays, empty, so the labels of the list start
    * at the same x. The links of «Destacados» bounce; the others rest.
    *
-   * The sprite is centred in the box and rests on frame 0 (6.3); `spriteDeMenu` picks its
-   * drawn size.
+   * The sprite is centred in the box and turns when its sheet is an animation (owner rule
+   * 2026-09-25: what the client animates, the site animates everywhere); `spriteDeMenu` picks
+   * its drawn size.
    */
   sprite: SidebarSprite | null;
 }
@@ -158,8 +159,8 @@ const ICONOS: Readonly<Record<string, string | null>> = {
 };
 
 /**
- * The sprite of a menu entry (DS:Sidebar): its key through the adapter, with no option, so a
- * sheet rests on frame 0 in the menu (6.3), and the size `menuSpriteSize` gives it: 1x for art
+ * The sprite of a menu entry (DS:Sidebar): its key through the adapter, with no option, so an
+ * animated sheet turns in the menu as everywhere, and the size `menuSpriteSize` gives it: 1x for art
  * up to 20, scaled down to 18 for larger art (src/lib/nav/menu-sprites.ts). `SidebarSprite.astro`
  * centres it in the box. An unknown key fails the build here, as it does in every other
  * composer (7.4.1).
@@ -483,8 +484,8 @@ export interface FeaturedLink {
  * the entries of the pinned group of the menu — the same records of content/destacados.json,
  * in the order of the file, through the same WG5 test (`enlazaDestacado`) — so a page and its menu
  * never show different ones (8.1 step 3: «Las mismas entradas forman el grupo "Destacados" del
- * menú»). Where the menu rests a sprite on frame 0, a sheet in `animacion` mode turns here (the
- * Diamond, DS:guias/40, 6.3); `FeaturedCard` picks its scale.
+ * menú»). A sheet in `animacion` mode turns here as in the menu; `FeaturedCard` picks its
+ * scale.
  *
  * @param locale Locale of the page: picks the labels and the locale segment.
  */
@@ -492,11 +493,7 @@ export function buildFeatured(locale: Locale): FeaturedLink[] {
   const registry = getSpriteRegistry();
   return getDestacados().flatMap((destacado) => {
     if (!enlazaDestacado(destacado.ruta, locale)) return [];
-    const still = spriteOrNull(registry, destacado.sprite);
-    const sprite =
-      still?.mode === 'animacion'
-        ? spriteOrNull(registry, destacado.sprite, { animado: true })
-        : still;
+    const sprite = spriteOrNull(registry, destacado.sprite);
     return [
       {
         label: destacado.etiqueta[locale],

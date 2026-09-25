@@ -27,8 +27,9 @@ import moneySprites from 'virtual:ac-money-sprites';
 // figure. The still Diamond is the reference's own window over the strip — `__frame`, 32
 // wide with `overflow: hidden`, around the whole `__sheet` image — so frame 0 needs no
 // `object-position`; a spinning one is `Sprite`, whose keyframes `SpriteStyles.astro`
-// writes in the build from the registry (7.4.2). It spins only in Comercio (7.8), where the
-// caller passes `animated`; with reduced motion `Sprite` stays on frame 0 (S15).
+// writes in the build from the registry (7.4.2). It spins wherever its registry entry is an
+// animation (owner rule 2026-09-25: what the client animates, the site animates everywhere);
+// with reduced motion `Sprite` stays on frame 0 (S15).
 //
 // The sprite is the fixed key `ui/diamond`, which this component resolves through the
 // adapter on its own (DP2), from the two-entry registry of `virtual:ac-money-sprites`
@@ -40,8 +41,8 @@ import moneySprites from 'virtual:ac-money-sprites';
 // returns `null` while it has none: the amount then stays plain text. DP3: no `open`,
 // `defaultOpen` or `onOpenChange`; the controller of 7.5.4 owns the panel.
 
-/** `ui/diamond` through the adapter (DP2): the frame of 32 × 32 (frame 0 of a sheet), still. */
-const STILL = spriteOrNull(moneySprites, 'ui/diamond');
+/** `ui/diamond` through the adapter (DP2): with its animation when the entry is one. */
+const DIAMOND = spriteOrNull(moneySprites, 'ui/diamond');
 
 /** The Diamonds panel a price opens, with the copy it needs (DP1). */
 export interface DiamondsLink {
@@ -68,8 +69,6 @@ export interface DiamondsAmountProps {
   word?: boolean;
   /** The figure in 700. */
   strong?: boolean;
-  /** The Diamond spins when its registry entry is an animation: only in Comercio (7.8). */
-  animated?: boolean;
   /** The price link that opens the Diamonds panel (DS `link`). */
   link?: DiamondsLink;
   /** Utilities added by the caller, after the component's own classes (3.8). */
@@ -85,23 +84,18 @@ function classes(...values: (string | false | undefined)[]): string {
   return values.filter(Boolean).join(' ');
 }
 
-/** Frame 0 of the Diamond at 32, still or spinning. */
-function diamond(animated: boolean): ReactNode {
-  // The Diamond turns only while its registry entry is an animation: the game's current gem
-  // is one still frame. A broken animation still fails the build (7.4.1).
-  if (animated && STILL?.mode === 'animacion') {
-    const spinning = spriteOrNull(moneySprites, 'ui/diamond', { animado: true });
-    if (spinning) return <Sprite {...spinning} alt="" />;
-  }
-  if (!STILL) return <MissingSprite size={16} />;
-  const [width, height] = STILL.size;
+/** The Diamond at 32: spinning when its registry entry is an animation, else frame 0. */
+function diamond(): ReactNode {
+  if (!DIAMOND) return <MissingSprite size={16} />;
+  if (DIAMOND.mode === 'animacion') return <Sprite {...DIAMOND} alt="" />;
+  const [width, height] = DIAMOND.size;
   return (
     <span className="ac-diamonds-amount__frame">
       <img
         className="ac-diamonds-amount__sheet"
-        src={STILL.src}
+        src={DIAMOND.src}
         alt=""
-        width={width * STILL.frames}
+        width={width * DIAMOND.frames}
         height={height}
         decoding="async"
         draggable={false}
@@ -115,7 +109,6 @@ export function DiamondsAmount({
   locale,
   word = true,
   strong = false,
-  animated = false,
   link,
   className,
 }: DiamondsAmountProps) {
@@ -130,7 +123,7 @@ export function DiamondsAmount({
   const content = (
     <>
       <span className="ac-diamonds-amount__sprite" aria-hidden="true">
-        {diamond(animated)}
+        {diamond()}
       </span>
       {word ? `${figure}${unit}` : figure}
       {word ? null : <span className="sr-only">{unit}</span>}

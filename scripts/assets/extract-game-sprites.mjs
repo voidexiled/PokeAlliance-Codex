@@ -3,10 +3,12 @@
 //
 //   Items    `sprite` of each record of content/items/*.json that has a `clientId` and still
 //            shows a placeholder (`ui/comercio/item` or a sprite marked `borrador`) becomes
-//            `items/cliente/<clientId>`: the first frame of the item as the inventory draws it
-//            (pattern 0, the single-count frame of a stackable item, phase 0, every layer,
-//            the visible `exactSize` square). A sprite the owner set is never replaced. An
-//            `apilable` still null becomes the DAT's `stackable` flag of that item.
+//            `items/cliente/<clientId>`: the item as the inventory draws it (pattern 0, the
+//            single-count frame of a stackable item, every layer, the visible `exactSize`
+//            square). An item the client animates (more than one phase) becomes the strip of
+//            its phases, `modo: animacion`, ITEM_PHASE_MS each; any other, its one frame. A
+//            sprite the owner set is never replaced. An `apilable` still null becomes the
+//            DAT's `stackable` flag of that item.
 //   Pokémon  each record of content/pokemon.json without an outfit gets one in
 //            content/outfits.json, from the lookType of the client's cyclopedia export (and,
 //            for the forms it does not list, the lookType the other exports name with the same
@@ -25,6 +27,10 @@
 //            7, phase 0, every layer), `modo: cantidad` with the thresholds of OTClient's
 //            `Item::calculatePatterns` (COUNT_THRESHOLDS); any other item, its inventory frame.
 //            The key and the file name stay, so no record or page changes.
+//   Copies   each key of ITEM_COPIES (registry art that is a copy of an animated client item:
+//            the Diamond, a Market category icon, the Índice sprites) is re-rendered from its
+//            item as the strip of its phases, cropped to the window the key registers,
+//            `modo: animacion`, ITEM_PHASE_MS each. Key, file name and frame size stay.
 //
 // Rerunning after a client update re-renders every sprite this script owns (the keys
 // `items/cliente/*` and the one-file `outfits/<id>` entries) and drops the ones nothing uses.
@@ -34,7 +40,7 @@
 //
 // Usage:
 //   node scripts/assets/extract-game-sprites.mjs --client <decrypted client root>
-//        --datamine <datamine folder | run folder> [--solo items,pokemon,retratos,balls]
+//        --datamine <datamine folder | run folder> [--solo items,pokemon,retratos,balls,copias]
 //        [--dry-run]
 //   --client     folder with data/things/things.{dat,spr,otfi} and data/images/pokemons/
 //   --things     the things folder, when it is not <client>/data/things
@@ -79,7 +85,30 @@ const SOUTH = 2;
  * 50 or more → 7. They are the `umbrales` of a `modo: cantidad` entry.
  */
 const COUNT_THRESHOLDS = [1, 2, 3, 4, 5, 10, 25, 50];
-const STEPS = ['items', 'pokemon', 'retratos', 'balls'];
+const STEPS = ['items', 'pokemon', 'retratos', 'balls', 'copias'];
+
+/**
+ * Milliseconds of each phase of an animated item. This client's DAT keeps no phase durations
+ * (things.otfi: `frame-durations: false`), so every item animation of the registry uses the one
+ * figure docs/REVISION_CLIENTE.md §6 already gives the Stones, the Boost Stone and the Índice
+ * sprites: 110 ms per phase. src/lib/sprites/resolve.ts (`CLIENT_ITEM_PHASE_MS`) repeats it so
+ * the lists can carry an animated client sprite as its id and phase count alone.
+ */
+const ITEM_PHASE_MS = 110;
+
+/**
+ * Registry keys that are copies of an animated client item, each with the item and the window
+ * of its frame the key shows ([x, y, width, height] of the rendered square). Found by comparing
+ * frame 0 of every hand-registered key with frame 0 of every DAT item (2026-09-25); no phase of
+ * these items has pixels outside the window.
+ */
+const ITEM_COPIES = {
+  'ui/diamond': { clientId: 3028, crop: [0, 0, 32, 32] },
+  'ui/categorias/helds': { clientId: 30858, crop: [2, 2, 28, 28] },
+  'ui/indice/items': { clientId: 49362, crop: [0, 0, 32, 32] },
+  'ui/indice/actividades': { clientId: 48196, crop: [0, 0, 32, 32] },
+  'ui/sistemas/boost': { clientId: 42016, crop: [0, 0, 32, 32] },
+};
 
 /**
  * Pokédex portraits of forms that do not follow NNN.png / NNN.1.png. Each one was checked by
@@ -171,7 +200,7 @@ const HELP = `Uso: node scripts/assets/extract-game-sprites.mjs --client <carpet
   --client <carpeta>    Cliente descifrado (con data/things y data/images/pokemons).
   --things <carpeta>    Carpeta del things.dat/things.spr si no es <client>/data/things.
   --datamine <carpeta>  Exportación de game_datamine (carpeta con run_* o una run_*).
-  --solo <lista>        items, pokemon, retratos, balls (por defecto, los cuatro).
+  --solo <lista>        items, pokemon, retratos, balls, copias (por defecto, todos).
   --dry-run             Informa sin escribir nada.
 `;
 
@@ -310,11 +339,11 @@ function cropBottomRight(pixels, width, height, w, h) {
  * The item as the inventory draws it (UIItem): first frame, every layer, exactSize square. `x`
  * and `y` pick another pattern (the count patterns of a stackable item).
  */
-function renderItem(thing, readSprite, x = 0, y = 0) {
+function renderItem(thing, readSprite, x = 0, y = 0, phase = 0) {
   const group = thing.frameGroups[0];
   let frame = null;
   for (let layer = 0; layer < group.layers; layer++) {
-    const composed = composeFrame(group, { layer, x, y, z: 0, phase: 0 }, readSprite);
+    const composed = composeFrame(group, { layer, x, y, z: 0, phase }, readSprite);
     if (!frame) frame = composed;
     else blendOver(frame.pixels, composed.pixels);
   }
@@ -328,17 +357,8 @@ function renderItem(thing, readSprite, x = 0, y = 0) {
   };
 }
 
-/**
- * A stackable item with 4 × 2 count patterns as the strip of its eight count frames, in the
- * order of COUNT_THRESHOLDS; `null` for any other item.
- */
-function renderCountStrip(thing, readSprite) {
-  const group = thing.frameGroups[0];
-  const stackable = thing.attributes.some((attribute) => attribute.name === 'stackable');
-  if (!stackable || group.patternX !== 4 || group.patternY !== 2) return null;
-  const frames = COUNT_THRESHOLDS.map((_, pattern) =>
-    renderItem(thing, readSprite, pattern % 4, Math.floor(pattern / 4)),
-  );
+/** Frames of the same size side by side, as one horizontal strip. */
+function joinStrip(frames) {
   const { width, height } = frames[0];
   const pixels = Buffer.alloc(width * frames.length * height * 4);
   frames.forEach((frame, index) => {
@@ -351,6 +371,64 @@ function renderCountStrip(thing, readSprite) {
       );
   });
   return { pixels, width, height, frames: frames.length };
+}
+
+/**
+ * A stackable item with 4 × 2 count patterns as the strip of its eight count frames, in the
+ * order of COUNT_THRESHOLDS; `null` for any other item.
+ */
+function renderCountStrip(thing, readSprite) {
+  const group = thing.frameGroups[0];
+  const stackable = thing.attributes.some((attribute) => attribute.name === 'stackable');
+  if (!stackable || group.patternX !== 4 || group.patternY !== 2) return null;
+  return joinStrip(
+    COUNT_THRESHOLDS.map((_, pattern) =>
+      renderItem(thing, readSprite, pattern % 4, Math.floor(pattern / 4)),
+    ),
+  );
+}
+
+/**
+ * The item as the inventory draws it over time: pattern 0 (the single-count frame of a
+ * stackable item), every layer, the exactSize square, one frame per animation phase. The
+ * client cycles the phases of an item that has more than one (OTClient
+ * `Item::calculateAnimationPhase`), so that strip is its animation; an item with one phase is
+ * a strip of one frame.
+ */
+function renderItemPhases(thing, readSprite) {
+  const { phases } = thing.frameGroups[0];
+  return joinStrip(
+    Array.from({ length: phases }, (_, phase) => renderItem(thing, readSprite, 0, 0, phase)),
+  );
+}
+
+/** Crops the `[x, y, width, height]` window of every frame of a strip. */
+function cropStrip(strip, [left, top, width, height]) {
+  const total = strip.width * strip.frames;
+  const pixels = Buffer.alloc(width * strip.frames * height * 4);
+  for (let frame = 0; frame < strip.frames; frame++)
+    for (let y = 0; y < height; y++) {
+      const from = ((top + y) * total + frame * strip.width + left) * 4;
+      strip.pixels.copy(
+        pixels,
+        (y * width * strip.frames + frame * width) * 4,
+        from,
+        from + width * 4,
+      );
+    }
+  return { pixels, width, height, frames: strip.frames };
+}
+
+/** The registry entry of an item strip: an animation when it has more than one frame. */
+function itemEntry(archivo, strip) {
+  return {
+    archivo,
+    frame: [strip.width, strip.height],
+    frames: strip.frames,
+    ...(strip.frames > 1
+      ? { modo: 'animacion', duracionMs: Array(strip.frames).fill(ITEM_PHASE_MS) }
+      : { modo: 'estatico' }),
+  };
 }
 
 /** South-facing idle frame of an outfit (phase 0, layer 0, no addon, no mount). */
@@ -540,6 +618,8 @@ function main() {
       let kept = 0;
       let noClientId = 0;
       let stacked = 0;
+      let animatedItems = 0;
+      let animatedBytes = 0;
       for (const file of files) {
         const full = path.join(itemsDir, file);
         const data = readJson(full);
@@ -569,21 +649,20 @@ function main() {
               rendered.set(item.clientId, null);
               notFound.push(`${item.id} (${item.clientId})`);
             } else {
-              const frame = renderItem(thing, readSprite);
-              if (isFullyTransparent(frame.pixels)) {
+              const strip = renderItemPhases(thing, readSprite);
+              if (isFullyTransparent(strip.pixels)) {
                 rendered.set(item.clientId, null);
                 empty.push(`${item.id} (${item.clientId})`);
               } else {
-                const png = encodeSmallPng(frame.pixels, frame.width, frame.height);
+                const png = encodeSmallPng(strip.pixels, strip.width * strip.frames, strip.height);
                 writeBinary(path.join(spritesDir, `${key}.png`), png, dryRun);
                 report.bytes += png.length;
                 report.files++;
-                sprites[key] = {
-                  archivo: `${key}.png`,
-                  frame: [frame.width, frame.height],
-                  frames: 1,
-                  modo: 'estatico',
-                };
+                sprites[key] = itemEntry(`${key}.png`, strip);
+                if (strip.frames > 1) {
+                  animatedItems++;
+                  animatedBytes += png.length;
+                }
                 rendered.set(item.clientId, key);
               }
             }
@@ -609,7 +688,8 @@ function main() {
       console.log(
         `Items: ${wired} con sprite del cliente (${[...rendered.values()].filter(Boolean).length} imágenes), ` +
           `${kept} con sprite propio sin tocar, ${noClientId} sin clientId; ` +
-          `${stacked} con apilable leído del DAT.`,
+          `${stacked} con apilable leído del DAT; ${animatedItems} animados ` +
+          `(${(animatedBytes / 1024).toFixed(1)} KiB).`,
       );
       if (notFound.length)
         console.log(
@@ -655,6 +735,27 @@ function main() {
         console.log(
           `  clientId que no existe en el DAT (${missing.length}): ${missing.join(', ')}`,
         );
+    }
+
+    // ---------------------------------------------------------------- copies of client items
+    if (options.solo.has('copias')) {
+      const done = [];
+      for (const [key, { clientId, crop }] of Object.entries(ITEM_COPIES)) {
+        const entry = sprites[key];
+        const thing = dat.things.items.get(clientId);
+        if (!entry || !thing) {
+          console.log(`  Copias: ${key} sin entrada en el registro o item ${clientId} sin DAT.`);
+          continue;
+        }
+        const strip = cropStrip(renderItemPhases(thing, readSprite), crop);
+        const png = encodeSmallPng(strip.pixels, strip.width * strip.frames, strip.height);
+        writeBinary(path.join(spritesDir, entry.archivo), png, dryRun);
+        report.bytes += png.length;
+        report.files++;
+        sprites[key] = itemEntry(entry.archivo, strip);
+        done.push(`${key} (${strip.frames} fases, ${png.length} B)`);
+      }
+      console.log(`Copias de items del cliente: ${done.join(', ')}`);
     }
 
     // ---------------------------------------------------------------- pokémon outfits

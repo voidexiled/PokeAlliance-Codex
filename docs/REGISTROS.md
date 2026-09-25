@@ -190,7 +190,7 @@ La Boost Stone del sistema Boost tiene 9 frames de 110 ms cada uno.
 }
 ```
 
-El Diamond (`ui/diamond`) es la gema del juego, la del Market y la Diamond Shop: un frame quieto de 32 × 32 (`modo: estatico`). La moneda antigua que giraba ya no es la del juego.
+El Diamond (`ui/diamond`) es la gema del juego, la del Market y la Diamond Shop: el item 3028 del cliente, que gira en 22 fases de 32 × 32 (`modo: animacion`, 110 ms cada una). Lo que el cliente anima, el sitio lo anima en todas partes: menú, pestañas, slots, tooltips, listas, selectores, páginas y Comercio.
 
 `duracionMs` lleva una duración por frame, así que cada frame puede durar distinto. Añade `"loop": false` para reproducirla una sola vez. Quien tenga activado «reducir movimiento» en su sistema ve el frame 0 quieto.
 
@@ -204,7 +204,8 @@ Comercio usa estas claves: `outfits/5`, `items/stones/fire-stone`, `ui/diamond` 
 
 `node scripts/assets/extract-game-sprites.mjs` (uso en `scripts/assets/README.md`) registra dos tipos de clave que no hace falta escribir a mano:
 
-- `items/cliente/<clientId>`: el sprite de inventario de un item. Lo pone en el `sprite` de los items que aún tienen `ui/comercio/item`. Si quieres otro sprite para un item, escribe tu clave en su `sprite`: el script ya no lo toca. De paso, un `apilable` en `null` toma el valor del cliente (si el item se apila).
+- `items/cliente/<clientId>`: el sprite de inventario de un item. Lo pone en el `sprite` de los items que aún tienen `ui/comercio/item`. Si el cliente anima el item (más de una fase), es la tira de sus fases con `modo: animacion` y 110 ms por fase (el DAT no guarda duraciones). Si quieres otro sprite para un item, escribe tu clave en su `sprite`: el script ya no lo toca. De paso, un `apilable` en `null` toma el valor del cliente (si el item se apila).
+- Copias de items animados (paso `copias`, tabla `ITEM_COPIES` del script): `ui/diamond`, `ui/categorias/helds`, `ui/indice/items`, `ui/indice/actividades` y `ui/sistemas/boost` se vuelven a sacar de su item del cliente como tira animada, con el mismo archivo y el mismo tamaño de frame.
 - `items/poke-balls/<id>`: la hoja de cantidad de cada Poké Ball con `clientId`, sacada de su item del cliente (paso `balls`).
 - `outfits/<outfitId>` con un solo archivo `outfits/<outfitId>/sur.png`: el Pokémon mirando al sur, quieto. Si el cliente lo anima quieto, es una tira con `modo: animacion`. La página del Pokémon lo dibuja igual que un outfit con cuatro direcciones.
 

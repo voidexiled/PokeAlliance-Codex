@@ -130,8 +130,8 @@ export interface PokedexItemRef {
 /**
  * A drop of the first page as the props carry it (§13.6, the 20 KB of props): `DexCard`'s drop
  * with the sprite as `listItemSprite` writes it, or, for an item with no sprite or a client
- * sprite, one text: the name, and after a `|` the client id (`"seed|3070"`). `dropOfProp`
- * reads both.
+ * sprite, one text: the name, and after a `|` the client sprite as `listItemSprite` writes it
+ * (`"seed|3070"`, `"gem|3028x22"`). `dropOfProp` reads both.
  */
 export type PokedexDropProp = string | PokedexListDrop;
 
@@ -143,16 +143,14 @@ export function dropProp(drop: PokedexListDrop): PokedexDropProp {
   const { name, sprite } = drop;
   if (Object.keys(drop).some((key) => key !== 'name' && key !== 'sprite')) return drop;
   if (sprite === undefined || sprite === null) return name;
-  return typeof sprite === 'number' ? `${name}|${sprite}` : drop;
+  return typeof sprite === 'object' ? drop : `${name}|${sprite}`;
 }
 
 /** A drop of the props as `DexCard` takes it. */
 export function dropOfProp(drop: PokedexDropProp): DexCardDrop {
   if (typeof drop !== 'string') return { ...drop, sprite: expandListSprite(drop.sprite) };
-  const match = /^(.*)\|(\d+)$/.exec(drop);
-  return match
-    ? { name: match[1] ?? '', sprite: expandListSprite(Number(match[2])) }
-    : { name: drop };
+  const match = /^(.*)\|(\d+(?:x\d+)?)$/.exec(drop);
+  return match ? { name: match[1] ?? '', sprite: expandListSprite(match[2]) } : { name: drop };
 }
 
 /** The items of `refs`, by id. */

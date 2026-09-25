@@ -80,11 +80,9 @@ if (community === undefined || market === undefined) {
 // DP2: every sprite through the adapter. The keys of the tabs and of the stages are the fixed
 // ones of 9.5.1 and 9.7.3 (FIXED_SPRITE_KEYS): a registry without one gives `null`, and the
 // place shows the missing mark or no sprite at all, never another icon (R11). The Diamond
-// spins in Comercio (7.8), so it carries its animation.
+// carries its animation, as every animated sheet does.
 const registry = getSpriteRegistry();
-const diamond = spriteOrNull(registry, 'ui/diamond', {
-  animado: registry['ui/diamond']?.modo === 'animacion',
-});
+const diamond = spriteOrNull(registry, 'ui/diamond');
 const moneda = getMonedaDiamantes();
 const pokedolares = spriteOrNull(registry, 'ui/pokedolares');
 const sprites: ListingFormSprites = {
@@ -135,7 +133,7 @@ const form: ListingFormProps = {
   // `moneda` object of content/items/diamantes.json (§3.13). A list the owner has not filled makes
   // no row; with neither, there is no panel and the Diamonds of a price stay plain text (R2).
   diamonds: {
-    tip: diamondsTip(moneda, locale, ui.tooltip, { sprite: diamond, animated: true }),
+    tip: diamondsTip(moneda, locale, ui.tooltip, { sprite: diamond }),
     boughtAt: moneda?.seCompranEn?.[locale] ?? [],
     usedFor: moneda?.seUsanEn?.[locale] ?? [],
   },

@@ -175,11 +175,8 @@ const context: TradeContext = {
   ui,
   labels: tradeLabels(messages),
 };
-// The Diamond turns in Comercio (7.8). Without a row there is no panel (R2).
-const diamondsPanel = diamondsTip(moneda, locale, ui.tooltip, {
-  sprite: sprites.types.diamonds,
-  animated: true,
-});
+// Without a row there is no panel (R2).
+const diamondsPanel = diamondsTip(moneda, locale, ui.tooltip, { sprite: sprites.types.diamonds });
 const diamondsLink = diamondsPanel === null ? undefined : { tip: diamondsPanel, hint: ui.pinHint };
 const title = listingTitleNode(row);
 

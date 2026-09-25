@@ -26,7 +26,11 @@ export type SpriteOptions = {
   frame?: number;
   /** Stack size; only for `cantidad` sprites. */
   cantidad?: number;
-  /** Play the animation; only for `animacion` sprites. */
+  /**
+   * Play the animation; only for `animacion` sprites. `spriteData` plays an `animacion` sprite
+   * unless this is `false` or a `frame` is asked for (owner rule 2026-09-25: what the client
+   * animates, the site animates everywhere); `resolveSprite` only when it is `true`.
+   */
   animado?: boolean;
   /** Integer scale, 1–16. */
   escala?: number;
@@ -273,18 +277,28 @@ export function animationSignature(key: string, entry: SpriteEntry): AnimationSi
 
 /**
  * CSS name of a signature's `@keyframes` (spec 7.4.2): `ac-sprite-<frames>-<durations
- * joined by ->`, with the suffix `-once` when the sheet does not loop. Every part is
- * a number, so the name is always a valid CSS identifier.
+ * joined by ->`, or `ac-sprite-<frames>x<duration>` when every frame holds the same time,
+ * with the suffix `-once` when the sheet does not loop. Every part is a number, so the
+ * name is always a valid CSS identifier.
  */
 export function animationName(signature: AnimationSignature): string {
   assertSignature(signature);
   const { frames, durations, loop } = signature;
-  return `ac-sprite-${frames}-${durations.join('-')}${loop ? '' : '-once'}`;
+  const timing = isUniform(durations)
+    ? `${frames}x${durations[0]}`
+    : `${frames}-${durations.join('-')}`;
+  return `ac-sprite-${timing}${loop ? '' : '-once'}`;
+}
+
+/** More than one frame, each held for the same time: every animated item of the client. */
+function isUniform(durations: readonly number[]): boolean {
+  return durations.length > 1 && durations.every((durationMs) => durationMs === durations[0]);
 }
 
 /**
  * `@keyframes` of one signature. Each frame holds for its own duration
- * (`steps(1, end)`, the `step-end` of the design system) and the animation moves the
+ * (`steps(1, end)`, the `step-end` of the design system; for equal durations, one
+ * `steps(<frames>, jump-none)` move from the first frame to the last) and the animation moves the
  * percentage object-position, so it is scale-independent. Motion only runs without
  * prefers-reduced-motion, so reduced-motion users keep frame 0 from the inline style.
  */
@@ -292,6 +306,20 @@ export function animationCss(signature: AnimationSignature): string {
   const name = animationName(signature);
   const { frames, durations, loop } = signature;
   const { totalMs, steps } = scheduleOf(durations);
+  const iteration = loop ? 'infinite' : '1 forwards';
+  const motion = (timing: string) =>
+    `@media (prefers-reduced-motion:no-preference){` +
+    `.ac-sprite[data-anim='${name}']` +
+    `{animation:${name} ${totalMs}ms ${timing} ${iteration}}}`;
+  // Every frame for the same time (every item of the client): one move from the first frame
+  // to the last in `frames` equal steps that include both ends, instead of one stop per frame,
+  // so the CSS of a sheet of 22 frames stays as short as that of one of 2.
+  if (isUniform(durations)) {
+    return (
+      `@keyframes ${name}{from{object-position:0% 0%}to{object-position:100% 0%}}` +
+      motion(`steps(${frames},jump-none)`)
+    );
+  }
   const body = steps
     .map(
       (step) =>
@@ -299,13 +327,7 @@ export function animationCss(signature: AnimationSignature): string {
     )
     .join('');
   const last = frameObjectPosition(frames, frames - 1);
-  const iteration = loop ? 'infinite' : '1 forwards';
-  return (
-    `@keyframes ${name}{${body}100%{object-position:${last}}}` +
-    `@media (prefers-reduced-motion:no-preference){` +
-    `.ac-sprite[data-anim='${name}']` +
-    `{animation:${name} ${totalMs}ms steps(1,end) ${iteration}}}`
-  );
+  return `@keyframes ${name}{${body}100%{object-position:${last}}}` + motion('steps(1,end)');
 }
 
 /** Every distinct animation signature of the registry, keyed by its `@keyframes` name. */
@@ -432,7 +454,10 @@ export function spriteData(
   if (escala !== 1) data.scale = escala;
   if (isIllustration(entry.frame)) data.smooth = true;
 
-  if (options.animado) {
+  const animado =
+    options.animado ??
+    (entry.modo === 'animacion' && options.frame === undefined && options.cantidad === undefined);
+  if (animado) {
     // Fails the build when the entry cannot animate, as it does for a bad frame.
     animationTimeline(key, entry);
     data.durations = [...(entry.duracionMs ?? [])];
@@ -501,15 +526,23 @@ export function resolveSprite(
 export const ITEM_PLACEHOLDER_SPRITE = 'ui/comercio/item';
 
 /**
+ * Milliseconds of each phase of an animated client item (`items/cliente/<clientId>` in
+ * `animacion` mode): the figure scripts/assets/extract-game-sprites.mjs (`ITEM_PHASE_MS`) writes,
+ * since the client's DAT keeps no phase durations.
+ */
+export const CLIENT_ITEM_PHASE_MS = 110;
+
+/**
  * An item's sprite as the list files and their props carry it (items and Pokédex `datos.json`):
  * `null` for the placeholder, so the list draws the missing-sprite mark of an item with no sprite
- * yet (R7); the client id alone (`3070`) for the 32 × 32 client sprite
- * `items/cliente/<clientId>` of scripts/assets/extract-game-sprites.mjs, which
- * `expandListSprite` turns back into the sprite; the sprite itself otherwise. A thousand items
- * written in full would take the files past their 400 KB and the first pages past their 20 KB
- * of props (§13.6).
+ * yet (R7); for a 32 × 32 client sprite `items/cliente/<clientId>` of
+ * scripts/assets/extract-game-sprites.mjs, the client id alone (`3070`) when it is one still
+ * frame and `"<clientId>x<frames>"` (`"3028x22"`) when it is the strip of an animation of
+ * CLIENT_ITEM_PHASE_MS per frame, which `expandListSprite` turns back into the sprite; the sprite
+ * itself otherwise. A thousand items written in full would take the files past their 400 KB and
+ * the first pages past their 20 KB of props (§13.6).
  */
-export type ListSprite = SpriteData | number | null;
+export type ListSprite = SpriteData | number | string | null;
 
 const CLIENT_ITEM_PREFIX = `${SPRITES_BASE_URL}items/cliente/`;
 
@@ -523,23 +556,35 @@ export function listItemSprite(
   const clientId = data.src.slice(CLIENT_ITEM_PREFIX.length).replace(/\.png$/, '');
   const plain =
     /^\d+$/.test(clientId) &&
-    data.mode === 'estatico' &&
-    data.frames === 1 &&
     data.size[0] === CELL &&
     data.size[1] === CELL &&
     data.scale === undefined &&
-    data.smooth === undefined;
-  return plain ? Number(clientId) : data;
+    data.smooth === undefined &&
+    data.loop === undefined;
+  if (plain && data.mode === 'estatico' && data.frames === 1) return Number(clientId);
+  const animated =
+    plain &&
+    data.mode === 'animacion' &&
+    data.durations?.length === data.frames &&
+    data.durations.every((ms) => ms === CLIENT_ITEM_PHASE_MS);
+  return animated ? `${clientId}x${data.frames}` : data;
 }
 
-/** The sprite of a `ListSprite`: a client id becomes its `items/cliente/<clientId>` sprite. */
+/**
+ * The sprite of a `ListSprite`: a client id (`3070`) or a client id and its frames
+ * (`"3028x22"`) become their `items/cliente/<clientId>` sprite, still or animated.
+ */
 export function expandListSprite(value: ListSprite | undefined): SpriteData | null {
   if (value === undefined || value === null) return null;
-  if (typeof value !== 'number') return value;
-  return {
-    src: spriteUrl(`items/cliente/${value}.png`),
+  if (typeof value === 'object') return value;
+  const [id, count] = String(value).split('x');
+  const frames = Number(count ?? 1);
+  const data: SpriteData = {
+    src: spriteUrl(`items/cliente/${id}.png`),
     size: [CELL, CELL],
-    frames: 1,
-    mode: 'estatico',
+    frames,
+    mode: frames > 1 ? 'animacion' : 'estatico',
   };
+  if (frames > 1) data.durations = Array<number>(frames).fill(CLIENT_ITEM_PHASE_MS);
+  return data;
 }

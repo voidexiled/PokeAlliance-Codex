@@ -405,7 +405,7 @@ describe('diamondsTip', () => {
   it('builds the two rows of §8.5 from the moneda object, never from the code', () => {
     for (const locale of locales) {
       const labels = LABELS[locale];
-      const tip = diamondsTip(MONEDA, locale, labels, { sprite: DIAMOND_SPRITE, animated: true });
+      const tip = diamondsTip(MONEDA, locale, labels, { sprite: DIAMOND_SPRITE });
       expect(tip?.key).toBe('moneda:diamonds');
       expect(tip?.title).toBe('Diamonds');
       expect(tip?.width).toBe(240);
@@ -416,18 +416,9 @@ describe('diamondsTip', () => {
     }
   });
 
-  it('animates the Diamond only where the caller asks for it (§7.5.3)', () => {
-    const inTrade = diamondsTip(MONEDA, 'es', LABELS.es, {
-      sprite: DIAMOND_SPRITE,
-      animated: true,
-    });
-    const elsewhere = diamondsTip(MONEDA, 'es', LABELS.es, { sprite: DIAMOND_SPRITE });
-    expect(inTrade?.head).toEqual({ type: 'sprite', sprite: DIAMOND_SPRITE });
-    expect(elsewhere?.head).toEqual({
-      type: 'sprite',
-      sprite: { src: DIAMOND_SPRITE.src, frames: 7, mode: 'animacion' },
-    });
-    // The record the caller passed is never mutated.
+  it('animates the Diamond in every panel (owner rule 2026-09-25)', () => {
+    const tip = diamondsTip(MONEDA, 'es', LABELS.es, { sprite: DIAMOND_SPRITE });
+    expect(tip?.head).toEqual({ type: 'sprite', sprite: DIAMOND_SPRITE });
     expect(DIAMOND_SPRITE.durations).toHaveLength(7);
   });
 

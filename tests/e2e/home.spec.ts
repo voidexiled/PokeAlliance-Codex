@@ -1400,8 +1400,10 @@ test.describe('Destacados en el menú (8.0.3, 7.10.2)', () => {
       await expect(image).toHaveCount(1);
       await expect(image).toHaveAttribute('width', String(drawn.width));
       await expect(image).toHaveAttribute('height', String(drawn.height));
-      // Frame 0 and no animation in the menu, the Diamond included (6.3).
-      await expect(image).not.toHaveAttribute('data-anim', /.+/);
+      // An animated sheet turns in the menu too, the Diamond included (owner rule 2026-09-25).
+      if (entry.sprite === null || SPRITES[entry.sprite]?.modo !== 'animacion')
+        await expect(image).not.toHaveAttribute('data-anim', /.+/);
+      else await expect(image).toHaveAttribute('data-anim', /^ac-sprite-/);
     }
   }
 

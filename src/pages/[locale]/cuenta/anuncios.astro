@@ -87,11 +87,9 @@ const texts: ListingsPageTexts = {
 
 // DP2: every sprite through the adapter. The keys are the fixed ones of 9.5.1 and 9.7.3: a
 // registry without one gives `null`, and the place shows the missing mark or no sprite at all.
-// The Diamond spins in Comercio (7.8), so it carries its animation.
+// The Diamond carries its animation, as every animated sheet does.
 const registry = getSpriteRegistry();
-const diamond = spriteOrNull(registry, 'ui/diamond', {
-  animado: registry['ui/diamond']?.modo === 'animacion',
-});
+const diamond = spriteOrNull(registry, 'ui/diamond');
 const pokedolares = spriteOrNull(registry, 'ui/pokedolares');
 const moneda = getMonedaDiamantes();
 const data: ListingsPageData = {
@@ -121,7 +119,7 @@ const data: ListingsPageData = {
   sprites: { item: spriteOrNull(registry, 'ui/comercio/item'), diamond, pokedolares },
   // The `moneda` object of content/items/diamantes.json (3.13): the Diamonds panel of a price.
   diamonds: {
-    tip: diamondsTip(moneda, locale, ui.tooltip, { sprite: diamond, animated: true }),
+    tip: diamondsTip(moneda, locale, ui.tooltip, { sprite: diamond }),
     boughtAt: moneda?.seCompranEn?.[locale] ?? [],
     usedFor: moneda?.seUsanEn?.[locale] ?? [],
   },

@@ -9,10 +9,13 @@
 //   margin inline; here the box names the odd side in `data-snap` and `sidebar.css` adds the
 //   margin, because 3.7 keeps literal lengths out of `style`.
 // - Scaled (`width` and `height`, see `spriteDeMenu`), the image is drawn smooth at that size,
-//   frame 0 of its sheet: the same `object-fit: cover` window over the strip `Sprite` uses,
-//   with its geometry as the one inline style (C-R2).
+//   through the same `object-fit: cover` window over the strip `Sprite` uses, with its
+//   geometry as the one inline style (C-R2). An animated sheet (the adapter sent its
+//   `durations`) turns there too, with the `@keyframes` of `SpriteStyles.astro`; otherwise, and
+//   with reduced motion, it rests on frame 0.
 import type { SidebarSprite } from '@/lib/nav/groups';
 import { Sprite } from '@/components/game/Sprite';
+import { animationName } from '@/lib/sprites/resolve';
 
 interface Props {
   sprite: SidebarSprite | null;
@@ -27,6 +30,14 @@ const scaled =
     ? { width: sprite.width, height: sprite.height }
     : null;
 const drawn = scaled ?? (sprite ? { width: sprite.size[0], height: sprite.size[1] } : null);
+const anim =
+  sprite && scaled && sprite.mode === 'animacion' && sprite.durations?.length === sprite.frames
+    ? animationName({
+        frames: sprite.frames,
+        durations: sprite.durations,
+        loop: sprite.loop !== false,
+      })
+    : undefined;
 const snap = drawn
   ? [drawn.width % 2 === 1 ? 'x' : null, drawn.height % 2 === 1 ? 'y' : null]
       .filter(Boolean)
@@ -49,6 +60,7 @@ const snap = drawn
         alt=""
         decoding="async"
         draggable="false"
+        data-anim={anim}
         style={`width: ${scaled.width}px; height: ${scaled.height}px; object-position: 0% 0%`}
       />
     ) : sprite ? (
