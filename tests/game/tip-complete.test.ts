@@ -184,6 +184,20 @@ describe('item panels (server)', () => {
     expect(tip.text?.value).toMatch(/Mega Evolve/);
   });
 
+  it('a toy names the Toy Box that gives it: «Se obtiene en»', () => {
+    const labels = UI.es.tooltip;
+    expect(valueOf(serverItemTip('pikachu-toy'), labels.obtainedFrom)).toBe('Kanto toy box');
+    expect(valueOf(serverItemTip('pikachu-toy', 'en'), UI.en.tooltip.obtainedFrom)).toBe(
+      'Kanto toy box',
+    );
+    expect(valueOf(serverItemTip('celebi-legendary-toy'), labels.obtainedFrom)).toBe(
+      'Johto Toy Box (10x)',
+    );
+    expect(valueOf(serverItemTip('treecko-toy'), labels.obtainedFrom)).toBe('Hoenn toy box');
+    // A toy whose box the owner's rule does not decide (a Shiny or a Mega toy) has no row.
+    expect(rowOf(serverItemTip('shiny-zubat-toy'), labels.obtainedFrom)).toBeUndefined();
+  });
+
   it('«Drop de» reads every loot zone: an item only Wildscape or Primal drops has droppers', () => {
     const labels = UI.es.tooltip;
     const base = new Set(getPokemon().flatMap((record) => (record.drops ?? []).map((d) => d.item)));
@@ -212,7 +226,7 @@ describe('item panels (server)', () => {
         expect(rowOf(tip, labels.battlePass), item.id).toBeDefined();
       if ((obtencion.calendario ?? []).length > 0)
         expect(rowOf(tip, labels.calendar), item.id).toBeDefined();
-      if ((obtencion.tareas ?? []).length > 0)
+      if ((obtencion.tareas ?? []).length > 0 || (obtencion.cajas ?? []).length > 0)
         expect(rowOf(tip, labels.obtainedFrom), item.id).toBeDefined();
       for (const recipe of obtencion.recetas ?? [])
         expect(rowOf(tip, recipe.taller ?? labels.crafting), item.id).toBeDefined();

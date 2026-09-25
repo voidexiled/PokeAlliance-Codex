@@ -24,13 +24,16 @@ const routePattern = /^\/(?:[a-z0-9]+(?:-[a-z0-9]+)*\/)*$/;
 
 /**
  * The 14 Market categories in client order, then the site's own categories and «otros», read
- * from categorias.schema.json (the only place that lists them). "todo" is virtual.
+ * from categorias.schema.json (the only place that lists them). "todo" is virtual; `mercado` is
+ * true for the 13 that are categories of the game's Market (the site's own ones and «otros» are
+ * not).
  */
 export const marketCategories = categoriasJsonSchema.properties.categorias.prefixItems.map(
   (entry, orden) => ({
     id: entry.properties.id.const,
     orden,
     virtual: entry.properties.virtual.const,
+    mercado: entry.properties.mercado.const,
   }),
 );
 
@@ -52,6 +55,8 @@ export const categoriaSchema = z.strictObject({
   icono: spriteKey,
   orden: z.number().int().min(0),
   virtual: z.boolean().optional(),
+  /** true for a category of the game's Market; missing (or false) on the site's own ones. */
+  mercado: z.boolean().optional(),
 });
 
 export const categoriasFileSchema = z.strictObject({
@@ -71,6 +76,13 @@ export const categoriasFileSchema = z.strictObject({
           issue(
             expected.virtual ? 'Esta categoría es virtual.' : 'Esta categoría no es virtual.',
             'virtual',
+          );
+        if ((categoria.mercado ?? false) !== expected.mercado)
+          issue(
+            expected.mercado
+              ? 'Esta categoría es del Market: "mercado": true.'
+              : 'Esta categoría no es del Market: sin "mercado" (o false).',
+            'mercado',
           );
       });
     }),
@@ -187,6 +199,15 @@ export const obtencionSchema = z.strictObject({
         nombre: text,
         actividad: slug.optional(),
         cantidad: itemAmount,
+      }),
+    )
+    .optional(),
+  /** The game's boxes that give it (a toy: its Toy Box), by item id, and the chance if known. */
+  cajas: z
+    .array(
+      z.strictObject({
+        item: slug,
+        probabilidad: z.number().min(0).max(100).nullable(),
       }),
     )
     .optional(),

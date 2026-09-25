@@ -20,7 +20,7 @@ import {
 import type { Locale } from '@/i18n/config';
 import { fill } from '@/i18n/messages/types';
 import { layout, spacing } from '@/lib/design/shell-tokens';
-import { rankSearch, type SearchEntry, type SearchKind } from '@/lib/search/rank';
+import type { SearchEntry, SearchGroup, SearchKind } from '@/lib/search/rank';
 
 /**
  * Contract with src/scripts/search-shortcut.ts, which answers Ctrl + K and the
@@ -85,25 +85,37 @@ export interface SearchPaletteProps {
   glyph?: ReactNode;
 }
 
-/**
- * The index of spec 7.9.1, kept in the memory of the module: it is downloaded on
- * the first opening and reused by every later one. A failed request leaves
- * nothing behind, so reopening the palette asks again (spec 8.6).
- */
-let cache: SearchEntry[] | null = null;
-let request: Promise<SearchEntry[]> | null = null;
+/** The index of spec 7.9.1 once it is here, with the ranking of 7.9.4 that came with it. */
+interface LoadedIndex {
+  entries: SearchEntry[];
+  rank: (entries: readonly SearchEntry[], query: string, locale: Locale) => SearchGroup[];
+}
 
-function loadIndex(url: string): Promise<SearchEntry[]> {
+/**
+ * The index, kept in the memory of the module: it is downloaded on the first opening and
+ * reused by every later one. A failed request leaves nothing behind, so reopening the palette
+ * asks again (spec 8.6). The file is packed (src/lib/search/index-file.ts); its reader and the
+ * ranking arrive with it, in one deferred chunk (13.6).
+ */
+let cache: LoadedIndex | null = null;
+let request: Promise<LoadedIndex> | null = null;
+
+function loadIndex(url: string): Promise<LoadedIndex> {
   if (cache) return Promise.resolve(cache);
   if (!request) {
-    request = fetch(url)
-      .then((response) => {
+    request = Promise.all([
+      fetch(url).then((response) => {
         if (!response.ok) throw new Error(`${url}: ${response.status}`);
-        return response.json() as Promise<SearchEntry[]>;
-      })
-      .then((entries) => {
-        cache = entries;
-        return entries;
+        return response.json() as Promise<unknown>;
+      }),
+      import('@/lib/search/palette-search'),
+    ])
+      .then(([data, search]) => {
+        cache = {
+          entries: search.expandSearchIndex(data) as SearchEntry[],
+          rank: search.rankSearch,
+        };
+        return cache;
       })
       .catch((error: unknown) => {
         request = null;
@@ -194,7 +206,7 @@ export function SearchPalette({ locale, messages, glyph }: SearchPaletteProps) {
 
   const [open, setOpen] = useState(false);
   const [query, setQuery] = useState('');
-  const [entries, setEntries] = useState<SearchEntry[] | null>(cache);
+  const [index, setIndex] = useState<LoadedIndex | null>(cache);
   const [failed, setFailed] = useState(false);
   const [active, setActive] = useState(0);
 
@@ -203,8 +215,8 @@ export function SearchPalette({ locale, messages, glyph }: SearchPaletteProps) {
   const allHref = `/${locale}/buscar/?q=${encodeURIComponent(text)}`;
 
   const groups = useMemo(
-    () => (entries ? rankSearch(entries, query, locale) : []),
-    [entries, query, locale],
+    () => (index ? index.rank(index.entries, query, locale) : []),
+    [index, query, locale],
   );
 
   const options = useMemo(() => {
@@ -251,7 +263,7 @@ export function SearchPalette({ locale, messages, glyph }: SearchPaletteProps) {
       if (!cache) {
         setFailed(false);
         loadIndex(indexUrl).then(
-          (list) => setEntries(list),
+          (loaded) => setIndex(loaded),
           () => setFailed(true),
         );
       }
@@ -352,7 +364,7 @@ export function SearchPalette({ locale, messages, glyph }: SearchPaletteProps) {
     }
   }
 
-  const loading = entries === null && !failed;
+  const loading = index === null && !failed;
   const showEmpty = text.length > 0 && !loading && options.length === 0;
 
   return (

@@ -152,9 +152,9 @@ export function namesOrCount(names: readonly string[]): string[] | number {
 
 /**
  * `obtencion` as a panel reads it: each game shop with its offers (price, currency and the
- * quantity a purchase gives), the Battle Pass levels, the calendar days, the tasks by name and
- * each crafting recipe with its workshop and materials by name; `undefined` when it gives no way
- * at all.
+ * quantity a purchase gives), the Battle Pass levels, the calendar days, the tasks by name, the
+ * boxes that give it by name and each crafting recipe with its workshop and materials by name;
+ * `undefined` when it gives no way at all.
  */
 function obtainFacts(
   obtencion: Item['obtencion'],
@@ -169,6 +169,9 @@ function obtainFacts(
   }
   const tiendas = [...shops].map(([tienda, ofertas]) => ({ tienda, ofertas }));
   const tareas = [...new Set((obtencion.tareas ?? []).map((task) => task.nombre))];
+  const cajas = [
+    ...new Set((obtencion.cajas ?? []).map((box) => index.itemName.get(box.item) ?? box.item)),
+  ];
   const pase = [...new Set((obtencion.pase ?? []).flatMap((reward) => reward.nivel ?? []))].sort(
     (a, b) => a - b,
   );
@@ -185,6 +188,7 @@ function obtainFacts(
   const kinds: NonNullable<ItemTipFacts['obtencion']> = {
     ...(tiendas.length > 0 ? { tiendas } : {}),
     ...(tareas.length > 0 ? { tareas } : {}),
+    ...(cajas.length > 0 ? { cajas } : {}),
     ...((obtencion.pase ?? []).length > 0 ? { pase } : {}),
     ...(calendar.length > 0 ? { calendario: { dias, ...(trasDia21 ? { trasDia21 } : {}) } } : {}),
     ...(recetas.length > 0 ? { recetas } : {}),

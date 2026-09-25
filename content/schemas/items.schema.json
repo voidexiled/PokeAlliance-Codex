@@ -261,6 +261,27 @@
             }
           }
         },
+        "cajas": {
+          "type": "array",
+          "description": "Cajas del juego que lo dan al abrirlas (un juguete de Toys: Kanto toy box, Johto Toy Box, Hoenn toy box). Su página y su tooltip dicen «Se obtiene en: <caja>».",
+          "items": {
+            "type": "object",
+            "required": ["item", "probabilidad"],
+            "additionalProperties": false,
+            "properties": {
+              "item": {
+                "$ref": "#/$defs/slug",
+                "description": "id del ítem de la caja en content/items/. pnpm content:check comprueba que exista."
+              },
+              "probabilidad": {
+                "type": ["number", "null"],
+                "minimum": 0,
+                "maximum": 100,
+                "description": "Probabilidad (%) de que la caja lo dé. null si no se conoce: ni el cliente ni la exportación la traen."
+              }
+            }
+          }
+        },
         "recetas": {
           "type": "array",
           "description": "Recetas de crafteo que lo producen. Cada material gana en su página «Se usa para».",
@@ -335,6 +356,8 @@
             "diamond-utilities",
             "packages",
             "toys",
+            "mega-stones",
+            "shiny-creature-items",
             "otros"
           ]
         },

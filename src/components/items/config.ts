@@ -213,10 +213,13 @@ export function decodeItems(data: unknown): ItemsRow[] {
   return filas.map((fila) => {
     const row: Partial<Record<ItemsField, unknown>> = {};
     for (const [field, index] of columns) {
+      // A row leaves out its trailing unknowns: a cell past its end is `null`.
       const cell = !Array.isArray(fila)
         ? undefined
         : index >= 0
-          ? fila[index]
+          ? index < fila.length
+            ? fila[index]
+            : null
           : SHAPES[field] === 'o?'
             ? null
             : undefined;

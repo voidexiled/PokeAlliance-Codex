@@ -524,10 +524,10 @@ export const es = {
   // `ui.tooltip.*`.
   items: {
     description:
-      'Ítems de PokeAlliance por categoría del Market, con los Pokémon que los sueltan, su elemento, su uso y sus precios en el NPC.',
+      'Ítems de PokeAlliance por categoría, con los Pokémon que los sueltan, su elemento, su uso y sus precios en el NPC.',
     categoryDescription:
-      'Ítems de la categoría {category} del Market de PokeAlliance, con los Pokémon que los sueltan, su elemento, su uso y sus precios en el NPC.',
-    categoriesLabel: 'Categorías del Market',
+      'Ítems de la categoría {category} de PokeAlliance, con los Pokémon que los sueltan, su elemento, su uso y sus precios en el NPC.',
+    categoriesLabel: 'Categorías',
     count: { one: '{n} ítem', other: '{n} ítems' },
     empty: 'No hay ítems en esta categoría.',
     captionAll: 'Todos los ítems',
@@ -570,7 +570,12 @@ export const es = {
     columnQuantity: 'Cantidad',
     sortBy: 'Ordenar por {column}',
     market: 'Mercado',
-    marketText: 'Se vende en el mercado del juego, en {category}.',
+    // `marketText` solo con `mercado: true`; nombra la categoría cuando es una del Market del
+    // juego (`mercado` en content/items/categorias.json), si no, `marketTextPlain`.
+    marketText: 'Se vende en el mercado, en la categoría {category}.',
+    marketTextPlain: 'Se vende en el mercado.',
+    boxes: 'Se obtiene en',
+    columnBox: 'Caja',
     npc: 'NPC',
     shops: 'Tiendas del juego',
     columnShop: 'Tienda',

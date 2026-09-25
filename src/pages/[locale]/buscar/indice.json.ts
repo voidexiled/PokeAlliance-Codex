@@ -33,6 +33,7 @@ import { getPokemon, getQuests, getSystemItemHref, getSystemItems } from '@/lib/
 import type { PokemonRecord } from '@/lib/content/types';
 import { formatInteger } from '@/lib/format/numbers';
 import { buildNav } from '@/lib/nav/groups';
+import { packSearchIndex } from '@/lib/search/index-file';
 import { normalize } from '@/lib/search/normalize';
 import type { SearchEntry, SearchIcon } from '@/lib/search/rank';
 import { spriteOrNull } from '@/lib/sprites/resolve';
@@ -400,7 +401,8 @@ export function buildSearchIndex(locale: Locale): SearchEntry[] {
 
 export const GET: APIRoute = ({ params }) => {
   const locale = getLocale(params.locale);
-  return new Response(JSON.stringify(buildSearchIndex(locale)), {
+  // Packed (src/lib/search/index-file.ts): an item of a category page as a row (§13.6, BU5).
+  return new Response(JSON.stringify(packSearchIndex(buildSearchIndex(locale))), {
     headers: { 'content-type': 'application/json; charset=utf-8' },
   });
 };

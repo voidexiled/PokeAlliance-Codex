@@ -57,63 +57,6 @@
       }
     },
     {
-      "id": "guardian-elixir",
-      "nombre": "Guardian Elixir",
-      "clientId": 23284,
-      "categoria": "consumable",
-      "sprite": "items/cliente/23284",
-      "apilable": true,
-      "precioNpc": {
-        "vende": null,
-        "compra": 100000
-      },
-      "descripcion": {
-        "en": "A potent potion that renders your Pokémon immune to all adverse effects. Infused with ancient protective magic, it offers unwavering defense when it matters most. Duration: 1 hour."
-      },
-      "obtencion": {
-        "tiendas": [
-          {
-            "tienda": "Twitch Shop",
-            "precio": 500,
-            "moneda": "Twitch Points",
-            "cantidad": 1
-          }
-        ],
-        "pase": [
-          {
-            "temporada": null,
-            "nivel": 25,
-            "pista": "gratis",
-            "cantidad": 1
-          },
-          {
-            "temporada": null,
-            "nivel": 32,
-            "pista": "gratis",
-            "cantidad": 1
-          },
-          {
-            "temporada": null,
-            "nivel": 48,
-            "pista": "gratis",
-            "cantidad": 2
-          },
-          {
-            "temporada": null,
-            "nivel": 25,
-            "pista": "premium",
-            "cantidad": 3
-          },
-          {
-            "temporada": null,
-            "nivel": 32,
-            "pista": "premium",
-            "cantidad": 3
-          }
-        ]
-      }
-    },
-    {
       "id": "max-revive",
       "nombre": "Max Revive",
       "clientId": 3077,

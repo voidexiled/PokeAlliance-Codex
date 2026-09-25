@@ -451,6 +451,8 @@ export type ItemTipFacts = {
   obtencion?: {
     tiendas?: readonly ItemTipShop[];
     tareas?: readonly string[];
+    /** The game's boxes that give it, by name (a toy's Toy Box): «Se obtiene en». */
+    cajas?: readonly string[];
     /** The Battle Pass levels that give it, ascending; empty when the registry has none. */
     pase?: readonly number[];
     /** The calendar days that give it, and whether every day after the 21st does. */
@@ -592,7 +594,7 @@ function obtainRows(
     if (materials.length > 0) rows.push([label, { list: materials }]);
     else bare.push(label);
   }
-  bare.push(...(obtencion.tareas ?? []));
+  bare.push(...(obtencion.cajas ?? []), ...(obtencion.tareas ?? []));
   rows.push([labels.obtainedFrom ?? '', { list: [...new Set(bare)] }]);
   return rows;
 }

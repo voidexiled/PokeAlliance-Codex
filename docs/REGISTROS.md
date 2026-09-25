@@ -64,16 +64,21 @@ Cada archivo empieza con `"$schema"`. VS Code lo usa para autocompletar los camp
 - `apilable` es `true`, `false` o `null`.
 - `sprite` es una clave de `public/sprites/sprites.json` (siguiente sección).
 
-- `mercado` (opcional) dice si el item se vende en el mercado del juego. `true` lo escribe `pnpm content:datamine` cuando el item está en el catálogo del Market o en algún anuncio: la página muestra «Comercializable en el mercado». Para un item que **no** se puede vender, escribe tú `"mercado": false`: la página muestra «No vendible» y el importador nunca lo cambia. `null` o sin el campo: la página no dice nada. El importador nunca escribe `false`.
+- `mercado` (opcional) dice si el item se vende en el mercado del juego. `true` lo escribe `pnpm content:datamine` cuando el item está en el catálogo del Market o en algún anuncio: la página muestra «Comercializable en el mercado» y, en «Cómo se obtiene», «Se vende en el mercado, en la categoría X» si su categoría es una del Market (`"mercado": true` en `categorias.json`) o solo «Se vende en el mercado» si es una categoría del sitio. Para un item que **no** se puede vender, escribe tú `"mercado": false`: la página muestra «No vendible» y el importador nunca lo cambia. `null` o sin el campo: la página no dice nada del mercado. El importador nunca escribe `false`.
+- `obtencion.cajas` (opcional) son las cajas del juego que dan el item al abrirlas: `[{ "item": "kanto-toy-box", "probabilidad": null }]`. `item` es el `id` de la caja en `content/items/` (`pnpm content:check` comprueba que exista); `probabilidad` es el % si algún dato lo trae, si no `null` (la página no muestra la columna). La página del item y su tooltip dicen «Se obtiene en: Kanto toy box».
 
-Las categorías son las del Market, luego cuatro propias del sitio (decisión del propietario 2026-09-25) y al final «Otros». «Todo» es virtual (`"virtual": true`) y reúne los items de las demás; no tiene archivo. Las del sitio no existen en el Market del juego:
+Las categorías son las 13 del Market (con `"mercado": true` en `categorias.json`), luego seis propias del sitio (decisiones del propietario 2026-09-25) y al final «Otros». «Todo» es virtual (`"virtual": true`) y reúne los items de las demás; no tiene archivo. Las del sitio no existen en el Market del juego (no llevan `mercado`):
 
-| `id`                | Nombre            | Qué guarda                                                                                                           |
-| ------------------- | ----------------- | -------------------------------------------------------------------------------------------------------------------- |
-| `boosters`          | Boosters          | Aumentos temporales: XP, captura, shiny, drop, Pokélog, Prey Wildcard                                                |
-| `diamond-utilities` | Diamond Utilities | Servicios de cuenta y personaje de la Diamond Shop: World Migration Ticket, Player Change Sex, Bless, Moving Ticket… |
-| `packages`          | Packages          | Paquetes y cajas que dan otros ítems: Founder Packages, Jirachi Package, Prime Boxes, Shard Boxes…                   |
-| `toys`              | Toys              | Juguetes de las Toy Box (y las propias Toy Box)                                                                      |
+| `id`                   | Nombre               | Qué guarda                                                                                                                                                                     |
+| ---------------------- | -------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `boosters`             | Boosters             | Todo ítem cuyo texto del juego da un aumento temporal o porcentual: XP, captura, shiny, drop, Pokélog, inmunidad (Guardian Elixir), comidas y dulces con efecto, Prey Wildcard |
+| `diamond-utilities`    | Diamond Utilities    | Servicios de cuenta y personaje de la Diamond Shop: World Migration Ticket, Player Change Sex, Bless, Moving Ticket…                                                           |
+| `packages`             | Packages             | Paquetes y cajas que dan otros ítems: Founder Packages, Jirachi Package, Prime Boxes, Shard Boxes, las Toy Box (Kanto, Johto, Hoenn)…                                          |
+| `toys`                 | Toys                 | Los juguetes del cliente («… toy», «… rare toy», «… Legendary toy»); `obtencion.cajas` dice de qué Toy Box sale                                                                |
+| `mega-stones`          | Mega Stones          | Las Mega Stones (los ítems con `mega`, y Clefablite)                                                                                                                           |
+| `shiny-creature-items` | Shiny Creature Items | Loot exclusivo de Pokémon shiny: lo que suelta un shiny y ningún Pokémon normal, incluidos los ítems de evolución shiny (Master Belt, Champion Underwear…)                     |
+
+**Toys.** Cada juguete del cliente es un registro de `toys` (su `id` es su nombre en kebab-case, con el `clientId` detrás si se repite, como «Vivillon toy»). La caja la decide el Pokémon del juguete (regla del propietario): Generación 1 → `kanto-toy-box`, Generación 2 → `johto-toy-box-10x`, Generación 3 → `hoenn-toy-box`, según `generacion` en `content/pokemon.json`. Los juguetes shiny, Mega, de formas regionales, de eventos y de generaciones 4 en adelante no llevan caja (el cliente tiene Sinnoh, Unova, Kalos, Alola, Galar, Legendary y Mega toy box, pero ningún dato dice qué dan). Ningún dato trae la probabilidad: `probabilidad` es `null`.
 
 Su icono es el sprite del cliente de un ítem de la categoría (`items/cliente/<id>`).
 
@@ -81,7 +86,7 @@ Su icono es el sprite del cliente de un ítem de la categoría (`items/cliente/<
 
 `content/schemas/categorias.schema.json` fija las categorías del Market, las del sitio y «otros», y su orden, posición por posición. Si en `categorias.json` cambias el orden, borras una categoría o añades otra, `pnpm content:check` y el build fallan. Si el juego algún día cambia el Market:
 
-1. Cambia la lista `prefixItems` de `content/schemas/categorias.schema.json` (`id`, `orden` y `virtual` de cada posición).
+1. Cambia la lista `prefixItems` de `content/schemas/categorias.schema.json` (`id`, `orden`, `virtual` y `mercado` de cada posición).
 2. Cambia la lista `categoria` de `content/schemas/items.schema.json`: son las mismas categorías sin «todo», en el mismo orden. `pnpm content:check` avisa si no coinciden.
 3. Cambia `content/items/categorias.json` y crea o borra el archivo `content/items/<categoria>.json`.
 

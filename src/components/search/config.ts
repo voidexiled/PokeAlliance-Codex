@@ -3,6 +3,7 @@ import type { Locale } from '@/i18n/config';
 import type { TipData } from '@/lib/game/tips';
 import { PENDING_ATTRIBUTE, paramName } from '@/lib/lists/state';
 import type { ListConfig, ListGroup } from '@/lib/lists/state';
+import { expandSearchIndex } from '@/lib/search/index-file';
 import { normalizeQuery } from '@/lib/search/normalize';
 import { rankSearch, scoreEntry, searchKinds } from '@/lib/search/rank';
 import type { SearchEntry, SearchKind } from '@/lib/search/rank';
@@ -98,11 +99,13 @@ function readEntry(raw: unknown): SearchEntry | null {
 }
 
 /**
- * The entries of `/{l}/buscar/indice.json` (7.9.1). A file that is not a list of
- * `SearchEntry` throws, and the list controller then reports the search as not loaded (PR5,
- * 8.6 step 7): an index the build wrote wrong is never searched half.
+ * The entries of `/{l}/buscar/indice.json` (7.9.1), unpacked (src/lib/search/index-file.ts);
+ * a plain list of entries is read as well. A file that is not a list of `SearchEntry` throws,
+ * and the list controller then reports the search as not loaded (PR5, 8.6 step 7): an index the
+ * build wrote wrong is never searched half.
  */
-export function decodeSearchIndex(data: unknown): SearchEntry[] {
+export function decodeSearchIndex(file: unknown): SearchEntry[] {
+  const data = expandSearchIndex(file);
   if (!Array.isArray(data)) throw new Error('buscar/indice.json: not a list');
   return data.map((raw, index) => {
     const entry = readEntry(raw);

@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://alliance-codex.local/schemas/categorias.schema.json",
   "title": "Categorías del Market",
-  "description": "Las 14 categorías del Market del juego, en el orden del cliente; después las categorías propias del sitio (boosters, diamond-utilities, packages, toys; decisión del propietario 2026-09-25) y «otros» al final: ítems del juego que aún no tienen categoría (el propietario los recoloca a mano). El orden y los ids son fijos: el esquema los comprueba posición por posición.",
+  "description": "Las 14 categorías del Market del juego, en el orden del cliente; después las categorías propias del sitio (boosters, diamond-utilities, packages, toys, mega-stones, shiny-creature-items; decisiones del propietario 2026-09-25) y «otros» al final: ítems del juego que aún no tienen categoría (el propietario los recoloca a mano). El orden y los ids son fijos: el esquema los comprueba posición por posición.",
   "type": "object",
   "required": ["categorias"],
   "additionalProperties": false,
@@ -10,16 +10,17 @@
     "$schema": { "type": "string" },
     "categorias": {
       "type": "array",
-      "description": "Exactamente estas 19 categorías, en este orden: todo, diamantes, pokemon, poke-balls, stones, helds, orbs, creature-items, general-items, utilities, addons, consumable, foods, furnitures, boosters, diamond-utilities, packages, toys, otros. \"todo\" es virtual (reúne las demás y no tiene archivo).",
-      "minItems": 19,
-      "maxItems": 19,
+      "description": "Exactamente estas 21 categorías, en este orden: todo, diamantes, pokemon, poke-balls, stones, helds, orbs, creature-items, general-items, utilities, addons, consumable, foods, furnitures, boosters, diamond-utilities, packages, toys, mega-stones, shiny-creature-items, otros. \"todo\" es virtual (reúne las demás y no tiene archivo). \"mercado\" es true en las 13 que son categorías del Market del juego (de diamantes a furnitures).",
+      "minItems": 21,
+      "maxItems": 21,
       "prefixItems": [
         {
           "$ref": "#/$defs/categoria",
           "properties": {
             "id": { "const": "todo" },
             "orden": { "const": 0 },
-            "virtual": { "const": true }
+            "virtual": { "const": true },
+            "mercado": { "const": false }
           },
           "required": ["virtual"]
         },
@@ -28,7 +29,8 @@
           "properties": {
             "id": { "const": "diamantes" },
             "orden": { "const": 1 },
-            "virtual": { "const": false }
+            "virtual": { "const": false },
+            "mercado": { "const": true }
           }
         },
         {
@@ -36,7 +38,8 @@
           "properties": {
             "id": { "const": "pokemon" },
             "orden": { "const": 2 },
-            "virtual": { "const": false }
+            "virtual": { "const": false },
+            "mercado": { "const": true }
           }
         },
         {
@@ -44,7 +47,8 @@
           "properties": {
             "id": { "const": "poke-balls" },
             "orden": { "const": 3 },
-            "virtual": { "const": false }
+            "virtual": { "const": false },
+            "mercado": { "const": true }
           }
         },
         {
@@ -52,7 +56,8 @@
           "properties": {
             "id": { "const": "stones" },
             "orden": { "const": 4 },
-            "virtual": { "const": false }
+            "virtual": { "const": false },
+            "mercado": { "const": true }
           }
         },
         {
@@ -60,7 +65,8 @@
           "properties": {
             "id": { "const": "helds" },
             "orden": { "const": 5 },
-            "virtual": { "const": false }
+            "virtual": { "const": false },
+            "mercado": { "const": true }
           }
         },
         {
@@ -68,7 +74,8 @@
           "properties": {
             "id": { "const": "orbs" },
             "orden": { "const": 6 },
-            "virtual": { "const": false }
+            "virtual": { "const": false },
+            "mercado": { "const": true }
           }
         },
         {
@@ -76,7 +83,8 @@
           "properties": {
             "id": { "const": "creature-items" },
             "orden": { "const": 7 },
-            "virtual": { "const": false }
+            "virtual": { "const": false },
+            "mercado": { "const": true }
           }
         },
         {
@@ -84,7 +92,8 @@
           "properties": {
             "id": { "const": "general-items" },
             "orden": { "const": 8 },
-            "virtual": { "const": false }
+            "virtual": { "const": false },
+            "mercado": { "const": true }
           }
         },
         {
@@ -92,7 +101,8 @@
           "properties": {
             "id": { "const": "utilities" },
             "orden": { "const": 9 },
-            "virtual": { "const": false }
+            "virtual": { "const": false },
+            "mercado": { "const": true }
           }
         },
         {
@@ -100,7 +110,8 @@
           "properties": {
             "id": { "const": "addons" },
             "orden": { "const": 10 },
-            "virtual": { "const": false }
+            "virtual": { "const": false },
+            "mercado": { "const": true }
           }
         },
         {
@@ -108,7 +119,8 @@
           "properties": {
             "id": { "const": "consumable" },
             "orden": { "const": 11 },
-            "virtual": { "const": false }
+            "virtual": { "const": false },
+            "mercado": { "const": true }
           }
         },
         {
@@ -116,7 +128,8 @@
           "properties": {
             "id": { "const": "foods" },
             "orden": { "const": 12 },
-            "virtual": { "const": false }
+            "virtual": { "const": false },
+            "mercado": { "const": true }
           }
         },
         {
@@ -124,7 +137,8 @@
           "properties": {
             "id": { "const": "furnitures" },
             "orden": { "const": 13 },
-            "virtual": { "const": false }
+            "virtual": { "const": false },
+            "mercado": { "const": true }
           }
         },
         {
@@ -132,7 +146,8 @@
           "properties": {
             "id": { "const": "boosters" },
             "orden": { "const": 14 },
-            "virtual": { "const": false }
+            "virtual": { "const": false },
+            "mercado": { "const": false }
           }
         },
         {
@@ -140,7 +155,8 @@
           "properties": {
             "id": { "const": "diamond-utilities" },
             "orden": { "const": 15 },
-            "virtual": { "const": false }
+            "virtual": { "const": false },
+            "mercado": { "const": false }
           }
         },
         {
@@ -148,7 +164,8 @@
           "properties": {
             "id": { "const": "packages" },
             "orden": { "const": 16 },
-            "virtual": { "const": false }
+            "virtual": { "const": false },
+            "mercado": { "const": false }
           }
         },
         {
@@ -156,15 +173,35 @@
           "properties": {
             "id": { "const": "toys" },
             "orden": { "const": 17 },
-            "virtual": { "const": false }
+            "virtual": { "const": false },
+            "mercado": { "const": false }
+          }
+        },
+        {
+          "$ref": "#/$defs/categoria",
+          "properties": {
+            "id": { "const": "mega-stones" },
+            "orden": { "const": 18 },
+            "virtual": { "const": false },
+            "mercado": { "const": false }
+          }
+        },
+        {
+          "$ref": "#/$defs/categoria",
+          "properties": {
+            "id": { "const": "shiny-creature-items" },
+            "orden": { "const": 19 },
+            "virtual": { "const": false },
+            "mercado": { "const": false }
           }
         },
         {
           "$ref": "#/$defs/categoria",
           "properties": {
             "id": { "const": "otros" },
-            "orden": { "const": 18 },
-            "virtual": { "const": false }
+            "orden": { "const": 20 },
+            "virtual": { "const": false },
+            "mercado": { "const": false }
           }
         }
       ],
@@ -211,6 +248,10 @@
         "virtual": {
           "type": "boolean",
           "description": "true si la categoría no tiene archivo propio (\"Todo\" reúne las demás)."
+        },
+        "mercado": {
+          "type": "boolean",
+          "description": "true si es una categoría del Market del juego (la página de un ítem la nombra: «Se vende en el mercado, en la categoría X»). Las categorías del sitio, «todo» y «otros» no lo llevan (o lo llevan a false)."
         }
       }
     }

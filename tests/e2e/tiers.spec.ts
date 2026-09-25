@@ -43,6 +43,7 @@ import { en } from '../../src/i18n/messages/en';
 import type { Messages } from '../../src/i18n/messages/en';
 import { es } from '../../src/i18n/messages/es';
 import { idiomas } from '../../scripts/lib/rutas-migradas.mjs';
+import { expandSearchIndex } from '../../src/lib/search/index-file';
 import { expect, test } from './fixtures';
 import { RETIRED_ROUTES } from './routes';
 
@@ -1141,7 +1142,7 @@ test.describe('Índice de búsqueda: la Tier list en el grupo Páginas (8.6, BU6
     test(`${locale}: «Tier list» es una página del índice y responde`, async ({ page }) => {
       const response = await page.request.get(`/${locale}/buscar/indice.json`);
       expect(response.status()).toBe(200);
-      const entries = (await response.json()) as Entry[];
+      const entries = expandSearchIndex(await response.json()) as Entry[];
       const pages = entries.filter((entry) => entry.kind === 'pagina');
       const tiers = pages.find((entry) => entry.href === TIERS_PATH(locale));
       expect(tiers, `${locale}: the Tier list is in the index (8.6)`).toBeDefined();

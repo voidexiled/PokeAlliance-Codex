@@ -323,10 +323,10 @@ export const en: Messages = {
   },
   items: {
     description:
-      'PokeAlliance items by Market category, with the Pokémon that drop them, their element, use and NPC prices.',
+      'PokeAlliance items by category, with the Pokémon that drop them, their element, use and NPC prices.',
     categoryDescription:
-      'Items in the {category} category of the PokeAlliance Market, with the Pokémon that drop them, their element, use and NPC prices.',
-    categoriesLabel: 'Market categories',
+      'Items in the {category} category of PokeAlliance, with the Pokémon that drop them, their element, use and NPC prices.',
+    categoriesLabel: 'Categories',
     count: { one: '{n} item', other: '{n} items' },
     empty: 'There are no items in this category.',
     captionAll: 'All items',
@@ -364,7 +364,10 @@ export const en: Messages = {
     columnQuantity: 'Amount',
     sortBy: 'Sort by {column}',
     market: 'Market',
-    marketText: 'Sold on the in-game market, under {category}.',
+    marketText: 'Sold on the market, in the {category} category.',
+    marketTextPlain: 'Sold on the market.',
+    boxes: 'Obtained from',
+    columnBox: 'Box',
     npc: 'NPC',
     shops: 'Game shops',
     columnShop: 'Shop',

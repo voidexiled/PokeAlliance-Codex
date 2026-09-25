@@ -43,6 +43,7 @@ import { en } from '../../src/i18n/messages/en';
 import type { Messages } from '../../src/i18n/messages/en';
 import { es } from '../../src/i18n/messages/es';
 import { idiomas } from '../../scripts/lib/rutas-migradas.mjs';
+import { expandSearchIndex } from '../../src/lib/search/index-file';
 import { expect, test } from './fixtures';
 import { POKEMON_SAMPLE, pokedexEmptyQuery } from './routes';
 
@@ -1527,7 +1528,7 @@ test.describe('Índice de búsqueda: el grupo Pokémon y Páginas (8.6, BU6)', (
     }) => {
       const response = await page.request.get(`/${locale}/buscar/indice.json`);
       expect(response.status()).toBe(200);
-      const entries = (await response.json()) as Entry[];
+      const entries = expandSearchIndex(await response.json()) as Entry[];
       const pokemon = entries.filter((entry) => entry.kind === 'pokemon');
       expect(pokemon.map((entry) => entry.id)).toEqual(POKEMON.map((record) => record.id));
       const level = MESSAGES[locale].ui.tooltip.level;

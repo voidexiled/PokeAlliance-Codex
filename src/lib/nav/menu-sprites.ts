@@ -31,7 +31,9 @@ export const ARTE_EN_MARCO: Readonly<Record<string, number>> = {
   'items/cliente/23312': 24,
   'items/cliente/39090': 30,
   'items/cliente/50394': 31,
-  'items/cliente/29365': 31,
+  'items/cliente/12147': 18,
+  'items/cliente/14181': 14,
+  'items/cliente/36166': 26,
 };
 
 /**

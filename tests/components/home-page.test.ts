@@ -160,9 +160,9 @@ describe('WD1: each count of the bento is the links its panel draws (8.1 step 4,
         word: word(leaf, n, l),
       });
     }
-    // «Todo», the 13 categories of the Market, the 4 of the site and «Otros», which the schema
+    // «Todo», the 13 categories of the Market, the 6 of the site and «Otros», which the schema
     // fixes (8.5).
-    expect(getCategorias()).toHaveLength(19);
+    expect(getCategorias()).toHaveLength(21);
     expect(getElementos()).toHaveLength(18);
   });
 

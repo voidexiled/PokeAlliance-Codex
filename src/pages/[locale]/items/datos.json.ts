@@ -18,7 +18,8 @@
 // panel shows. The rest of each panel (the game text, the Ball facts…) is in `/{l}/paneles.json`,
 // which every list loads once (src/lib/game/panels.ts). Names and data are the registries'; the
 // labels are not here, they come from the dictionary (DP1). An optional field of §3.13 that a
-// record does not write is `null`, like the registry's unknown: the views show neither (8.0.5).
+// record does not write is `null`, like the registry's unknown: the views show neither (8.0.5);
+// a row leaves out its trailing `null` cells, which `decodeItems` reads back as `null`.
 //
 // Budget (13.6): at most 60 KB gzip and 400 KB uncompressed; `pnpm perf:budget` measures it.
 //
@@ -137,7 +138,11 @@ export function buildItemsData(locale: Locale): ItemsData {
       held: record.held ?? null,
       mega: record.mega ?? null,
     };
-    return ITEMS_FIELDS.map((field) => values[field]);
+    // The trailing unknowns are left out (§13.6: 2,650 rows since the toys of 2026-09-25):
+    // `decodeItems` reads a cell past the end of a row as `null`.
+    const fila = ITEMS_FIELDS.map((field) => values[field]);
+    while (fila.length > 0 && fila[fila.length - 1] === null) fila.pop();
+    return fila;
   });
 
   return {

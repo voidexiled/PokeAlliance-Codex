@@ -6,6 +6,7 @@ import { afterAll, describe, expect, it, vi } from 'vitest';
 import type { z } from 'zod';
 
 import { getPokemonOutfit } from '@/lib/content/outfit-media';
+import { getPokemon } from '@/lib/content/repository';
 import {
   getAuras,
   getCategorias,
@@ -76,13 +77,75 @@ describe('registry loaders', () => {
       'Diamond Utilities',
       'Packages',
       'Toys',
+      'Mega Stones',
+      'Shiny Creature Items',
       'Otros',
     ]);
     expect(categorias[0]).toMatchObject({ id: 'todo', virtual: true });
+    // «mercado» marks the 13 categories of the game's Market (the item page names only those).
+    expect(
+      categorias.filter((categoria) => categoria.mercado).map((categoria) => categoria.id),
+    ).toEqual([
+      'diamantes',
+      'pokemon',
+      'poke-balls',
+      'stones',
+      'helds',
+      'orbs',
+      'creature-items',
+      'general-items',
+      'utilities',
+      'addons',
+      'consumable',
+      'foods',
+      'furnitures',
+    ]);
+  });
+
+  it('keeps the owner classification of 2026-09-25 (toys, boxes, Mega Stones, shiny loot)', () => {
+    const ids = (categoria: string) => getItems(categoria).map((item) => item.id);
+    // The Toy Boxes are Packages; every toy of the client is a record of Toys.
+    expect(ids('packages')).toEqual(
+      expect.arrayContaining(['kanto-toy-box', 'johto-toy-box-10x', 'hoenn-toy-box']),
+    );
+    expect(getItems('toys')).toHaveLength(1080);
+    expect(getItems('toys').every((item) => /toy/i.test(item.nombre))).toBe(true);
+    // Each toy of a Generation 1, 2 or 3 Pokémon names its region's box.
+    const boxOf = (id: string) => getItem(id)?.obtencion?.cajas?.map((caja) => caja.item);
+    expect(boxOf('pikachu-toy')).toEqual(['kanto-toy-box']);
+    expect(boxOf('mew-legendary-toy')).toEqual(['kanto-toy-box']);
+    expect(boxOf('unown-a-toy')).toEqual(['johto-toy-box-10x']);
+    expect(boxOf('deoxys-legendary-toy-attack-forme')).toEqual(['hoenn-toy-box']);
+    expect(boxOf('turtwig-toy')).toBeUndefined();
+    // No data source has the chance of a toy.
+    const chances = getItems('toys').flatMap((item) =>
+      (item.obtencion?.cajas ?? []).map((caja) => caja.probabilidad),
+    );
+    expect(new Set(chances)).toEqual(new Set([null]));
+    // Every Mega Stone is in Mega Stones; none is left in Stones.
+    expect(getItems('stones').some((item) => item.mega !== undefined)).toBe(false);
+    expect(getItems('mega-stones')).toHaveLength(36);
+    // Shiny Creature Items: loot no non-shiny Pokémon drops, the shiny evolution items included.
+    expect(getItem('master-belt')?.categoria).toBe('shiny-creature-items');
+    expect(getItem('champion-underwear')?.categoria).toBe('shiny-creature-items');
+    const normalLoot = new Set(
+      getPokemon()
+        .filter((pokemon) => pokemon.variante !== 'shiny')
+        .flatMap((pokemon) => [
+          ...(pokemon.drops ?? []),
+          ...Object.values(pokemon.dropsPorZona ?? {}).flat(),
+        ])
+        .map((drop) => drop.item),
+    );
+    expect(getItems('shiny-creature-items').filter((item) => normalLoot.has(item.id))).toEqual([]);
+    // Boosters: every item whose game text gives a timed bonus.
+    expect(ids('boosters')).toEqual(
+      expect.arrayContaining(['bubble-gum', 'guarana-soda', 'chocolate-bar', 'guardian-elixir']),
+    );
   });
 
   it('loads items per category and "todo" as every category', () => {
-    expect(getItems('stones')).toHaveLength(265);
+    expect(getItems('stones')).toHaveLength(229);
     expect(
       getItems('stones')
         .slice(0, 5)
@@ -237,8 +300,9 @@ describe('JSON Schemas and their Zod mirror', () => {
       getCategorias().map((categoria) => categoria.id),
     );
     expect(marketCategories.filter((categoria) => categoria.virtual)).toEqual([
-      { id: 'todo', orden: 0, virtual: true },
+      { id: 'todo', orden: 0, virtual: true, mercado: false },
     ]);
+    expect(marketCategories.filter((categoria) => categoria.mercado)).toHaveLength(13);
     expect(itemCategoryIds).toEqual(jsonSchema('items').$defs.item.properties.categoria.enum);
   });
 
@@ -670,7 +734,7 @@ describe('pnpm content:check', () => {
     expect(result.errors).toEqual([]);
     expect(result.summary.find((row) => row.file === 'content/items/stones.json')).toEqual({
       file: 'content/items/stones.json',
-      registros: '265 items',
+      registros: '229 items',
       borradores: 0,
     });
     expect(formatReport(result)).toMatch(/Resultado: sin errores/);
@@ -939,6 +1003,21 @@ describe('pnpm content:check', () => {
     ]);
   });
 
+  it('checks that the box of a toy (obtencion.cajas) is an item', () => {
+    const root = copyRepo();
+    edit(
+      root,
+      'content/items/toys.json',
+      (data: { items: { id: string; obtencion?: { cajas?: { item: string }[] } }[] }) => {
+        const toy = data.items.find((item) => item.id === 'pikachu-toy');
+        if (toy?.obtencion?.cajas?.[0]) toy.obtencion.cajas[0].item = 'no-such-box';
+      },
+    );
+    expect(lines(checkContent(root).errors)).toEqual([
+      expect.stringMatching(/toys\.json · .*obtencion\.cajas\[0\]\.item · "no-such-box" no existe/),
+    ]);
+  });
+
   it('keeps the 14 Market categories, the site categories, «Otros» and their order', () => {
     let root = copyRepo();
     edit(root, 'content/items/categorias.json', (data: { categorias: { orden: number }[] }) => {
@@ -959,7 +1038,7 @@ describe('pnpm content:check', () => {
     // otros.json stays (its items are the loot of content/pokemon.json): the file then has no
     // category, which is reported as well.
     expect(lines(checkContent(root).errors)).toContainEqual(
-      expect.stringMatching(/categorias\.json · categorias · necesita al menos 19 elemento/),
+      expect.stringMatching(/categorias\.json · categorias · necesita al menos 21 elemento/),
     );
 
     root = copyRepo();

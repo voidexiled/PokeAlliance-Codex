@@ -726,6 +726,65 @@
           }
         ]
       }
+    },
+    {
+      "id": "kanto-toy-box",
+      "nombre": "Kanto toy box",
+      "clientId": 29365,
+      "categoria": "packages",
+      "sprite": "items/cliente/29365",
+      "apilable": true,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      },
+      "mercado": true,
+      "obtencion": {
+        "tiendas": [
+          {
+            "tienda": "Diamond Shop",
+            "precio": 1,
+            "moneda": "Diamonds",
+            "cantidad": 10
+          }
+        ]
+      }
+    },
+    {
+      "id": "johto-toy-box-10x",
+      "nombre": "Johto Toy Box (10x)",
+      "clientId": 29366,
+      "categoria": "packages",
+      "sprite": "items/cliente/29366",
+      "apilable": true,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      },
+      "mercado": true,
+      "obtencion": {
+        "tiendas": [
+          {
+            "tienda": "Diamond Shop",
+            "precio": 1,
+            "moneda": "Diamonds",
+            "cantidad": 10
+          }
+        ]
+      }
+    },
+    {
+      "id": "hoenn-toy-box",
+      "nombre": "Hoenn toy box",
+      "clientId": 29367,
+      "categoria": "packages",
+      "sprite": "items/cliente/29367",
+      "apilable": true,
+      "precioNpc": {
+        "vende": null,
+        "compra": null
+      },
+      "mercado": true
     }
   ]
 }

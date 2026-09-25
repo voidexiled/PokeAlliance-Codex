@@ -49,6 +49,7 @@ import { normalizeQuery } from '../../src/lib/search/normalize';
 import { rankSearch, scoreEntry, searchKinds } from '../../src/lib/search/rank';
 import type { SearchEntry, SearchKind } from '../../src/lib/search/rank';
 import { idiomas } from '../../scripts/lib/rutas-migradas.mjs';
+import { expandSearchIndex } from '../../src/lib/search/index-file';
 import { expect, test } from './fixtures';
 import { POKEMON_SAMPLE, RETIRED_ROUTES } from './routes';
 
@@ -164,7 +165,7 @@ const PAGE_SIZE = 24;
 async function indexOf(page: Page, locale: Locale): Promise<SearchEntry[]> {
   const response = await page.request.get(`/${locale}/buscar/indice.json`);
   expect(response.status(), `/${locale}/buscar/indice.json answers 200`).toBe(200);
-  return (await response.json()) as SearchEntry[];
+  return expandSearchIndex(await response.json()) as SearchEntry[];
 }
 
 /**

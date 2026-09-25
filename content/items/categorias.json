@@ -18,7 +18,8 @@
         "en": "Diamonds"
       },
       "icono": "ui/categorias/diamantes",
-      "orden": 1
+      "orden": 1,
+      "mercado": true
     },
     {
       "id": "pokemon",
@@ -27,7 +28,8 @@
         "en": "Pokémon"
       },
       "icono": "ui/categorias/pokemon",
-      "orden": 2
+      "orden": 2,
+      "mercado": true
     },
     {
       "id": "poke-balls",
@@ -36,7 +38,8 @@
         "en": "Poké Balls"
       },
       "icono": "ui/categorias/poke-balls",
-      "orden": 3
+      "orden": 3,
+      "mercado": true
     },
     {
       "id": "stones",
@@ -45,7 +48,8 @@
         "en": "Stones"
       },
       "icono": "ui/categorias/stones",
-      "orden": 4
+      "orden": 4,
+      "mercado": true
     },
     {
       "id": "helds",
@@ -54,7 +58,8 @@
         "en": "Helds"
       },
       "icono": "ui/categorias/helds",
-      "orden": 5
+      "orden": 5,
+      "mercado": true
     },
     {
       "id": "orbs",
@@ -63,7 +68,8 @@
         "en": "Orbs"
       },
       "icono": "ui/categorias/orbs",
-      "orden": 6
+      "orden": 6,
+      "mercado": true
     },
     {
       "id": "creature-items",
@@ -72,7 +78,8 @@
         "en": "Creature Items"
       },
       "icono": "ui/categorias/creature-items",
-      "orden": 7
+      "orden": 7,
+      "mercado": true
     },
     {
       "id": "general-items",
@@ -81,7 +88,8 @@
         "en": "General Items"
       },
       "icono": "ui/categorias/general-items",
-      "orden": 8
+      "orden": 8,
+      "mercado": true
     },
     {
       "id": "utilities",
@@ -90,7 +98,8 @@
         "en": "Utilities"
       },
       "icono": "ui/categorias/utilities",
-      "orden": 9
+      "orden": 9,
+      "mercado": true
     },
     {
       "id": "addons",
@@ -99,7 +108,8 @@
         "en": "Addons"
       },
       "icono": "ui/categorias/addons",
-      "orden": 10
+      "orden": 10,
+      "mercado": true
     },
     {
       "id": "consumable",
@@ -108,7 +118,8 @@
         "en": "Consumable"
       },
       "icono": "ui/categorias/consumable",
-      "orden": 11
+      "orden": 11,
+      "mercado": true
     },
     {
       "id": "foods",
@@ -117,7 +128,8 @@
         "en": "Foods"
       },
       "icono": "ui/categorias/foods",
-      "orden": 12
+      "orden": 12,
+      "mercado": true
     },
     {
       "id": "furnitures",
@@ -126,7 +138,8 @@
         "en": "Furnitures"
       },
       "icono": "ui/categorias/furnitures",
-      "orden": 13
+      "orden": 13,
+      "mercado": true
     },
     {
       "id": "boosters",
@@ -161,8 +174,26 @@
         "es": "Toys",
         "en": "Toys"
       },
-      "icono": "items/cliente/29365",
+      "icono": "items/cliente/12147",
       "orden": 17
+    },
+    {
+      "id": "mega-stones",
+      "nombre": {
+        "es": "Mega Stones",
+        "en": "Mega Stones"
+      },
+      "icono": "items/cliente/14181",
+      "orden": 18
+    },
+    {
+      "id": "shiny-creature-items",
+      "nombre": {
+        "es": "Shiny Creature Items",
+        "en": "Shiny Creature Items"
+      },
+      "icono": "items/cliente/36166",
+      "orden": 19
     },
     {
       "id": "otros",
@@ -171,7 +202,7 @@
         "en": "Other"
       },
       "icono": "ui/categorias/otros",
-      "orden": 18
+      "orden": 20
     }
   ]
 }

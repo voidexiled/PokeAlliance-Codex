@@ -510,7 +510,7 @@ export interface ItemsNavigationProps {
   tabs: readonly ItemsTab[];
   /** The tab of the page: `aria-current="page"` and the «Actual» state (IT6). */
   category: string;
-  /** «Categorías del Market» / «Market categories»: the name of the `nav`. */
+  /** «Categorías» / «Categories»: the name of the `nav`. */
   label: string;
 }
 

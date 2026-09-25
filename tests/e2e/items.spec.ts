@@ -50,6 +50,7 @@ import type { Messages } from '../../src/i18n/messages/en';
 import { es } from '../../src/i18n/messages/es';
 import { formatPokedolares, formatPokedolaresLabel } from '../../src/lib/format/numbers';
 import { idiomas } from '../../scripts/lib/rutas-migradas.mjs';
+import { expandSearchIndex } from '../../src/lib/search/index-file';
 import { expect, test } from './fixtures';
 import { RETIRED_ROUTES } from './routes';
 
@@ -938,7 +939,9 @@ test.describe('Ítems (8.5)', () => {
     page,
   }) => {
     test.skip(ROWS.length === 0, 'Sin ítems visibles no hay ancla (IT2).');
-    const entries = (await (await page.request.get('/es/buscar/indice.json')).json()) as {
+    const entries = expandSearchIndex(
+      await (await page.request.get('/es/buscar/indice.json')).json(),
+    ) as {
       kind: string;
       id: string;
       href: string;
@@ -1389,7 +1392,7 @@ test.describe('Índice de búsqueda: el grupo Ítems y la página de Ítems (8.6
     test(`${locale}: un ítem por registro, con su categoría y su página`, async ({ page }) => {
       const response = await page.request.get(`/${locale}/buscar/indice.json`);
       expect(response.status()).toBe(200);
-      const entries = (await response.json()) as Entry[];
+      const entries = expandSearchIndex(await response.json()) as Entry[];
       const market = entries.filter(
         (entry) => entry.kind === 'item' && entry.href.includes('/items/c/'),
       );

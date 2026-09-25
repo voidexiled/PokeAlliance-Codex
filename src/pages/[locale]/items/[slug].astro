@@ -11,7 +11,8 @@
 //      Pokémon that drop it;
 //   3. «Cómo se obtiene»: the loot of the Pokémon (derived at build time from
 //      `content/pokemon.json`: `drops` and `dropsPorZona`), with zone tabs (CSS) and sortable
-//      columns (the small script at the end), the Market, and each list of `obtencion`
+//      columns (the small script at the end), the Market (only with `mercado: true`), the boxes
+//      that give it (`obtencion.cajas`: a toy's Toy Box) and each other list of `obtencion`
 //      (game shops, Battle Pass, calendar, quests and tasks, crafting recipes);
 //   4. «Se usa para»: `uso`, the recipes of other items that take it, the evolutions that ask
 //      for it and the elements whose stone or fragment it is — all derived;
@@ -87,6 +88,11 @@ if (group === undefined) {
 const categorias = getCategorias();
 const categoryNames = new Map(categorias.map((category) => [category.id, category.nombre]));
 const categoryName = categoryNames.get(item.categoria)?.[locale] ?? item.categoria;
+// A category of the game's Market (`mercado` in content/items/categorias.json), which the Market
+// block may name; the site's own categories and «Otros» are not the Market's.
+const marketCategory = categorias.some(
+  (category) => category.id === item.categoria && category.mercado === true,
+);
 const categoryHref = `/${locale}/items/c/${item.categoria}/`;
 
 const registry = getSpriteRegistry();
@@ -205,11 +211,18 @@ const taskLabel: Record<(typeof tasks)[number]['tipo'], string> = {
   dungeon: copy.taskType.dungeon,
 };
 
-/** A material or a product of a recipe: the item with its panel, or its id as text. */
+/**
+ * A material or a product of a recipe, or a box that gives it: the item with its panel, or its
+ * id as text.
+ */
 const partOf = (id: string) => {
   const entry = allItems.find((candidate) => candidate.id === id);
   return entry === undefined ? null : { entry, ...itemEntry(entry) };
 };
+
+// The game's boxes that give it (a toy: its Toy Box), with the chance only once it is known.
+const boxes = (obtencion.cajas ?? []).map((box) => ({ ...box, part: partOf(box.item) }));
+const boxesHaveChance = boxes.some((box) => box.probabilidad !== null);
 
 // ------------------------------------------------------------------------------ Se usa para
 
@@ -231,16 +244,22 @@ const show = {
   calendar: calendar.length > 0,
   tasks: tasks.length > 0,
   recipes: recipes.length > 0,
+  boxes: boxes.length > 0,
   use: use !== null,
   usedIn: uses.recipes.length > 0,
   evolutions: uses.evolutions.length > 0,
   elementParts: stoneElements.length > 0 || fragmentElements.length > 0,
 };
-// The Market block: every item of content/items/ is in a Market category (D-011), unless the
-// registry says the Market does not take it (`mercado: false`).
-const marketShown = item.mercado !== false;
+// The Market block (owner rule 2026-09-25): only for an item the Market takes (`mercado: true`,
+// seen in its catalog or its listings). It names the category only when that category is one of
+// the Market's own; an item of a site category is just «Se vende en el mercado».
+const marketShown = item.mercado === true;
+const marketText = marketCategory
+  ? fill(copy.marketText, { category: categoryName })
+  : copy.marketTextPlain;
 const obtainShown =
   marketShown ||
+  show.boxes ||
   show.loot ||
   show.shops ||
   show.pass ||
@@ -529,7 +548,58 @@ const pageDescription = fill(copy.description, { name: pageName, category: categ
         {marketShown && (
           <div class="ac-entity-block">
             <h3 class="ac-entity-block__title">{copy.market}</h3>
-            <p class="ac-entity-note">{fill(copy.marketText, { category: categoryName })}</p>
+            <p class="ac-entity-note">{marketText}</p>
+          </div>
+        )}
+
+        {show.boxes && (
+          <div class="ac-entity-block">
+            <h3 class="ac-entity-block__title">{copy.boxes}</h3>
+            <div class="ac-entity-table">
+              <table>
+                {boxesHaveChance && (
+                  <thead>
+                    <tr>
+                      <th scope="col">{copy.columnBox}</th>
+                      <th scope="col" class="ac-num">
+                        {copy.columnChance}
+                      </th>
+                    </tr>
+                  </thead>
+                )}
+                <tbody>
+                  {boxes.map((box) => (
+                    <tr>
+                      <th scope="row">
+                        {box.part ? (
+                          <span class="ac-entity-move">
+                            <EntitySlot
+                              size={32}
+                              name={box.part.entry.nombre}
+                              sprite={box.part.sprite}
+                              tip={box.part.tip}
+                              href={itemHref(box.part.entry.id)}
+                              locale={locale}
+                              hint={ui.pinHint}
+                            />
+                            <a href={itemHref(box.part.entry.id)}>{box.part.entry.nombre}</a>
+                          </span>
+                        ) : (
+                          box.item
+                        )}
+                      </th>
+                      {boxesHaveChance && (
+                        <td class="ac-num">
+                          {box.probabilidad === null
+                            ? UNKNOWN
+                            : formatPercent(box.probabilidad, locale)}
+                        </td>
+                      )}
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
           </div>
         )}
 

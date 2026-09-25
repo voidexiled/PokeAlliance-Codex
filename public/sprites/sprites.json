@@ -16373,6 +16373,6493 @@
       "frame": [32, 32],
       "frames": 1,
       "modo": "estatico"
+    },
+    "items/cliente/29367": {
+      "archivo": "items/cliente/29367.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/123": {
+      "archivo": "items/cliente/123.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/11922": {
+      "archivo": "items/cliente/11922.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/11923": {
+      "archivo": "items/cliente/11923.png",
+      "frame": [38, 38],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/11924": {
+      "archivo": "items/cliente/11924.png",
+      "frame": [44, 44],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/11925": {
+      "archivo": "items/cliente/11925.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/11926": {
+      "archivo": "items/cliente/11926.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/11927": {
+      "archivo": "items/cliente/11927.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/11928": {
+      "archivo": "items/cliente/11928.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/11929": {
+      "archivo": "items/cliente/11929.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/11930": {
+      "archivo": "items/cliente/11930.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/11931": {
+      "archivo": "items/cliente/11931.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/11932": {
+      "archivo": "items/cliente/11932.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/11933": {
+      "archivo": "items/cliente/11933.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/11934": {
+      "archivo": "items/cliente/11934.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/11935": {
+      "archivo": "items/cliente/11935.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/11936": {
+      "archivo": "items/cliente/11936.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/11937": {
+      "archivo": "items/cliente/11937.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/11938": {
+      "archivo": "items/cliente/11938.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/11939": {
+      "archivo": "items/cliente/11939.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/11940": {
+      "archivo": "items/cliente/11940.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/11941": {
+      "archivo": "items/cliente/11941.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/11942": {
+      "archivo": "items/cliente/11942.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/11943": {
+      "archivo": "items/cliente/11943.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/11944": {
+      "archivo": "items/cliente/11944.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/11945": {
+      "archivo": "items/cliente/11945.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/11946": {
+      "archivo": "items/cliente/11946.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/11947": {
+      "archivo": "items/cliente/11947.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/11948": {
+      "archivo": "items/cliente/11948.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/11949": {
+      "archivo": "items/cliente/11949.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/11950": {
+      "archivo": "items/cliente/11950.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/11951": {
+      "archivo": "items/cliente/11951.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/11952": {
+      "archivo": "items/cliente/11952.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/11953": {
+      "archivo": "items/cliente/11953.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/11954": {
+      "archivo": "items/cliente/11954.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/11955": {
+      "archivo": "items/cliente/11955.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/11956": {
+      "archivo": "items/cliente/11956.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/11957": {
+      "archivo": "items/cliente/11957.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/11958": {
+      "archivo": "items/cliente/11958.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/11959": {
+      "archivo": "items/cliente/11959.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/11960": {
+      "archivo": "items/cliente/11960.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/11961": {
+      "archivo": "items/cliente/11961.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/11962": {
+      "archivo": "items/cliente/11962.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/11963": {
+      "archivo": "items/cliente/11963.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/11964": {
+      "archivo": "items/cliente/11964.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/11965": {
+      "archivo": "items/cliente/11965.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/11966": {
+      "archivo": "items/cliente/11966.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/11967": {
+      "archivo": "items/cliente/11967.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/11968": {
+      "archivo": "items/cliente/11968.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/11969": {
+      "archivo": "items/cliente/11969.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/11970": {
+      "archivo": "items/cliente/11970.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/11971": {
+      "archivo": "items/cliente/11971.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/11972": {
+      "archivo": "items/cliente/11972.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/11973": {
+      "archivo": "items/cliente/11973.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/11974": {
+      "archivo": "items/cliente/11974.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/11975": {
+      "archivo": "items/cliente/11975.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/11976": {
+      "archivo": "items/cliente/11976.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/11977": {
+      "archivo": "items/cliente/11977.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/11978": {
+      "archivo": "items/cliente/11978.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/11979": {
+      "archivo": "items/cliente/11979.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/11980": {
+      "archivo": "items/cliente/11980.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/11981": {
+      "archivo": "items/cliente/11981.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/11982": {
+      "archivo": "items/cliente/11982.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/11983": {
+      "archivo": "items/cliente/11983.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/11984": {
+      "archivo": "items/cliente/11984.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/11985": {
+      "archivo": "items/cliente/11985.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/11986": {
+      "archivo": "items/cliente/11986.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/11987": {
+      "archivo": "items/cliente/11987.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/11988": {
+      "archivo": "items/cliente/11988.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/11989": {
+      "archivo": "items/cliente/11989.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/11990": {
+      "archivo": "items/cliente/11990.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/11991": {
+      "archivo": "items/cliente/11991.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/11992": {
+      "archivo": "items/cliente/11992.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/11993": {
+      "archivo": "items/cliente/11993.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/11994": {
+      "archivo": "items/cliente/11994.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/11995": {
+      "archivo": "items/cliente/11995.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/11996": {
+      "archivo": "items/cliente/11996.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/11997": {
+      "archivo": "items/cliente/11997.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/11998": {
+      "archivo": "items/cliente/11998.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/11999": {
+      "archivo": "items/cliente/11999.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/12000": {
+      "archivo": "items/cliente/12000.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/12001": {
+      "archivo": "items/cliente/12001.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/12002": {
+      "archivo": "items/cliente/12002.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/12003": {
+      "archivo": "items/cliente/12003.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/12004": {
+      "archivo": "items/cliente/12004.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/12005": {
+      "archivo": "items/cliente/12005.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/12006": {
+      "archivo": "items/cliente/12006.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/12007": {
+      "archivo": "items/cliente/12007.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/12008": {
+      "archivo": "items/cliente/12008.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/12009": {
+      "archivo": "items/cliente/12009.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/12010": {
+      "archivo": "items/cliente/12010.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/12011": {
+      "archivo": "items/cliente/12011.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/12012": {
+      "archivo": "items/cliente/12012.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/12013": {
+      "archivo": "items/cliente/12013.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/12014": {
+      "archivo": "items/cliente/12014.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/12015": {
+      "archivo": "items/cliente/12015.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/12016": {
+      "archivo": "items/cliente/12016.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/12017": {
+      "archivo": "items/cliente/12017.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/12018": {
+      "archivo": "items/cliente/12018.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/12019": {
+      "archivo": "items/cliente/12019.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/12020": {
+      "archivo": "items/cliente/12020.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/12021": {
+      "archivo": "items/cliente/12021.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/12022": {
+      "archivo": "items/cliente/12022.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/12023": {
+      "archivo": "items/cliente/12023.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/12024": {
+      "archivo": "items/cliente/12024.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/12025": {
+      "archivo": "items/cliente/12025.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/12026": {
+      "archivo": "items/cliente/12026.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/12027": {
+      "archivo": "items/cliente/12027.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/12028": {
+      "archivo": "items/cliente/12028.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/12029": {
+      "archivo": "items/cliente/12029.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/12030": {
+      "archivo": "items/cliente/12030.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/12031": {
+      "archivo": "items/cliente/12031.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/12032": {
+      "archivo": "items/cliente/12032.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/12033": {
+      "archivo": "items/cliente/12033.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/12034": {
+      "archivo": "items/cliente/12034.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/12035": {
+      "archivo": "items/cliente/12035.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/12036": {
+      "archivo": "items/cliente/12036.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/12037": {
+      "archivo": "items/cliente/12037.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/12038": {
+      "archivo": "items/cliente/12038.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/12039": {
+      "archivo": "items/cliente/12039.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/12040": {
+      "archivo": "items/cliente/12040.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/12041": {
+      "archivo": "items/cliente/12041.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/12042": {
+      "archivo": "items/cliente/12042.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/12043": {
+      "archivo": "items/cliente/12043.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/12044": {
+      "archivo": "items/cliente/12044.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/12045": {
+      "archivo": "items/cliente/12045.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/12046": {
+      "archivo": "items/cliente/12046.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/12047": {
+      "archivo": "items/cliente/12047.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/12048": {
+      "archivo": "items/cliente/12048.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/12049": {
+      "archivo": "items/cliente/12049.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/12050": {
+      "archivo": "items/cliente/12050.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/12051": {
+      "archivo": "items/cliente/12051.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/12052": {
+      "archivo": "items/cliente/12052.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/12053": {
+      "archivo": "items/cliente/12053.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/12054": {
+      "archivo": "items/cliente/12054.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/12055": {
+      "archivo": "items/cliente/12055.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/12056": {
+      "archivo": "items/cliente/12056.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/12057": {
+      "archivo": "items/cliente/12057.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/12058": {
+      "archivo": "items/cliente/12058.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/12059": {
+      "archivo": "items/cliente/12059.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/12060": {
+      "archivo": "items/cliente/12060.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/12061": {
+      "archivo": "items/cliente/12061.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/12062": {
+      "archivo": "items/cliente/12062.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/12063": {
+      "archivo": "items/cliente/12063.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/12064": {
+      "archivo": "items/cliente/12064.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/12065": {
+      "archivo": "items/cliente/12065.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/12066": {
+      "archivo": "items/cliente/12066.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/12067": {
+      "archivo": "items/cliente/12067.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/12068": {
+      "archivo": "items/cliente/12068.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/12069": {
+      "archivo": "items/cliente/12069.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/12070": {
+      "archivo": "items/cliente/12070.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/12071": {
+      "archivo": "items/cliente/12071.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/12072": {
+      "archivo": "items/cliente/12072.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/12073": {
+      "archivo": "items/cliente/12073.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/12074": {
+      "archivo": "items/cliente/12074.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/12075": {
+      "archivo": "items/cliente/12075.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/12076": {
+      "archivo": "items/cliente/12076.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/12077": {
+      "archivo": "items/cliente/12077.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/12078": {
+      "archivo": "items/cliente/12078.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/12079": {
+      "archivo": "items/cliente/12079.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/12080": {
+      "archivo": "items/cliente/12080.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/12081": {
+      "archivo": "items/cliente/12081.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/12082": {
+      "archivo": "items/cliente/12082.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/12083": {
+      "archivo": "items/cliente/12083.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/12084": {
+      "archivo": "items/cliente/12084.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/12085": {
+      "archivo": "items/cliente/12085.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/12086": {
+      "archivo": "items/cliente/12086.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/12087": {
+      "archivo": "items/cliente/12087.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/12088": {
+      "archivo": "items/cliente/12088.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/12089": {
+      "archivo": "items/cliente/12089.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/12090": {
+      "archivo": "items/cliente/12090.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/12091": {
+      "archivo": "items/cliente/12091.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/12092": {
+      "archivo": "items/cliente/12092.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/12093": {
+      "archivo": "items/cliente/12093.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/12094": {
+      "archivo": "items/cliente/12094.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/12095": {
+      "archivo": "items/cliente/12095.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/12096": {
+      "archivo": "items/cliente/12096.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/12097": {
+      "archivo": "items/cliente/12097.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/12098": {
+      "archivo": "items/cliente/12098.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/12099": {
+      "archivo": "items/cliente/12099.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/12100": {
+      "archivo": "items/cliente/12100.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/12101": {
+      "archivo": "items/cliente/12101.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/12102": {
+      "archivo": "items/cliente/12102.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/12103": {
+      "archivo": "items/cliente/12103.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/12104": {
+      "archivo": "items/cliente/12104.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/12105": {
+      "archivo": "items/cliente/12105.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/12106": {
+      "archivo": "items/cliente/12106.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/12107": {
+      "archivo": "items/cliente/12107.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/12108": {
+      "archivo": "items/cliente/12108.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/12109": {
+      "archivo": "items/cliente/12109.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/12110": {
+      "archivo": "items/cliente/12110.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/12111": {
+      "archivo": "items/cliente/12111.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/12112": {
+      "archivo": "items/cliente/12112.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/12113": {
+      "archivo": "items/cliente/12113.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/12114": {
+      "archivo": "items/cliente/12114.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/12115": {
+      "archivo": "items/cliente/12115.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/12116": {
+      "archivo": "items/cliente/12116.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/12117": {
+      "archivo": "items/cliente/12117.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/12118": {
+      "archivo": "items/cliente/12118.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/12119": {
+      "archivo": "items/cliente/12119.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/12120": {
+      "archivo": "items/cliente/12120.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/12121": {
+      "archivo": "items/cliente/12121.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/12122": {
+      "archivo": "items/cliente/12122.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/12123": {
+      "archivo": "items/cliente/12123.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/12124": {
+      "archivo": "items/cliente/12124.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/12125": {
+      "archivo": "items/cliente/12125.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/12126": {
+      "archivo": "items/cliente/12126.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/12127": {
+      "archivo": "items/cliente/12127.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/12128": {
+      "archivo": "items/cliente/12128.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/12129": {
+      "archivo": "items/cliente/12129.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/12130": {
+      "archivo": "items/cliente/12130.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/12131": {
+      "archivo": "items/cliente/12131.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/12132": {
+      "archivo": "items/cliente/12132.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/12133": {
+      "archivo": "items/cliente/12133.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/12134": {
+      "archivo": "items/cliente/12134.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/12135": {
+      "archivo": "items/cliente/12135.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/12136": {
+      "archivo": "items/cliente/12136.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/12137": {
+      "archivo": "items/cliente/12137.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/12138": {
+      "archivo": "items/cliente/12138.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/12139": {
+      "archivo": "items/cliente/12139.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/12140": {
+      "archivo": "items/cliente/12140.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/12141": {
+      "archivo": "items/cliente/12141.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/12142": {
+      "archivo": "items/cliente/12142.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/12143": {
+      "archivo": "items/cliente/12143.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/12144": {
+      "archivo": "items/cliente/12144.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/12145": {
+      "archivo": "items/cliente/12145.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/12146": {
+      "archivo": "items/cliente/12146.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/12147": {
+      "archivo": "items/cliente/12147.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/12148": {
+      "archivo": "items/cliente/12148.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/12149": {
+      "archivo": "items/cliente/12149.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/12150": {
+      "archivo": "items/cliente/12150.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/12151": {
+      "archivo": "items/cliente/12151.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/12152": {
+      "archivo": "items/cliente/12152.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/12153": {
+      "archivo": "items/cliente/12153.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/12154": {
+      "archivo": "items/cliente/12154.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/12155": {
+      "archivo": "items/cliente/12155.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/12156": {
+      "archivo": "items/cliente/12156.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/12157": {
+      "archivo": "items/cliente/12157.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/12158": {
+      "archivo": "items/cliente/12158.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/12159": {
+      "archivo": "items/cliente/12159.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/12160": {
+      "archivo": "items/cliente/12160.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/12161": {
+      "archivo": "items/cliente/12161.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/12162": {
+      "archivo": "items/cliente/12162.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/12163": {
+      "archivo": "items/cliente/12163.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/12164": {
+      "archivo": "items/cliente/12164.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/12165": {
+      "archivo": "items/cliente/12165.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/12166": {
+      "archivo": "items/cliente/12166.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/12167": {
+      "archivo": "items/cliente/12167.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/12168": {
+      "archivo": "items/cliente/12168.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/12169": {
+      "archivo": "items/cliente/12169.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/12170": {
+      "archivo": "items/cliente/12170.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/12171": {
+      "archivo": "items/cliente/12171.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/13266": {
+      "archivo": "items/cliente/13266.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/15344": {
+      "archivo": "items/cliente/15344.png",
+      "frame": [34, 34],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/15345": {
+      "archivo": "items/cliente/15345.png",
+      "frame": [34, 34],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/15349": {
+      "archivo": "items/cliente/15349.png",
+      "frame": [34, 34],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/15350": {
+      "archivo": "items/cliente/15350.png",
+      "frame": [34, 34],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/15875": {
+      "archivo": "items/cliente/15875.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/16868": {
+      "archivo": "items/cliente/16868.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/16869": {
+      "archivo": "items/cliente/16869.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/16870": {
+      "archivo": "items/cliente/16870.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/16871": {
+      "archivo": "items/cliente/16871.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/16872": {
+      "archivo": "items/cliente/16872.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/16873": {
+      "archivo": "items/cliente/16873.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/16874": {
+      "archivo": "items/cliente/16874.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/16875": {
+      "archivo": "items/cliente/16875.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/16876": {
+      "archivo": "items/cliente/16876.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/16877": {
+      "archivo": "items/cliente/16877.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/16878": {
+      "archivo": "items/cliente/16878.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/16879": {
+      "archivo": "items/cliente/16879.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/16880": {
+      "archivo": "items/cliente/16880.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/16881": {
+      "archivo": "items/cliente/16881.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/16882": {
+      "archivo": "items/cliente/16882.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/16883": {
+      "archivo": "items/cliente/16883.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/16884": {
+      "archivo": "items/cliente/16884.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/16885": {
+      "archivo": "items/cliente/16885.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/16886": {
+      "archivo": "items/cliente/16886.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/16887": {
+      "archivo": "items/cliente/16887.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/16888": {
+      "archivo": "items/cliente/16888.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/16889": {
+      "archivo": "items/cliente/16889.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/16890": {
+      "archivo": "items/cliente/16890.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/16891": {
+      "archivo": "items/cliente/16891.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/16892": {
+      "archivo": "items/cliente/16892.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/16893": {
+      "archivo": "items/cliente/16893.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/16894": {
+      "archivo": "items/cliente/16894.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/16895": {
+      "archivo": "items/cliente/16895.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/16896": {
+      "archivo": "items/cliente/16896.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/16897": {
+      "archivo": "items/cliente/16897.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/16898": {
+      "archivo": "items/cliente/16898.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/16899": {
+      "archivo": "items/cliente/16899.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/16900": {
+      "archivo": "items/cliente/16900.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/16901": {
+      "archivo": "items/cliente/16901.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/16902": {
+      "archivo": "items/cliente/16902.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/16903": {
+      "archivo": "items/cliente/16903.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/16904": {
+      "archivo": "items/cliente/16904.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/16905": {
+      "archivo": "items/cliente/16905.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/16906": {
+      "archivo": "items/cliente/16906.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/16907": {
+      "archivo": "items/cliente/16907.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/16908": {
+      "archivo": "items/cliente/16908.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/16909": {
+      "archivo": "items/cliente/16909.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/16910": {
+      "archivo": "items/cliente/16910.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/16911": {
+      "archivo": "items/cliente/16911.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/16912": {
+      "archivo": "items/cliente/16912.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/16913": {
+      "archivo": "items/cliente/16913.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/16914": {
+      "archivo": "items/cliente/16914.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/16915": {
+      "archivo": "items/cliente/16915.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/16916": {
+      "archivo": "items/cliente/16916.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/16917": {
+      "archivo": "items/cliente/16917.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/16918": {
+      "archivo": "items/cliente/16918.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/16919": {
+      "archivo": "items/cliente/16919.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/16920": {
+      "archivo": "items/cliente/16920.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/16921": {
+      "archivo": "items/cliente/16921.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/16922": {
+      "archivo": "items/cliente/16922.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/16923": {
+      "archivo": "items/cliente/16923.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/16924": {
+      "archivo": "items/cliente/16924.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/16925": {
+      "archivo": "items/cliente/16925.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/16926": {
+      "archivo": "items/cliente/16926.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/16927": {
+      "archivo": "items/cliente/16927.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/16928": {
+      "archivo": "items/cliente/16928.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/16929": {
+      "archivo": "items/cliente/16929.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/16930": {
+      "archivo": "items/cliente/16930.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/16931": {
+      "archivo": "items/cliente/16931.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/16932": {
+      "archivo": "items/cliente/16932.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/16933": {
+      "archivo": "items/cliente/16933.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/16934": {
+      "archivo": "items/cliente/16934.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/16935": {
+      "archivo": "items/cliente/16935.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/16936": {
+      "archivo": "items/cliente/16936.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/16937": {
+      "archivo": "items/cliente/16937.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/16938": {
+      "archivo": "items/cliente/16938.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/16939": {
+      "archivo": "items/cliente/16939.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/16940": {
+      "archivo": "items/cliente/16940.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/16941": {
+      "archivo": "items/cliente/16941.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/16942": {
+      "archivo": "items/cliente/16942.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/16943": {
+      "archivo": "items/cliente/16943.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/16944": {
+      "archivo": "items/cliente/16944.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/16945": {
+      "archivo": "items/cliente/16945.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/16946": {
+      "archivo": "items/cliente/16946.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/16947": {
+      "archivo": "items/cliente/16947.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/16948": {
+      "archivo": "items/cliente/16948.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/16949": {
+      "archivo": "items/cliente/16949.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/16950": {
+      "archivo": "items/cliente/16950.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/16951": {
+      "archivo": "items/cliente/16951.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/16952": {
+      "archivo": "items/cliente/16952.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/16953": {
+      "archivo": "items/cliente/16953.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/16954": {
+      "archivo": "items/cliente/16954.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/16955": {
+      "archivo": "items/cliente/16955.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/16956": {
+      "archivo": "items/cliente/16956.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/16957": {
+      "archivo": "items/cliente/16957.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/16958": {
+      "archivo": "items/cliente/16958.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/16959": {
+      "archivo": "items/cliente/16959.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/16960": {
+      "archivo": "items/cliente/16960.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/16961": {
+      "archivo": "items/cliente/16961.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/16962": {
+      "archivo": "items/cliente/16962.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/16963": {
+      "archivo": "items/cliente/16963.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/16964": {
+      "archivo": "items/cliente/16964.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/16965": {
+      "archivo": "items/cliente/16965.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/16966": {
+      "archivo": "items/cliente/16966.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/16967": {
+      "archivo": "items/cliente/16967.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/16968": {
+      "archivo": "items/cliente/16968.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/16969": {
+      "archivo": "items/cliente/16969.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/16970": {
+      "archivo": "items/cliente/16970.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/16971": {
+      "archivo": "items/cliente/16971.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/16972": {
+      "archivo": "items/cliente/16972.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/16973": {
+      "archivo": "items/cliente/16973.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/16974": {
+      "archivo": "items/cliente/16974.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/16975": {
+      "archivo": "items/cliente/16975.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/16976": {
+      "archivo": "items/cliente/16976.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/16977": {
+      "archivo": "items/cliente/16977.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/16978": {
+      "archivo": "items/cliente/16978.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/16979": {
+      "archivo": "items/cliente/16979.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/16980": {
+      "archivo": "items/cliente/16980.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/16981": {
+      "archivo": "items/cliente/16981.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/16982": {
+      "archivo": "items/cliente/16982.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/16983": {
+      "archivo": "items/cliente/16983.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/16984": {
+      "archivo": "items/cliente/16984.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/16985": {
+      "archivo": "items/cliente/16985.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/16986": {
+      "archivo": "items/cliente/16986.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/16987": {
+      "archivo": "items/cliente/16987.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/16988": {
+      "archivo": "items/cliente/16988.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/16989": {
+      "archivo": "items/cliente/16989.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/16990": {
+      "archivo": "items/cliente/16990.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/16991": {
+      "archivo": "items/cliente/16991.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/16992": {
+      "archivo": "items/cliente/16992.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/16993": {
+      "archivo": "items/cliente/16993.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/16994": {
+      "archivo": "items/cliente/16994.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/16995": {
+      "archivo": "items/cliente/16995.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/16996": {
+      "archivo": "items/cliente/16996.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/16997": {
+      "archivo": "items/cliente/16997.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/16998": {
+      "archivo": "items/cliente/16998.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/16999": {
+      "archivo": "items/cliente/16999.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/17000": {
+      "archivo": "items/cliente/17000.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/17001": {
+      "archivo": "items/cliente/17001.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/17002": {
+      "archivo": "items/cliente/17002.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/17003": {
+      "archivo": "items/cliente/17003.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/17004": {
+      "archivo": "items/cliente/17004.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/17005": {
+      "archivo": "items/cliente/17005.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/17006": {
+      "archivo": "items/cliente/17006.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/17007": {
+      "archivo": "items/cliente/17007.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/17008": {
+      "archivo": "items/cliente/17008.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/17009": {
+      "archivo": "items/cliente/17009.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/17010": {
+      "archivo": "items/cliente/17010.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/17011": {
+      "archivo": "items/cliente/17011.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/17012": {
+      "archivo": "items/cliente/17012.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/17013": {
+      "archivo": "items/cliente/17013.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/17014": {
+      "archivo": "items/cliente/17014.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/17015": {
+      "archivo": "items/cliente/17015.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/17016": {
+      "archivo": "items/cliente/17016.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/17017": {
+      "archivo": "items/cliente/17017.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/17018": {
+      "archivo": "items/cliente/17018.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/17019": {
+      "archivo": "items/cliente/17019.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/17020": {
+      "archivo": "items/cliente/17020.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/17021": {
+      "archivo": "items/cliente/17021.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/17022": {
+      "archivo": "items/cliente/17022.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/17023": {
+      "archivo": "items/cliente/17023.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/17024": {
+      "archivo": "items/cliente/17024.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/17025": {
+      "archivo": "items/cliente/17025.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/17026": {
+      "archivo": "items/cliente/17026.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/17027": {
+      "archivo": "items/cliente/17027.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/17028": {
+      "archivo": "items/cliente/17028.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/17029": {
+      "archivo": "items/cliente/17029.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/17030": {
+      "archivo": "items/cliente/17030.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/17031": {
+      "archivo": "items/cliente/17031.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/17032": {
+      "archivo": "items/cliente/17032.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/17033": {
+      "archivo": "items/cliente/17033.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/17034": {
+      "archivo": "items/cliente/17034.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/17035": {
+      "archivo": "items/cliente/17035.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/17036": {
+      "archivo": "items/cliente/17036.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/17037": {
+      "archivo": "items/cliente/17037.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/17038": {
+      "archivo": "items/cliente/17038.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/17039": {
+      "archivo": "items/cliente/17039.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/17040": {
+      "archivo": "items/cliente/17040.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/17041": {
+      "archivo": "items/cliente/17041.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/17042": {
+      "archivo": "items/cliente/17042.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/17043": {
+      "archivo": "items/cliente/17043.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/17044": {
+      "archivo": "items/cliente/17044.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/17045": {
+      "archivo": "items/cliente/17045.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/17046": {
+      "archivo": "items/cliente/17046.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/17047": {
+      "archivo": "items/cliente/17047.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/17048": {
+      "archivo": "items/cliente/17048.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/17049": {
+      "archivo": "items/cliente/17049.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/17050": {
+      "archivo": "items/cliente/17050.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/17051": {
+      "archivo": "items/cliente/17051.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/17052": {
+      "archivo": "items/cliente/17052.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/17053": {
+      "archivo": "items/cliente/17053.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/17054": {
+      "archivo": "items/cliente/17054.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/17055": {
+      "archivo": "items/cliente/17055.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/17056": {
+      "archivo": "items/cliente/17056.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/17057": {
+      "archivo": "items/cliente/17057.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/17058": {
+      "archivo": "items/cliente/17058.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/17059": {
+      "archivo": "items/cliente/17059.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/17060": {
+      "archivo": "items/cliente/17060.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/17061": {
+      "archivo": "items/cliente/17061.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/17062": {
+      "archivo": "items/cliente/17062.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/17063": {
+      "archivo": "items/cliente/17063.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/17064": {
+      "archivo": "items/cliente/17064.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/17065": {
+      "archivo": "items/cliente/17065.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/17066": {
+      "archivo": "items/cliente/17066.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/17067": {
+      "archivo": "items/cliente/17067.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/17068": {
+      "archivo": "items/cliente/17068.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/17069": {
+      "archivo": "items/cliente/17069.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/17070": {
+      "archivo": "items/cliente/17070.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/17071": {
+      "archivo": "items/cliente/17071.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/17072": {
+      "archivo": "items/cliente/17072.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/17073": {
+      "archivo": "items/cliente/17073.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/17074": {
+      "archivo": "items/cliente/17074.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/17075": {
+      "archivo": "items/cliente/17075.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/17076": {
+      "archivo": "items/cliente/17076.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/17077": {
+      "archivo": "items/cliente/17077.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/17078": {
+      "archivo": "items/cliente/17078.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/17079": {
+      "archivo": "items/cliente/17079.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/17080": {
+      "archivo": "items/cliente/17080.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/17081": {
+      "archivo": "items/cliente/17081.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/17082": {
+      "archivo": "items/cliente/17082.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/17083": {
+      "archivo": "items/cliente/17083.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/17084": {
+      "archivo": "items/cliente/17084.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/17085": {
+      "archivo": "items/cliente/17085.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/17086": {
+      "archivo": "items/cliente/17086.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/17087": {
+      "archivo": "items/cliente/17087.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/17088": {
+      "archivo": "items/cliente/17088.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/17089": {
+      "archivo": "items/cliente/17089.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/17090": {
+      "archivo": "items/cliente/17090.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/17092": {
+      "archivo": "items/cliente/17092.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/17093": {
+      "archivo": "items/cliente/17093.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/17094": {
+      "archivo": "items/cliente/17094.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/17095": {
+      "archivo": "items/cliente/17095.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/17096": {
+      "archivo": "items/cliente/17096.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/17097": {
+      "archivo": "items/cliente/17097.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/17098": {
+      "archivo": "items/cliente/17098.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/17099": {
+      "archivo": "items/cliente/17099.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/17100": {
+      "archivo": "items/cliente/17100.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/17101": {
+      "archivo": "items/cliente/17101.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/17102": {
+      "archivo": "items/cliente/17102.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/17103": {
+      "archivo": "items/cliente/17103.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/17104": {
+      "archivo": "items/cliente/17104.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/17106": {
+      "archivo": "items/cliente/17106.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/17107": {
+      "archivo": "items/cliente/17107.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/17108": {
+      "archivo": "items/cliente/17108.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/17109": {
+      "archivo": "items/cliente/17109.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/17110": {
+      "archivo": "items/cliente/17110.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/17111": {
+      "archivo": "items/cliente/17111.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/17112": {
+      "archivo": "items/cliente/17112.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/17113": {
+      "archivo": "items/cliente/17113.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/17114": {
+      "archivo": "items/cliente/17114.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/17115": {
+      "archivo": "items/cliente/17115.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/17116": {
+      "archivo": "items/cliente/17116.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/17117": {
+      "archivo": "items/cliente/17117.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/17118": {
+      "archivo": "items/cliente/17118.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/17119": {
+      "archivo": "items/cliente/17119.png",
+      "frame": [39, 39],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/17120": {
+      "archivo": "items/cliente/17120.png",
+      "frame": [40, 40],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/17121": {
+      "archivo": "items/cliente/17121.png",
+      "frame": [45, 45],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/17122": {
+      "archivo": "items/cliente/17122.png",
+      "frame": [45, 45],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/17123": {
+      "archivo": "items/cliente/17123.png",
+      "frame": [38, 38],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/17124": {
+      "archivo": "items/cliente/17124.png",
+      "frame": [48, 48],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/17125": {
+      "archivo": "items/cliente/17125.png",
+      "frame": [39, 39],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/17126": {
+      "archivo": "items/cliente/17126.png",
+      "frame": [42, 42],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/17127": {
+      "archivo": "items/cliente/17127.png",
+      "frame": [48, 48],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/17128": {
+      "archivo": "items/cliente/17128.png",
+      "frame": [35, 35],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/17139": {
+      "archivo": "items/cliente/17139.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/17140": {
+      "archivo": "items/cliente/17140.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/17141": {
+      "archivo": "items/cliente/17141.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/17142": {
+      "archivo": "items/cliente/17142.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/17143": {
+      "archivo": "items/cliente/17143.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/17144": {
+      "archivo": "items/cliente/17144.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/17145": {
+      "archivo": "items/cliente/17145.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/17146": {
+      "archivo": "items/cliente/17146.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/17147": {
+      "archivo": "items/cliente/17147.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/17148": {
+      "archivo": "items/cliente/17148.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/17149": {
+      "archivo": "items/cliente/17149.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/17150": {
+      "archivo": "items/cliente/17150.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/17151": {
+      "archivo": "items/cliente/17151.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/17152": {
+      "archivo": "items/cliente/17152.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/17153": {
+      "archivo": "items/cliente/17153.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/17154": {
+      "archivo": "items/cliente/17154.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/17155": {
+      "archivo": "items/cliente/17155.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/17156": {
+      "archivo": "items/cliente/17156.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/17157": {
+      "archivo": "items/cliente/17157.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/17158": {
+      "archivo": "items/cliente/17158.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/17159": {
+      "archivo": "items/cliente/17159.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/17160": {
+      "archivo": "items/cliente/17160.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/17161": {
+      "archivo": "items/cliente/17161.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/17162": {
+      "archivo": "items/cliente/17162.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/17163": {
+      "archivo": "items/cliente/17163.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/17164": {
+      "archivo": "items/cliente/17164.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/17165": {
+      "archivo": "items/cliente/17165.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/17166": {
+      "archivo": "items/cliente/17166.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/18837": {
+      "archivo": "items/cliente/18837.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/18838": {
+      "archivo": "items/cliente/18838.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/18839": {
+      "archivo": "items/cliente/18839.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/18840": {
+      "archivo": "items/cliente/18840.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/18841": {
+      "archivo": "items/cliente/18841.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/18842": {
+      "archivo": "items/cliente/18842.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/18843": {
+      "archivo": "items/cliente/18843.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/18844": {
+      "archivo": "items/cliente/18844.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/18845": {
+      "archivo": "items/cliente/18845.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/18846": {
+      "archivo": "items/cliente/18846.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/18847": {
+      "archivo": "items/cliente/18847.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/18848": {
+      "archivo": "items/cliente/18848.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/18849": {
+      "archivo": "items/cliente/18849.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/18850": {
+      "archivo": "items/cliente/18850.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/18851": {
+      "archivo": "items/cliente/18851.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/18852": {
+      "archivo": "items/cliente/18852.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/18853": {
+      "archivo": "items/cliente/18853.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/18854": {
+      "archivo": "items/cliente/18854.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/18855": {
+      "archivo": "items/cliente/18855.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/18856": {
+      "archivo": "items/cliente/18856.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/18857": {
+      "archivo": "items/cliente/18857.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/18858": {
+      "archivo": "items/cliente/18858.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/18859": {
+      "archivo": "items/cliente/18859.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/18860": {
+      "archivo": "items/cliente/18860.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/18861": {
+      "archivo": "items/cliente/18861.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/18862": {
+      "archivo": "items/cliente/18862.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/18863": {
+      "archivo": "items/cliente/18863.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/18864": {
+      "archivo": "items/cliente/18864.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/18865": {
+      "archivo": "items/cliente/18865.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/18866": {
+      "archivo": "items/cliente/18866.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/18867": {
+      "archivo": "items/cliente/18867.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/18868": {
+      "archivo": "items/cliente/18868.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/18869": {
+      "archivo": "items/cliente/18869.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/18870": {
+      "archivo": "items/cliente/18870.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/18871": {
+      "archivo": "items/cliente/18871.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/18872": {
+      "archivo": "items/cliente/18872.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/18873": {
+      "archivo": "items/cliente/18873.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/18874": {
+      "archivo": "items/cliente/18874.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/18875": {
+      "archivo": "items/cliente/18875.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/18876": {
+      "archivo": "items/cliente/18876.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/18877": {
+      "archivo": "items/cliente/18877.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/18878": {
+      "archivo": "items/cliente/18878.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/18879": {
+      "archivo": "items/cliente/18879.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/18880": {
+      "archivo": "items/cliente/18880.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/18881": {
+      "archivo": "items/cliente/18881.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/18882": {
+      "archivo": "items/cliente/18882.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/18883": {
+      "archivo": "items/cliente/18883.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/18884": {
+      "archivo": "items/cliente/18884.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/18885": {
+      "archivo": "items/cliente/18885.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/18886": {
+      "archivo": "items/cliente/18886.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/18887": {
+      "archivo": "items/cliente/18887.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/18888": {
+      "archivo": "items/cliente/18888.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/18889": {
+      "archivo": "items/cliente/18889.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/18890": {
+      "archivo": "items/cliente/18890.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/18891": {
+      "archivo": "items/cliente/18891.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/18892": {
+      "archivo": "items/cliente/18892.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/18893": {
+      "archivo": "items/cliente/18893.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/18894": {
+      "archivo": "items/cliente/18894.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/18895": {
+      "archivo": "items/cliente/18895.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/18896": {
+      "archivo": "items/cliente/18896.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/18897": {
+      "archivo": "items/cliente/18897.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/18898": {
+      "archivo": "items/cliente/18898.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/18899": {
+      "archivo": "items/cliente/18899.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/18900": {
+      "archivo": "items/cliente/18900.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/18901": {
+      "archivo": "items/cliente/18901.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/18902": {
+      "archivo": "items/cliente/18902.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/18903": {
+      "archivo": "items/cliente/18903.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/18904": {
+      "archivo": "items/cliente/18904.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/18905": {
+      "archivo": "items/cliente/18905.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/18906": {
+      "archivo": "items/cliente/18906.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/18907": {
+      "archivo": "items/cliente/18907.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/18908": {
+      "archivo": "items/cliente/18908.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/18909": {
+      "archivo": "items/cliente/18909.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/18910": {
+      "archivo": "items/cliente/18910.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/18911": {
+      "archivo": "items/cliente/18911.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/18912": {
+      "archivo": "items/cliente/18912.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/18913": {
+      "archivo": "items/cliente/18913.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/18914": {
+      "archivo": "items/cliente/18914.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/18915": {
+      "archivo": "items/cliente/18915.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/18916": {
+      "archivo": "items/cliente/18916.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/18917": {
+      "archivo": "items/cliente/18917.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/20199": {
+      "archivo": "items/cliente/20199.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/20206": {
+      "archivo": "items/cliente/20206.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/20207": {
+      "archivo": "items/cliente/20207.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/20208": {
+      "archivo": "items/cliente/20208.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/20209": {
+      "archivo": "items/cliente/20209.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/20210": {
+      "archivo": "items/cliente/20210.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/20211": {
+      "archivo": "items/cliente/20211.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/20212": {
+      "archivo": "items/cliente/20212.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/20213": {
+      "archivo": "items/cliente/20213.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/20718": {
+      "archivo": "items/cliente/20718.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/22743": {
+      "archivo": "items/cliente/22743.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/22744": {
+      "archivo": "items/cliente/22744.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/22745": {
+      "archivo": "items/cliente/22745.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/22746": {
+      "archivo": "items/cliente/22746.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/24203": {
+      "archivo": "items/cliente/24203.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/24204": {
+      "archivo": "items/cliente/24204.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/28966": {
+      "archivo": "items/cliente/28966.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/28969": {
+      "archivo": "items/cliente/28969.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/28970": {
+      "archivo": "items/cliente/28970.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/28971": {
+      "archivo": "items/cliente/28971.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/28972": {
+      "archivo": "items/cliente/28972.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/28973": {
+      "archivo": "items/cliente/28973.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/28974": {
+      "archivo": "items/cliente/28974.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/28975": {
+      "archivo": "items/cliente/28975.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/28976": {
+      "archivo": "items/cliente/28976.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/28977": {
+      "archivo": "items/cliente/28977.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/28978": {
+      "archivo": "items/cliente/28978.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/28979": {
+      "archivo": "items/cliente/28979.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/28980": {
+      "archivo": "items/cliente/28980.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/28981": {
+      "archivo": "items/cliente/28981.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/28982": {
+      "archivo": "items/cliente/28982.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/28983": {
+      "archivo": "items/cliente/28983.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/28984": {
+      "archivo": "items/cliente/28984.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/28985": {
+      "archivo": "items/cliente/28985.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/28986": {
+      "archivo": "items/cliente/28986.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/28987": {
+      "archivo": "items/cliente/28987.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/28988": {
+      "archivo": "items/cliente/28988.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/28989": {
+      "archivo": "items/cliente/28989.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/28990": {
+      "archivo": "items/cliente/28990.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/28991": {
+      "archivo": "items/cliente/28991.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/28992": {
+      "archivo": "items/cliente/28992.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/28993": {
+      "archivo": "items/cliente/28993.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/28994": {
+      "archivo": "items/cliente/28994.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/28995": {
+      "archivo": "items/cliente/28995.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/28996": {
+      "archivo": "items/cliente/28996.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/28997": {
+      "archivo": "items/cliente/28997.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/28998": {
+      "archivo": "items/cliente/28998.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/28999": {
+      "archivo": "items/cliente/28999.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29000": {
+      "archivo": "items/cliente/29000.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29001": {
+      "archivo": "items/cliente/29001.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29002": {
+      "archivo": "items/cliente/29002.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29003": {
+      "archivo": "items/cliente/29003.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29004": {
+      "archivo": "items/cliente/29004.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29005": {
+      "archivo": "items/cliente/29005.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29006": {
+      "archivo": "items/cliente/29006.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29007": {
+      "archivo": "items/cliente/29007.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29008": {
+      "archivo": "items/cliente/29008.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29009": {
+      "archivo": "items/cliente/29009.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29010": {
+      "archivo": "items/cliente/29010.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29011": {
+      "archivo": "items/cliente/29011.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29012": {
+      "archivo": "items/cliente/29012.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29013": {
+      "archivo": "items/cliente/29013.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29014": {
+      "archivo": "items/cliente/29014.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29015": {
+      "archivo": "items/cliente/29015.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29016": {
+      "archivo": "items/cliente/29016.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29017": {
+      "archivo": "items/cliente/29017.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29018": {
+      "archivo": "items/cliente/29018.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29019": {
+      "archivo": "items/cliente/29019.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29020": {
+      "archivo": "items/cliente/29020.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29021": {
+      "archivo": "items/cliente/29021.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29022": {
+      "archivo": "items/cliente/29022.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29023": {
+      "archivo": "items/cliente/29023.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29024": {
+      "archivo": "items/cliente/29024.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29025": {
+      "archivo": "items/cliente/29025.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29026": {
+      "archivo": "items/cliente/29026.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29027": {
+      "archivo": "items/cliente/29027.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29028": {
+      "archivo": "items/cliente/29028.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29029": {
+      "archivo": "items/cliente/29029.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29030": {
+      "archivo": "items/cliente/29030.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29031": {
+      "archivo": "items/cliente/29031.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29032": {
+      "archivo": "items/cliente/29032.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29033": {
+      "archivo": "items/cliente/29033.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29034": {
+      "archivo": "items/cliente/29034.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29035": {
+      "archivo": "items/cliente/29035.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29036": {
+      "archivo": "items/cliente/29036.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29037": {
+      "archivo": "items/cliente/29037.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29038": {
+      "archivo": "items/cliente/29038.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29039": {
+      "archivo": "items/cliente/29039.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29040": {
+      "archivo": "items/cliente/29040.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29041": {
+      "archivo": "items/cliente/29041.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29042": {
+      "archivo": "items/cliente/29042.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29043": {
+      "archivo": "items/cliente/29043.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29044": {
+      "archivo": "items/cliente/29044.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29045": {
+      "archivo": "items/cliente/29045.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29046": {
+      "archivo": "items/cliente/29046.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29047": {
+      "archivo": "items/cliente/29047.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29048": {
+      "archivo": "items/cliente/29048.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29049": {
+      "archivo": "items/cliente/29049.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29050": {
+      "archivo": "items/cliente/29050.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29051": {
+      "archivo": "items/cliente/29051.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29052": {
+      "archivo": "items/cliente/29052.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29053": {
+      "archivo": "items/cliente/29053.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29054": {
+      "archivo": "items/cliente/29054.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29055": {
+      "archivo": "items/cliente/29055.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29056": {
+      "archivo": "items/cliente/29056.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29057": {
+      "archivo": "items/cliente/29057.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29058": {
+      "archivo": "items/cliente/29058.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29059": {
+      "archivo": "items/cliente/29059.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29060": {
+      "archivo": "items/cliente/29060.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29061": {
+      "archivo": "items/cliente/29061.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29062": {
+      "archivo": "items/cliente/29062.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29063": {
+      "archivo": "items/cliente/29063.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29064": {
+      "archivo": "items/cliente/29064.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29065": {
+      "archivo": "items/cliente/29065.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29066": {
+      "archivo": "items/cliente/29066.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29067": {
+      "archivo": "items/cliente/29067.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29068": {
+      "archivo": "items/cliente/29068.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29069": {
+      "archivo": "items/cliente/29069.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29070": {
+      "archivo": "items/cliente/29070.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29071": {
+      "archivo": "items/cliente/29071.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29072": {
+      "archivo": "items/cliente/29072.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29073": {
+      "archivo": "items/cliente/29073.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29074": {
+      "archivo": "items/cliente/29074.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29075": {
+      "archivo": "items/cliente/29075.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29076": {
+      "archivo": "items/cliente/29076.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29077": {
+      "archivo": "items/cliente/29077.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29078": {
+      "archivo": "items/cliente/29078.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29079": {
+      "archivo": "items/cliente/29079.png",
+      "frame": [32, 37],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29080": {
+      "archivo": "items/cliente/29080.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29081": {
+      "archivo": "items/cliente/29081.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29082": {
+      "archivo": "items/cliente/29082.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29083": {
+      "archivo": "items/cliente/29083.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29084": {
+      "archivo": "items/cliente/29084.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29085": {
+      "archivo": "items/cliente/29085.png",
+      "frame": [36, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29086": {
+      "archivo": "items/cliente/29086.png",
+      "frame": [38, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29087": {
+      "archivo": "items/cliente/29087.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29088": {
+      "archivo": "items/cliente/29088.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29089": {
+      "archivo": "items/cliente/29089.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29090": {
+      "archivo": "items/cliente/29090.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29091": {
+      "archivo": "items/cliente/29091.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29092": {
+      "archivo": "items/cliente/29092.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29093": {
+      "archivo": "items/cliente/29093.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29094": {
+      "archivo": "items/cliente/29094.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29095": {
+      "archivo": "items/cliente/29095.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29096": {
+      "archivo": "items/cliente/29096.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29097": {
+      "archivo": "items/cliente/29097.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29098": {
+      "archivo": "items/cliente/29098.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29099": {
+      "archivo": "items/cliente/29099.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29100": {
+      "archivo": "items/cliente/29100.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29101": {
+      "archivo": "items/cliente/29101.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29102": {
+      "archivo": "items/cliente/29102.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29103": {
+      "archivo": "items/cliente/29103.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29104": {
+      "archivo": "items/cliente/29104.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29105": {
+      "archivo": "items/cliente/29105.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29106": {
+      "archivo": "items/cliente/29106.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29107": {
+      "archivo": "items/cliente/29107.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29108": {
+      "archivo": "items/cliente/29108.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29109": {
+      "archivo": "items/cliente/29109.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29110": {
+      "archivo": "items/cliente/29110.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29111": {
+      "archivo": "items/cliente/29111.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29112": {
+      "archivo": "items/cliente/29112.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29113": {
+      "archivo": "items/cliente/29113.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29114": {
+      "archivo": "items/cliente/29114.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29115": {
+      "archivo": "items/cliente/29115.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29116": {
+      "archivo": "items/cliente/29116.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29117": {
+      "archivo": "items/cliente/29117.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29118": {
+      "archivo": "items/cliente/29118.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29119": {
+      "archivo": "items/cliente/29119.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29120": {
+      "archivo": "items/cliente/29120.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29121": {
+      "archivo": "items/cliente/29121.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29122": {
+      "archivo": "items/cliente/29122.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29123": {
+      "archivo": "items/cliente/29123.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29124": {
+      "archivo": "items/cliente/29124.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29125": {
+      "archivo": "items/cliente/29125.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29126": {
+      "archivo": "items/cliente/29126.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29127": {
+      "archivo": "items/cliente/29127.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29128": {
+      "archivo": "items/cliente/29128.png",
+      "frame": [60, 60],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29129": {
+      "archivo": "items/cliente/29129.png",
+      "frame": [57, 57],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29130": {
+      "archivo": "items/cliente/29130.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29131": {
+      "archivo": "items/cliente/29131.png",
+      "frame": [57, 57],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29132": {
+      "archivo": "items/cliente/29132.png",
+      "frame": [62, 62],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29133": {
+      "archivo": "items/cliente/29133.png",
+      "frame": [62, 62],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29134": {
+      "archivo": "items/cliente/29134.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29135": {
+      "archivo": "items/cliente/29135.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29136": {
+      "archivo": "items/cliente/29136.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29137": {
+      "archivo": "items/cliente/29137.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29138": {
+      "archivo": "items/cliente/29138.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29139": {
+      "archivo": "items/cliente/29139.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29140": {
+      "archivo": "items/cliente/29140.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29141": {
+      "archivo": "items/cliente/29141.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29142": {
+      "archivo": "items/cliente/29142.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29143": {
+      "archivo": "items/cliente/29143.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29144": {
+      "archivo": "items/cliente/29144.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29145": {
+      "archivo": "items/cliente/29145.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29146": {
+      "archivo": "items/cliente/29146.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29147": {
+      "archivo": "items/cliente/29147.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29148": {
+      "archivo": "items/cliente/29148.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29149": {
+      "archivo": "items/cliente/29149.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29150": {
+      "archivo": "items/cliente/29150.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29151": {
+      "archivo": "items/cliente/29151.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29152": {
+      "archivo": "items/cliente/29152.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29153": {
+      "archivo": "items/cliente/29153.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29154": {
+      "archivo": "items/cliente/29154.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29155": {
+      "archivo": "items/cliente/29155.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29156": {
+      "archivo": "items/cliente/29156.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29157": {
+      "archivo": "items/cliente/29157.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29158": {
+      "archivo": "items/cliente/29158.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29159": {
+      "archivo": "items/cliente/29159.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29160": {
+      "archivo": "items/cliente/29160.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29161": {
+      "archivo": "items/cliente/29161.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29162": {
+      "archivo": "items/cliente/29162.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29163": {
+      "archivo": "items/cliente/29163.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29164": {
+      "archivo": "items/cliente/29164.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29165": {
+      "archivo": "items/cliente/29165.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29166": {
+      "archivo": "items/cliente/29166.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29167": {
+      "archivo": "items/cliente/29167.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29168": {
+      "archivo": "items/cliente/29168.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29169": {
+      "archivo": "items/cliente/29169.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29170": {
+      "archivo": "items/cliente/29170.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29171": {
+      "archivo": "items/cliente/29171.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29172": {
+      "archivo": "items/cliente/29172.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29173": {
+      "archivo": "items/cliente/29173.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29174": {
+      "archivo": "items/cliente/29174.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29175": {
+      "archivo": "items/cliente/29175.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29176": {
+      "archivo": "items/cliente/29176.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29177": {
+      "archivo": "items/cliente/29177.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29178": {
+      "archivo": "items/cliente/29178.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29179": {
+      "archivo": "items/cliente/29179.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29180": {
+      "archivo": "items/cliente/29180.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29181": {
+      "archivo": "items/cliente/29181.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29182": {
+      "archivo": "items/cliente/29182.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29183": {
+      "archivo": "items/cliente/29183.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29184": {
+      "archivo": "items/cliente/29184.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29185": {
+      "archivo": "items/cliente/29185.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29186": {
+      "archivo": "items/cliente/29186.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29187": {
+      "archivo": "items/cliente/29187.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29188": {
+      "archivo": "items/cliente/29188.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29189": {
+      "archivo": "items/cliente/29189.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29190": {
+      "archivo": "items/cliente/29190.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29191": {
+      "archivo": "items/cliente/29191.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29192": {
+      "archivo": "items/cliente/29192.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29193": {
+      "archivo": "items/cliente/29193.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29194": {
+      "archivo": "items/cliente/29194.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29195": {
+      "archivo": "items/cliente/29195.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29196": {
+      "archivo": "items/cliente/29196.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29197": {
+      "archivo": "items/cliente/29197.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29198": {
+      "archivo": "items/cliente/29198.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29199": {
+      "archivo": "items/cliente/29199.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29200": {
+      "archivo": "items/cliente/29200.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29201": {
+      "archivo": "items/cliente/29201.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29202": {
+      "archivo": "items/cliente/29202.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29203": {
+      "archivo": "items/cliente/29203.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29204": {
+      "archivo": "items/cliente/29204.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29205": {
+      "archivo": "items/cliente/29205.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29206": {
+      "archivo": "items/cliente/29206.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29207": {
+      "archivo": "items/cliente/29207.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29208": {
+      "archivo": "items/cliente/29208.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29209": {
+      "archivo": "items/cliente/29209.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29210": {
+      "archivo": "items/cliente/29210.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29211": {
+      "archivo": "items/cliente/29211.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29212": {
+      "archivo": "items/cliente/29212.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29213": {
+      "archivo": "items/cliente/29213.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29214": {
+      "archivo": "items/cliente/29214.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29215": {
+      "archivo": "items/cliente/29215.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29216": {
+      "archivo": "items/cliente/29216.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29217": {
+      "archivo": "items/cliente/29217.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29218": {
+      "archivo": "items/cliente/29218.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29219": {
+      "archivo": "items/cliente/29219.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29220": {
+      "archivo": "items/cliente/29220.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29221": {
+      "archivo": "items/cliente/29221.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29222": {
+      "archivo": "items/cliente/29222.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29223": {
+      "archivo": "items/cliente/29223.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29224": {
+      "archivo": "items/cliente/29224.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29225": {
+      "archivo": "items/cliente/29225.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29226": {
+      "archivo": "items/cliente/29226.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29227": {
+      "archivo": "items/cliente/29227.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29228": {
+      "archivo": "items/cliente/29228.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29229": {
+      "archivo": "items/cliente/29229.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29230": {
+      "archivo": "items/cliente/29230.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29231": {
+      "archivo": "items/cliente/29231.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29232": {
+      "archivo": "items/cliente/29232.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29233": {
+      "archivo": "items/cliente/29233.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29234": {
+      "archivo": "items/cliente/29234.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29235": {
+      "archivo": "items/cliente/29235.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29236": {
+      "archivo": "items/cliente/29236.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29237": {
+      "archivo": "items/cliente/29237.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29238": {
+      "archivo": "items/cliente/29238.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29239": {
+      "archivo": "items/cliente/29239.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29240": {
+      "archivo": "items/cliente/29240.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29241": {
+      "archivo": "items/cliente/29241.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29242": {
+      "archivo": "items/cliente/29242.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29243": {
+      "archivo": "items/cliente/29243.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29244": {
+      "archivo": "items/cliente/29244.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29245": {
+      "archivo": "items/cliente/29245.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29246": {
+      "archivo": "items/cliente/29246.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29247": {
+      "archivo": "items/cliente/29247.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29248": {
+      "archivo": "items/cliente/29248.png",
+      "frame": [48, 48],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29249": {
+      "archivo": "items/cliente/29249.png",
+      "frame": [47, 47],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29250": {
+      "archivo": "items/cliente/29250.png",
+      "frame": [42, 42],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29251": {
+      "archivo": "items/cliente/29251.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29252": {
+      "archivo": "items/cliente/29252.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29253": {
+      "archivo": "items/cliente/29253.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29254": {
+      "archivo": "items/cliente/29254.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29255": {
+      "archivo": "items/cliente/29255.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29256": {
+      "archivo": "items/cliente/29256.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29257": {
+      "archivo": "items/cliente/29257.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29258": {
+      "archivo": "items/cliente/29258.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29259": {
+      "archivo": "items/cliente/29259.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29260": {
+      "archivo": "items/cliente/29260.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29261": {
+      "archivo": "items/cliente/29261.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29262": {
+      "archivo": "items/cliente/29262.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29263": {
+      "archivo": "items/cliente/29263.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29264": {
+      "archivo": "items/cliente/29264.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29265": {
+      "archivo": "items/cliente/29265.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29266": {
+      "archivo": "items/cliente/29266.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29267": {
+      "archivo": "items/cliente/29267.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29268": {
+      "archivo": "items/cliente/29268.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29269": {
+      "archivo": "items/cliente/29269.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29270": {
+      "archivo": "items/cliente/29270.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29271": {
+      "archivo": "items/cliente/29271.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29272": {
+      "archivo": "items/cliente/29272.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29273": {
+      "archivo": "items/cliente/29273.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29274": {
+      "archivo": "items/cliente/29274.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29275": {
+      "archivo": "items/cliente/29275.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29276": {
+      "archivo": "items/cliente/29276.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29277": {
+      "archivo": "items/cliente/29277.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29278": {
+      "archivo": "items/cliente/29278.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29279": {
+      "archivo": "items/cliente/29279.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29280": {
+      "archivo": "items/cliente/29280.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29281": {
+      "archivo": "items/cliente/29281.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29282": {
+      "archivo": "items/cliente/29282.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29283": {
+      "archivo": "items/cliente/29283.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29284": {
+      "archivo": "items/cliente/29284.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29285": {
+      "archivo": "items/cliente/29285.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29286": {
+      "archivo": "items/cliente/29286.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29287": {
+      "archivo": "items/cliente/29287.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29288": {
+      "archivo": "items/cliente/29288.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29289": {
+      "archivo": "items/cliente/29289.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29290": {
+      "archivo": "items/cliente/29290.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29291": {
+      "archivo": "items/cliente/29291.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29292": {
+      "archivo": "items/cliente/29292.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29293": {
+      "archivo": "items/cliente/29293.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29294": {
+      "archivo": "items/cliente/29294.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29295": {
+      "archivo": "items/cliente/29295.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29296": {
+      "archivo": "items/cliente/29296.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29297": {
+      "archivo": "items/cliente/29297.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29298": {
+      "archivo": "items/cliente/29298.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29299": {
+      "archivo": "items/cliente/29299.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29300": {
+      "archivo": "items/cliente/29300.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29301": {
+      "archivo": "items/cliente/29301.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29302": {
+      "archivo": "items/cliente/29302.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29303": {
+      "archivo": "items/cliente/29303.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29304": {
+      "archivo": "items/cliente/29304.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29305": {
+      "archivo": "items/cliente/29305.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29306": {
+      "archivo": "items/cliente/29306.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29307": {
+      "archivo": "items/cliente/29307.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29308": {
+      "archivo": "items/cliente/29308.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29309": {
+      "archivo": "items/cliente/29309.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29310": {
+      "archivo": "items/cliente/29310.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29311": {
+      "archivo": "items/cliente/29311.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29312": {
+      "archivo": "items/cliente/29312.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29313": {
+      "archivo": "items/cliente/29313.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29314": {
+      "archivo": "items/cliente/29314.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29315": {
+      "archivo": "items/cliente/29315.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29316": {
+      "archivo": "items/cliente/29316.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29317": {
+      "archivo": "items/cliente/29317.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29318": {
+      "archivo": "items/cliente/29318.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29319": {
+      "archivo": "items/cliente/29319.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29320": {
+      "archivo": "items/cliente/29320.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29321": {
+      "archivo": "items/cliente/29321.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29322": {
+      "archivo": "items/cliente/29322.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29323": {
+      "archivo": "items/cliente/29323.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29324": {
+      "archivo": "items/cliente/29324.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29325": {
+      "archivo": "items/cliente/29325.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29326": {
+      "archivo": "items/cliente/29326.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29327": {
+      "archivo": "items/cliente/29327.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29328": {
+      "archivo": "items/cliente/29328.png",
+      "frame": [42, 42],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29329": {
+      "archivo": "items/cliente/29329.png",
+      "frame": [61, 61],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29330": {
+      "archivo": "items/cliente/29330.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29331": {
+      "archivo": "items/cliente/29331.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29332": {
+      "archivo": "items/cliente/29332.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29333": {
+      "archivo": "items/cliente/29333.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29334": {
+      "archivo": "items/cliente/29334.png",
+      "frame": [43, 43],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29335": {
+      "archivo": "items/cliente/29335.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29336": {
+      "archivo": "items/cliente/29336.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29337": {
+      "archivo": "items/cliente/29337.png",
+      "frame": [48, 48],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29338": {
+      "archivo": "items/cliente/29338.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29339": {
+      "archivo": "items/cliente/29339.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29340": {
+      "archivo": "items/cliente/29340.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29341": {
+      "archivo": "items/cliente/29341.png",
+      "frame": [40, 40],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29342": {
+      "archivo": "items/cliente/29342.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29343": {
+      "archivo": "items/cliente/29343.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29344": {
+      "archivo": "items/cliente/29344.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29345": {
+      "archivo": "items/cliente/29345.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29346": {
+      "archivo": "items/cliente/29346.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29347": {
+      "archivo": "items/cliente/29347.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29348": {
+      "archivo": "items/cliente/29348.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29349": {
+      "archivo": "items/cliente/29349.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29350": {
+      "archivo": "items/cliente/29350.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29351": {
+      "archivo": "items/cliente/29351.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29352": {
+      "archivo": "items/cliente/29352.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29353": {
+      "archivo": "items/cliente/29353.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29354": {
+      "archivo": "items/cliente/29354.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29355": {
+      "archivo": "items/cliente/29355.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29356": {
+      "archivo": "items/cliente/29356.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29357": {
+      "archivo": "items/cliente/29357.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29358": {
+      "archivo": "items/cliente/29358.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29359": {
+      "archivo": "items/cliente/29359.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29360": {
+      "archivo": "items/cliente/29360.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29361": {
+      "archivo": "items/cliente/29361.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29362": {
+      "archivo": "items/cliente/29362.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29363": {
+      "archivo": "items/cliente/29363.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29364": {
+      "archivo": "items/cliente/29364.png",
+      "frame": [51, 51],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29909": {
+      "archivo": "items/cliente/29909.png",
+      "frame": [33, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29910": {
+      "archivo": "items/cliente/29910.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29911": {
+      "archivo": "items/cliente/29911.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29912": {
+      "archivo": "items/cliente/29912.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29913": {
+      "archivo": "items/cliente/29913.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29914": {
+      "archivo": "items/cliente/29914.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29915": {
+      "archivo": "items/cliente/29915.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29916": {
+      "archivo": "items/cliente/29916.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29917": {
+      "archivo": "items/cliente/29917.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29918": {
+      "archivo": "items/cliente/29918.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29919": {
+      "archivo": "items/cliente/29919.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29920": {
+      "archivo": "items/cliente/29920.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29921": {
+      "archivo": "items/cliente/29921.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29922": {
+      "archivo": "items/cliente/29922.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29923": {
+      "archivo": "items/cliente/29923.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29924": {
+      "archivo": "items/cliente/29924.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29925": {
+      "archivo": "items/cliente/29925.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29926": {
+      "archivo": "items/cliente/29926.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29927": {
+      "archivo": "items/cliente/29927.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29928": {
+      "archivo": "items/cliente/29928.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29929": {
+      "archivo": "items/cliente/29929.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29930": {
+      "archivo": "items/cliente/29930.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29931": {
+      "archivo": "items/cliente/29931.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29932": {
+      "archivo": "items/cliente/29932.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29933": {
+      "archivo": "items/cliente/29933.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29934": {
+      "archivo": "items/cliente/29934.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29935": {
+      "archivo": "items/cliente/29935.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29936": {
+      "archivo": "items/cliente/29936.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29937": {
+      "archivo": "items/cliente/29937.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29938": {
+      "archivo": "items/cliente/29938.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29939": {
+      "archivo": "items/cliente/29939.png",
+      "frame": [45, 45],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29940": {
+      "archivo": "items/cliente/29940.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29941": {
+      "archivo": "items/cliente/29941.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/29942": {
+      "archivo": "items/cliente/29942.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/30150": {
+      "archivo": "items/cliente/30150.png",
+      "frame": [32, 32],
+      "frames": 2,
+      "modo": "animacion",
+      "duracionMs": [110, 110]
+    },
+    "items/cliente/30151": {
+      "archivo": "items/cliente/30151.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/32830": {
+      "archivo": "items/cliente/32830.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/32831": {
+      "archivo": "items/cliente/32831.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/32832": {
+      "archivo": "items/cliente/32832.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/32833": {
+      "archivo": "items/cliente/32833.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/32834": {
+      "archivo": "items/cliente/32834.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
+    },
+    "items/cliente/32835": {
+      "archivo": "items/cliente/32835.png",
+      "frame": [32, 32],
+      "frames": 1,
+      "modo": "estatico"
     }
   }
 }

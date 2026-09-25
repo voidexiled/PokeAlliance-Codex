@@ -44,6 +44,7 @@ import { en } from '../../src/i18n/messages/en';
 import type { Messages } from '../../src/i18n/messages/en';
 import { es } from '../../src/i18n/messages/es';
 import { idiomas } from '../../scripts/lib/rutas-migradas.mjs';
+import { expandSearchIndex } from '../../src/lib/search/index-file';
 import { expect, test } from './fixtures';
 
 // ------------------------------------------------------------------------------ registries
@@ -1221,9 +1222,9 @@ test.describe('SI4: borradores', () => {
       ).toEqual(SYSTEMS.map((system) => systemPath(locale, system.id)));
 
       // The search index (8.6).
-      const entries = (await (
-        await page.request.get(`/${locale}/buscar/indice.json`)
-      ).json()) as SearchEntry[];
+      const entries = expandSearchIndex(
+        await (await page.request.get(`/${locale}/buscar/indice.json`)).json(),
+      ) as SearchEntry[];
       expect(
         entries.filter((entry) => entry.kind === 'sistema').map((entry) => entry.id),
         `${locale}: the search index lists the systems of this build`,
@@ -1429,7 +1430,7 @@ test.describe('Índice de búsqueda: los grupos Sistemas e Ítems (8.6, E16, BU6
     }) => {
       const response = await page.request.get(`/${locale}/buscar/indice.json`);
       expect(response.status()).toBe(200);
-      const entries = (await response.json()) as SearchEntry[];
+      const entries = expandSearchIndex(await response.json()) as SearchEntry[];
 
       // `sistema`: each system page, in the order of the menu, its subtitle as `meta`.
       const systems = entries.filter((entry) => entry.kind === 'sistema');

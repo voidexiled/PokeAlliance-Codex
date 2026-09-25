@@ -621,9 +621,20 @@ export function checkContent(root) {
         )
           error(file, 'un elemento repetido', `${at}.ball.elementos`);
       }
-      // `obtencion`: the materials of its recipes and the activities of its tasks resolve.
+      // `obtencion`: the materials of its recipes, the activities of its tasks and the boxes
+      // that give it resolve.
       if (isObject(item.obtencion)) {
-        const { recetas, tareas } = item.obtencion;
+        const { recetas, tareas, cajas } = item.obtencion;
+        if (Array.isArray(cajas))
+          cajas.forEach((caja, boxIndex) => {
+            if (isObject(caja) && text(caja.item))
+              obtencionChecks.push({
+                file,
+                at: `${at}.obtencion.cajas[${boxIndex}].item`,
+                kind: 'item',
+                id: caja.item,
+              });
+          });
         if (Array.isArray(recetas))
           recetas.forEach((receta, recipeIndex) => {
             if (!isObject(receta) || !Array.isArray(receta.materiales)) return;
